@@ -134,6 +134,10 @@ Key finding: **the app does not hardcode validation ranges.** It queries the ser
 
 - [FIELD_TYPES.md](FIELD_TYPES.md) — 234 fields with data types and example values, cross-referenced across Blutter (B), thomluther's API examples (U), and MQTT mappings (M)
 
+## Endpoint → Fields Direct Mapping
+
+- [ENDPOINT_FIELDS.md](ENDPOINT_FIELDS.md) — 142 endpoints with request parameters and response model mapping (90 with identified response models)
+
 ---
 
 ## Required vs Optional Fields
