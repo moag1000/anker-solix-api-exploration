@@ -139,6 +139,7 @@ Key finding: **the app does not hardcode validation ranges.** It queries the ser
 - [ENDPOINT_FIELDS.md) — 142 endpoints with request parameters and response models
 - [JSON_EXAMPLES.md](JSON_EXAMPLES.md) — 33 verified request payloads + 60 inferred + new parameter discoveries for thomluther's API
 - [RESPONSE_EXAMPLES.md](RESPONSE_EXAMPLES.md) — 71 real API response examples from 48 endpoints (extracted from thomluther's documented code)
+- [ENUMS.md](ENUMS.md) — All enum values, constants, device types, and feature flags from APK object pool
 
 ---
 
