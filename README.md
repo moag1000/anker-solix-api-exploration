@@ -137,6 +137,7 @@ Key finding: **the app does not hardcode validation ranges.** It queries the ser
 ## Field Types and Examples
 
 - [FIELD_TYPES.md](FIELD_TYPES.md) — 234 fields with data types and example values, cross-referenced across Blutter (B), thomluther's API examples (U), and MQTT mappings (M)
+- [DART_PYTHON_MAPPING.md](DART_PYTHON_MAPPING.md) — 35 confirmed Dart camelCase → JSON snake_case field name pairs
 
 ## Endpoint → Fields Direct Mapping
 
@@ -226,7 +227,7 @@ Key models that carry validation information:
 
 ## Known Limitations
 
-- **Dart names ≠ JSON keys** — the response model fields are Dart property names (camelCase). The actual API JSON uses snake_case in most cases, but the mapping is not 1:1 and not included yet
+- **Dart names ≠ JSON keys** — the response model fields are Dart property names (camelCase). The actual API JSON uses snake_case in most cases, but the mapping is not 1:1 — see [DART_PYTHON_MAPPING.md](DART_PYTHON_MAPPING.md) for 35 confirmed pairs
 - **Flat field lists ≠ JSON structure** — fields are listed without nesting information. Real responses have objects, arrays, and optional fields that this reference does not capture
 - **Example responses are from thomluther's code** — [RESPONSE_EXAMPLES.md](RESPONSE_EXAMPLES.md) has 71 examples, but these are copies from thomluther's docstrings, not independently captured
 - **Field types** (int/string/bool/list) are not extractable — the TLV protocol carries type information in the data packets themselves, and the server responses use standard JSON typing
