@@ -205,3 +205,16 @@ To improve this reference:
 2. **Test API endpoints** with the [anker-solix-api](https://github.com/thomluther/anker-solix-api) library and report actual response structures
 3. **Report errors** — if you find a field attribution that is wrong, please flag it so it can be corrected
 4. Follow the methodology described in [Discussion #222](https://github.com/thomluther/anker-solix-api/discussions/222)
+
+---
+
+## Trademarks
+
+Anker, Solix, Solarbank, EverFrost, and related product names are trademarks of
+Anker Innovations Limited. Shelly is a trademark of Allterco Robotics. Nordpool,
+Tibber, Octopus Energy, Amazon, Alexa, and Google are trademarks of their
+respective owners. OCPP is a standard by the Open Charge Alliance.
+
+This project is not affiliated with, endorsed by, or connected to any of these
+companies. All trademarks are used here solely for identification and
+interoperability documentation purposes under fair use.
