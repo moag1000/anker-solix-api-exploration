@@ -185,12 +185,32 @@ Key models that carry validation information:
 
 ---
 
+## What this exploration IS and IS NOT
+
+**This is useful as:**
+- A **vocabulary / cheat sheet** for mqtt_monitor decoding sessions — knowing the field names that exist in the app helps identify unknown hex fields faster
+- A **param_type purpose mapping** — types 1, 2, 3, 5, 19, 20 were previously undocumented
+- A **validation flow guide** — understanding that the app always queries limits before setting values
+- A **BLE action inventory** — 66 action names tell you what controls exist, even if the payload format is unknown
+- A **starting point** for device owners who want to contribute verified mappings
+
+**This is NOT:**
+- A replacement for [thomluther/anker-solix-api](https://github.com/thomluther/anker-solix-api) — that library has real, tested, working code
+- A source of verified hex-to-field mappings — those require mqtt_monitor sessions per [Discussion #222](https://github.com/thomluther/anker-solix-api/discussions/222)
+- Implementation-ready data — the field names are Dart class names (camelCase), not the snake_case JSON keys used in API responses. A Dart→JSON mapping is not yet included.
+- A complete API specification — most of the 205 endpoints listed here are already documented in `apitypes.py`. The incremental value is in the param_type mappings, response model fields, and required/optional classification.
+- Reliable for required/optional — the branch-based detection has known false positives (see REQUIRED_FIELDS.md header)
+
 ## Known Limitations
 
+- **Dart names ≠ JSON keys** — the response model fields are Dart property names (camelCase). The actual API JSON uses snake_case in most cases, but the mapping is not 1:1 and not included yet
+- **Flat field lists ≠ JSON structure** — fields are listed without nesting information. Real responses have objects, arrays, and optional fields that this reference does not capture
+- **No example responses** — `schedule.py` in thomluther's library has better documentation with actual JSON examples for param_types 4, 6, 9, 12, 13, 16, 18, 23, 26
 - **Field types** (int/string/bool/list) are not extractable — the TLV protocol carries type information in the data packets themselves, and the server responses use standard JSON typing
 - **Validation ranges** are dynamic (from server), not hardcoded in the app — each device/region may have different min/max/step values
 - **Error codes** are scattered throughout the code with no central registry found
 - **Cooler devices** (A17A3-A5 EverFrost) have minimal logic in the Dart layer — most control appears to be BLE-only with limited decompilable structure
+- **BLE action names without payload formats** — knowing `action_set_backup_strategy` exists does not help without the binary payload structure, which requires hardware testing
 - **12 response models** yielded no field names due to generic deserialization patterns
 - **25 of 205 endpoints** are not covered in REQUIRED_FIELDS.md (passport auth + misc)
 - **param_type 7** is listed in apitypes.py but not found in APK v3.18.0

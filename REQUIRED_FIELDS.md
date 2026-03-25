@@ -6,28 +6,24 @@
 > Endpoints with *(no params extracted)* pass parameters via object construction not visible as strings.
 > This analysis may have false positives/negatives due to compiler optimizations.
 >
-> **Known limitation:** `site_id` and `device_sn` are marked as `?` (optional) in most endpoints.
-> This is a systematic artifact — unrelated branch instructions before these fields cause false positives.
-> In practice, `site_id` and `device_sn` are almost always required. Treat them as required unless
-> the endpoint documentation explicitly says otherwise.
+> **Note:** `site_id`, `device_sn`, `station_id`, and `siteId` have been moved from optional to
+> required where they were previously misclassified due to unrelated branch instructions.
+> The remaining optional/required classifications may still have false positives.
 
 ## `/app/devicemanage/update_relate_device_info`
 
 **updateDeviceInfo**
-- Required: `ble_mac, product_code, device_name, main_sw_version, sec_sw_version`
-- Optional: `device_sn`
+- Required: `ble_mac, product_code, device_name, main_sw_version, sec_sw_version, device_sn`
 
 ## `/app/devicerelation/relate_device`
 
 **deviceBind**
-- Required: `product_code, device_name, bt_ble_id, bt_ble_mac, firmware_version, wifi_name, parent_device_sn, parent_device_pn`
-- Optional: `device_sn`
+- Required: `product_code, device_name, bt_ble_id, bt_ble_mac, firmware_version, wifi_name, parent_device_sn, parent_device_pn, device_sn`
 
 ## `/app/devicerelation/un_relate_and_unbind_device`
 
 **iotDeviceUnbind**
-- Required: `bt_ble_mac, parent_device_sn, parent_device_pn`
-- Optional: `device_sn`
+- Required: `bt_ble_mac, parent_device_sn, parent_device_pn, device_sn`
 
 **deviceUnbind**
 - Required: `device_sn, unbind_type`
@@ -36,8 +32,7 @@
 ## `/app/devicerelation/up_alias_name`
 
 **updateDeviceName**
-- Required: `device_mac, alias_name`
-- Optional: `device_sn`
+- Required: `device_mac, alias_name, device_sn`
 
 ## `/app/help/add_feedback`
 
@@ -124,8 +119,7 @@
 ## `/charging_energy_service/get_configs`
 
 **getSiteConfigs**
-- Required: `param_types`
-- Optional: `station_id`
+- Required: `param_types, station_id`
 
 ## `/charging_energy_service/get_device_infos`
 
@@ -179,13 +173,12 @@
 ## `/charging_hes_svc/adjust_station_price_unit`
 
 **changePriceUnit**
-- Required: `price_unit`
-- Optional: `station_id`
+- Required: `price_unit, station_id`
 
 ## `/charging_hes_svc/check_function`
 
 **checkFunction**
-- Optional: `station_id`
+- Required: `station_id`
 
 ## `/charging_hes_svc/deal_share_data`
 
@@ -212,7 +205,7 @@
 ## `/charging_hes_svc/get_auto_disaster_prepare_status`
 
 **getAutoDisasterPrepareStatus**
-- Optional: `station_id`
+- Required: `station_id`
 
 ## `/charging_hes_svc/get_current_disaster_prepare_details`
 
@@ -221,8 +214,7 @@
 ## `/charging_hes_svc/get_device_command`
 
 **getDeviceCommand**
-- Required: `accuracy`
-- Optional: `station_id`
+- Required: `accuracy, station_id`
 
 ## `/charging_hes_svc/get_device_product_info`
 
@@ -248,7 +240,7 @@
 ## `/charging_hes_svc/get_station_config_and_status`
 
 **getA5101StationConfigDetail**
-- Optional: `station_id`
+- Required: `station_id`
 
 ## `/charging_hes_svc/get_station_evchargers`
 
@@ -265,8 +257,7 @@
 ## `/charging_hes_svc/get_vpp_check_code`
 
 **getVppInfo**
-- Required: `get_code, current_version`
-- Optional: `station_id`
+- Required: `get_code, current_version, station_id`
 
 ## `/charging_hes_svc/get_vpp_service_policy_by_agg_user`
 
@@ -286,8 +277,7 @@
 ## `/charging_hes_svc/restart_peak_session`
 
 **deleteAndRestartPeakValley**
-- Required: `far_field_model`
-- Optional: `station_id`
+- Required: `far_field_model, station_id`
 
 ## `/charging_hes_svc/set_station_evchargers`
 
@@ -306,8 +296,7 @@
 ## `/charging_hes_svc/user_event_alarm`
 
 **reportHesEvents**
-- Required: `pn, language, event`
-- Optional: `station_id`
+- Required: `pn, language, event, station_id`
 
 ## `/charging_hes_svc/user_fault_alarm`
 
@@ -341,7 +330,7 @@
 ## `/mini_power/v1/app/charging/get_charging_mode_list`
 
 **getCustomChargeModeList**
-- Optional: `device_sn`
+- Required: `device_sn`
 
 ## `/mini_power/v1/app/charging/update_charging_mode`
 
@@ -352,7 +341,7 @@
 ## `/mini_power/v1/app/egg/get_easter_egg_trigger_list`
 
 **getEasterEggRecord**
-- Optional: `device_sn`
+- Required: `device_sn`
 
 ## `/mini_power/v1/app/egg/report_easter_egg_trigger_status`
 
@@ -385,7 +374,7 @@
 ## `/mini_power/v1/app/setting/get_port_remarks`
 
 **getPortRemarks**
-- Optional: `device_sn`
+- Required: `device_sn`
 
 ## `/mini_power/v1/app/setting/get_power_range_support_protocols`
 
@@ -395,55 +384,47 @@
 ## `/mini_power/v1/app/setting/get_protocol_status`
 
 **getA2687ProtocolAgreementStatus**
-- Optional: `device_sn`
+- Required: `device_sn`
 
 ## `/mini_power/v1/app/setting/set_charging_device_identity_new_status`
 
 **setA2687StandardChargingDeviceModelIdentityStatus**
-- Required: `charging_device_identity_new_status`
-- Optional: `device_sn`
+- Required: `charging_device_identity_new_status, device_sn`
 
 ## `/mini_power/v1/app/setting/set_charging_device_identity_status`
 
 **setA2687ChargingDeviceModelIdentityStatus**
-- Required: `charging_device_identity_status`
-- Optional: `device_sn`
+- Required: `charging_device_identity_status, device_sn`
 
 ## `/mini_power/v1/app/setting/set_charging_device_identity_status_default_true`
 
 **setA2345DeviceIdentityStatus**
-- Required: `charging_device_identity_status_default_true`
-- Optional: `device_sn`
+- Required: `charging_device_identity_status_default_true, device_sn`
 
 ## `/mini_power/v1/app/setting/set_charging_mode_status`
 
 **saveCustomChargeModeSetting**
-- Required: `charging_mode_status`
-- Optional: `device_sn`
+- Required: `charging_mode_status, device_sn`
 
 ## `/mini_power/v1/app/setting/set_compatibility_status`
 
 **saveCompatibilityStatusSetting**
-- Required: `compatibility_status`
-- Optional: `device_sn`
+- Required: `compatibility_status, device_sn`
 
 ## `/mini_power/v1/app/setting/set_mode_sub_status`
 
 **setA2687ModeSubStatus**
-- Required: `mode, protocol_key, status`
-- Optional: `device_sn`
+- Required: `mode, protocol_key, status, device_sn`
 
 ## `/mini_power/v1/app/setting/set_port_remark`
 
 **setPortRemark**
-- Required: `port_name, remark`
-- Optional: `device_sn`
+- Required: `port_name, remark, device_sn`
 
 ## `/mini_power/v1/app/setting/set_protocol_status`
 
 **setA2687ProtocolAgreementStatus**
-- Required: `protocol_status`
-- Optional: `device_sn`
+- Required: `protocol_status, device_sn`
 
 ## `/mini_power/v1/app/style/add_manual_clock_screensavers`
 
@@ -487,13 +468,12 @@
 ## `/power_service/v1/ai_ems/get_status`
 
 **getAiModeStatusRequest**
-- Optional: `site_id`
+- Required: `site_id`
 
 ## `/power_service/v1/ai_ems/profit`
 
 **getAiEmsProfit**
-- Required: `start_time, end_time, type`
-- Optional: `site_id`
+- Required: `start_time, end_time, type, site_id`
 
 ## `/power_service/v1/app/after_sale/check_popup`
 
@@ -502,7 +482,7 @@
 ## `/power_service/v1/app/after_sale/get_popup`
 
 **queryA17Y0Popup**
-- Optional: `site_id`
+- Required: `site_id`
 
 ## `/power_service/v1/app/check_upgrade_record`
 
@@ -547,13 +527,12 @@
 ## `/power_service/v1/app/compatible/get_ota_update`
 
 **getThirdOtaStatus**
-- Required: `insert_sn`
-- Optional: `device_sn`
+- Required: `insert_sn, device_sn`
 
 ## `/power_service/v1/app/compatible/installation_popup`
 
 **getIncompatiblePopupApi**
-- Optional: `site_id`
+- Required: `site_id`
 
 ## `/power_service/v1/app/compatible/save_compatible_solar`
 
@@ -574,8 +553,7 @@
 ## `/power_service/v1/app/compatible/set_ota_update`
 
 **setThirdOta**
-- Required: `solar_pn, insert_sn, rollback_install_mode`
-- Optional: `device_sn`
+- Required: `solar_pn, insert_sn, rollback_install_mode, device_sn`
 
 ## `/power_service/v1/app/device/get_device_attrs`
 
@@ -584,86 +562,72 @@
 - Optional: `device_sn, enable_0w_v2`
 
 **getTouElectricAttrs**
-- Required: `attributes`
-- Optional: `device_sn`
+- Required: `attributes, device_sn`
 
 ## `/power_service/v1/app/device/get_device_home_load`
 
 **getDeviceHomeLoadPort**
-- Optional: `device_sn`
+- Required: `device_sn`
 
 **getDeviceHomeLoadRes**
-- Optional: `device_sn`
+- Required: `device_sn`
 
 **get17C1DeviceHomeLoadPort**
-- Required: `param_type, device_pn`
-- Optional: `device_sn`
+- Required: `param_type, device_pn, device_sn`
 
 ## `/power_service/v1/app/device/get_device_income`
 
 **getTOUChartStatistics**
-- Required: `type, start_time`
-- Optional: `device_sn`
+- Required: `type, start_time, device_sn`
 
 ## `/power_service/v1/app/device/get_mes_device_info`
 
 **getDeviceLaserSn**
-- Optional: `device_sn`
+- Required: `device_sn`
 
 ## `/power_service/v1/app/device/get_relate_belong`
 
 **getDeviceBindInfo**
-- Optional: `device_sn`
+- Required: `device_sn`
 
 ## `/power_service/v1/app/device/remove_param_config_key`
 
 **removeParamConfigKey**
-- Required: `device_sn, remove_key, use_time`
-- Optional: `site_id`
+- Required: `device_sn, remove_key, use_time, site_id`
 
 ## `/power_service/v1/app/device/set_device_attrs`
 
 **setDevicePowerOptionsReq**
-- Required: `attributes`
-- Optional: `device_sn`
+- Required: `attributes, device_sn`
 
 **setDeviceGameStatus**
-- Required: `attributes, init_status`
-- Optional: `device_sn`
+- Required: `attributes, init_status, device_sn`
 
 **setTouElectricAttrs**
-- Required: `attributes, pps_use_time`
-- Optional: `device_sn`
+- Required: `attributes, pps_use_time, device_sn`
 
 **getCurrencySetDeviceAttrs**
-- Required: `attributes, currency`
-- Optional: `device_sn`
+- Required: `attributes, currency, device_sn`
 
 **setSolarName**
-- Required: `device_pn, attributes`
-- Optional: `device_sn`
+- Required: `device_pn, attributes, device_sn`
 
 **setDeviceFeedGridSwitch**
-- Required: `attributes, switch_0w`
-- Optional: `device_sn`
+- Required: `attributes, switch_0w, device_sn`
 
 **setDevicePvPowerOptionsReq**
-- Required: `attributes, pv_power_limit`
-- Optional: `device_sn`
+- Required: `attributes, pv_power_limit, device_sn`
 
 **setLocationTag**
-- Required: `attributes, tag`
-- Optional: `device_sn`
+- Required: `attributes, tag, device_sn`
 
 **setPpsSolarName**
-- Required: `device_pn, attributes`
-- Optional: `device_sn`
+- Required: `device_pn, attributes, device_sn`
 
 ## `/power_service/v1/app/device/set_device_home_load`
 
 **setDeviceHomeLoadRes**
-- Required: `home_load_data`
-- Optional: `device_sn`
+- Required: `home_load_data, device_sn`
 
 **set17C1DeviceHomeLoadRes**
 - Required: `mode_type`
@@ -688,7 +652,7 @@
 ## `/power_service/v1/app/get_relate_device_fittings`
 
 **getRelateAccessory**
-- Optional: `device_sn`
+- Required: `device_sn`
 
 ## `/power_service/v1/app/get_token_by_userid`
 
@@ -721,8 +685,7 @@
 ## `/power_service/v1/app/share_site/get_invited_list`
 
 **getInviteMember**
-- Required: `status`
-- Optional: `site_id`
+- Required: `status, site_id`
 
 ## `/power_service/v1/app/share_site/invite_member`
 
@@ -735,8 +698,7 @@
 ## `/power_service/v1/app/shelly_ctrl_device`
 
 **changeShellyDeviceStatus**
-- Required: `op_type, toggle, value`
-- Optional: `device_sn`
+- Required: `op_type, toggle, value, device_sn`
 
 ## `/power_service/v1/app/third/platform/list`
 
@@ -747,8 +709,7 @@
 ## `/power_service/v1/app/upgrade_event_report`
 
 **getReportBleUpgrade**
-- Required: `device_pn, device_type, upgrade_type, after_version, before_version, upgrade_time, site_id`
-- Optional: `device_sn`
+- Required: `device_pn, device_type, upgrade_type, after_version, before_version, upgrade_time, site_id, device_sn`
 
 ## `/power_service/v1/app/upgrade_event_reports`
 
@@ -783,8 +744,7 @@
 ## `/power_service/v1/dynamic_price/support_option`
 
 **getDynamicPriceSupportOption**
-- Required: `device_pn`
-- Optional: `site_id`
+- Required: `device_pn, site_id`
 
 ## `/power_service/v1/get_all_service_config`
 
@@ -844,7 +804,7 @@
 ## `/power_service/v1/site/co2_ranking`
 
 **queryRankingInfo**
-- Optional: `site_id`
+- Required: `site_id`
 
 ## `/power_service/v1/site/create_site`
 
@@ -867,8 +827,7 @@
 ## `/power_service/v1/site/get_addable_site_list`
 
 **getAddableSiteList**
-- Required: `device_model, device_model`
-- Optional: `device_sn`
+- Required: `device_model, device_model, device_sn`
 
 ## `/power_service/v1/site/get_charging_device`
 
@@ -882,79 +841,69 @@
 ## `/power_service/v1/site/get_home_load_chart`
 
 **getSiteHomeLoadChat**
-- Required: `device_sn`
-- Optional: `site_id`
+- Required: `device_sn, site_id`
 
 ## `/power_service/v1/site/get_power_limit`
 
 **getSitePowerLimit**
-- Optional: `site_id`
+- Required: `site_id`
 
 ## `/power_service/v1/site/get_scen_info`
 
 **querySceneInfo**
-- Optional: `site_id`
+- Required: `site_id`
 
 ## `/power_service/v1/site/get_schedule`
 
 **getSiteSchedule**
-- Optional: `site_id`
+- Required: `site_id`
 
 **queryBasicStatus**
-- Optional: `site_id`
+- Required: `site_id`
 
 ## `/power_service/v1/site/get_site_detail`
 
 **getStationDetail**
-- Optional: `site_id`
+- Required: `site_id`
 
 **getGreenPPSSiteDetail**
-- Optional: `site_id`
+- Required: `site_id`
 
 **getRemainPluginsDetails**
-- Optional: `site_id`
+- Required: `site_id`
 
 ## `/power_service/v1/site/get_site_device_param`
 
 **getSafetySocParams**
-- Required: `param_type`
-- Optional: `site_id`
+- Required: `param_type, site_id`
 
 **getCombineBoxListData**
-- Required: `param_type`
-- Optional: `site_id`
+- Required: `param_type, site_id`
 
 **getThreePvParam**
-- Required: `param_type, cmd`
-- Optional: `site_id`
+- Required: `param_type, cmd, site_id`
 
 **getStationCountryCode**
-- Required: `param_type`
-- Optional: `site_id`
+- Required: `param_type, site_id`
 
 **getSitePeakTimeDeviceParam**
-- Required: `param_type`
-- Optional: `site_id`
+- Required: `param_type, site_id`
 
 **get17C1SiteDeviceParam**
 - Required: `param_type, cmd, device_sn`
 - Optional: `site_id, parallel_type`
 
 **getSiteDeviceParam**
-- Required: `param_type`
-- Optional: `site_id`
+- Required: `param_type, site_id`
 
 **getSiteEnablePeakDeviceParam**
-- Required: `param_type`
-- Optional: `site_id`
+- Required: `param_type, site_id`
 
 **getSiteLowerLimitDeviceParam**
-- Required: `param_type`
-- Optional: `site_id`
+- Required: `param_type, site_id`
 
 **getSiteGreenModeDeviceParam**
-- Required: `param_type`
-- Optional: `site_id`
+- Required: `param_type, site_id`
 
 ## `/power_service/v1/site/get_site_list`
 
@@ -963,8 +912,7 @@
 ## `/power_service/v1/site/get_site_price`
 
 **getSitePriceRequest**
-- Required: `accuracy`
-- Optional: `site_id`
+- Required: `accuracy, site_id`
 
 ## `/power_service/v1/site/get_site_rules`
 
@@ -1003,20 +951,16 @@
 - Optional: `cmd`
 
 **setSiteDeviceParam**
-- Required: `param_type, cmd, param_data`
-- Optional: `site_id`
+- Required: `param_type, cmd, param_data, site_id`
 
 **setStationCountryCode**
-- Required: `param_type, cmd, param_data`
-- Optional: `site_id`
+- Required: `param_type, cmd, param_data, site_id`
 
 **setDynamicPrice**
-- Required: `param_type, cmd, param_data`
-- Optional: `site_id`
+- Required: `param_type, cmd, param_data, site_id`
 
 **setThreePvInstallSwitch**
-- Required: `param_type, cmd, param_data`
-- Optional: `site_id`
+- Required: `param_type, cmd, param_data, site_id`
 
 **setSiteDevicePowerLimit**
 - Required: `limit, param_type, cmd, param_data`
@@ -1025,8 +969,7 @@
 ## `/power_service/v1/site/shift_power_site_type`
 
 **shiftPowerSite**
-- Required: `power_site_type`
-- Optional: `site_id`
+- Required: `power_site_type, site_id`
 
 ## `/power_service/v1/site/update_charging_device`
 
@@ -1039,8 +982,7 @@
 ## `/power_service/v1/site/update_site_devices`
 
 **updateSiteDevices**
-- Required: `pps_list`
-- Optional: `site_id`
+- Required: `pps_list, site_id`
 
 ## `/power_service/v1/site/update_site_price`
 
