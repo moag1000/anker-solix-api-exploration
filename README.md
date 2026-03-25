@@ -130,6 +130,10 @@ Covers: Power limits, home load, SOC reserve, usage modes, grid export, LED, tem
 
 Key finding: **the app does not hardcode validation ranges.** It queries the server for device-specific min/max/step values and builds the UI dynamically. Developers must follow the same pattern.
 
+## Field Types and Examples
+
+- [FIELD_TYPES.md](FIELD_TYPES.md) — 234 fields with data types and example values, cross-referenced across Blutter (B), thomluther's API examples (U), and MQTT mappings (M)
+
 ---
 
 ## Required vs Optional Fields
