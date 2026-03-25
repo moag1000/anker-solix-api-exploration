@@ -764,3 +764,177 @@ Blutter reveals the `station_id` parameter name (thomluther documents it as `sit
 {"station_id": "...", "param_types": [...]}
 ```
 Function: `getSiteConfigs` — note: `station_id` vs `siteId` may be interchangeable.
+
+---
+
+## Constants and Enum Values (from APK)
+
+### Peak/Valley Price Types
+```json
+{"peak": 1, "normal": 2, "valley": 3, "super_valley": 4}
+```
+
+### Usage Mode Types
+```
+self_consumption, manual_backup, peak_shaving, custom_mode,
+time_of_use, use_time, smart, dynamic, fixed
+```
+
+### Day Types
+```
+weekday, weekend, everyday
+```
+
+### Schedule/Rate Plan Names
+```
+ai_ems, blend_plan, custom_rate_plan, manual_backup,
+peak_sessions, peak_valley_prices, use_time
+```
+
+### Device Type Categories
+```
+solar_bank, solarbank, pps, hes, micro_inverter, ev_charger, generator
+```
+
+### All Known Product Codes (53 models)
+```
+A1340, A1341, A1722, A1723, A1725, A1726, A1727, A1728, A1729,
+A1753, A1754, A1755, A1761, A1762, A1763, A1765,
+A1770, A1771, A1772, A1780, A1780P, A1781, A1782, A1783, A1785,
+A1790, A1790A, A1790B, A1790P, A1903,
+A2345, A2687, A2693, A2693E1, A2693E2,
+A5101, A5102, A5103, A5140, A5141, A5143, A5150, A5190, A5191, A5220, A5341, A5450,
+A7320, AE100, AE1R0, AX170, AX1C0, AX1S0
+```
+
+---
+
+## EV Charger Schedule Defaults (A5190)
+
+```json
+{
+  "weekdayStartTime": "08:00",
+  "weekdayEndTime": "22:00",
+  "weekendStartTime": "08:00",
+  "weekendEndTime": "22:00",
+  "everyDaySwitch": false,
+  "isSwitchOn": false,
+  "chargingMode": "...",
+  "regularCharge": "...",
+  "smartChargeList": []
+}
+```
+
+---
+
+## Range Extender Strategy (A7320)
+
+```json
+{
+  "strategySwitchOn": true,
+  "strategyType": "bysoc|bytime",
+  "bysocData": {"startSoc": 20, "targetSoc": 80},
+  "bytimeData": {"startTime": "08:00", "targetSoc": 80},
+  "unableExcuteStrategyReason": "...",
+  "lastTaskResult": "...",
+  "lastTaskExecusionTime": "...",
+  "lastTaskFailReason": "..."
+}
+```
+
+---
+
+## EV Charger Control (A5190 prop_write_evcharger)
+
+```json
+{
+  "rechargingPowerOutage": false,
+  "plugAndChargeSwitch": false,
+  "carChargerLockStatus": 0,
+  "maximumCurrentLimit": 16,
+  "delayStartSwitch": false,
+  "lightBrightness": 100,
+  "ledSwitch": true,
+  "ledCloseStartTime": "22:00",
+  "ledCloseEndTime": "06:00"
+}
+```
+
+---
+
+## Device Bind Request
+
+`/app/devicerelation/relate_device`
+
+```json
+{
+  "device_sn": "...",
+  "product_code": "A17C0",
+  "device_name": "Solarbank E1600",
+  "bt_ble_id": "...",
+  "bt_ble_mac": "...",
+  "firmware_version": "...",
+  "wifi_name": "...",
+  "parent_device_sn": "...",
+  "parent_device_pn": "..."
+}
+```
+
+---
+
+## Dynamic Price Response Fields
+
+`/power_service/v1/dynamic_price/price_detail`
+
+```json
+{
+  "release_time": "...",
+  "today_avg_price": 0.15,
+  "tomorrow_avg_price": 0.12,
+  "today_price_trend": "...",
+  "tomorrow_price_trend": "...",
+  "batteryReserve": 10,
+  "value": [...]
+}
+```
+
+---
+
+## akiot.cloud_api Bridge Format
+
+The native AKIoT SDK uses this format to proxy cloud API calls through BLE/MQTT:
+
+```json
+{
+  "method": "POST",
+  "path": "/power_service/v1/site/get_site_device_param",
+  "param": {"site_id": "...", "param_type": "18"}
+}
+```
+Transport: `akiot.cloud_api` via `akiot.device.invoke_action`
+
+---
+
+## SceneInfo Key Feature Flags
+
+From `get_scen_info` response — these boolean/status fields control UI behavior:
+
+```json
+{
+  "manual_backup_mode": false,
+  "exceed_power": "0",
+  "peak_valley_mode": false,
+  "heating": false,
+  "shelly_meter": false,
+  "support_p1_meter": false,
+  "enable_parallel": false,
+  "plug_switch_report": false,
+  "show_third_party_pv_panel": false,
+  "meter_self_testing": false,
+  "power_limit_status": 0,
+  "power_saving_mode": false,
+  "third_party_pv_enable": false,
+  "enable_aiems_v2": false,
+  "grid_to_ev": false
+}
+```
