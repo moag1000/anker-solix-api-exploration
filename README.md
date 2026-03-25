@@ -64,12 +64,16 @@
 
 ## Statistics
 
-- **243** function-to-endpoint mappings
-- **205** unique API endpoints across 8 service prefixes
-- **94** response models with field names (82 with fields, 12 with generic deserialization)
+- **243** function-to-endpoint mappings across **205** unique API endpoints
+- **94** response models with field names
 - **180** endpoints with required/optional field classification
 - **33** device setting categories with complete GET→SET flows
-- **66** BLE/IoT SDK action names
+- **82** BLE/IoT SDK action names (65 actions + 14 prop + 3 query)
+- **234** cross-referenced field types with examples
+- **60** unique product codes (44 IoT + 16 from message models)
+- **30+** enum types with exact API integer values
+- **71** real API response examples from thomluther's code
+- **13** supported countries for dynamic pricing
 
 ---
 
@@ -136,10 +140,16 @@ Key finding: **the app does not hardcode validation ranges.** It queries the ser
 
 ## Endpoint → Fields Direct Mapping
 
-- [ENDPOINT_FIELDS.md) — 142 endpoints with request parameters and response models
-- [JSON_EXAMPLES.md](JSON_EXAMPLES.md) — 33 verified request payloads + 60 inferred + new parameter discoveries for thomluther's API
+- [ENDPOINT_FIELDS.md](ENDPOINT_FIELDS.md) — 142 endpoints with request parameters and response model mapping (90 with identified response models)
+
+## JSON Payloads and Examples
+
+- [JSON_EXAMPLES.md](JSON_EXAMPLES.md) — 33 verified request payloads + 60 inferred + new parameter discoveries + enum constants + device-specific payload templates (EV charger, generator, SceneInfo feature flags)
 - [RESPONSE_EXAMPLES.md](RESPONSE_EXAMPLES.md) — 71 real API response examples from 48 endpoints (extracted from thomluther's documented code)
-- [ENUMS.md](ENUMS.md) — All enum values, constants, device types, and feature flags from APK object pool
+
+## Enums, Constants, and Product Codes
+
+- [ENUMS.md](ENUMS.md) — 30+ enum types with exact API integer values: EmsModeType (6 modes with API codes 1/4/5/8/9/10), 16-bit EnergyFlowType bitmask, AI mode codes, BLE status codes, MQTT command types, generator modes, PPS work status, price types, 60 product codes, 13 supported countries, TOU schedule templates
 
 ---
 
@@ -202,7 +212,9 @@ Key models that carry validation information:
 - A **vocabulary / cheat sheet** for mqtt_monitor decoding sessions — knowing the field names that exist in the app helps identify unknown hex fields faster
 - A **param_type purpose mapping** — types 1, 2, 3, 5, 19, 20 were previously undocumented
 - A **validation flow guide** — understanding that the app always queries limits before setting values
-- A **BLE action inventory** — 66 action names tell you what controls exist, even if the payload format is unknown
+- A **BLE action inventory** — 82 action/prop/query names tell you what controls exist, even if the payload format is unknown
+- An **enum reference** — EMS modes, energy flow bitmasks, price types, device types, BLE status codes with their exact API integer values
+- A **product code registry** — 60 known device model codes
 - A **starting point** for device owners who want to contribute verified mappings
 
 **This is NOT:**
@@ -216,7 +228,7 @@ Key models that carry validation information:
 
 - **Dart names ≠ JSON keys** — the response model fields are Dart property names (camelCase). The actual API JSON uses snake_case in most cases, but the mapping is not 1:1 and not included yet
 - **Flat field lists ≠ JSON structure** — fields are listed without nesting information. Real responses have objects, arrays, and optional fields that this reference does not capture
-- **No example responses** — `schedule.py` in thomluther's library has better documentation with actual JSON examples for param_types 4, 6, 9, 12, 13, 16, 18, 23, 26
+- **Example responses are from thomluther's code** — [RESPONSE_EXAMPLES.md](RESPONSE_EXAMPLES.md) has 71 examples, but these are copies from thomluther's docstrings, not independently captured
 - **Field types** (int/string/bool/list) are not extractable — the TLV protocol carries type information in the data packets themselves, and the server responses use standard JSON typing
 - **Validation ranges** are dynamic (from server), not hardcoded in the app — each device/region may have different min/max/step values
 - **Error codes** are scattered throughout the code with no central registry found
