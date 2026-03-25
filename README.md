@@ -17,6 +17,14 @@
 > verified against the live API or the mqtt_monitor tool before use in production
 > code. Anker can change any endpoint, field name or behavior between app versions
 > without notice.
+>
+> **No server-side impact analysis has been performed.** This exploration documents
+> what the app *sends*, not what the server *expects* or *tolerates*. Sending
+> malformed, unexpected, or excessive requests to Anker's API or MQTT infrastructure
+> could have unintended consequences including but not limited to account restrictions,
+> device malfunction, or infrastructure impact. **Anyone using this data does so
+> entirely at their own risk and responsibility.** The authors accept no liability
+> for any consequences arising from the use of this information.
 
 ---
 
