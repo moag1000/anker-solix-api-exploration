@@ -221,7 +221,7 @@ Key models that carry validation information:
 **This is NOT:**
 - A replacement for [thomluther/anker-solix-api](https://github.com/thomluther/anker-solix-api) — that library has real, tested, working code
 - A source of verified hex-to-field mappings — those require mqtt_monitor sessions per [Discussion #222](https://github.com/thomluther/anker-solix-api/discussions/222)
-- Implementation-ready data — the field names are Dart class names (camelCase), not the snake_case JSON keys used in API responses. A Dart→JSON mapping is not yet included.
+- Implementation-ready data — the field names are Dart class names (camelCase), not the snake_case JSON keys used in API responses. See [DART_PYTHON_MAPPING.md](DART_PYTHON_MAPPING.md) for 35 confirmed pairs, but coverage is incomplete.
 - A complete API specification — most of the 205 endpoints listed here are already documented in `apitypes.py`. The incremental value is in the param_type mappings, response model fields, and required/optional classification.
 - Reliable for required/optional — the branch-based detection has known false positives (see REQUIRED_FIELDS.md header)
 
