@@ -136,7 +136,8 @@ Key finding: **the app does not hardcode validation ranges.** It queries the ser
 
 ## Endpoint → Fields Direct Mapping
 
-- [ENDPOINT_FIELDS.md](ENDPOINT_FIELDS.md) — 142 endpoints with request parameters and response model mapping (90 with identified response models)
+- [ENDPOINT_FIELDS.md) — 142 endpoints with request parameters and response models
+- [JSON_EXAMPLES.md](JSON_EXAMPLES.md) — 33 verified request payloads + 60 inferred + new parameter discoveries for thomluther's API
 
 ---
 
