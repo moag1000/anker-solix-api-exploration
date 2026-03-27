@@ -365,9 +365,9 @@ Source: `schedule.py`
 ## `set_device_attributes`
 
 ```json
-{"pv_power_limit": 3600, "ac_power_limit": 1200, "power_limit": 800}
+{"device_sn": "...", "attributes": {"pv_power_limit": 3600, "ac_power_limit": 1200, "power_limit": 800}}
 ```
-Source: `api.py`
+Source: `api.py` — upstream confirms all power fields go inside `attributes` dict
 
 ## `set_device_load`
 

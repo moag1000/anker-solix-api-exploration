@@ -1,68 +1,74 @@
 # App
 
 > 20 function calls, 18 unique endpoints
+>
+> **Source**: Regenerated from ENDPOINT_FIELDS.md (authoritative reference)
+>
+> **HA relevance**: Device bind/unbind and OTA are relevant. Help/FAQ, feedback,
+> banners, manuals, and push token endpoints are **not relevant** for HA integration
+> (app UI and support features only).
 
 ## `/app/devicemanage/update_relate_device_info`
 
-- **updateDeviceInfo**(`company, area, date, device_sn`)
+- **updateDeviceInfo**(`device_sn?, ble_mac, product_code, device_name, main_sw_version, sec_sw_version`)
 
 ## `/app/devicerelation/relate_device`
 
-- **deviceBind**(`check_list, feature_code, product_code`) → `DeviceModel`
+- **deviceBind**(`device_sn?, product_code, device_name, bt_ble_id, bt_ble_mac, firmware_version, wifi_name, parent_device_sn, parent_device_pn`) → `DeviceModel`
 
 ## `/app/devicerelation/un_relate_and_unbind_device`
 
-- **iotDeviceUnbind**(`device_sn`)
-- **deviceUnbind**(`sn`)
+- **iotDeviceUnbind**(`device_sn?, bt_ble_mac, parent_device_sn, parent_device_pn`)
+- **deviceUnbind**(`bt_ble_mac?, device_sn, unbind_type`)
 
 ## `/app/devicerelation/up_alias_name`
 
-- **updateDeviceName**(`peak_sessions`)
+- **updateDeviceName**(`device_sn?, device_mac, alias_name`)
 
 ## `/app/help/add_feedback`
 
-- **postFeedback**(`*(no params extracted)*`)
+- **postFeedback**(`attachment_key_prefixs?, device_name, product_number, device_sn, user_name, user_email, message_content, type, device_mac, subject, purchase_channel, order_number?`)
 
 ## `/app/help/app_versions/check`
 
-- **checkUpdateForApp**(`app_id, anker_power`) → `AppUpdateModel`
+- **checkUpdateForApp**(`version?`) → `AppUpdateModel`
 
 ## `/app/help/banner/nps`
 
-- **getNpsSurveyList**(`device_sn, attributes, init_status`) → `BannerModel`
+- **getNpsSurveyList**(`*(none extracted)*`) → `BannerModel`
 
 ## `/app/help/banners`
 
-- **getBanners**(`*(no params extracted)*`) → `BannerModel`
+- **getBanners**(`region?`) → `BannerModel`
 
 ## `/app/help/dst`
 
-- **getDaylightSavingTime**(`device_sn`)
-- **getCloudCurrentTimezone**(`station_id`)
+- **getDaylightSavingTime**(`city?`)
+- **getCloudCurrentTimezone**(`city?`)
 
 ## `/app/help/dynamic/config/list`
 
-- **getCustomerServicePhoneList**(`*(no params extracted)*`) → `CustomerServicePhoneInfos`
+- **getCustomerServicePhoneList**(`*(none extracted)*`) → `CustomerServicePhoneInfos`
 
 ## `/app/help/faqs`
 
-- **getFaqs**(`station_id`) → `FaqModel`
+- **getFaqs**(`*(none extracted)*`) → `FaqModel`
 
 ## `/app/help/handle_survey_popup`
 
-- **handleSurveyPopup**(`*(no params extracted)*`)
+- **handleSurveyPopup**(`banner_id?, handle_type`)
 
 ## `/app/help/manual_list`
 
-- **getUserManualsDeviceList**(`site_id`) → `UserManualsModel`
+- **getUserManualsDeviceList**(`*(none extracted)*`) → `UserManualsModel`
 
 ## `/app/help/product_tutorial_search`
 
-- **searchUserManualsDeviceDataList**(`city`) → `SearchUserManualsModel`
+- **searchUserManualsDeviceDataList**(`*(none extracted)*`) → `SearchUserManualsModel`
 
 ## `/app/help/scan_code_white_list`
 
-- **scanodeWhiteListReq**(`device_sn`) → `UrlWhiteListModel`
+- **scanodeWhiteListReq**(`*(none extracted)*`) → `UrlWhiteListModel`
 
 ## `/app/help/xtest/data`
 
@@ -70,9 +76,8 @@
 
 ## `/app/ota/batch/check_update`
 
-- **checkBatchOTAUpdateWifi**(`device_sn, type, start_time`) → `BatchDeviceModel`
+- **checkBatchOTAUpdateWifi**(`*(none extracted)*`) → `BatchDeviceModel`
 
 ## `/app/push/register_push_token`
 
-- **uploadDeviceToken**(`ab, mode`) → `RegionHostModel`
-
+- **uploadDeviceToken**(`is_notification_enable?, token`)

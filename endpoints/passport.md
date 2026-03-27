@@ -1,101 +1,107 @@
 # Passport
 
 > 25 function calls, 24 unique endpoints
+>
+> **Source**: Regenerated from ENDPOINT_FIELDS.md (authoritative reference)
+>
+> **HA relevance**: Only `login` and `token refresh` are relevant for HA integration.
+> All other endpoints (account management, email verification, third-party auth,
+> GDPR) are **not relevant** — they handle app account lifecycle, not device control.
+> Note: Passport endpoints are not covered in ENDPOINT_FIELDS.md (which focuses on power/charging/app endpoints). These endpoints were discovered in the Blutter decompilation but their parameters were not extractable from the same code paths. Parameters shown as `*(no params in ENDPOINT_FIELDS.md)*` need verification via API testing.
 
 ## `/passport/change_password`
 
-- **changePwdRequest**(`account`) → `Result`
+- **changePwdRequest**(`*(no params in ENDPOINT_FIELDS.md)*`) → `Result`
 
 ## `/passport/discount_desc`
 
-- **getDisCountDesc**(`site_id, start_time, end_time, type`)
+- **getDisCountDesc**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/passport/forget_password`
 
-- **sendForgetPwdEmailRequest**(`client_id, redirect_uri, response_type, scope, state`)
+- **sendForgetPwdEmailRequest**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/passport/freeze_account`
 
-- **freezeAccount**(`password, verify_kind, export_account, client_secret_info, public_key`)
+- **freezeAccount**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/passport/get_profile`
 
-- **getUserProfileRequest**(`*(no params extracted)*`) → `UserModel`
+- **getUserProfileRequest**(`*(none extracted)*`) → `UserModel`
 
 ## `/passport/get_subscriptions`
 
-- **getSubscription**(`*(no params extracted)*`) → `SubscribeEmailModel`
+- **getSubscription**(`*(none extracted)*`) → `SubscribeEmailModel`
 
 ## `/passport/get_user_param`
 
-- **getAppSwitchApi**(`user_params, param_type, param_value`) → `UserParamModel`
+- **getAppSwitchApi**(`*(no params in ENDPOINT_FIELDS.md)*`) → `UserParamModel`
 
 ## `/passport/login`
 
-- **iotLoginRequest**(`phone_number, verify_code, client_secret_info, public_key`) → `IotUserModel`
+- **iotLoginRequest**(`*(no params in ENDPOINT_FIELDS.md)*`) → `IotUserModel`
 
 ## `/passport/logout`
 
-- **logOutRequest**(`*(no params extracted)*`) → `Result`
+- **logOutRequest**(`*(none extracted)*`) → `Result`
 
 ## `/passport/phone_bind_account`
 
-- **bindPhoneNumberRequest**(`phone_number, kind`) → `IotUserModel`
+- **bindPhoneNumberRequest**(`*(no params in ENDPOINT_FIELDS.md)*`) → `IotUserModel`
 
 ## `/passport/phone_code_list`
 
-- **getPreDirectionPhoneCode**(`device_sn, type, device_sns`)
+- **getPreDirectionPhoneCode**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/passport/phone_reset_password`
 
-- **sendForgetPwdPhoneRequest**(`email`)
+- **sendForgetPwdPhoneRequest**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/passport/phone_verification_code`
 
-- **sendVerifyCodeRequest**(`email`)
+- **sendVerifyCodeRequest**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/passport/phone_verification_login`
 
-- **verifyCodeLoginRequest**(`email, password, is_subscribe, country_code`) → `IotUserModel`
+- **verifyCodeLoginRequest**(`*(no params in ENDPOINT_FIELDS.md)*`) → `IotUserModel`
 
 ## `/passport/phone_verification_regist`
 
-- **verifyCodeRegisterRequest**(`*(no params extracted)*`) → `UserModel`
+- **verifyCodeRegisterRequest**(`*(none extracted)*`) → `UserModel`
 
 ## `/passport/register`
 
-- **registerRequest**(`phone_number, verify_code, password, client_secret_info, public_key, is_subscribe, country_code`) → `UserModel`
+- **registerRequest**(`*(no params in ENDPOINT_FIELDS.md)*`) → `UserModel`
 
 ## `/passport/resend_active_email`
 
-- **sendVerifyEmailRequest**(`file_name, content_type, file_size, disable_ssl, type`) → `Result`
+- **sendVerifyEmailRequest**(`*(no params in ENDPOINT_FIELDS.md)*`) → `Result`
 
 ## `/passport/set_account_password`
 
-- **userSetPasswordApi**(`*(no params extracted)*`)
+- **userSetPasswordApi**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/passport/set_subscriptions`
 
-- **setSubscription**(`email`)
+- **setSubscription**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/passport/subscription_configs`
 
-- **getSubscriptionConfigs**(`*(no params extracted)*`)
+- **getSubscriptionConfigs**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/passport/third_party_login`
 
-- **thirdLoginRequest**(`email, password, client_secret_info, public_key`) → `IotUserModel`
+- **thirdLoginRequest**(`*(no params in ENDPOINT_FIELDS.md)*`) → `IotUserModel`
 
 ## `/passport/update_profile`
 
-- **updateUserProfileRequest**(`password, original_password`) → `UserModel`
+- **updateUserProfileRequest**(`*(no params in ENDPOINT_FIELDS.md)*`) → `UserModel`
 
 ## `/passport/update_user_param`
 
-- **setAppSwitchApi**(`*(no params extracted)*`)
+- **setAppSwitchApi**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/passport/validate_email`
 
-- **validateAccountRequest**(`site_id, status`) → `ValidateAccountModel`
-- **checkIsRegisterRequest**(`phone_number, verify_code, password, client_secret_info, public_key`) → `ValidateAccountModel`
-
+- **validateAccountRequest**(`*(no params in ENDPOINT_FIELDS.md)*`) → `ValidateAccountModel`
+- **checkIsRegisterRequest**(`*(no params in ENDPOINT_FIELDS.md)*`) → `ValidateAccountModel`

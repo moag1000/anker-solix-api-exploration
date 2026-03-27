@@ -281,11 +281,17 @@
 
 ## `/charging_hes_svc/set_station_evchargers`
 
-**bindUnX1Charger** — *(no params extracted)*
+**bindUnX1Charger**
+- Required: `evChargers`
+- Optional: `stationId, deleteFlag, forceBindFlag`
+- ⚠️ Uses **camelCase** field names
 
 ## `/charging_hes_svc/update_hes_utility_rate_plan`
 
-**updatePeakAndValley** — *(no params extracted)*
+**updatePeakAndValley**
+- Required: `peakValleyPriceSeason`
+- Optional: `siteId`
+- ⚠️ Uses **camelCase** field names; this is a HES-specific endpoint, NOT `set_site_device_param`
 
 ## `/charging_hes_svc/update_wifi_config`
 
@@ -597,37 +603,41 @@
 
 ## `/power_service/v1/app/device/set_device_attrs`
 
+> **Upstream-confirmed nesting**: `switch_0w`, `pv_power_limit`, `tag`, etc. go **inside** `attributes`.
+> Pattern: `{"device_sn": "...", "attributes": {"switch_0w": 0, "pv_power_limit": 800}}`
+
 **setDevicePowerOptionsReq**
-- Required: `attributes, device_sn`
+- Required: `device_sn, attributes` (attributes contains: `power_limit?, ac_power_limit?, pv_power_limit?`)
 
 **setDeviceGameStatus**
-- Required: `attributes, init_status, device_sn`
+- Required: `device_sn, attributes` (attributes contains: `init_status`)
 
 **setTouElectricAttrs**
-- Required: `attributes, pps_use_time, device_sn`
+- Required: `device_sn, attributes` (attributes contains: `pps_use_time`)
 
 **getCurrencySetDeviceAttrs**
-- Required: `attributes, currency, device_sn`
+- Required: `device_sn, attributes` (attributes contains: `currency`)
 
 **setSolarName**
-- Required: `device_pn, attributes, device_sn`
+- Required: `device_sn, device_pn, attributes`
 
 **setDeviceFeedGridSwitch**
-- Required: `attributes, switch_0w, device_sn`
+- Required: `device_sn, attributes` (attributes contains: `switch_0w` — 0=allow, 1=block)
 
 **setDevicePvPowerOptionsReq**
-- Required: `attributes, pv_power_limit, device_sn`
+- Required: `device_sn, attributes` (attributes contains: `pv_power_limit` in W)
 
 **setLocationTag**
-- Required: `attributes, tag, device_sn`
+- Required: `device_sn, attributes` (attributes contains: `tag`)
 
 **setPpsSolarName**
-- Required: `device_pn, attributes, device_sn`
+- Required: `device_sn, device_pn, attributes`
 
 ## `/power_service/v1/app/device/set_device_home_load`
 
 **setDeviceHomeLoadRes**
-- Required: `home_load_data, device_sn`
+- Required: `device_sn, home_load_data`
+- Optional: `site_id` (upstream confirms site_id is sent but may not be strictly required)
 
 **set17C1DeviceHomeLoadRes**
 - Required: `mode_type`
@@ -771,8 +781,7 @@
 ## `/power_service/v1/message_not_disturb`
 
 **setEvChargerPushMessage**
-- Required: `start_charging, stop_charging, paused_charging, paused_car_charging, restore_charging, smart_charging, boost_charging`
-- Optional: `disturb_scenes`
+- Required: `disturb_scenes` (nested object containing: `stop_charging, start_charging, paused_charging, paused_car_charging, restore_charging, smart_charging, boost_charging`)
 
 **setMessageDisturb**
 - Optional: `start_time, end_time, disturb_switch`
@@ -963,8 +972,9 @@
 - Required: `param_type, cmd, param_data, site_id`
 
 **setSiteDevicePowerLimit**
-- Required: `limit, param_type, cmd, param_data`
-- Optional: `power_limit, limit_real, site_id`
+- Required: `param_type, cmd, param_data`
+- Optional: `site_id`
+- ⚠️ `power_limit`, `limit`, `limit_real` are **inside** the JSON-encoded `param_data` string, not top-level fields
 
 ## `/power_service/v1/site/shift_power_site_type`
 

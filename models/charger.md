@@ -18,9 +18,7 @@ Source: `model/a2687/a2687_protocol_agreement_model.dart`
 
 Source: `model/a91b2/easter_egg_tigger_record_model.dart`
 
-```
-egg_type
-```
+Hidden gamification feature on charger devices — trigger details omitted to avoid spoilers.
 
 ## PowerRangeProtocolsResponse
 

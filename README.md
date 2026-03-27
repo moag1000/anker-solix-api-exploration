@@ -36,6 +36,9 @@
 | `libapp.so` strings | `strings` extraction + pattern matching | MQTT field names, model `toString()` patterns, debug log messages | High for field names, low for interpretation |
 | mqtt_monitor sessions | Live MQTT traffic capture on real devices (A17C1, A17X8) | Verified MQTT command fields, state change tracking | High — byte-for-byte verified |
 | APK manifest + resources | Standard APK analysis | Device model codes, BLE UUIDs, app version | High |
+| Model `toJson()` methods | 460 class scan across `asm/charging/model/` | Exact request body nesting, field names per model | High — compiler-generated serialization |
+| Device-specific logic | `ui/page/device/*/` + helper classes scan | 95 additional endpoints not in central repository | Medium — device-specific, may not be available to all accounts |
+| Upstream cross-reference | thomluther/anker-solix-api code comparison | Nesting verification, missing fields, confirmed constants | High — upstream code is community-tested on real devices |
 
 **Dart SDK**: 3.4.4 (stable), snapshot hash `d20a1be77c3d3c41b2a5accaee1ce549`
 
@@ -64,16 +67,36 @@
 
 ## Statistics
 
-- **243** function-to-endpoint mappings across **205** unique API endpoints
+- **~243** unique API endpoints across **12** service prefixes
+  - 148 from `http_request_repository_impl.dart` (initial extraction)
+  - +95 from device-specific logic files (breadth scan)
+- **460** toJson() class implementations scanned (depth analysis)
 - **94** response models with field names
 - **180** endpoints with required/optional field classification
 - **33** device setting categories with complete GET→SET flows
 - **82** BLE/IoT SDK action names (65 actions + 14 prop + 3 query)
-- **234** cross-referenced field types with examples
+- **234+** cross-referenced field types with examples
 - **60** unique product codes (44 IoT + 16 from message models)
 - **30+** enum types with exact API integer values
 - **71** real API response examples from thomluther's code
 - **13** supported countries for dynamic pricing
+
+### API Service Prefixes
+
+| Prefix | Endpoints | Primary Device |
+|--------|-----------|---------------|
+| `/power_service/v1/` | ~130 | All devices (core API) |
+| `/power_service/v2/` | 5 | AX170, A17EX (newer) |
+| `/charging_hes_svc/` | ~55 | A5101 HES/X1 |
+| `/charging_energy_service/` | ~12 | A17B1 System |
+| `/charging_hes_dynamic_price_svc/` | 6 | Dynamic pricing |
+| `/charging_disaster_prepared/` | 5 | Storm Guard |
+| `/charging_pv_svc/` | 5 | A5140 Solar |
+| `/charging_common_svc/` | 3 | Location |
+| `/smart_service/v1/` | 3 | Anka AI Agent |
+| `/charging_imsg_svc/` | 2 | EV Charger faults |
+| `/mini_power/v1/` | 27 | A2345/A2687 Charger |
+| `/app/` | ~10 | Auth, News, AIOT |
 
 ---
 
@@ -120,9 +143,10 @@ The type numbers are already listed in `apitypes.py` of [thomluther/anker-solix-
 | power_service/v1/app/device/ | [power_service_device.md](endpoints/power_service_device.md) | 8 | Device attributes, home load (21 functions, heavily overloaded) |
 | power_service/v1/app/share_site/ | [power_service_share.md](endpoints/power_service_share.md) | 5 | Site member management |
 | power_service/v1/dynamic_price/ | [power_service_dynamic_price.md](endpoints/power_service_dynamic_price.md) | 3 | Dynamic pricing (Nordpool, Tibber, Octopus) |
-| charging_pv_svc/ | [charging_pv_svc.md](endpoints/charging_pv_svc.md) | 3 | Standalone inverters |
+| charging_pv_svc/ | [charging_pv_svc.md](endpoints/charging_pv_svc.md) | 4 | Standalone inverters |
 | power_service/v1/ai_ems/ | [power_service_ai_ems.md](endpoints/power_service_ai_ems.md) | 2 | AI Energy Management |
 | charging_common_svc/ | [charging_common_svc.md](endpoints/charging_common_svc.md) | 1 | Location services |
+| *(device-specific)* | [device_specific.md](endpoints/device_specific.md) | 95 | EV Charger, Generator, HES, Storm Guard, AI, etc. |
 
 ---
 
@@ -141,12 +165,12 @@ Key finding: **the app does not hardcode validation ranges.** It queries the ser
 
 ## Endpoint → Fields Direct Mapping
 
-- [PARAM_DATA_STRUCTURES.md](PARAM_DATA_STRUCTURES.md) — Nested JSON structures for param_data per param_type (verified against thomluther's Issue #423 findings)
-- [ENDPOINT_FIELDS.md](ENDPOINT_FIELDS.md) — 142 endpoints with request parameters and response model mapping (90 with identified response models)
+- [PARAM_DATA_STRUCTURES.md](PARAM_DATA_STRUCTURES.md) — Nested JSON structures for param_data per param_type (cross-referenced with thomluther's Issue #423 device findings)
+- [ENDPOINT_FIELDS.md](ENDPOINT_FIELDS.md) — ~150 endpoints with request parameters and response model mapping (91 with identified response models), plus nesting corrections from 460 toJson() class analysis
 
 ## JSON Payloads and Examples
 
-- [JSON_EXAMPLES.md](JSON_EXAMPLES.md) — 33 verified request payloads + 60 inferred + new parameter discoveries + enum constants + device-specific payload templates (EV charger, generator, SceneInfo feature flags)
+- [JSON_EXAMPLES.md](JSON_EXAMPLES.md) — 33 upstream-sourced request payloads + 60 inferred + new parameter discoveries + enum constants + device-specific payload templates (EV charger, generator, SceneInfo feature flags)
 - [RESPONSE_EXAMPLES.md](RESPONSE_EXAMPLES.md) — 71 real API response examples from 48 endpoints (extracted from thomluther's documented code)
 
 ## Enums, Constants, and Product Codes
@@ -229,7 +253,7 @@ Key models that carry validation information:
 ## Known Limitations
 
 - **Dart names ≠ JSON keys** — the response model fields are Dart property names (camelCase). The actual API JSON uses snake_case in most cases, but the mapping is not 1:1 — see [DART_PYTHON_MAPPING.md](DART_PYTHON_MAPPING.md) for 35 confirmed pairs
-- **Flat field lists ≠ JSON structure** — fields are listed without nesting information. Real responses have objects, arrays, and optional fields that this reference does not capture
+- **Partial nesting information** — key SET functions now have upstream-confirmed nesting (set_device_attrs, param_data) and structurally inferred nesting from toJson() analysis (disturb_scenes, home_load_data), but many GET response structures still lack full nesting detail
 - **Example responses are from thomluther's code** — [RESPONSE_EXAMPLES.md](RESPONSE_EXAMPLES.md) has 71 examples, but these are copies from thomluther's docstrings, not independently captured
 - **Field types** (int/string/bool/list) are not extractable — the TLV protocol carries type information in the data packets themselves, and the server responses use standard JSON typing
 - **Validation ranges** are dynamic (from server), not hardcoded in the app — each device/region may have different min/max/step values

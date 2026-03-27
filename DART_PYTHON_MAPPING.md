@@ -4,7 +4,7 @@
 > snake_case JSON equivalents. Where thomluther's library uses a different name,
 > the Python name is shown in the third column.
 
-**35** confirmed camelCase↔snake_case pairs found in the same source files.
+**35** cross-referenced camelCase↔snake_case pairs found in the same source files.
 
 | Dart (camelCase) | JSON (snake_case) | In thomluther's mqttmap? |
 |-----------------|-------------------|-------------------------|

@@ -1,53 +1,55 @@
 # Power Service Other
 
 > 13 function calls, 12 unique endpoints
+>
+> **Source**: Regenerated from ENDPOINT_FIELDS.md (authoritative reference)
 
 ## `/power_service/v1/add_message`
 
-- **addMessage**(`device_sn, product_code, device_name, bt_ble_id, bt_ble_mac, firmware_version, wifi_name, parent_device_sn, parent_device_pn`)
+- **addMessage**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/power_service/v1/currency/get_list`
 
-- **getCurrencyGetList**(`solar_bank_sn, solar_sn`) → `CurrencyInfo`
+- **getCurrencyGetList**(`counrty?`) → `CurrencyInfo`
 
 ## `/power_service/v1/del_message`
 
-- **delMessage**(`token`)
+- **delMessage**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/power_service/v1/get_all_service_config`
 
-- **getAllQaEnvConfig**(`*(no params extracted)*`)
+- **getAllQaEnvConfig**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/power_service/v1/get_message`
 
-- **getMessage**(`*(no params extracted)*`) → `MsgHttpModel`
+- **getMessage**(`last_time?, device_sns?, limit?, message_type, last_msg_id?`) → `MsgHttpModel`
 
 ## `/power_service/v1/get_message_not_disturb`
 
-- **getMessageDisturb**(`*(no params extracted)*`) → `GdprLinkResponseModel`
+- **getMessageDisturb**(`*(none extracted)*`) → `MsgDisturbHttpModel`
 
 ## `/power_service/v1/get_message_sn_list`
 
-- **getMessageSnList**(`last_time, device_sns, limit, message_type, last_msg_id`)
+- **getMessageSnList**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/power_service/v1/get_message_unread`
 
-- **getMessageUnread**(`*(no params extracted)*`)
+- **getMessageUnread**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/power_service/v1/message_not_disturb`
 
-- **setEvChargerPushMessage**(`start_time, end_time, disturb_switch`)
-- **setMessageDisturb**(`*(no params extracted)*`)
+- **setEvChargerPushMessage**(`disturb_scenes`)
+  - `disturb_scenes` is a nested object: `{stop_charging, start_charging, paused_charging, ...}`
+- **setMessageDisturb**(`start_time?, end_time?, disturb_switch?`)
 
 ## `/power_service/v1/product_accessories`
 
-- **getProductAccessories**(`device_model, device_sn, brand_id`)
+- **getProductAccessories**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/power_service/v1/product_categories`
 
-- **getProductCategories**(`*(no params extracted)*`)
+- **getProductCategories**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/power_service/v1/read_message`
 
-- **setMessageRead**(`disturb_scenes, start_charging, stop_charging, paused_charging, paused_car_charging, restore_charging, smart_charging, boost_charging`)
-
+- **setMessageRead**(`*(no params in ENDPOINT_FIELDS.md)*`)

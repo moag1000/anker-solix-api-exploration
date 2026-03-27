@@ -1,10 +1,13 @@
 # JSON Request Examples per Endpoint
 
-> Request payloads extracted from thomluther's Python code (marked **verified**)
+> Request payloads extracted from thomluther's Python code (marked **upstream-sourced**)
 > and supplemented with Blutter-decompiled parameters (marked *inferred*).
 > Replace placeholder values (siteId, deviceSn, etc.) with actual IDs.
+>
+> Note: "upstream-sourced" means the payload comes from thomluther/anker-solix-api's
+> community-tested implementation, not that we independently tested it against the API.
 
-## Verified Requests (from thomluther's implementation)
+## Upstream-Sourced Requests (from thomluther/anker-solix-api, community-tested)
 
 ### `check_upgrade_record`
 `check_upgrade_record`
@@ -476,7 +479,7 @@ Function: `getCustomChargeModeSetting`
 ```
 
 ### `get_easter_egg_trigger_list`
-Function: `getEasterEggRecord`
+Function: `getEasterEggRecord` — hidden gamification feature on charger devices (details omitted)
 
 ```json
 {"device_sn": "..."}
@@ -705,55 +708,55 @@ Blutter reveals the expected response contains:
 ```
 Function: `getCustomChargeModeSetting` — these fields indicate available charger modes and compatibility state.
 
-### `set_device_attributes` — Multiple usage patterns
+### `set_device_attributes` — Upstream-confirmed nesting pattern
 
-The `set_device_attrs` endpoint (`power_service/v1/app/device/set_device_attrs`) is used by **9 different functions** in the app, each with a different payload structure:
+The `set_device_attrs` endpoint (`power_service/v1/app/device/set_device_attrs`) is used by **9 different functions** in the app. Upstream's community-tested code confirms that all additional fields go **inside** the `attributes` dict:
 
 #### Set power options
 ```json
-{"device_sn": "...", "attributes": {...}, "enable_0w_v2": true}
+{"device_sn": "...", "attributes": {"power_limit": 800, "ac_power_limit": 1200, "pv_power_limit": 3600}}
 ```
 Function: `setDevicePowerOptionsReq`
 
 #### Set TOU electricity attributes
 ```json
-{"device_sn": "...", "attributes": {...}, "pps_use_time": "..."}
+{"device_sn": "...", "attributes": {"pps_use_time": "..."}}
 ```
 Function: `setTouElectricAttrs`
 
 #### Set currency
 ```json
-{"device_sn": "...", "attributes": {...}, "currency": "..."}
+{"device_sn": "...", "attributes": {"currency": "EUR"}}
 ```
 Function: `getCurrencySetDeviceAttrs`
 
 #### Set solar panel names
 ```json
-{"device_sn": "...", "device_pn": "...", "attributes": {...}}
+{"device_sn": "...", "device_pn": "...", "attributes": {"pv1_name": "...", "pv2_name": "..."}}
 ```
 Function: `setSolarName` / `setPpsSolarName`
 
 #### Set 0W feed-in grid switch
 ```json
-{"device_sn": "...", "attributes": {...}, "switch_0w": 0}
+{"device_sn": "...", "attributes": {"switch_0w": 0}}
 ```
-Function: `setDeviceFeedGridSwitch`
+Function: `setDeviceFeedGridSwitch` — 0=allow grid export, 1=block
 
 #### Set PV power limit
 ```json
-{"device_sn": "...", "attributes": {...}, "pv_power_limit": 800}
+{"device_sn": "...", "attributes": {"pv_power_limit": 800}}
 ```
 Function: `setDevicePvPowerOptionsReq`
 
 #### Set location tag
 ```json
-{"device_sn": "...", "attributes": {...}, "tag": "..."}
+{"device_sn": "...", "attributes": {"tag": "outdoor"}}
 ```
 Function: `setLocationTag`
 
 #### Set game/demo status
 ```json
-{"device_sn": "...", "attributes": {...}, "init_status": "..."}
+{"device_sn": "...", "attributes": {"init_status": "1"}}
 ```
 Function: `setDeviceGameStatus`
 

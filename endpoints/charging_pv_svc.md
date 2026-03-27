@@ -1,16 +1,23 @@
 # Charging Pv Svc
 
-> 3 function calls, 3 unique endpoints
+> 4 function calls, 4 unique endpoints
+>
+> **Source**: Regenerated from ENDPOINT_FIELDS.md (authoritative reference)
 
 ## `/charging_pv_svc/getPvStatus`
 
-- **getPvStatus**(`*(no params extracted)*`) → `A5140DeviceStatus`
+- **getPvStatus**(`sns?`) → `A5140DeviceStatus`
 
 ## `/charging_pv_svc/selectUserTieredElecPrice`
 
-- **selectUserTieredElecPrice**(`site_id, param_type, cmd, param_data`) → `CurrencyElecModel`
+- **selectUserTieredElecPrice**(`sn?`) → `CurrencyElecModel`
 
 ## `/charging_pv_svc/updateUserTieredElecPrice`
 
-- **updateUserTieredElecPrice**(`device_sn, op_type, toggle, value`)
+- **updateUserTieredElecPrice**(`sn, currencyUnit, tieredElecPrices`)
+  - Upstream-confirmed: `tieredElecPrices` = `[{"from": "00:00", "to": "23:59", "price": 0.30}]`
 
+## `/charging_pv_svc/set_aps_power`
+
+- **set_device_pv_power**(`sn, power`)
+  - Upstream-confirmed: sets standalone inverter power limit in Watts

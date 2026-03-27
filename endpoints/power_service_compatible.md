@@ -1,52 +1,58 @@
 # Power Service Compatible
 
 > 12 function calls, 12 unique endpoints
+>
+> **Source**: Regenerated from ENDPOINT_FIELDS.md (authoritative reference)
 
 ## `/power_service/v1/app/compatible/check_third_sn`
 
-- **checkThirdSN**(`device_sn, insert_sn`) → `OTAUpdateStatus`
+- **checkThirdSN**(`device_model?, device_sn, brand_id`) → `OTAUpdateStatus`
 
 ## `/power_service/v1/app/compatible/confirm_permissions_settings`
 
-- **getConfirmPermissionsSettingsApi**(`sns`) → `BrandModel`
+- **getConfirmPermissionsSettingsApi**(`device_model?, confirm_type`) → `BrandModel`
 
 ## `/power_service/v1/app/compatible/get_compatible_process`
 
-- **checkSolarForceUpdateState**(`device_sn`) → `CheckSolarForceUpdateModel`
+- **checkSolarForceUpdateState**(`solar_sn?, solarbank_sn`) → `CheckSolarForceUpdateModel`
 
 ## `/power_service/v1/app/compatible/get_confirm_permissions`
 
-- **getConfirmPermissionsApi**(`*(no params extracted)*`) → `ConfirmModel`
+- **getConfirmPermissionsApi**(`device_model?`) → `ConfirmModel`
 
 ## `/power_service/v1/app/compatible/get_installation`
 
-- **getInstallationApi**(`device_models`) → `SaveCompatibleSolarModel`
+- **getInstallationApi**(`solarbank_sn?, site_id?`) → `SaveCompatibleSolarModel`
 
 ## `/power_service/v1/app/compatible/get_ota_info`
 
-- **getThirdOtaInfo**(`device_sn, solar_pn, insert_sn, rollback_install_mode`) → `ThirdOtaInfoModel`
+- **getThirdOtaInfo**(`solar_bank_sn?, solar_sn`) → `ThirdOtaInfoModel`
 
 ## `/power_service/v1/app/compatible/get_ota_update`
 
-- **getThirdOtaStatus**(`device_mac`) → `OTAUpdateStatus`
+- **getThirdOtaStatus**(`device_sn?, insert_sn`) → `OTAUpdateStatus`
 
 ## `/power_service/v1/app/compatible/installation_popup`
 
-- **getIncompatiblePopupApi**(`solarbank_sn, site_id`)
+- **getIncompatiblePopupApi**(`site_id?`)
 
 ## `/power_service/v1/app/compatible/save_compatible_solar`
 
-- **saveCompatibleSolarApi**(`device_sn, param_type, device_pn`) → `SaveCompatibleSolarModel`
+- **saveCompatibleSolarApi**(`*(none extracted)*`) → `SaveCompatibleSolarModel`
 
 ## `/power_service/v1/app/compatible/save_ota_complete_status`
 
-- **saveThirdOtaInfo**(`device_model, device_sn, date`)
+- **saveThirdOtaInfo**(`solarbank_sn?, ota_complete_status`)
 
 ## `/power_service/v1/app/compatible/set_installation`
 
-- **setInstallationApi**(`solarbank_sn, ota_complete_status`)
+- **setInstallationApi**(`install_mode?, site_id?, is_save, solarbank_sn?`)
 
 ## `/power_service/v1/app/compatible/set_ota_update`
 
-- **setThirdOta**(`install_mode, site_id, is_save, solarbank_sn`)
+- **setThirdOta**(`device_sn?, solar_pn, insert_sn, rollback_install_mode`)
 
+## `/power_service/v1/app/compatible/set_power_cutoff`
+
+- **set_power_cutoff**(`device_sn, cutoff_data_id`)
+  - Upstream-confirmed: sets min SOC via `cutoff_data_id` from `get_power_cutoff` response

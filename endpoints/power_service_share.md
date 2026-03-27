@@ -1,24 +1,25 @@
 # Power Service Share
 
 > 5 function calls, 5 unique endpoints
+>
+> **Source**: Regenerated from ENDPOINT_FIELDS.md (authoritative reference)
 
 ## `/power_service/v1/app/share_site/delete_inviting_member`
 
-- **deleteInviteMember**(`*(no params extracted)*`)
+- **deleteInviteMember**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/power_service/v1/app/share_site/delete_site_member`
 
-- **deleteSiteMember**(`*(no params extracted)*`)
+- **deleteSiteMember**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/power_service/v1/app/share_site/get_invited_list`
 
-- **getInviteMember**(`*(no params extracted)*`) → `SiteInviteMemberModel`
+- **getInviteMember**(`site_id?, status`) → `SiteInviteMemberModel`
 
 ## `/power_service/v1/app/share_site/invite_member`
 
-- **inviteMemberSite**(`site_id, device_sn, remove_key, use_time`)
+- **inviteMemberSite**(`*(no params in ENDPOINT_FIELDS.md)*`)
 
 ## `/power_service/v1/app/share_site/join_site`
 
-- **joinSite**(`*(no params extracted)*`)
-
+- **joinSite**(`*(no params in ENDPOINT_FIELDS.md)*`)

@@ -7,7 +7,7 @@
 > The API expects: `{"param_data": "{\"key\":{\"nested\":\"value\"}}"}` — a string
 > containing JSON, not a nested object directly.
 >
-> Verified example from thomluther (param_type 19):
+> Device-tested example from upstream (param_type 19):
 > ```json
 > {"site_id": "<id>", "param_type": "19", "cmd": 17,
 >  "param_data": "{\"power_limit\":{\"limit\":3600,\"limit_real\":3600}}"}
@@ -17,7 +17,7 @@
 
 Function: `setSiteDevicePowerLimit`
 
-Verified by thomluther ([Issue #423](https://github.com/thomluther/ha-anker-solix/issues/423#issuecomment-4135301109)):
+Device-tested by thomluther ([Issue #423](https://github.com/thomluther/ha-anker-solix/issues/423#issuecomment-4135301109)):
 
 ```json
 {
@@ -195,21 +195,27 @@ This technique can reveal nesting that flat field name extraction misses.
 Extracted using 4 methods: Map._fromLiteral + TypeArguments, jsonEncode tracing,
 json.dumps patterns, and StoreField nesting analysis across the entire codebase.
 
-### set_device_attrs — 9 Different Payload Patterns
+### set_device_attrs — Confirmed Nesting Pattern
 
-The `set_device_attrs` endpoint uses `device_sn` + `attributes` as base, with
-different additional fields per use case:
+The `set_device_attrs` endpoint uses `device_sn` + `attributes` dict. **Upstream confirms**
+that additional fields like `switch_0w`, `pv_power_limit` go **inside** the `attributes`
+dict, NOT alongside it:
 
+```json
+{"device_sn": "...", "attributes": {"pv_power_limit": 800, "switch_0w": 0}}
 ```
-setDevicePowerOptionsReq:     {"device_sn": "...", "attributes": {...}, "enable_0w_v2": true}
-setTouElectricAttrs:          {"device_sn": "...", "attributes": {...}, "pps_use_time": "..."}
-getCurrencySetDeviceAttrs:    {"device_sn": "...", "attributes": {...}, "currency": "..."}
-setSolarName:                 {"device_sn": "...", "device_pn": "...", "attributes": {...}}
-setDeviceFeedGridSwitch:      {"device_sn": "...", "attributes": {...}, "switch_0w": 0}
-setDevicePvPowerOptionsReq:   {"device_sn": "...", "attributes": {...}, "pv_power_limit": 800}
-setLocationTag:               {"device_sn": "...", "attributes": {...}, "tag": "..."}
-setDeviceGameStatus:          {"device_sn": "...", "attributes": {...}, "init_status": "..."}
-setPpsSolarName:              {"device_sn": "...", "device_pn": "...", "attributes": {...}}
+
+Per-function attribute keys (all go inside `attributes`):
+```
+setDevicePowerOptionsReq:     attributes: {power_limit?, ac_power_limit?, pv_power_limit?}
+setTouElectricAttrs:          attributes: {pps_use_time}
+getCurrencySetDeviceAttrs:    attributes: {currency}
+setSolarName:                 device_pn + attributes: {}
+setDeviceFeedGridSwitch:      attributes: {switch_0w}        ← 0=allow grid, 1=block
+setDevicePvPowerOptionsReq:   attributes: {pv_power_limit}   ← in Watts
+setLocationTag:               attributes: {tag}
+setDeviceGameStatus:          attributes: {init_status}
+setPpsSolarName:              device_pn + attributes: {}
 ```
 
 ### Shelly Device Control
@@ -339,27 +345,44 @@ home_usage = {branch_load, other_load}
 
 ## Notes on Accuracy
 
-- **param_type 19** structure is **verified** by thomluther (Issue #423)
+### Confidence Levels
+
+| Level | Description | Examples |
+|-------|-------------|---------|
+| **Device-tested** | Tested on real devices by specific community member | param_type 19 power_limit (thomluther, Issue #423) |
+| **Upstream-confirmed** | From upstream's community-tested code | param_type 18, 26, 6, 23; set_device_attrs nesting |
+| **Structurally inferred** | Consistent Blutter decompilation / toJson() analysis | disturb_scenes nesting, home_load_data nesting |
+| **Heuristic** | StoreField pattern, may conflate sequential assignments with nesting | Some nested structures |
+
+### Known Issues
+
+- **param_type 19** structure is **device-tested** by thomluther (Issue #423)
 - **param_type 18, 26, 6, 23** structures are from **upstream schedule.py examples** (high confidence)
-- **set_device_attrs patterns** show `switch_0w`, `pv_power_limit`, `tag` etc. as separate
-  keys alongside `attributes` in the decompiled code. Upstream confirms this pattern for
-  `{"attributes": {"pv_power_limit": 800}}`. Whether additional keys like `switch_0w` are
-  at the same level or inside `attributes` needs API testing to confirm.
+- **set_device_attrs nesting RESOLVED**: Upstream confirms `switch_0w`, `pv_power_limit`, `tag` etc.
+  go **inside** the `attributes` dict: `{"device_sn": "...", "attributes": {"switch_0w": 0}}`
+- **`setDeviceHomeLoadRes` missing `site_id`**: Upstream confirms `site_id` is sent (now fixed)
+- **Missing from APK extraction**: `set_power_cutoff` and `set_aps_power` — added from upstream
 - **AX170 IoT actions** include `deviceSn` alongside `id` and `param` (corrected from
   initial documentation that showed only `{id, param}`)
 - **StoreField nesting** analysis may sometimes conflate sequential field assignments
   with nested object construction — treat as hints, not specifications
+- **`endpoints/*.md` files** had a systematic parameter-shifting bug (now fixed): parameters
+  from one function were incorrectly assigned to adjacent functions. All 16 files have been
+  regenerated from `ENDPOINT_FIELDS.md`. Use `ENDPOINT_FIELDS.md` as the authoritative source
+- **camelCase HES endpoints**: `bindUnX1Charger` and `updatePeakAndValley` use camelCase
+  field names (`stationId`, `evChargers`, `siteId`, `peakValleyPriceSeason`), unlike
+  the snake_case convention used by most power_service endpoints
 
 ---
 
-## Remaining SET Function Payloads (32 functions)
+## Remaining SET Function Payloads (31 functions)
 
 Extracted from `http_request_repository_impl.dart`. Endpoint paths are in
 [ENDPOINT_FIELDS.md](ENDPOINT_FIELDS.md) — keys here show the request body structure.
 
 ### Home Load
 - **set17C1DeviceHomeLoadRes**: `device_sn, mode_type, custom_rate_plan?, home_load_data?`
-- **setDeviceHomeLoadRes**: `device_sn, home_load_data`
+- **setDeviceHomeLoadRes**: `site_id, device_sn, home_load_data` (upstream confirms site_id is required)
 
 ### Site/Device Param (generic)
 - **setSiteDeviceParam**: `site_id, param_type, cmd, param_data`
@@ -368,7 +391,8 @@ Extracted from `http_request_repository_impl.dart`. Endpoint paths are in
 ### Site Management
 - **createSiteRequest**: `site_name, site_img, solar_list, pps_list?, solarbank_list?, ...`
 - **updateSiteDevices**: `site_id, pps_list`
-- **updateSitePriceRequest**: `site_id, price, site_co2?, site_price_unit?, price_type?`
+- **updateSitePriceRequest**: `site_id, price, site_co2?, site_price_unit?, price_type?, current_mode?, accuracy?, dynamic_price?`
+  - `dynamic_price` nested: `{"country": "...", "company": "Nordpool", "area": "GER", "pct": float?, "adjust_coef": float?}`
 
 ### OTA/Firmware
 - **setThirdOta**: `device_sn, solar_pn, insert_sn, rollback_install_mode`
@@ -396,7 +420,7 @@ Extracted from `http_request_repository_impl.dart`. Endpoint paths are in
 ### HES/Energy Service
 - **changePriceUnit**: `station_id, price_unit`
 - **changeA17B1PriceUnit**: (same pattern for A17B1)
-- **dealUtilityRatePlanData**: `device_sn, attributes, switch_0w`
+- **dealUtilityRatePlanData**: `peak_sessions` (endpoint: `/charging_energy_service/preprocess_utility_rate_plan`)
 - **deleteAndRestartPeakValley**: `station_id, far_field_model`
 - **reportHesEvents**: `station_id, pn, language, event`
 - **bindUnX1Charger**: `stationId, evChargers, deleteFlag, forceBindFlag` (uses **camelCase**)
@@ -411,9 +435,11 @@ Extracted from `http_request_repository_impl.dart`. Endpoint paths are in
 - **setRemainPluginStatus**: (payload from setDeviceFeature — `site_id, smart_plug` list)
 
 ### Notifications
-- **setEvChargerPushMessage**: `disturb_scenes, start_charging, stop_charging, paused_charging, paused_car_charging, restore_charging, smart_charging, boost_charging`
+- **setEvChargerPushMessage**: `disturb_scenes` (nested object containing: `stop_charging, start_charging, paused_charging, paused_car_charging, restore_charging, smart_charging, boost_charging`)
 - **setMessageDisturb**: `start_time, end_time, disturb_switch`
 
 ### Pricing
 - **updateUserTieredElecPrice**: (via CurrencyElecModel — `sn, currencyUnit, tieredElecPrices`)
-- **updatePeakAndValley**: `power_limit, limit, limit_real, site_id, param_type=19, cmd, param_data`
+- **updatePeakAndValley**: `siteId, peakValleyPriceSeason` (camelCase! — endpoint: `/charging_hes_svc/update_hes_utility_rate_plan`)
+  - ⚠️ This is a **HES-specific endpoint**, NOT a `set_site_device_param` wrapper
+  - Previously incorrectly documented with `power_limit, limit, limit_real` — those belong to `setSiteDevicePowerLimit`

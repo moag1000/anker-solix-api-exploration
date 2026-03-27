@@ -241,10 +241,43 @@
 
 - **updateWiFiConfig**(`ssid?, sn, rssi, encryption`)
 
+## `get_station_evchargers`
+`/charging_hes_svc/get_station_evchargers`
+
+- **getX1BindChargerList**(`station_id?`)
+
+## `set_station_evchargers`
+`/charging_hes_svc/set_station_evchargers`
+
+- **bindUnX1Charger**(`stationId?, evChargers, deleteFlag?, forceBindFlag?`)
+  - ⚠️ Uses **camelCase** field names (unlike most API endpoints)
+
+## `get_system_running_time`
+`/charging_hes_svc/get_system_running_time`
+
+- **getDeviceRunTime**(`station_id?`)
+
+## `get_world_monetary_unit`
+`/charging_hes_svc/get_world_monetary_unit`
+
+- **getPriceUnits**(`station_id?`)
+
+## `update_hes_utility_rate_plan`
+`/charging_hes_svc/update_hes_utility_rate_plan`
+
+- **updatePeakAndValley**(`siteId?, peakValleyPriceSeason`)
+  - ⚠️ Uses **camelCase** field names
+  - This is a HES-specific endpoint, NOT a `set_site_device_param` wrapper
+
 ## `user_event_alarm`
 `/charging_hes_svc/user_event_alarm`
 
 - **reportHesEvents**(`station_id?, pn, language, event`) → **A5101EventsSetModel**
+
+## `user_fault_alarm`
+`/charging_hes_svc/user_fault_alarm`
+
+- **sendDeviceReport**(`station_id?`)
 
 ## `getPvStatus`
 `/charging_pv_svc/getPvStatus`
@@ -509,20 +542,25 @@
 ## `set_device_attrs`
 `/power_service/v1/app/device/set_device_attrs`
 
-- **setDevicePowerOptionsReq**(`device_sn?, attributes`)
-- **setDeviceGameStatus**(`device_sn?, attributes, init_status`)
-- **setTouElectricAttrs**(`device_sn?, attributes, pps_use_time`)
-- **getCurrencySetDeviceAttrs**(`device_sn?, attributes, currency`)
+> **Nesting confirmed by upstream**: All additional fields (`switch_0w`, `pv_power_limit`,
+> `power_limit`, `ac_power_limit`, `tag`, `init_status`, etc.) go **inside** the `attributes`
+> dict. Upstream pattern: `{"device_sn": "...", "attributes": {"pv_power_limit": 800, "switch_0w": 0}}`
+
+- **setDevicePowerOptionsReq**(`device_sn?, attributes{power_limit?, ac_power_limit?, pv_power_limit?}`)
+- **setDeviceGameStatus**(`device_sn?, attributes{init_status}`)
+- **setTouElectricAttrs**(`device_sn?, attributes{pps_use_time}`)
+- **getCurrencySetDeviceAttrs**(`device_sn?, attributes{currency}`)
 - **setSolarName**(`device_sn?, device_pn, attributes`)
-- **setDeviceFeedGridSwitch**(`device_sn?, attributes, switch_0w`)
-- **setDevicePvPowerOptionsReq**(`device_sn?, attributes, pv_power_limit`)
-- **setLocationTag**(`device_sn?, attributes, tag`)
+- **setDeviceFeedGridSwitch**(`device_sn?, attributes{switch_0w}`)
+- **setDevicePvPowerOptionsReq**(`device_sn?, attributes{pv_power_limit}`)
+- **setLocationTag**(`device_sn?, attributes{tag}`)
 - **setPpsSolarName**(`device_sn?, device_pn, attributes`)
 
 ## `set_device_home_load`
 `/power_service/v1/app/device/set_device_home_load`
 
-- **setDeviceHomeLoadRes**(`device_sn?, home_load_data`)
+- **setDeviceHomeLoadRes**(`site_id?, device_sn, home_load_data`)
+  - ⚠️ Upstream confirms `site_id` is sent in request body (not just device_sn)
 - **set17C1DeviceHomeLoadRes**(`device_sn?, mode_type, custom_rate_plan?, home_load_data?`)
 
 ## `get_annual_report`
@@ -593,7 +631,7 @@
 ## `get_list`
 `/power_service/v1/currency/get_list`
 
-- **getCurrencyGetList**(`counrty?`) → **CurrencyInfo**
+- **getCurrencyGetList**(`country?`) → **CurrencyInfo**
 
 ## `price_detail`
 `/power_service/v1/dynamic_price/price_detail`
@@ -618,7 +656,9 @@
 ## `message_not_disturb`
 `/power_service/v1/message_not_disturb`
 
-- **setEvChargerPushMessage**(`disturb_scenes?, start_charging, stop_charging, paused_charging, paused_car_charging, restore_charging, smart_charging, boost_charging`)
+- **setEvChargerPushMessage**(`disturb_scenes`)
+  - `disturb_scenes` is a nested object: `{"stop_charging": true, "start_charging": true, "paused_charging": true, "paused_car_charging": true, "restore_charging": true, "smart_charging": true, "boost_charging": true}`
+  - Structurally inferred from toJson() decompilation (DisturbScenesHttpModel)
 - **setMessageDisturb**(`start_time?, end_time?, disturb_switch?`)
 
 ## `can_create_site`
@@ -732,7 +772,9 @@
 - **setStationCountryCode**(`site_id?, param_type, cmd, param_data`)
 - **setDynamicPrice**(`site_id?, param_type, cmd, param_data`)
 - **setThreePvInstallSwitch**(`site_id?, param_type, cmd, param_data`)
-- **setSiteDevicePowerLimit**(`power_limit?, limit, limit_real?, site_id?, param_type, cmd, param_data`)
+- **setSiteDevicePowerLimit**(`site_id?, param_type, cmd, param_data`)
+  - ⚠️ `power_limit`, `limit`, `limit_real` are **inside** the JSON-encoded `param_data` string, not top-level fields
+  - Actual `param_data`: `"{\"power_limit\":{\"limit\":3600,\"limit_real\":3600}}"`
 
 ## `shift_power_site_type`
 `/power_service/v1/site/shift_power_site_type`
@@ -747,9 +789,75 @@
 ## `update_site_price`
 `/power_service/v1/site/update_site_price`
 
-- **updateSitePriceRequest**(`site_id?, price, site_co2?, site_price_unit?, price_type?, current_mode?, accuracy?`)
-
+- **updateSitePriceRequest**(`site_id?, price, site_co2?, site_price_unit?, price_type?, current_mode?, accuracy?, dynamic_price?`)
+  - `dynamic_price` is a nested object (when `price_type="dynamic"`):
+    `{"country": "...", "company": "Nordpool", "area": "GER", "pct": float?, "adjust_coef": float?}`
 
 ---
 
-142 endpoints. 90 with identified response models.
+## Endpoints confirmed by upstream but missing from APK extraction
+
+### `set_power_cutoff`
+`/power_service/v1/app/compatible/set_power_cutoff`
+
+- **set_power_cutoff**(`device_sn, cutoff_data_id`)
+  - Upstream-confirmed: sets min SOC via cutoff_data_id from `get_power_cutoff` response
+  - Note: Deprecated for SB1, but still functional
+
+### `set_aps_power`
+`/charging_pv_svc/set_aps_power`
+
+- **set_device_pv_power**(`sn, power`)
+  - Upstream-confirmed: sets standalone inverter power limit in W
+
+---
+
+## Nesting corrections from toJson() analysis (460 classes scanned)
+
+### param_data inner fields (SetSiteDeviceParamData::toJson)
+The `param_data` JSON string can contain: `id, soc, switch_0w, enable_0w, feed-in_power_limit, third_part_pv_setting`
+- ⚠️ `feed-in_power_limit` uses a **HYPHEN** (not underscore!)
+- `enable_0w_change` exists in the GET response but not in SET
+
+### home_load_data inner fields (HomeRangesModel::toJson)
+```json
+{"id": 0, "turn_on": true, "start_time": "00:00", "end_time": "24:00",
+ "power_setting_mode": 1, "charge_priority": 80, "priority_discharge_switch": 0,
+ "appliance_loads": [{"name": "...", "power": 100, "number": 1, "id": 0}],
+ "device_power_loads": [{"device_sn": "...", "power": 50}]}
+```
+
+### set_device_attrs Attributes inner fields (Attributes::toJson in soc_model.dart)
+Full list of fields that go INSIDE `attributes`:
+```
+region_power_limit, power_limit_option, power_limit_option_real, user_power_limit,
+legal_power_limit, ip_region, regulation_code, region_microinverter_limit,
+rssi, feeder0w, switch_0w, pv_power_limit_option, pv_power_limit, enable_0w
+```
+
+### disturb_scenes is NESTED (DisturbScenesHttpModel::toJson)
+```json
+{"disturb_scenes": {"stop_charging": true, "start_charging": true, ...}}
+```
+The boolean fields are INSIDE `disturb_scenes`, not at the same level.
+
+### SiteConsumptionStrategyModel (17C1 schedule response/request)
+Additional fields: `reserved_soc`, `ai_ems: {status}`, `exceed_alarm` (in plan ranges)
+
+### FeatureSwitch flags (SceneInfo response)
+New flags: `enable_aiems_v2, grid_to_ev, meter_self_testing, power_limit_status, power_saving_mode`
+
+---
+
+## Statistics
+
+- 148 endpoints from `http_request_repository_impl.dart` (initial extraction)
+- +95 endpoints from device-specific logic files (see `endpoints/device_specific.md`)
+- = **~243 total endpoints** across 10+ API service prefixes
+- 460 toJson() classes scanned for nesting analysis
+- 91 endpoints with identified response models
+- 6 new API service prefixes discovered
+
+---
+
+148 endpoints. 90 with identified response models.

@@ -148,7 +148,7 @@
 | `powerPopUpFlag` | int | 0 | U |
 | `power_limit` | int | 800 | U |
 | `power_limit_option` | null | null | B+U |
-| `power_limit_option_real` | null | null | B+U |
+| `power_limit_option_real` | int | 800 | B+U |
 | `power_setting_mode` | int | 1 | B+U |
 | `power_site_type` | int | 0 | B+U |
 | `power_unit` | string | "" | B+U |
@@ -244,3 +244,52 @@
 | `wifi_online` | bool | false | U |
 | `wifi_signal` | string | "48" | B+U+M |
 | `wireless_type` | string | "" | B+U |
+
+## Fields discovered from toJson() analysis (Breadth + Depth scan)
+
+> These fields were found by scanning 460 toJson() class implementations,
+> NOT from the original http_request_repository_impl.dart extraction.
+
+### param_data inner fields
+| Field | Type | Example | Source |
+|-------|------|---------|--------|
+| `feed-in_power_limit` | int | 4500 | B (⚠️ HYPHEN!) |
+| `enable_0w` | int | 0 | B |
+| `enable_0w_change` | bool | false | B (GET response only) |
+
+### Attributes inner fields (soc_model.dart — all go INSIDE `attributes` dict)
+| Field | Type | Example | Source |
+|-------|------|---------|--------|
+| `feeder0w` | int | 0 | B |
+| `pv_power_limit_option` | int | 2000 | B |
+| `user_power_limit` | int | 800 | B |
+| `legal_power_limit` | int | 800 | B |
+| `region_power_limit` | int | 800 | B |
+| `power_limit_option` | int | 800 | B |
+| `ip_region` | string | "" | B |
+| `regulation_code` | string | "" | B |
+| `region_microinverter_limit` | int | 800 | B |
+
+### home_load_data inner fields (HomeRangesModel)
+| Field | Type | Example | Source |
+|-------|------|---------|--------|
+| `power_setting_mode` | int | 1 | B |
+| `priority_discharge_switch` | int | 0 | B |
+| `appliance_loads` | array | [{name, power, number, id}] | B |
+| `device_power_loads` | array | [{device_sn, power}] | B |
+
+### Feature flags (SceneInfo::FeatureSwitch)
+| Field | Type | Example | Source |
+|-------|------|---------|--------|
+| `enable_aiems_v2` | bool | false | B |
+| `grid_to_ev` | bool | false | B |
+| `meter_self_testing` | bool | false | B |
+| `power_limit_status` | bool | false | B |
+| `power_saving_mode` | bool | false | B |
+
+### SiteConsumptionStrategy additional fields
+| Field | Type | Example | Source |
+|-------|------|---------|--------|
+| `reserved_soc` | int | 10 | B |
+| `exceed_alarm` | int | 0 | B (in plan ranges) |
+| `ai_ems` | object | {"status": 0} | B |
