@@ -248,7 +248,7 @@ getStrategyLastRecord:          {"extender_system_id": "...", "strategy_type": 1
 
 All AX170 BLE/IoT actions use the pattern:
 ```json
-{"id": "<action_name>", "param": {<action-specific params>}}
+{"id": "<action_name>", "deviceSn": "<sn>", "param": {<action-specific params>}}
 ```
 
 Examples:
@@ -334,3 +334,18 @@ all_input = {home_usage, solarbank, grid}
 all_input = {pv_input, third_party_pv_input, diesel_input, third_party_diesel_input}
 home_usage = {branch_load, other_load}
 ```
+
+---
+
+## Notes on Accuracy
+
+- **param_type 19** structure is **verified** by thomluther (Issue #423)
+- **param_type 18, 26, 6, 23** structures are from **upstream schedule.py examples** (high confidence)
+- **set_device_attrs patterns** show `switch_0w`, `pv_power_limit`, `tag` etc. as separate
+  keys alongside `attributes` in the decompiled code. Upstream confirms this pattern for
+  `{"attributes": {"pv_power_limit": 800}}`. Whether additional keys like `switch_0w` are
+  at the same level or inside `attributes` needs API testing to confirm.
+- **AX170 IoT actions** include `deviceSn` alongside `id` and `param` (corrected from
+  initial documentation that showed only `{id, param}`)
+- **StoreField nesting** analysis may sometimes conflate sequential field assignments
+  with nested object construction — treat as hints, not specifications
