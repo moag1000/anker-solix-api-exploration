@@ -127,6 +127,19 @@ The type numbers are already listed in `apitypes.py` of [thomluther/anker-solix-
 
 ---
 
+## Device Pages
+
+Start here if you own a specific device:
+
+| Device | Page | Upstream Issue | Status |
+|--------|------|---------------|--------|
+| Solarbank 2/3 (A17C1/C5) | [devices/solarbank.md](devices/solarbank.md) | [70+ issues](https://github.com/thomluther/ha-anker-solix/issues?q=solarbank) | Core supported |
+| Smart Plug (A17X8) | [devices/smart_plug.md](devices/smart_plug.md) | [#150](https://github.com/thomluther/ha-anker-solix/issues/150) | Switch in v3.5.0, timer open |
+| EV Charger V1 (A5191) | [devices/ev_charger.md](devices/ev_charger.md) | [#322](https://github.com/thomluther/ha-anker-solix/issues/322) | Not yet supported |
+| X1 HES / E10 (A5101) | [devices/x1_hes_e10.md](devices/x1_hes_e10.md) | [#274](https://github.com/thomluther/anker-solix-api/issues/274) | Basic monitoring |
+
+---
+
 ## Endpoints
 
 | Service | File | Endpoints | Description |
