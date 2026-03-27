@@ -1,6 +1,50 @@
 # Changelog
 
-## 2026-03-27 — Accuracy overhaul: upstream verification, breadth+depth APK scan
+## 2026-03-28 — BLE/MQTT command map, device pages, protocol cross-reference (Part 2)
+
+### BLE/MQTT Command Map (new methodology)
+
+Cross-referenced decompiled APK command builder functions with thomluther's device-tested
+TLV tag assignments. Validated on 5 confirmed commands (Smart Plug 007a/007c/007e,
+Solarbank 005e/0080) — 100% match rate on field order and types.
+
+Key insight: Dart Smi encoding means assembly constant >> 1 = actual hex tag value.
+
+Coverage:
+- **A17C1/C5 (Solarbank 2/3)**: 17 commands, 6 NEW (electricity price, self-test,
+  micro power limit)
+- **A17X8 (Smart Plug)**: 7 commands, 3 NEW (momentary switch, countdown variant)
+- **PPS family**: 17 commands, 3 NEW (light wait time, locale, port memory)
+- **A1790 (F3800)**: 3 NEW (generator ATS params, sub-battery switches)
+- **A5190 (EV Charger)**: Full field→tag mapping (12 confirmed, 3 NEW: ioDetection,
+  disconnect, initSettings)
+- **A5101 (X1 HES)**: Different protocol (att_id + JSON, not TLV) — entirely unmapped
+- **EverFrost**: 12 commands, ALL NEW (entirely unmapped in upstream)
+- **Prime Charger / A91B2**: 9 commands, ALL NEW
+
+### Device pages
+
+Added `devices/` directory with per-device reference pages:
+- `solarbank.md` — param_types, usage modes, MQTT commands, abbreviated fields
+- `smart_plug.md` — verified MQTT commands, timer fields
+- `ev_charger.md` — 35 API endpoints, BLE actions, field→TLV tag mapping
+- `x1_hes_e10.md` — 65 A5101DataCodeType MQTT field names with hex codes
+
+Each page links to upstream community issues and all relevant files in this repo.
+
+### Community demand priority
+
+Added P1-P4 priority tags based on thomluther/ha-anker-solix issue analysis.
+Tagged non-relevant endpoints (AIOT popups, AI chat, screen savers, easter eggs).
+
+### Confidence language audit
+
+Replaced "verified" with device-tested / upstream-confirmed / structurally inferred
+throughout all documentation.
+
+---
+
+## 2026-03-27 — Accuracy overhaul: upstream verification, breadth+depth APK scan (Part 1)
 
 ### Critical fixes
 

@@ -163,6 +163,22 @@ Start here if you own a specific device:
 
 ---
 
+## BLE/MQTT Command Map (new)
+
+- [BLE_COMMAND_MAP.md](BLE_COMMAND_MAP.md) — Cross-reference of APK command builders with upstream TLV tag assignments
+
+**New methodology**: By tracing the decompiled command builder functions (field order + Dart Smi
+constants) and cross-referencing with thomluther's device-tested `mqttcmdmap.py`, we can infer
+which APK field name maps to which TLV hex tag — **without needing a physical device**.
+
+Validated on 5 confirmed commands (A17X8 + A17C1) with 100% match rate. This does NOT replace
+device testing — it generates hypotheses that device owners can verify in one mqtt_monitor session.
+
+Covers: A17C1/C5 (Solarbank), A17X8 (Smart Plug), A17C0 (SB Gen1), PPS family, A1790 (F3800),
+A5190 (EV Charger), A5101 (X1 HES), EverFrost, Prime Charger. Includes 20+ NEW commands not in upstream.
+
+---
+
 ## Validation Model
 
 - [VALIDATION_MODEL.md](VALIDATION_MODEL.md) — GET→SET flow for 33 setting categories across API, MQTT and BLE
