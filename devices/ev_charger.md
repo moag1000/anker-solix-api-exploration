@@ -92,9 +92,89 @@ See [device_specific.md](../endpoints/device_specific.md#ev-charger-endpoints-a5
   "restore_charging": true, "smart_charging": true, "boost_charging": true}}
 ```
 
-## MQTT
+## MQTT/BLE Command → TLV Tag → APK Field Name Mapping
 
-thomluther noted (Issue #271): EV Charger commands require **encoding type 2** with a 16-byte random seed. No dedicated EV MQTT command codes found in APK — commands flow through `evcharger_setting` parameter in HES `sendDeviceCommand`.
+Cross-referenced from APK decompilation (field names) + upstream mqttcmdmap.py (TLV tags).
+The IoT framework maps `prop_write_*` field names to TLV tags at the protocol layer.
+
+> **Confidence**: Tag assignments are inferred by correlating the APK field names with
+> thomluther's device-tested TLV mappings. Fields marked "?" need device verification.
+
+### Charge Control (encoding_type=2, via `action_control_charging`)
+
+| APK Field | TLV Tag | Values | Upstream Name |
+|-----------|---------|--------|---------------|
+| `controlType` | a2 | 1=Start, 2=Stop, 3=SkipDelay, 4=Boost | `ev_charger_mode` |
+
+### Device Settings (via `prop_write_evcharger`)
+
+| APK Field | TLV Tag | Type/Range | Upstream Name |
+|-----------|---------|-----------|---------------|
+| `carChargerLockStatus` | a3 | 1=off, 2=on (bit-shifted) | `plug_lock_switch` |
+| `plugAndChargeSwitch` | a4 | 0=off, 1=on | `ev_auto_start_switch` |
+| `maximumCurrentLimit` | a8 | 6-32A (int, divider 0.1) | `ev_max_charge_current` |
+| `lightBrightness` | aa | 0-100% | `light_brightness` |
+| `rechargingPowerOutage` | ac | 0=off, 1=on | `ev_auto_charge_restart_switch` |
+| `delayStartSwitch` | ad | 0=off, 1=on | `ev_random_delay_switch` |
+| `ledSwitch` | b4 | on/off | `light_off_schedule` (switch) |
+| `ledCloseStartTime` | b5 | "HH:MM" | `light_off_schedule` (start) |
+| `ledCloseEndTime` | b6 | "HH:MM" | `light_off_schedule` (end) |
+| `modbusTcpSwitch` | b7 | 0=off, 1=on (left-shifted by 1) | `modbus_switch` |
+| `ioDetectionSwitch` | ? | 0=off, 1=on | **NEW — not in upstream** |
+| `ioDetectionType` | ? | int | **NEW — digital input type** |
+| `ioDetectionMaxCurrent` | ? | int (A) | **NEW — digital input max current** |
+| `initSettings` | ? | 2 = init complete | **NEW — init completion flag** |
+
+### Solar Charging / Green Energy Priority (via `prop_write_green_energy_priority`)
+
+| APK Field | TLV Tag | Notes | Upstream Name |
+|-----------|---------|-------|---------------|
+| `greenEnergyPrioritySwitch` | a2 | on/off | `solar_evcharge_switch` |
+| `greenEnergyPriorityChargingMode` | a3 | 0=solar+grid, 1=solar only | `solar_evcharge_mode` |
+| `greenEnergyPriorityMinOutputCurrent` | a4 | 6-16A | `solar_evcharge_min_current` |
+| `greenEnergyPriorityConnectedType` | a5? | phase mode (1=1P, 3=3P) | `phase_operating_mode?` |
+| `greenEnergyPriorityConnectionMode` | a6? | monitoring mode | `solar_evcharge_monitoring_mode?` |
+| `greenEnergyPriorityThreePhaseSwitch` | a7 | auto phase switch | `auto_phase_switch` |
+| `greenEnergyPriorityConnectedId` | a8 | device SN (16 bytes) | `solar_evcharge_monitor_device` |
+
+### Load Balancing (via `prop_write_load_balancing`)
+
+| APK Field | TLV Tag | Notes | Upstream Name |
+|-----------|---------|-------|---------------|
+| `loadBalancingSwitch` | a2 | on/off | `load_balance_switch` |
+| `loadBalancingMainBreakerCurrent` | a3? | 10-500A | `main_breaker_limit` |
+| `loadBalancingConnectedType` | a4? | — | `load_balance_setting_d5?` |
+| `loadBalancingConnectionMode` | a5? | — | `load_balance_setting_d6?` |
+| `loadBalancingConnectedId` | a6 | device SN (16 bytes) | `load_balance_monitor_device` |
+
+### Schedule (via `action_set_schedule`)
+
+| APK Field | TLV Tag | Notes | Upstream Name |
+|-----------|---------|-------|---------------|
+| `schedChargeSwitch` | a2 | 1=on, 2=off (inverted!) | `ev_schedule_switch` |
+| `chargerMode` | ? | 0 = default | — |
+| `weekdayStartHour/Min` | a3? | HH:MM split | `ev_week_start_time` |
+| `weekdayEndHour/Min` | a4? | HH:MM split | `ev_week_end_time` |
+| `weekendStartHour/Min` | a5? | HH:MM split | `ev_weekend_start_time` |
+| `weekendEndHour/Min` | a6? | HH:MM split | `ev_weekend_end_time` |
+| `everyDaySwitch` | ? | same weekday/weekend | — |
+
+### Other Actions
+
+| Action | Property ID | Fields |
+|--------|------------|--------|
+| RCD Test | `action_rcd_test` | (none — trigger only) |
+| Disconnect | `action_disconnect_function` | `disconnectFunction` — **NEW** |
+| OCPP Config | `prop_write_ocpp_info` | `ocppName` + 6 more fields |
+| RFID Write | `prop_write_rfid` | card data |
+| RFID Read | `prop_write_by_evcharger_rfid` | — |
+
+### Key Insight: encoding_type 2
+
+Only `action_control_charging` (start/stop/boost) and `device_power_mode` (restart) use
+encoding type 2 with 16-byte random seed. All other commands use standard encoding.
+The APK routes these through `invokeAction` (not `writeProperty`), which is a different
+code path in the IoT framework.
 
 ## What's needed from device owners
 
@@ -103,3 +183,5 @@ Per thomluther (Issue #322):
 2. EV charger must be **added to a system** (not standalone)
 3. Vehicles should be configured
 4. MQTT monitoring during charging sessions
+5. The field→tag mapping above can be **quickly verified** by changing one setting
+   and checking which TLV tag changes in mqtt_monitor
