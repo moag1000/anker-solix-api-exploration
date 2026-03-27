@@ -141,6 +141,7 @@ Key finding: **the app does not hardcode validation ranges.** It queries the ser
 
 ## Endpoint → Fields Direct Mapping
 
+- [PARAM_DATA_STRUCTURES.md](PARAM_DATA_STRUCTURES.md) — Nested JSON structures for param_data per param_type (verified against thomluther's Issue #423 findings)
 - [ENDPOINT_FIELDS.md](ENDPOINT_FIELDS.md) — 142 endpoints with request parameters and response model mapping (90 with identified response models)
 
 ## JSON Payloads and Examples
