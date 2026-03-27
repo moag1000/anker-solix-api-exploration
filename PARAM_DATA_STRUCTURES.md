@@ -153,3 +153,37 @@ All `set_site_device_param` calls follow:
 
 Where `cmd: 17` appears to be a constant for SET operations (from thomluther's verification).
 The `param_data` value is always a **JSON-encoded string**, not a nested object.
+
+---
+
+## Additional Nested Structures (from Map TypeArguments)
+
+### getDeviceInfos (charging_energy_service)
+```json
+{"main_sn": "<sn>", "device_rom_versions": [{"sn": "<sn1>"}, {"sn": "<sn2>"}]}
+```
+Type: `Map<String, List<String>>`
+
+### getDeviceJoinSiteList
+```json
+{"devices": [{"device_sn": "...", "device_model": "...", ...}]}
+```
+Type: `Map<String, List<DeviceJoinSiteModel>>`
+
+### getHeatPumpTimePlan (charging_hes_svc)
+```json
+{"heat_pump_plan": [{"start_time": "...", "end_time": "...", "mode": "...", ...}]}
+```
+Type: `Map<String, List<Map<String, dynamic>>>`
+
+---
+
+## Technique Used
+
+The nested structures were identified by tracing:
+1. `Map._fromLiteral()` calls in decompiled Dart
+2. `TypeArguments` annotations that show the generic types (e.g., `<String, Map<String, int>>`)
+3. String constants (`r17 = "field_name"`) set via `StoreField` before the Map construction
+4. `jsonEncode()` calls that serialize the Map into the `param_data` JSON string
+
+This technique can reveal nesting that flat field name extraction misses.
