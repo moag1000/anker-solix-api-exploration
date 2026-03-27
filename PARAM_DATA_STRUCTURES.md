@@ -187,3 +187,150 @@ The nested structures were identified by tracing:
 4. `jsonEncode()` calls that serialize the Map into the `param_data` JSON string
 
 This technique can reveal nesting that flat field name extraction misses.
+
+---
+
+## Comprehensive Nested Structure Extraction (660 findings)
+
+Extracted using 4 methods: Map._fromLiteral + TypeArguments, jsonEncode tracing,
+json.dumps patterns, and StoreField nesting analysis across the entire codebase.
+
+### set_device_attrs — 9 Different Payload Patterns
+
+The `set_device_attrs` endpoint uses `device_sn` + `attributes` as base, with
+different additional fields per use case:
+
+```
+setDevicePowerOptionsReq:     {"device_sn": "...", "attributes": {...}, "enable_0w_v2": true}
+setTouElectricAttrs:          {"device_sn": "...", "attributes": {...}, "pps_use_time": "..."}
+getCurrencySetDeviceAttrs:    {"device_sn": "...", "attributes": {...}, "currency": "..."}
+setSolarName:                 {"device_sn": "...", "device_pn": "...", "attributes": {...}}
+setDeviceFeedGridSwitch:      {"device_sn": "...", "attributes": {...}, "switch_0w": 0}
+setDevicePvPowerOptionsReq:   {"device_sn": "...", "attributes": {...}, "pv_power_limit": 800}
+setLocationTag:               {"device_sn": "...", "attributes": {...}, "tag": "..."}
+setDeviceGameStatus:          {"device_sn": "...", "attributes": {...}, "init_status": "..."}
+setPpsSolarName:              {"device_sn": "...", "device_pn": "...", "attributes": {...}}
+```
+
+### Shelly Device Control
+
+```json
+{"device_sn": "...", "op_type": "parameter", "toggle": "...", "value": "..."}
+```
+
+### Power Limit Region Config (deeply nested)
+
+```
+power_limit_option
+  └─ user_power_limit
+  └─ region_power_limit
+       └─ ip_region
+       └─ regulation_code
+       └─ region_microinverter_limit
+  └─ legal_power_limit
+  └─ enable_0w
+       └─ switch_0w
+```
+
+### Extender System Operations
+
+```
+addExtenderSystem:              {"device_list": [...]}
+delExtenderSystem:              {"extender_system_id": "..."}
+setExtenderSystemName:          {"extender_system_id": "...", "extender_system_name": "..."}
+updateExtenderSystemStrategy:   {"extender_system_id": "...", "extender_system_params": {...}}
+batchAddDevice:                 {"extender_system_id": "...", "device_list": [...]}
+batchDelDevice:                 {"extender_system_id": "...", "device_sn_list": [...]}
+getStrategyLastRecord:          {"extender_system_id": "...", "strategy_type": 1}
+```
+
+### AX170 IoT Action Payloads
+
+All AX170 BLE/IoT actions use the pattern:
+```json
+{"id": "<action_name>", "param": {<action-specific params>}}
+```
+
+Examples:
+```
+action_set_backup_strategy:          {"id": "action_set_backup_strategy", "param": {...}}
+action_set_standby_oil_machine_params: {"id": "action_set_standby_oil_machine_params", "param": {...}}
+action_set_custom_branch:            {"id": "action_set_custom_branch", "param": {"custom_branches": [...]}}
+action_set_biggest_frequency:        {"id": "action_set_biggest_frequency", "param": {...}}
+action_set_connection_sensitivity:   {"id": "action_set_connection_sensitivity", "param": {...}}
+action_manual_set_oil_machine_params: {"id": "action_manual_set_oil_machine_params", "param": {...}}
+```
+
+### Init Flow Actions
+
+```
+action_set_distribution_box:         {"id": "action_set_distribution_box", "param": {...}}
+action_set_power_limit_country_code: {"id": "action_set_power_limit_country_code", "param": {...}}
+action_set_standby_rated_power:      {"id": "action_set_standby_rated_power", "param": {...}}
+action_set_third_oil_type:           {"id": "action_set_third_oil_type", "param": {...}}
+action_set_third_party_pv:           {"id": "action_set_third_party_pv", "param": {...}}
+action_set_system_self_check:        {"id": "action_set_system_self_check"}
+```
+
+### EV Charger Operations
+
+```
+addChargingDevice:    {"site_id": "...", "ev_charger": {...}, "device_sn": "..."}
+getStationEvChargers: {"site_id": "...", "charging_pile_list": [...]}
+shareDevice:          {"device_sn": "...", "sub_devices": [...]}
+setRfidCard:          {"device_sn": "...", "card_number": "...", "alias_name": "..."}
+```
+
+### Smart Charging (EV)
+
+```json
+{"switch_smart_charging": true, "price_type": "...", "fixed_price": "...",
+ "currency": "...", "site_price_info": {...}}
+```
+
+Driving plan:
+```json
+{"driving_plan": [{"vehicleId": "...", "targetSoc": 80, "departureTime": "08:00",
+  "everyday": false, "weekday": true, "weekend": false}]}
+```
+
+### Disaster Preparedness
+
+```
+setDisaster:     {"type": 2, "identifier_id": "<siteid>", "manual_disaster_switch": 1,
+                  "start_time": "...", "end_time": "..."}
+autoDisaster:    {"type": 2, "identifier_id": "<siteid>", "auto_disaster_switch": 1}
+quitDisaster:    {"type": 2, "identifier_id": "<siteid>"}
+```
+
+### Message/Notification Control
+
+```json
+{"disturb_scenes": [...], "start_charging": true, "stop_charging": true,
+ "paused_charging": true, "paused_car_charging": true,
+ "restore_charging": true, "smart_charging": true, "boost_charging": true}
+```
+
+### A7320 Generator Maintenance
+
+```
+setOilReminder:    {"device_sn": "...", "interval_period_month": 2, "interval_period_week": 0}
+setExercisePlan:   {"device_sn": "...", "effective_mode": 4,
+                    "automatic_exercise": {...}, "manual_exercise": {...}}
+batchMaintain:     {"device_sn": "...", "maintenance_items": [{"item_id": "...", "item_name": "...", "description": "..."}]}
+setNoticeSwitch:   {"device_sn": "...", "notice_switch": 1}
+```
+
+### User Params
+
+```json
+{"user_params": [{"param_type": "...", "param_value": "..."}]}
+```
+
+### Station Energy Data Flow Grouping
+
+```
+all_input = {home_usage, solarbank, grid}
+all_input = {pv_input, third_party_pv_input, diesel_input, third_party_diesel_input}
+home_usage = {branch_load, other_load}
+```
