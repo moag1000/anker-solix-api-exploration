@@ -349,3 +349,71 @@ home_usage = {branch_load, other_load}
   initial documentation that showed only `{id, param}`)
 - **StoreField nesting** analysis may sometimes conflate sequential field assignments
   with nested object construction — treat as hints, not specifications
+
+---
+
+## Remaining SET Function Payloads (32 functions)
+
+Extracted from `http_request_repository_impl.dart`. Endpoint paths are in
+[ENDPOINT_FIELDS.md](ENDPOINT_FIELDS.md) — keys here show the request body structure.
+
+### Home Load
+- **set17C1DeviceHomeLoadRes**: `device_sn, mode_type, custom_rate_plan?, home_load_data?`
+- **setDeviceHomeLoadRes**: `device_sn, home_load_data`
+
+### Site/Device Param (generic)
+- **setSiteDeviceParam**: `site_id, param_type, cmd, param_data`
+- **setDynamicPrice**: `site_id, param_type, cmd, param_data` (for dynamic pricing)
+
+### Site Management
+- **createSiteRequest**: `site_name, site_img, solar_list, pps_list?, solarbank_list?, ...`
+- **updateSiteDevices**: `site_id, pps_list`
+- **updateSitePriceRequest**: `site_id, price, site_co2?, site_price_unit?, price_type?`
+
+### OTA/Firmware
+- **setThirdOta**: `device_sn, solar_pn, insert_sn, rollback_install_mode`
+- **saveThirdOtaInfo**: `solarbank_sn, ota_complete_status`
+- **saveCompatibleSolarApi**: (via model serialization)
+- **setAutoUpgrade**: `main_switch, device_list`
+- **syncInstallation**: `sn, page, errors`
+
+### Prime Charger (A2345/A2687)
+- **addCustomChargeMode**: `device_sn, name, number, total_power, max_total_power, auto_exit, has_charge_protocol, power_settings?`
+- **updateCustomChargeMode**: `id, name, total_power, max_total_power, auto_exit, has_charge_protocol, power_settings?`
+- **deleteCustomChargeMode**: `id`
+- **saveCustomChargeModeSetting**: `device_sn, charging_mode_status`
+- **saveCompatibilityStatusSetting**: `device_sn, compatibility_status`
+- **setA2687ModeSubStatus**: `device_sn, mode, protocol_key, status`
+- **setA2687ProtocolAgreementStatus**: `device_sn, protocol_status`
+- **setA2687ChargingDeviceModelIdentityStatus**: `device_sn, charging_device_identity_status`
+- **setA2687StandardChargingDeviceModelIdentityStatus**: `device_sn, charging_device_identity_new_status`
+- **setA2345DeviceIdentityStatus**: `device_sn, charging_device_identity_status_default_true`
+- **setPortRemark**: `device_sn, port_name, remark`
+- **addA2345CustomClockScreenSavers**: `sn, img_url, hash_code`
+- **deleteA2345CustomClockScreenSavers**: `id`
+- **addEasterEggStatusRecord**: `device_sn, egg_type, report_time?`
+
+### HES/Energy Service
+- **changePriceUnit**: `station_id, price_unit`
+- **changeA17B1PriceUnit**: (same pattern for A17B1)
+- **dealUtilityRatePlanData**: `device_sn, attributes, switch_0w`
+- **deleteAndRestartPeakValley**: `station_id, far_field_model`
+- **reportHesEvents**: `station_id, pn, language, event`
+- **bindUnX1Charger**: `stationId, evChargers, deleteFlag, forceBindFlag` (uses **camelCase**)
+- **updateWiFiConfig**: `ssid, sn, rssi, encryption`
+
+### Device Management
+- **updateDeviceName**: `device_sn, device_mac, alias_name`
+- **updateDeviceInfo**: `device_sn, ble_mac, product_code, device_name, main_sw_version, sec_sw_version`
+- **removeParamConfigKey**: `site_id, device_sn, remove_key, use_time`
+
+### Smart Plug
+- **setRemainPluginStatus**: (payload from setDeviceFeature — `site_id, smart_plug` list)
+
+### Notifications
+- **setEvChargerPushMessage**: `disturb_scenes, start_charging, stop_charging, paused_charging, paused_car_charging, restore_charging, smart_charging, boost_charging`
+- **setMessageDisturb**: `start_time, end_time, disturb_switch`
+
+### Pricing
+- **updateUserTieredElecPrice**: (via CurrencyElecModel — `sn, currencyUnit, tieredElecPrices`)
+- **updatePeakAndValley**: `power_limit, limit, limit_real, site_id, param_type=19, cmd, param_data`
