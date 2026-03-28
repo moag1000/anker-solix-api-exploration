@@ -409,3 +409,179 @@ Extracted from `parseDeviceAllInfo` (a17c1_device_commands.dart, 8804 bytes).
 | c7 | consumed | int | `home_load_preset` | Read but value flows into next op |
 | e9 | field_2cb | int | `battery_capacity?` | Defaults to 0 |
 | fc | field_287+bits | bitfield | `extended_flags` | Schedule/parallel data |
+
+---
+
+## A17C0 — Solarbank Gen 1 0405 Status Tags
+
+23 upstream-confirmed + 11 new. Shares protocol base with A17C1.
+
+### Confirmed tags (matching upstream)
+| Tag | Upstream Name | Tag | Upstream Name |
+|-----|-------------|-----|-------------|
+| a2 | `device_sn` | a3 | `battery_soc` |
+| a6 | `sw_version` | a7 | `sw_controller` |
+| a8 | `hw_version` | a9 | `temp_unit_fahrenheit` |
+| aa | `temperature` (signed) | ab | `photovoltaic_power` |
+| ac | `output_power` | ad | `charging_status` |
+| b0 | `bat_charge_power` | b1 | `pv_yield` |
+| b2 | `charged_energy` | b3 | `output_energy` |
+| b4 | `output_cutoff_data` | b5 | `lowpower_input_data` |
+| b6 | `input_cutoff_data` | b7 | `inverter_brand` |
+| b8 | `inverter_model` | b9 | `min_load` |
+| c0 | `0w_switch_sn` | c1 | `0w_switch_bt_mac` |
+| fe | `msg_timestamp` | | |
+
+### NEW tags (not in upstream A17C0)
+| Tag | Field | Inferred Name | Notes |
+|-----|-------|---------------|-------|
+| a4 | field_30f | `unknown_1` | Upstream had "?" — APK confirms parsed |
+| a5 | field_3db | `error_code?` | Same offset as A17C1 error_code |
+| ae | field_3df | `schedule_data?` | Upstream notes binary schedule slots |
+| af | field_f | `unknown_flag` | |
+| ba-bb | field_26b/26f | `extended_cutoff_data?` | After min_load (b9) |
+| bc-bd | field_48b | `parallel_config?` | Same offset, conditional branch |
+| be-bf | field_27b/27f | `extended_settings` | |
+| fb-fc | field_287/283 | `status_flags` | Not in upstream for SB Gen 1 |
+
+---
+
+## A172X — C300/C300X 0405 Status Tags (P3)
+
+29 upstream-confirmed + 4 new. APK **confirms** upstream "?" tags b1-b4 as firmware versions.
+
+### Key confirmed tags
+| Tag | Upstream Name | Tag | Upstream Name |
+|-----|-------------|-----|-------------|
+| a2 | `dc_output_timeout_seconds` | a3 | `remaining_time_hours` (×0.1) |
+| a4-a7 | `usbc_1-4_power` | a8-a9 | `usba_1-2_power` |
+| aa | `dc_12v_1_power` | ab | `photovoltaic_power` |
+| ac | `dc_input_power_total` | ad | `dc_output_power_total` |
+| af | `battery_soc_ah` (×0.001) | b0 | `sw_version` |
+| b5 | `temperature` (signed) | b6 | `charging_status` |
+| b7 | `battery_soc` | b8 | `battery_soh` |
+| b9-bc | `usbc_1-4_status` | c1 | `overload_event` |
+| c3 | `device_sn` | c4 | `device_timeout_minutes` |
+| c5 | `display_timeout_seconds` | c7 | `display_mode` |
+| c8 | `light_mode` | c9 | `temp_unit_fahrenheit` |
+
+### Upstream "?" tags CONFIRMED by APK
+| Tag | Upstream had | APK confirms |
+|-----|-------------|-------------|
+| b1 | `version1?` (commented) | **Parsed** — firmware sub-version |
+| b2 | `version2?` (commented) | **Parsed** — firmware sub-version |
+| b3 | `version3?` (commented) | **Parsed** — firmware sub-version |
+| b4 | `version4?` (commented) | **Parsed** — firmware sub-version |
+
+### NEW tags
+| Tag | Inferred Name | Notes |
+|-----|---------------|-------|
+| ae | `unknown_power?` | Between ad (output_total) and af (soc_ah) |
+| c6 | `unknown_setting` | |
+| cc | `unknown` | |
+| f9 | `unknown_flag` | |
+
+---
+
+## A1771 — C1000/C1000X 0405 Status Tags (P3)
+
+30 upstream-confirmed + **18 new** — biggest gap in PPS family.
+
+### Key confirmed tags
+| Tag | Upstream Name | Tag | Upstream Name |
+|-----|-------------|-----|-------------|
+| a4 | `remaining_time_hours` | a5 | `grid_to_battery_power` |
+| a6 | `ac_output_power` | a7-a8 | `usbc_1-2_power` |
+| a9-aa | `usba_1-2_power` | ae | `dc_input_power` |
+| af | `photovoltaic_power` | b0 | `output_power_total` |
+| b3 | `sw_version` | b9 | `sw_expansion` |
+| ba | `sw_controller` | bd | `temperature` (signed) |
+| be | `exp_1_temperature` | c1 | `main_battery_soc` |
+| c2 | `exp_1_soc` | d0 | `device_sn` |
+| d1 | `max_load` | d2 | `device_timeout_minutes` |
+| d3 | `display_timeout_seconds` | d5 | `display_mode` |
+| dc | `light_mode` | dd | `temp_unit_fahrenheit` |
+
+### NEW tags (18 — not in upstream)
+| Tag | Inferred Name | Notes |
+|-----|---------------|-------|
+| a2-a3 | `unknown_timeout?` | Before remaining_time |
+| ab-ad | `usba/dc power?` | Between usba_2 and dc_input |
+| b1-b2 | `unknown_energy?` | Between output_total and sw_version |
+| b4-b8 | `fw_sub_versions?` | Between sw_version and sw_expansion |
+| bc | `unknown_status` | |
+| bf-c0 | `unknown_temp/soc?` | Between exp_temp and main_soc |
+| d4-d6 | `display_settings?` | Display/timeout area |
+| da | `unknown_mode` | |
+| df-e0 | `unknown_switch?` | |
+| e2-e4 | `extended_status` | e3 is bool (==1) |
+| f7 | `unknown_flag` | |
+
+---
+
+## A1790 — F3800 0405 Status Tags (P3)
+
+39 upstream-confirmed + **19+ new**. Includes generator/ATS fields.
+
+### Key confirmed tags
+| Tag | Upstream Name | Tag | Upstream Name |
+|-----|-------------|-----|-------------|
+| a4 | `remaining_time_hours` | a5 | `ac_input_power` |
+| a6 | `ac_output_power` | a7-a9 | `usbc_1-3_power` |
+| aa-ab | `usba_1-2_power` | ad | `main_battery_soc` |
+| ae | `photovoltaic_power` | af | `pv_1_power` |
+| b1 | `bat_charge_power` | b2 | `output_power` |
+| b4 | `bat_discharge_power` | b5 | `sw_version` |
+| ba | `sw_expansion` | bc | `ac_output_power_switch` |
+| bd | `charging_status` | be | `temperature` (debug: "bmsTempMajor") |
+| bf | `display_status` | c0 | `battery_soc` (total) |
+| c1 | `max_soc` | cc | `device_sn` |
+| cd | `ac_input_limit` | cf | `display_timeout_seconds` |
+| d5 | `display_mode` | d8 | `temp_unit_fahrenheit` |
+| d9 | `light_mode` | f6 | `region` |
+| f7 | `port_memory_switch` | fe | `msg_timestamp` |
+
+### NEW tags (19+)
+| Tag | Inferred Name | Notes |
+|-----|---------------|-------|
+| a2-a3 | `unknown_timeout?` | Before remaining_time |
+| b3 | `unknown_power?` | Between output_power and bat_discharge |
+| b6-b9 | `fw_sub_versions?` | Between sw_version and sw_expansion |
+| bb | `unknown_status` | Between sw_expansion and ac_switch |
+| c9-cb | `port_status?` | After max_soc area |
+| ce | `unknown_setting` | Before display_timeout |
+| d0-d2 | `timeout_settings?` | Display/power timeout area |
+| d6-d7 | `mode_settings?` | Between display and temp_unit |
+| da-db | `light_settings?` | After light_mode |
+| dd | `unknown_switch?` | |
+| de-df | `extended_flags` | |
+| f8-f9 | `port_config?` | Different offset than saving mode |
+
+---
+
+## A17A0 / A17A3-A5 — EverFrost Cooler (entirely unmapped, P4)
+
+> **Different protocol**: Uses command-key map (not TLV tags). NOT in upstream at all.
+
+### Upload Commands (device → app status reports)
+| Command | Description |
+|---------|-------------|
+| `uploadDeviceInfo` | Full device info |
+| `uploadInputPower` | Charging input power |
+| `uploadOutputPower` | Cooling output power |
+| `uploadBatteryValue` | Battery level |
+| `uploadBatteryState` | Charging state |
+| `uploadSingleBoxTemp` | Single-zone current temp |
+| `uploadDoubleBoxLTemp` | Dual-zone LEFT current temp |
+| `uploadDoubleBoxRTemp` | Dual-zone RIGHT current temp |
+| `uploadSingleBoxSetTemp` | Single-zone SET temp |
+| `uploadDoubleBoxLSetTemp` | Dual-zone LEFT SET temp |
+| `uploadDoubleBoxRSetTemp` | Dual-zone RIGHT SET temp |
+| `uploadDoubleBoxLSwitchState` | LEFT zone on/off |
+| `uploadDoubleBoxRSwitchState` | RIGHT zone on/off |
+| `uploadTempUnit` | Temperature unit (C/F) |
+| `uploadLcdLight` | LCD brightness |
+| `uploadScreenAlwaysOn` | Screen always-on |
+| `uploadVoltageProtection` | Low-voltage protection |
+| `uploadExceptionMsgCode` | Exception messages |
+| `uploadErrorCode` | Error codes |
