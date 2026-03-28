@@ -403,3 +403,135 @@ If any phase current drops below 6A during three-phase solar charging:
 4. **Solar micro-grid-usage is normal** — small grid draws during solar mode are expected
 5. **Phase switching is automatic** — don't try to control it manually
 6. **Offline schedule capability** — schedules persist without cloud
+
+---
+
+# Business Rules — A5101 HES / X1
+
+> Extracted from a5101 UI logic and system policy controller assembly.
+
+## 4 Universal Guard Conditions (block ALL setting changes)
+
+Every A5101 SET command checks these 4 conditions. If ANY is true → command blocked:
+
+| # | Condition | Chinese Log | Meaning |
+|---|-----------|------------|---------|
+| 1 | EMS policy disabled | "禁用ems策略" | Device's energy management strategy is off |
+| 2 | Off-grid state | "离网状态" | Device is currently off-grid |
+| 3 | BLE not connected | "蓝牙未连接" | Near-field BLE required but not present |
+| 4 | Manual off-grid | "近场手动离网状态" | User manually switched to off-grid locally |
+
+**Rule: ALL HES settings require EMS enabled + grid connected + BLE connected + not manual off-grid.**
+
+## Peak Shaving — Maximum Power by Product
+
+| Product | Max Peak Shaving | Notes |
+|---------|-----------------|-------|
+| A5101 (X1 single-phase US) | **60,000W** (60kW) | |
+| A5102 (X1 single-phase EU) | **60,000W** (60kW) | |
+| A5103 (X1 three-phase) | **180,000W** (180kW) | 3× single-phase |
+| A5341 (Backup Controller) | **38,400W** (38.4kW) | |
+| Unknown/default | **0W** | Feature disabled |
+
+**Rule: Peak shaving limits are hardcoded per product number. Don't allow values above these.**
+
+## Battery Reserve
+
+- **Default**: 20%
+- **Maximum**: 100%
+- Set via `sendDeviceCommandOfConservepercent()`
+
+## Disaster Preparedness / Storm Guard
+
+Two modes: **Manual** and **Auto**
+
+Parameters:
+- `disaster_preparedness_enable`: on/off
+- `disaster_preparedness_soc`: SOC reserve threshold
+- `disaster_preparedness_start` / `_end`: time window
+- `auto_disaster_preparedness_enable`: auto mode toggle
+
+**Auto-disaster data synced via BLE in packets** — enable/disable sent only after ALL packets complete.
+
+## Off-Grid Switching
+
+Parameters: `off_grid_enable`, `off_grid_sensitivity`
+
+Seamless off-grid switch available (zero-transfer-time). Same 4 guard conditions apply.
+
+## Heat Pump SG-Ready
+
+- Separate weekday and weekend time plans
+- Has enable/disable toggle
+- Timer settings managed separately
+- Transmitted via `heatPumpSetting` in device command payload
+
+## HES Work Modes
+
+| Value | Mode | Description |
+|-------|------|-------------|
+| 0 | `standBy` | Standby |
+| 2 | `gridOff` | Grid disconnected |
+| 6 | `working` | Normal operation |
+
+---
+
+# Business Rules — A1790 F3800 / Expansion Batteries
+
+## Expansion Battery Guards
+
+Before any operation on expansion batteries, the app checks:
+- `isSubBatteryEqualing()` — **6+ call sites**. If battery equalization is in progress → block operations
+- `isSubBatteryOverError()` — shows error dialog + uploads error report
+- `isBatteryError()` — general battery error check
+
+**Rule: Never send commands to expansion batteries during equalization.**
+
+## Generator Auto-Start (A7320 / AX170)
+
+| Parameter | Description |
+|-----------|-------------|
+| `oilEngineStartCondition` | Flag that triggers auto-start |
+| `oilEngineStartSoc` | SOC threshold for startup |
+| `standbyOilMachineNormalStartSoc` | Normal hours start SOC |
+| `standbyOilMachineQuietStartSoc` | Quiet hours start SOC (typically higher) |
+| `oilEngineStartTime` | Scheduled start time |
+| `isStartCloseSoc` | Validates start/close SOC consistency |
+
+**Rule: Generator has DUAL SOC thresholds — normal vs quiet hours. Quiet hours threshold is typically higher to avoid unnecessary starts at night.**
+
+---
+
+# Cross-Cutting Rules (all devices)
+
+## WiFi: 2.4GHz Only
+
+**ALL Anker Solix devices** only support 2.4GHz WiFi. The app shows `selectWifi5GTips` warning across every device type (A5101, A5140, A5143, A5150, A1781, and all device bind flows).
+
+**Rule: Never attempt 5GHz WiFi connection. It will fail silently.**
+
+## OTA Blocks Device Control
+
+- `isOtaInProgress()` checked before rendering home page UI (A1790, A1782)
+- **ALL user operations blocked during OTA** — not just settings, but the entire home page
+- **OTA requires MinSoc** — battery must be above threshold before BLE firmware update
+- **Rollback available** — component-level rollback supported with dedicated UI
+
+## Battery Temperature Protection (4 zones)
+
+| Zone | Effect |
+|------|--------|
+| `outHighTemperatureProtection` | **Discharge blocked** |
+| `outLowTemperatureProtection` | **Discharge blocked** |
+| `inHighTemperatureProtection` | **Charging blocked** |
+| `inLowTemperatureProtection` | **Charging blocked** |
+
+**Rule: Temperature protection is per-direction. High temp blocks the current direction (charge OR discharge), not both.**
+
+## Slider Debounce
+
+`sendDeviceCommandWithDebounce()` wraps all slider-based SET operations. Prevents rapid-fire commands when user drags a slider. The debounce fires only the LAST value after the user stops moving.
+
+## Input Validation
+
+`RangeTextInputFormatter`: Rejects values < 1 or > max (loaded dynamically from server). Invalid input reverts to previous value — no error shown.
