@@ -144,6 +144,21 @@ MQTT payloads are **base64-encoded**, optionally **GZip-compressed** JSON.
 - Modes: AES-GCM and AES-CBC available
 - Opcodes: `getAesKeyReq` / `getAesKeyRes` for key negotiation
 
+## MQTT Topic Structure
+
+Topics are deterministic, built from device info:
+
+```
+Subscribe: cmd/anker_power/{product_key}/{device_sn}/app/res     (command responses)
+Subscribe: dt/anker_power/{product_key}/{device_sn}/basic_info   (basic device info)
+Subscribe: dt/anker_power/{product_key}/{device_sn}/param_info   (parameter updates)
+Publish:   cmd/anker_power/{product_key}/{device_sn}/req         (send commands)
+```
+
+`product_key` = device product type identifier, `device_sn` = serial number.
+
+---
+
 ## TLV Parsing Details
 
 ### Tag Iteration (`parseCommonData`)
@@ -585,6 +600,169 @@ Example: tag 0xA2 = error code (int), tag 0xA4 = error message (Utf8 string).
 
 ---
 
+# API Response Model Structures (from toJson/fromJson)
+
+> Complete nested structures for key API responses. Extracted from Dart model classes.
+
+## SceneInfo (master site response — `get_site_detail`)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `site_info` | object | Site metadata |
+| `feature_switch` | FeatureSwitch | 22 capability flags (see below) |
+| `solar_list` | list | Per-panel solar data |
+| `pps_info` | object | PPS device info |
+| `solarbank_info` | object | SolarBank data |
+| `smart_plug_info` | object | Smart plug data |
+| `grid_info` | object | Grid info + ammeter list |
+| `error_info_map` | object | Error info |
+| `aiems_profit` | object | AI EMS profit data |
+| `combiner_box_info` | object | Combiner box / Power Dock |
+| `charging_pile_info` | object | EV charging pile |
+| `statistics` | object | Energy statistics |
+
+### FeatureSwitch (22 boolean flags — what a site supports)
+| Flag | Description | Flag | Description |
+|------|-------------|------|-------------|
+| `multi_pv` | Multiple PV arrays | `smart_plug` | Smart plug support |
+| `manual_backup_mode` | Manual backup | `exceed_power` | Exceed power alert |
+| `peak_valley_mode` | Peak/valley pricing | `heating` | Heating support |
+| `shelly_meter` | Shelly meter | `support_p1_meter` | P1 meter |
+| `support_0w` | 0W feed-in | `0w_feed_v2` | 0W feed v2 |
+| `micro_inverter_power_exceed` | MI power alert | `micro_inverter_output_exceed` | MI output alert |
+| `offgrid_with_micro_inverter_alert` | Off-grid MI | `enable_parallel` | Parallel ops |
+| `plug_switch_report` | Plug reporting | `show_third_party_pv_panel` | 3rd party PV |
+| `meter_self_testing` | Meter test | `power_limit_status` | Power limit active |
+| `power_saving_mode` | Power saving | `third_party_pv_enable` | 3rd party PV on |
+| `enable_aiems_v2` | AI EMS v2 | `grid_to_ev` | Grid→EV charging |
+
+## SiteConsumptionStrategyModel (param_type=6 response)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `mode_type` | int | Mode (1-8) |
+| `default_home_load` | int | Default (W) |
+| `max_load` | int | Maximum (W) |
+| `min_load` | int | Minimum (W) |
+| `step` | int | Step (W) |
+| `custom_rate_plan` | list | Schedule: `[{index, week:[0-6], ranges:[{start_time, end_time, power, exceed_alarm}]}]` |
+| `blend_plan` | list | Blend schedule |
+| `ai_ems` | object | `{status: int}` |
+| `reserved_soc` | int | Reserved SOC (%) |
+| `manual_backup` | object | Backup config |
+| `dynamic_price` / `fixed_price` | object | Pricing config |
+
+## StationPowerLimitModel (`get_power_limit` response)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `legal_power_limit` | int | Legal max (W) |
+| `ac_input_power_unit` | string | Unit ("W") |
+| `power_limit_option` | list | Per-device: `[{device_sn, limit, limit_real, ac_input_limit, status}]` |
+| `parallel_type` | int | Parallel type |
+| `exceed_alarm` | int | Exceed alarm |
+
+## HomeLoadData (`get_device_home_load` response)
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `min_load` / `max_load` / `step` | int | Range (W) |
+| `default_home_load` | int | Default (W) |
+| `schedule_mode` | int | Mode |
+| `is_charge_priority` | bool | Charge priority |
+| `is_show_priority_discharge` | bool | Priority discharge UI |
+| `display_advanced_mode` | bool | Advanced mode UI |
+| `ranges` | list | See HomeRange below |
+
+### HomeRange (schedule entry)
+```json
+{"id": 0, "turn_on": true, "start_time": "00:00", "end_time": "08:00",
+ "power_setting_mode": 1, "charge_priority": 80,
+ "priority_discharge_switch": false,
+ "appliance_loads": [{"name": "Fridge", "power": 100, "number": 1, "id": 0}],
+ "device_power_loads": [{"device_sn": "...", "power": 50}]}
+```
+
+## A5101DeviceCommandModel (HES `sendDeviceCommand`)
+
+17+ fields with 8 nested sub-models:
+
+### electricity_strategy
+```json
+{"conserve_percent": 10, "mode": 1, "grid_recharging": true,
+ "peck_shaving": false, "peck_shaving_max_power": 5000,
+ "disaster_preparedness_enable": false,
+ "disaster_preparedness_plans": [{"soc": 100, "start_time": "...", "end_time": "...", "type": 2}],
+ "auto_disaster_preparedness_enable": false}
+```
+
+### off_grid_switching
+```json
+{"off_grid_enable": false, "off_grid_sensitivity": 50}
+```
+
+### heat_pump_setting
+```json
+{"heat_pump_state": 0, "heat_pump_power": 2000, "heat_pump_mode": 1,
+ "heat_pump_manual_enable": false, "heat_pump_min_launch_time": 30,
+ "heat_pump_min_running_time": 10,
+ "heat_pump_plan": [{"day_type": 1, "start_time": "06:00", "end_time": "22:00"}]}
+```
+
+### advanced_setting
+```json
+{"arc_fault_circuit_interrupter": false, "rapid_shutdown": false,
+ "mppt_multi_peak_scanning": {"scanning_switch": false, "scanning_interval": 10}}
+```
+
+### screen_setting
+```json
+{"radar": true, "screen": true, "screen_timeout": 60}
+```
+
+### utility_rate_plan (seasons + pricing)
+```json
+{"peak_sessions": [{"id": 1, "name": "Summer", "start_time": "06-01", "end_time": "09-30",
+  "peak_valley_prices": [{"buy": 0.30, "sell": 0.08, "energy_unit": "€",
+    "start_time_period": "06:00", "end_time_period": "22:00", "peak_type": 1, "day_type": 1}]}],
+ "nem_plan_info": {"template_id": "...", "template_name": "...", "customer_segment_type": "..."}}
+```
+
+## A5101 BLE Data Codes — GET vs SET
+
+131 total DataCodeType enum values. Selected important ones by direction:
+
+### SET-only (writable)
+| Hex | Name | Description |
+|-----|------|-------------|
+| 0x02BE-0x02D1 | `diesel*` (14 codes) | All generator params |
+| 0x09C9 | `gridSensitivity` | Grid sensitivity value |
+| 0x09D4 | `softwarePowerExportLimitInput` | Export limit value |
+| 0x09D3 | `x1AllowCharge` | X1 charge permission |
+| 0x0284 | `clsStateReset` | CLS reset |
+
+### GET-only (readable)
+| Hex | Name | Description |
+|-----|------|-------------|
+| 0x014C | `pvState` | PV connection |
+| 0x014D | `batRemain` | Battery remaining |
+| 0x0155 | `supportFunction` | Capability flags |
+| 0x0160 | `minSoc` | Minimum SOC |
+| 0xE004 | `systemStatus` | System status |
+
+### Both GET and SET
+| Hex | Name | Hex | Name |
+|-----|------|-----|------|
+| 0xF009 | `gridStandardCode` | 0x0137 | `backupMode` |
+| 0x0222 | `pvLoadPower` | 0x020E | `batteryLoadPower` |
+| 0xF00C | `gridBatteryPower` | 0x0221 | `gridLoadPower` |
+
+~60 codes in enum but NOT in either BLE map — used via MQTT:
+`soc`(0x3a), `workMode`(0x46), `batteryReserve`(0x21), `peakShaving`(0x24),
+`heatPumpSGEnable`(0x57), `evChargerAllPower`(0x85), `autoDisaster`(0x44)
+
+---
+
 ## HES / X1 JSON Protocol (NOT TLV)
 
 X1/HES devices (`A5101`) use a **different protocol**:
@@ -809,7 +987,7 @@ Debug strings reveal exact field meanings (power in Watts):
 | Tag | Debug String (Chinese) | Resolved Name | Unit |
 |-----|----------------------|---------------|------|
 | ac | "电池充放电功率（单位W）" | `bat_charge_discharge_power` | W |
-| ab | "总输出功率（单位W）" | `total_output_power` | W |
+| ab | "总输出功率（单位W" | `total_output_power` | W (note: APK is missing closing `）` — Anker typo) |
 | c2 | "总输入功率 设备主页totalInput" | `total_input_power` | W |
 | ae | "并网口功率（单位W）" | `grid_port_power` | W |
 | af | "离网口功率（单位W）" | `off_grid_port_power` | W |
