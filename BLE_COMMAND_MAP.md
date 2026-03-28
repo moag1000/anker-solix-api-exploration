@@ -1187,9 +1187,11 @@ Richest PPS parser (10841 lines). 4 ports with individual monitoring.
 
 ## Cross-Device Discoveries
 
-### New Device Type: A17D0
+### A17D0 — Generator Input Adapter
 Found in A17B1 parser (line 3663). Referenced 4× alongside A1790/A1790P.
-Appears to be an **unreleased battery type** supported by the A17B1 hub.
+This is the [Anker SOLIX Generator Input Adapter](https://support.ankersolix.com/s/article/Anker-SOLIX-Generator-Input-Adapter-User-Guide-A17D0)
+(A17D0111, $399) — connects gas generators to F3800 Plus / Home Power Panel.
+Shipping product, not unreleased.
 
 ### A5140 Microinverter = A1780 Protocol
 The A5140 microinverter reuses `A1780DeviceCommands` entirely.

@@ -66,7 +66,9 @@
 
 **Device→Command Matrix**: Which of thomluther's 53 CMD_* each device supports.
 
-**Unreleased device A17D0** discovered in A17B1 parser (4 references).
+**A17D0** identified in A17B1 parser — initially thought unreleased, but is the
+[Generator Input Adapter](https://support.ankersolix.com/s/article/Anker-SOLIX-Generator-Input-Adapter-User-Guide-A17D0)
+(A17D0111, $399, shipping product).
 
 ### BLE_COMMAND_MAP.md growth
 From 0 to 2350 lines covering:
