@@ -168,3 +168,199 @@ P4 priority — minimal community demand.
 | — | `setClockFormat` (A91B2) | a2 | **NEW** |
 
 P3 priority — niche but requested.
+
+---
+
+# STATUS Message Fields (Receive Direction)
+
+> Devices periodically send status messages (0405 type). These are the fields
+> the app reads from those messages. Extracted from `parseDeviceAllInfo` and
+> MQTT model `fromJson` methods in the decompiled code.
+
+---
+
+## A17B1 — Solarbank 2 System JSON Keys (MQTT status)
+
+The A17B1 uses **JSON** (not binary TLV) for MQTT status messages.
+These abbreviated keys are what mqtt_monitor shows — now with full names.
+
+### Core Power Fields
+| Key | Full Name | Type | Default |
+|-----|-----------|------|---------|
+| `soc` | State of Charge | int | — |
+| `pp` | PV (Solar) Power | int | 0 |
+| `bp` | Battery Power | int | 0 |
+| `gp` | Grid Power | int | 0 |
+| `lp` | Load Power | int | 0 |
+| `op` | Output Power | int? | null |
+| `ep` | Export Power | int | 0 |
+| `ppu` | PV Power Unit | str | — |
+| `bpu` | Battery Power Unit | str | — |
+| `gpu` | Grid Power Unit | str | — |
+| `lpu` | Load Power Unit | str | — |
+| `opu` | Output Power Unit | str | — |
+
+### State Fields
+| Key | Full Name | Type | Default |
+|-----|-----------|------|---------|
+| `ws` | WiFi Signal | int | 0 |
+| `bs` | Battery State | int | — |
+| `gs` | Grid Status | int | 0 |
+| `ps` | PV Status | int | 0 |
+| `m` | Mode | int | 2 |
+| `os` | Online State | bool | false |
+| `ts` | Timer/Schedule State | bool | false |
+
+### Energy Flow (nested in `dataFlow` object)
+| Key | Full Name |
+|-----|-----------|
+| `p2bp` | PV → Battery Power |
+| `p2lp` | PV → Load Power |
+| `p2gp` | PV → Grid Power |
+| `b2lp` | Battery → Load Power |
+| `b2gp` | Battery → Grid Power |
+| `g2bp` | Grid → Battery Power |
+| `g2lp` | Grid → Load Power |
+| `mpp` | Micro-Inverter PV Power |
+
+### Settings & Totals
+| Key | Full Name | Type | Default |
+|-----|-----------|------|---------|
+| `cp` | Charge Percentage Target | int | 40 |
+| `pu` | Power Usage Mode | int | 0 |
+| `tu` | Time Update / Timestamp | int | 0 |
+| `b1t` | Battery 1 Temperature | int | 0 |
+| `mps` | Micro Power Setting | int | 0 |
+| `tpp` | Total PV Production | int | 0 |
+| `tgp` | Total Grid Power | int | 0 |
+| `tlp` | Total Load Power | int | 0 |
+| `tsp` | Total Solar Production | int | 0 |
+| `dps` | Discharge Power Setting | int | 0 |
+| `dpct` | Discharge Percent | int | 0 |
+| `inmt` | Inverter Max Throughput | int? | null |
+| `gmp` | Grid Max Power | int? | null |
+| `scfg` | System Configuration | int? | null |
+
+### Version & System
+| Key | Full Name | Type |
+|-----|-----------|------|
+| `mv` | Main Firmware Version | str |
+| `mdv` | Module Detail Version | str |
+| `tv` | Total Version | str |
+| `acc` | Account/Access Code | str? |
+| `rp` | Rate Plan (schedule array) | list |
+| `dpp` | Discharge Power Plan | list |
+
+### Battery Array (in `bds` list)
+| Key | Full Name |
+|-----|-----------|
+| `sn` | Battery Serial Number |
+| `name` | Battery Name |
+| `soc` | Battery SOC |
+| `power` | Battery Power |
+| `error` | Error Code |
+| `related` | Related Device |
+
+### Diesel/Generator Extension
+| Key | Full Name |
+|-----|-----------|
+| `hasDiesel` | Has Diesel Generator |
+| `dieselState` | Diesel Generator State |
+| `o2lp` / `o2lpu` | Output2 Load Power / Unit |
+| `o2pp` / `o2ppu` | Output2 PV Power / Unit |
+
+---
+
+## A5101 — X1 HES MQTT Status Fields
+
+The X1 system uses **JSON "trans" payloads** (not binary TLV).
+
+### Core Power Fields
+| Key | Full Name | Unit Key |
+|-----|-----------|----------|
+| `pvPower` | PV Power | `pvEnergyUnit` |
+| `batPower` | Battery Power | `batEnergyUnit` |
+| `gridPower` | Grid Power | `gridEnergyUnit` |
+| `loadPower` | Load Power | `loadEnergyUnit` |
+| `dieselPower` | Diesel/Generator Power | `dieselPowerUnit` |
+| `evChargerAllPower` | EV Charger Total Power | — |
+| `ppsTotalPower` | PPS Total Power | — |
+
+### State Fields
+| Key | Full Name |
+|-----|-----------|
+| `gridState` | Grid Connection State |
+| `pvState` | PV Connection State |
+| `batState` | Battery State |
+| `batElectricQuantity` | Battery Charge Level (SOC) |
+| `emsStatus` | EMS Status |
+| `emsMode` | EMS Mode |
+| `mainSnDisconnected` | Main SN Disconnected |
+
+### System Topology
+| Key | Full Name |
+|-----|-----------|
+| `batTotalCount` | Total Battery Pack Count |
+| `numberOfParallelDevice` | Number of Parallel Devices |
+| `pcsOnlineNum` | PCS Online Count |
+| `pcsTotal` | PCS Total Count |
+| `evChargerOnlineNums` | EV Charger Online Count |
+| `ppsTotalCount` | PPS Total Count |
+| `ppsTotalElectricQuantity` | PPS Total Charge |
+
+### Energy Flow (nested in `dataFlow`)
+| Key | Full Name |
+|-----|-----------|
+| `pvToLoadPower` | PV → Load |
+| `pvToGridPower` | PV → Grid |
+| `batToLoadPower` | Battery → Load |
+| `batToGridPower` | Battery → Grid |
+| `gridToBatPower` | Grid → Battery |
+| `gridToLoadPower` | Grid → Load |
+| `dieselToLoadPower` | Diesel → Load |
+| `dieselToBatPower` | Diesel → Battery |
+| `pvToEvChargerPower` | PV → EV Charger |
+| `gridToEvChargerPower` | Grid → EV Charger |
+| `batToEvChargerPower` | Battery → EV Charger |
+
+---
+
+## A17X8 — Smart Plug Status Tags (0405 TLV)
+
+Binary TLV — field names not embedded. Tag sequence from `parseDeviceAllInfo`:
+
+| Tag | Notes |
+|-----|-------|
+| fe | Timestamp |
+| a2 | Device SN (Utf8) |
+| a3 | Switch state (bool: ==1 → true) |
+| a4 | Related to power? (checked for existence) |
+| a5-ab | Data fields (power, energy, signal, etc.) |
+| ad-ae | Data fields |
+| b0 | Data field |
+| f7-f8 | Data fields |
+| fb-fc | Data fields (read twice) |
+
+Tag a3 = **switch state** is the most useful confirmed finding for plug owners.
+
+---
+
+## A17C1 — Solarbank 2 Status Tags (0405 TLV)
+
+Binary TLV — 40+ tags in `parseDeviceAllInfo`. Key tags:
+
+| Tag | Notes |
+|-----|-------|
+| fe | Timestamp |
+| a2 | Device SN (Utf8) |
+| a3 | Station ID / FW version |
+| a7 | Total version (+ debug: "17c1 version log") |
+| ad-ae | Battery-related data |
+| a4-ac | Core data fields (power, SOC, mode, etc.) |
+| af-bb | Extended data fields |
+| c2, c6-c9 | Additional metrics |
+| d2-d3, e0-e1 | Extended metrics |
+| e8-e9, fb-fc | System/diagnostic fields |
+
+The exact field-to-meaning mapping for these binary TLV tags requires correlation
+with the App UI values via mqtt_monitor — the same approach thomluther uses.
