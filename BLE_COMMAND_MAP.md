@@ -1633,3 +1633,718 @@ Extracted from `parseDeviceAllInfo` (a17c1_device_commands.dart, 8804 bytes).
 | `uploadVoltageProtection` | Low-voltage protection |
 | `uploadExceptionMsgCode` | Exception messages |
 | `uploadErrorCode` | Error codes |
+
+---
+
+# GAP FILL: Final Analysis (2026-03-28)
+
+## Task 1: A1780 (F2000) Positional Parser
+
+The A1780 uses **positional byte parsing** (NOT TLV tags like Solarbanks). The `parseOtherData` function reads sequential 2-byte fields from the data buffer using `sublist(offset, offset+2)` then `listToInt()`. The `r16` register holds the **start offset** into the data buffer, and `r2` holds the **end offset** (start + field_width). The `r17` register holds the **object field offset** where the result is stored.
+
+The A1780 `parseCountdownData` is inherited from A1770 (`A1770Commands::parseCountdownData`).
+
+### parseOtherData: Positional Byte Map
+
+The function parses the data buffer sequentially. `r16` = buffer read position, `r2` = bytes to read (field width=2 for most, then varying), `r17` = object store offset.
+
+| Pos (r16) | End (r2) | Obj Offset (r17) | Upstream Tag | Field Name | Conversion |
+|-----------|----------|-------------------|--------------|------------|------------|
+| 26 | 9 | 0x1AB (427) | `a4` | remaining_time_hours | listToInt(), x0.1 |
+| 34 | 13 | 0x1AF (431) | `a5` | grid_to_battery_power | listToInt() |
+| 38 | 17 | 0x1D3 (467) | `a6` | ac_socket_power | listToInt() |
+| 42 | 19 | 0x1D7 (471) | `a7` | usbc_1_power | listToInt() |
+| 46 | 21 | 0x1DB (475) | `a8` | usbc_2_power | listToInt() |
+| 50 | 23 | 0x1DF (479) | `a9` | usbc_3_power | listToInt() |
+| 54 | 25 | 0x1E3 (483) | `aa` | usba_1_power | listToInt() |
+| 58 | 27 | 0x1E7 (487) | `ab` | usba_2_power | listToInt() |
+| 62 | 29 | 0x1EB (491) | `ac` | dc_12v_1_power | listToInt() |
+| 66 | 31 | 0x1EF (495) | `ad` | dc_12v_2_power | listToInt() |
+| 70 | 33 | 0x1FB (507) | `ae` | dc_input_power | listToInt() |
+| 74 | 35 | 0x1FF (511) | `af` | ac_input_power | listToInt() |
+| 78 | 37 | 0x203 (515) | `b0` | ac_output_power_total | listToInt() |
+| 82 | 39 | 0x20B (523) | -- | (unknown, gap in upstream) | listToInt() |
+| 86 | 41 | 0x237 (567) | -- | (unknown, gap in upstream) | listToInt() |
+| 90 | 43 | 0x2CF (719) | `b3` | sw_version | toString (special) |
+| 94 | 45 | 0x2D3 (723) | `b9` | sw_expansion | listToInt() |
+| 98 | 47 | 0x2D7 (727) | `ba` | sw_controller | listToInt() |
+| 102 | 49 | 0x2DB (731) | -- | (unknown fw field) | listToInt() |
+| 106 | 51 | 0x2DF (735) | -- | (unknown fw field) | listToInt() |
+| 110 | 53 | 0x2E3 (739) | -- | (unknown fw field) | listToInt() |
+| 114 | 55 | 0x2E7 (743) | -- | (unknown fw field) | listToInt() |
+| 118 | 57 | 0x2EB (747) | -- | (unknown fw field) | listToInt() |
+| 122 | 59 | 0x2EF (751) | -- | (unknown fw field) | listToInt() |
+| 126 | 61 | 0x2F3 (755) | `bd` | temperature | listToInt() -> getMainVersion() |
+| 130 | 63 | 0x2FB (763) | -- | temp_unit_bool | listToInt() == 1 -> bool |
+| 132 | 65 | 0x303 (771) | `c1` | main_battery_soc | listToInt() |
+| 134 | 66 | 0x307 (775) | `bd` | temperature | signed: if >= 0x80, subtract 0x100 |
+| 136 | 67 | 0x30B (779) | `be` | exp_1_temperature | signed: if >= 0x80, subtract 0x100 |
+| 138 | 68 | 0x30F (783) | -- | (unknown) | listToInt() |
+| 140 | 69 | 0x313 (787) | `c2` | exp_1_soc | listToInt() |
+| 142 | 70 | 0x317 (791) | -- | (unknown) | listToInt() |
+| 144 | 71 | 0x3D3 (979) | `c3` | battery_soh | listToInt() |
+| 146 | 72 | 0x31F (799) | `c4` | exp_1_soh | listToInt() |
+| 148 | 73 | 0x323 (803) | -- | (unknown) | listToInt() |
+| 150 | 74 | 0x327 | `c5` | expansion_packs_b? | listToInt() == 1 -> bool |
+| 152 | 75 | 0x32B | `d8` | dc_output_power_switch | listToInt() == 1 -> bool |
+| 154 | 76 | 0x32F | `d7` | ac_output_power_switch | listToInt() == 1 -> bool |
+| 156 | 77 | 0x333 | `db` | energy_saving_mode | listToInt() == 1 -> bool |
+| 158 | 78 | 0x337 | `de` | display_switch | listToInt() == 1 -> bool |
+| 160 | 79 | 0x33B | `dd` | temp_unit_fahrenheit | listToInt() == 1 -> bool |
+| 162 | 80 | 0x347 | `e5` | backup_charge_switch | listToInt() == 1 -> bool |
+| 164 | 81 | -- | -- | (unknown bool) | listToInt() == 1 -> bool |
+| 166 | 82 | -- | -- | (unknown bool) | listToInt() == 1 -> bool |
+| 168 | 83 | 0x3DB (987) | `d9` | display_mode | listToInt() |
+| 170 | 84 | -- | `dc` | light_mode | listToInt() |
+
+### parseSwitchData: Switch Fields
+
+Parses 4 switch/boolean fields from sequential 2-byte positions in the data buffer:
+
+| Position (r16) | Obj Offset | Upstream Tag | Field Name | Conversion |
+|----------------|------------|--------------|------------|------------|
+| 18 | 0x39B (923) | `d7` | ac_output_power_switch | listToInt() == 1 -> bool |
+| 20 | 0x39F (927) | `d8` | dc_output_power_switch | listToInt() == 1 -> bool |
+| 22 | 0x3AF (943) | `db` | energy_saving_mode | listToInt() == 1 -> bool |
+| 24 | 0x3B3 (947) + cmp >= 4 -> 0x193 (403) | `dc` | light_mode + bool flag | listToInt(): if < 4 -> store raw, cmp == 4 -> bool |
+
+**Note**: The 4th switch entry has dual logic: it stores the raw light_mode value AND compares against 4 (blinking mode) to set a separate boolean flag.
+
+### parseCountdownData (inherited from A1770)
+
+The countdown parser reads 4 elements from positions 18, 20, 22, 24 into a 4-element list, then calls `listToInt()` on the combined 4 bytes to produce a single countdown value stored at object offset 0x1AB (427). Then it reads another pair of values from positions 26, 28 and 30 to produce more countdown fields.
+
+Format: 4 bytes assembled into a 32-bit value representing countdown time.
+
+| Position (r16) | Field | Description |
+|----------------|-------|-------------|
+| 18-24 | countdown_value_packed | 4 bytes -> combined listToInt at obj offset 427 |
+| 26-28 | countdown_hours | Additional countdown hours |
+| 30 | countdown_minutes? | Additional field |
+
+### parseDeviceInfo
+
+This is a **wrapper** that first calls `parseOtherData()`, then reads additional fields starting from the position where parseOtherData left off. The additional fields in parseDeviceInfo (after parseOtherData returns) include:
+
+| Continuation | Obj Offset (r17) | Upstream Tag | Field Name |
+|-------------|-------------------|--------------|------------|
+| +0 (from return) | 0x2FF (767) | `c0` | expansion_packs_a? |
+| +2 | 0x1B3 (435) | -- | additional power/status |
+| +4 | 0x1BB (443) | -- | additional power/status |
+| +6 | 0x1BF (447) | -- | additional power/status |
+| +8 | 0x1C3 (451) | -- | additional power/status |
+| +10 | 0x1C7 (455) | -- | additional power/status |
+| +12 | 0x1CB (459) | -- | additional power/status |
+| +14 | 0x1CF (463) | -- | additional power/status |
+| ... | ... | ... | ... continues with more fields |
+
+**Key insight**: The A1780 positional parser makes TLV tags unnecessary for BLE -- the byte offsets ARE the implicit tags. Upstream mqttmap.py maps these same fields to explicit TLV tags (a4-fe) for the MQTT path. The BLE positional format and the MQTT TLV format carry identical data, just encoded differently.
+
+---
+
+## Task 2: All Upstream SET Commands (from mqttcmdmap.py)
+
+### Group 1: PPS AC/DC Controls
+
+#### CMD_AC_CHARGE_SWITCH
+**Command**: `ac_charge_switch` | **Devices**: A1780, A1790, A5140, A5143
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_ac_charge_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+**STATE_NAME**: `backup_charge_switch`
+
+#### CMD_AC_FAST_CHARGE_SWITCH
+**Command**: `ac_fast_charge_switch` | **Devices**: A1780
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_ac_fast_charge_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+**STATE_NAME**: `fast_charge_switch`
+
+#### CMD_AC_CHARGE_LIMIT
+**Command**: `ac_charge_limit` | **Devices**: A5140, A5143
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_ac_input_limit | sile (2B) | (device-specific watt value) |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+**STATE_NAME**: `ac_input_limit`
+
+#### CMD_AC_OUTPUT_SWITCH
+**Command**: `ac_output_switch` | **Devices**: A1780, A5140, A5143, A17X8
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_ac_output_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+**STATE_NAME**: `ac_output_power_switch`
+
+#### CMD_AC_OUTPUT_MODE
+**Command**: `ac_output_mode_select` | **Devices**: A1780, A5140, A5143
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_ac_output_mode | ui (1B) | smart=0, normal=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+**STATE_NAME**: `ac_output_mode` (with converter: setting 0 -> state 2, setting 1 -> state 1)
+
+#### CMD_AC_OUTPUT_TIMEOUT_SEC
+**Command**: `ac_output_timeout_seconds` | **Devices**: A5140, A5143
+| Tag | NAME | TYPE | Range |
+|-----|------|------|-------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_ac_output_timeout_seconds | var (3B) | 0-86400, step 300 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+**STATE_NAME**: `ac_output_timeout_seconds`
+
+#### CMD_DC_OUTPUT_SWITCH
+**Command**: `dc_output_switch` | **Devices**: A1780, A5140, A5143
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_dc_output_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+**STATE_NAME**: `dc_output_power_switch`
+
+#### CMD_DC_12V_OUTPUT_MODE
+**Command**: `dc_12v_output_mode_select` | **Devices**: A1780, A5140, A5143
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_dc_12v_output_mode | ui (1B) | smart=0, normal=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+**STATE_NAME**: `dc_12v_output_mode` (with converter: setting 0 -> state 2, setting 1 -> state 1)
+
+#### CMD_DC_OUTPUT_TIMEOUT_SEC
+**Command**: `dc_output_timeout_seconds` | **Devices**: A5140, A5143
+| Tag | NAME | TYPE | Range |
+|-----|------|------|-------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_dc_output_timeout_seconds | var (3B) | 0-86400, step 300 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+**STATE_NAME**: `dc_output_timeout_seconds`
+
+### Group 2: PPS Display/Light/Port Controls
+
+#### CMD_LIGHT_SWITCH
+**Command**: `light_switch` | **Devices**: A1780, A5140, A5143
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_light_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_LIGHT_MODE
+**Command**: `light_mode_select` | **Devices**: A1780, A5140, A5143
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_light_mode | ui (1B) | off=0, low=1, medium=2, high=3, blinking=4 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_DISPLAY_SWITCH
+**Command**: `display_switch` | **Devices**: A1780, A5140, A5143 (and all PPS)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_display_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_DISPLAY_MODE
+**Command**: `display_mode_select` | **Devices**: A1780, A5140, A5143
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_display_mode | ui (1B) | off=0, low=1, medium=2, high=3 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_DISPLAY_TIMEOUT_SEC
+**Command**: `display_timeout_seconds` | **Devices**: A1780, A5140, A5143
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_display_timeout_sec | sile (2B) | [20, 30, 60, 300, 1800] |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_PORT_MEMORY_SWITCH
+**Command**: `port_memory_switch` | **Devices**: A5140, A5143
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_port_memory_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_USB_PORT_SWITCH
+**Command**: `usbc_1/2/3/4_port_switch`, `usba_port_switch` | **Devices**: A5140, A5143
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_port_switch_select | ui (1B) | usbc_1=0, usbc_2=1, usbc_3=2, usbc_4=3, usba=4 |
+| `a3` | set_port_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SOC_LIMITS_V2
+**Command**: `soc_limits` | **Devices**: A5140, A5143 (uses CMD_COMMON_V2 with `fd` timestamp)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `aa` | set_max_soc | ui (1B) | [80, 85, 90, 95, 100] |
+| `ab` | set_min_soc | ui (1B) | [1, 5, 10, 15, 20] |
+| `fd` | msg_timestamp | str | (milliseconds) |
+
+### Group 3: Solarbank Extras
+
+#### CMD_SB_STATUS_CHECK
+**Command**: `sb_status_check` | **Devices**: A17C0 (Solarbank 1)
+| Tag | NAME | TYPE | Notes |
+|-----|------|------|-------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | device_sn | str (16B) | Device serial |
+| `a3` | charging_status | ui (1B) | Current status |
+| `a4` | set_output_preset | var | Output W |
+| `a5` | status_timeout_sec? | var | Timeout |
+| `a6` | local_timestamp | var | Time sync |
+| `a7` | next_status_timestamp | var | +56-57s |
+| `a8` | status_check_unknown_1? | ui | Unknown |
+| `a9` | status_check_unknown_2? | ui | Unknown |
+| `aa` | status_check_unknown_3? | ui | Unknown |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_POWER_CUTOFF
+**Command**: `sb_power_cutoff_select` | **Devices**: A17C0-C3 (SB1, SB2)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_output_cutoff_data | ui (1B) | [5, 10] |
+| `a3` | set_lowpower_input_data | ui (1B) | follows a2: {5:4, 10:5} |
+| `a4` | set_input_cutoff_data | ui (1B) | follows a2: {5:5, 10:10} |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_MIN_SOC
+**Command**: `sb_min_soc_select` | **Devices**: A17C5, A17C6 (SB3)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_min_soc | ui (1B) | [5, 10] |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_INVERTER_TYPE
+**Command**: `sb_inverter_type_select` | **Devices**: A17C0 (SB1)
+| Tag | NAME | TYPE | Notes |
+|-----|------|------|-------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_output_cutoff_data | ui | inherited from CMD_SB_POWER_CUTOFF |
+| `a3` | set_lowpower_input_data | ui | inherited |
+| `a4` | set_input_cutoff_data | ui | inherited |
+| `a5` | set_inverter_brand | bin | Hex bytes of brand |
+| `a6` | set_inverter_model | bin | Hex bytes of model |
+| `a7` | set_min_load | sile (2B) | Watts |
+| `a8` | set_max_load | sile (2B) | Watts |
+| `a9` | set_inverter_unknown_1? | ui | Usually 0 |
+| `aa` | set_ch_1_min_what? | var | 500 etc |
+| `ab` | set_ch_1_max_what? | var | 10000 etc |
+| `ac` | set_ch_2_min_what? | var | 500 etc |
+| `ad` | set_ch_2_max_what? | var | 10000 etc |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_AC_SOCKET_SWITCH
+**Command**: `sb_ac_socket_switch` | **Devices**: A17C5 (SB3)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_ac_socket_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_3RD_PARTY_PV_SWITCH
+**Command**: `sb_3rd_party_pv_switch` | **Devices**: A17C5, A17C6 (cloud-driven)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_3rd_party_pv_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_EV_CHARGER_SWITCH
+**Command**: `sb_ev_charger_switch` | **Devices**: A17C6 (cloud-driven)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_ev_charger_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_MAX_LOAD
+**Command**: `sb_max_load` | **Devices**: A17C1-C6 (all SB2/SB3)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_max_load | sile (2B) | device-specific: [350,600,800,1000] or [350,600,800,1000,1200] |
+| `a3` | set_max_load_type | sile (2B) | individual=0, parallel=2, single=3 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_MAX_LOAD (parallel variant, opcode 005a)
+**Command**: `sb_max_load_parallel` | **Devices**: A17C1-C6
+Same structure as CMD_SB_MAX_LOAD but with `VALUE_OPTIONS: [1200, 2400, 3600, 4800]` and `a3` default=2 (parallel).
+
+#### CMD_SB_DISABLE_GRID_EXPORT_SWITCH
+**Command**: `sb_disable_grid_export_switch` | **Devices**: A17C1-C6
+| Tag | NAME | TYPE | VALUE_OPTIONS / Range |
+|-----|------|------|----------------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a5` | set_disable_grid_export_a5? | sile (2B) | default=0 |
+| `a6` | set_disable_grid_export_switch | sile (2B) | off=0, on=1 |
+| `a9` | set_grid_export_limit | sile (2B) | 0-100000, step 100 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_PV_LIMIT
+**Command**: `sb_pv_limit_select` | **Devices**: A17C5 (SB3, in 0080 group)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a7` | set_sb_pv_limit_select | sile (2B) | [2000, 3600] |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_AC_INPUT_LIMIT
+**Command**: `sb_ac_input_limit` | **Devices**: A17C2, A17C5 (in 0080 group)
+| Tag | NAME | TYPE | Range |
+|-----|------|------|-------|
+| `a1` | pattern_22 | auto | (header) |
+| `a8` | set_ac_input_limit | sile (2B) | 0-1200 W, step 100 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_LIGHT_SWITCH
+**Command**: `sb_light_switch` | **Devices**: A17C1-C6 (in 0068 group)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_light_mode | ui (1B) | uses actual light_mode state |
+| `a3` | set_light_off_switch | ui (1B) | off=0 (light on), on=1 (light off) |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_LIGHT_MODE
+**Command**: `sb_light_mode_select` | **Devices**: A17C1-C6 (in 0068 group)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_light_mode | ui (1B) | normal=0, mood=1 |
+| `a3` | set_light_off_switch | ui (1B) | uses actual light_off_switch state |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_DEVICE_TIMEOUT
+**Command**: `sb_device_timeout` | **Devices**: A17C5 (opcode 009a)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_device_timeout_min | ui (1B) | [0,30,60,120,240,360,720,1440] (VALUE_DIVIDER=30) |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SB_USAGE_MODE
+**Command**: `sb_usage_mode` | **Devices**: A17C5 (opcode 005e, cloud-driven, NOT supported directly)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_usage_mode | ui (1B) | manual=1, smartmeter=2, smartplugs=3, backup=4, use_time=5, smart=7, time_slot=8 |
+| `a3` | set_timestamp_a3_or_0? | ui | Unknown |
+| `a4` | set_backup_charge_switch | ui (1B) | off=0, on=1 |
+| `a5` | set_dynamic_soc_limit | ui (1B) | 10-100%, default=0 |
+| `a6` | set_timestamp_backup_start | var | Timestamp |
+| `a6_mode_8` | set_time_slot_modes | bin | 48 x 1-byte slots: discharge=1, charge=4, default=6 |
+| `a7` | set_timestamp_backup_end | var | Timestamp |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+### Group 4: Smartplug Controls
+
+#### CMD_PLUG_SCHEDULE
+**Command**: `plug_schedule` | **Devices**: A17X8
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_plug_schedule_a2? | ui (1B) | default=1 |
+| `a3` | set_plug_schedule_order? | ui (1B) | 1-10 |
+| `a4` | set_plug_schedule_a4? | ui (1B) | default=1 |
+| `a5` | set_plug_schedule_time | sile (2B) | 0-5947 (hour*256+minute) |
+| `a6` | set_plug_schedule_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_PLUG_DELAYED_TOGGLE
+**Command**: `plug_delayed_toggle` | **Devices**: A17X8
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_toggle_to_switch? | ui (1B) | off=0, on=1 |
+| `a3` | set_toggle_to_delay_time | bin/var (3B) | sec:min:hour, 0-1522491 |
+| `a4` | set_toggle_back_switch? | ui (1B) | off=0, on=1 |
+| `a5` | set_toggle_back_delay_time | bin/var (3B) | sec:min:hour, 0-1522491 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+### Group 5: EV Charger Controls
+
+#### CMD_EV_CHARGER_MODE
+**Command**: `ev_charger_mode_select` | **Devices**: A17B1 (EV Charger)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_ev_charger_mode | ui (1B) | start_charge=1, stop_charge=2, skip_delay=3, boost_charge=4 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+**COMMAND_ENCODING**: 2
+
+#### CMD_DEVICE_POWER_MODE
+**Command**: `device_power_mode` | **Devices**: A17B1 (EV Charger)
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_device_power_mode | ui (1B) | restart=5 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+**COMMAND_ENCODING**: 2
+
+#### CMD_PLUG_LOCK_SWITCH
+**Command**: `plug_lock_switch` | **Devices**: A17B1
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a3` | set_plug_lock_switch | ui (1B) | off=1, on=2 (!) |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_EV_AUTO_START_SWITCH
+**Command**: `ev_auto_start_switch` | **Devices**: A17B1
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a4` | set_auto_start_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_EV_MAX_CHARGE_CURRENT
+**Command**: `ev_max_charge_current` | **Devices**: A17B1
+| Tag | NAME | TYPE | Range |
+|-----|------|------|-------|
+| `a1` | pattern_22 | auto | (header) |
+| `a8` | set_max_evcharge_current | sile (2B) | 6-32 A, step 1 (VALUE_DIVIDER=0.1) |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_EV_LIGHT_BRIGHTNESS
+**Command**: `light_brightness` | **Devices**: A17B1
+| Tag | NAME | TYPE | Range |
+|-----|------|------|-------|
+| `a1` | pattern_22 | auto | (header) |
+| `aa` | set_light_brightness | ui (1B) | 0-100%, step 10 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_EV_LIGHT_OFF_SCHEDULE
+**Command**: `light_off_schedule` | **Devices**: A17B1
+| Tag | NAME | TYPE | VALUE_OPTIONS / Range |
+|-----|------|------|----------------------|
+| `a1` | pattern_22 | auto | (header) |
+| `b4` | set_light_off_schedule_switch | ui (1B) | off=0, on=1 |
+| `b5` | set_light_off_start_time | sile (2B) | 0-5947 (hour*256+minute) |
+| `b6` | set_light_off_end_time | sile (2B) | 0-5947 (hour*256+minute) |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_EV_AUTO_CHARGE_RESTART_SWITCH
+**Command**: `ev_auto_charge_restart_switch` | **Devices**: A17B1
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `ac` | set_auto_charge_restart_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_EV_CHARGE_RANDOM_DELAY_SWITCH
+**Command**: `ev_random_delay_switch` | **Devices**: A17B1
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `ad` | set_random_delay_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SWIPE_UP_MODE
+**Command**: `swipe_up_mode_select` | **Devices**: A17B1
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `af` | set_wipe_up_mode_select | ui (1B) | off=0, start_charge=1, stop_charge=2, boost_charge=3 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SWIPE_DOWN_MODE
+**Command**: `swipe_down_mode_select` | **Devices**: A17B1
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `b0` | set_wipe_down_mode_select | ui (1B) | off=0, start_charge=1, stop_charge=2, boost_charge=3 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_SMART_TOUCH_MODE
+**Command**: `smart_touch_mode_select` | **Devices**: A17B1
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `b2` | set_smart_touch_mode_select | ui (1B) | simple=0, anti_mistouch=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_MODBUS_SWITCH
+**Command**: `modbus_switch` | **Devices**: A17B1
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `b7` | set_modbus_switch | ui (1B) | off=0, on=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_MAIN_BREAKER_LIMIT
+**Command**: `main_breaker_limit` | **Devices**: A17B1
+| Tag | NAME | TYPE | Range |
+|-----|------|------|-------|
+| `a1` | pattern_22 | auto | (header) |
+| `a3` | set_main_breaker_limit | sile (2B) | 10-500 A, step 1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_EV_LOAD_BALANCING
+**Command**: `ev_load_balancing` | **Devices**: A17B1
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_load_balance_switch | ui (1B) | off=0, on=1 |
+| `a4` | set_load_balance_setting_d5 | ui (1B) | off=0, on=1 |
+| `a5` | set_load_balance_setting_d6 | ui (1B) | off=0, on=1 |
+| `a6` | set_load_balance_monitor_device | str (16B) | Device SN |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_EV_SOLAR_CHARGING
+**Command**: `ev_solar_charging` | **Devices**: A17B1
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_solar_evcharge_switch | ui (1B) | off=0, on=1 |
+| `a3` | set_solar_evcharge_mode | ui (1B) | solar_grid=0, solar_only=1 |
+| `a4` | set_solar_evcharge_min_current | sile (2B) | 6-32 A, step 1 |
+| `a5` | set_phase_operating_mode? | ui (1B) | one_phase=1, three_phase=3 |
+| `a6` | set_solar_evcharge_monitoring_mode | ui (1B) | off=0, on=1 |
+| `a7` | set_auto_phase_switch | ui (1B) | off=0, on=1 |
+| `a8` | set_solar_evcharge_monitor_device | str (16B) | Device SN |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_EV_CHARGER_SCHEDULE_SETTINGS
+**Command**: `ev_charger_schedule_settings` | **Devices**: A17B1
+| Tag | NAME | TYPE | VALUE_OPTIONS |
+|-----|------|------|---------------|
+| `a1` | pattern_22 | auto | (header) |
+| `a2` | set_schedule_switch | ui (1B) | off=2(!), on=1 |
+| `a8` | schedule_mode | ui (1B) | normal=0, smart=1 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+#### CMD_EV_CHARGER_SCHEDULE_TIMES
+**Command**: `ev_charger_schedule_times` | **Devices**: A17B1
+| Tag | NAME | TYPE | Range |
+|-----|------|------|-------|
+| `a1` | pattern_22 | auto | (header) |
+| `a3` | set_week_start_time | sile (2B) | 0-5947 (hour*256+minute) |
+| `a4` | set_week_end_time | sile (2B) | 0-5947 |
+| `a5` | set_weekend_start_time | sile (2B) | 0-5947 |
+| `a6` | set_weekend_end_time | sile (2B) | 0-5947 |
+| `a7` | set_weekend_mode | ui (1B) | same=1, different=2 |
+| `fe` | msg_timestamp | var (4B) | (auto) |
+
+### Group 6: Common Controls (already mapped but listed for completeness)
+
+These are already in BLE_COMMAND_MAP or are trivial request-only commands:
+- **CMD_STATUS_REQUEST** (`status_request`): a1 + fe only
+- **CMD_REALTIME_TRIGGER** (`realtime_trigger`): a2=enable(0/1), a3=timeout_sec(60-600)
+- **CMD_TIMER_REQUEST** (`timer_request`): a1 + fe only
+- **CMD_TEMP_UNIT** (`temp_unit_switch`): a2=celsius(0)/fahrenheit(1)
+- **CMD_DEVICE_MAX_LOAD** (`device_max_load`): a2=watts (sile)
+- **CMD_DEVICE_TIMEOUT_MIN** (`device_timeout_minutes`): a2=[0,30,60,120,240,360,720,1440]
+
+---
+
+## Task 3: A17C5 (Solarbank 3) vs A17C1 (Solarbank 2) Tag Differences
+
+The A17C5 class **extends** A17C1DeviceCommands, so it inherits all A17C1 tags and adds extras.
+
+### Method: Comparing indexString() calls (TLV tag lookups)
+
+Each `indexString(N)` call extracts tag 0xN from the TLV data. By comparing the decimal values used in both files:
+
+#### Tags present in BOTH A17C1 and A17C5 (shared, from A17C1 parseDeviceAllInfo)
+| Decimal | Hex Tag | Upstream Field |
+|---------|---------|----------------|
+| 254 | 0xFE | msg_timestamp |
+| 162 | 0xA2 | device_sn |
+| 163 | 0xA3 | main_battery_soc |
+| 164 | 0xA4 | (varies) |
+| 165 | 0xA5 | error_code / temperature |
+| 166 | 0xA6 | sw_version / battery_soc |
+| 167 | 0xA7 | sw_controller? / sw_version |
+| 168 | 0xA8 | sw_expansion / sw_controller? |
+| 169 | 0xA9 | temp_unit / sw_expansion |
+| 173 | 0xAD | (power field) |
+| 174 | 0xAE | (power field) |
+| 175 | 0xAF | (power field) |
+| 176 | 0xB0 | bat_charge_power / pv_yield |
+| 177 | 0xB1 | pv_yield / charged_energy |
+| 178 | 0xB2 | charged_energy / discharged_energy |
+| 179 | 0xB3 | output_energy |
+| 180 | 0xB4 | output_cutoff_data / consumed_energy |
+| 181 | 0xB5 | lowpower_input_data / min_soc |
+| 182 | 0xB6 | input_cutoff_data / min_soc_exp_1? |
+| 183 | 0xB7 | bat_discharge_power / min_soc_exp_2? |
+| 184 | 0xB8 | (field) |
+| 185 | 0xB9 | (field) |
+| 186 | 0xBA | (bitmask: light/socket/temp) |
+| 187 | 0xBB | heating_power |
+| 189 | 0xBD | (power/soc field) |
+| 190 | 0xBE | (energy/max_load) |
+| 191 | 0xBF | timestamp_backup_start |
+| 192 | 0xC0 | timestamp_backup_end |
+| 193 | 0xC1 | (field) |
+| 194 | 0xC2 | max_load / photovoltaic_power? |
+| 198 | 0xC6 | usage_mode / pv_1_power |
+| 199 | 0xC7 | home_load_preset / pv_2_power |
+| 200 | 0xC8 | ac_socket_power / pv_3_power |
+| 201 | 0xC9 | consumed_energy / pv_4_power |
+| 251 | 0xFB | grid_export_disabled bitmask |
+| 252 | 0xFC | (unknown) |
+
+#### Tags ONLY in A17C5 (NOT in A17C1)
+| Decimal | Hex Tag | Probable Upstream Field | Evidence |
+|---------|---------|------------------------|----------|
+| **170** | **0xAA** | temperature (signed) | In A17C5 only, not in A17C1's parseDeviceAllInfo |
+| **171** | **0xAB** | photovoltaic_power | Matches A17C5_0405["ab"] |
+| **172** | **0xAC** | battery_power_signed | Matches A17C5_0405["ac"] |
+| **202** | **0xCA** | pv_1_power (SB2) / pv_4_power (SB3) | In A17C5 overridden parseDeviceAllInfo |
+| **203** | **0xCB** | expansion_packs (SB3) | Matches A17C5_0405["cb"] |
+| **195** | **0xC3** | battery_soh | In A17C5 only |
+| **210** | **0xD2** | light_mode | In A17C1's parseDeviceAllInfo at the end |
+| **211** | **0xD3** | output_power | In A17C5 additional |
+| **212** | **0xD4** | device_timeout_minutes | Matches A17C5_0405["d4"] -- SB3 exclusive |
+| **213** | **0xD5** | pv_limit | Matches A17C5_0405["d5"] -- SB3 exclusive |
+| **214** | **0xD6** | ac_input_limit | Matches A17C5_0405["d6"] -- SB3 exclusive |
+| **224** | **0xE0** | grid_status | In A17C1_0405["e0"] but parsed differently in A17C5 |
+| **225** | **0xE1** | light_off_switch | Additional in A17C5 |
+| **232** | **0xE8** | battery_heating | A17C1_0405["e8"], in A17C5 parseDeviceAllInfo |
+| **233** | **0xE9** | (unknown, SB3 only) | Only in A17C5, not in any upstream map |
+
+### A17C5 Extra Commands vs A17C1 (from mqttmap.py device entries)
+
+| Opcode | Command | A17C1 | A17C5 | Notes |
+|--------|---------|-------|-------|-------|
+| `005e` | CMD_SB_USAGE_MODE | no | yes | Usage mode (cloud-driven, not direct) |
+| `0067` | CMD_SB_MIN_SOC | CMD_SB_POWER_CUTOFF | CMD_SB_MIN_SOC | Different command! SB3 uses simpler min_soc |
+| `0073` | CMD_SB_AC_SOCKET_SWITCH | no | yes | Emergency AC socket toggle |
+| `0080.a4` | set_max_load_a4? | no | yes | Extra field in SB3's max_load group |
+| `0080.a7` | CMD_SB_PV_LIMIT | no | yes | PV MPPT limit: 2000 or 3600 W |
+| `0080.a8` | CMD_SB_AC_INPUT_LIMIT | no (A17C2 has it) | yes | AC charge input limit: 0-1200W |
+| `0085` | CMD_SB_3RD_PARTY_PV_SWITCH | no | yes | 3rd party PV support |
+| `009a` | CMD_SB_DEVICE_TIMEOUT | no | yes | Device auto-off timeout (30min chunks) |
+| `0420` | multisystem msg | no | yes | Multi-device status |
+| `0421` | multisystem msg | no | yes | Multi-device params |
+| `0428` | multisystem msg | no | yes | Multi-device energy |
+
+### Summary of SB3-Exclusive Features
+1. **AC Socket**: Tag 0x73 controls an emergency AC output socket (CMD_SB_AC_SOCKET_SWITCH)
+2. **Device Timeout**: Tag 0x9A sets auto-shutdown timer in 30-minute increments (CMD_SB_DEVICE_TIMEOUT)
+3. **PV Limit**: In the 0x80 compound group, tag a7 sets MPPT limit to 2000 or 3600W (CMD_SB_PV_LIMIT)
+4. **Usage Mode**: Tag 0x5E controls the SB3 usage mode directly (cloud-driven, complex field structure)
+5. **Min SOC**: SB3 uses simplified CMD_SB_MIN_SOC at 0x67 instead of SB2's 3-field CMD_SB_POWER_CUTOFF
+6. **Grid Export Control**: Both have it in 0x80 group, identical
+7. **3rd Party PV**: Tag 0x85, cloud-driven switch
+8. **AC Input Limit**: In 0x80 group, tag a8, 0-1200W in 100W steps
+9. **Extra data tags**: 0xD4 (timeout), 0xD5 (pv_limit), 0xD6 (ac_input_limit), 0xE9 (unknown SB3-only)
+10. **Multi-system messages**: 0420, 0421, 0428 for multi-device coordination

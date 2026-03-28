@@ -1,6 +1,87 @@
 # Changelog
 
-## 2026-03-28 — BLE/MQTT command map, device pages, protocol cross-reference (Part 2)
+## 2026-03-28 — BLE/MQTT Protocol Reference (2350 lines), device pages, API findings
+
+### Concrete NEW API/Protocol Findings (not previously known)
+
+**Wire protocol details** (from ZXCommandTransformer/ZXCmdUtil assembly):
+- TLV frame: `0xA1` marker, `0x02` version, direction byte `0x42`/`0x44`
+- Direction detection: `(byte[0] & 0x0F) >> 3` — bit 3 = response
+- Data type codes: 1=ui(1B), 2=int(2B), 3=variable, 4=int(4B)
+- Checksum: XOR of all bytes
+- Timestamps: Unix seconds (not ms) via `DateTime.now().toUtc().microsecondsSinceEpoch / 1e6`
+
+**MQTT envelope** (from MqttCommandTransformer):
+- `sess_id` and `msg_seq` are HARDCODED ("1" and 2) — not dynamic sequence numbers
+- Topic pattern: `cmd/anker_power/{product_key}/{device_sn}/req` (publish), 3 subscribe topics
+- 8 MqttCommandType values with cmd codes (0x22=normal, 0x0C=OTA, 0x18=unbind, etc.)
+- Payloads are base64-encoded, optional GZip (0x1F8B magic), then JSON
+
+**A17X7 Smart Meter** (entirely unmapped in upstream):
+- 11 status tags: grid_power, grid_import/export, totals, firmware, OTA status
+- Debug strings confirm: "fromGrid", "toGrid", "fromGridSum", "toGridSum"
+
+**A17C1 Solarbank 2 — 11 new status tags** (not in upstream 0405 mapping):
+- `ae`=ac_socket_switch, `af`=schedule_enabled, `b8`=ac_input_power
+- `ba`=cutoff_power, `bb`=heating_power (upstream comment confirmed)
+- `fc`=extended_status_flags bitfield ([2]=parallel, [10]=export, [14]=schedule, [18]=config)
+- Divisors from assembly: `ab`÷10, `ac`÷10, `b0`÷100, `b7`÷100, `c8`÷10, `d3`÷10
+
+**A17C2 Hybrid Inverter — 8 tags with Chinese debug labels**:
+- `ac`="电池充放电功率" (bat charge/discharge power)
+- `ae`="并网口功率" (grid-connected port power), `af`="离网口功率" (off-grid port power)
+- `d3`="标识当前是否0溃网" (grid collapse flag)
+
+**A17C5 Solarbank 3 — 15+ extra tags vs A17C1**:
+- Extra commands: AC socket (0x73), device timeout (0x9A), PV limit, usage mode (0x5E)
+- Multi-system messages: 0420/0421/0428
+
+**EV Charger field→TLV tag mapping** (cross-referenced APK field names with upstream tags):
+- 12 confirmed tag assignments (controlType→a2, carChargerLockStatus→a3, etc.)
+- 3 NEW commands: `ioDetection*`, `disconnectFunction`, `initSettings`
+- Only start/stop/boost use encoding_type=2
+
+**A1790 F3800**:
+- `b3` uses `bytesToHexString` (NOT listToInt) = battery_serial_hex
+- `f8` uses DeviceSavingModeEnum (1=normal, 2=smart, 4=custom)
+
+**A1771/A1753 PPS** — 5 new tags from Chinese debug strings:
+- `df`="绿电模式" (green energy mode), `e0`="绿电充电功率上限" (green charge limit)
+- `e2`="是否启用波峰波谷" (peak/valley enabled), `e4`="波峰波谷数据"
+
+**Data structures with byte-level layouts**:
+- CountDownInfo: 8-byte min payload, remaining = max(0, total - elapsed)
+- TimingInfo: 5 fixed bytes + variable weekdays (NOT bitmask, sequential 1-7)
+- OutputPortInfo (A2345): portIndex, voltage(mV), current(mA), power(mW)
+- SubBatteryInfo (A1790): 17 fields including SOC, health, heating, error
+
+**10 complete enum tables** with API integer values:
+- EmsModeType: 1/4/5/8/9/10
+- EvChargerDeviceStatus: 0-8 (OCPP-aligned)
+- GeneratorMode: 0-6 (silentDc through dcExercise)
+- StartWayEnum: 1-8 (wifi/ble/touch/rfid/plug/timed/autoResume/modbus)
+
+**22 FeatureSwitch flags** from SceneInfo:
+- New: `enable_aiems_v2`, `grid_to_ev`, `meter_self_testing`, `power_saving_mode`
+
+**Device→Command Matrix**: Which of thomluther's 53 CMD_* each device supports.
+
+**Unreleased device A17D0** discovered in A17B1 parser (4 references).
+
+### BLE_COMMAND_MAP.md growth
+From 0 to 2350 lines covering:
+- Wire protocol + MQTT envelope + compression + encryption
+- TLV parsing internals + value encoding (scaling, signed, sub-byte)
+- ~80 SET commands + ~200 STATUS tags across 13 device families
+- 10 enum tables + 5 GET→SET flows + 30 value range definitions
+- 6 complete API response model structures
+- Device→Command matrix for all upstream devices
+- 10 byte-level data structure layouts
+- 37 missing upstream CMD_* cross-referenced
+
+---
+
+## 2026-03-28 — BLE/MQTT command map, device pages, protocol cross-reference (Part 2 original)
 
 ### BLE/MQTT Command Map (new methodology)
 
