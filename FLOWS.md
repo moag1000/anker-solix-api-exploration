@@ -220,7 +220,7 @@ A17X8 Timing List Page → _setTimingCmd()
 | switchState | target | 0=OFF, 1=ON (but see inversion below!) |
 | hours | time picker | Hour (0-23) |
 | minutes | time picker | Minute (0-59) |
-| isEffective | toggle | **INVERTED: true→sends 0, false→sends 1** |
+| isEffective | toggle | ~~INVERTED~~ **Device test shows a4=1=enabled (normal, NOT inverted)** |
 | repeatCycleList | weekday picker | Day numbers: [1,3,5] = Mon,Wed,Fri |
 
 ### TLV Command (0x007C)
@@ -236,20 +236,35 @@ For "Create: ON at 08:00, Mon+Wed+Fri":
 | a6 | 0x014C | 1 | `08` | hours: 8 |
 | a7 | 0x014E | var | `01 03 05` | weekdays: Mon(1), Wed(3), Fri(5) |
 
-### isEffective Inversion!
+### ~~isEffective Inversion~~ CORRECTION (device-tested 2026-03-28)
 
-```
-if isEffective == true:   send 0  (enabled in protocol = 0!)
-if isEffective == false:  send 1  (disabled in protocol = 1!)
-```
-
-**This is the #1 bug risk for schedule implementation.**
+APK assembly showed inverted logic, but **device test disproves it**:
+- All 3 commands (create/modify/delete) sent a4=**1** for an enabled schedule
+- **a4=1 = ENABLED (normal, not inverted)**
+- The assembly inversion was UI-layer logic, not protocol-level
 
 ### Weekday Encoding
 - Variable length list of day numbers
 - 1=Monday, 2=Tuesday, ... 7=Sunday
 - **NOT a bitmask** — sequential bytes, one per day
 - Only added to TLV if list is non-empty
+
+### Device-Tested Schedule CRUD (2026-03-28, A17X8)
+
+3 mqtt_monitor runs: create → modify → delete. All tags verified:
+
+| Tag | CREATE | MODIFY | DELETE | Meaning |
+|-----|--------|--------|--------|---------|
+| a2 | **1** | **2** | **0** | action: 1=create, 2=modify, 0=delete |
+| a3 | 1 | 1 | 1 | slot_id (first slot) |
+| a4 | 1 | 1 | 1 | enabled (1=yes, **NOT inverted**) |
+| a5 | 14:00 (20h) | **15:00 (21h)** | 15:00 | time (hour in sile, LE) |
+| a6 | 1 | 1 | 1 | switch: 1=ON |
+| a7 | 01:02:05 | 01:02:05 | 01:02:05 | weekdays: Mon+Tue+Fri |
+| fe | varies | varies | varies | timestamp |
+
+Time encoding: hour as 2-byte sile (20 = 0x14:0x00, 21 = 0x15:0x00).
+Weekdays confirmed: sequential day numbers (NOT bitmask). 1=Mon, 2=Tue, 5=Fri.
 
 ### Max Schedules
 - Default: **24** (from `timing_limit` device attribute)
@@ -516,7 +531,7 @@ System Policy Slider (0-100%) → sendDeviceCommandOfConservepercent(value)
 | 1 | SB Schedule | API type=6 + BLE 005e | Dual | cmd=246, CRC32, 14 max slots |
 | 2 | EV Start | action_control_charging | MQTT only | encoding_type 2 is below Flutter |
 | 3 | Plug Timer | BLE 007e | BLE+MQTT | States 0/4/6, delete=type 0 |
-| 4 | Plug Schedule | BLE 007c | BLE+MQTT | **isEffective INVERTED**, max 24 |
+| 4 | Plug Schedule | BLE 007c | BLE+MQTT | a2=action(0/1/2), a7=weekdays, max 24. **a4 NOT inverted** (device-tested) |
 | 5 | SB Power Limit | BLE 0080 | BLE | 4 code paths, guards |
 | 6 | SB SOC Reserve | API set_power_cutoff + BLE 0067 | API first | NOT param_type 18! |
 | 7 | SB Grid Export | API set_device_attrs | API | BLE 0073 for off-grid variant |

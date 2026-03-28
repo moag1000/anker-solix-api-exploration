@@ -1389,7 +1389,7 @@ Extracted from `parseDeviceAllInfo` (a17x8_device_commands.dart). 9 upstream-con
 |-----|-------|-----------|---------------|--------|
 | fe | timestamp | int | `msg_timestamp` | CONFIRMED |
 | a2 | device_sn | Utf8 string | `device_sn` | CONFIRMED |
-| a3 | field_187 | List\<int\>, len≥2 check, [4]==2→bool | **NEW** — `timer_data` (sub-parsed: relay state + timer status) | Cross-device: field_187 = schedule flag |
+| a3 | field_187 | List\<int\>, len≥2 check, [4]==2→bool | **NEW** — `timer_data` | **Device test: STATIC (=0)** despite active schedule. Not a schedule flag. |
 | a4 | field_47b+4bb | bool (`cmp #1`), dual store | `ac_output_power_switch` | CONFIRMED |
 | a5 | field_3db | int, unsigned | **NEW** — `error_code` | Cross-device: field_3db = error_code on A17C1 + A17C0 |
 | a6 | field_7b | getMainVersionWithHex | `sw_version` | CONFIRMED |
@@ -1399,7 +1399,7 @@ Extracted from `parseDeviceAllInfo` (a17x8_device_commands.dart). 9 upstream-con
 | aa | field_487 | int × 0.1 | `power` | CONFIRMED (float) |
 | ab | field_48b | int | `output_energy` (upstream ×0.001) | CONFIRMED |
 | ad | → parseCountDownInfo() | sub-parser | `timer_status` | CONFIRMED |
-| ae | field_49b | bool (`cmp #1 → csel`) | **NEW** — `countdown_active` | Boolean flag for delayed toggle |
+| ae | field_49b | bool (`cmp #1 → csel`) | **NEW** — `unknown_ae` | **Device test: STATIC (=1)** across all tests. Likely capability, not status. |
 
 ---
 

@@ -271,7 +271,7 @@ They are independent UI pages with independent commands.
 
 1. **Connection check before every command** — 30s timeout, silently drops if disconnected
 2. **Max 24 schedules** (from server attribute, default 24)
-3. **Schedule enabled flag is INVERTED** (enabled=0 in TLV, not 1!)
+3. ~~Schedule enabled flag is INVERTED~~ **CORRECTION: a4=1=enabled is NORMAL** (device-tested 2026-03-28)
 4. **Timer cancel = same command with switchState=0** — no separate cancel
 5. **Debounce relay toggle** — prevent rapid switching
 6. **Timing responses carry relay state** — use them to refresh switch status
@@ -772,7 +772,7 @@ Two explicit firmware version checks:
 
 | Behavior | Detail |
 |----------|--------|
-| Schedule enabled = **0** in TLV | Inverted! 0=enabled, 1=disabled |
+| ~~Schedule enabled = 0 in TLV~~ | **DISPROVED**: device test shows a4=1=enabled (normal) |
 | 5 EV faults don't stop charging | 0x0C, 0x16, 0x17, 0x18, 0x21 |
 | Timer cancel = SET with state=0 | No separate cancel command |
 | Timing response carries relay state | Switch and schedule coupled |
