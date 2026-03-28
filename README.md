@@ -150,7 +150,7 @@ Start here if you own a specific device:
 | passport/ | [passport.md](endpoints/passport.md) | 24 | Authentication, account management |
 | app/ | [app.md](endpoints/app.md) | 18 | Device management, help, OTA |
 | power_service/v1/app/ | [power_service_app.md](endpoints/power_service_app.md) | 17 | Upgrade, sharing, device config |
-| charging_energy_service/ | [charging_energy_service.md](endpoints/charging_energy_service.md) | 13 | Power Panel (A17B1) |
+| charging_energy_service/ | [charging_energy_service.md](endpoints/charging_energy_service.md) | 10 | Power Panel (A17B1) |
 | power_service/v1/app/compatible/ | [power_service_compatible.md](endpoints/power_service_compatible.md) | 12 | OTA, solar compatibility |
 | power_service/v1/ (other) | [power_service_other.md](endpoints/power_service_other.md) | 12 | Messages, currency, products |
 | power_service/v1/app/device/ | [power_service_device.md](endpoints/power_service_device.md) | 8 | Device attributes, home load (21 functions, heavily overloaded) |

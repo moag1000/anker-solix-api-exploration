@@ -25,15 +25,20 @@
 
 Constructed in `ZXCommandTransformer::_getSettingCommand`:
 
+**Note**: Two protocol layers exist:
+- **MQTT binary**: `FF 09` header (thomluther's mqtt_monitor), `03 00/01 0f` pattern
+- **BLE command**: `0xA1` tag marker (APK's ZXCommandTransformer), inside the payload
+
 ```
-[0xA1] [0x02] [dir] [tag] [len_lo] [len_hi] [type] [data...] [timestamp_4B] [xor_checksum]
+MQTT layer: [FF 09] [len_lo len_hi] [03 00/01 0f] [cmd_lo cmd_hi] [TLV payload...]
+BLE layer:  [0xA1] [0x02] [dir] [tag] [len_lo] [len_hi] [type] [data...] [timestamp_4B] [xor_checksum]
 ```
 
 | Offset | Bytes | Value | Description |
 |--------|-------|-------|-------------|
-| 0 | 1 | `0xA1` | Frame start marker (Smi 322 in assembly) |
-| 1 | 1 | `0x02` | Protocol version |
-| 2 | 1 | `0x42`/`0x44` | Direction: `0x42`=one direction, `0x44`=other (bit 4 of field_b) |
+| 0 | 1 | `0xA1` | BLE TLV tag frame marker (inside MQTT payload) |
+| 1 | 1 | `0x02` | Protocol version (APK-observed) |
+| 2 | 1 | `0x42`/`0x44` | Direction byte (APK internal) |
 | 3 | 1 | tag | TLV tag byte (e.g., `0xa2`, `0xa3`) |
 | 4-5 | 2 | length | Payload length + 1, **little-endian** (via `intToList2`) |
 | 6 | 1 | type | Data type code (see below) |
@@ -50,10 +55,12 @@ Bit 3 of the low nibble: **0 = request, 1 = response**.
 ### Data Type Codes (from `_getDataType`)
 | Code | Meaning | Byte Length | APK Function |
 |------|---------|-------------|--------------|
-| 1 | unsigned int (1 byte) | 1 | `intToList()` |
-| 2 | integer (2 bytes) | 2 | `intToList2()` |
-| 3 | variable/binary | N | raw bytes |
-| 4 | integer (4 bytes) | 4 | `intToList4()` |
+| 1 (ui) | unsigned int | 1 | `intToList()` |
+| 2 (sile) | **signed** int, little-endian | 2 | `intToList2()` |
+| 3 (var) | variable (1-4 bytes, can be signed) | N | raw bytes |
+| 4 (bin) | **bitmap** (bit pattern for settings) | N | raw bytes |
+| 5 (sfle) | signed float, little-endian | 4 | — |
+| 0 (str) | string | N | — |
 
 ### Byte Order
 **All multi-byte integers are little-endian** (low byte first):
@@ -93,8 +100,8 @@ MQTT payloads are **base64-encoded**, optionally **GZip-compressed** JSON.
   "head": {
     "version": "<protocol_version>",
     "client_id": "<mqtt_client_id>",
-    "sess_id": "1",
-    "msg_seq": 2,
+    "sess_id": "1234-5678",
+    "msg_seq": 1,
     "cmd": 34,
     "cmd_status": 4,
     "sign_code": 2,
@@ -240,8 +247,8 @@ This is how thomluther's `BYTES: {"00": {...}, "01": {...}}` structures work at 
 - **Transport**: TLS-secured WebSocket (`MqttServerSecureConnection`)
 
 ### Request-Response Correlation
-- `sess_id`: hardcoded `"1"` (not dynamic)
-- `msg_seq`: hardcoded `2` (not dynamic)
+- `sess_id`: hardcoded (APK uses `"1"`, upstream uses `"1234-5678"` — not dynamic either way)
+- `msg_seq`: hardcoded (APK uses `2`, upstream uses `1` — not dynamic either way)
 - Correlation via MQTT topic + `device_sn`, NOT sequence numbers
 
 ### Debounce System (systematic)
@@ -952,10 +959,12 @@ Inherits all PPS commands above, plus:
 | a5 | field_3db | int | — | `grid_power` |
 | a6 | field_7b | getMainVersionWithHex | "总包版本号" | `sw_version` |
 | a7 | field_2d7 | int | — | `sw_controller` |
-| a8/ac | field_477 | int | "fromGrid" | `grid_import_power` (a8 or ac, same field) |
-| a9/ad | field_47b | int | "toGrid" | `grid_export_power` (a9 or ad, same field) |
-| aa | field_47f | int | "fromGridSum" | `grid_import_total` |
-| ab | field_483 | int | "toGridSum" | `grid_export_total` |
+| a8 | field_477 | int | "fromGrid" | `grid_to_home_power` (upstream-confirmed) |
+| a9 | field_47b | int | "toGrid" | `pv_to_grid_power` (upstream-confirmed) |
+| aa | field_47f | int | "fromGridSum" | `grid_import_energy` (upstream FACTOR: 0.01) |
+| ab | field_483 | int | "toGridSum" | `grid_export_energy` (upstream FACTOR: 0.01) |
+| ac | field_477 | int | — | APK alternate path for same field as a8 (NOT in upstream) |
+| ad | field_47b | int | — | APK alternate path for same field as a9 (upstream: commented out) |
 | fd | field_473 | bool (presence) | "showTwoDecimal" | `show_two_decimal` |
 
 ### parseWorkInfo (real-time data — shares offsets with A17C0/A17C1)
@@ -1436,11 +1445,11 @@ Extracted from `parseDeviceAllInfo` (a17c1_device_commands.dart, 8804 bytes).
 | Tag | Field | Format | Inferred Name | Evidence |
 |-----|-------|--------|---------------|---------|
 | a4 | field_30f | int, unsigned | `battery_soc_2` | Same offset as A17X8 a4, cross-device = SOC area |
-| ae | field_433 | bool (`cmp #1 → csel`) | `ac_socket_switch` | Boolean on/off, unique to A17C1 |
+| ae | field_433 | bool (`cmp #1 → csel`) | `ac_output_power_signed?` | Upstream (commented) says ac_output_power, NOT ac_socket_switch |
 | af | field_187 | bool (`cmp #1 → csel`) | `schedule_enabled` | Same offset as A17X8 a3 (field_187 = schedule flag cross-device) |
 | b8 | field_47f | int, unsigned, default=0 | `ac_input_power` | Same offset as A17X8 a9 (current ×0.01), raw int here = milliwatts? |
 | b9 | field_4cb | bool (`cmp #1`, default=false) | `self_test_enabled` | Defaults false when absent, boolean flag |
-| ba | field_26b | int, unsigned | `cutoff_power` | Same offset as A17C0 ba — confirmed cross-device match |
+| ba | field_26b | int (BITMASK) | `status_bitmask` | Upstream: BYTES containing light_mode, light_off_switch, ac_socket_switch, temp_unit |
 | bb | field_26f | int, unsigned | `heating_power` | Same offset as A17C0 bb — upstream comments confirm "bb"=heating |
 | c7 | (consumed) | int, NOT stored | `home_load_power_raw` | Value read but consumed by c8 ÷10 chain → `ac_socket_power` |
 | e9 | field_2cb | int, unsigned, default=0 | `battery_capacity` | Writes `wzr` (zero register) if absent |
