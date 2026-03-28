@@ -229,13 +229,24 @@ is_negative = (value & 0x80) == 0x80    // bit 7 = sign
 
 **16-bit signed**: NOT explicitly handled. Values stay unsigned from `listToInt`.
 
-### Sub-Byte Extraction (BYTES sub-fields)
-Tags whose data contains multiple sub-fields use bitmask extraction:
+### Sub-Field Extraction — NOT Bitmasks, but Indexed Byte Arrays
+The Dart AOT compiler does **not** generate ARM `and` bitmask instructions for field extraction.
+Instead, the APK stores raw `List<int>` and accesses individual bytes by index:
+
 ```
-field_a = value & 0x7F       // bits 0-6
-field_b = (value & 0x80) >> 7  // bit 7
+// APK pattern (Dart → ARM64):
+list[N] == 2  →  "feature enabled" (value 2 = true in this protocol)
+list[N] raw   →  raw value stored to separate field offset
 ```
-This is how thomluther's `BYTES: {"00": {...}, "01": {...}}` structures work at the binary level.
+
+The only traditional bitmask pattern found is **7-bit magnitude + sign bit** (A91B2):
+```
+magnitude = value & 0x7F       // bits 0-6
+is_negative = (value & 0x80)   // bit 7
+```
+
+thomluther's `BYTES: {"00": {...}, "01": {...}}` structures correspond to byte-index access,
+not bit-level extraction. The "00", "01" keys are **byte positions** within the data payload.
 
 ## MQTT Connection Details
 
@@ -1138,8 +1149,8 @@ Debug strings reveal exact field meanings (power in Watts):
 | ac | "电池充放电功率（单位W）" | `bat_charge_discharge_power` | W |
 | ab | "总输出功率（单位W" | `total_output_power` | W (note: APK is missing closing `）` — Anker typo) |
 | c2 | "总输入功率 设备主页totalInput" | `total_input_power` | W |
-| ae | "并网口功率（单位W）" | `grid_port_power` | W |
-| af | "离网口功率（单位W）" | `off_grid_port_power` | W |
+| ae | "并网口功率（单位W）" | `grid_connected_port_power` | W, `hexStringToDouble` conversion, offset 0x21b |
+| af | "离网口功率（单位W）" | `off_grid_port_power` | W, `hexStringToDouble` conversion, offset 0x21f |
 | b0 | "pv累计发电量（单位Wh）" | `pv_cumulative_generation` | Wh |
 | b1 | "储能累计充电量（单位Wh）" | `storage_cumulative_charge` | Wh |
 | d3 | "标识当前是否0溃网" | `grid_collapse_flag` | bool |
@@ -1449,11 +1460,28 @@ Extracted from `parseDeviceAllInfo` (a17c1_device_commands.dart, 8804 bytes).
 | af | field_187 | bool (`cmp #1 → csel`) | `schedule_enabled` | Same offset as A17X8 a3 (field_187 = schedule flag cross-device) |
 | b8 | field_47f | int, unsigned, default=0 | `ac_input_power` | Same offset as A17X8 a9 (current ×0.01), raw int here = milliwatts? |
 | b9 | field_4cb | bool (`cmp #1`, default=false) | `self_test_enabled` | Defaults false when absent, boolean flag |
-| ba | field_26b | int (BITMASK) | `status_bitmask` | Upstream: BYTES containing light_mode, light_off_switch, ac_socket_switch, temp_unit |
+| ba | field_26b | int → ÷100.0 (float) | `percentage_value` | APK uses as percentage (÷100). Upstream claims bitmask — may differ by firmware. Read path: `_realUpdateData`, `gotoSiteSettingPricePage` |
 | bb | field_26f | int, unsigned | `heating_power` | Same offset as A17C0 bb — upstream comments confirm "bb"=heating |
 | c7 | (consumed) | int, NOT stored | `home_load_power_raw` | Value read but consumed by c8 ÷10 chain → `ac_socket_power` |
 | e9 | field_2cb | int, unsigned, default=0 | `battery_capacity` | Writes `wzr` (zero register) if absent |
-| fc | field_287 | List\<int\> raw + bit extraction | `extended_status_flags` | [2]→parallel_connected, [10]→export_enabled, [14]→schedule_active_2, [18]→config_value (all `cmp #2`) |
+| fb/fc | field_287 | List\<int\> (indexed byte array, NOT bitmask) | `status_byte_array` | See sub-field table below |
+
+#### fb/fc Sub-Field Extraction (traced via READ paths in UI/Controller)
+
+Tags fb and fc write to the same field (0x287). fb is primary, fc overwrites if fb was empty.
+The APK does NOT use ARM `and` bitmask instructions — it uses **indexed byte access** (`list[N] == 2`).
+
+| Index | Comparison | Dest Offset | Semantic Name | Evidence (READ path) |
+|-------|-----------|-------------|---------------|---------------------|
+| [0] | raw value | 0x297 | `power_limit_ref` | Compared in DevicePowerLimit closure; triggers `setDevicePowerLimit()` if changed |
+| [2] | `== 2` → bool | 0x49b | `ui_feature_flag` | Conditional UI rendering in a17c1setting_logic |
+| [10] | `== 2` → bool | 0x457 | `unknown_bool` | Boolean flag |
+| [14] | `== 2` → bool | 0x28b | **`is_enable_0w`** | Debug: "-isEnable0w-". Zero-export enable flag. Checked with `isItalyPowerLimit()` fallback |
+| [18] | raw value | 0x28f | **`feeder0w_config`** | Used in `setDevicePowerLimit()` with params "feeder0w" and "switch0w". `cmp #2` check |
+
+> **Key insight**: Dart AOT does not compile bitmask `and` instructions. Sub-fields are stored
+> as individual bytes in a List\<int\>, accessed by index. `list[N] == 2` means "feature enabled"
+> (value 2 = true in this protocol, NOT value 1).
 
 ---
 
