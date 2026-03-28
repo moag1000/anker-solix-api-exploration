@@ -15,6 +15,10 @@
 
 ### New documents
 
+- **BUSINESS_RULES.md** (781 lines) — SET command guards, error codes, state machine, safety rules
+- **FLOWS.md** (529 lines) — 14 step-by-step traces from UI button to wire bytes
+- **BLE_COMMAND_MAP.md** (~2400 lines) — Wire protocol, 200+ tags, enums, data structures
+
 ### Concrete NEW API/Protocol Findings (not previously known)
 
 **Wire protocol details** (from ZXCommandTransformer/ZXCmdUtil assembly):
@@ -36,9 +40,9 @@
 - Debug strings confirm: "fromGrid", "toGrid", "fromGridSum", "toGridSum"
 
 **A17C1 Solarbank 2 — 11 new status tags** (not in upstream 0405 mapping):
-- `ae`=ac_socket_switch, `af`=schedule_enabled, `b8`=ac_input_power
-- `ba`=cutoff_power, `bb`=heating_power (upstream comment confirmed)
-- `fc`=extended_status_flags bitfield ([2]=parallel, [10]=export, [14]=schedule, [18]=config)
+- `ae`=ac_output_power_signed (upstream-corrected), `af`=schedule_enabled?, `b8`=ac_input_power?
+- `ba`=percentage_value (÷100.0, NOT bitmask), `bb`=heating_power (upstream comment confirmed)
+- `fc`=static capability array (device-tested: 136 msgs, zero change on 0W toggle)
 - Divisors from assembly: `ab`÷10, `ac`÷10, `b0`÷100, `b7`÷100, `c8`÷10, `d3`÷10
 
 **A17C2 Hybrid Inverter — 8 tags with Chinese debug labels**:
@@ -96,10 +100,10 @@
 ### READ path analysis (methodology breakthrough)
 
 Traced UI/controller consumption of parser-stored values:
-- **fb[14] = `is_enable_0w`** — Zero-Export enable flag (debug: "-isEnable0w-")
-- **fb[18] = `feeder0w_config`** — used in setDevicePowerLimit with "feeder0w"/"switch0w"
+- **fc[14]** — APK debug says "isEnable0w" but **device-tested: STATIC** (capability flag, not live setting)
+- **fc[18]** — APK uses in setDevicePowerLimit context but **device-tested: STATIC**
 - **Tag ba** is percentage (÷100.0) in APK, NOT bitmask as upstream suggests
-- **Value 2 = enabled** in this protocol (not 1!) — `list[N] == 2` throughout
+- **isEffective (a4)** — APK assembly suggested inversion (true→0) but **device-tested: a4=1=enabled (normal)**
 - Dart AOT does NOT compile ARM `and` bitmask instructions — uses indexed byte arrays
 
 ### Root cause analysis of methodology errors
