@@ -1,0 +1,37 @@
+diff --git a/api/mqttmap.py b/api/mqttmap.py
+index 0f37ea8..adbd54f 100644
+--- a/api/mqttmap.py
++++ b/api/mqttmap.py
+@@ -1362,6 +1362,32 @@ _A17C1_0405 = {
+         }
+     },
+     "fe": {NAME: "msg_timestamp"},
++    # === APK-extracted tags (moag1000/anker-solix-api-exploration, 2026-03-28) ===
++    # Source: Blutter decompilation of parseDeviceAllInfo + READ path analysis
++    # Confidence: structurally inferred from assembly, NOT device-tested
++    "a4": {NAME: "apk_status_code?"},  # listToInt, offset 0x30f, near error fields
++    "ae": {NAME: "apk_ac_output_power_signed?"},  # listToInt→cmp#1→bool at offset 0x433. Wire=signed int, APK stores as bool
++    "af": {NAME: "apk_schedule_enabled?"},  # bool(==1), offset 0x187, cross-device match with A17X8
++    "b8": {NAME: "apk_ac_input_power?"},  # listToInt, offset 0x47f, default=0
++    "b9": {NAME: "apk_self_test_enabled?"},  # bool(==1), offset 0x4cb, defaults false
++    "ba": {NAME: "apk_percentage_value?", FACTOR: 0.01},  # APK uses ÷100.0, NOT bitmask. Read in _realUpdateData
++    "bb": {NAME: "apk_heating_power?"},  # listToInt, offset 0x26f, upstream comment confirms bb=heating
++    "e9": {NAME: "apk_battery_capacity?"},  # listToInt, offset 0x2cb, defaults 0
++    "ea": {NAME: "apk_unknown_ea?"},  # present in dump, value=1
++    "fc": {
++        # 22-byte indexed byte array. APK extracts:
++        # [0]=power_limit_ref, [2]==2→ui_flag, [10]==2→bool,
++        # [14]==2→is_enable_0w (debug:"-isEnable0w-"), [18]→feeder0w_config
++        # Note: value 2 = enabled (NOT 1!)
++        BYTES: {
++            "00": [{NAME: "apk_fc_power_limit_ref?"}],
++            "02": [{NAME: "apk_fc_ui_flag?", MASK: 0x02}],
++            "0e": [{NAME: "apk_fc_is_enable_0w?", MASK: 0x02}],
++            "12": [{NAME: "apk_fc_feeder0w_config?"}],
++        }
++    },
++    # === End APK-extracted tags ===
++    # Original commented-out upstream entries preserved below:
+     # "ab": {NAME: "photovoltaic_power"},
+     # "ac": {NAME: "battery_power_signed"},
+     # "ae": {NAME: "ac_output_power_signed?"},
