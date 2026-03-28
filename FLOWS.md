@@ -321,12 +321,209 @@ For "set output to 800W":
 
 ---
 
-## Flow Summary: What Thomluther Needs
+---
 
-| Flow | Command | Key Insight |
-|------|---------|-------------|
-| Schedule | API param_type=6 + BLE 005e | **Both paths sent**. cmd=246 in APK (not 17). CRC32 on BLE. |
-| EV Start | action_control_charging | **encoding_type 2 is below Flutter layer** — 4 simple controlType values |
-| Plug Timer | BLE 007e | States: 0=idle, 4=paused, 6=running. Delete=same cmd with type=0 |
-| Plug Schedule | BLE 007c | **isEffective is INVERTED** (true→0, false→1). Max 24 slots. |
-| Power Limit | BLE 0080 | **4 distinct code paths** depending on which params provided |
+## Flow 6: Solarbank SOC Reserve Change
+
+### Call Chain
+```
+Settings Page → showSocPicker() (bottom sheet wheel picker)
+  → requestToSetSoc()
+    → STEP 1: API POST set_power_cutoff {device_sn, cutoff_data_id}
+    → STEP 2 (on API success only): BLE 0x0067 {tag a2=currentSOC, a4=minSOC, a6=newSOC}
+    → EventBus fire(2214, 2)
+```
+
+### Key Details
+- SOC options come from **server** via `get_power_cutoff` → `power_cutoff_data` list
+- **NOT** `set_site_device_param(param_type=18)` — uses dedicated `set_power_cutoff` endpoint
+- **API-first**: BLE only sent on API success. If API fails → BLE never fires.
+- Default fallbacks: 10%, 5%, 10% (if server returns null)
+
+---
+
+## Flow 7: Solarbank Toggle Grid Export (switch_0w)
+
+### Call Chain
+```
+Home Page onInit → getDeviceAttrs(["enable_0w", "switch_0w"]) reads current state
+Setting change → setGridConnectedInput()
+  → API POST set_device_attrs {device_sn, attributes: {switch_0w: <value>}}
+Off-grid variant → BLE 0x0073 {tag a2 = 0 or 1}
+```
+
+### Key Details
+- Grid export toggle goes through **API** (`set_device_attrs`), not BLE 0x0080
+- Off-grid switch uses **separate BLE command 0x0073** (not 0x0080)
+- `enable_0w` = capability (can this device do 0W?), `switch_0w` = current setting
+- 11 attributes fetched in single batch for the power limit page
+
+---
+
+## Flow 8: Solarbank Temperature Unit
+
+### Call Chain
+```
+Settings → showTempPicker() (bottom sheet: index 0=C, 1=F)
+  → A17C1DeviceController::setTempUnit()
+    → BLE 0x0050, payload = intToList(index)
+```
+
+### Key Details
+- **BLE only** — no API call
+- Optimistic UI update (local state changed immediately, no wait for response)
+- Status reflected in tag a9 of 0405 status
+
+---
+
+## Flow 9: Smart Plug Relay Toggle (007a)
+
+### Call Chain
+```
+Home Page → changeSwitch()
+  → XOR toggle (flips boolean)
+  → A17X8DeviceController::setRelaySwitchCmd()
+    → BLE 0x007A {tag a2 = 0(OFF) or 1(ON)}
+    → ALSO MQTT cloud path (dual: BLE + MQTT)
+  → debounce: 2 seconds Future.delayed
+```
+
+### Key Details
+- **Dual path**: BLE for direct, MQTT for cloud sync (both sent)
+- **2-second debounce** after toggle (prevents rapid switching)
+- If relay turned ON → calls `_clearFromGridCurve()` (resets energy graph)
+
+---
+
+## Flow 10: PPS AC Output Toggle (004a / varies)
+
+### Call Chain
+```
+PPS Home → AC toggle
+  → A1770DeviceController::setAcSwitch()
+    → BLE command (from A1770Commands::setAcSwitch static field)
+    → payload: intToList(0=OFF, 1=ON)
+```
+
+### Key Details
+- No explicit battery-low guard in AC switch
+- A1790 has dual routing: A17B1-style BLE vs standard ZX BLE (based on `isA17B2` flag)
+- Status in parseSwitchData: index [18]=AC state, [20]=DC state, [24]=smart mode
+
+---
+
+## Flow 11: A5101 HES Work Mode Change
+
+### Call Chain
+```
+System Policy Page → sendDeviceCommandOfTou() (or other mode method)
+  → sendDeviceCommandOfMode(mode_int)
+    → 3 guard checks (BLE object, connection data, field_83)
+    → If online: sendDeviceCommondOfNetWork({mode: <int>}) → debounce → sendDeviceCommand
+    → If BLE only: A5101BleLogic::setShiftMode(mode)
+```
+
+### Mode Values
+| Value | Mode | Display Name |
+|-------|------|-------------|
+| 1 | Time-of-Use | "timeOfUse" |
+| 0x10 (16) | AI EMS | Special path with dismiss |
+| 0x14 (20) | (another AI variant?) | Triggers dismiss |
+
+### Key Details
+- Mode change sends **ONLY** the mode — does NOT set peak_shaving or conserve_percent
+- Those are separate dedicated commands
+- Response includes `electricity_strategy_mode` + `price_source_sub_type`
+
+---
+
+## Flow 12: A5101 HES Storm Guard
+
+### Manual Disaster BLE Payload
+```json
+{"dpe":1,"dpn":[{"start":<start>,"end":<end>,"type":1,"soc":<soc>}]}
+```
+
+Disabled:
+```json
+{"dpe":0,"dpn":[]}
+```
+
+### Auto Disaster
+- Uses `AutoDisasterMixin::request()` via HTTP
+- Model: `DisasterSetting` with `autoDisasterSwitch`, `manualDisasterSwitch`, `disasterEvents`
+- Auto-disaster data synced to device via BLE in packets, enable/disable sent AFTER sync
+
+### Key Details
+- SOC reserve is user-configurable (no hardcoded default visible)
+- Manual and auto are independent — can have both configured
+
+---
+
+## Flow 13: Site Price Configuration
+
+### API Endpoint
+```
+POST /power_service/v1/site/update_site_price
+```
+
+### Fixed Price Payload
+```json
+{
+  "site_id": "<id>",
+  "price": 0.30,
+  "site_co2": 0.5,
+  "site_price_unit": "EUR/kWh",
+  "price_type": "fixed",
+  "current_mode": null,
+  "accuracy": 2
+}
+```
+
+### TOU / Dynamic Price Payload
+Same endpoint, `price_type` = `"use_time"`. Dynamic vs static TOU differentiated
+via `price_source_sub_type` in device command, not in site price API.
+
+### Key Details
+- **accuracy defaults to 2** (decimal places)
+- **price_type defaults to "fixed"**
+- Most currencies use 5 decimal places, 2 specific markets use 4 (JPY/KRW?)
+- CO2 calculation is server-side only
+
+---
+
+## Flow 14: A5101 Battery Reserve
+
+### Call Chain
+```
+System Policy Slider (0-100%) → sendDeviceCommandOfConservepercent(value)
+  → If online: sendDeviceCommondOfNetWork({conserve_percent: <int>})
+  → If BLE: A5101BleLogic::setBatteryReserve(value)
+```
+
+### Key Details
+- **Slider range: 0-100** (hardcoded in UI)
+- **Display inversion**: slider shows `100 - conserve_percent` (100% slider = 0% reserve)
+- **Fallback: 80%** if value < 0 (safety default)
+- Default initial value: **20%**
+
+---
+
+## Complete Flow Summary
+
+| # | Flow | Command | Path | Key Insight |
+|---|------|---------|------|-------------|
+| 1 | SB Schedule | API type=6 + BLE 005e | Dual | cmd=246, CRC32, 14 max slots |
+| 2 | EV Start | action_control_charging | MQTT only | encoding_type 2 is below Flutter |
+| 3 | Plug Timer | BLE 007e | BLE+MQTT | States 0/4/6, delete=type 0 |
+| 4 | Plug Schedule | BLE 007c | BLE+MQTT | **isEffective INVERTED**, max 24 |
+| 5 | SB Power Limit | BLE 0080 | BLE | 4 code paths, guards |
+| 6 | SB SOC Reserve | API set_power_cutoff + BLE 0067 | API first | NOT param_type 18! |
+| 7 | SB Grid Export | API set_device_attrs | API | BLE 0073 for off-grid variant |
+| 8 | SB Temp Unit | BLE 0050 | BLE only | No API, optimistic UI |
+| 9 | Plug Toggle | BLE 007a + MQTT | Dual | **2s debounce**, clears energy graph |
+| 10 | PPS AC Toggle | BLE (varies) | BLE | Dual routing on A1790 |
+| 11 | HES Mode | API sendDeviceCommand | API/BLE | Mode only, no side-effects |
+| 12 | HES Storm Guard | BLE JSON + API | Both | Manual: JSON, Auto: HTTP |
+| 13 | Site Price | API update_site_price | API only | accuracy=2, price_type="fixed" default |
+| 14 | HES Battery Reserve | API/BLE | Both | **Slider inverted** (100-value), default 20% |
