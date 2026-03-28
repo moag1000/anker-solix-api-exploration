@@ -535,3 +535,120 @@ Before any operation on expansion batteries, the app checks:
 ## Input Validation
 
 `RangeTextInputFormatter`: Rejects values < 1 or > max (loaded dynamically from server). Invalid input reverts to previous value — no error shown.
+
+---
+
+# HES State Machine (11 device states)
+
+> From `mode_state_definition.dart`. States 6-9 and 20 are hardware-initiated overrides.
+
+| Value | State | Type | Description |
+|-------|-------|------|-------------|
+| 0 | `NA` | — | Unknown |
+| 1 | `selfUse` | User-set | Self-consumption |
+| 2 | `timeOfUse` | User-set | Time-of-use pricing |
+| 3 | `manualBackupPower` | User-set | Manual backup |
+| 4 | `severeWeatherMode` | User-set | Storm Guard / auto disaster |
+| 5 | `onlyBackup` | User-set | Backup only |
+| 6 | `atsEmsOffGridMode` | **Hardware override** | ATS forced off-grid |
+| 7 | `socCalibration` | **Hardware override** | SOC calibration in progress |
+| 8 | `gridOutage` | **Hardware override** | Physical grid outage detected |
+| 9 | `lowSolarInput` | **Hardware override** | Low solar input status |
+| 20 | `forcedRecharge` | **Hardware override** | Forced battery recharge |
+
+**Rule: States 6-9 and 20 CANNOT be set by user/API — they are triggered by hardware conditions. An integration must show these as read-only states.**
+
+## Transaction Lock System
+
+Commands are guarded by a per-device, per-property transaction lock:
+- Keyed by `deviceSn`
+- Tracks: `transactionId`, `properties`, `timestamp`, `timeOutTimer`
+- **Default timeout: 12 seconds** (when no device-specific config)
+- Different device models can have different timeouts
+- If property count matches locked count → lock not needed (skip)
+- Older firmware: `"sdk 能力协商不支持事务锁"` — transaction lock not supported, commands pass unguarded
+
+**Rule: Don't send overlapping commands to the same device within 12s.**
+
+---
+
+# Site Creation Rules
+
+## 10 Device Categories for Sites
+
+| # | Category | Description |
+|---|----------|-------------|
+| 1 | `solar_list` | Solar panels / inverters |
+| 2 | `grid_list` | Grid-connected devices |
+| 3 | `smartplug_list` | Smart plugs |
+| 4 | `pps_list` | Portable Power Stations |
+| 5 | `solarbank_list` | SolarBank devices |
+| 6 | `powerpanel_list` | Power Panels |
+| 7 | `combiner_box_list` | Combiner Boxes |
+| 8 | `solarbank_pps_list` | Combined SolarBank+PPS |
+| 9 | `charging_pile_list` | EV Charging Piles |
+| 10 | `home_backup_system_list` | Home Backup Systems |
+
+**18 Product Numbers** in the PN enum, each mapped to a `powerSiteType` integer.
+
+## Currency Decimal Places (by market)
+
+- **Most markets**: 5 decimal places (€, $, £, etc.)
+- **2 specific markets**: 4 decimal places (likely JPY, KRW — currencies without cents)
+
+---
+
+# Dynamic Pricing / TOU Rules
+
+## Three Price Types
+
+| Type | Field | Description |
+|------|-------|-------------|
+| `"fixed"` | `price` | Fixed rate per kWh |
+| `"use_time"` | `use_time` → PeakValleyParamData | Time-of-use with peak/valley/off-peak |
+| `"dynamic"` | `dynamic_price` → DynamicPriceParamData | Live pricing (Nordpool, Tibber, etc.) |
+
+## Provider Support (by Product Number)
+
+| Provider | Supported PNs | Description |
+|----------|--------------|-------------|
+| Flatpeak | 5 product numbers | Generic TOU |
+| Tibber | 5 product numbers | Nordic dynamic pricing |
+| AI EMS | **only 2 product numbers** | AI-optimized energy management |
+
+**Rule: AI EMS is only available on 2 specific products. Don't offer it on unsupported devices.**
+
+## Seasonal TOU
+
+TOU supports `PeakValleySeasonModel` — **seasonal pricing** with different rates per season.
+Default `mode_type` = 5.
+
+## Charge/Discharge Windows
+
+`chargeTimePeriod` and `dischargeTimePeriod` are **independently configurable** lists with `start`/`end` time strings. They don't need to be complementary.
+
+## Dynamic Price Save Payload
+
+When saving dynamic price config, the app sends:
+- `price: 0.0` (zero — actual prices fetched live from provider)
+- `site_price_unit: ""` (empty — provider determines unit)
+- `site_co2: 0.0` (zero)
+- `price_type: "dynamic"`
+- `dynamic_price: {provider config object}`
+
+---
+
+# Energy Calculations
+
+## CO2 Savings — Server-Computed
+
+- `site_co2` field sent with price config
+- Savings calculation happens **server-side**
+- App only displays pre-computed values from `savingsUnit`, `saveCarbonsUnit`, `powerGenerationsUnit`
+- Formula shown to users via `co2SavingsComputationRule` localization key
+
+**Rule: Don't try to calculate CO2 locally — use the server-provided values.**
+
+## Chart Granularity
+
+4 periods: `day`, `week`, `month`, `year` with `YYYY-MM-DD` date format.
