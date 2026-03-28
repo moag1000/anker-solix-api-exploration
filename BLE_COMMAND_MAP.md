@@ -1476,22 +1476,25 @@ The APK does NOT use ARM `and` bitmask instructions — it uses **indexed byte a
 | [0] | raw value | 0x297 | `power_limit_ref` | Compared in DevicePowerLimit closure; triggers `setDevicePowerLimit()` if changed |
 | [2] | `== 2` → bool | 0x49b | `ui_feature_flag` | Conditional UI rendering in a17c1setting_logic |
 | [10] | `== 2` → bool | 0x457 | `unknown_bool` | Boolean flag |
-| [14] | `== 2` → bool | 0x28b | `capability_flag_14` | APK debug: "-isEnable0w-", but **device-tested: STATIC** (see below) |
-| [18] | raw value | 0x28f | `capability_flag_18` | APK uses in setDevicePowerLimit context, but **device-tested: STATIC** |
+| [14] | `== 2` → bool | 0x28b | `capability_flag_14` | **Device-tested: STATIC** across 136 msgs. APK reads as "isEnable0w" but value is firmware capability |
+| [18] | raw value | 0x28f | `capability_flag_18` | **Device-tested: STATIC** |
 
-> **Device-tested (2026-03-28, A17C1 SB2 Pro, 64 messages over 5 minutes):**
-> fc bytes did **NOT change in any of 64 MQTT 0405 messages** after 0W mode toggle.
-> fc is a **static capability/feature array**, not a live settings array.
+> **Device-tested (2026-03-28, A17C1 SB2 Pro, 136 messages, 5 min, automation OFF):**
+> fc bytes did **NOT change in any message** after 0W mode was set via custom plan.
+> fc is a **static capability/feature array** — confirmed definitively.
 >
-> The APK UI reads fc[14] and interprets it as "is_enable_0w" (debug: "-isEnable0w-"),
-> but the value comes pre-set from the device and reflects hardware/firmware capability,
-> not the current 0W setting. The actual 0W state goes through:
-> - MQTT command **0080** (feeder0w + switch0w TLV tags)
-> - Cloud API `set_site_device_param` (switch_0w / enable_0w fields)
-> - Upstream fb tag (`grid_export_disabled`) for the status side
+> **The actual 0W mode is simply `c7` (home_load_preset) set to 0:**
 >
-> **Lesson**: Code traces showing "MQTT parser is the only writer" are necessary but not
-> sufficient. The device must also CHANGE the value in its status reports — which fc does not.
+> | Tag | Before | After 0W | Time | Meaning |
+> |-----|--------|----------|------|---------|
+> | c7 | `82:00` (130W) | `00:00` (0W) | 17:22:43 | **home_load_preset → 0W** |
+> | ac | `14:05` (130W) | `00:00` (0W) | 17:22:46 | output_power drops to 0 |
+> | c4 | `14:05` (130W) | `00:00` (0W) | 17:22:46 | home_demand drops to 0 |
+> | c6 | `01` | `01` | — | usage_mode UNCHANGED |
+> | fc | all bytes | all bytes | — | STATIC |
+> | fb | `00:00:00:00` | `00:00:00:00` | — | STATIC |
+>
+> **0W mode = no special flag. Just `c7 = 0` (home_load_preset = 0 watts).**
 
 ---
 
