@@ -15,6 +15,150 @@
 
 ---
 
+# Wire Protocol Reference (from APK static analysis)
+
+> These details are extracted from `ZXCommandTransformer`, `ZXCmdUtil`, `PPSDeviceCommands`,
+> and `MqttCommandTransformer` in the decompiled assembly. They describe how the app
+> constructs and parses BLE/MQTT messages at the byte level.
+
+## TLV Binary Frame Format
+
+Constructed in `ZXCommandTransformer::_getSettingCommand`:
+
+```
+[0xA1] [0x02] [dir] [tag] [len_lo] [len_hi] [type] [data...] [timestamp_4B] [xor_checksum]
+```
+
+| Offset | Bytes | Value | Description |
+|--------|-------|-------|-------------|
+| 0 | 1 | `0xA1` | Frame start marker (Smi 322 in assembly) |
+| 1 | 1 | `0x02` | Protocol version |
+| 2 | 1 | `0x42`/`0x44` | Direction: `0x42`=one direction, `0x44`=other (bit 4 of field_b) |
+| 3 | 1 | tag | TLV tag byte (e.g., `0xa2`, `0xa3`) |
+| 4-5 | 2 | length | Payload length + 1, **little-endian** (via `intToList2`) |
+| 6 | 1 | type | Data type code (see below) |
+| 7.. | N | data | Payload bytes |
+| -4 | 4 | timestamp | Unix epoch **seconds**, little-endian (via `intToList4`) |
+| -1 | 1 | checksum | XOR of all preceding bytes |
+
+### Direction Detection
+```
+isResponse = (byte[0] & 0x0F) >> 3 & 1
+```
+Bit 3 of the low nibble: **0 = request, 1 = response**.
+
+### Data Type Codes (from `_getDataType`)
+| Code | Meaning | Byte Length | APK Function |
+|------|---------|-------------|--------------|
+| 1 | unsigned int (1 byte) | 1 | `intToList()` |
+| 2 | integer (2 bytes) | 2 | `intToList2()` |
+| 3 | variable/binary | N | raw bytes |
+| 4 | integer (4 bytes) | 4 | `intToList4()` |
+
+### Byte Order
+**All multi-byte integers are little-endian** (low byte first):
+- `intToList2`: `[value & 0xFF, (value >> 8) & 0xFF]`
+- `intToList4`: same pattern, 4 bytes
+- `listToInt`: reconstructs in same LE order
+
+### Checksum
+Simple XOR: `result = 0; for each byte: result ^= byte`
+
+### Timestamp
+`getCurrentTimestamp()`: `DateTime.now().toUtc().microsecondsSinceEpoch / 1000 / 1000`
+= **Unix epoch seconds** (not milliseconds). Encoded as 4 bytes LE.
+
+Tags `fe` (older) and `fd` (newer) carry timestamps:
+- `fe`: seconds (4 bytes, `intToList4`)
+- `fd`: milliseconds (used in CMD_COMMON_V2)
+
+## MQTT JSON Envelope
+
+MQTT payloads are **base64-encoded**, optionally **GZip-compressed** JSON.
+
+### Decompression Flow (`MqttDecompressionUtil::decompressPayload`)
+```
+1. base64Decode(payload_string) → bytes
+2. if bytes[0]==0x1F && bytes[1]==0x8B:  // GZip magic
+     GZipCodec.decode(bytes) → decompressed
+   else:
+     bytes → decompressed  // not compressed
+3. Utf8Codec.decode(decompressed) → json_string
+4. jsonDecode(json_string) → Map<String, dynamic>
+```
+
+### JSON Structure (`MqttCommandTransformer::generateCommand`)
+```json
+{
+  "head": {
+    "version": "<protocol_version>",
+    "client_id": "<mqtt_client_id>",
+    "sess_id": "1",
+    "msg_seq": 2,
+    "cmd": 34,
+    "cmd_status": 4,
+    "sign_code": 2,
+    "seed": "1",
+    "timestamp": 1711622400,
+    "device_pn": "A17C1",
+    "device_sn": "<serial>"
+  },
+  "payload": {
+    "device_sn": "<serial>",
+    "account_id": "<user_id>",
+    "data": "<base64_encoded_TLV_binary>"
+  }
+}
+```
+
+### Command Types (`MqttCommandType` enum → `cmd` field value)
+| cmd | Type | Description |
+|-----|------|-------------|
+| 0x22 (34) | `normalCommand` | Standard device command |
+| 0x0C (12) | `otaCommand` | OTA firmware update |
+| 0x0C (12) | `a17y0OtaCommand` | A17Y0 sub-device OTA |
+| 0x0A (10) | `uploadLogCommand` | Log upload |
+| 0x32 (50) | `remoteScanWifi` | Remote WiFi scan |
+| 0x34 (52) | `remoteSwitchWifi` | Remote WiFi switch |
+| 0x18 (24) | `unbindDevice` | Device unbinding |
+| 0x38 (56) | `getDeviceBssid` | Get device BSSID |
+
+### Payload Variants (based on command type)
+| Type | Extra payload fields |
+|------|---------------------|
+| normalCommand (0) | `data`: base64 TLV binary |
+| otaCommand (2) | `ota_type`: "A17Y0" |
+| uploadLog (4) | `log_id`: device_sn + " " + timestamp |
+| wifiConfig (6) | `ssid`, `pwd`, `timezone`, `timeid` |
+
+## BLE Specifics
+
+### MTU Fragmentation (`AssembleCmdUtil::splitPackageCmd`)
+- MTU overhead: **10 bytes**
+- Default MTU: **200 bytes** (if 0 reported)
+- Fragments: `(MTU - 10)` bytes per packet
+
+### Encryption
+- **ECDH** key exchange for BLE sessions (`SecureEcdhConfer`, `EcdhConfer`)
+- **AES** encryption after key exchange (`AesConferV1`, `AesHelper`)
+- Modes: AES-GCM and AES-CBC available
+- Opcodes: `getAesKeyReq` / `getAesKeyRes` for key negotiation
+
+## HES / X1 JSON Protocol (NOT TLV)
+
+X1/HES devices (`A5101`) use a **different protocol**:
+- Communication via HTTP to `/charging_hes_svc/*` endpoints
+- Payloads are plain JSON (abbreviated field keys like `pvPower`, `batPower`)
+- MQTT subscription delivers JSON "trans" payloads
+- Uses `att_id` (attribute ID) system for BLE, not TLV tags
+- See [devices/x1_hes_e10.md](devices/x1_hes_e10.md) for field dictionary
+
+---
+
+# SET Commands (App → Device)
+
+---
+
 ## A17C1 / A17C2 / A17C3 / A17C5 — Solarbank 2/3
 
 > A17C5 (Solarbank 3) reuses `A17C1DeviceController` — confirmed in device_factory_impl.dart
