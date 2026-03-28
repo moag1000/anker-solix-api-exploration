@@ -600,6 +600,77 @@ Example: tag 0xA2 = error code (int), tag 0xA4 = error message (Utf8 string).
 
 ---
 
+# Device → Command Matrix (from upstream SOLIXMQTTMAP)
+
+> Which device supports which SET commands. Extracted from thomluther's `mqttmap.py`.
+> Opcode groups (0101, 0102, etc.) are Gen2-specific compound commands.
+
+### Solarbank Family
+| Command | A17C0 | A17C1 | A17C2 | A17C3 | A17C5 | AE100 |
+|---------|-------|-------|-------|-------|-------|-------|
+| TEMP_UNIT (0050) | x | x | x | x | x | — |
+| STATUS_REQUEST (0040) | x | — | — | — | — | — |
+| REALTIME_TRIGGER (0057) | x | x | x | x | x | x |
+| SB_STATUS_CHECK (0056) | x | — | — | — | — | — |
+| SB_POWER_CUTOFF (0067) | x | x | x | x | — | — |
+| SB_MIN_SOC (0067) | — | — | — | — | x | x |
+| SB_INVERTER_TYPE (0068) | x | — | — | — | — | — |
+| SB_LIGHT (0068) | — | x | x | x | x | — |
+| SB_MAX_LOAD (005a) | — | x | x | x | x | — |
+| SB_GRID_EXPORT (0080) | — | x | x | x | x | x |
+| SB_PV_LIMIT (0080) | — | — | — | — | x | — |
+| SB_AC_INPUT (0080) | — | — | x | — | x | — |
+| SB_USAGE_MODE (005e) | — | — | — | — | x | — |
+| AC_SOCKET (0073) | — | — | — | — | x | — |
+| 3RD_PARTY_PV (0085) | — | — | — | — | x | x |
+| EV_CHARGER_SW (0084) | — | — | — | — | — | x |
+| DEVICE_TIMEOUT (009a) | — | — | — | — | x | — |
+
+### PPS Family (selected models)
+| Command | A1726 | A1761 | A1763 | A1780 | A1790 |
+|---------|-------|-------|-------|-------|-------|
+| REALTIME_TRIGGER (0057) | x | x | x | x | x |
+| AC_OUTPUT_SWITCH (004a) | — | x | grp | x | x |
+| DC_OUTPUT_SWITCH (004b) | x | x | grp | x | x |
+| DEVICE_MAX_LOAD (0044) | — | x | — | — | x |
+| DEVICE_TIMEOUT (0045) | — | x | grp | — | x |
+| DISPLAY_TIMEOUT (0046) | — | x | grp | — | x |
+| DISPLAY_MODE (004c) | — | x | grp | — | x |
+| LIGHT_MODE (004f) | x | x | — | — | x |
+| TEMP_UNIT (0050) | — | x | — | x | x |
+| DISPLAY_SWITCH (0052) | x | x | grp | — | x |
+| AC_FAST_CHARGE (005e) | — | x | — | — | — |
+| DC_12V_MODE (0076) | — | x | grp | — | x |
+| AC_OUTPUT_MODE (0077) | — | x | — | — | x |
+| PORT_MEMORY (0079) | — | — | grp | — | x |
+| SOC_LIMITS (grp 0103) | — | — | x | — | — |
+| AC_CHARGE_LIMIT (grp) | — | — | x | — | — |
+
+`grp` = Gen2 compound command groups (0101-0103 for PPS, 0105-010e for EV)
+
+### Smart Devices
+| Command | A17X8 | A2345 | A5191 |
+|---------|-------|-------|-------|
+| STATUS_REQUEST | 0040 | 0200 | — |
+| REALTIME_TRIGGER | 0057 | 020b | 0057 |
+| AC_OUTPUT_SWITCH | 007a | — | — |
+| PLUG_SCHEDULE | 007c | — | — |
+| PLUG_DELAYED_TOGGLE | 007e | — | — |
+| TIMER_REQUEST | 007f | — | — |
+| USB_PORT_SWITCH | — | 0207 | — |
+| EV_CHARGER_MODE | — | — | 0105 (enc=2) |
+| EV_SCHEDULE | — | — | 0106 |
+| EV_POWER_MODE | — | — | 0108 (enc=2) |
+| EV_LOAD_BALANCE | — | — | 010c |
+| EV_SOLAR_CHARGE | — | — | 010e |
+| EV settings (10 cmds) | — | — | 0100 |
+
+### Minimal-Command Devices (REALTIME_TRIGGER only)
+A17E1 (E10), AX170 (Power Dock Hub), A17X7 (Smart Meter), A17B1 (Power Panel),
+A5101/02/03 (HES X1), A1782 (F3000), SHEMP3 (Shelly Pro 3EM)
+
+---
+
 # API Response Model Structures (from toJson/fromJson)
 
 > Complete nested structures for key API responses. Extracted from Dart model classes.
@@ -864,6 +935,75 @@ Inherits all PPS commands above, plus:
 | **0078** | `setThirdATSData` | a2-a5: generator params(u16), fe: timestamp(u24) | **NEW** |
 | **005f** | `setBMSSubBatteryPowerSwitch` | a2: battery_id, a3: switch, a4: ? | **NEW** |
 | **0060** | `setBMSSubBatteryLightSwitch` | a2: battery_id, a3: switch, a4: ? | **NEW** |
+
+---
+
+## A17X7 / A17X7US — Smart Meter 0405 Status Tags (P1)
+
+> **Not in upstream** — NO `_A17X7_0405` exists in mqttmap.py. ALL tags are new.
+> A17X7US delegates entirely to A17X7.
+
+### parseDeviceAllInfo
+| Tag | Field | Conversion | Debug String | Inferred Name |
+|-----|-------|-----------|-------------|---------------|
+| fe | field_6f | int | "a17x7_updateTime_" | `msg_timestamp` |
+| a2 | field_6b | Utf8 string | — | `device_sn` |
+| a3 | field_187 | bool (==1) | "17X7是否在升级中" | `ota_in_progress` |
+| a5 | field_3db | int | — | `grid_power` |
+| a6 | field_7b | getMainVersionWithHex | "总包版本号" | `sw_version` |
+| a7 | field_2d7 | int | — | `sw_controller` |
+| a8/ac | field_477 | int | "fromGrid" | `grid_import_power` (a8 or ac, same field) |
+| a9/ad | field_47b | int | "toGrid" | `grid_export_power` (a9 or ad, same field) |
+| aa | field_47f | int | "fromGridSum" | `grid_import_total` |
+| ab | field_483 | int | "toGridSum" | `grid_export_total` |
+| fd | field_473 | bool (presence) | "showTwoDecimal" | `show_two_decimal` |
+
+### parseWorkInfo (real-time data — shares offsets with A17C0/A17C1)
+| Tag | Field | Inferred Name | Tag | Field | Inferred Name |
+|-----|-------|---------------|-----|-------|---------------|
+| a2 | 0x18b | grid_power_rt | a3 | 0x317+3d3 | soc (dual store) |
+| a4 | 0x30f | status_code | a5 | 0x3db | total_power |
+| a6 | 0x2f3 | version_raw | a7 | 0x2d7 | controller_ver |
+| a8 | 0x2eb | hw_version | a9 | 0x3b7 | temp_unit |
+| aa | 0x307 | temperature | ab | 0x20b | pv_power (÷10?) |
+| ac | 0x237 | output_power | ae | 0x3df | load_schedule |
+| b0 | 0x243 | charge_power | b1-b3 | 0x24b-253 | energy fields |
+| b4 | 0x25b | cutoff_data | b7 | — | — |
+| b8-bc | 0x25f-26f | extended fields | fb-fc | 0x287/283 | status flags |
+
+---
+
+## A1771 / A1753 / A1781 — C800/C1000/F2600 0405 Status Tags (P3)
+
+> A1753 extends A1771. A1781/A1780P also extend A1771 chain.
+
+### A1771 parseDeviceAllInfo (base for C1000/C800/F2600)
+| Tag | Field | Conversion | Debug | Inferred Name | Status |
+|-----|-------|-----------|-------|---------------|--------|
+| fe | 0x6f | int | — | `msg_timestamp` | — |
+| d0 | 0x6b | Utf8 | "更新设备sn" | `device_sn` | — |
+| d1 | 0x2ff | int | — | `max_load` | — |
+| d2 | 0x1b3 | int | — | `device_timeout` | — |
+| d3 | 0x1bb | int | — | `display_timeout` | — |
+| d7 | 0x39b | bool (==1) | — | `ac_output_switch` | — |
+| d8 | 0x39f | bool (==1) | — | `dc_output_switch` | — |
+| d9 | 0x3a3 | int | — | `display_mode` | — |
+| db | 0x3af | bool (==1) | — | `energy_saving_mode` | — |
+| dc | 0x3b3 | int | — | `light_mode` | — |
+| dd | 0x3b7 | int | — | `temp_unit_fahrenheit` | — |
+| de | 0x3a7 | bool (==1) | — | `display_switch` | — |
+| df | 0x3c3 | int | "[绿电模式]" | `green_energy_mode` | **NEW** |
+| e0 | 0x3c7 | int | "[绿电充电功率上限]" | `green_charge_power_limit` | **NEW** |
+| e2 | 0x3cf | list | "[是否启用波峰波谷]" | `peak_valley_enabled` | **NEW** |
+| e3 | 0x187 | bool (==1) | — | `unknown_flag` | **NEW** |
+| e4 | 0x3e3 | int | "[波峰波谷数据]" | `peak_valley_data` | **NEW** |
+
+### A1753 extra tags (added on top of A1771)
+| Tag | Field | Conversion | Inferred Name | Status |
+|-----|-------|-----------|---------------|--------|
+| e5 | 0x3f3 | bool (==1) | `backup_charge_switch` | **NEW** |
+| f8 | 0x197+19b | DeviceSavingModeEnum | `port_saving_mode` (1=normal,2=smart,4=custom) | **NEW** |
+| f9 | 0x42b | int | `saving_mode_ext` | **NEW** |
 
 ---
 
