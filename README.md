@@ -127,6 +127,16 @@ The type numbers are already listed in `apitypes.py` of [thomluther/anker-solix-
 
 ---
 
+## Command Flows (new — step-by-step traces)
+
+- [FLOWS.md](FLOWS.md) — Complete traces from UI button to wire bytes for 5 key operations
+
+Covers: Solarbank schedule (dual API+BLE, CRC32, 14 slots), EV Charger start (encoding_type 2
+is below Flutter layer!), Smart Plug timer (states 0/4/6), Smart Plug schedule (isEffective INVERTED),
+Solarbank power limit (4 code paths).
+
+---
+
 ## Business Rules (new — not available from mqtt_monitor)
 
 - [BUSINESS_RULES.md](BUSINESS_RULES.md) — When SET commands are allowed, what values are valid, what guards exist
