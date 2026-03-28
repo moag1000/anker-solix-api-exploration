@@ -28,20 +28,25 @@ Adds 12 APK-extracted tags to `_A17C1_0405` in `mqttmap.py`:
 - `bb`: heating_power (upstream comment confirms)
 - `e9`: battery_capacity (defaults 0)
 - `ea`: unknown flag (value=1 in test dump)
-- `fc`: 22-byte indexed array with 5 sub-fields:
-  - [0] power_limit_ref
-  - [2] ui_flag (==2 → enabled)
-  - [14] is_enable_0w (==2 → zero-export enabled, debug: "-isEnable0w-")
-  - [18] feeder0w_config (used in setDevicePowerLimit)
+- `fc`: 22-byte indexed array — likely CAPABILITY flags (static), NOT live settings
+  - [0], [2], [14], [18] mapped as capability flags
+  - **Device test (2026-03-28): fc did NOT change when 0W mode was toggled**
+  - The 0W setting goes via Cloud API, not MQTT 0405 status
 
 All tag names prefixed with `apk_` to distinguish from upstream-confirmed names.
-Value 2 = enabled in this protocol (NOT 1).
 
-### Verification needed
-To confirm a tag name, change the corresponding setting in the Anker app
-while mqtt_monitor is running, and check if the tag value changes as expected.
-Best candidates for quick verification:
-- Toggle 0W mode → fc[14] should change from 0 to 2
+### Device test results (2026-03-28)
+- fc bytes: **STATIC** — did not change on 0W toggle. Likely capability array.
+- All other apk_ tags showed plausible, stable values consistent with device state.
+
+### Methodology lesson learned
+APK UI debug strings (like "-isEnable0w-") reference the app's internal state,
+which combines MQTT status AND Cloud API data at the same offset. Static analysis
+cannot distinguish which data source populates a field.
+
+### Verification still needed
+To confirm remaining tag names, change settings while mqtt_monitor runs:
+- Toggle 0W mode → check fb (grid_export_disabled), NOT fc[14]
 - Change power limit → fc[0] and ba should change
 - Enable schedule → af should change from 0 to 1
 - Start heating → bb should show power value > 0

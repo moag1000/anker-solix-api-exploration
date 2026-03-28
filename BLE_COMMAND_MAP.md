@@ -1476,12 +1476,17 @@ The APK does NOT use ARM `and` bitmask instructions — it uses **indexed byte a
 | [0] | raw value | 0x297 | `power_limit_ref` | Compared in DevicePowerLimit closure; triggers `setDevicePowerLimit()` if changed |
 | [2] | `== 2` → bool | 0x49b | `ui_feature_flag` | Conditional UI rendering in a17c1setting_logic |
 | [10] | `== 2` → bool | 0x457 | `unknown_bool` | Boolean flag |
-| [14] | `== 2` → bool | 0x28b | **`is_enable_0w`** | Debug: "-isEnable0w-". Zero-export enable flag. Checked with `isItalyPowerLimit()` fallback |
-| [18] | raw value | 0x28f | **`feeder0w_config`** | Used in `setDevicePowerLimit()` with params "feeder0w" and "switch0w". `cmp #2` check |
+| [14] | `== 2` → bool | 0x28b | `capability_0w?` | Debug: "-isEnable0w-" in UI, but **device test shows no change on 0W toggle** |
+| [18] | raw value | 0x28f | `capability_feeder?` | Used in `setDevicePowerLimit()` context. **Static in device test** |
 
-> **Key insight**: Dart AOT does not compile bitmask `and` instructions. Sub-fields are stored
-> as individual bytes in a List\<int\>, accessed by index. `list[N] == 2` means "feature enabled"
-> (value 2 = true in this protocol, NOT value 1).
+> **Device test result (2026-03-28):** fc bytes did NOT change when 0W mode was toggled in
+> the Anker App. fc is likely a **capability/feature flag array** (static), not a live settings
+> array. The actual 0W setting goes through the Cloud API (`set_site_device_param` with
+> `switch_0w`/`enable_0w`), not through MQTT 0405 status.
+>
+> **Key methodology lesson:** APK UI debug strings (like "-isEnable0w-") reference the
+> app's internal state, which combines data from BOTH MQTT status AND Cloud API responses
+> at the same device object offset. Static analysis cannot distinguish the source.
 
 ---
 

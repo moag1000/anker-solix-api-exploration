@@ -1,5 +1,5 @@
 diff --git a/api/mqttmap.py b/api/mqttmap.py
-index 0f37ea8..adbd54f 100644
+index 0f37ea8..6fbaf90 100644
 --- a/api/mqttmap.py
 +++ b/api/mqttmap.py
 @@ -1362,6 +1362,32 @@ _A17C1_0405 = {
@@ -19,15 +19,15 @@ index 0f37ea8..adbd54f 100644
 +    "e9": {NAME: "apk_battery_capacity?"},  # listToInt, offset 0x2cb, defaults 0
 +    "ea": {NAME: "apk_unknown_ea?"},  # present in dump, value=1
 +    "fc": {
-+        # 22-byte indexed byte array. APK extracts:
-+        # [0]=power_limit_ref, [2]==2→ui_flag, [10]==2→bool,
-+        # [14]==2→is_enable_0w (debug:"-isEnable0w-"), [18]→feeder0w_config
-+        # Note: value 2 = enabled (NOT 1!)
++        # 22-byte indexed byte array. Likely CAPABILITY flags (static), NOT live settings.
++        # Device test (2026-03-28): values did NOT change when 0W mode was toggled.
++        # APK UI reads [14] for is_enable_0w, but this may come from API, not MQTT 0405.
++        # Values: 0/1 = feature available/unavailable (NOT 0/2 as initially assumed)
 +        BYTES: {
-+            "00": [{NAME: "apk_fc_power_limit_ref?"}],
-+            "02": [{NAME: "apk_fc_ui_flag?", MASK: 0x02}],
-+            "0e": [{NAME: "apk_fc_is_enable_0w?", MASK: 0x02}],
-+            "12": [{NAME: "apk_fc_feeder0w_config?"}],
++            "00": [{NAME: "apk_fc_capability_0?"}],
++            "02": [{NAME: "apk_fc_capability_2?"}],
++            "14": [{NAME: "apk_fc_capability_14?"}],
++            "18": [{NAME: "apk_fc_capability_18?"}],
 +        }
 +    },
 +    # === End APK-extracted tags ===
