@@ -254,6 +254,131 @@ elif encrypted:
 | `event_schedule_status_report` | Schedule state change |
 | `event_unbind_extended_device_report` | Device unbind event |
 
+## Data Structures (byte-level layouts from assembly)
+
+### CountDownInfo (A17X8 Smart Plug timer — tag `0xAD`)
+Minimum payload: **8 bytes**. Class size: 0x28 (40 bytes).
+
+```
+Offset  Bytes  Field            Derivation
+[0..3]  4      totalTimeMinutes listToInt(bytes[0:3]) — little-endian
+[4]     1      (unused)
+[5..7]  3      elapsedTime      listToInt(bytes[5:8])
+[6]     1      switchState      0=off, 1=on (single byte)
+[8]     1      endHour          hour of shutdown
+```
+`remainingTime = max(0, totalTimeMinutes - elapsedTime)`
+
+### TimingInfo (A17X8 Smart Plug schedule — tag `0x7C`)
+Per schedule entry: **5 fixed bytes + variable weekday bytes**. Class size: 0x40 (64 bytes).
+
+```
+Offset  Bytes  Field        Values
+[0]     1      id           Schedule slot index (0-based)
+[2]     1      switchState  0=off, 2=on (note: 2, not 1!)
+[4]     1      hours        Start hour (0-23)
+[6]     1      minutes      Start minute (0-59)
+[8]     1      endHour      End hour (0-23)
+[9..]   N      weekdays     Variable: one byte per day (1=Mon..7=Sun)
+```
+Weekdays are **not a bitmask** — they are sequential day numbers of variable length.
+
+### DischargeTimeModel (A17C1 Solarbank schedule — `setTacticsTime` 005e)
+**14 maximum time slots**. Each slot: 4 fields, 32 bytes (0x20).
+
+| Field | Offset | Type | Description |
+|-------|--------|------|-------------|
+| startTime | 0x08 | int | Start time (minutes from midnight?) |
+| endTime | 0x0c | int | End time |
+| power | 0x10 | int | Output power (W) |
+| chargingPercentage | 0x14 | int | Charge target (%) |
+
+The full `setTacticsTime` function is 14020 bytes — the largest in the codebase.
+Uses tags a2-bb (30 tags) + fd (timestamp).
+
+### SubBatteryInfo (A1790 F3800 expansion pack)
+Class size: 0x4C (76 bytes). Complete fields:
+
+| JSON Key | Type | Description |
+|----------|------|-------------|
+| `sn` | String | Serial number |
+| `batteryId` | String | Battery identifier |
+| `snNumber` | int | SN as number |
+| `version` | int | Firmware version |
+| `temperature` | int | Battery temperature |
+| `chargingStatus` | int | Charge status code |
+| `electricQuantity` | int | SOC / charge level (%) |
+| `heatingFilmOpened` | int | Heating film active flag |
+| `healthDegree` | int | Battery health (%) |
+| `isLightBlink` | int | LED blink indicator |
+| `lightOff` | int | LED off indicator |
+| `powerOff` | int | Power off status |
+| `errorCode` | int | Error code (integer, not bitmask) |
+| `type` | int | Battery type |
+| `equalType` | int | Equalization type |
+| `status` | int | Status code |
+| `batteryPackType` | int | Pack type identifier |
+
+### OutputPortInfo (A2345 Prime Charger — per USB port)
+Minimum payload: **7 bytes**. Class size: 0x40 (64 bytes).
+
+```
+Offset  Bytes  Field        Unit
+[0]     1      portIndex    Port number (0-based)
+[1..4]  4      voltage      mV (millivolts, little-endian)
+[5..8]  4      current      mA (milliamps)
+[9..12] 4      power        mW (milliwatts)
+[14]    1      status       Port status code
+[16]    1      temperature  Degrees (single byte)
+```
+
+Additional per-port protocol info: `chargeProtocol`, `maxChargePower`, `protocolCurrent`, `protocolVoltage`.
+
+### Firmware Version Format
+Two encoding variants:
+
+**`getMainVersion`** — decimal dotted: each byte → decimal string, joined with `.`
+- Input: `[1, 5, 0]` → Output: `"1.5.0"`
+- Default 3 segments, configurable
+
+**`getMainVersionWithHex`** — hex dotted with `v` prefix: each byte → hex string
+- Input: `[0x01, 0x05, 0x00]` → Output: `"v01.05.00"`
+- Used in debug logs: "17c1总包版本号" / "17X8总包版本号"
+
+### DataFlow (A17B1 power flow — nested JSON object)
+Exactly **8 nullable int fields**, fixed order:
+
+```json
+{"p2bp": null, "mpp": null, "p2lp": null, "p2gp": null,
+ "b2lp": null, "b2gp": null, "g2bp": null, "g2lp": null}
+```
+
+| Key | Full Name |
+|-----|-----------|
+| p2bp | PV → Battery Power |
+| mpp | MPPT Power (max power point tracking) |
+| p2lp | PV → Load Power |
+| p2gp | PV → Grid Power |
+| b2lp | Battery → Load Power |
+| b2gp | Battery → Grid Power |
+| g2bp | Grid → Battery Power |
+| g2lp | Grid → Load Power |
+
+### Bd (A17B1 battery device list entry)
+In the `bds` array. Class size: 0x20 (32 bytes).
+
+```json
+{"sn": "...", "related": "...", "name": "...", "power": null, "error": null, "soc": null}
+```
+
+All power/error/soc fields are nullable int.
+
+### Error Codes
+**Simple integers**, not bitmasks or lists. Companion tags carry UTF-8 error message strings.
+Example: tag 0xA2 = error code (int), tag 0xA4 = error message (Utf8 string).
+
+---
+
 ## HES / X1 JSON Protocol (NOT TLV)
 
 X1/HES devices (`A5101`) use a **different protocol**:
