@@ -379,6 +379,212 @@ Example: tag 0xA2 = error code (int), tag 0xA4 = error message (Utf8 string).
 
 ---
 
+# Enum Value Tables (from objs.txt)
+
+> Concrete integer values used in SET commands and returned in STATUS messages.
+> Extracted from Dart enum object pool with actual API values (`off_14` field).
+
+### EmsModeType — HES Work Mode (`workMode` / `sceneMode`)
+| API Value | Name | Description |
+|-----------|------|-------------|
+| 1 | `selfConsumption` | Self-consumption (Eigenverbrauch) |
+| 4 | `manualPowerBackup` | Manual power backup |
+| 5 | `timeOfUse` | Time-of-use / peak-valley pricing |
+| 8 | `onlyBackupPower` | Backup-only mode |
+| 9 | `severeWeatherMode` | Severe weather / Storm Guard |
+| 10 | `offGrid` | Off-grid mode |
+
+### EvChargerDeviceStatus — OCPP-aligned charger status
+| API Value | Name | Description |
+|-----------|------|-------------|
+| 0 | `available` | Ready to charge |
+| 1 | `preparing` | Connector plugged, not yet charging |
+| 2 | `charging` | Actively charging |
+| 3 | `suspendedEVSE` | Suspended by charger |
+| 4 | `suspendedEV` | Suspended by vehicle |
+| 5 | `finishing` | Charge complete |
+| 6 | `reserved` | Reserved |
+| 7 | `unavailable` | Unavailable |
+| 8 | `faulted` | Fault condition |
+
+### StartWayEnum — EV Charge Start Method
+| API Value | Name |
+|-----------|------|
+| 1 | `wifi` |
+| 2 | `ble` |
+| 3 | `touch` |
+| 4 | `rfid` |
+| 5 | `plug` (plug & charge) |
+| 6 | `timed` |
+| 7 | `autoResume` |
+| 8 | `modbus` |
+| -1 | `unknown` |
+
+### EvChargerGestureFunction — Swipe/Touch Actions
+| API Value | Action |
+|-----------|--------|
+| 0 | `disable` |
+| 1 | `startCharging` |
+| 2 | `stopCharging` |
+| 3 | `startBoostMode` |
+| 4 | `startImmediately` |
+
+### GeneratorMode — A7320 Range Extender
+| API Value | Name | Description |
+|-----------|------|-------------|
+| 0 | `silentDc` / `dcQuiet` | DC quiet mode |
+| 1 | `saveDc` / `dcECO` | DC economy |
+| 2 | `fastDc` / `dcTurbo` | DC turbo |
+| 3 | `eco` / `acECO` | AC economy |
+| 4 | `turbo` / `acTurbo` | AC turbo |
+| 5 | `exerciseAc` / `acExercise` | AC exercise |
+| 6 | `exerciseDc` / `dcExercise` | DC exercise |
+
+### ScreenBrightType — Display Brightness (all PPS + charger devices)
+| API Value | Level |
+|-----------|-------|
+| 0 | off |
+| 1 | low |
+| 2 | medium |
+| 3 | high |
+
+### LoadBalancingErrorType — EV Charger
+| API Value | Meaning |
+|-----------|---------|
+| 0 | `normal` |
+| 1 | `mainDeviceDisconnected` |
+| 2 | `mainDeviceAndMeterDisconnected` |
+
+### BatterySubPackageConnectionStatus — A1790 Expansion
+| API Value | State |
+|-----------|-------|
+| 1 | `normal` |
+| 2 | `offline` |
+| 3 | `highTemp` |
+| 4 | `mainPackagePressureDifference` |
+| 5 | `subPackagePressureDifference` |
+| 6 | `other` |
+
+### AddDeviceType — Station Device Categories
+| Index | Type |
+|-------|------|
+| 0 | `homeBackupSystem` |
+| 1 | `energyStorage` |
+| 2 | `smartMeter` |
+| 3 | `generator` |
+| 4 | `pps` |
+
+### EvStationType — Compatible Station Types for EV Charger
+| API Value | Station |
+|-----------|---------|
+| 5 | A17C1 (Solarbank 2 Pro) |
+| 10 | A17C3 (Solarbank 2 Plus) |
+| 11 | A17C2 (Solarbank 2 AC) |
+| 12 | A17C5 (Solarbank 3) |
+| 18 | AE100 (Power Dock) |
+
+---
+
+# GET→SET Communication Patterns
+
+> The app NEVER sends a SET without first doing a GET to retrieve valid ranges.
+> Power limits, SOC values, and schedules are **server-constrained**, not hardcoded.
+
+### Pattern: Power Limit Change
+```
+1. GET /power_service/v1/site/get_power_limit
+   → Response: {legal_power_limit, power_limit_option: [{value, label}...], ac_input_power_unit}
+2. User selects from power_limit_option (clamped to legal_power_limit)
+3. SET /power_service/v1/site/set_site_device_param
+   → param_type=19, param_data={"power_limit":{"limit":<selected>,"limit_real":<selected>}}
+```
+
+### Pattern: SOC Reserve Change
+```
+1. GET /power_service/v1/site/get_site_device_param (param_type=18)
+   → Response: {soc_list: [{id, soc, is_selected}...], switch_0w, enable_0w, feed-in_power_limit}
+2. User selects from soc_list options
+3. SET /power_service/v1/site/set_site_device_param (param_type=18)
+   → param_data={soc_list: [{id:<selected_id>, soc:<value>, is_selected:1}...], switch_0w, enable_0w}
+```
+
+### Pattern: Usage Mode + Schedule (A17C1)
+```
+1. GET /power_service/v1/site/get_site_device_param (param_type=6)
+   → Response: {mode_type, custom_rate_plan, default_home_load, min_load, max_load, step}
+2. User builds schedule (clamped to min_load..max_load with step)
+3. SET /power_service/v1/site/set_site_device_param (param_type=6)
+   → param_data={mode_type:<1-8>, custom_rate_plan:[{index,week,ranges:[{start_time,end_time,power}]}]}
+   AND simultaneously via MQTT/BLE: command 005e with mode + schedule tags
+```
+
+### Pattern: Device Attributes (Power/Grid)
+```
+1. GET /power_service/v1/app/device/get_device_attrs
+   → Response: {attributes: {pv_power_limit, ac_power_limit, power_limit, switch_0w, ...}}
+2. User modifies one attribute
+3. SET /power_service/v1/app/device/set_device_attrs
+   → {device_sn: "...", attributes: {<changed_field>: <new_value>}}
+```
+
+### Pattern: EV Charger Max Current
+```
+1. Device reports ev_max_current capability in device info
+2. App reads maxCurrentRangeHint (localized range string, e.g. "6-32")
+3. User selects within range
+4. SET via prop_write_evcharger: {"maximumCurrentLimit": <value>}
+```
+
+### Pattern: Smart Plug Toggle (simplest)
+```
+Single BLE/MQTT command: 007a with tag a2 = 0(off) or 1(on)
+No GET required — fire and forget.
+```
+
+---
+
+# Value Ranges and Constraints
+
+> **Critical**: Value ranges are NOT hardcoded in the app. They are retrieved from the
+> server per-device, per-region. The table below shows the **field types and known
+> constraints** from the APK — actual valid ranges MUST be queried via GET first.
+
+| Field | Type | Known Values | Constraint Source | Devices |
+|-------|------|-------------|-------------------|---------|
+| `switch_0w` | int | 0=allow export, 1=block | Fixed (boolean) | A17C1, A17C0 |
+| `enable_0w` | int | 0, 1 | Fixed (boolean) | A17C1 |
+| `temp_unit_fahrenheit` | int | 0=Celsius, 1=Fahrenheit | Fixed (enum) | All |
+| `light_mode` | int | 0=normal, 1=mood (SB); 0=off,1-3=low/med/high (PPS) | Fixed (enum) | All |
+| `display_mode` | int | 0=off, 1=low, 2=medium, 3=high | Fixed (ScreenBrightType) | PPS, Charger |
+| `usage_mode` | int | 1,2,3,4,5,7,8 | Fixed (UsageModeType) | A17C1/C5 |
+| `temperature` | int (SIGNED) | -40..+80°C typical | 8-bit signed (cmp 0x80) | All |
+| `battery_soc` | int | 0-100 (%) | Dynamic from device | All |
+| `max_load` | int | min_load..legal_limit, step | Dynamic from `get_power_limit` | A17C1 |
+| `power_limit` | int | From `power_limit_option` list | Dynamic from `get_power_limit` | A17C1 |
+| `pv_power_limit` | int | From `pv_power_limit_option` | Dynamic from `get_device_attrs` | A17C1 |
+| `feed-in_power_limit` | int | 0..legal_limit | Dynamic (HYPHEN in name!) | A17C1 |
+| `output_cutoff_data` | int | 5, 10 (%) | Fixed options | A17C1, A17C0 |
+| `maximumCurrentLimit` | int | 6-32+ (A, model-dependent) | Dynamic from device capability | A5190 |
+| `lightBrightness` | int | 0-100 (%) | Fixed range | A5190 |
+| `controlType` | int | 1=Start, 2=Stop, 3=SkipDelay, 4=Boost | Fixed (ChargeControlType) | A5190 |
+| `carChargerLockStatus` | int | 2=off, 4=on (bit-shifted) | Fixed | A5190 |
+| `port_saving_mode` | int | 1=normal, 2=smart, 4=custom | Fixed (DeviceSavingModeEnum) | A1790 |
+| `device_timeout_minutes` | int | 0,30,60,120,240,360,720,1440 | Fixed option set | PPS |
+| `display_timeout_seconds` | int | 20,30,60,300,1800 | Fixed option set | PPS |
+| `dc_output_timeout_seconds` | int | 0-86400, step 300 | Range + step | PPS |
+| `voltage` | float | ×0.1 (reads as int, multiply) | Measurement | A17X8 |
+| `current` | float | ×0.01 | Measurement | A17X8 |
+| `power` | float | ×0.1 | Measurement | A17X8 |
+| `photovoltaic_power` | int | ÷10 from raw | Measurement | A17C1 |
+| `bat_charge_power` | int | ÷100 from raw | Measurement | A17C1 |
+| `pv_yield` | int | ×0.0001 (upstream) | Cumulative energy | A17C1 |
+
+### Error Codes
+**Simple integers**, not bitmasks or lists. Companion tags carry UTF-8 error message strings.
+Example: tag 0xA2 = error code (int), tag 0xA4 = error message (Utf8 string).
+
+---
+
 ## HES / X1 JSON Protocol (NOT TLV)
 
 X1/HES devices (`A5101`) use a **different protocol**:
