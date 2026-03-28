@@ -652,3 +652,130 @@ When saving dynamic price config, the app sends:
 ## Chart Granularity
 
 4 periods: `day`, `week`, `month`, `year` with `YYYY-MM-DD` date format.
+
+---
+
+# Parallel System Rules (Solarbank Multi-System)
+
+## Power Options Scale with Parallel
+
+| Config | Max Load Options |
+|--------|-----------------|
+| Single device | 350, 600, 800, 1000W |
+| Multi-device parallel | 1200, 2400, 3600, 4800W |
+
+Fields: `enable_parallel`, `parallel_home_load`, `parallel_display`, `parallel_type`
+
+## PV Surplus Handling
+
+- `pvSurplusPower` tracked per site
+- When PV > load + battery full → surplus goes to grid export (if enabled) or curtailed by PV limit
+
+## A17C5 Firmware Feature Gate
+
+```
+if firmware_component_version >= 2:
+    isSupportPvLimit = true   → PV power limit setting available
+else:
+    isSupportPvLimit = false  → PV limit UI hidden
+```
+Debug: "固件是否支持pv设置光伏上限 isSupportPvLimit:"
+
+---
+
+# Auth / Account Rules
+
+## Token Auto-Refresh
+
+HTTP 401 → `_handler401()` → automatic re-authentication via `_reLogInIoTSDK()`.
+**Transparent** — happens during API calls without user interaction.
+
+## BLE Password Lockout
+
+After too many wrong BLE passwords (firmware-enforced limit):
+- Status 15: `passwordWrongAuthenticationFailed` — "鉴权失败，密码错误"
+- Status 16: `passwordRetryCountExceededAuthenticationFailed` — "密码次数超过，已锁定" (LOCKED)
+
+**Rule: BLE lockout is device-side. No unlock from app — device must be power-cycled.**
+
+## Account Freeze
+
+`freeze_status` field + `/passport/freeze_account` endpoint exist.
+`accountExpiredReminderOK` string suggests expired account warnings.
+
+## IP Ban
+
+**No client-side ban detection.** The 10x ban rule (thomluther) is server-side only.
+
+---
+
+# BLE Constraints
+
+| Constraint | Value | Source |
+|-----------|-------|--------|
+| Connection timeout | **30 seconds** | simple_ble_connector.dart |
+| Background disconnect | **30 minutes** | Duration pool |
+| Default MTU | **200 bytes** | AssembleCmdUtil |
+| MTU overhead | **10 bytes** | AssembleCmdUtil |
+| Max concurrent | **OS-limited** (~6-7 Android) | flutter_reactive_ble |
+| OTA reconnect | **Suppressed** during firmware update | ota_reconnect_suppress_helper |
+
+## MTU Negotiation
+
+MTU is explicitly negotiated and logged: `"Transmission parameters: MTU="`
+Packet fragmentation controlled by `isMTU` parameter.
+
+---
+
+# EV Charger Firmware Compatibility
+
+Two explicit firmware version checks:
+- `"X1固件版本过低"` — X1 firmware version too low (for EV+X1 integration)
+- `"充电桩固件版本过低"` — Charger firmware version too low
+
+**Rule: EV Charger features may be unavailable if X1 HES or charger firmware is too old.**
+
+## Forced Firmware Updates
+
+`force_upgrade` and `is_forced` fields in FirmwareUpdateModel.
+**Mandatory updates cannot be deferred.**
+
+---
+
+# Complete Safety Summary
+
+## Conditions That Block ALL Commands
+
+| Condition | Applies To | Check |
+|-----------|-----------|-------|
+| OTA in progress | All devices | `isOtaInProgress()` / `isSettingsEnable()` |
+| Device offline | All devices | `isCurDeviceConnected()` |
+| BLE disconnected | BLE devices | `_getCurrentStatus() != connected` |
+| Battery equalizing | A1790 expansion | `isSubBatteryEqualing()` |
+| EMS disabled | A5101 HES | "禁用ems策略" guard |
+| Off-grid state | A5101 HES | "离网状态" guard |
+| Manual off-grid | A5101 HES | "近场手动离网状态" guard |
+
+## Conditions That Silently Limit Functionality
+
+| Condition | Effect |
+|-----------|--------|
+| Charge priority active | Schedule editing disabled |
+| Not grid-connected | SOC editing disabled (A17C1) |
+| No meter present | Grid feed-in editing disabled |
+| Firmware too old | PV limit, EV features unavailable |
+| BLE password locked | Device unreachable until power-cycle |
+| Transaction lock active | Commands within 12s dropped |
+| Value unchanged | setDevicePowerLimit skipped |
+
+## Non-Obvious Protocol Behaviors
+
+| Behavior | Detail |
+|----------|--------|
+| Schedule enabled = **0** in TLV | Inverted! 0=enabled, 1=disabled |
+| 5 EV faults don't stop charging | 0x0C, 0x16, 0x17, 0x18, 0x21 |
+| Timer cancel = SET with state=0 | No separate cancel command |
+| Timing response carries relay state | Switch and schedule coupled |
+| Power above grid limit = silent clamp | No error, just clamped |
+| Error 8 = exits self-consumption | Mode changes without user action |
+| 0W mode = c7 preset set to 0 | No special flag, just preset=0W |
