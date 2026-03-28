@@ -276,3 +276,130 @@ They are independent UI pages with independent commands.
 5. **Debounce relay toggle** — prevent rapid switching
 6. **Timing responses carry relay state** — use them to refresh switch status
 7. **Timer and schedule coexist** — no need to disable one for the other
+
+---
+
+# Error Code → Message Mapping
+
+> These are the actual error descriptions from the APK. mqtt_monitor only shows
+> the numeric code — these translations come from the app's string pool.
+
+## A17C1 Solarbank 2 Pro — 12 Error Codes
+
+| Code | Meaning | Impact |
+|------|---------|--------|
+| 1 | System failure | Wait or contact service |
+| 2 | System failure | Power cycle (hold 3s) |
+| 3 | **Off-grid overload** | Load exceeds spec |
+| 4 | **Grid connection lost** | — |
+| 5 | Power grid exception | Fluctuation/outage |
+| 6 | **PV input overvoltage** | Each panel max 60V |
+| 7 | Device overheating | — |
+| 8 | **Meter communication lost** | **Exits self-consumption mode!** |
+| 9 | Software version outdated | — |
+| 10 | **Meter CT connection error** | System re-checks every **5 minutes** |
+| 11 | Device sleep mode | Data temporarily unavailable |
+| 12 | Low device temperature | — |
+
+**Bug risk**: Error 8 exits self-consumption mode entirely. Not handling this leaves system in wrong mode.
+
+## EV Charger A5190 — 23 Fault Codes
+
+| Hex | Fault | Stops Charging? |
+|-----|-------|----------------|
+| 0x01 | CP voltage / connector issue | Yes |
+| 0x02 | Overvoltage | Yes |
+| 0x04 | Undervoltage | Yes |
+| 0x06 | Abnormal current | Yes |
+| 0x07 | Overheat | Yes |
+| 0x0C | **Temp high — power REDUCED** | **No — reduces power only** |
+| 0x12 | Ground fault | Yes |
+| 0x13 | Leakage trip | Yes |
+| 0x16 | **Lost signal with smart meter** | **No — continues at limited power** |
+| 0x17 | **Lost signal with system** | **No — continues at limited power** |
+| 0x18 | **Card reader fault** | **No — does NOT affect charging** |
+| 0x19 | **Wiring error** | Yes — **DO NOT self-fix** |
+| 0x1D | **Time sync needed** | Affects scheduling + statistics |
+| 0x21 | **Internal fault** | **No — does NOT affect charging** |
+
+**Bug risk**: Not all faults stop charging. 0x0C, 0x16, 0x17, 0x18, 0x21 are non-stopping.
+Treating all faults as "stop" would incorrectly interrupt charging sessions.
+
+## A17X8 Smart Plug — 2 Error Codes
+
+| Code | Meaning |
+|------|---------|
+| 1 | Over-power protection — check if appliance overloaded |
+| 2 | Device disconnected — reconnect via Shelly app |
+
+---
+
+# Timing Constants (from APK Duration pool)
+
+| Duration | Used For |
+|----------|---------|
+| 300ms | Default debounce (AnkerDebounceThrottle) |
+| 900ms | Safety SOC status update delay |
+| 2000ms | MQTT message listener delay |
+| 5000ms | API polling interval |
+| **30s** | **BLE command timeout** + background disconnect |
+| **60s** | MQTT listener cycle |
+| **5 min** | Meter CT re-check interval (error code 10) |
+| **30 min** | **Background disconnect threshold** — BLE considered dead after 30min backgrounded |
+
+**Bug risk**: 30-minute background threshold means BLE connections break if app is backgrounded.
+
+---
+
+# Business Rules — A5190 EV Charger V1
+
+> These rules are critical for anyone building EV charger integration.
+
+## 6A Fallback Rule
+
+In **5 scenarios**, the charger falls back to **6A minimum current**:
+1. Load balancing loses connection to energy monitor
+2. Solar charging loses communication with energy devices
+3. Modbus TCP communication lost
+4. Electric meter disconnected (standalone or system)
+5. Main device AND meter both disconnected
+
+**This is a safety feature, not a bug.**
+
+## 80% Main Breaker Rule
+
+Load balancing keeps total consumption below **80% of main breaker limit**.
+Not 100% — there's a 20% safety margin hardcoded.
+
+## Phase Auto-Switching
+
+```
+If any phase current drops below 6A during three-phase solar charging:
+  → Switch to single-phase to maximize solar use
+  → Grid power only used if minimum 6A cannot be reached
+```
+
+## Solar Charging Modes
+
+| Mode | Behavior |
+|------|----------|
+| Pure Solar | Pauses when solar < 6A. **Brief grid micro-usage** to assess solar availability |
+| Solar + Grid | Solar-only when surplus meets minimum. Grid supplements when insufficient |
+| Boost | User can tap Boost during any session → switches to fast/full power |
+
+**Hidden detail**: "Brief grid micro-usage" prevents frequent relay switching. This is NOT a bug.
+
+## Schedule Conflicts
+
+**"Don't schedule both car and charger."** If both car's built-in schedule and charger schedule are set, behavior is undefined. The app warns but does not prevent this.
+
+**Charger schedule works offline** — no cloud/app connection needed once set.
+
+## What This Means for HA Integration
+
+1. **Handle 6A fallback** — when communication lost, charger drops to 6A. Show this state.
+2. **80% breaker rule** — don't set limits above 80% of breaker capacity
+3. **Non-stopping faults exist** — codes 0x0C, 0x16-0x18, 0x21 don't stop charging
+4. **Solar micro-grid-usage is normal** — small grid draws during solar mode are expected
+5. **Phase switching is automatic** — don't try to control it manually
+6. **Offline schedule capability** — schedules persist without cloud
