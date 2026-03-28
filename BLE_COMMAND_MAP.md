@@ -325,42 +325,87 @@ The X1 system uses **JSON "trans" payloads** (not binary TLV).
 
 ---
 
-## A17X8 — Smart Plug Status Tags (0405 TLV)
+## A17X8 — Smart Plug 0405 Status Tags
 
-Binary TLV — field names not embedded. Tag sequence from `parseDeviceAllInfo`:
+Extracted from `parseDeviceAllInfo` (a17x8_device_commands.dart). 9 upstream-confirmed, 3 new.
 
-| Tag | Notes |
-|-----|-------|
-| fe | Timestamp |
-| a2 | Device SN (Utf8) |
-| a3 | Switch state (bool: ==1 → true) |
-| a4 | Related to power? (checked for existence) |
-| a5-ab | Data fields (power, energy, signal, etc.) |
-| ad-ae | Data fields |
-| b0 | Data field |
-| f7-f8 | Data fields |
-| fb-fc | Data fields (read twice) |
-
-Tag a3 = **switch state** is the most useful confirmed finding for plug owners.
+| Tag | Field | Conversion | Upstream Name | Status |
+|-----|-------|-----------|---------------|--------|
+| fe | timestamp | int | `msg_timestamp` | CONFIRMED |
+| a2 | device_sn | Utf8 string | `device_sn` | CONFIRMED |
+| a3 | field_187 | bool (==1) | — | **NEW** — inferred: `schedule_active` |
+| a4 | field_47b+4bb | bool (==1), dual | `ac_output_power_switch` | CONFIRMED |
+| a5 | field_47b+4bb | bool, conditional | — | **NEW** — `ac_switch_confirmation` (only if field_49f set) |
+| a6 | field_7b | getMainVersionWithHex | `sw_version` | CONFIRMED |
+| a7 | field_2d7 | int | `sw_controller` | CONFIRMED |
+| a8 | field_483 | int × 0.1 | `voltage` | CONFIRMED (float) |
+| a9 | field_47f | int × 0.01 | `current` | CONFIRMED (float) |
+| aa | field_487 | int × 0.1 | `power` | CONFIRMED (float) |
+| ab | field_48b | int | `output_energy` (upstream ×0.001) | CONFIRMED |
+| ad | → parseCountDownInfo() | sub-parser | `timer_status` | CONFIRMED |
+| ae | field_49b | bool (==1) | — | **NEW** — inferred: `countdown_active` |
 
 ---
 
-## A17C1 — Solarbank 2 Status Tags (0405 TLV)
+## A17C1 — Solarbank 2 Pro 0405 Status Tags
 
-Binary TLV — 40+ tags in `parseDeviceAllInfo`. Key tags:
+Extracted from `parseDeviceAllInfo` (a17c1_device_commands.dart, 8804 bytes).
+20 upstream-confirmed, 11 new. Divisors extracted from assembly (sdiv instructions).
 
-| Tag | Notes |
-|-----|-------|
-| fe | Timestamp |
-| a2 | Device SN (Utf8) |
-| a3 | Station ID / FW version |
-| a7 | Total version (+ debug: "17c1 version log") |
-| ad-ae | Battery-related data |
-| a4-ac | Core data fields (power, SOC, mode, etc.) |
-| af-bb | Extended data fields |
-| c2, c6-c9 | Additional metrics |
-| d2-d3, e0-e1 | Extended metrics |
-| e8-e9, fb-fc | System/diagnostic fields |
+### Core Identity & Version
+| Tag | Field | Conversion | Divisor | Upstream Name | Status |
+|-----|-------|-----------|---------|---------------|--------|
+| fe | field_6f | int | — | `msg_timestamp` | CONFIRMED |
+| a2 | field_6b | Utf8 string | — | `device_sn` | CONFIRMED |
+| a6 | field_7b | getMainVersionWithHex | — | `sw_version` | CONFIRMED (debug: "17c1 total package version") |
+| a7 | field_2d7 | int | — | `sw_controller` | CONFIRMED |
+| a8 | field_2eb | int | — | `sw_expansion` | CONFIRMED |
 
-The exact field-to-meaning mapping for these binary TLV tags requires correlation
-with the App UI values via mqtt_monitor — the same approach thomluther uses.
+### Battery & SOC
+| Tag | Field | Conversion | Divisor | Upstream Name | Status |
+|-----|-------|-----------|---------|---------------|--------|
+| a3 | field_317 + field_3d3 | int | — | `main_battery_soc` | CONFIRMED (stored to 2 offsets) |
+| ad | field_3d7 | int | — | `battery_soc` | CONFIRMED (avg incl. expansions) |
+| b0 | field_243 | int | ÷100 | `bat_charge_power` | CONFIRMED |
+| b7 | field_247 | int | ÷100 | `bat_discharge_power` | CONFIRMED |
+| e8 | field_2bf | bitlist | bits | `battery_heating` | CONFIRMED (bit[0]==2→heating) |
+
+### Power & Energy
+| Tag | Field | Conversion | Divisor | Upstream Name | Status |
+|-----|-------|-----------|---------|---------------|--------|
+| ab | field_20b | int | ÷10 | `photovoltaic_power` | CONFIRMED |
+| ac | field_237 | int | ÷10 | `ac_output_power` | CONFIRMED |
+| c8 | field_1db | int | ÷10 | `ac_socket_power` | CONFIRMED |
+| d3 | field_23f | int | ÷10 | `output_power` | CONFIRMED |
+| b1 | field_24b | int | — | `pv_yield` (upstream ×0.0001) | CONFIRMED |
+| b2 | field_24f | int | — | `charged_energy` (upstream ×0.00001) | CONFIRMED |
+| b3 | field_253 | int | — | `output_energy` (upstream ×0.0001) | CONFIRMED |
+| c9 | field_257 | int | — | `consumed_energy` (upstream ×0.0001) | CONFIRMED |
+
+### Settings & State
+| Tag | Field | Conversion | Divisor | Upstream Name | Status |
+|-----|-------|-----------|---------|---------------|--------|
+| a5 | field_3db | int | — | `error_code` | CONFIRMED |
+| a9 | field_3b7 | int | — | `temp_unit_fahrenheit` | CONFIRMED |
+| aa | field_307 | int | SIGNED (≥0x80→−) | `temperature` | CONFIRMED (signed byte) |
+| b4 | field_25b | int | — | `output_cutoff_data` | CONFIRMED |
+| c2 | field_417 | int | — | `max_load` | CONFIRMED |
+| c6 | field_473 | int | — | `usage_mode` | CONFIRMED |
+| d2 | field_23b | int | — | `light_mode` | CONFIRMED |
+| e0 | field_42f | bool (==7) | — | `grid_status` | CONFIRMED (7=connected) |
+| e1 | field_2b7 | int | — | `light_off_switch` | CONFIRMED |
+| fb | field_287 | bitfield | bits | `grid_export_disabled` (+flags) | CONFIRMED |
+
+### NEW — Not in upstream 0405 mapping
+| Tag | Field | Conversion | Inferred Name | Notes |
+|-----|-------|-----------|---------------|-------|
+| a4 | field_30f | int | `unknown_status_code` | Near error fields |
+| ae | field_433 | bool (==1) | `ac_socket_switch?` | On/off flag |
+| af | field_187 | bool (==1) | `schedule_enabled?` | |
+| b8 | field_47f | int | `ac_input_power?` | Near control fields |
+| b9 | field_4cb | bool (==1) | `self_consumption_mode?` | Sets false default |
+| ba | field_26b | int | `status_bitmask` | Upstream has commented-out bitmask |
+| bb | field_26f | int | `heating_power` | Upstream comments confirm "bb"=heating |
+| c7 | consumed | int | `home_load_preset` | Read but value flows into next op |
+| e9 | field_2cb | int | `battery_capacity?` | Defaults to 0 |
+| fc | field_287+bits | bitfield | `extended_flags` | Schedule/parallel data |
