@@ -1476,19 +1476,22 @@ The APK does NOT use ARM `and` bitmask instructions — it uses **indexed byte a
 | [0] | raw value | 0x297 | `power_limit_ref` | Compared in DevicePowerLimit closure; triggers `setDevicePowerLimit()` if changed |
 | [2] | `== 2` → bool | 0x49b | `ui_feature_flag` | Conditional UI rendering in a17c1setting_logic |
 | [10] | `== 2` → bool | 0x457 | `unknown_bool` | Boolean flag |
-| [14] | `== 2` → bool | 0x28b | **`is_enable_0w`** | Debug: "-isEnable0w-". Code trace confirms: offset 0x28b written ONLY by MQTT parser, NOT by API |
-| [18] | raw value | 0x28f | **`feeder0w_config`** | Used in `setDevicePowerLimit()` with params "feeder0w"/"switch0w" |
+| [14] | `== 2` → bool | 0x28b | `capability_flag_14` | APK debug: "-isEnable0w-", but **device-tested: STATIC** (see below) |
+| [18] | raw value | 0x28f | `capability_flag_18` | APK uses in setDevicePowerLimit context, but **device-tested: STATIC** |
 
-> **Code trace result (2026-03-28):** Offset 0x287 (fc array) and 0x28b (is_enable_0w)
-> are written **exclusively** by `parseDeviceAllInfo()` (MQTT 0405 parser). The Cloud API
-> stores `enable_0w` in a separate model object (`GetSiteDeviceParamModel`), NOT at these offsets.
-> fc[14]==2 means "0W enabled" — this is definitively an MQTT-sourced field.
+> **Device-tested (2026-03-28, A17C1 SB2 Pro, 64 messages over 5 minutes):**
+> fc bytes did **NOT change in any of 64 MQTT 0405 messages** after 0W mode toggle.
+> fc is a **static capability/feature array**, not a live settings array.
 >
-> Initial device test showed no change — likely a timing issue (0405 status is periodic,
-> ~3 min interval). A longer test with multiple `O` triggers after toggle is needed.
+> The APK UI reads fc[14] and interprets it as "is_enable_0w" (debug: "-isEnable0w-"),
+> but the value comes pre-set from the device and reflects hardware/firmware capability,
+> not the current 0W setting. The actual 0W state goes through:
+> - MQTT command **0080** (feeder0w + switch0w TLV tags)
+> - Cloud API `set_site_device_param` (switch_0w / enable_0w fields)
+> - Upstream fb tag (`grid_export_disabled`) for the status side
 >
-> **0W toggle sends**: MQTT command **0080** with TLV tags a2=feeder0w, a6=switch0w (2-byte LE)
-> AND Cloud API `set_site_device_param` with `switch_0w`/`enable_0w` fields.
+> **Lesson**: Code traces showing "MQTT parser is the only writer" are necessary but not
+> sufficient. The device must also CHANGE the value in its status reports — which fc does not.
 
 ---
 
