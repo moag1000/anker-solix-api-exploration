@@ -127,6 +127,17 @@ The type numbers are already listed in `apitypes.py` of [thomluther/anker-solix-
 
 ---
 
+## Business Rules (new — not available from mqtt_monitor)
+
+- [BUSINESS_RULES.md](BUSINESS_RULES.md) — When SET commands are allowed, what values are valid, what guards exist
+
+Extracted from APK controller assembly. These are the conditions the Anker app checks
+before sending a command — device connectivity, charge priority blocking schedules,
+value-unchanged skip, SOC defaults, max 7 schedule slots, 4 different power limit paths.
+**This information is not obtainable from mqtt_monitor or API responses.**
+
+---
+
 ## Device Pages
 
 Start here if you own a specific device:
