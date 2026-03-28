@@ -144,6 +144,116 @@ MQTT payloads are **base64-encoded**, optionally **GZip-compressed** JSON.
 - Modes: AES-GCM and AES-CBC available
 - Opcodes: `getAesKeyReq` / `getAesKeyRes` for key negotiation
 
+## TLV Parsing Details
+
+### Tag Iteration (`parseCommonData`)
+- Tags are **sequential**: starts at `0xA1`, then `0xA2`, `0xA3`, ...
+- Each TLV entry: **Tag = 1 byte**, **Length = 1 byte**, **Value = length bytes**
+- First tag `0xA1` parsed specially (frame header), subsequent tags follow same pattern
+- Values extracted via `bytesToHexString()` and stored as `Map<String, dynamic>` keyed by hex tag
+
+### `customLengthBytes` Variant
+Some opcodes have tags with non-standard lengths. A `Map<int, int>` overrides the
+1-byte length for specific tags (e.g., tag `0xA2` might use 4-byte length prefix).
+
+### parseWorkInfo vs parseDeviceAllInfo
+- `parseDeviceAllInfo`: Full status dump — firmware versions, serial numbers, all settings + power data
+- `parseWorkInfo`: Real-time operational data only — power, temperature, SOC. Subset of tags.
+- Both use identical TLV format, different tag sets
+
+### Dispatch (`_parsePayloadData`)
+Routes by ZXOpcodeType to:
+- `parseCommonData` — most standard opcodes
+- `parseReqJsonData` — JSON-formatted responses
+- `parseBluetoothListIData` — BLE device list
+- `parseCommonDataWithDataType` — typed data variants
+- `parseCommonDataWithCustomLengthBytes` — variable-length overrides
+
+## Value Encoding Details
+
+### Integer Reconstruction (`listToInt` algorithm)
+```
+result = 0
+for i in 0..list.length:
+    byte = list[i] & 0xFF
+    shift = i * 8
+    result += byte << shift    // LITTLE-ENDIAN: LSB first
+```
+Returns unsigned. `listToIntNormal` exists as big-endian variant.
+
+### Scaling Factors (complete from assembly)
+| Factor | Hex (IEEE 754 double) | Used For |
+|--------|----------------------|----------|
+| ×0.1 | `0x3FB999999999999A` | Voltage, temperature, power (÷10) |
+| ×0.01 | `0x3F847AE147AE147B` | Current, energy (÷0.01) |
+| ×0.001 | `0x3F50624DD2F1A9FC` | Fine precision values |
+| ÷10 (sdiv) | — | Integer division in controllers |
+| ÷100 (sdiv) | — | Battery charge/discharge power |
+
+### Signed Value Patterns
+
+**8-bit signed (temperature)** — used in ALL device families:
+```
+value = listToInt(bytes)
+if value >= 0x80:  value -= 0x100    // two's complement
+```
+Stores to field offset `0x307` (temperature) across A1770, A1726, A17C0, A17C1.
+
+**7-bit magnitude + sign bit** (A91B2 charging direction):
+```
+magnitude = value & 0x7F     // lower 7 bits
+is_negative = (value & 0x80) == 0x80    // bit 7 = sign
+```
+
+**16-bit signed**: NOT explicitly handled. Values stay unsigned from `listToInt`.
+
+### Sub-Byte Extraction (BYTES sub-fields)
+Tags whose data contains multiple sub-fields use bitmask extraction:
+```
+field_a = value & 0x7F       // bits 0-6
+field_b = (value & 0x80) >> 7  // bit 7
+```
+This is how thomluther's `BYTES: {"00": {...}, "01": {...}}` structures work at the binary level.
+
+## MQTT Connection Details
+
+### QoS & Keepalive
+- **Default QoS**: 1 (atLeastOnce)
+- Available: atMostOnce(0), atLeastOnce(1), exactlyOnce(2)
+- **Keepalive**: configurable period, auto-ping, disconnect on no ping response
+- **Auto-reconnect**: built-in, with status logging
+- **Transport**: TLS-secured WebSocket (`MqttServerSecureConnection`)
+
+### Request-Response Correlation
+- `sess_id`: hardcoded `"1"` (not dynamic)
+- `msg_seq`: hardcoded `2` (not dynamic)
+- Correlation via MQTT topic + `device_sn`, NOT sequence numbers
+
+### Debounce System (systematic)
+Every parse and HTTP call uses debounce:
+- Key format: `"pps_parse_common_" + deviceSn` (per device, per operation)
+- HTTP: `debounceMills` parameter on requests
+- UI: separate button debounce (`ButtonDebounce`) + `AnkerDebounceThrottle`
+
+### Decryption Flow (in parseCommonData)
+```
+if encrypted && device.hasKey:
+    data = AesHelper.aesGcmDecrypt(data, key)     // AES-GCM preferred
+elif encrypted:
+    data = AesHelper.decrypt(data)                  // AES-CBC fallback
+```
+
+## Event Types (from string pool)
+| Event | Description |
+|-------|-------------|
+| `event_charge_status_report` | Charging state change |
+| `event_error_code_report` | Error occurred |
+| `event_current_report` | Current measurement |
+| `event_protective_charging_score_report` | Battery protection score |
+| `event_charging_mode_report` | Mode change |
+| `event_schedule_status_report` | Schedule state change |
+| `event_unbind_extended_device_report` | Device unbind event |
+
 ## HES / X1 JSON Protocol (NOT TLV)
 
 X1/HES devices (`A5101`) use a **different protocol**:
