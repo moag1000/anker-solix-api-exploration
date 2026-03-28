@@ -171,6 +171,137 @@ P3 priority — niche but requested.
 
 ---
 
+## A2345 — Prime Charger 250W 0405 Status Tags (P3)
+
+28 tags parsed in `parseDeviceAllInfo`. Debug strings from assembly.
+
+| Tag | Format | Name / Debug String | Notes |
+|-----|--------|---------------------|-------|
+| fe | int | `msg_timestamp` | |
+| a2 | getMainVersionWithHex | `sw_version` | "打印版本：otaModuleVersion" |
+| a3 | int → field_3db | `error_state?` | "设备错误状态" |
+| a4-a6 | → `parseChargePortInfo()` | `port_1/2/3_info` | Sub-parser for per-port data |
+| a7 | int | `port_4_info?` | A91B2 has this as 4th port |
+| a8-ab | int | port power/status fields | Sequential |
+| ac-af | int | extended port fields | |
+| b0-b5 | int | energy/battery fields | |
+| b7-bf | int | extended settings | Only in A2345, not A91B2 |
+| bc | int | `ac_port_switch` | "acPortSwitchState acPortNumber" |
+| b8 | bitmask | `compatibility_switch` | Bits: 0x10,0x20,0x40,0x80,0x100,0x200,0x400 |
+| — | bitmask | `ufcs_switch` | "UFCSSwitchValue" — Bits: 0x10,0x20 |
+
+### A2345 Sub-Parser: parseChargePortInfo
+Extracts per USB-C port: manufacturer, product, protocol, voltage, current.
+Debug: "充电设备1的信息" (charging device 1 info)
+
+### A2345 Port Debug Fields
+| Debug String | Meaning |
+|-------------|---------|
+| "c1端口状态/电压/电流" | C1 port status/voltage/current |
+| "c2端口状态/电压/电流" | C2 port status/voltage/current |
+| "a端口状态/电压/电流" | USB-A port status/voltage/current |
+| "p端口状态/电压/电流" | P port status/voltage/current |
+| "屏幕关闭时间" | Screen off time |
+| "屏幕亮度" | Screen brightness |
+| "时钟屏保开关" | Clock screensaver switch |
+| "蜂鸣器开关状态" | Buzzer switch state |
+| "底座指示灯开关状态" | Base indicator light switch |
+| "放电优化信息" | Discharge optimization info |
+| "充电优化信息" | Charge optimization info |
+| "输入总电量" | Input total energy |
+| "输出总电量" | Output total energy |
+| "底座状态" | Base status |
+| "电池健康度" | Battery health (SOH) |
+| "电池循环次数" | Battery cycle count |
+
+---
+
+## A17C2 — Solarbank 2 AC / Hybrid Inverter Status (P1)
+
+Uses A17C1 base protocol with hybrid-inverter-specific extensions.
+Debug strings reveal exact field meanings (power in Watts):
+
+| Tag | Debug String (Chinese) | Resolved Name | Unit |
+|-----|----------------------|---------------|------|
+| ac | "电池充放电功率（单位W）" | `bat_charge_discharge_power` | W |
+| ab | "总输出功率（单位W）" | `total_output_power` | W |
+| c2 | "总输入功率 设备主页totalInput" | `total_input_power` | W |
+| ae | "并网口功率（单位W）" | `grid_port_power` | W |
+| af | "离网口功率（单位W）" | `off_grid_port_power` | W |
+| b0 | "pv累计发电量（单位Wh）" | `pv_cumulative_generation` | Wh |
+| b1 | "储能累计充电量（单位Wh）" | `storage_cumulative_charge` | Wh |
+| d3 | "标识当前是否0溃网" | `grid_collapse_flag` | bool |
+
+Additional: "副包数量" = sub-package count, "设备功率上限值" = device power upper limit,
+"设备AC功率上限值" = AC power upper limit, "isMeterAvailable" = smart meter present.
+
+---
+
+## A1340 — Portable Power Bank Status (P3)
+
+Richest PPS parser (10841 lines). 4 ports with individual monitoring.
+
+### Per-Port Fields (USB-C1, USB-C2, USB-A, DC/P)
+| Field | Debug String | Format |
+|-------|-------------|--------|
+| status | "c1端口状态" | int |
+| voltage | "c1端口电压" | int (×0.1V?) |
+| current | "c1端口电流" | int (×0.01A?) |
+| power | per port | int |
+| repeat | "c1端口repeat" | int |
+| manufacturer | "C1厂商=" | string |
+| product | "C1产品=" | string |
+| protocol | from `chargeProtocol` list | string |
+
+### Device-Level Fields
+| Debug String | Resolved Name |
+|-------------|---------------|
+| "电池信息: 充电状态" | `battery_charge_state` |
+| "充放电时间" | `charge_discharge_time` |
+| "电池健康度" | `battery_soh` |
+| "电池循环次数" | `battery_cycle_count` |
+| "电池电量" | `battery_level` |
+| "获取蜂鸣器开关状态" | `buzzer_switch` |
+| "获取蜂鸣器时间" | `buzzer_time` |
+| "获取充电开关状态" | `charge_switch_state` |
+| "获取放电开关状态" | `discharge_switch_state` |
+
+---
+
+## Shelly (3rd Party) Status Fields
+
+| Debug String | Field Name |
+|-------------|-----------|
+| "fromGrid" | `grid_import_power` |
+| "toGrid" | `grid_export_power` |
+| "fromGridSum" | `grid_import_total` |
+| "toGridSum" | `grid_export_total` |
+| "shellyPlugOutPutPower" | `plug_output_power` |
+| "shellyPlugSwitch" | `plug_switch_state` |
+| "totalChargingPower" | `total_charging_power` |
+
+---
+
+## Cross-Device Discoveries
+
+### New Device Type: A17D0
+Found in A17B1 parser (line 3663). Referenced 4× alongside A1790/A1790P.
+Appears to be an **unreleased battery type** supported by the A17B1 hub.
+
+### A5140 Microinverter = A1780 Protocol
+The A5140 microinverter reuses `A1780DeviceCommands` entirely.
+No device-specific BLE protocol — shares PPS command structure.
+
+### Device Model Checks in A17C1 Parser
+The `parseDeviceAllInfo` entry checks device model against:
+`"A17C1"`, `"A17C5"`, `"A17C3"`, `"A17C2"` — confirming all SB2 variants
+share the same base parser with model-specific branches.
+
+### Timer Duration Enum (A17C5)
+`"30min"`, `"hr"`, `"hrs"`, `"never"` — device timeout display values.
+
+---
+
 # STATUS Message Fields (Receive Direction)
 
 > Devices periodically send status messages (0405 type). These are the fields
