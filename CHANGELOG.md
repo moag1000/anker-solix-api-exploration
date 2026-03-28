@@ -1,6 +1,19 @@
 # Changelog
 
-## 2026-03-28 — BLE/MQTT Protocol Reference (2350 lines), device pages, API findings
+## 2026-03-28 — Protocol reference, business rules, flows, device-tested corrections
+
+### Device-tested corrections (on own SB2 Pro + Smart Plug, mqtt_monitor)
+
+- **0W mode = c7 (home_load_preset) set to 0** — no special flag, just preset=0W
+  (136 MQTT messages, automation off, c7 changed from 130W→0W at 17:22:43)
+- **fc = static capability array** — 136 messages over 5 minutes, zero bytes changed
+- **isEffective inversion DISPROVED** — APK assembly showed inverted logic but device
+  test shows a4=1=enabled (normal). Assembly inversion was UI-layer, not protocol.
+- **Schedule CRUD confirmed** — 3 mqtt_monitor runs: CREATE(a2=1), MODIFY(a2=2), DELETE(a2=0)
+  Weekdays [01,02,05] = Mon+Tue+Fri. thomluther's naming independently identical.
+- **A17X8 a3/ae are STATIC** in 0405 status — not schedule/countdown flags as APK suggested
+
+### New documents
 
 ### Concrete NEW API/Protocol Findings (not previously known)
 
