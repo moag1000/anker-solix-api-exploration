@@ -333,9 +333,9 @@ Extracted from `parseDeviceAllInfo` (a17x8_device_commands.dart). 9 upstream-con
 |-----|-------|-----------|---------------|--------|
 | fe | timestamp | int | `msg_timestamp` | CONFIRMED |
 | a2 | device_sn | Utf8 string | `device_sn` | CONFIRMED |
-| a3 | field_187 | bool (==1) | — | **NEW** — inferred: `schedule_active` |
-| a4 | field_47b+4bb | bool (==1), dual | `ac_output_power_switch` | CONFIRMED |
-| a5 | field_47b+4bb | bool, conditional | — | **NEW** — `ac_switch_confirmation` (only if field_49f set) |
+| a3 | field_187 | List\<int\>, len≥2 check, [4]==2→bool | **NEW** — `timer_data` (sub-parsed: relay state + timer status) | Cross-device: field_187 = schedule flag |
+| a4 | field_47b+4bb | bool (`cmp #1`), dual store | `ac_output_power_switch` | CONFIRMED |
+| a5 | field_3db | int, unsigned | **NEW** — `error_code` | Cross-device: field_3db = error_code on A17C1 + A17C0 |
 | a6 | field_7b | getMainVersionWithHex | `sw_version` | CONFIRMED |
 | a7 | field_2d7 | int | `sw_controller` | CONFIRMED |
 | a8 | field_483 | int × 0.1 | `voltage` | CONFIRMED (float) |
@@ -343,7 +343,7 @@ Extracted from `parseDeviceAllInfo` (a17x8_device_commands.dart). 9 upstream-con
 | aa | field_487 | int × 0.1 | `power` | CONFIRMED (float) |
 | ab | field_48b | int | `output_energy` (upstream ×0.001) | CONFIRMED |
 | ad | → parseCountDownInfo() | sub-parser | `timer_status` | CONFIRMED |
-| ae | field_49b | bool (==1) | — | **NEW** — inferred: `countdown_active` |
+| ae | field_49b | bool (`cmp #1 → csel`) | **NEW** — `countdown_active` | Boolean flag for delayed toggle |
 
 ---
 
@@ -396,19 +396,19 @@ Extracted from `parseDeviceAllInfo` (a17c1_device_commands.dart, 8804 bytes).
 | e1 | field_2b7 | int | — | `light_off_switch` | CONFIRMED |
 | fb | field_287 | bitfield | bits | `grid_export_disabled` (+flags) | CONFIRMED |
 
-### NEW — Not in upstream 0405 mapping
-| Tag | Field | Conversion | Inferred Name | Notes |
-|-----|-------|-----------|---------------|-------|
-| a4 | field_30f | int | `unknown_status_code` | Near error fields |
-| ae | field_433 | bool (==1) | `ac_socket_switch?` | On/off flag |
-| af | field_187 | bool (==1) | `schedule_enabled?` | |
-| b8 | field_47f | int | `ac_input_power?` | Near control fields |
-| b9 | field_4cb | bool (==1) | `self_consumption_mode?` | Sets false default |
-| ba | field_26b | int | `status_bitmask` | Upstream has commented-out bitmask |
-| bb | field_26f | int | `heating_power` | Upstream comments confirm "bb"=heating |
-| c7 | consumed | int | `home_load_preset` | Read but value flows into next op |
-| e9 | field_2cb | int | `battery_capacity?` | Defaults to 0 |
-| fc | field_287+bits | bitfield | `extended_flags` | Schedule/parallel data |
+### NEW — Not in upstream 0405 mapping (resolved via assembly analysis)
+| Tag | Field | Format | Inferred Name | Evidence |
+|-----|-------|--------|---------------|---------|
+| a4 | field_30f | int, unsigned | `battery_soc_2` | Same offset as A17X8 a4, cross-device = SOC area |
+| ae | field_433 | bool (`cmp #1 → csel`) | `ac_socket_switch` | Boolean on/off, unique to A17C1 |
+| af | field_187 | bool (`cmp #1 → csel`) | `schedule_enabled` | Same offset as A17X8 a3 (field_187 = schedule flag cross-device) |
+| b8 | field_47f | int, unsigned, default=0 | `ac_input_power` | Same offset as A17X8 a9 (current ×0.01), raw int here = milliwatts? |
+| b9 | field_4cb | bool (`cmp #1`, default=false) | `self_test_enabled` | Defaults false when absent, boolean flag |
+| ba | field_26b | int, unsigned | `cutoff_power` | Same offset as A17C0 ba — confirmed cross-device match |
+| bb | field_26f | int, unsigned | `heating_power` | Same offset as A17C0 bb — upstream comments confirm "bb"=heating |
+| c7 | (consumed) | int, NOT stored | `home_load_power_raw` | Value read but consumed by c8 ÷10 chain → `ac_socket_power` |
+| e9 | field_2cb | int, unsigned, default=0 | `battery_capacity` | Writes `wzr` (zero register) if absent |
+| fc | field_287 | List\<int\> raw + bit extraction | `extended_status_flags` | [2]→parallel_connected, [10]→export_enabled, [14]→schedule_active_2, [18]→config_value (all `cmp #2`) |
 
 ---
 
@@ -432,17 +432,21 @@ Extracted from `parseDeviceAllInfo` (a17c1_device_commands.dart, 8804 bytes).
 | c0 | `0w_switch_sn` | c1 | `0w_switch_bt_mac` |
 | fe | `msg_timestamp` | | |
 
-### NEW tags (not in upstream A17C0)
-| Tag | Field | Inferred Name | Notes |
-|-----|-------|---------------|-------|
-| a4 | field_30f | `unknown_1` | Upstream had "?" — APK confirms parsed |
-| a5 | field_3db | `error_code?` | Same offset as A17C1 error_code |
-| ae | field_3df | `schedule_data?` | Upstream notes binary schedule slots |
-| af | field_f | `unknown_flag` | |
-| ba-bb | field_26b/26f | `extended_cutoff_data?` | After min_load (b9) |
-| bc-bd | field_48b | `parallel_config?` | Same offset, conditional branch |
-| be-bf | field_27b/27f | `extended_settings` | |
-| fb-fc | field_287/283 | `status_flags` | Not in upstream for SB Gen 1 |
+### NEW tags (resolved via assembly + cross-device correlation)
+| Tag | Field | Format | Resolved Name | Evidence |
+|-----|-------|--------|---------------|---------|
+| a4 | field_30f | int | `battery_soc_2` | Upstream "?" — APK confirms. Same offset as A17C1 a4 |
+| a5 | field_3db | int | `error_code` | Cross-device: field_3db = error_code on A17C1 + A17X8 |
+| ae | field_3df | int/binary | `schedule_slot_data` | Upstream notes binary schedule format |
+| af | field_f | int | `unknown_flag` | |
+| ba | field_26b | int | `cutoff_power` | Cross-device match with A17C1 ba |
+| bb | field_26f | int | `heating_power` | Cross-device match with A17C1 bb |
+| bc | field_48b | object | `sub_device_connection` | Triggers `createByProductCode("A17Y0")` — sub-battery init! |
+| bd | (nested) | forwarded | `sub_device_data` | Data forwarded to A17Y0 sub-device parser |
+| be | field_27b | int | `extended_setting_1` | |
+| bf | field_27f | int | `extended_setting_2` | |
+| fb | field_287 | List\<int\> raw | `status_flags` | Same pattern as A17C1 fb bitfield |
+| fc | field_283 | int | `status_counter` | |
 
 ---
 
@@ -466,20 +470,20 @@ Extracted from `parseDeviceAllInfo` (a17c1_device_commands.dart, 8804 bytes).
 | c8 | `light_mode` | c9 | `temp_unit_fahrenheit` |
 
 ### Upstream "?" tags CONFIRMED by APK
-| Tag | Upstream had | APK confirms |
-|-----|-------------|-------------|
-| b1 | `version1?` (commented) | **Parsed** — firmware sub-version |
-| b2 | `version2?` (commented) | **Parsed** — firmware sub-version |
-| b3 | `version3?` (commented) | **Parsed** — firmware sub-version |
-| b4 | `version4?` (commented) | **Parsed** — firmware sub-version |
+| Tag | Upstream had | APK confirms | Format |
+|-----|-------------|-------------|--------|
+| b1 | `version1?` (commented) | **Parsed** — `fw_sub_version_1` | int |
+| b2 | `version2?` (commented) | **Parsed** — `fw_sub_version_2` | int |
+| b3 | `version3?` (commented) | **Parsed** — `fw_sub_version_3` | int |
+| b4 | `version4?` (commented) | **Parsed** — `fw_sub_version_4` | int |
 
-### NEW tags
-| Tag | Inferred Name | Notes |
-|-----|---------------|-------|
-| ae | `unknown_power?` | Between ad (output_total) and af (soc_ah) |
-| c6 | `unknown_setting` | |
-| cc | `unknown` | |
-| f9 | `unknown_flag` | |
+### NEW tags (resolved)
+| Tag | Field | Format | Resolved Name | Evidence |
+|-----|-------|--------|---------------|---------|
+| ae | field_2cf | int | `unknown_power` | Between output_total and soc_ah |
+| c6 | field | int | `unknown_setting` | |
+| cc | field | int | `unknown` | |
+| f9 | field_42b | int | `unknown_flag` | |
 
 ---
 
@@ -502,20 +506,25 @@ Extracted from `parseDeviceAllInfo` (a17c1_device_commands.dart, 8804 bytes).
 | d3 | `display_timeout_seconds` | d5 | `display_mode` |
 | dc | `light_mode` | dd | `temp_unit_fahrenheit` |
 
-### NEW tags (18 — not in upstream)
-| Tag | Inferred Name | Notes |
-|-----|---------------|-------|
-| a2-a3 | `unknown_timeout?` | Before remaining_time |
-| ab-ad | `usba/dc power?` | Between usba_2 and dc_input |
-| b1-b2 | `unknown_energy?` | Between output_total and sw_version |
-| b4-b8 | `fw_sub_versions?` | Between sw_version and sw_expansion |
-| bc | `unknown_status` | |
-| bf-c0 | `unknown_temp/soc?` | Between exp_temp and main_soc |
-| d4-d6 | `display_settings?` | Display/timeout area |
-| da | `unknown_mode` | |
-| df-e0 | `unknown_switch?` | |
-| e2-e4 | `extended_status` | e3 is bool (==1) |
-| f7 | `unknown_flag` | |
+### NEW tags (18 — resolved where possible)
+| Tag | Field | Format | Resolved Name | Evidence |
+|-----|-------|--------|---------------|---------|
+| a2 | field_1ab | int | `dc_output_timeout?` | Same offset pattern as A1790 |
+| a3 | field_1af | int | `ac_output_timeout?` | Sequential with a2 |
+| ab | field_1f3 | int | `dc_12v_power?` | Between usba_2 and dc_input |
+| ac | field_1f7 | int | `dc_12v_2_power?` | Sequential |
+| ad | field_1fb | int | `dc_input_power_2?` | Before photovoltaic |
+| b1 | field_2cf | int | `unknown_energy` | Between output_total and sw_version |
+| b2 | field_2d3 | int | `unknown_energy_2` | Sequential |
+| b4-b8 | field_2db-2eb | int | `fw_sub_version_1..5` | Between sw_version(b3) and sw_expansion(b9) |
+| bc | field_303 | int | `unknown_status` | |
+| bf | field_30f | int | `exp_2_temperature?` | Near exp_1_temperature(be), signed? |
+| c0 | field_313 | int | `exp_2_soc?` | Near exp_1_soc(c2) pattern |
+| d4-d6 | field | int | `display_settings` | Display/timeout area |
+| da | field | int | `unknown_mode` | |
+| df-e0 | field | int | `switch_flags` | |
+| e2-e4 | field | int/bool | `extended_status` | e3: bool (`cmp #1 → csel`) |
+| f7 | field_f | int | `unknown_flag` | |
 
 ---
 
@@ -541,21 +550,26 @@ Extracted from `parseDeviceAllInfo` (a17c1_device_commands.dart, 8804 bytes).
 | d9 | `light_mode` | f6 | `region` |
 | f7 | `port_memory_switch` | fe | `msg_timestamp` |
 
-### NEW tags (19+)
-| Tag | Inferred Name | Notes |
-|-----|---------------|-------|
-| a2-a3 | `unknown_timeout?` | Before remaining_time |
-| b3 | `unknown_power?` | Between output_power and bat_discharge |
-| b6-b9 | `fw_sub_versions?` | Between sw_version and sw_expansion |
-| bb | `unknown_status` | Between sw_expansion and ac_switch |
-| c9-cb | `port_status?` | After max_soc area |
-| ce | `unknown_setting` | Before display_timeout |
-| d0-d2 | `timeout_settings?` | Display/power timeout area |
-| d6-d7 | `mode_settings?` | Between display and temp_unit |
-| da-db | `light_settings?` | After light_mode |
-| dd | `unknown_switch?` | |
-| de-df | `extended_flags` | |
-| f8-f9 | `port_config?` | Different offset than saving mode |
+### NEW tags (19+ resolved)
+| Tag | Field | Format | Resolved Name | Evidence |
+|-----|-------|--------|---------------|---------|
+| a2 | field_1ab | int | `dc_output_timeout?` | Before remaining_time, timeout area |
+| a3 | field_1af | int | `ac_output_timeout?` | Sequential with a2 |
+| b3 | field_2cf | `bytesToHexString` → string | `battery_serial_hex` | NOT listToInt — hex string conversion! |
+| b6 | field_2db | int | `fw_sub_version_1` | Between sw_version(b5) and sw_expansion(ba) |
+| b7 | field_2df | int | `fw_sub_version_2` | Sequential |
+| b8 | field_2e3 | int | `fw_sub_version_3` | Sequential |
+| b9 | field_2e7 | int | `fw_sub_version_4` | Sequential |
+| bb | field | int | `sw_expansion_2` | Between sw_expansion(ba) and ac_switch(bc) |
+| c9-cb | field | int | `port_status` fields | After max_soc area |
+| ce | field | int | `unknown_setting` | Before display_timeout |
+| d0-d2 | field | int | `timeout_settings` | Display/power timeout area |
+| d6-d7 | field | int | `mode_settings` | Between display and temp_unit |
+| da-db | field | int | `light_settings` | After light_mode |
+| dd | field | int | `unknown_switch` | |
+| de-df | field | int | `extended_flags` | |
+| f8 | field_197+19b | List\<int\>, DeviceSavingModeEnum | `port_saving_mode` | [0]→1=normal/2=smart/4=custom, [2]→mode2, [4]→bool(==2) |
+| f9 | field | complex | `port_saving_mode_ext` | Continuation of f8 pattern |
 
 ---
 
