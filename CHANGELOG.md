@@ -5,20 +5,21 @@
 ### Concrete NEW API/Protocol Findings (not previously known)
 
 **Wire protocol details** (from ZXCommandTransformer/ZXCmdUtil assembly):
-- TLV frame: `0xA1` marker, `0x02` version, direction byte `0x42`/`0x44`
-- Direction detection: `(byte[0] & 0x0F) >> 3` — bit 3 = response
-- Data type codes: 1=ui(1B), 2=int(2B), 3=variable, 4=int(4B)
-- Checksum: XOR of all bytes
-- Timestamps: Unix seconds (not ms) via `DateTime.now().toUtc().microsecondsSinceEpoch / 1e6`
+- Two protocol layers: MQTT binary (`FF 09` header) wraps BLE TLV (`0xA1` tag marker)
+- Data type codes: 0x01=ui(1B), 0x02=**signed** int LE(2B), 0x03=variable, 0x04=**bitmap**, 0x05=signed float LE
+- Checksum: XOR of all bytes (upstream-confirmed)
+- Timestamps: Unix seconds (not ms) — upstream-confirmed
+- Byte order: little-endian everywhere — upstream-confirmed
 
 **MQTT envelope** (from MqttCommandTransformer):
-- `sess_id` and `msg_seq` are HARDCODED ("1" and 2) — not dynamic sequence numbers
-- Topic pattern: `cmd/anker_power/{product_key}/{device_sn}/req` (publish), 3 subscribe topics
+- `sess_id`/`msg_seq` hardcoded in APK ("1"/2) — upstream uses different values ("1234-5678"/1)
+- Topic pattern: `cmd/anker_power/{product_key}/{device_sn}/req` — upstream-confirmed
 - 8 MqttCommandType values with cmd codes (0x22=normal, 0x0C=OTA, 0x18=unbind, etc.)
 - Payloads are base64-encoded, optional GZip (0x1F8B magic), then JSON
 
-**A17X7 Smart Meter** (entirely unmapped in upstream):
-- 11 status tags: grid_power, grid_import/export, totals, firmware, OTA status
+**A17X7 Smart Meter** (upstream has mapping, our initial names were partially wrong):
+- Tags a8/a9/aa/ab confirmed by upstream as grid_to_home/pv_to_grid/import_energy/export_energy
+- Tags ac/ad are APK firmware-compatibility aliases (not in upstream)
 - Debug strings confirm: "fromGrid", "toGrid", "fromGridSum", "toGridSum"
 
 **A17C1 Solarbank 2 — 11 new status tags** (not in upstream 0405 mapping):
@@ -70,8 +71,35 @@
 [Generator Input Adapter](https://support.ankersolix.com/s/article/Anker-SOLIX-Generator-Input-Adapter-User-Guide-A17D0)
 (A17D0111, $399, shipping product).
 
+### Upstream validation (10 findings cross-referenced)
+
+6 confirmed, 4 corrected:
+- CONFIRMED: All 6 A17C1 divisors, EV Charger tags, MQTT topic format, timestamps, XOR checksum
+- CORRECTED: Data type 0x02 = signed (not unsigned), 0x04 = bitmap (not int)
+- CORRECTED: sess_id/msg_seq differ between APK and upstream (both hardcoded)
+- CORRECTED: A17C1 tag ae = ac_output_power_signed (not ac_socket_switch)
+- CORRECTED: A17X7 tag naming (a8=grid_to_home, a9=pv_to_grid per upstream)
+
+### READ path analysis (methodology breakthrough)
+
+Traced UI/controller consumption of parser-stored values:
+- **fb[14] = `is_enable_0w`** — Zero-Export enable flag (debug: "-isEnable0w-")
+- **fb[18] = `feeder0w_config`** — used in setDevicePowerLimit with "feeder0w"/"switch0w"
+- **Tag ba** is percentage (÷100.0) in APK, NOT bitmask as upstream suggests
+- **Value 2 = enabled** in this protocol (not 1!) — `list[N] == 2` throughout
+- Dart AOT does NOT compile ARM `and` bitmask instructions — uses indexed byte arrays
+
+### Root cause analysis of methodology errors
+
+5 systematic failures identified and documented:
+1. Only traced WRITE (parser), missed READ (UI) → Fix: trace both paths
+2. Documented storage format, not wire format → Fix: report wire format
+3. Inferred semantics from serialization helpers → Fix: helpers only measure size
+4. Missed tag aliasing (same offset = same field) → Fix: check offsets
+5. Error propagation across devices → Fix: validate semantics first
+
 ### BLE_COMMAND_MAP.md growth
-From 0 to 2350 lines covering:
+From 0 to ~2400 lines covering:
 - Wire protocol + MQTT envelope + compression + encryption
 - TLV parsing internals + value encoding (scaling, signed, sub-byte)
 - ~80 SET commands + ~200 STATUS tags across 13 device families
