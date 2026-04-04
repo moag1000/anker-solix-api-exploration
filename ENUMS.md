@@ -157,6 +157,16 @@ From object pool — hardcoded schedule template:
 [{"start": 1692201600, "end": 1692288000, "type": 1, "soc": 20}]
 ```
 
+## Backup Mode (charging_disaster_prepared)
+
+| Value | Name | Description |
+|-------|------|-------------|
+| 0 | AUTO | Weather-based automatic backup |
+| 1 | MANUAL | User-defined time window |
+| 4 | CLEAR | Disable/clear backup mode |
+
+See `endpoints/charging_disaster_prepared.md` for full API documentation.
+
 ## Fault/Error Info Fields
 
 From push notification and fault models:

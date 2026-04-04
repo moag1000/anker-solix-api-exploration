@@ -90,7 +90,7 @@
 | `/charging_hes_svc/` | ~55 | A5101 HES/X1 |
 | `/charging_energy_service/` | ~12 | A17B1 System |
 | `/charging_hes_dynamic_price_svc/` | 6 | Dynamic pricing |
-| `/charging_disaster_prepared/` | 5 | Storm Guard |
+| `/charging_disaster_prepared/` | 5 | A17B1/A5101 Backup & Storm Guard |
 | `/charging_pv_svc/` | 5 | A5140 Solar |
 | `/charging_common_svc/` | 3 | Location |
 | `/smart_service/v1/` | 3 | Anka AI Agent |

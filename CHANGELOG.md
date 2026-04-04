@@ -1,5 +1,106 @@
 # Changelog
 
+## 2026-04-04 — Home Power Panel (A17B1) complete device documentation + flow analysis
+
+> Triggered by [ha-anker-solix #480](https://github.com/thomluther/ha-anker-solix/issues/480)
+> (manual backup mode for HPP). Deep dive into all HPP-related APK code.
+> Code-traced through 12 decompiled Dart files (40,000+ lines of ARM64 ASM).
+
+### New documents
+
+- **`devices/home_power_panel.md`** — Complete A17B1 device reference (10 KB):
+  MQTT status fields (_PP_JSON), Mode State enum, EmsModeType, BLE commands,
+  Cloud API methods, Dart UI page inventory, Python API implementation map,
+  implementation gaps for HA integration
+
+- **`endpoints/charging_disaster_prepared.md`** — Previously undocumented API service
+  layer (6 endpoints) for backup/disaster mode control:
+  `set_site_device_disaster`, `get_site_device_disaster`, `get_site_device_disaster_status`,
+  `get_support_func`, `quit_disaster_prepare`, `clear`
+
+### Key findings for thomluther/ha-anker-solix
+
+**Complete flow analysis** — code-traced through the actual decompiled Dart to determine
+how backup mode really works:
+
+1. **Two abstraction layers exist** (Cloud API vs IoT Kit) — they use **different field names**
+   for the same concepts. The Cloud API layer is what should be implemented:
+   - Cloud API: `auto_disaster_switch` / `manual_disaster_switch` / `manual_disaster_detail`
+   - IoT Kit: `backupMode` / `autoBackupSwitch` / `manualBackupSwitch` (native bridge, skip this)
+
+2. **`charging_disaster_prepared/`** — 6 endpoints, code-traced request/response structures:
+   - `set_site_device_disaster`: Enable manual backup = `{manual_disaster_switch: true, manual_disaster_detail: {disaster_type: 4, start_time: <unix>, end_time: <unix>}}`
+   - `get_site_device_disaster` → `DisasterSetting` (3 fields: auto_switch, manual_switch, details[])
+   - `get_support_func` → `SupportFunc` (support_auto_disaster + country codes)
+   - `get_site_device_disaster_status` → `DisasterStatus` (auto/manual status + current detail)
+   - `quit_disaster_prepare`: `{type, identifier_id, is_ble: 4, disaster_type: <from status>}`
+   - `clear`: via IoT Kit only (`backupMode: 4`)
+
+3. **5 data models fully traced** from `device_disaster_model.dart` (1136 lines):
+   - DisasterSetting (ChangeNotifier, 3 fields)
+   - DisasterStatus (3 fields incl. nullable DisasterPrepareDetail)
+   - DisasterPrepareDetail (7 fields incl. disaster_type, uuid, event)
+   - DisasterEvent (5 fields, start/end as unix timestamps)
+   - SupportCountryCode (code + google_code)
+
+4. **Initialization flow traced**: onInit → resolve siteId → 3 parallel GETs
+   (setting + support + status) via RefreshManager
+
+5. **Manual disaster `disaster_type = 4`** hardcoded in APK
+
+6. **`charging_hes_svc/device_command`** — Station-level EMS strategy (separate system):
+   - `electricity_strategy` nested object with `conserve_percent` and `mode`
+   - `off_grid_switching` with `off_grid_enable` and `off_grid_sensitivity`
+   - Full `A5101DeviceCommandModel` with 4 nested sub-models documented
+
+**HPP communication architecture**:
+- MQTT: Read-only JSON status via `{SN}/0505/a2` — no MQTT commands exist
+- BLE: "Minimal-Command Device" — only Realtime Trigger + EV Charger commands
+- Cloud API: Exclusive control channel (3 service prefixes)
+
+### Expanded existing documents
+
+- **`endpoints/charging_hes_svc.md`** — +22 new endpoints from pp.txt string pool
+  (sync_back_up_history, enable_aiems_mode, get_history_setting, get_device_self_check,
+  get_electric_utility_and_electric_plan_list, get_external_device_config, etc.)
+
+- **`endpoints/charging_energy_service.md`** — +8 endpoints with parameter details
+  (get_system_running_info with full response fields, energy_statistics with all params,
+  get_sns, restart_peak_session, etc.)
+
+- **`endpoints/device_specific.md`** — New `[A17B1]` section with all disaster_prepared
+  and device_command endpoints tagged
+
+- **`models/hes.md`** — A5101DeviceCommandModel expanded from 1 line to full structure:
+  ElectricityStrategy, OffGridSwitching, HeatPumpModel (8 fields),
+  AdvancedSetting (4 fields). Plus expanded CheckFunctionModel (7 fields),
+  AutoDisasterDetailModel (5 fields), DisasterPrepareDetailsModel, A5101StationGridConfigModel.
+
+- **`ENUMS.md`** — Added Backup Mode enum (AUTO=0, MANUAL=1, CLEAR=4)
+
+- **`README.md`** — Updated charging_disaster_prepared description
+
+### pp.txt string pool analysis
+
+Extracted and cross-referenced 100+ HPP-related string constants:
+- 7 `charging_disaster_prepared/` endpoint paths with pp offsets
+- 19 `akiot.device.*` action strings (IoT Kit command layer)
+- All backup/disaster field names: `backupMode`, `backupSwitch`, `backupStartTime`,
+  `backupEndTime`, `backupPowerStartTime`, `backupPowerEndTime`, `chargeDischargeStatus`,
+  `manualBackupStartTime`, `manualBackupEndTime`
+- EMS strategy fields: `electricity_strategy`, `electricity_strategy_mode`,
+  `conserve_percent`, `off_grid_switching`, `off_grid_enable`, `off_grid_sensitivity`
+- Debug strings: `"sendA17B1Command--->cmdId: "`, `"====A17B1 StationMqttMixin AutoDisaster cmd: "`
+
+### Files changed
+
+- 2 new files (`devices/home_power_panel.md`, `endpoints/charging_disaster_prepared.md`)
+- 6 files expanded (`charging_hes_svc.md`, `charging_energy_service.md`, `device_specific.md`,
+  `models/hes.md`, `ENUMS.md`, `README.md`)
+- 1 file updated (`CHANGELOG.md`)
+
+---
+
 ## 2026-03-28 — Protocol reference, business rules, flows, device-tested corrections
 
 ### Device-tested corrections (on own SB2 Pro + Smart Plug, mqtt_monitor)

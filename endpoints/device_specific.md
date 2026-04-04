@@ -244,3 +244,24 @@
 - `/charging_energy_service/energy_statistics` — **energyStatistics**
 - `/charging_energy_service/get_system_running_info` — **getSystemRunningInfo**
 - `/charging_energy_service/report_device_data` — **reportDeviceData** [SET]
+
+---
+
+## Home Power Panel Endpoints `[A17B1]` — P2
+
+> Full device documentation: `devices/home_power_panel.md`
+> Full disaster API: `endpoints/charging_disaster_prepared.md`
+
+### Disaster/Backup Control (NEW — `charging_disaster_prepared/`)
+- `/charging_disaster_prepared/set_site_device_disaster` — **setDisasterSwitch**(`type, identifier_id, autoBackupSwitch?, manualBackupSwitch?, backupStartTime?, backupEndTime?, quitCurrentBackup?`) [SET] `[A17B1]`
+- `/charging_disaster_prepared/get_site_device_disaster` — **getDisasterSetting** `[A17B1]`
+- `/charging_disaster_prepared/get_site_device_disaster_status` — **getDisasterStatus** `[A17B1]`
+- `/charging_disaster_prepared/get_support_func` — **getSupportFunc** `[A17B1]`
+- `/charging_disaster_prepared/quit_disaster_prepare` — **quitDisasterPrepare**(`identifier_id`) [SET] `[A17B1]`
+
+### Device Command (shared with A5101)
+- `/charging_hes_svc/device_command` — **sendDeviceCommand** [SET] `[A17B1, A5101]`
+- `/charging_hes_svc/get_device_command` — **getDeviceCommand** `[A17B1, A5101]`
+
+### Backup History
+- `/charging_hes_svc/get_back_up_history` — **getBackUpHistory** `[A17B1]`
