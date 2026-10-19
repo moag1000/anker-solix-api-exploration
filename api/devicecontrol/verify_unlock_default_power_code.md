@@ -20,7 +20,7 @@ Yes (asm-traced): sent through `HttpRequestControllerImpl::encryptionRequestHttp
 
 ## Request
 
-The body starts as a one-pair map literal (4 slots, `@0x30bc150`) holding `unlock_code`. Then exactly one of `device_sn` or `site_id` is added: if the device serial argument is a non-empty string, `device_sn` is added and `site_id` is skipped (`@0x30bc19c` to `@0x30bc1c8`, branch to `@0x30bc218`); otherwise `site_id` is added if it is non-empty (`@0x30bc1cc` to `@0x30bc214`).
+The body starts as a one-pair map literal (2 slots, raw `r2 = 4`, `@0x30bc150`) holding `unlock_code`. Then exactly one of `device_sn` or `site_id` is added: if the device serial argument is a non-empty string, `device_sn` is added and `site_id` is skipped (`@0x30bc19c` to `@0x30bc1c8`, branch to `@0x30bc218`); otherwise `site_id` is added if it is non-empty (`@0x30bc1cc` to `@0x30bc214`).
 
 | field | type | required | example | source |
 |---|---|---|---|---|

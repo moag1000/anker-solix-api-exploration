@@ -25,6 +25,8 @@ Developers implementing controls must follow the same pattern:
 ## Power Limit Settings
 
 ### Query: `get_power_limit` (param_type=16)
+Corrected 2026-10-19 (App 3.24.3): `get_power_limit` takes no param_type, and the field list below is not what the app's model reads; see the owner pages [`api/power_service/site/get_power_limit.md`](api/power_service/site/get_power_limit.md) and [`models/station_power_limit.md`](models/station_power_limit.md).
+
 **Response model:** `StationPowerLimitModel`
 
 | Response Field | Purpose |
@@ -44,7 +46,7 @@ Developers implementing controls must follow the same pattern:
 | `exceed_alarm` | Exceed alarm threshold |
 
 ### Set: `set_site_device_param` (param_type=19)
-Corrected 2026-10-19 (App 3.24.3): cmd is 123 (not 246/17 as previously documented) and `param_data` carries `display_type`; see the owner page [`api/power_service/site/set_site_device_param.md`](api/power_service/site/set_site_device_param.md).
+Corrected 2026-10-19 (App 3.24.3): the app sends cmd 123 and `param_data` carries `display_type`; the upstream library sends cmd 17 (works for values from `power_limit_option`, thomluther #423); acceptance of 123 vs 17 untested — see owner page [`api/power_service/site/set_site_device_param.md`](api/power_service/site/set_site_device_param.md).
 
 ---
 

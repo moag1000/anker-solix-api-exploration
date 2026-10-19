@@ -20,7 +20,7 @@ Yes (asm-traced): the type-19 wrapper sends the request through `HttpRequestCont
 
 ## Request
 
-The request body is a JSON object with four keys (the map literal is allocated with 8 slots, i.e. 4 key/value pairs, `http_request_repository_impl.dart @0x435587c`). The values below are those of the type-19 wrapper `setSiteDevicePowerLimit`; other wrappers fill the same four keys with their own values, see [../../param_types.md](../../param_types.md).
+The request body is a JSON object with four keys (the map literal is allocated with 8 slots (raw `r2 = 16`), i.e. 4 key/value pairs, `http_request_repository_impl.dart @0x435587c`). The values below are those of the type-19 wrapper `setSiteDevicePowerLimit`; other wrappers fill the same four keys with their own values, see [../../param_types.md](../../param_types.md).
 
 | field | type | required | example | source |
 |---|---|---|---|---|
@@ -33,12 +33,12 @@ The request body is a JSON object with four keys (the map literal is allocated w
 
 ### Usage: param_type 19 (system output power limit)
 
-Wrapper: `HttpRequestControllerImpl::setSiteDevicePowerLimit` (`http_request_repository_impl.dart @0x4355750`). The decoded `param_data` object has two keys (outer map, 4 slots, `@0x43557a4`):
+Wrapper: `HttpRequestControllerImpl::setSiteDevicePowerLimit` (`http_request_repository_impl.dart @0x4355750`). The decoded `param_data` object has two keys (outer map, 4 slots (raw `r2 = 8`), `@0x43557a4`):
 
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `display_type` | int | yes | `1` | `http_request_repository_impl.dart @0x43557b0` (key), value raw `2` at `@0x43557bc`, stored 32-bit (`stur w16`, `@0x43557c0`), Smi, so the value is 1. It is a constant, not a parameter. |
-| `power_limit` | object | yes | `{"limit": 790, "limit_real": 790}` | `http_request_repository_impl.dart @0x43557c4` (inner map, 4 slots, `@0x43557d4`) |
+| `power_limit` | object | yes | `{"limit": 790, "limit_real": 790}` | `http_request_repository_impl.dart @0x43557c4` (inner map, 4 slots (raw `r2 = 8`), `@0x43557d4`) |
 | `power_limit.limit` | int | yes | `790` | `http_request_repository_impl.dart @0x43557e0` (key), value from parameter r3, boxed at `@0x43557f0` |
 | `power_limit.limit_real` | int | yes | `790` | `http_request_repository_impl.dart @0x4355808` (key), value from parameter r5, boxed at `@0x4355818` |
 
@@ -83,16 +83,16 @@ Response, synthesized (shape only; no captured response for this payload exists 
 
 ## Errors seen
 
-None recorded for the app payload above. For a different payload (upstream library, `cmd` 17, no `display_type`, 790 W on A17C5) error `10004` (ItemNotFoundError) was reported in [thomluther/anker-solix-api#339](https://github.com/thomluther/anker-solix-api/issues/339); that report is not yet a complete `device-tested` record (firmware and date missing). Error codes are catalogued in `api/errors.md`.
+None recorded for the app payload above. For a different payload (upstream library, `cmd` 17, no `display_type`, 790 W on A17C5) error `10004` (ItemNotFoundError) was reported in [thomluther/anker-solix-api#339](https://github.com/thomluther/anker-solix-api/issues/339) (2026-10-18; firmware not recorded); see Device-tested by. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
 - `StationPowerLimitLogic::_setOutputPowerLimit` (`station_power_limit_logic.dart @0x4355598`) calls `setSiteDevicePowerLimit` at `@0x435567c`. UI: station settings, power limit page, output power slider; see [../../../flows/system_output_limit.md](../../../flows/system_output_limit.md). `setSiteDevicePowerLimit` has no other caller in the 3.24.3 asm.
-- The URL string is referenced by 32 functions in the 3.24.3 asm (other wrappers such as `setSiteDeviceParam`, `setSafetySocParams`, `set17C1SiteDeviceParam`, `setStationCountryCode`, `setDynamicPrice`, `setThreePvInstallSwitch`, plus feature controllers). They belong to other param_types and are documented per row in [../../param_types.md](../../param_types.md) (pending Task 3.4).
+- The URL string has 32 references in 20 files of the 3.24.3 asm (other wrappers such as `setSiteDeviceParam`, `setSafetySocParams`, `set17C1SiteDeviceParam`, `setStationCountryCode`, `setDynamicPrice`, `setThreePvInstallSwitch`, plus feature controllers). They belong to other param_types and are documented per row in [../../param_types.md](../../param_types.md) (pending Task 3.4).
 
 ## Since/changed
 
-3.18.0: `setSiteDevicePowerLimit` (3.18.0 `http_request_repository_impl.dart @0x327fdc0`) sent the same four top-level keys with `param_type` `"19"` and `cmd` raw 246 stored 32-bit (`@0x327ff20`/`@0x327ff24`), i.e. 123; its `param_data` held only `power_limit` (`limit`, `limit_real`), typed `Map<String, Map<String, int>>`, with no `display_type`. 3.24.3: `display_type` (constant 1) is new in `param_data` (`@0x43557b0`); `cmd` is unchanged at 123; the request is still sent encrypted.
+3.18.0: `setSiteDevicePowerLimit` (3.18.0 `http_request_repository_impl.dart @0x327fdc0`) sent the same four top-level keys with `param_type` `"19"` and the same `cmd` (3.18.0 value on [../../param_types.md](../../param_types.md)); its `param_data` held only `power_limit` (`limit`, `limit_real`), typed `Map<String, Map<String, int>>`, with no `display_type`. 3.24.3: `display_type` (constant 1) is new in `param_data` (`@0x43557b0`); `cmd` is unchanged (see [../../param_types.md](../../param_types.md)); the request is still sent encrypted.
 
 ## Known unknowns
 
@@ -103,4 +103,9 @@ None recorded for the app payload above. For a different payload (upstream libra
 
 ## Device-tested by
 
-none
+No device test of the app payload above exists. Records for the upstream library payload (client: thomluther/anker-solix-api; firmware not recorded):
+
+| who | device | request | value | result | date | source |
+|---|---|---|---|---|---|---|
+| thomluther | not recorded in the reference | `cmd` 17, `param_data` `{"power_limit":{"limit":N,"limit_real":N}}` | N from `power_limit_option` | accepted | not recorded | [ha-anker-solix#423](https://github.com/thomluther/ha-anker-solix/issues/423#issuecomment-4135301109) |
+| thomluther | A17C5 | same as above (no `display_type`) | 790 W (not in `power_limit_option`) | rejected, `10004` ItemNotFoundError | 2026-10-18 | [anker-solix-api#339](https://github.com/thomluther/anker-solix-api/issues/339) |

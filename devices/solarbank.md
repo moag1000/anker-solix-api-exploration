@@ -40,7 +40,7 @@ with numbered types. See [PARAM_DATA_STRUCTURES.md](../PARAM_DATA_STRUCTURES.md)
 | 5 | `getSiteLowerLimitDeviceParam` | Lower limit / min power | APK-extracted |
 | 6 | `set17C1SiteDeviceParam` | SB2/SB3 schedule | Upstream-confirmed |
 | 18 | `setSafetySocParams` | Safety SOC | Upstream-confirmed |
-| 19 | `setSiteDevicePowerLimit` | Power limit | Device-tested (thomluther, #423) |
+| 19 | `setSiteDevicePowerLimit` | Power limit | Device-tested only for option-list values, see [owner page](../api/power_service/site/set_site_device_param.md#device-tested-by) |
 | 20 | `get/setStationCountryCode` | Country/grid code | APK-extracted |
 | 23 | — | Switch config | Upstream-confirmed |
 | 26 | `getThreePvParam` | Third-party PV | Upstream-confirmed |
@@ -61,8 +61,8 @@ with numbered types. See [PARAM_DATA_STRUCTURES.md](../PARAM_DATA_STRUCTURES.md)
 ```
 Note: `feed-in_power_limit` uses a **HYPHEN** (not underscore).
 
-### param_type 19 — Power Limit (device-tested by thomluther)
-Corrected 2026-10-19 (App 3.24.3): cmd is 123 (not 246/17 as previously documented) and `param_data` carries `display_type`; see the owner page [`api/power_service/site/set_site_device_param.md`](../api/power_service/site/set_site_device_param.md).
+### param_type 19 — Power Limit (device-tested only for option-list values, see owner page)
+Corrected 2026-10-19 (App 3.24.3): the app sends cmd 123 and `param_data` carries `display_type`; the upstream library sends cmd 17 (works for values from `power_limit_option`, thomluther #423); acceptance of 123 vs 17 untested — see owner page [`api/power_service/site/set_site_device_param.md`](../api/power_service/site/set_site_device_param.md).
 
 ## Usage Modes (from ENUMS)
 

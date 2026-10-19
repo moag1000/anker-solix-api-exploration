@@ -8,7 +8,7 @@ Reads the station power limit state of a site: the selectable output limits, the
 
 ## Upstream name
 
-`get_site_power_limit` in `API_ENDPOINTS` of `api/apitypes.py`, called by `get_site_power_limit()` in `api/api.py` (upstream-confirmed).
+`get_site_power_limit` is the `API_ENDPOINTS` key in `api/apitypes.py`; the library method is `AnkerSolixApi.get_power_limit(siteId, fromFile)` in `api/api.py` (upstream-confirmed).
 
 ## Method+URL
 
@@ -20,14 +20,14 @@ Yes (asm-traced): sent through `HttpRequestControllerImpl::encryptionRequestHttp
 
 ## Request
 
-The body starts as a one-pair map literal (4 slots, `@0x2379008`) holding `site_id`; `app_ability` is added afterwards with `[]=` (`@0x2379048` to `@0x2379050`).
+The body starts as a one-pair map literal (2 slots, raw `r2 = 4`, `@0x2379008`) holding `site_id`; `app_ability` is added afterwards with `[]=` (`@0x2379048` to `@0x2379050`).
 
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `site_id` | String | yes | `"<site_id>"` | `http_request_repository_impl.dart @0x2379010` (value from parameter r5) |
 | `app_ability` | object (`Map<String, dynamic>`) | sent by the app | `{"site_power_limit": true}` | `http_request_repository_impl.dart @0x2379048` (value from parameter r2); both callers pass the map literal `{"site_power_limit": true}`: `station_power_limit_logic.dart @0x28cac40`/`@0x28cac4c` and `energy_plan_logic.dart @0x28caa50`/`@0x28caa5c` |
 
-The upstream library sends only `site_id` (`api/api.py`, `get_site_power_limit()`), so `app_ability` is not required for a response; what it changes is not known (see Known unknowns).
+The upstream library sends only `site_id` (`api/api.py`, `get_power_limit()`), so `app_ability` is not required for a response; what it changes is not known (see Known unknowns).
 
 ## `param_type`/`cmd`
 

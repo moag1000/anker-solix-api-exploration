@@ -7,11 +7,11 @@
 > The API expects: `{"param_data": "{\"key\":{\"nested\":\"value\"}}"}` — a string
 > containing JSON, not a nested object directly.
 >
-> param_type 19: Corrected 2026-10-19 (App 3.24.3): cmd is 123 (not 246/17 as previously documented) and `param_data` carries `display_type`; see the owner page [`api/power_service/site/set_site_device_param.md`](api/power_service/site/set_site_device_param.md).
+> param_type 19: Corrected 2026-10-19 (App 3.24.3): the app sends cmd 123 and `param_data` carries `display_type`; the upstream library sends cmd 17 (works for values from `power_limit_option`, thomluther #423); acceptance of 123 vs 17 untested — see owner page [`api/power_service/site/set_site_device_param.md`](api/power_service/site/set_site_device_param.md).
 
 ## param_type 19 — Power Limit (SET only)
 
-Corrected 2026-10-19 (App 3.24.3): cmd is 123 (not 246/17 as previously documented) and `param_data` carries `display_type`; see the owner page [`api/power_service/site/set_site_device_param.md`](api/power_service/site/set_site_device_param.md).
+Corrected 2026-10-19 (App 3.24.3): the app sends cmd 123 and `param_data` carries `display_type`; the upstream library sends cmd 17 (works for values from `power_limit_option`, thomluther #423); acceptance of 123 vs 17 untested — see owner page [`api/power_service/site/set_site_device_param.md`](api/power_service/site/set_site_device_param.md).
 
 ## param_type 18 — Safety SOC Parameters
 
@@ -329,14 +329,14 @@ home_usage = {branch_load, other_load}
 
 | Level | Description | Examples |
 |-------|-------------|---------|
-| **Device-tested** | Tested on real devices by specific community member | param_type 19 power_limit (thomluther, Issue #423) |
+| **Device-tested** | Tested on real devices by specific community member | param_type 19 power_limit, values from `power_limit_option` only (thomluther, Issue #423); see [owner page](api/power_service/site/set_site_device_param.md#device-tested-by) |
 | **Upstream-confirmed** | From upstream's community-tested code | param_type 18, 26, 6, 23; set_device_attrs nesting |
 | **Structurally inferred** | Consistent Blutter decompilation / toJson() analysis | disturb_scenes nesting, home_load_data nesting |
 | **Heuristic** | StoreField pattern, may conflate sequential assignments with nesting | Some nested structures |
 
 ### Known Issues
 
-- **param_type 19** structure is **device-tested** by thomluther (Issue #423)
+- **param_type 19** is device-tested only for values from `power_limit_option` (thomluther, Issue #423); see the [owner page](api/power_service/site/set_site_device_param.md#device-tested-by)
 - **param_type 18, 26, 6, 23** structures are from **upstream schedule.py examples** (high confidence)
 - **set_device_attrs nesting RESOLVED**: Upstream confirms `switch_0w`, `pv_power_limit`, `tag` etc.
   go **inside** the `attributes` dict: `{"device_sn": "...", "attributes": {"switch_0w": 0}}`
@@ -422,4 +422,4 @@ Extracted from `http_request_repository_impl.dart`. Endpoint paths are in
 - **updateUserTieredElecPrice**: (via CurrencyElecModel — `sn, currencyUnit, tieredElecPrices`)
 - **updatePeakAndValley**: `siteId, peakValleyPriceSeason` (camelCase! — endpoint: `/charging_hes_svc/update_hes_utility_rate_plan`)
   - ⚠️ This is a **HES-specific endpoint**, NOT a `set_site_device_param` wrapper
-  - Previously incorrectly documented with `power_limit, limit, limit_real` — those belong to `setSiteDevicePowerLimit`
+  - Previously documented here with the type-19 keys, which belong to `setSiteDevicePowerLimit`. Corrected 2026-10-19 (App 3.24.3): the app sends cmd 123 and `param_data` carries `display_type`; the upstream library sends cmd 17 (works for values from `power_limit_option`, thomluther #423); acceptance of 123 vs 17 untested — see owner page [`api/power_service/site/set_site_device_param.md`](api/power_service/site/set_site_device_param.md).

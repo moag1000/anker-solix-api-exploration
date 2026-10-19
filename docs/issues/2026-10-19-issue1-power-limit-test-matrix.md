@@ -24,8 +24,8 @@ POST /power_service/v1/site/set_site_device_param
 - The app sends this through its encrypted request path (`x-encryption-info: algo_ecdh`). Since 800 W works for you unencrypted, I don't think encryption is the blocker, but noting it.
 
 **Slider range / DIY unlock**
-- Range in the app: 100 W … `legal_power_limit`, step 10 W.
-- Values *above* the legal limit go through a new "DIY legal power limit" sheet that can require an unlock code: `POST /devicecontrol/v1/device/verify_unlock_default_power_code` with `{"unlock_code", "device_sn", "site_id"}` → `verify_result`. `get_power_limit` now carries `unlock_default_power_type`, `unlock_pop_content`, `unlock_pop_image` for that. Not relevant for 790 W, but good to know it exists.
+- Range in the app: 100 W up to the last entry of `power_limit_option`, step 10 W; the slider starts at `legal_power_limit`.
+- Values *above* `legal_limit` go through a new "DIY legal power limit" sheet that can require an unlock code: `POST /devicecontrol/v1/device/verify_unlock_default_power_code` with `{"unlock_code", "site_id"}` from this page (in general the body carries `device_sn` or `site_id`, never both) → `verify_result`. `get_power_limit` now carries `unlock_default_power_type`, `unlock_pop_content`, `unlock_pop_image` for that. Not relevant for 790 W, but good to know it exists.
 
 **Suggested test on your A17C5 (in this order, raw payloads)**
 
@@ -39,6 +39,9 @@ If you can paste the raw responses (incl. error codes) for the three, I'll recor
 
 **One honest caveat about the existing docs**
 While doing this I found a systematic mistake in my earlier Blutter-based numbers: Blutter prints raw register values, and Dart stores small ints tagged (value × 2). So several integers in this repo are exactly double the real value — e.g. the `cmd: 246` in FLOWS.md is really 123, the MQTT header `cmd 34 / cmd_status 4 / sign_code 2` are really 17 / 2 / 1 (which matches what your library has always used), and `disaster_type 4` is really 2. String-based facts (endpoint paths, field names, `"19"` etc.) are not affected. I'm reworking the whole repo on 3.24.3 with that fixed, plus the ~80 endpoints that are new since 3.18.0 (installer service, Modbus TCP settings, `power_service/v2`, …). Will post here when the power-limit pages are updated.
+
+**Correction 2026-10-19**
+After the set call the app does not re-read `get_power_limit`: it updates its own display right away and only toggles an internal flag back after a 3 s delay, so the page shows the new value even if the server rejects it. Also, the app's `get_power_limit` request carries `app_ability: {"site_power_limit": true}` next to `site_id` (your library sends only `site_id`).
 
 Cheers,
 Michael

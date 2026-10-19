@@ -974,7 +974,7 @@
 **setSiteDevicePowerLimit**
 - Required: `param_type, cmd, param_data`
 - Optional: `site_id`
-- ⚠️ `power_limit`, `limit`, `limit_real` are **inside** the JSON-encoded `param_data` string, not top-level fields
+- Corrected 2026-10-19 (App 3.24.3): the app sends cmd 123 and `param_data` carries `display_type`; the upstream library sends cmd 17 (works for values from `power_limit_option`, thomluther #423); acceptance of 123 vs 17 untested — see owner page [`api/power_service/site/set_site_device_param.md`](api/power_service/site/set_site_device_param.md).
 
 ## `/power_service/v1/site/shift_power_site_type`
 

@@ -15,6 +15,8 @@ switch_0w, user_power_limit
 
 ## StationPowerLimitModel
 
+Corrected 2026-10-19 (App 3.24.3): the field list below is outdated; `StationPowerLimitModel`, `PowerLimitOption`, `DeviceInfo` and `Ae100Info` are owned by [`models/station_power_limit.md`](station_power_limit.md).
+
 Source: `ui/page/device/main/sitation_energy_system/station_home_settings/station_power_limit/station_power_limit_model.dart`
 
 ```

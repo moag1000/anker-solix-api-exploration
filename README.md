@@ -138,7 +138,7 @@ The type numbers are already listed in `apitypes.py` of [thomluther/anker-solix-
 | 13 | *(native layer)* | SB3 system config | Known (schedule.py) |
 | 16 | `getCombineBoxListData` | Combiner box / power dock | Known response, function name from Blutter |
 | 18 | `getSafetySocParams` | Safety SOC parameters | Known response, function name from Blutter |
-| 19 | `setSiteDevicePowerLimit` | Power limit (SET only) | Number **not in apitypes.py list**, purpose new |
+| 19 | `setSiteDevicePowerLimit` | Power limit (SET only) | 19 is `SOLARBANK_POWER_LIMIT` upstream; corrected 2026-10-19, see [api/param_types.md](api/param_types.md) |
 | 20 | `get/setStationCountryCode` | Station country code | Number known, **purpose new** |
 | 23 | *(not in APK v3.18.0)* | Switch config | Known (schedule.py, minimal) |
 | 26 | `getThreePvParam` | 3rd-party PV params | Known response, function name from Blutter |
