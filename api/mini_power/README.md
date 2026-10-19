@@ -42,3 +42,25 @@ Service index for the URL prefix `/mini_power/`. Each endpoint page is the singl
 | [`/mini_power/v1/app/style/set_manual_clock_screensaver_name`](app/style/set_manual_clock_screensaver_name.md) | TODO | - | skeleton |
 
 Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
+
+<!-- hand-written below: kept by tools/service_index.py -->
+
+## 3.24.3 URL strings without an inventory row (string-only)
+
+Eleven `mini_power` URL strings are in the 3.24.3 object pool (`pp.txt`) but are neither in `data/endpoints.json` nor loaded by any decoded asm instruction (a search for each string and for its `pp+` offset in `blutter_output/asm` finds no load). The Dart code that uses them most probably sits in mixin applications that the Blutter dump omits (for example `AntiLossMapHttpMixin` in `small_charging_platform/src/scp/anti_loss_map/anti_loss_map_http_mixin.dart` is an empty class in the dump, while `weather_clock_location_helper.dart` calls `getDeviceLastLocationAntiLossData` and `setDeviceLastLocationAntiLossData` on it). None of them is in the 3.18.0 pool, so all are new in 3.24.3. No request body was traced, so there is no page for them; this table is their only record (tag `string-only`).
+
+| URL string | pool entry | what the surrounding code suggests |
+|---|---|---|
+| `/mini_power/v1/app/setting/get_user_last_location` | `pp+0x9f9d8` | the weather clock reads the device's last location (`_fetchLastLocationFromCloud`, `weather_clock_location_helper.dart @0x35b9b54`; log prefix `[WeatherClock] get_user_last_location`) |
+| `/mini_power/v1/app/setting/set_user_last_location` | `pp+0x86700` | the weather clock writes the current GPS position to the cloud (`fetchCurrentLocationAndSync`, `weather_clock_location_helper.dart @0x3907b24`; log prefix `[WeatherClock] set_user_last_location`) |
+| `/mini_power/v1/app/setting/get_morning_greeting` | `pp+0x86cc8` | a morning greeting switch (pool strings `action_set_morning_greeting`, `morning_greeting_enabled` next to it) |
+| `/mini_power/v1/pet_screensaver/default_animations/list` | `pp+0x9fce0` | AI pet screensaver (`ai_pet_screensaver` pages, models `ai_pet_screensaver_*_model.dart`) |
+| `/mini_power/v1/pet_screensaver/tasks/create` | `pp+0xa0c88` | AI pet screensaver generation task |
+| `/mini_power/v1/pet_screensaver/tasks/query` | `pp+0x9fd78` | AI pet screensaver generation task |
+| `/mini_power/v1/pet_screensaver/tasks/list` | `pp+0xa0588` | AI pet screensaver task list (record page) |
+| `/mini_power/v1/pet_screensaver/tasks/update` | `pp+0xa0a80` | AI pet screensaver generation task |
+| `/mini_power/v1/pet_screensaver/tasks/delete` | `pp+0xa0ae0` | AI pet screensaver generation task |
+| `/mini_power/v1/pet_screensaver/tasks/image_review` | `pp+0x12bb40` | AI pet screensaver image review |
+| `/mini_power/v1/pet_screensaver/quota/query` | `pp+0xa07f0` | AI pet screensaver quota (`ai_pet_screensaver_quota_model.dart`) |
+
+The three reminder endpoints (`reminder/get_reminder_list`, `reminder/set_reminder`, `reminder/del_reminder`) are traced and documented in the table above.
