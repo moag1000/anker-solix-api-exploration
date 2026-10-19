@@ -34,21 +34,21 @@ Sections (one per audited file or entry):
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "20 function calls, 18 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 18 distinct endpoint paths, 18 of them found in `data/endpoints.json`, which holds 40 function rows for those URLs (18 of the URLs exist since 3.18.0 or earlier only). |
+| header "20 function calls, 18 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 18 distinct endpoint paths; 18 found in `data/endpoints.json`, which holds 40 function rows for those URLs (18 of the URLs have only rows present since 3.18.0 or earlier). |
 | NOT-FROM-ASM (whole file: endpoint paths, function names and parameter names only) | 1-84 | - | - | - | NOT-FROM-ASM | `grep -nE "0x[0-9a-f]+\|[=:] ?-?[0-9]+\|[0-9]+ ?(or\|/\|-) ?[0-9]+" endpoints/app.md` (header line excluded) has no hit; the only digits are inside identifiers such as `17C1`, `A2345`, `A17B1`. |
 
 ## endpoints/charging_common_svc.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "1 function call, 1 unique endpoint" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 1 distinct endpoint paths, 1 of them found in `data/endpoints.json`, which holds 2 function rows for those URLs (1 of the URLs exist since 3.18.0 or earlier only). |
+| header "1 function call, 1 unique endpoint" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 1 distinct endpoint path; 1 found in `data/endpoints.json`, which holds 2 function rows for that URL (1 of the URLs have only rows present since 3.18.0 or earlier). |
 | NOT-FROM-ASM (whole file: endpoint paths, function names and parameter names only) | 1-12 | - | - | - | NOT-FROM-ASM | `grep -nE "0x[0-9a-f]+\|[=:] ?-?[0-9]+\|[0-9]+ ?(or\|/\|-) ?[0-9]+" endpoints/charging_common_svc.md` (header line excluded) has no hit; the only digits are inside identifiers such as `17C1`, `A2345`, `A17B1`. |
 
 ## endpoints/charging_energy_service.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "11+ function calls, 10+ unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 17 distinct endpoint paths, 17 of them found in `data/endpoints.json`, which holds 18 function rows for those URLs (17 of the URLs exist since 3.18.0 or earlier only). "N+" claims are lower bounds. |
+| header "11+ function calls, 10+ unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 17 distinct endpoint paths; 17 found in `data/endpoints.json`, which holds 18 function rows for those URLs (17 of the URLs have only rows present since 3.18.0 or earlier). "N+" claims are lower bounds. |
 | "Implemented in `powerpanel.py` lines 518-581" and "lines 860-922" | 60, 76 | upstream anker-solix-api/api/powerpanel.py | - | - | NOT-FROM-ASM | Upstream line numbers of an older snapshot; in the current checkout `get_system_running_info` starts at line 620 and `energy_statistics` at line 982. |
 | `control`: 0 or 1 (report_device_data) | 88 | upstream anker-solix-api/api/apitypes.py API_CHARGING_ENDPOINTS comment `ctrol [0 1]` | - | - | NOT-FROM-ASM | Upstream comment, not an asm constant. |
 | Example `{"main_sn": ..., "macs": [...]}` | 94 | upstream apitypes.py comment | - | - | NOT-FROM-ASM | Example payload. |
@@ -57,14 +57,14 @@ Sections (one per audited file or entry):
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "28+ function calls, 28+ unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 50 distinct endpoint paths, 50 of them found in `data/endpoints.json`, which holds 71 function rows for those URLs (50 of the URLs exist since 3.18.0 or earlier only). "N+" claims are lower bounds. |
+| header "28+ function calls, 28+ unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 50 distinct endpoint paths; 50 found in `data/endpoints.json`, which holds 71 function rows for those URLs (50 of the URLs have only rows present since 3.18.0 or earlier). "N+" claims are lower bounds. |
 | NOT-FROM-ASM (whole file: endpoint paths, function names and parameter names only) | 1-248 | - | - | - | NOT-FROM-ASM | `grep -nE "0x[0-9a-f]+\|[=:] ?-?[0-9]+\|[0-9]+ ?(or\|/\|-) ?[0-9]+" endpoints/charging_hes_svc.md` (header line excluded) has no hit; the only digits are inside identifiers such as `17C1`, `A2345`, `A17B1`. |
 
 ## endpoints/charging_pv_svc.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "4 function calls, 4 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 4 distinct endpoint paths, 4 of them found in `data/endpoints.json`, which holds 4 function rows for those URLs (4 of the URLs exist since 3.18.0 or earlier only). |
+| header "4 function calls, 4 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 4 distinct endpoint paths; 4 found in `data/endpoints.json`, which holds 4 function rows for those URLs (4 of the URLs have only rows present since 3.18.0 or earlier). |
 | Upstream-confirmed example `tieredElecPrices` `[{"from": "00:00", "to": "23:59", "price": 0.30}]` | 17 | - | - | - | NOT-FROM-ASM | Upstream example payload. |
 
 ## endpoints/device_specific.md
@@ -84,75 +84,75 @@ Sections (one per audited file or entry):
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "28 function calls, 27 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 27 distinct endpoint paths, 27 of them found in `data/endpoints.json`, which holds 33 function rows for those URLs (27 of the URLs exist since 3.18.0 or earlier only). |
+| header "28 function calls, 27 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 27 distinct endpoint paths; 27 found in `data/endpoints.json`, which holds 33 function rows for those URLs (27 of the URLs have only rows present since 3.18.0 or earlier). |
 | NOT-FROM-ASM (whole file: endpoint paths, function names and parameter names only) | 1-119 | - | - | - | NOT-FROM-ASM | `grep -nE "0x[0-9a-f]+\|[=:] ?-?[0-9]+\|[0-9]+ ?(or\|/\|-) ?[0-9]+" endpoints/mini_power.md` (header line excluded) has no hit; the only digits are inside identifiers such as `17C1`, `A2345`, `A17B1`. |
 
 ## endpoints/other.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "1 function call, 1 unique endpoint" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 1 distinct endpoint paths, 1 of them found in `data/endpoints.json`, which holds 1 function rows for those URLs (1 of the URLs exist since 3.18.0 or earlier only). |
+| header "1 function call, 1 unique endpoint" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 1 distinct endpoint path; 1 found in `data/endpoints.json`, which holds 1 function rows for that URL (1 of the URLs have only rows present since 3.18.0 or earlier). |
 | NOT-FROM-ASM (whole file: endpoint paths, function names and parameter names only) | 1-12 | - | - | - | NOT-FROM-ASM | `grep -nE "0x[0-9a-f]+\|[=:] ?-?[0-9]+\|[0-9]+ ?(or\|/\|-) ?[0-9]+" endpoints/other.md` (header line excluded) has no hit; the only digits are inside identifiers such as `17C1`, `A2345`, `A17B1`. |
 
 ## endpoints/passport.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "25 function calls, 24 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 24 distinct endpoint paths, 24 of them found in `data/endpoints.json`, which holds 26 function rows for those URLs (24 of the URLs exist since 3.18.0 or earlier only). |
+| header "25 function calls, 24 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 24 distinct endpoint paths; 24 found in `data/endpoints.json`, which holds 26 function rows for those URLs (24 of the URLs have only rows present since 3.18.0 or earlier). |
 | NOT-FROM-ASM (whole file: endpoint paths, function names and parameter names only) | 1-108 | - | - | - | NOT-FROM-ASM | `grep -nE "0x[0-9a-f]+\|[=:] ?-?[0-9]+\|[0-9]+ ?(or\|/\|-) ?[0-9]+" endpoints/passport.md` (header line excluded) has no hit; the only digits are inside identifiers such as `17C1`, `A2345`, `A17B1`. |
 
 ## endpoints/power_service_ai_ems.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "2 function calls, 2 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 2 distinct endpoint paths, 2 of them found in `data/endpoints.json`, which holds 3 function rows for those URLs (2 of the URLs exist since 3.18.0 or earlier only). |
+| header "2 function calls, 2 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 2 distinct endpoint paths; 2 found in `data/endpoints.json`, which holds 3 function rows for those URLs (2 of the URLs have only rows present since 3.18.0 or earlier). |
 | NOT-FROM-ASM (whole file: endpoint paths, function names and parameter names only) | 1-14 | - | - | - | NOT-FROM-ASM | `grep -nE "0x[0-9a-f]+\|[=:] ?-?[0-9]+\|[0-9]+ ?(or\|/\|-) ?[0-9]+" endpoints/power_service_ai_ems.md` (header line excluded) has no hit; the only digits are inside identifiers such as `17C1`, `A2345`, `A17B1`. |
 
 ## endpoints/power_service_app.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "17 function calls, 17 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 17 distinct endpoint paths, 17 of them found in `data/endpoints.json`, which holds 25 function rows for those URLs (17 of the URLs exist since 3.18.0 or earlier only). |
+| header "17 function calls, 17 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 17 distinct endpoint paths; 17 found in `data/endpoints.json`, which holds 25 function rows for those URLs (17 of the URLs have only rows present since 3.18.0 or earlier). |
 | NOT-FROM-ASM (whole file: endpoint paths, function names and parameter names only) | 1-74 | - | - | - | NOT-FROM-ASM | `grep -nE "0x[0-9a-f]+\|[=:] ?-?[0-9]+\|[0-9]+ ?(or\|/\|-) ?[0-9]+" endpoints/power_service_app.md` (header line excluded) has no hit; the only digits are inside identifiers such as `17C1`, `A2345`, `A17B1`. |
 
 ## endpoints/power_service_compatible.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "12 function calls, 12 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 13 distinct endpoint paths, 13 of them found in `data/endpoints.json`, which holds 16 function rows for those URLs (13 of the URLs exist since 3.18.0 or earlier only). The extra path is an upstream-confirmed endpoint "missing from APK extraction" (set_power_cutoff). |
+| header "12 function calls, 12 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 13 distinct endpoint paths; 13 found in `data/endpoints.json`, which holds 16 function rows for those URLs (13 of the URLs have only rows present since 3.18.0 or earlier). The extra path is an upstream-confirmed endpoint "missing from APK extraction" (set_power_cutoff). |
 | NOT-FROM-ASM (whole file: endpoint paths, function names and parameter names only) | 1-59 | - | - | - | NOT-FROM-ASM | `grep -nE "0x[0-9a-f]+\|[=:] ?-?[0-9]+\|[0-9]+ ?(or\|/\|-) ?[0-9]+" endpoints/power_service_compatible.md` (header line excluded) has no hit; the only digits are inside identifiers such as `17C1`, `A2345`, `A17B1`. |
 
 ## endpoints/power_service_device.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "21 function calls, 8 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 8 distinct endpoint paths, 8 of them found in `data/endpoints.json`, which holds 73 function rows for those URLs (8 of the URLs exist since 3.18.0 or earlier only). |
+| header "21 function calls, 8 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 8 distinct endpoint paths; 8 found in `data/endpoints.json`, which holds 73 function rows for those URLs (8 of the URLs have only rows present since 3.18.0 or earlier). |
 | Upstream example `{"pv_power_limit": 800, "switch_0w": 0}` | 38 | - | - | - | NOT-FROM-ASM | Upstream example payload. |
 
 ## endpoints/power_service_dynamic_price.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "3 function calls, 3 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 3 distinct endpoint paths, 3 of them found in `data/endpoints.json`, which holds 3 function rows for those URLs (3 of the URLs exist since 3.18.0 or earlier only). |
+| header "3 function calls, 3 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 3 distinct endpoint paths; 3 found in `data/endpoints.json`, which holds 3 function rows for those URLs (3 of the URLs have only rows present since 3.18.0 or earlier). |
 | NOT-FROM-ASM (whole file: endpoint paths, function names and parameter names only) | 1-18 | - | - | - | NOT-FROM-ASM | `grep -nE "0x[0-9a-f]+\|[=:] ?-?[0-9]+\|[0-9]+ ?(or\|/\|-) ?[0-9]+" endpoints/power_service_dynamic_price.md` (header line excluded) has no hit; the only digits are inside identifiers such as `17C1`, `A2345`, `A17B1`. |
 
 ## endpoints/power_service_other.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "13 function calls, 12 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 12 distinct endpoint paths, 12 of them found in `data/endpoints.json`, which holds 14 function rows for those URLs (12 of the URLs exist since 3.18.0 or earlier only). |
+| header "13 function calls, 12 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 12 distinct endpoint paths; 12 found in `data/endpoints.json`, which holds 14 function rows for those URLs (12 of the URLs have only rows present since 3.18.0 or earlier). |
 | NOT-FROM-ASM (whole file: endpoint paths, function names and parameter names only) | 1-56 | - | - | - | NOT-FROM-ASM | `grep -nE "0x[0-9a-f]+\|[=:] ?-?[0-9]+\|[0-9]+ ?(or\|/\|-) ?[0-9]+" endpoints/power_service_other.md` (header line excluded) has no hit; the only digits are inside identifiers such as `17C1`, `A2345`, `A17B1`. |
 
 ## endpoints/power_service_share.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "5 function calls, 5 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 5 distinct endpoint paths, 5 of them found in `data/endpoints.json`, which holds 6 function rows for those URLs (5 of the URLs exist since 3.18.0 or earlier only). |
+| header "5 function calls, 5 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 5 distinct endpoint paths; 5 found in `data/endpoints.json`, which holds 6 function rows for those URLs (5 of the URLs have only rows present since 3.18.0 or earlier). |
 | NOT-FROM-ASM (whole file: endpoint paths, function names and parameter names only) | 1-26 | - | - | - | NOT-FROM-ASM | `grep -nE "0x[0-9a-f]+\|[=:] ?-?[0-9]+\|[0-9]+ ?(or\|/\|-) ?[0-9]+" endpoints/power_service_share.md` (header line excluded) has no hit; the only digits are inside identifiers such as `17C1`, `A2345`, `A17B1`. |
 
 ## endpoints/power_service_site.md
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| header "51 function calls, 31 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 31 distinct endpoint paths, 31 of them found in `data/endpoints.json`, which holds 139 function rows for those URLs (31 of the URLs exist since 3.18.0 or earlier only). |
+| header "51 function calls, 31 unique endpoints" | 3 | data/endpoints.json (generated from the 3.24.3 asm with a 3.18.0 diff) | - | - | NOT-FROM-ASM | Prose counts. The page names 31 distinct endpoint paths; 31 found in `data/endpoints.json`, which holds 139 function rows for those URLs (31 of the URLs have only rows present since 3.18.0 or earlier). |
 | set_site_device_param power limit: app sends cmd 123, upstream sends cmd 17 | 129 | charging/http/http_request_repository_impl.dart setSiteDevicePowerLimit @0x43558c4 (3.24.3) | 246 | `mov x16,#0xf6` / `stur w16` (map-literal slot) -> 123 | OK | Already corrected in the text; owner page `api/power_service/site/set_site_device_param.md`. |
