@@ -9,9 +9,11 @@ Not here: which endpoint returns a model (see [../api/README.md](../api/README.m
 ## Dedicated model pages (template layout)
 
 - [a5190_device_info.md](a5190_device_info.md): `A5190DeviceInfo`, the EV charger device state (Modbus TCP keys only).
+- [anka_agent_models.md](anka_agent_models.md): the Anka AI assistant response classes (`AnkaAgentEntryConfigModel`, `AnkaAgentMenuConfigModel`, `GetSettingResponse`, `WelcomeGreetingModel`, `ProactiveCtaResponse`, `QuestionBankResponse`).
 - [backup_report_models.md](backup_report_models.md): `BackupReportPopupModel`, `BackupReportListModel` and their item classes, the answers of the backup-report endpoints.
 - [branch_icon_models.md](branch_icon_models.md): `BranchIconModel` and `BranchIconInfo`, the AX170 branch icon catalogue (`get_custom_branch_icon`).
 - [combine_box_entity.md](combine_box_entity.md): `CombineBoxEntity`, combiner box serial and image (`param_type` 16).
+- [custom_reminder_models.md](custom_reminder_models.md): `CustomReminderItem` and `CustomReminderListResponse`, the custom reminders of the Prime charger.
 - [daily_revenue_card_status.md](daily_revenue_card_status.md): `DailyRevenueCardStatus`, the answer of `daily_revenue_card/status`.
 - [device_power_config.md](device_power_config.md): `DevicePowerConfigItem`, the answer of `get_devices_power_config`.
 - [device_share_models.md](device_share_models.md): `DeviceShareListResponse`, `DeviceShareListModel`, `DeviceShareInstallerListModel` and `DeviceShareInstallerItem`, the device-sharing answers of the EV charger app.

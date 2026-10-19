@@ -143,6 +143,20 @@ def build(endpoints, api):
     return out, summary
 
 
+KEEP_MARKER = '<!-- hand-written below: kept by tools/service_index.py -->'
+
+
+def keep_tail(path, text):
+    """Append the hand-written part of an existing README (from KEEP_MARKER on)."""
+    if os.path.exists(path):
+        with open(path, encoding='utf-8') as fh:
+            old = fh.read()
+        i = old.find(KEEP_MARKER)
+        if i >= 0:
+            return text.rstrip('\n') + '\n\n' + old[i:]
+    return text
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--endpoints', default='data/endpoints.json')
@@ -152,6 +166,7 @@ def main(argv=None):
         data = json.load(fh)
     out, summary = build(data, a.api)
     for path, text in out.items():
+        text = keep_tail(path, text)
         with open(path, 'w', encoding='utf-8') as fh:
             fh.write(text)
     print('%d indexes, %d pages (%d skeletons)' % (

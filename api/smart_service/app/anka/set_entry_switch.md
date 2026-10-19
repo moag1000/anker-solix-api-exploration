@@ -1,28 +1,30 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Owner page: this page
 
 # set_entry_switch
 
 ## Purpose
 
-<!-- TODO -->
+Turns the Anka assistant entry (the AI entry on the user page) on or off for the account.
 
 ## Upstream name
 
-`none` (no upstream name)
+`none` (no upstream name; the URL is not mentioned in `api/apitypes.py`).
 
 ## Method+URL
 
-`/smart_service/v1/app/anka/set_entry_switch`, method: not extracted by the inventory <!-- TODO -->; string-only: `anka_agent/http/anka_agent_http.dart @0x403f0d8`
+`POST /smart_service/v1/app/anka/set_entry_switch` (asm-traced). Sender: `AnkaAgentHttp.setAnkaAgentEntrySwitch` (`anka_agent/http/anka_agent_http.dart @0x403f000`); the URL literal is loaded at `@0x403f0d8` and the method is `Method.post` (pool entry `pp+0xa7e0`, `@0x403f0d0`).
 
 ## Encrypted?
 
-encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Yes by wrapper (asm-traced): `setAnkaAgentEntrySwitch` calls `HttpServiceImpl.encryptionRequestHttpByGHttpRequest` (`anka_agent/http/anka_agent_http.dart @0x403f100`) without passing `needEncryption`, so the default `true` applies ([encryption.md](../../../encryption.md#which-calls-are-encrypted)). The wrapper sends through the global `HttpRequest` object (`gHttpRequest`). Whether the call really goes through the SDK is decided at run time ([encryption.md](../../../encryption.md)); asm alone does not decide it.
 
 ## Request
 
+Body is a `<String, bool>` map of one pair (`r2 = 4`, `@0x403f048`).
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `setting_switch` | ? | ? | ? | `anka_agent/http/anka_agent_http.dart @0x403f000` |
+| `setting_switch` | bool | yes | `true` | `anka_agent_http.dart @0x403f050`; value is the first argument; the model key of the same name is `setting_switch` (`bool?`) |
 
 ## `param_type`/`cmd`
 
@@ -30,31 +32,35 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+n/a (asm-traced): the answer is passed to the caller's callbacks, no model.
 
 ## Response
 
-<!-- TODO -->
+Not parsed by the sender.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized
+
+```json
+{ "setting_switch": true }
+```
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+No error code specific to this endpoint was traced; the shared transport codes are in [../../../encryption.md](../../../encryption.md#response-handling-and-error-codes). `api/errors.md` does not exist yet (Task 4.2).
 
 ## Callers in app
 
-- `anka_agent/http/anka_agent_http.dart`: `setAnkaAgentEntrySwitch` @0x403f000 (encryptionRequestHttpByGHttpRequest; encrypted: true)
+- `AnkaAgentSettingLogic.toggleAnkaAI` (`charging/ui/page/user/ankaAgent/anka_agent_setting_logic.dart @0x403efec`)
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present (pool `pp+0xafe50`); the sender function has the same sequence of string, integer and type literals in 3.18.0 (compared with a throwaway script, not committed). 3.24.3: present (pool `pp+0xdd090`). since: ≤3.18.0.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Whether the switch also hides the entry on other screens is not traced.
 
 ## Device-tested by
 

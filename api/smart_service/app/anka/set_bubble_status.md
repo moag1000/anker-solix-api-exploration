@@ -1,31 +1,33 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Owner page: this page
 
 # set_bubble_status
 
 ## Purpose
 
-<!-- TODO -->
+Reports the state of the bubble shown on the Anka entry button (for example that the user consumed it) with the bubble id and type and the time.
 
 ## Upstream name
 
-`none` (no upstream name)
+`none` (no upstream name; the URL is not mentioned in `api/apitypes.py`).
 
 ## Method+URL
 
-`/smart_service/v1/app/anka/set_bubble_status`, method: not extracted by the inventory <!-- TODO -->; string-only: `anka_agent/http/bubble_http.dart @0x2bc1764`
+`POST /smart_service/v1/app/anka/set_bubble_status` (asm-traced). Sender: `AnkaAgentHttp.setBubbleStatus` (`anka_agent/http/bubble_http.dart @0x2bc1558`); the URL literal is loaded at `@0x2bc1764` and the method is `Method.post` (pool entry `pp+0xa7e0`, `@0x2bc175c`).
 
 ## Encrypted?
 
-encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Yes by wrapper (asm-traced): `setBubbleStatus` calls `HttpServiceImpl.encryptionRequestHttpByGHttpRequest` (`anka_agent/http/bubble_http.dart @0x2bc178c`) without passing `needEncryption`, so the default `true` applies ([encryption.md](../../../encryption.md#which-calls-are-encrypted)). The wrapper sends through the global `HttpRequest` object (`gHttpRequest`). Whether the call really goes through the SDK is decided at run time ([encryption.md](../../../encryption.md)); asm alone does not decide it.
 
 ## Request
 
+Body is a `<String, dynamic>` map of four pairs (`r2 = 16`, `@0x2bc15ac`); the function logs `[Bubble] setBubbleStatus REQUEST: status=..., bubble_type=..., bubble_id=...` first (`@0x2bc16a0`).
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `status` | ? | ? | ? | `anka_agent/http/bubble_http.dart @0x2bc1558` |
-| `bubble_type` | ? | ? | ? | `anka_agent/http/bubble_http.dart @0x2bc1558` |
-| `bubble_id` | ? | ? | ? | `anka_agent/http/bubble_http.dart @0x2bc1558` |
-| `consume_time` | ? | ? | ? | `anka_agent/http/bubble_http.dart @0x2bc1558` |
+| `status` | String or int (not shown) | yes | `<status>` | `bubble_http.dart @0x2bc15b8`; first argument |
+| `bubble_type` | String | yes | `<bubble type>` | `bubble_http.dart @0x2bc15cc`; field `0xb` of the second argument (`@0x2bc15dc`), the bubble object |
+| `bubble_id` | String | yes | `<bubble id>` | `bubble_http.dart @0x2bc15e8`; field `0x7` of the second argument (`@0x2bc15f4`) |
+| `consume_time` | int | yes | `1760000000` | `bubble_http.dart @0x2bc1600`; the current time in whole seconds: `_getCurrentMicros` (`@0x2bc160c`) divided by 1000 twice (`sdiv`, `@0x2bc163c`, `@0x2bc1640`), boxed with `BoxInt64Instr` (`@0x2bc1644`) |
 
 ## `param_type`/`cmd`
 
@@ -33,31 +35,36 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+n/a (asm-traced): the answer is passed to the caller's callbacks, no model.
 
 ## Response
 
-<!-- TODO -->
+Not parsed by the sender.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized
+
+```json
+{ "status": "<status>", "bubble_type": "<bubble type>", "bubble_id": "<bubble id>", "consume_time": 1760000000 }
+```
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+No error code specific to this endpoint was traced; the shared transport codes are in [../../../encryption.md](../../../encryption.md#response-handling-and-error-codes). `api/errors.md` does not exist yet (Task 4.2).
 
 ## Callers in app
 
-- `anka_agent/http/bubble_http.dart`: `setBubbleStatus` @0x2bc1558 (encryptionRequestHttpByGHttpRequest; encrypted: true)
+- `BubbleStatusService._retrySingle` (`anka_agent/services/bubble_status_service.dart @0x2bc1544`)
+- `BubbleStatusService.report` (`anka_agent/services/bubble_status_service.dart @0x2e0b3b8`)
 
 ## Since/changed
 
-3.18.0: absent. 3.24.3: present (new). since: 3.24.3.
+3.18.0: absent (the URL string is not in the 3.18.0 object pool). 3.24.3: present (pool `pp+0x14c070`). since: 3.24.3.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- The values of `status` are not decoded; `BubbleStatusService` (`report`, `_retrySingle`) retries failed reports.
 
 ## Device-tested by
 
