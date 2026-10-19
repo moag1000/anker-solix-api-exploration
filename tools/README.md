@@ -96,3 +96,14 @@ python3 -m unittest tools.tests.test_error_codes                                
 ```
 
 `error_codes.py` writes `data/errors.json` and nothing else (the path is fixed; there is no `--out`). Rows have a `source`: `upstream` (every `ERRORS` entry of the upstream `api/errors.py`, read with `ast`), `asm` (compares of an error code in the handler functions listed in `SITES` inside the script, by file and function address, valid for 3.24.3 only) and `issue` (codes reported in a GitHub issue, hard-coded with the issue link). Every row also has `kind`: `api` (an error code, the rows the catalog page is about) or `message-type-excluded` (a compare of 10000 to 10007 in an `onMessageDispatch` function or MQTT closure listed in `MSG_SITES`: a device message type that shares numbers with API codes; recorded with file, function address and compare address so the exclusion is data, never counted as a catalog code and not needing a page row). The asm rows obey the Smi rule by compare width: `cmp wN` (or `r17 = N; cmp wN, w17`) is a tagged int and the value is raw / 2, `cmp xN` is an unboxed int and the value is raw; `width`, `raw` and `branch` stay in the row so the step can be redone. The handler list is curated on purpose: a sweep of every compare against a 4 to 6 digit constant mostly finds class ids, MQTT message types in `onMessageDispatch` and UI limits, so the tool reads only the listed functions and aborts with exit 2 (writing nothing) when a listed function is missing. `--check` writes nothing and exits 1 when `data/errors.json` is stale or missing, or when `api/errors.md` lacks a table row (`| <code> |`) for a code in the JSON. The catalog page is hand-written; the JSON holds the extracted facts it cites.
+
+## 7. Data export schema check and models.json filter
+
+```bash
+python3 -I tools/schema_check.py [--repo .] [--check]                                  # validate data/*.json, writes nothing
+python3 -I -m unittest discover -s tools/tests -t . -p 'test_schema_check.py'          # own tests, under 1 s
+python3 -I tools/model_fields.py $N --version 3.24.3 --old-root $O [--include-noise]   # data/models.json
+python3 -I -m unittest discover -s tools/tests -t . -p 'test_model_fields_dedupe.py'   # own tests, under 1 s
+```
+
+`schema_check.py` validates the four exports against the inline schemas that [../data/README.md](../data/README.md) documents: envelope keys, required and optional row fields with their types, unknown fields, unique `models.json` keys and equal `app_version`/`snapshot` across the files. It prints one line per violation; `--check` makes any violation exit 1. When a generator gains a field, extend the schema and `data/README.md` in the same change. `model_fields.py` keys every row `package::Class` (extended to a unique directory or file path where the package key collides; `class` keeps the short name) and by default drops classes without fields and the `sentry` package; `--include-noise` keeps them.
