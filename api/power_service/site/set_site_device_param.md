@@ -70,7 +70,7 @@ Request, synthesized (decrypted body as built by `setSiteDevicePowerLimit` for a
 {
   "site_id": "<site_id>",
   "param_type": "19",
-  "cmd": 123,
+  "cmd": "<cmd: owner api/param_types.md>",
   "param_data": "{\"display_type\":1,\"power_limit\":{\"limit\":790,\"limit_real\":790}}"
 }
 ```
@@ -83,7 +83,7 @@ Response, synthesized (shape only; no captured response for this payload exists 
 
 ## Errors seen
 
-None recorded for the app payload above. For a different payload (upstream library, `cmd` 17, no `display_type`, 790 W on A17C5) error `10004` (ItemNotFoundError) was reported in [thomluther/anker-solix-api#339](https://github.com/thomluther/anker-solix-api/issues/339) (2026-10-18; firmware not recorded); see Device-tested by. Error codes are catalogued in `api/errors.md`.
+None recorded for the app payload above. For a different payload (upstream library with its own `cmd` value, see [../../param_types.md](../../param_types.md), no `display_type`, 790 W on A17C5) error `10004` (ItemNotFoundError) was reported in [thomluther/anker-solix-api#339](https://github.com/thomluther/anker-solix-api/issues/339) (2026-10-18; firmware not recorded); see Device-tested by. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -97,7 +97,7 @@ None recorded for the app payload above. For a different payload (upstream libra
 ## Known unknowns
 
 - What `display_type` means on the server side. A plausible reading is that it marks the value as a free slider value rather than an entry of `power_limit_option`; this is not verified.
-- Whether the server accepts `cmd` 17 (as sent by the upstream library) as well as 123 for param_type 19, with and without `display_type`. A test matrix is pending with thomluther; no outcome is recorded here.
+- Whether the server accepts the upstream library's `cmd` value as well as the app's for param_type 19 (both values are owned by [../../param_types.md](../../param_types.md)), with and without `display_type`. A test matrix is pending with thomluther; no outcome is recorded here.
 - Whether the encrypted request path is required, or whether a plain request with the same body is accepted.
 - The response body for a successful type-19 call (not read by the app).
 
@@ -107,5 +107,5 @@ No device test of the app payload above exists. Records for the upstream library
 
 | who | device | request | value | result | date | source |
 |---|---|---|---|---|---|---|
-| thomluther | not recorded in the reference | `cmd` 17, `param_data` `{"power_limit":{"limit":N,"limit_real":N}}` | N from `power_limit_option` | accepted | not recorded | [ha-anker-solix#423](https://github.com/thomluther/ha-anker-solix/issues/423#issuecomment-4135301109) |
+| thomluther | not recorded in the reference | upstream `cmd` value (owner: param_types.md), `param_data` `{"power_limit":{"limit":N,"limit_real":N}}` | N from `power_limit_option` | accepted | not recorded | [ha-anker-solix#423](https://github.com/thomluther/ha-anker-solix/issues/423#issuecomment-4135301109) |
 | thomluther | A17C5 | same as above (no `display_type`) | 790 W (not in `power_limit_option`) | rejected, `10004` ItemNotFoundError | 2026-10-18 | [anker-solix-api#339](https://github.com/thomluther/anker-solix-api/issues/339) |

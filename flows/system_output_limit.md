@@ -63,4 +63,4 @@ All of these run right after the request is handed to the HTTP layer, without wa
 - Whether the server enforces the legal limit itself, or relies on the app prompt (steps 9 to 12).
 - The confirm path of the `h5` prompt variant.
 - What the internal boolean toggled around the 3 s delay controls in the UI.
-- The server meaning of `display_type` and whether `cmd` 17 is accepted as well as 123; both are tracked on [set_site_device_param](../api/power_service/site/set_site_device_param.md#known-unknowns).
+- The server meaning of `display_type` and whether the upstream library's `cmd` value is accepted as well as the app's; both are tracked on [set_site_device_param](../api/power_service/site/set_site_device_param.md#known-unknowns).

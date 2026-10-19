@@ -57,7 +57,7 @@ B. Each encrypted call afterwards (SDK path, step 8; order by analogy with A, up
 | # | operation | detail |
 |---|---|---|
 | B1 | timestamp and nonce, fresh per request; key identifier from storage | [encryption.md](../api/encryption.md#nonce-and-timestamp) |
-| B2 | encrypt the JSON body with the session key, base64 it (`IV (16 bytes) + ciphertext` in the capture), send as `text/plain` | [encryption.md](../api/encryption.md#payload-encryption-and-response-decryption) |
+| B2 | encrypt the JSON body with the session key, base64 it (IV plus ciphertext; layout in the owner page), send as `text/plain` | [encryption.md](../api/encryption.md#payload-encryption-and-response-decryption) |
 | B3 | signature = hex of the HMAC, key = session key, over `ts + "+" + once + "+" + <body text>` | [encryption.md](../api/encryption.md#request-signing) |
 | B4 | answer: `signature`, `msg`, `code`, `trace_id`, encrypted `data`; the SDK verifies and decrypts, Dart receives the decrypted `data` (step 10) | [encryption.md](../api/encryption.md#response-handling-and-error-codes) |
 
