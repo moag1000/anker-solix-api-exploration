@@ -18,7 +18,7 @@ Rules (each finding is printed as `path:line: ERROR|WARN rule: message`):
 
 Exit 1 when any error is reported. `--warn-only` runs only the warning rules and exits 0.
 Old root docs listed in the migration map of docs/STRUCTURE.md that still lack a status
-header (legacy, bannered later) are exempt from every rule except `links`. Standard library only.
+header (legacy, bannered later) and headerless pages under docs/archive/ are exempt from every rule except `links`. Standard library only.
 """
 import argparse
 import collections
@@ -162,7 +162,8 @@ def collect(root):
                 continue
             rel = os.path.relpath(os.path.join(dp, f), root).replace(os.sep, '/')
             pg = Page(root, rel)
-            pg.legacy = rel in legacy and not pg.has_header()
+            # docs/archive/ holds superseded 3.18.0 pages kept for provenance: link check only
+            pg.legacy = (rel in legacy or rel.startswith('docs/archive/')) and not pg.has_header()
             pages.append(pg)
     return pages
 

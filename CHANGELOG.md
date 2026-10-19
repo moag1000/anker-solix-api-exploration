@@ -62,10 +62,10 @@ Corrected facts (old statement to the 3.24.3 reading; the value is on the owner 
 
 ### Removed / superseded
 
-- The 12 superseded root pages of 3.18.0 content ([README section 9](README.md#9-3180-reference-superseded)), the legacy `endpoints/`, `devices/` and `models/` group pages, and `patches/` (now `docs/archive/patches-2026-03/`) are scheduled for deletion in the cleanup commit; see the migration map in [docs/STRUCTURE.md](docs/STRUCTURE.md#migration-map).
+- The 12 superseded root pages of 3.18.0 content ([README section 9](README.md#9-3180-reference-superseded)), the legacy `endpoints/`, `devices/` and `models/` group pages, and `patches/` (now `docs/archive/patches-2026-03/`) are deleted in the cleanup commits (see the cleanup result below); see the migration map in [docs/STRUCTURE.md](docs/STRUCTURE.md#migration-map).
 - Until then each of them carries a banner that names its owner pages. Their wrong numbers are not fixed in place; use the Errata and [docs/audit/](docs/audit/).
 
-<!-- cleanup result: filled by the controller after Task 4.9 -->
+- Cleanup result (Task 4.9, 2026-10-20): `patches/` archived to `docs/archive/patches-2026-03/`; 11 superseded root pages and the 18 legacy `endpoints/*.md` pages deleted after 25 inbound links were retargeted to their owners; `BLE_COMMAND_MAP.md` archived as `docs/archive/BLE_COMMAND_MAP-3.18.0.md` instead of deleted, because seven of its product sections have no 3.24.3 owner page yet; the five `devices/` product pages were brought onto 3.24.3 (Task 4.9-pre) and stay; lint now link-checks headerless legacy and archive pages. Recovery point for the old state: tag `v2026.04-app3.18.0`.
 
 ### Issue #1 (power limit, display_type)
 

@@ -161,7 +161,7 @@ These root files carried 3.18.0 content and were deleted in the cleanup after th
 
 | Deleted file | Owner on 3.24.3 |
 |---|---|
-| `BLE_COMMAND_MAP.md` | [ble/](ble/README.md), [mqtt/](mqtt/README.md) |
+| `BLE_COMMAND_MAP.md` | [ble/](ble/README.md), [mqtt/](mqtt/README.md) (some content not yet moved: PPS A176X/A178X, EV chargers A5190/A5191, EverFrost A17A4/A17A5, generator adapter A17D0 — their 3.18.0 prose is archived in [docs/archive/BLE_COMMAND_MAP-3.18.0.md](docs/archive/BLE_COMMAND_MAP-3.18.0.md), not a source) |
 | `BUSINESS_RULES.md` | [reference/business_rules.md](reference/business_rules.md) |
 | `DART_PYTHON_MAPPING.md` | [data/models.json](data/models.json), [models/](models/README.md) (some content not yet moved, see the migration map) |
 | `ENDPOINT_FIELDS.md` | [api/](api/README.md) |

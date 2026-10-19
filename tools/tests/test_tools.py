@@ -983,6 +983,12 @@ class LintDocsTests(unittest.TestCase):
         self.assertEqual([(f.path, f.rule) for f in r], [('old.md', 'links')])
         self.assertEqual(self.lint(files, ['header']), [])
 
+    def test_archive_page_is_link_checked_only(self):
+        body = '# old map\n[bad](nope.md)\n' + '\n'.join('| a | 12 |' for _ in range(700)) + '\n'
+        files = {'docs/archive/OLD.md': body, 'docs/STRUCTURE.md': self.HDR + '## Migration map\n'}
+        self.assertEqual([(f.path, f.rule) for f in self.lint(files, ['links'])], [('docs/archive/OLD.md', 'links')])
+        self.assertEqual(self.lint(files, ['header', 'length', 'uncited-int']), [])
+
 
 class LintDocsRound1Tests(LintDocsTests):
     """Exemptions and CLI of lint_docs; inherits the helpers (its own tests run again, cheap)."""
