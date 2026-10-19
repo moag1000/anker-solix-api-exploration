@@ -25,7 +25,8 @@ INT_RE = re.compile(r'^(r\d+) = (-?\d+)$')
 CONST_RE = re.compile(r'^(r\d+) = (true|false|Null)$')
 ASSIGN_RE = re.compile(r'^(r\d+) = ')
 STORE_DEC_RE = re.compile(
-    r'^(?:StoreField: r\d+->field_([0-9a-f]+)|ArrayStore: r\d+\[\d+\]) = (r\d+)')
+    r'^(?:StoreField: r\d+->field_([0-9a-f]+)|ArrayStore: r\d+\[\d+\]) = (r\d+|rZR)')
+ZR_STORE_RE = re.compile(r'\b(?:stur|str)\s+([wx])zr\b')
 WRITE_RE = re.compile(
     r'^(?:ldur|ldr|mov|add|sub|and|orr|eor|movz|movk|sbfiz|sbfx)\s+[xw](\d+)')
 OFF_RES = (re.compile(r'\[x\d+, #0x([0-9a-f]+)\]'),
@@ -132,6 +133,14 @@ def extract_request(fn):
             fr = stack[-1]
             if slot is not None and slot < fr.n:
                 val = lit.get(src)
+                zr = None
+                if src == 'rZR':
+                    # store of the zero register: value 0 (a Smi 0 is raw 0)
+                    for rl in ins.raw:
+                        zr = ZR_STORE_RE.search(rl)
+                        if zr:
+                            break
+                    val = ('i', 0, ins.addr)
                 if slot % 2 == 0:
                     fr.keys[slot] = val[1] if val and val[0] == 's' else None
                 else:
@@ -149,7 +158,11 @@ def extract_request(fn):
                                         'addr': ins.addr}
                     elif val[0] == 'i':
                         # single Smi implementation: smi.decode_following
-                        d = smi.decode_following(int(src[1:]), val[1], ins.raw)
+                        if src == 'rZR':
+                            d = {'width': zr.group(1) if zr else None,
+                                 'value': 0 if zr else None, 'odd': False}
+                        else:
+                            d = smi.decode_following(int(src[1:]), val[1], ins.raw)
                         fr.vals[key] = {'type': 'int', 'value': d['value'],
                                         'raw': val[1], 'width': d['width'],
                                         'odd': d['odd'], 'addr': val[2]}

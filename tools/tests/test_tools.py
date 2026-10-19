@@ -149,6 +149,21 @@ class ParamTypeTests(unittest.TestCase):
             [r for r in res['rows'] if r['param_type'] == 'variable'][0]
             ['param_type_source'], 'variable')
         self.assertIn('setSiteDevicePowerLimit', r19['set_function'])
+        by = {r['param_type']: r for r in res['rows']}
+        # zero-register sender: cmd 0, no GET cmd
+        self.assertEqual((by['24']['cmd_set'], by['24']['cmd'], by['24']['cmd_get']), (0, 0, None))
+        # type 32: SET sends 0 (setGridPowerAsync), GET _fetchPowerLimits sends 123
+        self.assertEqual((by['32']['cmd_set'], by['32']['cmd_get']), (0, 123))
+        self.assertEqual(by['32']['cmd'], by['32']['cmd_set'])
+        self.assertEqual((by['19']['cmd_set'], by['19']['cmd_get']), (123, None))
+
+
+@need(ROOT_NEW, ROOT_OLD)
+class NonFactoryModelTests(unittest.TestCase):
+    def test_heat_pump_param_present(self):
+        classes = {r['class'] for r in models_new()['rows']}
+        for c in ('HeatPumpParam', 'Params', 'SocSettingParam', 'FeedGridSettingParam'):
+            self.assertIn(c, classes)
 
 
 @need(ROOT_NEW, ROOT_OLD)
@@ -348,6 +363,26 @@ class SynthTests(unittest.TestCase):
         r = self._req('stur            w16, [x0, #0x13]')
         self.assertEqual((r['cmd'], r['cmd_raw']), (123, 246))
         self.assertIsNone(r['cmd_note'])
+
+    def test_zero_register_store_is_cmd_zero(self):
+        r = self._req_zr()
+        self.assertEqual((r['cmd'], r['cmd_raw']), (0, 0))
+        self.assertIsNone(r['cmd_note'])
+
+    def _req_zr(self):
+        import tempfile
+        import asmparse
+        import endpoint_inventory
+        src = SYNTH.replace('r16 = 246', 'r16 = 7').replace(
+            '    //     0x105: mov             x16, #0xf6\n', '    //     0x105: mov             x16, #7\n')
+        src = src.replace('// 0x106: StoreField: r0->field_13 = r16',
+                          '// 0x106: StoreField: r0->field_13 = rZR') % 'stur            wzr, [x0, #0x13]'
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, 'y.dart')
+            with open(p, 'w') as fh:
+                fh.write(src)
+            fn = next(asmparse.iter_functions(p, 'y.dart'))
+            return endpoint_inventory.extract_request(fn)
 
     def test_unknown_width_gives_null_cmd(self):
         r = self._req('str             x1, [x0, #0x13]')

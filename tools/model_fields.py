@@ -123,7 +123,9 @@ def scan_models(root, log=None):
         if not ok:
             continue
         for fn in A.iter_functions(p, rel):
-            if not fn.header.strip().startswith('factory') or not fn.name.endswith('.fromJson'):
+            h = fn.header.strip()
+            # `factory X.fromJson` and plain constructors written as `_ X.fromJson`
+            if not (h.startswith('factory') or h.startswith('_ ')) or not fn.name.endswith('.fromJson'):
                 continue
             cls = fn.name.rsplit('.', 1)[0]
             out[(rel, cls)] = {

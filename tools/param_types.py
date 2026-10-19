@@ -10,7 +10,8 @@ string literal stored after the `"param_type"` key, or `variable` when the key
 is stored from a register; for those the call sites of the wrapper are
 searched (look-back window) for a numeric string literal, and the result is
 recorded as `traced_from` so that a human can verify it.  `cmd` follows the
-Smi rule.  Names come from `SolixParmType` in the upstream apitypes.py.
+Smi rule (a `stur wzr` store into the slot is cmd 0).  `cmd_set` / `cmd_get`
+are the values of the set_ / get_site_device_param senders; `cmd` equals `cmd_set`.  Names come from `SolixParmType` in the upstream apitypes.py.
 """
 import argparse
 import os
@@ -92,6 +93,8 @@ def build_param_types(root, version, upstream=None, log=None):
         return groups.setdefault(pt, {
             'param_type': pt, 'name': names.get(pt), 'set_function': [],
             'get_function': [], 'cmd': None, 'cmd_raw': None, 'cmd_addr': None,
+            'cmd_set': None, 'cmd_set_raw': None, 'cmd_set_addr': None,
+            'cmd_get': None, 'cmd_get_raw': None, 'cmd_get_addr': None,
             'cmd_by_function': {}, 'keys': [], 'get_model': None,
             'dart_files': [], 'traced_from': [], 'unresolved': [],
             'function_sources': {}, 'param_type_source': None})
@@ -105,9 +108,14 @@ def build_param_types(root, version, upstream=None, log=None):
         req = r['_req'] or {}
         if req.get('cmd') is not None:
             g['cmd_by_function'][label] = req['cmd']
-            if pt != 'variable' and (g['cmd'] is None or r['url'] == SET_URL):
-                g['cmd'], g['cmd_raw'], g['cmd_addr'] = (
+            if pt != 'variable':
+                role = 'set' if r['url'] == SET_URL else 'get'
+                g['cmd_' + role], g['cmd_%s_raw' % role], g['cmd_%s_addr' % role] = (
                     req['cmd'], req['cmd_raw'], req['cmd_addr'])
+                if role == 'set':
+                    # `cmd` stays the SET value (backward compatible)
+                    g['cmd'], g['cmd_raw'], g['cmd_addr'] = (
+                        req['cmd'], req['cmd_raw'], req['cmd_addr'])
         if r['url'] == SET_URL and pt != 'variable':
             for k in req.get('params', []):
                 if k not in g['keys'] and k not in ENVELOPE:
@@ -167,8 +175,8 @@ def main(argv=None):
     A.write_json(a.out, gen, a.version, a.snapshot, res['rows'])
     print('%d rows -> %s (%.1fs)' % (len(res['rows']), a.out, time.time() - t0))
     for g in res['rows']:
-        print('  %-9s cmd=%-5s set=%d get=%d unresolved=%d %s' % (
-            g['param_type'], g['cmd'], len(g['set_function']),
+        print('  %-9s cmd_set=%-5s cmd_get=%-5s set=%d get=%d unresolved=%d %s' % (
+            g['param_type'], g['cmd_set'], g['cmd_get'], len(g['set_function']),
             len(g['get_function']), len(g['unresolved']), g['name'] or ''))
     return 0
 

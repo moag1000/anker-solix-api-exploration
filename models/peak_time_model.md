@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
 
 # PeakTimeModel
 
@@ -39,7 +39,7 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (3.18.0 `PeakTime
 
 ## Produced by
 
-[`get_site_device_param`](../api/power_service/site/get_site_device_param.md) with `param_type` 2: `getSitePeakTimeDeviceParam` (`http_request_repository_impl.dart @0x28f1538`), success closure `@0x28f163c` (reads `param_data`, `jsonDecode` `@0x28f1760`, `PeakTimeModel.fromJson` `@0x28f178c`). The same plan is written with [`set_site_device_param`](../api/power_service/site/set_site_device_param.md) (`savePeakPlanNew`, `deletePeakPlan`; see [param_types.md](../api/param_types.md)).
+[`get_site_device_param`](../api/power_service/site/get_site_device_param.md) with `param_type` 2: `getSitePeakTimeDeviceParam` (`http_request_repository_impl.dart @0x28f1538`), success closure `@0x28f163c` (reads `param_data`, `jsonDecode` `@0x28f1760`, `PeakTimeModel.fromJson` `@0x28f178c`). The same plan is written, by the set callers, with a value whose class is not typed in the asm; the binding of that value to `PeakTimeModel` is inferred from this GET parse and is `string-only` (status tag of this page). Written with [`set_site_device_param`](../api/power_service/site/set_site_device_param.md) (`savePeakPlanNew`, `deletePeakPlan`; see [param_types.md](../api/param_types.md)).
 
 ## Consumed by
 
@@ -52,4 +52,4 @@ No key added or removed in `PeakTimeModel` or `Data` (same four and two keys in 
 ## Known unknowns
 
 - The meaning and value sets of `mode` and `ext`, and the unit of `start_time` / `end_time` (minutes, seconds or an index).
-- Whether the value that the set callers serialize is a `PeakTimeModel` object (inferred, see [param_types.md](../api/param_types.md)).
+- Whether the value that the set callers serialize is a `PeakTimeModel` object (`string-only` inference, see [param_types.md](../api/param_types.md)).
