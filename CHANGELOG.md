@@ -1,10 +1,10 @@
 # Changelog
 
-2026-10-19 — rework branch published; README/index version pass
+2026-10-20 — rework merged (branch rework/3.24.3, tag v2026.10-app3.24.3); README/index version pass
 
 > **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/CHANGELOG_old_entries.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
 
-## 2026-10 — App 3.24.3 rework (branch rework/3.24.3)
+## 2026-10 — App 3.24.3 rework (merged 2026-10-20, branch rework/3.24.3, tag v2026.10-app3.24.3)
 
 The reference was rebuilt from the Anker app 3.24.3 (the 3.18.0 state is tagged `v2026.04-app3.18.0`). The app was decompiled again, every integer read from the decompiled code was re-read under the Smi rule ([METHODOLOGY.md](METHODOLOGY.md#confidence-tags)), and the content now lives in single-owner pages: a fact has one owner page and every other page links to it ([docs/STRUCTURE.md](docs/STRUCTURE.md)). This entry has no facts of its own; every corrected fact below links the page that owns it. The per-claim corrections of the old pages are the [Errata 2026-10 (Smi decoding)](#errata-2026-10-smi-decoding) section below and the tables in [docs/audit/](docs/audit/). The 3.18.0 entries further down are unchanged.
 
