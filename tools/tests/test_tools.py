@@ -599,5 +599,130 @@ class SyntheticToolTests(unittest.TestCase):
             self.assertEqual([x[2] for x in b], ['zz'])
 
 
+class LintDocsTests(unittest.TestCase):
+    HDR = ('> Verified against: App 3.24.3 · Date: 2026-10-19 · '
+           'Confidence: asm-traced · Owner page: this page\n\n')
+    ENDPOINT = ['Purpose', 'Upstream name', 'Method+URL', 'Encrypted?', 'Request',
+                '`param_type`/`cmd`', 'Response model (link)', 'Response',
+                'Example request/response', 'Errors seen', 'Callers in app',
+                'Since/changed', 'Known unknowns', 'Device-tested by']
+
+    def lint(self, files, rules=None, templates=True):
+        import tempfile
+        import lint_docs
+        with tempfile.TemporaryDirectory() as root:
+            if templates:
+                body = '# Template: endpoint page\n\n' + ''.join(
+                    '## %s\n\ntext\n\n' % h for h in self.ENDPOINT) + '# example\n'
+                files = dict(files)
+                files['docs/templates/endpoint.md'] = body
+            for rel, text in files.items():
+                path = os.path.join(root, rel)
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                with open(path, 'w', encoding='utf-8') as fh:
+                    fh.write(text)
+            return lint_docs.lint_repo(root, rules)
+
+    def rules(self, found):
+        return sorted({(f.rule, f.severity) for f in found})
+
+    def endpoint(self, extra='', sections=None):
+        out = self.HDR + '# x\n\n'
+        for h in sections or self.ENDPOINT:
+            out += '## %s\n\n%s\n\n' % (h, extra if h == 'Request' else 'text')
+        return out
+
+    def test_clean_endpoint_page(self):
+        self.assertEqual(self.lint({'api/s/x.md': self.endpoint()}), [])
+
+    def test_header_missing_and_bad_tag(self):
+        r = self.lint({'api/s/x.md': '# x\n', 'models/y.md': self.HDR.replace(
+            'asm-traced', 'probably') + '# y\n'}, ['header'])
+        self.assertEqual([f.path for f in r], ['api/s/x.md', 'models/y.md'])
+
+    def test_sections_order(self):
+        sec = list(self.ENDPOINT)
+        sec[0], sec[1] = sec[1], sec[0]
+        r = self.lint({'api/s/x.md': self.endpoint(sections=sec)}, ['sections'])
+        self.assertEqual(self.rules(r), [('sections', 'error')])
+
+    def test_uncited_int(self):
+        tbl = '| a | b |\n|---|---|\n| `x` | 17 |\n| `y` | 17 @0x1234 |\n| `z` | 17 upstream-confirmed |\n| `w` | 2024-10-19, 3.24.3, a17c5, 1200W, 1 |\n'
+        r = self.lint({'api/s/x.md': self.endpoint(tbl)}, ['uncited-int'])
+        self.assertEqual([f.line for f in r if f.rule == 'uncited-int'],
+                         [r[0].line])
+        self.assertIn('| `x` |', open_line(r[0], self))
+
+    def test_uncited_int_exempt_audit(self):
+        tbl = self.HDR + '| a |\n|---|\n| 17 |\n'
+        self.assertEqual(self.lint({'docs/audit/a.md': tbl}, ['uncited-int']), [])
+
+    def test_tag_overclaim_and_traced_sequence(self):
+        txt = 'This is presumably set (asm-traced).\n\nPlain step [T] inferred here.\n'
+        r = self.lint({'api/s/x.md': self.endpoint(txt)},
+                      ['tag-overclaim', 'inferred-as-traced-sequence'])
+        self.assertEqual(self.rules(r), [('inferred-as-traced-sequence', 'error'),
+                                         ('tag-overclaim', 'error')])
+        ok = 'Likely (string-only). Unlikely is fine (asm-traced).\n'
+        self.assertEqual(self.lint({'api/s/x.md': self.endpoint(ok)},
+                                   ['tag-overclaim']), [])
+
+    def test_todo_purpose_is_warning(self):
+        sec = self.endpoint().replace('## Purpose\n\ntext', '## Purpose\n\n<!-- TODO -->')
+        r = self.lint({'api/svc/x.md': sec}, ['todo-purpose'])
+        self.assertEqual(self.rules(r), [('todo-purpose', 'warning')])
+
+    def test_links(self):
+        txt = ('[ok](y.md) [bad](nope.md) [anc](y.md#hello-world) [badanc](y.md#zzz) '
+               '`[code](nope2.md)` [self](#request) [web](https://x.y/z)\n')
+        r = self.lint({'api/s/x.md': self.endpoint(txt),
+                       'api/s/y.md': self.HDR + '# Hello World\n'}, ['links'])
+        self.assertEqual(len(r), 2)
+        self.assertTrue(all(f.rule == 'links' for f in r))
+
+    def test_length(self):
+        big = self.HDR + '# x\n' + 'line\n' * 160
+        huge = self.HDR + '# x\n' + 'line\n' * 610
+        toc = self.HDR + '# x\n\n## Contents\n' + 'line\n' * 160
+        r = self.lint({'reference/a.md': big, 'reference/b.md': huge,
+                       'reference/c.md': toc}, ['length'])
+        self.assertEqual(sorted((f.path, f.severity) for f in r),
+                         [('reference/a.md', 'warning'), ('reference/b.md', 'error')])
+
+    def test_dup_payload(self):
+        blk = '```json\n{"a": 1,\n "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2}\n```\n'
+        flat = '```json\n{"a":1,"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb":2}\n```\n'
+        r = self.lint({'reference/a.md': self.HDR + blk, 'reference/b.md': self.HDR + flat,
+                       'docs/templates/t.md': blk}, ['dup-payload'])
+        self.assertEqual(sorted(f.path for f in r), ['reference/a.md', 'reference/b.md'])
+        self.assertEqual({f.rule for f in r}, {'dup-payload'})
+
+    def test_secret(self):
+        h = 'a' * 32
+        r = self.lint({'reference/a.md': self.HDR + h + '\n',
+                       'docs/audit/a.md': self.HDR + h + '\n',
+                       'reference/b.md': self.HDR + 'a' * 31 + '\n'}, ['secret'])
+        self.assertEqual([f.path for f in r], ['reference/a.md'])
+
+    def test_owner_cmd(self):
+        txt = 'x "cmd": 17 and cmd = 18 and cmd 19 and `cmd` 20\n'
+        r = self.lint({'reference/a.md': self.HDR + txt,
+                       'api/param_types.md': self.HDR + txt}, ['owner-cmd'])
+        self.assertEqual({f.path for f in r}, {'reference/a.md'})
+        self.assertEqual(self.lint({'reference/a.md': self.HDR + 'the `cmd` value, see x\n'}, ['owner-cmd']), [])
+
+    def test_slug_and_legacy_skip(self):
+        import lint_docs
+        self.assertEqual(lint_docs.slug('`param_type`/`cmd` (x)'), 'param_typecmd-x')
+        legacy = '| `old.md` | `new.md` | x | pending |\n'
+        mig = '## Migration map\n\n| Old path | New | What | Status |\n|---|---|---|---|\n' + legacy
+        r = self.lint({'docs/STRUCTURE.md': self.HDR + mig, 'old.md': '# old\n'}, ['header'])
+        self.assertEqual(r, [])
+
+
+def open_line(finding, case):
+    return finding.text
+
+
 if __name__ == '__main__':
     unittest.main()
