@@ -86,3 +86,12 @@ python3 -I -m unittest discover -s tools/tests -t .
 ```
 
 The tests read the real asm trees (about 2 minutes) and skip with a message when a root is missing.
+
+## 6. Error-code catalog
+
+```bash
+python3 -I tools/error_codes.py [--asm <asm_root>] [--upstream <errors.py>] [--check]   # data/errors.json
+python3 -I -m unittest discover -s tools/tests -t . -p 'test_error_codes.py'          # own tests, about 1 s
+```
+
+`error_codes.py` writes `data/errors.json` and nothing else (the path is fixed; there is no `--out`). Rows have a `source`: `upstream` (every `ERRORS` entry of the upstream `api/errors.py`, read with `ast`), `asm` (compares of an error code in the handler functions listed in `SITES` inside the script, by file and function address, valid for 3.24.3 only) and `issue` (codes reported in a GitHub issue, hard-coded with the issue link). The asm rows obey the Smi rule by compare width: `cmp wN` (or `r17 = N; cmp wN, w17`) is a tagged int and the value is raw / 2, `cmp xN` is an unboxed int and the value is raw; `width`, `raw` and `branch` stay in the row so the step can be redone. The handler list is curated on purpose: a sweep of every compare against a 4 to 6 digit constant mostly finds class ids, MQTT message types in `onMessageDispatch` and UI limits, so the tool reads only the listed functions and aborts with exit 2 (writing nothing) when a listed function is missing. `--check` writes nothing and exits 1 when `data/errors.json` is stale or missing, or when `api/errors.md` lacks a table row (`| <code> |`) for a code in the JSON. The catalog page is hand-written; the JSON holds the extracted facts it cites.
