@@ -66,7 +66,7 @@ Coverage and statistics are generated from the data files, see [Statistics and c
 
 **History**: previously built on App v3.18.0 (build 160), Dart SDK 3.4.4, snapshot: `d20a1be77c3d3c41b2a5accaee1ce549`.
 
-> This repo is mid-rework (branch `rework/3.24.3`, 2026-10-19). Re-verified against App 3.24.3: [api/](api/README.md), the dedicated pages in [models/](models/README.md), [mqtt/](mqtt/README.md), [flows/](flows/README.md), [devices/a17c5.md](devices/a17c5.md), [devices/modbus.md](devices/modbus.md) and the audit tables in [docs/audit/](docs/audit/). Every root page and old section marked "3.18.0 reference, superseded — kept until Task 4.9" below still carries 3.18.0 content and numbers. See [METHODOLOGY.md](METHODOLOGY.md) for the rules and confidence tags used.
+> This repo is mid-rework (branch `rework/3.24.3`, 2026-10-19). Re-verified against App 3.24.3: [api/](api/README.md), the dedicated pages in [models/](models/README.md), [mqtt/](mqtt/README.md), [flows/](flows/README.md), [devices/a17c5.md](devices/a17c5.md), [devices/modbus.md](devices/modbus.md), [reference/iot_kit_channels.md](reference/iot_kit_channels.md) (90 `akiot.*` IoT-Kit identifiers, 22 new in 3.24.3) and the audit tables in [docs/audit/](docs/audit/). Every root page and old section marked "3.18.0 reference, superseded — kept until Task 4.9" below still carries 3.18.0 content and numbers. See [METHODOLOGY.md](METHODOLOGY.md) for the rules and confidence tags used.
 
 ---
 
