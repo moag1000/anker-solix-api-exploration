@@ -85,7 +85,7 @@ none: the handshake has no MQTT twin and the product has no MQTT page.
 - Which negotiation implementation runs for this product, the Dart conferer or the native kit ([handshake.md](handshake.md#known-unknowns)).
 - Whether and how BLE is used for these products: the `micro_hes` and `ak_soft_ems` modules were not traced for their transport.
 
-BLE is unavailable while the device is on WiFi; see `ble/protocol.md`.
+BLE is unavailable while the device is on WiFi; see `ble/protocol.md` (community finding, see protocol.md; not asm-traced).
 
 #### Device-tested by
 

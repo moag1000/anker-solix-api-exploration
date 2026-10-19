@@ -97,7 +97,7 @@ MQTT twin and device page: [../mqtt/shelly.md](../mqtt/shelly.md). The handshake
 - Which negotiation implementation runs for this product, the Dart conferer or the native kit ([handshake.md](handshake.md#known-unknowns)).
 - How this product's session is set up if not by the ZX handshake: the legacy connect path of `SimpleBleConnector` (`_connectLegacyDevice`) is a candidate, but the link from the device class to it was not found.
 
-BLE is unavailable while the device is on WiFi; see `ble/protocol.md`.
+BLE is unavailable while the device is on WiFi; see `ble/protocol.md` (community finding, see protocol.md; not asm-traced).
 
 #### Device-tested by
 
@@ -159,7 +159,7 @@ MQTT twin: [../mqtt/shelly.md](../mqtt/shelly.md)
 - Rows marked `no` may be commands that are MQTT-only on the cloud side or simply undocumented on the MQTT page; this page does not decide which.
 - The payload tags of the rows marked `no` and the response handling of each method.
 
-BLE is unavailable while the device is on WiFi; see `ble/protocol.md`.
+BLE is unavailable while the device is on WiFi; see `ble/protocol.md` (community finding, see protocol.md; not asm-traced).
 
 #### Device-tested by
 

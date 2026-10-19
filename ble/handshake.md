@@ -190,7 +190,7 @@ The two exchanges share the plugin and the client key pair but not the derivatio
 
 Tag: untagged by design (no API fact).
 
-The root documents of this repository describe the BLE encryption in two lines (`BLE_COMMAND_MAP.md`: ECDH with `SecureEcdhConfer` and `EcdhConfer`, AES with `AesConferV1` and `AesHelper`, GCM and CBC, opcodes `getAesKeyReq` and `getAesKeyRes`); both are consistent with what is traced above. `REVERSE_ENGINEERING_REPORT.md` contains no negotiation text beyond the list of channel methods (`akiot.device.set_device_negotiated`, `set_device_encrypt_key`); the "6-stage negotiation", the `uECC_make_key` remark and the "first 16 bytes key, rest IV" split came from the project notes and the external SolixBLE library. Against the asm: the stage count depends on the conferer (after the connect and capability stages of `ZXBleConfer` there are six handler stages for `SecureEcdhConfer` and for `EcdhConfer` and five for `AesConferV1`, so seven to eight request/response pairs in total), the key is bytes 0 to 15 of the 32-byte secret, and the IV is bytes 16 to 27 (GCM) or 16 to 31 (CBC), not "the rest".
+The root documents of this repository describe the BLE encryption in two lines (`BLE_COMMAND_MAP.md`: ECDH with `SecureEcdhConfer` and `EcdhConfer`, AES with `AesConferV1` and `AesHelper`, GCM and CBC, opcodes `getAesKeyReq` and `getAesKeyRes`); both are consistent with what is traced above. `REVERSE_ENGINEERING_REPORT.md` contains no negotiation text beyond the list of channel methods (`akiot.device.set_device_negotiated`, `set_device_encrypt_key`); the "6-stage negotiation", the `uECC_make_key` remark and the "first 16 bytes key, rest IV" split came from the project notes and the external SolixBLE library. Against the asm: the stage count depends on the conferer (after the connect and capability stages of `ZXBleConfer` there are 5 opcode-dispatched handlers in `SecureEcdhConfer` and `EcdhConfer` (7 request/response pairs including connect and capability) and 4 in `AesConferV1` (6 pairs); `SecureEcdhConfer` and `EcdhConfer` additionally send a conditional all-device-info request (`@0x484d2b8` to `@0x484d2e0` in `secure_ecdh_confer.dart`) with no response handler in the conferer), the key is bytes 0 to 15 of the 32-byte secret, and the IV is bytes 16 to 27 (GCM) or 16 to 31 (CBC), not "the rest".
 
 ## Since 3.18.0
 
@@ -210,4 +210,4 @@ Tag: untagged by design (no API fact).
 - Whether `0004` (`configureCapabilityReq`) or `0031`/`0032` are used by any device class.
 - Whether the serial number of every product is long enough for the 16-character cut of the `AesConferV1` IV (the shorter branch uses the whole serial).
 
-BLE is unavailable while the device is on WiFi; see `ble/protocol.md`.
+BLE is unavailable while the device is on WiFi; see `ble/protocol.md` (community finding, see protocol.md; not asm-traced).
