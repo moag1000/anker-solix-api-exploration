@@ -49,6 +49,8 @@ Audit rows without an MQTT page: 189-198 are API response models and examples (n
 
 ## Source conflicts (unresolved)
 
+- **007e timer bytes (A17X8):** the asm builds the 3-byte timer values with `intToList3(seconds)` (little-endian integer; [a17x8.md](a17x8.md), docs/audit/devices.md row 76, [devices/smart_plug.md](../devices/smart_plug.md)); upstream `mqttmap.py` `_PLUG_TIMER_STATUS` labels the same 3 bytes `seconds:minutes:hours` (type `var`). Both readings agree for values below 256 s; a device test with a timer above 4 min 15 s decides (backlog row on the A17X8 group).
+
 - Tag `fd`: upstream describes a millisecond timestamp string, the app builders write a CRC32 (audit rows 24, 219-221). See [envelope.md](envelope.md#tlv-frame) and [a17c1.md](a17c1.md#005e-setbackpower-settacticstime-setpeakvalley). Untested here.
 - A17C1 tag `e0`: the parser tests `== 7` (audit row 395), upstream lists 1, 6 and 3. See [a17c1_status.md](a17c1_status.md#payload-fields).
 - Opcode `005a`: the app has no builder (audit row 222) while [../devices/solarbank.md](../devices/solarbank.md) lists it as tested. See [a17c1.md](a17c1.md#opcodes-without-a-confirmed-app-builder-005a-0082-006a-0069).
