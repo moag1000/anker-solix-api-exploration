@@ -1,5 +1,7 @@
 # BLE/MQTT Command Map — Static Cross-Reference
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/BLE_COMMAND_MAP.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > **New methodology (2026-03-28)**: This mapping was produced by cross-referencing
 > decompiled APK command builder functions (field order + Dart Smi constants) with
 > thomluther's device-tested TLV tag assignments in `mqttcmdmap.py`.
