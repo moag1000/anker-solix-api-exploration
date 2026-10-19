@@ -273,6 +273,26 @@ class RenderTests(unittest.TestCase):
         self.assertNotIn('| `url` |', page)
         self.assertNotIn('| `method` |', page)
 
+    def test_param_data_outer_keys_are_envelope(self):
+        import render_pages
+        row = dict(
+            addr='0x1', callers=[], cmd=None, dart_file='x/y.dart', encrypted=True,
+            encryption_note=None,
+            envelope=['site_id', 'param_type', 'cmd', 'param_data', 'url'],
+            function='f', http_callees=['A::b'], param_data_is_json=True,
+            param_type=None, params=['display_type', 'power_limit.limit'],
+            role='sender', since='3.24.3', url='/s/v1/a/b', url_addr='0x2')
+        page = render_pages.render_endpoint([row], date='2026-10-19')
+        outer = [l for l in page.splitlines() if 'outer keys:' in l]
+        self.assertEqual(len(outer), 1)
+        for k in ('site_id', 'param_type', 'cmd', 'param_data'):
+            self.assertIn('`%s`' % k, outer[0])
+        self.assertNotIn('`url`', outer[0])
+        self.assertNotIn('display_type', outer[0])
+        self.assertIn('| `display_type` |', page)
+        self.assertIn('| `power_limit.limit` |', page)
+        self.assertNotIn('| `site_id` |', page)
+
     def test_service_index_idempotent(self):
         import service_index, tempfile, shutil
         inv = inventory_new()

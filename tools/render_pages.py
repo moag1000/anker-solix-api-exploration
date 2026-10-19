@@ -126,7 +126,8 @@ def render_endpoint(rows, date=None, version='3.24.3'):
         L += ['No request keys found by the extractor. %s' % TODO, '']
     else:
         env = sorted({k for r in shown if r['param_data_is_json']
-                      for k in request_keys(r)})
+                      for k in r['envelope']
+                      if not is_noise_key(k, envelope=True)})
         if env:
             L += ['Some senders wrap these keys in `param_data` as a JSON string '
                   '(`jsonEncode`); outer keys: %s.' % ', '.join(
