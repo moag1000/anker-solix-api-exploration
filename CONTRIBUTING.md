@@ -16,6 +16,8 @@ This repository documents what the Anker app 3.24.3 sends and receives, read fro
 
 ## Report a device-tested result
 
+Not sure what to test? Pick a row from [docs/DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md): each row names the owner page, what to send, what to look for, and whether a test is already on record.
+
 Open an issue with the template "Device-tested result" (`.github/ISSUE_TEMPLATE/device_tested.md`), or paste the block below. A result earns `device-tested` only when the record names every field the [METHODOLOGY.md](METHODOLOGY.md#confidence-tags) requires: who tested, which client and version, which device PN and firmware, the date, what was sent and what was observed. Rejections count as results; a test that failed is as useful as one that worked.
 
 ```text
