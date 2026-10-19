@@ -25,7 +25,7 @@ Client + version: official app capture, upstream library, or raw request; with v
 Device PN + firmware: for example A17C5, firmware as shown in the app
 Date:            YYYY-MM-DD
 Request sent:    endpoint and body, exactly as sent (remove tokens, keys, serial numbers)
-Response:        HTTP status, API code, body as received
+Response observed: HTTP status, API code, body as received
 Verdict:         accepted | rejected | partly | unclear, and which page row it confirms or contradicts
 ```
 
