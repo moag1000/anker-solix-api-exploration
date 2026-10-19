@@ -25,7 +25,7 @@ S1/S2 sender (`param` map literal, four pairs, `r2 = 16`, `@0x2991cb0`):
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `device_sn` | String | yes | `"<device sn>"` | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2991cb8` |
-| `start_time` | String | yes | `"2026-10"` | `@0x2991ccc`; function argument; the caller `_fetchFromServer` (`s1_s2/src/page/charge_sessions/repository/charger_chart_http_repository.dart @0x2990f58`) cuts the date string with `substring(0, n)` depending on the chart date type: raw `14` (`@0x2991050`) and raw `8` (`@0x2991098`), pushed as call arguments (tagged), so 7 and 4 characters, consistent with `yyyy-MM` and `yyyy` (inference, the date format itself is not decoded) |
+| `start_time` | String | yes | `"2026-10"` | `@0x2991ccc`; function argument; the caller `_fetchFromServer` (`s1_s2/src/page/charge_sessions/repository/charger_chart_http_repository.dart @0x2990f58`) cuts the date string with `substring(0, n)` depending on the chart date type: raw `14` (`@0x299104c`) and raw `8` (`@0x2991094`), pushed as call arguments (`str x16, [SP]` at `@0x2991050`, `@0x2991098`; `tools/smi.py` cannot decode an argument push) (tagged), so 7 and 4 characters, consistent with `yyyy-MM` and `yyyy` (inference, the date format itself is not decoded) |
 | `end_time` | String | yes | `"2026-10"` | `@0x2991ce0`; function argument, cut the same way |
 | `type` | not decoded | yes | not decoded | `@0x2991cf4`; value is the field at offset 0xf of the chart-type argument (`@0x2991d00`) |
 
