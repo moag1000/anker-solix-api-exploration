@@ -1,5 +1,7 @@
 # Pricing / TOU / Dynamic — Response Models
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/models.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > 7 models
 
 ## CurrencyElecModel

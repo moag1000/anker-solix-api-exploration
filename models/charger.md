@@ -1,5 +1,7 @@
 # Charger (A2345/A2687/A91B2) — Response Models
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/models.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > 4 models
 
 ## A2345CustomModeList

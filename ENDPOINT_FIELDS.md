@@ -1,5 +1,7 @@
 # Endpoint → Request Fields → Response Model
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/field_docs.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > Direct answer to: 'What JSON field names are used per API endpoint?'
 > Request params from decompiled function calls. Response models from `fromJson` in same scope.
 > Fields without `?` are always sent. Fields with `?` are conditional.

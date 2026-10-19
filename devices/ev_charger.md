@@ -1,5 +1,7 @@
 # EV Charger V1 — A5190 / A5191
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/devices.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > **Priority**: P2 (High demand) — actively requested in upstream Issues
 > [ha-anker-solix #322](https://github.com/thomluther/ha-anker-solix/issues/322) |
 > [anker-solix-api #271](https://github.com/thomluther/anker-solix-api/issues/271)

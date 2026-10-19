@@ -1,5 +1,7 @@
 # Home Power Panel (A17B1)
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/devices.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > SOLIX Home Power Panel — gateway for SOLIX F3800 battery system
 >
 > **Product Code**: A17B1

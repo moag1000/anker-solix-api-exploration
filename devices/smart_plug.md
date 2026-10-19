@@ -1,5 +1,7 @@
 # Smart Plug — A17X8
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/devices.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > **Priority**: P1 (Core)
 > [ha-anker-solix #150](https://github.com/thomluther/ha-anker-solix/issues/150) (61 comments) |
 > [anker-solix-api #124](https://github.com/thomluther/anker-solix-api/issues/124) |

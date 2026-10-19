@@ -1,5 +1,7 @@
 # Changelog
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/CHANGELOG_old_entries.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 ## Errata 2026-10 (Smi decoding)
 
 One line per WRONG verdict of the Phase 2 Smi sweeps (full tables in `docs/audit/`). Doc line numbers refer to the file BEFORE the banner was added (commit 68bc345); in the current file add 2.
@@ -163,6 +165,35 @@ One line per WRONG verdict of the Phase 2 Smi sweeps (full tables in `docs/audit
 - patches/README.md:35 — fc sub-field `[18] feeder0w_config (used in setDevicePowerLimit)`; byte key `"18"` → element [9] (heuristic: index-basis equivalence BLE list <-> MQTT bytes assumed, not traced) (charging/ble/device/A17C1/a17c1_device_commands.dart parseDeviceAllInfo fc branch @0x486670c..@0x4866730 (3.24.3); @0x3679ac0..@0x3679adc (3.18.0))
 - patches/README.md:42 — "Value 2 = enabled in this protocol (NOT 1)" → value 1 = enabled (charging/ble/device/A17C1/a17c1_device_commands.dart parseDeviceAllInfo fc branch compares @0x48665dc, @0x486662c, @0x4866790 (3.24.3); @0x3679a3c, @0x3679a84, @0x3679b34 (3.18.0))
 - patches/README.md:53, 56 — "Note fc[14] value ... Check if fc[14] changed from 0<->2" → fc[7], 0<->1 (charging/ble/device/A17C1/a17c1_device_commands.dart parseDeviceAllInfo fc branch index @0x4866770, compare @0x4866790 (3.24.3))
+- devices/smart_plug.md:39, 41 — not Smi: 007e `a3`/`a5` "3 bytes (seconds:minutes:hours)" → one little-endian 3-byte integer (charging/ble/device/A17X8/a17x8_device_controller.dart setCountdownCmd @0x3dcfbe4 (intToList3), @0x3dcfdf0 (intToList) (3.24.3))
+- devices/ev_charger.md:122 — `modbusTcpSwitch` "0=off, 1=on (left-shifted by 1)" → value 0/1 is passed as is (ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart setModbusTcpSwitch @0x3972f84 (3.24.3))
+- devices/ev_charger.md:126 — `initSettings` "2 = init complete" → 1 (ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart setMaximumCurrentAndCompleteInit @0x3981730 (3.24.3))
+- devices/ev_charger.md:176 — not Smi: "The APK routes these through `invokeAction` (not `writeProperty`)" → action_control_charging goes through writeProperty (ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart setControlType @0x39447d4 (3.24.3); base_service/ak_iot_kit/ak_iot_kit_manager_impl.dart writeProperty @0x228fec8 (3.24.3))
+- devices/home_power_panel.md:149 — Manual-disaster request `"disaster_type": 4` → 2 (ak_soft_ems/manual_power_backup/manual_power_backup_logic.dart @0x25ecd80 (3.24.3))
+- devices/home_power_panel.md:185 — not Smi: `DisasterStatus` (size 0x1c) → 0xc (base_service/ak_iot_kit/business/basic/model/device_disaster_model.dart class header (3.24.3, 3.18.0))
+- devices/home_power_panel.md:200 — `DisasterPrepareDetail.disaster_type` "Type (4 = manual)" → 2 (manual) (ak_soft_ems/manual_power_backup/manual_power_backup_logic.dart @0x25ecd80 (3.24.3))
+- devices/home_power_panel.md:209 — not Smi: BLE opcodes `0x233` (response), `0x45a` (dismiss) → not BLE opcodes (internal event / timeout codes) (charging/ble/device/A17B1/a17b1_device_controller.dart @0x3b4a000 (MessageEvent); charging/feature/backup_power/back_power_logic.dart @0x26e3214; charging/util/request_timeout_util.dart @0x33d6238 (3.24.3))
+- devices/x1_hes_e10.md:19 — not Smi: Column title "Hex" of every table in "MQTT Field Vocabulary - A5101DataCodeType" (65 rows) → enum index, not wire code (charging/ble/device/A5101/a5101_commands.dart setDataCodeMap @0x3b88db8.., getDataCodeMap @0x3b8ac28.. (3.24.3); pp.txt Obj!A5101DataCodeType (133 members))
+- devices/x1_hes_e10.md:160 — not Smi: Disaster payload `"manual_disaster_switch": 1` → true (bool) (ak_soft_ems/manual_power_backup/manual_power_backup_logic.dart @0x25ecd50 (3.24.3))
+- models/hes.md:26 — "28 parameters allocated (60-element array)" in the SET request to `device_command` → 15 key/value pairs (30 slots) (charging/http/http_request_repository_impl.dart sendDeviceCommand @0x24a0aa8, AllocateArray @0x24a0b78 (3.24.3); @0x1d59d24 (3.18.0))
+- models/hes.md:39 — `accuracy` "Fixed value: 10" → 5 (charging/http/http_request_repository_impl.dart sendDeviceCommand @0x24a0d6c (3.24.3); @0x1d59f14 (3.18.0); ui/page/device/a5101/setting/homeSetting/save_tou_plan_logic.dart sendPeakValleyData @0x249e12c (3.24.3))
+- endpoints/device_specific.md:233 — `afterSaleMarkSn(after_sale_type=2, device_sns, mark_type=2)` → after_sale_type=1, mark_type=1 (charging/http/http_business_impl.dart afterSaleMarkSn map literal @0x28606e0, @0x2860710 (3.24.3); @0x20b5bcc, @0x20b5bfc (3.18.0))
+- CHANGELOG.md:196 — `set_site_device_disaster` "Enable manual backup = `{... disaster_type: 4 ...}`" → 2 (ak_soft_ems/manual_power_backup/manual_power_backup_logic.dart @0x25ecd80 (3.24.3))
+- CHANGELOG.md:200 — `quit_disaster_prepare`: `{type, identifier_id, is_ble: 4, disaster_type: <from status>}` → is_ble 2 (ak_soft_ems/ems_service_impl.dart showSevereWeatherModeDialog @0x3324ed0 (3.24.3))
+- CHANGELOG.md:201 — `clear`: via IoT Kit only (`backupMode: 4`) → 2 (ak_soft_pps_ems/src/disaster_preparedness/command/disaster_preparedness_command.dart clearBackup @0x2603c00 (3.24.3))
+- CHANGELOG.md:213 — "5. Manual disaster `disaster_type = 4` hardcoded in APK" → 2 (ak_soft_ems/manual_power_backup/manual_power_backup_logic.dart @0x25ecd80 (3.24.3))
+- CHANGELOG.md:243 — `ENUMS.md` "Added Backup Mode enum (AUTO=0, MANUAL=1, CLEAR=4)" → AUTO=1, MANUAL=0, CLEAR=2 (ak_soft_pps_ems/src/disaster_preparedness/command/disaster_preparedness_command.dart setBackup @0x3574770, clearBackup @0x2603c00 (3.24.3); pp.txt PreparednessModeType auto [pp+0xe4f10])
+- CHANGELOG.md:250 — not Smi: "7 `charging_disaster_prepared/` endpoint paths with pp offsets" → 6 (pp.txt "/charging_disaster_prepared/..." strings (3.24.3, 3.18.0))
+- CHANGELOG.md:291 — Data type code `0x03` = variable → 4-byte values only (charging/communication/transformer/zx_command_transformer.dart _getDataType @0x2273f20.. (3.24.3))
+- CHANGELOG.md:297 — "`sess_id`/`msg_seq` hardcoded in APK ("1"/2) - upstream uses ("1234-5678"/1)" → msg_seq 1 (charging/communication/transformer/mqtt_command_transformer.dart generateCommand @0x226ef1c (sess_id), @0x226ef34 (msg_seq) (3.24.3); @0x19a24e8 (3.18.0))
+- CHANGELOG.md:299 — "8 MqttCommandType values" with `0x22` normal → 17 (0x11) (charging/communication/transformer/mqtt_command_transformer.dart cmdMap @0x226f2a4 (builder @0x226f274) (3.24.3); @0x19a27b8 (3.18.0))
+- CHANGELOG.md:299 — `0x0C` = OTA → 6 (charging/communication/transformer/mqtt_command_transformer.dart cmdMap @0x226f2b8 (3.24.3); @0x19a27cc (3.18.0))
+- CHANGELOG.md:299 — `0x18` = unbind → 12 (0x0C) (charging/communication/transformer/mqtt_command_transformer.dart cmdMap (unbindDevice) (3.24.3))
+- CHANGELOG.md:309, 370 — not Smi: "`ba` = percentage_value (÷100.0, NOT bitmask)" and "Tag `ba` is percentage (÷100.0) in APK" → no ÷100 at tag ba (charging/ble/device/A17C1/a17c1_device_commands.dart parseDeviceAllInfo @0x4865c1c (3.24.3))
+- CHANGELOG.md:329 — A1790 "`f8` uses DeviceSavingModeEnum (1=normal, 2=smart, 4=custom)" → 0 notSupport, 1 close, 2 open (charging/ble/device/A1790/a1790_device_commands.dart parseDeviceAllInfo / parseWorkInfo (3.24.3); pp.txt DeviceSavingModeEnum [pp+0x15a60] [pp+0x551a0] [pp+0x551a8])
+- CHANGELOG.md:368, 369 — READ path: `fc[14]` ("isEnable0w") and `fc[18]` ("feeder0w") are STATIC capability values → fc[7] / fc[9] (charging/ble/device/A17C1/a17c1_device_commands.dart parseDeviceAllInfo fc branch index @0x4866770 (3.24.3))
+- CHANGELOG.md:423, 424 — not Smi: "`ev_charger.md` - 35 API endpoints"; "`x1_hes_e10.md` - 65 A5101DataCodeType MQTT field names with hex codes" → EV section lists 42 endpoints; the hex values are enum indices (the enum has 133 members) (endpoints/device_specific.md; pp.txt Obj!A5101DataCodeType)
+- CHANGELOG.md:492 — not Smi: "`cmd=17` confirmed as SET constant" → 17 only for setSiteDeviceParam; 123 for the 17C1 / power-limit / dynamic-price paths (charging/http/http_request_repository_impl.dart setSiteDeviceParam @0x2404444, set17C1SiteDeviceParam @0x238cca8, setSiteDevicePowerLimit @0x43558c4 (3.24.3))
 
 ## 2026-04-04 — Home Power Panel (A17B1) complete device documentation + flow analysis
 

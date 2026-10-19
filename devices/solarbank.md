@@ -1,5 +1,7 @@
 # Solarbank — A17C0, A17C1, A17C2, A17C3, A17C5
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/devices.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > **Priority**: P1 (Core) — largest user base, 70+ upstream issues
 > Most actively developed device category in thomluther's integration
 

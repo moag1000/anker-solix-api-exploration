@@ -1,5 +1,7 @@
 # X1 HES / E10 Home Backup — A5101, A17E1, AX170
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/devices.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > **Priority**: P2 (High demand)
 > [anker-solix-api #274](https://github.com/thomluther/anker-solix-api/issues/274) (E10, 80+ comments) |
 > [anker-solix-api #162](https://github.com/thomluther/anker-solix-api/issues/162) (X1) |

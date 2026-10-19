@@ -1,5 +1,7 @@
 # Dart → JSON → Python Field Name Mapping
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/field_docs.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > Maps the Dart camelCase property names (from Blutter decompilation) to their
 > snake_case JSON equivalents. Where thomluther's library uses a different name,
 > the Python name is shown in the third column.

@@ -1,5 +1,7 @@
 # Device-Specific Endpoints
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/endpoints.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > Endpoints discovered in device logic files, NOT in `http_request_repository_impl.dart`.
 > These are called directly from device UI/logic code and were missed in the initial extraction.
 >

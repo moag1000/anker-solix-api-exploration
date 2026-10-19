@@ -1,5 +1,7 @@
 # Home Energy System (A5101/X1) & Home Power Panel (A17B1) — Response Models
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/models.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > 14+ models (expanded with nested structures from Blutter decompilation)
 
 ## A5101DeviceCommandModel

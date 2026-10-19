@@ -1,5 +1,7 @@
 # Required vs Optional Fields per API Endpoint
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/field_docs.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > Derived from conditional branching patterns in decompiled Dart code.
 > Fields marked **required** are always included in the request body.
 > Fields marked `?` have a conditional branch before assignment — likely optional or context-dependent.
