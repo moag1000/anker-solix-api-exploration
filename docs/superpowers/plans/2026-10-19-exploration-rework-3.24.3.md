@@ -223,3 +223,22 @@ Current state (2026-10-19): 59 commits, tracked = 14 root `.md` + `devices/`(5) 
 - Re-decompiling the React-Native charging bundle (`libhermes`) unless a flow needs it.
 - Unity/il2cpp content (3D product viewer) — note only.
 - mkdocs/GitHub Pages site — optional follow-up once Phase 4 is done.
+
+---
+
+## Added 2026-10-19 (owner: "Kümmer dich um alles") — controller rulings folded into the plan
+
+### Task 3.1c: caller resolution for url_provider rows (after 3.7)
+- [ ] `tools/endpoint_inventory.py`: for a URL literal with no `*Http*` call in its function, follow the function's callers (grep `Class::fn` in `bl` comments) up to 3 levels; if a caller reaches an `*Http*`/SDK sender, record it as the sender (`sender_via: [chain]`); if the chain enters a mixin-dedup region absent from the dump, mark `reference: "mixin-gap"` (UNCONFIRMED). Tests on 3 known cases (set_user_site_param → setUserParamsAsync; a standby-exercise-plan literal; one that stays unresolved). Regenerate JSON + re-render only the upgraded skeletons (no-clobber). Report before/after url_provider count.
+### Task 3.6c: generic `iot` MQTT decoder page (fold into 3.7 dispatch or run right after)
+- [ ] `mqtt/iot.md` from the audit rows that cover the generic/iot decoder + new 3.24.3 reads; EverFrost and A17D0 stay "not covered" (niche / no UI page).
+### Task 1.2c: fold the issue #1 thread back into the owner pages (right after 4.7-pre)
+- [ ] `api/power_service/site/set_site_device_param.md` Device-tested: thomluther 2026-10-19 — `display_type: 1` enables free 10 W values; `display_type` 0/absent → option-list values only; API does not enforce `legal_limit`. `flows/system_output_limit.md`: note that the legacy `PowerSliderView` is the per-device AC INPUT limit (`set_device_attrs ac_power_limit`, A17C1/A17C3 gate, `supportAcLimit` AE103/A17E2/AE111) and that the entry gate is `_updateStationPowerLimitStatus` (get_power_limit with app_ability). `devices/a17c5.md` row → device-tested yes.
+### Task 4.7-pre addendum: status column
+- [ ] `tools/service_index.py`: per-page status column (`owner` = no TODO purpose; `skeleton`; `pool-only`; `removed`) in every service README + counts in api/README.md.
+### Task 4.8 addendum
+- [ ] `data/models.json`: drop Sentry/field-less classes behind a `--include-noise` flag; key `package::Class` to disambiguate the 111 duplicate names.
+### Decisions (no task)
+- Preset-key literal stays redacted (role + pp.txt offset only). Trailer mix stays (CHANGELOG note). Merge to main = merge commit, no squash; tag `v2026.10-app3.24.3`.
+### Task 4.11: pointer comment to thomluther (after 4.7-pre is pushed)
+- [ ] Short comment on issue #1 linking `api/param_types.md`, `mqtt/README.md`, `api/encryption.md` on the branch.
