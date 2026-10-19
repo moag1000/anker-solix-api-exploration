@@ -4,8 +4,6 @@
 
 Every numeric claim in `patches/README.md` and in the number-bearing comments of the two `.patch` files (`a17c1_apk_tags.patch`, `a17c1_a17x8_apk_tags.patch`). The patches are stale (written against 3.18.0) and will be archived; this table is the record. Captured values (`value=2 in test dump`, `0.29`, `~3 min`) are NOT-FROM-ASM and kept apart from asm compares. The fc sub-field decoding reuses the rows of `docs/audit/BLE_COMMAND_MAP.md` (410-414); byte offsets are real and only flagged when they moved.
 
-The patches are stale (3.18.0) and will be archived; this table is the record.
-
 What survives in 3.24.3 (checked against the asm): the A17C1 bool compares `== 1` for `ae`, `af`, `b9` (BLE_COMMAND_MAP rows 399, 400, 402), the `e9` default 0 (row 406), the fc index-0 read (row 410), and the A17X8 `a3` / `ae` compares `== 1` (rows 358, 368). Everything else (byte offsets, the fc `== 2` / index decoding, the 22-byte length, the `ba` scaling) is moved, inverted or unverified.
 
 Doc line numbers refer to the file BEFORE the banner was added (commit f105769); in the current file add 2.
