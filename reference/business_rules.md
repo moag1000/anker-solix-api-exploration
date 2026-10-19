@@ -232,7 +232,7 @@ Tag: `asm-traced`. `grid_dispatch_logic.dart` (WorkMode switch `@0x27c7724` to `
 
 ## BLE rules
 
-Tag: `asm-traced`. BLE is not a live fallback for the cloud: the app disables BLE while the device is on WiFi (see the BLE pages); nothing here says otherwise.
+Tag: untagged by design (the BLE/WiFi exclusion is a community finding, not an asm fact; see [ble/protocol.md](../ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule)). BLE is not a live fallback for the cloud: the community finding is that BLE is unavailable while the device is on WiFi; the rule rows below are asm-traced.
 
 | rule | value | site | rows |
 |---|---|---|---|

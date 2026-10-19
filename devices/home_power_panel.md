@@ -44,7 +44,7 @@ Row numbers ("audit row N") count the table rows of [../docs/audit/devices.md](.
 | BLE | minimal | the controller is a dual stack, ZX BLE plus MQTT transformer; commands: [../ble/a17b1.md](../ble/a17b1.md). The old claim "only Realtime Trigger (0x0057) plus EV charger commands" is not an asm fact: no `[0, 0x57]` list exists in the A17B1 controller (see Known unknowns) | asm-traced |
 | Cloud API | primary | three service layers, below | upstream-confirmed |
 
-The panel is controlled through the cloud API; MQTT delivers status only. BLE is disabled while WiFi is active, so BLE is never a live fallback for the cloud path.
+The panel is controlled through the cloud API; MQTT delivers status only. The community finding is that BLE is unavailable while the device is on WiFi (see [../ble/protocol.md](../ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule)), so BLE is never a live fallback for the cloud path.
 
 ## Cloud API service layers
 

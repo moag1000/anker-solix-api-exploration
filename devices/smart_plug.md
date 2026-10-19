@@ -29,7 +29,7 @@ Tag: asm-traced unless stated. Each fact cites the 3.24.3 site; the field-level 
 - `007a`: one field, `a2` = switch, 0 off and 1 on (audit row 40; `a17x8_device_controller.dart` `setRelaySwitchCmd` key @0x307390c, opcode @0x3073938).
 - `007c`: tags `a2` to `a7` are action, slot, enabled, time, switch and weekdays (audit row 41; `a17x8_device_controller.dart` `setTimingCmd` @0x3de1b54, @0x3de1c0c, @0x3de1d34, @0x3de1d58, @0x3de1dd0, @0x3de1e8c). `a2` action: 0 delete, 1 create, 2 modify (audit row 42).
 - `007e`: `a2` = 0 is cancel (`a17x8countdown_logic.dart` `deleteCountdown` @0x3dcf9c4, audit row 44); 2 and 3 are pause and resume (`a17x8countdown_logic.dart` `changeStartOrPause` @0x3dd03e4 to @0x3dd04a8, audit row 46, discovered in an mqtt_monitor session and contributed upstream as PR 283). `a4` and `a5` carry the toggle-back switch (keys 328 and 330 halved, `a17x8_device_controller.dart` `setCountdownCmd` @0x3dcfe54, @0x3dcfe90, audit row 48).
-- `007e` `a3` (delay) and `a5` (toggle-back delay) are each one little-endian 3-byte integer built by a single `intToList3(value)` call (`a17x8_device_controller.dart` `setCountdownCmd` @0x3dcfbe4, `intToList` @0x3dcfdf0; audit row 47). The unit is seconds: the worked example 1800 s is the bytes `08 07 00` (FLOWS audit, worked example). See "Since/changed" for the old wording.
+- `007e` `a3` (delay) and `a5` (toggle-back delay): the 3-byte encoding has two readings (asm versus upstream); the rows and the conflict are owned by [../mqtt/a17x8.md](../mqtt/a17x8.md#007e-setcountdowncmd) and [../mqtt/README.md](../mqtt/README.md).
 - `007e` `a2` = 1 (start) is an upstream value (`CMD_PLUG_DELAYED_TOGGLE`: off 0, start 1, pause 2, resume 3; upstream-confirmed). The app's own start and resume path sends 3 (`changeStartOrPause`, same site as above; audit row 45 NOT-FROM-ASM).
 - `007c` `a7` weekdays: the old page said day numbers 1 (Monday) to 7 (Sunday), variable length, "0x07 = Sunday", not a bitmask. That is an upstream and device statement, not an asm fact (audit row 43 NOT-FROM-ASM); the 3.24.3 wire rules are in [../mqtt/a17x8.md](../mqtt/a17x8.md#007c-settimingcmd).
 - `007f`: the app polls the timer state with this request (`a17x8_device_controller.dart` opcode @0x2764034, audit row 39).
@@ -38,7 +38,7 @@ Tag: asm-traced unless stated. Each fact cites the 3.24.3 site; the field-level 
 
 | item | old page (3.18.0 reading) | 3.24.3 | audit row |
 |---|---|---|---|
-| `007e` `a3` and `a5` encoding | "3 bytes (seconds:minutes:hours)" | one little-endian 3-byte integer, unit seconds; no seconds, minutes, hours split is visible in `setCountdownCmd` (3-byte width unchanged); `intToList3` in `a17x8_device_controller.dart` @0x3dcfbe4 | 47 (WRONG) |
+| `007e` `a3` and `a5` encoding | "3 bytes (seconds:minutes:hours)" | two readings, see [../mqtt/a17x8.md](../mqtt/a17x8.md); asm-traced `intToList3` @0x3dcfbe4 | 47 (WRONG) |
 
 ## Known firmware notes
 
@@ -48,7 +48,7 @@ Tag: asm-traced unless stated. Each fact cites the 3.24.3 site; the field-level 
 
 Tag: untagged by design (no API fact).
 
-- Confirm the byte order and unit of the `007e` delay values on a device (the old issue request asked for "seconds:minutes:hours"; the asm shows one integer, audit row 47). [../mqtt/a17x8.md](../mqtt/a17x8.md) still says "seconds:minutes:hours per upstream" for these two fields; the two statements need one owner decision.
+- Confirm the byte order and unit of the `007e` delay values on a device (asm and upstream disagree; the rows are owned by [../mqtt/a17x8.md](../mqtt/a17x8.md)).
 - How saved schedules appear in the `0405` status message (TimingInfo readback) and the full schedule create, modify, delete cycle.
 - A system export ZIP with MQTT data recorded while the plug is toggled and while a timer runs (requested upstream).
 - Whether day numbers or a bitmask are used for `007c` weekdays on current firmware (audit row 43).

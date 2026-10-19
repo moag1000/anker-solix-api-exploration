@@ -71,7 +71,7 @@ python3 -I -m unittest discover -s tools/tests -t .
 
 - Key material. Do not post the app-embedded preset key, session keys, tokens, passwords or serial numbers. The documentation names the preset key by role and location only, and a library reads it from its own copy of the APK; see [api/encryption.md](api/encryption.md). Redact the same values in test records.
 - Anything that bypasses account security or another person's account.
-- A claim that BLE works as a live cloud fallback. In the app a device is in a WiFi state or in a BLE state, not both; see [ble/protocol.md](ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule).
+- A claim that BLE works as a live cloud fallback. The community finding is that BLE is unavailable while the device is on WiFi; see [ble/protocol.md](ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule).
 - The app's easter-egg assets (the local `easter_eggs/` folder is git-ignored): they would spoil the surprise for other users, and the images and animations are Anker's copyrighted APK assets, which this repository does not redistribute.
 
 ## Naming

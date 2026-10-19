@@ -63,6 +63,8 @@ All of these run right after the request is handed to the HTTP layer, without wa
 
 - Server validation: partly answered by a device test on an A17C5, see [set_site_device_param, Device-tested by](../api/power_service/site/set_site_device_param.md#device-tested-by); other devices and firmware are untested. The app never sends `display_type: 0`.
 - Whether the server accepts every 10 W value between 100 W and the maximum, or only some of them, for a given device and firmware.
+**Warning:** `legal_limit` is the regulatory feed-in limit of the site's region; the server not enforcing it is not permission — exceeding it may be unlawful or void the installation's certification, and this reference does not endorse it.
+
 - Whether the server enforces the legal limit on other devices; the A17C5 result is on the endpoint page (linked above). The prompt in steps 9 to 12 is app-only.
 - The confirm path of the `h5` prompt variant.
 - What the internal boolean toggled around the 3 s delay controls in the UI.

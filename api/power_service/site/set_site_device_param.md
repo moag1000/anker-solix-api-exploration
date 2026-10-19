@@ -98,6 +98,8 @@ None recorded for the app payload above. For a different payload (upstream libra
 
 - Server-side meaning of `display_type` beyond the behaviour recorded under [Device-tested by](#device-tested-by): why the server draws that line, and what other values do, is not known.
 - Behaviour of `display_type` 0 or an absent key with non-option values: not reported as tested.
+**Warning:** `legal_limit` is the regulatory feed-in limit of the site's region; the server not enforcing it is not permission — exceeding it may be unlawful or void the installation's certification, and this reference does not endorse it.
+
 - Whether the server checks `legal_limit` at all. One test (A17C5) saw it apparently ignored; other devices and firmware are untested.
 - Whether the server accepts the upstream library's `cmd` value as well as the app's for param_type 19 (both values are owned by [../../param_types.md](../../param_types.md)). The issue #1 test recorded below does not establish which `cmd` value was used, so this stays open.
 - Whether the encrypted request path is required, or whether a plain request with the same body is accepted.

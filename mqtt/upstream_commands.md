@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: upstream-confirmed · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced (lowest tag; most rows are upstream-confirmed) · Owner page: this page
 
 # Upstream command index (mqttcmdmap.py)
 
@@ -80,7 +80,7 @@ Index only, no payload copies. The bindings column counts every occurrence of th
 | `CMD_SB_DEVICE_TIMEOUT` | upstream-confirmed (line 820) | audit row 614 | A17C5 `009a` line 5206 (1 binding, 1 product) | [a17c5.md](a17c5.md) | Cross-check: no /30 divider exists in the APK setter or in getSleepTimeInt (audit row 222). |
 | `CMD_SB_USAGE_MODE` | upstream-confirmed (line 838) | audit row 615 | A17C5 `005e` line 5167 (1 binding, 1 product) | [a17c5.md](a17c5.md) | Cross-check: modes 1-5, 7, 8 equal the AiModeEnum wire values (ENUMS audit). "48 x 1-byte slots: discharge=1, charge=4, default=6" was not asm-checked. |
 | `CMD_PLUG_SCHEDULE` | upstream-confirmed (line 947) | audit row 616 | A17X8 `007c` line 5375 (1 binding, 1 product) | [a17x8.md](a17x8.md) | Arithmetic: 0-5947 = 23 * 256 + 59 (hour * 256 + minute). |
-| `CMD_PLUG_DELAYED_TOGGLE` | upstream-confirmed (line 993) | audit row 617 | A17X8 `007e` line 5376 (1 binding, 1 product) | [a17x8.md](a17x8.md) | Arithmetic: 0-1522491 = 23 * 65536 + 59 * 256 + 59 (sec:min:hour). The APK writes the delay with `intToList3`, i.e. up to 16,777,215. |
+| `CMD_PLUG_DELAYED_TOGGLE` | upstream-confirmed (line 993) | audit row 617 | A17X8 `007e` line 5376 (1 binding, 1 product) | [a17x8.md](a17x8.md) | Arithmetic, upstream reading (sec:min:hour): 0-1522491 = 23 * 65536 + 59 * 256 + 59; asm reading: one little-endian seconds integer, see the conflict in [README.md](README.md) (asm-traced for the APK fact). The APK writes the delay with `intToList3`, i.e. up to 16,777,215. |
 | `CMD_EV_CHARGER_MODE` | upstream-confirmed (line 1030) | audit row 618 | A5191 `0105` line 5884 (1 binding, 1 product) | no page for the bound products (outside 3.6a/3.6b) | Cross-check: 1-4 equal the ChargeControlType wire values (start 1, cancel 2, startNow 3, boost 4). |
 | `CMD_DEVICE_POWER_MODE` | upstream-confirmed (line 1047) | audit row 619 | A5191 `0108` line 5898 (1 binding, 1 product) | no page for the bound products (outside 3.6a/3.6b) | - |
 | `CMD_PLUG_LOCK_SWITCH` | upstream-confirmed (line 1059) | audit row 620 | A5191 `0100` line 5868 (1 binding, 1 product) | no page for the bound products (outside 3.6a/3.6b) | Cross-check: off=1, on=2 is confirmed by the APK lock-status value (carChargerLockStatus real 1 / 2). |
