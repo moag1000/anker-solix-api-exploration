@@ -343,7 +343,7 @@ This section (3.18.0 reference, superseded — kept until Task 4.9): the counts 
 - **Example responses are from thomluther's code** — [RESPONSE_EXAMPLES.md](RESPONSE_EXAMPLES.md) has 71 examples, but these are copies from thomluther's docstrings, not independently captured
 - **Field types** (int/string/bool/list) are not extractable — the TLV protocol carries type information in the data packets themselves, and the server responses use standard JSON typing
 - **Validation ranges** are dynamic (from server), not hardcoded in the app — each device/region may have different min/max/step values
-- **Error codes** are scattered throughout the code; a catalog is planned (`api/errors.md`, not written yet)
+- **Error codes** are scattered throughout the code; the catalog is [api/errors.md](api/errors.md) (83 codes from upstream, the 3.24.3 handlers and issue reports; generated data in `data/errors.json`)
 - **Cooler devices** (A17A3-A5 EverFrost) have minimal logic in the Dart layer — most control appears to be BLE-only with limited decompilable structure
 - **BLE action names without payload formats** — knowing `action_set_backup_strategy` exists does not help without the binary payload structure, which requires hardware testing
 - **12 response models** yielded no field names due to generic deserialization patterns
