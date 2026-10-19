@@ -1,31 +1,35 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Owner page: this page
 
 # report_data
 
 ## Purpose
 
-<!-- TODO -->
+Uploads a low-battery warning of a device to the cloud: the device serial, the data type `battery_soc`, the state of charge and the report time; the app sends it when a device reports a battery level at or below the configured warning level.
 
 ## Upstream name
 
-`none` (no upstream name)
+`none` for this URL (no upstream name). Upstream lists the URL without a key in `api/apitypes.py` (line 350).
 
 ## Method+URL
 
-`/power_service/v2/device/report_data`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2603778`
+`POST /power_service/v2/device/report_data` (asm-traced): URL literal `@0x2603778` in `DeviceMainLogic._uploadLowBatteryWarning` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26031c4`), method object `Method.post` (pool entry `pp+0xa7e0`, `@0x2603770`).
 
 ## Encrypted?
 
-encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Yes by wrapper (asm-traced): ``_uploadLowBatteryWarning`` calls `encryptionRequestHttp` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x260379c`) without passing `needEncryption`, so the default `true` applies (`api/encryption.md`, [which calls are encrypted](../../../encryption.md#which-calls-are-encrypted)). Whether the call really goes through the SDK is decided at run time (SDK login state and a base-URL test, [encryption.md](../../../encryption.md)); asm alone does not decide it.
 
 ## Request
 
+Map literal with four pairs, `<String, Object>` (`@0x2603728`); the third value is itself a `<String, int>` map.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn` | ? | ? | ? | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26031c4` |
-| `data_type` | ? | ? | ? | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26031c4` |
-| `data.soc` | ? | ? | ? | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26031c4` |
-| `report_time` | ? | ? | ? | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26031c4` |
+| `device_sn` | String | yes | `"<device sn>"` | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2603624`; value is a local variable stored at `@0x2603634` |
+| `data_type` | String | yes | `"battery_soc"` | `@0x2603638`, literal value `"battery_soc"` `@0x2603644` |
+| `data` | map | yes | `{ "soc": 20 }` | `@0x2603650`; inner map `<String, int>` with the key `soc` (`@0x2603664`, value stored at `@0x2603674`, a local int, not a literal) |
+| `report_time` | int | yes | `1760000000` | `@0x26036b0`; seconds since the epoch: `DateTime` microseconds (`_getCurrentMicros`, `@0x26036bc`) divided by 1000 twice with signed division (`sdiv` by 1000 at `@0x26036e4`, `@0x26036e8`; the raw immediates `1000` at `@0x26036dc` and `999` at `@0x26036d0` are arithmetic operands, unboxed, so real values 1000 and 999) |
+
+Gate before sending: the function reads the low-battery warning config (`getLowBatteryWarningConfig`, `@0x2603208`) and a stored map with `isPending`, `lastBattery` and `isUpload` (`@0x26033bc`, `@0x260341c`, `@0x2603478`), and only sends when its comparisons allow (the comparison logic is not decoded).
 
 ## `param_type`/`cmd`
 
@@ -33,35 +37,39 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+n/a (asm-traced): no model is parsed.
 
 ## Response
 
-<!-- TODO -->
+No response field is read (asm-traced). The success closure (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26038e0`) updates the stored map keys `isPending` (`@0x2603920`), `isUpload` (`@0x2603954`) and `lastBattery` (`@0x2603984`); the failure closure (`@0x260380c`) resets `isPending` (`@0x260384c`) and `lastBattery` (`@0x2603880`).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized
+
+```json
+{ "device_sn": "<device sn>", "data_type": "battery_soc", "data": { "soc": 20 }, "report_time": 1760000000 }
+```
+
+Response: no captured response; no field is read.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+No error code specific to this endpoint was traced. The failure closure of each sender passes the code and message to the caller or logs it; the shared transport codes are in [encryption.md](../../../encryption.md#response-handling-and-error-codes). `api/errors.md` does not exist yet (Task 4.2).
 
 ## Callers in app
 
-- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`: `_uploadLowBatteryWarning` @0x26031c4 (encryptionRequestHttp; encrypted: true)
-
-Called from:
-
-- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onMessageDispatch`
+- `DeviceMainLogic._uploadLowBatteryWarning` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26031c4`), called from `DeviceMainLogic.onMessageDispatch`: the device main page of the station device home (package `charging`), triggered by incoming device messages.
 
 ## Since/changed
 
-3.18.0: absent. 3.24.3: present (new). since: 3.24.3.
+3.18.0: absent (the URL string is not in the 3.18.0 pool as a code-referenced URL; see the inventory row `since`). 3.24.3: present (new). since: 3.24.3.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- The conditions under which the warning is uploaded (thresholds, resend rules) are not decoded.
+- Whether other `data_type` values exist is not known; only `battery_soc` is sent by the traced sender.
+- Server behaviour (what the cloud does with the report, for example push notifications) is not known.
 
 ## Device-tested by
 

@@ -70,7 +70,7 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/app/get_token_by_userid`](app/get_token_by_userid.md) | TODO | `get_token_by_userid` | skeleton |
 | [`/power_service/v1/app/get_upgrade_record`](app/get_upgrade_record.md) | TODO | `get_upgrade_record` | skeleton |
 | [`/power_service/v1/app/get_user_op_shelly_status`](app/get_user_op_shelly_status.md) | TODO | `get_shelly_status` | skeleton |
-| [`/power_service/v1/app/get_weather`](app/get_weather.md) | TODO | - | skeleton |
+| [`/power_service/v1/app/get_weather`](app/get_weather.md) | Reads the current weather for a position (latitude and longitude): the station home weather widget and the Unity (3D scene) weather manager each have their own caller and model. | - | hand-written |
 | [`/power_service/v1/app/group/delete_group_devices`](app/group/delete_group_devices.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/group/force_save_group_devices`](app/group/force_save_group_devices.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/group/get_group_devices`](app/group/get_group_devices.md) | TODO | `get_device_group` | skeleton |
@@ -127,7 +127,7 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/dynamic_price/check_available`](dynamic_price/check_available.md) | TODO | `get_dynamic_price_sites` | skeleton |
 | [`/power_service/v1/dynamic_price/price_detail`](dynamic_price/price_detail.md) | TODO | `get_dynamic_price_details` | skeleton |
 | [`/power_service/v1/dynamic_price/support_option`](dynamic_price/support_option.md) | TODO | `get_dynamic_price_providers` | skeleton |
-| [`/power_service/v1/everhome/bind`](everhome/bind.md) | TODO | - | skeleton |
+| [`/power_service/v1/everhome/bind`](everhome/bind.md) | Binds an everHome (third-party smart meter platform) account to the Anker account: after the user logs in on the everHome page, the page returns an authorization code that the app sends; the answer lists the serial numbers of the bound devices. | - | hand-written |
 | [`/power_service/v1/get_all_service_config`](get_all_service_config.md) | TODO | - | skeleton |
 | [`/power_service/v1/get_message`](get_message.md) | TODO | `get_message` | skeleton |
 | [`/power_service/v1/get_message_not_disturb`](get_message_not_disturb.md) | TODO | - | skeleton |
@@ -140,7 +140,7 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/rfid/delete_device_card`](rfid/delete_device_card.md) | TODO | - | skeleton |
 | [`/power_service/v1/rfid/get_device_cards`](rfid/get_device_cards.md) | TODO | `get_device_rfid_cards` | skeleton |
 | [`/power_service/v1/rfid/save_device_card`](rfid/save_device_card.md) | TODO | - | skeleton |
-| [`/power_service/v1/set_user_site_param`](set_user_site_param.md) | TODO | - | skeleton |
+| [`/power_service/v1/set_user_site_param`](set_user_site_param.md) | Sets user-level site parameters in the cloud; the only traced wrapper takes the parameter map from its caller and has no caller in the asm, so what it carries is not known. | - | hand-written |
 | [`/power_service/v1/site/add_charging_device`](site/add_charging_device.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/add_site_devices`](site/add_site_devices.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/can_create_site`](site/can_create_site.md) | TODO | - | skeleton |
@@ -179,18 +179,18 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/site/update_site_devices`](site/update_site_devices.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/update_site_price`](site/update_site_price.md) | TODO | `update_site_price` | skeleton |
 | [`/power_service/v2/app/get_custom_branch_icon`](v2/app/get_custom_branch_icon.md) | TODO | - | skeleton |
-| [`/power_service/v2/app/get_hardware_relation`](v2/app/get_hardware_relation.md) | TODO | - | skeleton |
-| [`/power_service/v2/app/set_device_pv_name`](v2/app/set_device_pv_name.md) | TODO | - | skeleton |
-| [`/power_service/v2/device/energy_analysis`](v2/device/energy_analysis.md) | TODO | - | skeleton |
-| [`/power_service/v2/device/energy_options`](v2/device/energy_options.md) | TODO | - | skeleton |
-| [`/power_service/v2/device/report_data`](v2/device/report_data.md) | TODO | - | skeleton |
-| [`/power_service/v2/device/timeline/event`](v2/device/timeline/event.md) | TODO | - | skeleton |
-| [`/power_service/v2/device/timeline/event/batch_read`](v2/device/timeline/event/batch_read.md) | TODO | - | skeleton |
-| [`/power_service/v2/platform_get_pn_region_code`](v2/platform_get_pn_region_code.md) | TODO | - | skeleton |
-| [`/power_service/v2/platform_get_user_region_param`](v2/platform_get_user_region_param.md) | TODO | - | skeleton |
-| [`/power_service/v2/platform_set_user_region_param`](v2/platform_set_user_region_param.md) | TODO | - | skeleton |
+| [`/power_service/v2/app/get_hardware_relation`](v2/app/get_hardware_relation.md) | Reads which sites a list of device serials belongs to (site id, site name, product code, serial, and whether the site is the main one); the app uses it for device relations and for the sub-package (OTA) info of devices. | - | hand-written |
+| [`/power_service/v2/app/set_device_pv_name`](v2/app/set_device_pv_name.md) | Renames one PV input of a device: the app sends the device serial, the key of the PV input and the new name typed by the user. | - | hand-written |
+| [`/power_service/v2/device/energy_analysis`](v2/device/energy_analysis.md) | Reads the energy chart data of one device for a time range: the S1/S2 charge-session chart (power and energy per period) and the history chart of the AE1X0 meter (import and export per phase). | - | hand-written |
+| [`/power_service/v2/device/energy_options`](v2/device/energy_options.md) | Asks for the chart options of a device; the only field the app reads is `earliest_date`, the date from which the S1/S2 charge-session chart may start (the app calls it the start-use time). | - | hand-written |
+| [`/power_service/v2/device/report_data`](v2/device/report_data.md) | Uploads a low-battery warning of a device to the cloud: the device serial, the data type `battery_soc`, the state of charge and the report time; the app sends it when a device reports a battery level at or below the configured warning level. | - | hand-written |
+| [`/power_service/v2/device/timeline/event`](v2/device/timeline/event.md) | Reads the guardian journal (timeline) of an S1/S2 device: statistics with the number of stable days, the list of events and the current top event; the home page shows the top event as an unlock sheet when it is unread. | - | hand-written |
+| [`/power_service/v2/device/timeline/event/batch_read`](v2/device/timeline/event/batch_read.md) | Marks guardian journal events of an S1/S2 device as read; the home page sends the id of the top event after showing it. | - | hand-written |
+| [`/power_service/v2/platform_get_pn_region_code`](v2/platform_get_pn_region_code.md) | Reads the list of region codes (countries with their states and grid codes) that a product supports; the grid selection pages use it to fill the country and grid-code pickers. | - | hand-written |
+| [`/power_service/v2/platform_get_user_region_param`](v2/platform_get_user_region_param.md) | Reads the grid code (grid standard) settings of a product for the user: the country, the grid code and its name, the enabled parameters and the advanced parameter template and values, used by the grid parameter setting pages. | - | hand-written |
+| [`/power_service/v2/platform_set_user_region_param`](v2/platform_set_user_region_param.md) | Saves the grid code settings of a product for the user: the app sends the grid parameter document (country, grid code, enabled and advanced parameters) plus the flag `is_push_device`, which tells whether the settings were also pushed to the device. | - | hand-written |
 | [`/power_service/v2/site/platform_energy_analysis_options`](v2/site/platform_energy_analysis_options.md) | TODO | - | skeleton |
-| [`/power_service/v2/site/platform_get_site_savings`](v2/site/platform_get_site_savings.md) | TODO | - | skeleton |
-| [`/power_service/v2/site/platform_get_site_scene`](v2/site/platform_get_site_scene.md) | TODO | - | skeleton |
+| [`/power_service/v2/site/platform_get_site_savings`](v2/site/platform_get_site_savings.md) | Reads the savings (income) statistics of a site for a chart period: the self-sufficiency split between solar and grid, the trend values per period, the total with its unit and the list of years; the income detail pages of the micro HES (A17E2) and the station home use it. | - | hand-written |
+| [`/power_service/v2/site/platform_get_site_scene`](v2/site/platform_get_site_scene.md) | Reads the scene (energy flow) information of a micro HES site: the app parses it into a `SceneInfoModel` with the solarbank, grid, diesel, smart plug and charging pile information and the feature switches. | - | hand-written |
 
 Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
