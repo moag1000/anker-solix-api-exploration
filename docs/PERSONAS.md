@@ -14,7 +14,7 @@ The repository is being rebuilt on App 3.24.3, so each step has two columns. **T
 
 | Step | Today | Target |
 |---|---|---|
-| 1 | [endpoints/power_service_site.md](../endpoints/power_service_site.md) (pick the service of interest) | `api/<service>/<endpoint>.md` |
+| 1 | [README Endpoints section](../README.md#endpoints) (index), then one service page such as [endpoints/power_service_site.md](../endpoints/power_service_site.md) | `api/<service>/<endpoint>.md` |
 | 2 | [ENDPOINT_FIELDS.md](../ENDPOINT_FIELDS.md) | `data/endpoints.json` (machine-readable, diffable against the library) |
 | 3 | [PARAM_DATA_STRUCTURES.md](../PARAM_DATA_STRUCTURES.md) | `api/param_types.md` |
 | 4 | [ENUMS.md](../ENUMS.md) | `reference/` |
@@ -39,13 +39,14 @@ The repository is being rebuilt on App 3.24.3, so each step has two columns. **T
 - **Who:** Watches live MQTT traffic of a device and needs to decode what it sees.
 - **First question:** "What is field a8, or command 0x7c?"
 - **First page needed:** the MQTT decoder page for the device's product number (PN).
+- **Status today: partial.** No existing page is a per-PN field decoder; those pages (`mqtt/<pn>.md`) are a target. The nearest answers are spread over three files, listed below.
 
 | Step | Today | Target |
 |---|---|---|
-| 1 | [BLE_COMMAND_MAP.md](../BLE_COMMAND_MAP.md) (MQTT part) | `mqtt/<pn>.md` |
-| 2 | [ENUMS.md](../ENUMS.md) | `reference/` |
-| 3 | [devices/smart_plug.md](../devices/smart_plug.md) (example device) | `devices/<pn>.md` |
-| 4 | [FLOWS.md](../FLOWS.md) (which command a flow sends) | `flows/<name>.md` |
+| 1 | [devices/solarbank.md](../devices/solarbank.md) (MQTT sections: "MQTT Commands", "MQTT Abbreviated Fields"; A17C1 `0050`/`0067`/`005a`/`005e` a2..a4 fields) | `mqtt/<pn>.md` |
+| 2 | [BLE_COMMAND_MAP.md](../BLE_COMMAND_MAP.md) (MQTT sections: "A17B1 — Solarbank 2 System JSON Keys (MQTT status)", "A5101 — X1 HES MQTT Status Fields", device to command matrix) | `mqtt/<pn>.md` |
+| 3 | [devices/smart_plug.md](../devices/smart_plug.md) (MQTT section: "MQTT Commands", A17X8 timer and pause/resume) | `devices/<pn>.md` |
+| 4 | [VALIDATION_MODEL.md](../VALIDATION_MODEL.md) ("MQTT-Only Settings" for A17C0-C5; ranges per command) | `flows/<name>.md` |
 
 ## 4. BLE project developer
 
@@ -67,10 +68,11 @@ BLE is a local channel. It is not a live fallback for the cloud: the app disable
 - **Who:** Owns Anker Solix hardware or is evaluating it, with no API background.
 - **First question:** "What can be controlled at all, and what is a site or a station?"
 - **First page needed:** the glossary, then the use-case index in the README.
+- **Glossary planned (target `GLOSSARY.md`); no equivalent today. Start with the README use-case index.**
 
 | Step | Today | Target |
 |---|---|---|
 | 1 | [README.md](../README.md#how-to-use-this-reference) (use-case index) | `README.md` (use-case index) |
-| 2 | [devices/solarbank.md](../devices/solarbank.md) | `GLOSSARY.md` (site, station, device, PN) |
+| 2 | [devices/solarbank.md](../devices/solarbank.md) (closest thing to an overview; not a glossary) | `GLOSSARY.md` (site, station, device, PN) |
 | 3 | [models/device.md](../models/device.md) | `models/` |
 | 4 | [FLOWS.md](../FLOWS.md) (what the app can do, step by step) | `flows/<name>.md` |
