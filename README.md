@@ -7,7 +7,7 @@
 > This reference was created through reverse engineering of the Anker App 3.24.3
 > APK (rework in progress on branch `rework/3.24.3`, 2026-10-19; the previous
 > 3.18.0 reference is tagged `v2026.04-app3.18.0`) using Blutter (Dart AOT decompiler).
-> **The analysis was heavily AI-assisted.**
+> **The analysis was heavily AI-assisted.** Before polling the cloud with a library, read [docs/SAFE_USAGE.md](docs/SAFE_USAGE.md).
 > This means the content may be:
 >
 > - **Inaccurate** — field names extracted from compiled binary code may be
