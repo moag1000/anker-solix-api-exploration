@@ -10,15 +10,14 @@ import unittest
 TOOLS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, TOOLS)
 
+# Default sibling checkouts live next to the repo root (override with the ANKER_* env vars).
+_SIBLINGS = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))
 ROOT_NEW = os.environ.get(
-    'ANKER_ASM_NEW', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-    'v3.24.3/blutter_output/asm')
+    'ANKER_ASM_NEW', os.path.join(_SIBLINGS, 'v3.24.3/blutter_output/asm'))
 ROOT_OLD = os.environ.get(
-    'ANKER_ASM_OLD', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-    'blutter_output/asm')
+    'ANKER_ASM_OLD', os.path.join(_SIBLINGS, 'blutter_output/asm'))
 UPSTREAM = os.environ.get(
-    'ANKER_UPSTREAM', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-    'anker-solix-api/api/apitypes.py')
+    'ANKER_UPSTREAM', os.path.join(_SIBLINGS, 'anker-solix-api/api/apitypes.py'))
 REPO = os.path.dirname(TOOLS)
 
 HTTP_FILE = os.path.join(ROOT_NEW, 'charging/http/http_request_repository_impl.dart')

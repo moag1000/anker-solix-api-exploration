@@ -164,16 +164,15 @@ def closure_parents(text):
     return {m.group(1): m.group(2) for m in CLOSURE_REF_RE.finditer(text)}
 
 
+# Default sibling checkouts live next to the repo root (override with the ANKER_* env vars).
+_SIBLINGS = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..'))
 SNAPSHOT_3_24_3 = '78da37fed6bf1489361a312568249f3f'
 DEFAULT_NEW_ROOT = os.environ.get(
-    'ANKER_ASM_NEW', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-    'v3.24.3/blutter_output/asm')
+    'ANKER_ASM_NEW', os.path.join(_SIBLINGS, 'v3.24.3/blutter_output/asm'))
 DEFAULT_OLD_ROOT = os.environ.get(
-    'ANKER_ASM_OLD', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-    'blutter_output/asm')
+    'ANKER_ASM_OLD', os.path.join(_SIBLINGS, 'blutter_output/asm'))
 DEFAULT_UPSTREAM = os.environ.get(
-    'ANKER_UPSTREAM', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-    'anker-solix-api/api/apitypes.py')
+    'ANKER_UPSTREAM', os.path.join(_SIBLINGS, 'anker-solix-api/api/apitypes.py'))
 ALL_CALLEE_RE = re.compile(r'\bbl\s+#0x[0-9a-f]+\s+; \[[^\]]*\] (\S+)')
 
 

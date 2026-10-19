@@ -21,12 +21,12 @@ sys.path.insert(0, TOOLS)
 import asmparse as A  # noqa: E402
 import error_codes as E  # noqa: E402
 
+# Default sibling checkouts live next to the repo root (override with the ANKER_* env vars).
+_SIBLINGS = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..', '..'))
 ROOT_NEW = os.environ.get(
-    'ANKER_ASM_NEW', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-    'v3.24.3/blutter_output/asm')
+    'ANKER_ASM_NEW', os.path.join(_SIBLINGS, 'v3.24.3/blutter_output/asm'))
 UPSTREAM_ERRORS = os.environ.get(
-    'ANKER_UPSTREAM_ERRORS', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-    'anker-solix-api/api/errors.py')
+    'ANKER_UPSTREAM_ERRORS', os.path.join(_SIBLINGS, 'anker-solix-api/api/errors.py'))
 
 FAKE_ERRORS = '''"""Errors."""
 
