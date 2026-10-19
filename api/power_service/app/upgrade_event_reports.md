@@ -53,7 +53,7 @@ n/a
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `getReportsBleUpgrade` @0x3423398 (requestHttp; encrypted: default-true (requestHttp) — verify)
-- `ota_kit/src/services/ota_upgrade_record_reporter.dart`: `_reportBatch` @0x280a11c (URL literal only, no `*Http*` call)
+- `ota_kit/src/services/ota_upgrade_record_reporter.dart`: `_reportBatch` @0x280a11c (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
 
 Called from:
 
@@ -61,6 +61,7 @@ Called from:
 - `charging/ui/page/device/a1780p/ota/wifi_ble_ota_logic.dart::handleOtaRecordResult`
 - `charging/ui/page/device/a1780p/parallel_ota/wifi_ble_parallel_ota_logic.dart::handleOtaRecordResult`
 - `charging/ui/page/device/anker_ota/base/anker_ota_base_logic.dart::handleA17A3BleOtaRecords`
+- `ota_kit/src/services/ota_upgrade_record_reporter.dart::report`
 
 ## Since/changed
 

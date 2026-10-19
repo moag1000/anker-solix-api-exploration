@@ -49,7 +49,12 @@ n/a
 
 ## Callers in app
 
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getEvModelList` @0x2c6b2b4 (URL literal only, no `*Http*` call)
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getEvModelList` @0x2c6b2b4 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
+
+Called from:
+
+- `ev_charger/src/ev_charger/page/vehicle/vehicle_edit_logic.dart::getModelList`
+- `ev_charger/src/ev_charger/page/vehicle/widgets/add_vehicle_controller.dart::getModelListIfNeed`
 
 ## Since/changed
 

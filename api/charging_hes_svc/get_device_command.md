@@ -48,7 +48,7 @@ n/a
 
 ## Callers in app
 
-- `ak_soft_ems/http/ems_api.dart`: `getDeviceCommand` @0x2a31618 (URL literal only, no `*Http*` call)
+- `ak_soft_ems/http/ems_api.dart`: `getDeviceCommand` @0x2a31618 (URL literal only, no `*Http*` call; sender found through callers: `EmsAiModeConditionLogic::_getLargeAuthorizationStatus` (`ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x2a31278`) via `EmsAiModeConditionLogic::_getLargeAuthorizationStatus` (`ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x2a31278`))
 - `charging/http/http_request_repository_impl.dart`: `getDeviceCommand` @0x277caa0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
 Called from:

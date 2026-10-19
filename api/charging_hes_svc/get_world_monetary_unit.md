@@ -49,7 +49,7 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `getPriceUnitsConfig` @0x29ae8dc (URL literal only, no `*Http*` call)
+- `base_service/api_url.dart`: `getPriceUnitsConfig` @0x29ae8dc (URL literal only, no `*Http*` call; sender found through callers: `ElectricityUsageHelper::getPriceUnits` (`electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x29ae3f4`) via `ElectricityUsageHelper::getPriceUnits` (`electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x29ae3f4`))
 - `charging/http/http_request_repository_impl.dart`: `getPriceUnits` @0x28e9994 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
 Called from:

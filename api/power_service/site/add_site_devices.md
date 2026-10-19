@@ -52,7 +52,7 @@ n/a
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `multiAddDeviceInfo` @0x26f6f78 (encryptionRequestHttp; encrypted: true)
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `addSiteDevice` @0x3964400 (URL literal only, no `*Http*` call)
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `addSiteDevice` @0x3964400 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
 
 Called from:
 
@@ -68,6 +68,7 @@ Called from:
 - `charging/ui/page/device/connect/zx_config_wifi_success/zx_config_wifi_succees_logic.dart::addDeviceToStation`
 - `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::multiAddDevices`
 - `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::addSitePPS`
+- `ev_charger/src/ev_charger/page/home/load_balancing/select_station/evselect_station_logic.dart::_executeAddSiteDevice`
 
 ## Since/changed
 

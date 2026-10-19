@@ -44,7 +44,7 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `saveAutoTou` @0x2e82408 (URL literal only, no `*Http*` call)
+- `base_service/api_url.dart`: `saveAutoTou` @0x2e82408 (URL literal only, no `*Http*` call; sender found through callers: `GeneralPriceSettingLogic::setTOU` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a68ac`) via `ElectricityPricePlanApiHelper::changeToTouPlan` (`electricity_price/components/electricity_price_common/electricity_price_plan_api_helper.dart @0x31a9fdc`) -> `GeneralPriceSettingLogic::setTOU` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a68ac`))
 
 ## Since/changed
 

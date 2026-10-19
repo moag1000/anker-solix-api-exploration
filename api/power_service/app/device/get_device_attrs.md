@@ -57,15 +57,15 @@ n/a
 
 ## Callers in app
 
-- `ak_soft_ems/util/timezone_util.dart`: `getDeviceTimezone` @0x22ba090 (URL literal only, no `*Http*` call)
+- `ak_soft_ems/util/timezone_util.dart`: `getDeviceTimezone` @0x22ba090 (URL literal only, no `*Http*` call; no sender within 3 caller levels)
 - `ak_soft_pps_ems/src/modules/pps_tou/service/pps_tou_http_service.dart`: `getTouElectricAttrs` @0x2a3ebd0 (encryptionRequestHttp; encrypted: true)
 - `as200/src/page/home/as200_home_logic.dart`: `_getLowLoadAutoShutdownTimeout` @0x29f088c (encryptionRequestHttp; encrypted: true)
-- `ats_ax170/src/sdk/command/ax170_command.dart`: `getCustomBranchList` @0x27d664c (URL literal only, no `*Http*` call)
+- `ats_ax170/src/sdk/command/ax170_command.dart`: `getCustomBranchList` @0x27d664c (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
 - `charging/http/http_request_repository_impl.dart`: `getDeviceAttrs` @0x239ec40 (encryptionRequestHttp; encrypted: true); `getDeviceAttrsInfo` @0x2384088 (encryptionRequestHttp; encrypted: true)
-- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart`: `<anonymous closure> in ElectricityUsageHelper::getPriceType` @0x35f72e8 (URL literal only, no `*Http*` call); `getPriceType` @0x35f70c8 (encryptionRequestHttp; encrypted: true)
+- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart`: `<anonymous closure> in ElectricityUsageHelper::getPriceType` @0x35f72e8 (URL literal only, no `*Http*` call; no sender within 3 caller levels); `getPriceType` @0x35f70c8 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/electricity_price_common/tou_auto_preview/tou_auto_price_pkg_result_logic.dart`: `_getDevicePriceUnit` @0x31acd90 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart`: `getDataFromAPi` @0x2c49144 (encryptionRequestHttp; encrypted: true)
-- `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart`: `<anonymous closure> in GeneralPriceSettingLogic::getDevicePriceType` @0x29a4e04 (URL literal only, no `*Http*` call); `_getDevicePriceUnit` @0x2a799d0 (encryptionRequestHttp; encrypted: true); `getDevicePriceType` @0x29a4974 (encryptionRequestHttp; encrypted: true); `getPriceTypeUrl` @0x29a4d20 (URL literal only, no `*Http*` call)
+- `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart`: `<anonymous closure> in GeneralPriceSettingLogic::getDevicePriceType` @0x29a4e04 (URL literal only, no `*Http*` call; no sender within 3 caller levels); `_getDevicePriceUnit` @0x2a799d0 (encryptionRequestHttp; encrypted: true); `getDevicePriceType` @0x29a4974 (encryptionRequestHttp; encrypted: true); `getPriceTypeUrl` @0x29a4d20 (URL literal only, no `*Http*` call; sender found through callers: `GeneralPriceSettingLogic::getDevicePriceType` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4974`) via `GeneralPriceSettingLogic::getDevicePriceType` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4974`))
 - `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_getDeviceAttrs` @0x2851084 (_requestHttp; encrypted: default-true (requestHttp) — verify)
 - `micro_hes/src/a17ex/home/components/electricity_price/a17ex_electricity_price_logic.dart`: `_fetchDeviceCurrency` @0x35fe644 (encryptionRequestHttp; encrypted: true)
 - `micro_hes/src/common_business/basic_station/module/system_flow/common/energy_system_cover_helper.dart`: `getSolarPvNameMode` @0x2c8d5a0 (encryptionRequestHttp; encrypted: true)
@@ -79,12 +79,17 @@ n/a
 
 Called from:
 
+- `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::getDeviceTimezoneWithCallback`
+- `ak_soft_ems/manual_power_backup/manual_power_backup_logic.dart::getTimeZone`
+- `ak_soft_pps_ems/src/modules/setting/modules_setting_logic.dart::getTouElectricAttrsFn`
 - `as200/src/page/home/as200_home_logic.dart::onReady`
+- `ats_ax170/src/ats_ax170/branch_circuit/pages/custom_branch/custom_branch_controller.dart::onInit`
 - `charging/ble/device/anker_device_delegate_impl.dart::a17C1JumpToBleSuccessPage`
 - `charging/common_bussiness/currency/app_currency_process_list_controller.dart::getDeciceGetCurrency`
 - `charging/feature/backup_power/back_power_logic.dart::getTimeZone`
 - `charging/http/http_request_repository.dart::getDeviceAttrs`
 - `charging/http/http_request_repository.dart::getDeviceAttrsInfo`
+- `charging/ui/page/device/a1782/module_list/modules_logic.dart::getTouElectricAttrsFn`
 - `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::_preloadDeviceAttrs`
 - `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::getMicorLimitData`
 - `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::getWifiSignal`
@@ -106,6 +111,11 @@ Called from:
 - `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::getDevicePriceType`
 - `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::onReady`
 - `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::setFixedPriceV2`
+- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart::_getAllDeviceAttrs`
+- `micro_hes/src/a17e2/home/a17e2_home_controller.dart::toggleOffGridSwitch`
+- `micro_hes/src/a17e2/station/home/base_station_logic.dart::getDeviceTimezoneWithCallback`
+- `micro_hes/src/a17e2/station/home/base_station_logic.dart::refreshDeviceTimezone`
+- `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart::homeLoadSwitchChanged`
 - `micro_hes/src/a17ex/home/components/electricity_price/a17ex_electricity_price_logic.dart::_initializeDeviceIfAvailable`
 - `micro_hes/src/common_business/basic_station/dialog/multiple_pv_data.dart::_requestSolarPvNames`
 - `settings/src/common/menu_controller/equipment_feed_power_menu_controller.dart::onInit`

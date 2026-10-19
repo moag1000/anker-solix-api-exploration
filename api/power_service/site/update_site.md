@@ -55,7 +55,7 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `updateSiteNameInfoRequest` @0x30c7640 (encryptionRequestHttp; encrypted: true)
 - `device/src/station_setting/controller/common_station_name/station_name_view_model.dart`: `requestRenameStation` @0x2cb53ec (encryptionRequestHttp; encrypted: true)
-- `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart`: `<anonymous closure> in RenameSiteController::save` @0x47a6694 (URL literal only, no `*Http*` call)
+- `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart`: `<anonymous closure> in RenameSiteController::save` @0x47a6694 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
 - `micro_hes/src/common_business/basic_station/basic_station_setting/component/general_setting/station_name_controller.dart`: `requestRenameStation` @0x2cd3010 (encryptionRequestHttp; encrypted: true)
 
 Called from:

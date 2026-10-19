@@ -48,7 +48,7 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `adjustStationPriceUnit` @0x29ae7dc (URL literal only, no `*Http*` call)
+- `base_service/api_url.dart`: `adjustStationPriceUnit` @0x29ae7dc (URL literal only, no `*Http*` call; sender found through callers: `ElectricityUsageHelper::changeCurrencyUnit` (`electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x29ae5f0`) via `ElectricityUsageHelper::changeCurrencyUnit` (`electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x29ae5f0`))
 - `charging/http/http_request_repository_impl.dart`: `changePriceUnit` @0x3ecf954 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
 Called from:

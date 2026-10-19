@@ -54,11 +54,13 @@ n/a
 
 - `charging/http/user/about/about_http_request_repository_impl.dart`: `getPersonalizationOptionsApi` @0x298e7d8 (encryptionRequestHttp; encrypted: true)
 - `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_getUserParams` @0x2850430 (_requestHttp; encrypted: default-true (requestHttp) — verify)
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getUserParams` @0x2700a98 (URL literal only, no `*Http*` call)
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getUserParams` @0x2700a98 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
 
 Called from:
 
 - `charging/ui/page/user/about/personalizationOptions/personalization_options_logic.dart::requestPersonalizationOptionsStatus`
+- `ev_charger/src/ev_charger/base/ev_charger_user_params.dart::getUserParamFromServer`
+- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart::getDrivingPlan`
 
 ## Since/changed
 

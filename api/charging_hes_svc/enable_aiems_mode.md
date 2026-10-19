@@ -47,7 +47,7 @@ n/a
 
 ## Callers in app
 
-- `ak_soft_ems/http/ems_api.dart`: `enableAiEmsMode` @0x379e6d0 (URL literal only, no `*Http*` call)
+- `ak_soft_ems/http/ems_api.dart`: `enableAiEmsMode` @0x379e6d0 (URL literal only, no `*Http*` call; sender found through callers: `EmsAiModeConditionLogic::_enableLargeSmartMode` (`ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x379e4b8`) via `EmsAiModeConditionLogic::_enableLargeSmartMode` (`ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x379e4b8`))
 - `charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart`: `enableSmartMode` @0x3eaee94 (encryptionRequestHttp; encrypted: true)
 
 Called from:

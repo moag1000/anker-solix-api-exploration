@@ -56,8 +56,8 @@ param_type is a variable at this sender (traced by heuristic — verify against 
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `get17C1DeviceHomeLoadPort` @0x262c0b0 (encryptionRequestHttp; encrypted: true, param_type/cmd: see `api/param_types.md`); `getDeviceHomeLoadPort` @0x2674420 (encryptionRequestHttp; encrypted: true); `getDeviceHomeLoadRes` @0x274a794 (encryptionRequestHttp; encrypted: true)
-- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart`: `<anonymous closure> in ElectricityUsageHelper::getCurEmsModeType` @0x292e774 (URL literal only, no `*Http*` call); `<anonymous closure> in ElectricityUsageHelper::getManualSetTOUDetailWithUrl` @0x2c4fdfc (URL literal only, no `*Http*` call); `assembleRemoteApiParametersWidthGetDetail` @0x2c4f694 (URL literal only, no `*Http*` call); `getCurEmsModeType` @0x292e1f4 (encryptionRequestHttp; encrypted: true); `getElectricityUsagePolicyUrl` @0x292e5e8 (URL literal only, no `*Http*` call)
-- `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart`: `<anonymous closure> in TOUPlanLogic::getDataFromAPi` @0x2c49658 (URL literal only, no `*Http*` call); `getDataFromAPi` @0x2c49144 (encryptionRequestHttp; encrypted: true)
+- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart`: `<anonymous closure> in ElectricityUsageHelper::getCurEmsModeType` @0x292e774 (URL literal only, no `*Http*` call; no sender within 3 caller levels); `<anonymous closure> in ElectricityUsageHelper::getManualSetTOUDetailWithUrl` @0x2c4fdfc (URL literal only, no `*Http*` call; no sender within 3 caller levels); `assembleRemoteApiParametersWidthGetDetail` @0x2c4f694 (URL literal only, no `*Http*` call; no sender within 3 caller levels); `getCurEmsModeType` @0x292e1f4 (encryptionRequestHttp; encrypted: true); `getElectricityUsagePolicyUrl` @0x292e5e8 (URL literal only, no `*Http*` call; sender found through callers: `ElectricityUsageHelper::getCurEmsModeType` (`electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x292e1f4`) via `ElectricityUsageHelper::getCurEmsModeType` (`electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x292e1f4`))
+- `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart`: `<anonymous closure> in TOUPlanLogic::getDataFromAPi` @0x2c49658 (URL literal only, no `*Http*` call; no sender within 3 caller levels); `getDataFromAPi` @0x2c49144 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/tou/impl_v2/service/tou_http_service.dart`: `getDeviceHomeLoad` @0x4878c74 (request; encrypted: default-true (requestHttp) — verify, param_type/cmd: see `api/param_types.md`)
 - `ev_charger/src/ev_charger/page/home/a5190_home_logic.dart`: `_fetchDeviceStationInfo` @0x3504e80 (encryptionRequestHttp; encrypted: true)
 
@@ -85,6 +85,7 @@ Called from:
 - `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::parserRouterInfo`
 - `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::updateData`
 - `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::onReady`
+- `electricity_price/components/tou/impl_v2/repository/charging_pile_tou_repository.dart::getTouDetail`
 - `ev_charger/src/ev_charger/page/home/a5190_home_logic.dart::onInit`
 
 ## Since/changed

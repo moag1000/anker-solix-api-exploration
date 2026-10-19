@@ -47,7 +47,7 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `checkFunction` @0x2349c50 (URL literal only, no `*Http*` call)
+- `base_service/api_url.dart`: `checkFunction` @0x2349c50 (URL literal only, no `*Http*` call; sender found through callers: `A17E2StationLogic::_checkVppFunction` (`micro_hes/src/a17e2/station/home/a17e2_station_logic.dart @0x2349388`) via `A17E2StationLogic::_checkVppFunction` (`micro_hes/src/a17e2/station/home/a17e2_station_logic.dart @0x2349388`); also `PowerUsageScenarioController::checkVppFunction`)
 - `charging/http/http_request_repository_impl.dart`: `checkFunction` @0x28e7e58 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
 Called from:

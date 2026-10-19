@@ -44,7 +44,7 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `getAreaByCode` @0x41e4a70 (URL literal only, no `*Http*` call)
+- `base_service/api_url.dart`: `getAreaByCode` @0x41e4a70 (URL literal only, no `*Http*` call; sender found through callers: `ElectricityPriceProviderLogic::fetchAreaByCode` (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e44e4`) via `ElectricityPriceProviderLogic::fetchAreaByCode` (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e44e4`))
 
 ## Since/changed
 

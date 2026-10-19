@@ -72,10 +72,10 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `sendDeviceCommand` @0x249e524 (URL literal only, no `*Http*` call)
+- `base_service/api_url.dart`: `sendDeviceCommand` @0x249e524 (URL literal only, no `*Http*` call; sender found through callers: `TouHttpService::sendDeviceCommand` (`electricity_price/components/tou/impl_v2/service/tou_http_service.dart @0x4884e40`) via `TouHttpService::sendDeviceCommand` (`electricity_price/components/tou/impl_v2/service/tou_http_service.dart @0x4884e40`))
 - `charging/http/http_request_repository_impl.dart`: `sendDeviceCommand` @0x24a0aa8 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart`: `savePlanPrice` @0x278dc40 (requestHttp; encrypted: default-true (requestHttp) — verify)
-- `charging/util/demosite_util_impl.dart`: `DemoSiteUtilImpl` @0x4a33a6c (URL literal only, no `*Http*` call)
+- `charging/util/demosite_util_impl.dart`: `DemoSiteUtilImpl` @0x4a33a6c (URL literal only, no `*Http*` call; no sender within 3 caller levels)
 
 Called from:
 

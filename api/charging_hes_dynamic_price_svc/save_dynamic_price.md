@@ -44,7 +44,7 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `saveDynamicPrice` @0x2e82b34 (URL literal only, no `*Http*` call)
+- `base_service/api_url.dart`: `saveDynamicPrice` @0x2e82b34 (URL literal only, no `*Http*` call; sender found through callers: `ChargeDischargeSettingLogic::save` (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b469c`) via `ChargeDischargeSettingLogic::save` (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b469c`); also `ChargeDischargeSettingLogic_C5::save`, `CustomTimePeriodController::saveChargeTimes`, `ElectricityCompanySelectLogic::_switchToFlatpeakThenConfirm`, `ElectricityCompanySelectLogic::saveDynamicPrice`, `ElectricityPlaceConfirmPageLogic::save`)
 
 ## Since/changed
 

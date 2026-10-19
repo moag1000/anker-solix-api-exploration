@@ -56,13 +56,16 @@ n/a
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `bindUnX1Charger` @0x226c334 (encryptionRequestHttp; encrypted: true)
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `setStationEvChargers` @0x3961580 (URL literal only, no `*Http*` call)
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `setStationEvChargers` @0x3961580 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
 
 Called from:
 
 - `charging/http/http_request_repository.dart::bindUnX1Charger`
 - `charging/ui/page/device/a5101/setting/device_manager/ev_charger/add_ev_charger_logic.dart::pushToStation`
 - `charging/ui/page/device/a5101/setting/device_manager/ev_charger/ev_charger_manager_logic.dart::unBindEvCharger`
+- `ev_charger/src/ev_charger/page/home/load_balancing/load_balancing_logic.dart::_executeStationDisconnect`
+- `ev_charger/src/ev_charger/page/home/load_balancing/select_station/evselect_station_logic.dart::_executeSetStationEvChargers`
+- `ev_charger/src/ev_charger/page/home/load_balancing/select_station/evselect_station_logic.dart::removeFromStationAndBind`
 
 ## Since/changed
 

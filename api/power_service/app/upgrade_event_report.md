@@ -60,12 +60,13 @@ n/a
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `getReportBleUpgrade` @0x3422678 (requestHttp; encrypted: default-true (requestHttp) — verify)
-- `ota_kit/src/services/ota_upgrade_record_reporter.dart`: `_reportSingle` @0x280a890 (URL literal only, no `*Http*` call)
+- `ota_kit/src/services/ota_upgrade_record_reporter.dart`: `_reportSingle` @0x280a890 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
 
 Called from:
 
 - `charging/http/http_request_repository.dart::getReportBleUpgrade`
 - `charging/ui/page/device/anker_ota/base/anker_ota_base_logic.dart::reportBleOtaRecord`
+- `ota_kit/src/services/ota_upgrade_record_reporter.dart::report`
 
 ## Since/changed
 

@@ -69,11 +69,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `postCloudSitePrice` @0x31e4050 (encryptionRequestHttp; encrypted: true); `updateSitePriceRequest` @0x279e0cc (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/electricity_price_common/electricity_price_plan_api_helper.dart`: `saveMediumChargingPlan` @0x41a73e0 (encryptionRequestHttp; encrypted: true)
-- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart`: `getSaveDeviceEMSPrice` @0x249e420 (URL literal only, no `*Http*` call)
+- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart`: `getSaveDeviceEMSPrice` @0x249e420 (URL literal only, no `*Http*` call; sender found through callers: `ElectricityUsageHelper::setDeviceEMSPriceArgument` (`electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x249e2cc`) via `ElectricityUsageHelper::setDeviceEMSPriceArgument` (`electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x249e2cc`))
 - `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart`: `savePlan` @0x31b88b4 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart`: `setFixedPrice` @0x41a7afc (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/tou/impl_v2/service/tou_http_service.dart`: `updateSitePrice` @0x4883d48 (request; encrypted: default-true (requestHttp) — verify)
-- `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart`: `<anonymous closure> in TOUEditPreviewLogic::savePlan` @0x31df304 (URL literal only, no `*Http*` call); `savePlan` @0x31de7dc (encryptionRequestHttp; encrypted: true)
+- `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart`: `<anonymous closure> in TOUEditPreviewLogic::savePlan` @0x31df304 (URL literal only, no `*Http*` call; no sender within 3 caller levels); `savePlan` @0x31de7dc (encryptionRequestHttp; encrypted: true)
 
 Called from:
 
@@ -90,6 +90,9 @@ Called from:
 - `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::setDeviceEMSPriceArgument`
 - `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::clickSeasonItem`
 - `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::setFixedPriceV2`
+- `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::setTOU`
+- `electricity_price/components/tou/impl_v2/repository/medium_tou_repository.dart::saveTouPlan`
+- `electricity_price/components/tou/impl_v2/repository/platform_tou_repository.dart::saveTouPlan`
 - `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart::onDoneClick`
 - `electricity_price/components/tou_pct/page/electricity_price_pad_preview/electricity_price_pad_preview_logic.dart::setSitePrice`
 

@@ -54,14 +54,19 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getUserSiteList` @0x28c2f6c (encryptionRequestHttp; encrypted: true)
 - `charging/ui/page/home/home_base_http_reposity.dart`: `querySiteList` @0x238e380 (encryptionRequestHttp; encrypted: true)
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getUserSiteList` @0x2aaea38 (URL literal only, no `*Http*` call)
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getUserSiteList` @0x2aaea38 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
 
 Called from:
 
 - `charging/http/http_request_repository.dart::getUserSiteList`
 - `charging/ui/page/device/a17c0/select_station/select_station_logic.dart::getUserSiteListReq`
+- `charging/ui/page/device/connect/zx_config_wifi/zx_config_wifi_logic.dart::parseBleResponseData`
+- `charging/ui/page/device/connect/zx_connect_ble_success/zx_connect_ble_success_logic.dart::_updateDeviceName`
 - `charging/ui/page/green_energy/site/site_logic.dart::onReady`
+- `charging/ui/page/home/home_base_logic.dart::quierySiteList`
 - `charging/ui/page/user/share_site/manage_system/manage_system_logic.dart::getUserSiteListReq`
+- `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart::fetchHesSites`
+- `ev_charger/src/ev_charger/page/home/load_balancing/select_station/evselect_station_logic.dart::getUserStation`
 
 ## Since/changed
 

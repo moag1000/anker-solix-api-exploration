@@ -44,7 +44,7 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `getPrice` @0x2554b74 (URL literal only, no `*Http*` call)
+- `base_service/api_url.dart`: `getPrice` @0x2554b74 (URL literal only, no `*Http*` call; sender found through callers: `PowerUsageScenarioController::getPriceDetail` (`ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x25549d0`) via `PowerUsageScenarioController::getPriceDetail` (`ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x25549d0`); also `PowerUsageScenarioLogic::_requestDynamicPriceInfo`, `SystemPolicyLogic::getPriceDetail`)
 
 ## Since/changed
 
