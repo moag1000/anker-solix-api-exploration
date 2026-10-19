@@ -40,7 +40,7 @@ Pick the line that matches what you want to do. Each links to a persona section 
 - **Home Assistant integration developer** ("which setting, which flow, which ranges?"): [persona](docs/PERSONAS.md#2-home-assistant-integration-developer), first pages [flows/](flows/README.md) and [api/param_types.md](api/param_types.md).
 - **mqtt_monitor user** ("what is field a8 / cmd 0x7c?"): [persona](docs/PERSONAS.md#3-mqtt_monitor-user), first pages [mqtt/README.md](mqtt/README.md) (one decoder page per product number) and [mqtt/envelope.md](mqtt/envelope.md) (frame and envelope).
 - **BLE project developer** ("opcode, TLV, handshake?"): [persona](docs/PERSONAS.md#4-ble-project-developer), the [ble/](ble/README.md) pages are planned (Task 3.7/4.x, nothing there yet); the shared TLV frame and the per-product command tags are in [mqtt/envelope.md](mqtt/envelope.md) and [mqtt/README.md](mqtt/README.md). BLE is a local channel only; it is not a live fallback for the cloud.
-- **Curious user / newcomer** ("what can be controlled, what is a site?"): [persona](docs/PERSONAS.md#5-curious-user--newcomer), start with [How to use this reference](#how-to-use-this-reference) and [METHODOLOGY.md](METHODOLOGY.md); a glossary is planned (`GLOSSARY.md`), none today.
+- **Curious user / newcomer** ("what can be controlled, what is a site?"): [persona](docs/PERSONAS.md#5-curious-user--newcomer), start with [How to use this reference](#how-to-use-this-reference) and [METHODOLOGY.md](METHODOLOGY.md); the [glossary](GLOSSARY.md).
 
 The layout and the owner of every kind of fact are described in [docs/STRUCTURE.md](docs/STRUCTURE.md); the old root pages are still present and are marked as superseded below.
 

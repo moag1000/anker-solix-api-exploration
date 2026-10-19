@@ -17,7 +17,7 @@ This page defines where every kind of fact lives in the rebuilt repository and h
 
 ```
 README.md                 entry: role paths, use-case index, version matrix, what changed in 3.24.3
-GLOSSARY.md               terms (Task 4.1)
+GLOSSARY.md               terms (29 entries, owner links)
 METHODOLOGY.md            how facts are produced, Smi rule, tags
 CHANGELOG.md              per-rework entries + Errata
 api/<service>/<endpoint>.md   ONE page per endpoint (owner of payload facts)
@@ -37,7 +37,7 @@ tools/                    scripts
 docs/                     personas, structure, issues, audit tables, plans
 ```
 
-Each directory has a `README.md` index stub: [api](../api/README.md), [mqtt](../mqtt/README.md), [ble](../ble/README.md), [flows](../flows/README.md), [devices](../devices/README.md), [models](../models/README.md), [reference](../reference/README.md), [data](../data/README.md), [tools](../tools/README.md). Pages written so far on this branch: [api/auth.md](../api/auth.md), [api/encryption.md](../api/encryption.md), [api/sdk_senders.md](../api/sdk_senders.md), [api/param_types.md](../api/param_types.md), the endpoint pages under [api/](../api/README.md), the MQTT pages in [mqtt/](../mqtt/README.md) (including [mqtt/envelope.md](../mqtt/envelope.md)), three flow pages in [flows/](../flows/README.md), [devices/a17c5.md](../devices/a17c5.md), [devices/modbus.md](../devices/modbus.md), the model pages in [models/](../models/README.md), [reference/iot_kit_channels.md](../reference/iot_kit_channels.md) (owner of the `akiot.*` identifier list), [reference/enums.md](../reference/enums.md), [reference/business_rules.md](../reference/business_rules.md), [reference/validation_model.md](../reference/validation_model.md), the BLE pages in [ble/](../ble/README.md) and [data/endpoints.json](../data/endpoints.json), [data/models.json](../data/models.json), [data/param_types.json](../data/param_types.json). Every other path named in the layout above (for example `GLOSSARY.md`, `api/errors.md`, `data/errors.json`) is planned and does not exist yet.
+Each directory has a `README.md` index stub: [api](../api/README.md), [mqtt](../mqtt/README.md), [ble](../ble/README.md), [flows](../flows/README.md), [devices](../devices/README.md), [models](../models/README.md), [reference](../reference/README.md), [data](../data/README.md), [tools](../tools/README.md). Pages written so far on this branch: [api/auth.md](../api/auth.md), [api/encryption.md](../api/encryption.md), [api/sdk_senders.md](../api/sdk_senders.md), [api/param_types.md](../api/param_types.md), the endpoint pages under [api/](../api/README.md), the MQTT pages in [mqtt/](../mqtt/README.md) (including [mqtt/envelope.md](../mqtt/envelope.md)), three flow pages in [flows/](../flows/README.md), [devices/a17c5.md](../devices/a17c5.md), [devices/modbus.md](../devices/modbus.md), the model pages in [models/](../models/README.md), [reference/iot_kit_channels.md](../reference/iot_kit_channels.md) (owner of the `akiot.*` identifier list), [reference/enums.md](../reference/enums.md), [reference/business_rules.md](../reference/business_rules.md), [reference/validation_model.md](../reference/validation_model.md), the BLE pages in [ble/](../ble/README.md), [GLOSSARY.md](../GLOSSARY.md) and [data/endpoints.json](../data/endpoints.json), [data/models.json](../data/models.json), [data/param_types.json](../data/param_types.json). Every other path named in the layout above (for example `api/errors.md`, `data/errors.json`) is planned and does not exist yet.
 
 ## Ownership rule
 

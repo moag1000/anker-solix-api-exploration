@@ -70,12 +70,12 @@ The [ble/](../ble/README.md) pages exist: [protocol](../ble/protocol.md), [hands
 
 - **Who:** Owns Anker Solix hardware or is evaluating it, with no API background.
 - **First question:** "What can be controlled at all, and what is a site or a station?"
-- **First page needed:** the README use-case index; the glossary (`GLOSSARY.md`) is planned.
-- **Glossary planned (target `GLOSSARY.md`); no equivalent today. Start with the README use-case index.**
+- **First page needed:** the README use-case index and the [glossary](../GLOSSARY.md).
+- **Glossary: [GLOSSARY.md](../GLOSSARY.md) (29 terms, owner links). Start with the README use-case index.**
 
 | Step | Now | Planned |
 |---|---|---|
 | 1 | [README.md](../README.md#how-to-use-this-reference) (use-case index) | unchanged |
 | 2 | [METHODOLOGY.md](../METHODOLOGY.md) (what the confidence tags mean) | |
-| 3 | [devices/a17c5.md](../devices/a17c5.md) (a worked device page; not a glossary) | `GLOSSARY.md` (site, station, device, PN) |
+| 3 | [GLOSSARY.md](../GLOSSARY.md) (site, station, device, PN) | — |
 | 4 | [flows/README.md](../flows/README.md) (what the app can do, step by step) | more flow pages |
