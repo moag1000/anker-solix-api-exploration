@@ -21,7 +21,7 @@ Ruled out as the decoder, with the evidence (all 3.24.3):
 | `base_service/device/iot_device_adapter.dart` | `IotDeviceAdapter` (class id 8440, size 0x200), the device-model base of `IotAnkerDevice`: connection, OTA, battery and version getters; its `onMessageDispatch` @0x2855894 handles only the SDK event code 6000 (a BLE status event carrying `bleMac`), see below | class header; `onMessageDispatch` @0x2855894 |
 | `ak_base_contract/src/iot_ak_result.dart` | `IoTAKResult<X0>` (class id 0x1c6f, size 0x24): result wrapper with `isSuccessful` and `fromAKIoTResult` | class header |
 
-The code 6000 compare in `IotDeviceAdapter.onMessageDispatch` is `mov x17,#0x1770; cmp x0,x17` against a 64-bit field load (`ldur x0,[x2,#0xb]`), so the raw value is the real value (0x1770 = 6000) @0x28558b8. It then reads `bleMac` and `data.type` from the event map and calls `_updateBleStatus` @0x2855a70. It never touches a frame.
+The code 6000 compare in `IotDeviceAdapter.onMessageDispatch` is `mov x17,#0x1770; cmp x0,x17` against a 64-bit field load (`ldur x0,[x2,#0xb]`), so the raw value is the real value (0x1770 = 6000) iot_device_adapter.dart @0x28558b8. It then reads `bleMac` and `data.type` from the event map and calls `_updateBleStatus` @0x2855a70. It never touches a frame.
 
 ## Contents
 
@@ -55,7 +55,7 @@ none (receive path, no opcode).
 
 #### Direction
 
-device→app. Tag: asm-traced. The send side (`MqttCommandController.sendCommand` @0x226f930, which JSON-encodes a map and calls `MqttServe.zxSendMessage` @0x226f9a4) is documented on [envelope.md](envelope.md#topics).
+device→app. Tag: asm-traced. The send side (`MqttCommandController.sendCommand` mqtt_command_controller.dart @0x226f930, which JSON-encodes a map and calls `MqttServe.zxSendMessage` mqtt_serve.dart @0x226f9a4) is documented on [envelope.md](envelope.md#topics).
 
 #### Topic pattern
 
@@ -72,15 +72,15 @@ Hops in order; tag column is the hop id. Event codes are read from a 64-bit fiel
 | h2 | event data | `Map<String, dynamic>` (type test) | added to the broadcast response stream | yes | same function @0x2855180 |
 | h3 | manager choice | bool `field_7` of the late static `DemoSiteUtil` (field table offset 0xdf8) | true: Dart `MqttManagerImpl`; false: `SdkMqttManagerImpl` | yes | `mqtt_serve.dart` `_manager` @0x2207ed0, branch @0x2207ef8, targets @0x2207f04 and @0x2207f14; `response` getter @0x23c1e80 |
 | h4 | per-controller stream | `StreamController.broadcast` in `MqttCommandController` | listens to `MqttServe().response` and re-adds every event | yes | `mqtt_command_controller.dart` ctor @0x3aaed60, `notifyCommand` @0x4859c40 (listen), @0x4859cb0 (add) |
-| h5 | controller filter | `MqttServe.isCurrentDeviceMqttResponse(device, topic)` | topic must contain (case-insensitive) a value of one device selector and then a value of a second | yes | `mqtt_serve.dart` @0x242e328 (size 0xa4): `isCaseInsensitiveContainsAny` @0x242e37c and @0x242e3ac; caller `DeviceController._initMQTTDeviceResponse` closure @0x242e2dc |
+| h5 | controller filter | `MqttServe.isCurrentDeviceMqttResponse(device, topic)` | topic must contain (case-insensitive) a value of one device selector and then a value of a second | yes | `mqtt_serve.dart` @0x242e328 (size 0xa4): `isCaseInsensitiveContainsAny` @0x242e37c and @0x242e3ac; caller `DeviceController._initMQTTDeviceResponse` closure device_controller.dart @0x242e2dc |
 | h6 | handler call | virtual `handleMQTTDeviceResponse(event)` | per controller | yes | `device_controller.dart` closure @0x242e2fc |
-| h7 | body | first chained property read, String, `JsonCodec.decode`, must be a `Map<String, dynamic>` | | yes | `IotDeviceController.handleMQTTDeviceResponse` @0x3b69900: decode @0x3b69a1c, type test @0x3b69a8c |
-| h8 | topic gate | second chained property read, String; `MqttServe.isDeviceParamInfoTopic(device, topic)` false returns | `param_info` only | yes | @0x3b69b40 (`isDeviceParamInfoTopic` @0x3b33070, size 0x58, builds `"dt/" + getCommonTopicString + "/param_info"` through `getDeviceParamInfoTopic` @0x34d01fc, literals @0x34d0234 and @0x34d0278) |
-| h9 | `payload` | key `"payload"` of the body; null returns; String decoded a second time to a `Map` | | yes | @0x3b69b58 to @0x3b69be0 |
+| h7 | body | first chained property read, String, `JsonCodec.decode`, must be a `Map<String, dynamic>` | | yes | `IotDeviceController.handleMQTTDeviceResponse` iot_anker_controller.dart @0x3b69900: decode @0x3b69a1c, type test @0x3b69a8c |
+| h8 | topic gate | second chained property read, String; `MqttServe.isDeviceParamInfoTopic(device, topic)` false returns | `param_info` only | yes | iot_anker_controller.dart @0x3b69b40 (`isDeviceParamInfoTopic` mqtt_serve.dart @0x3b33070, size 0x58, builds `"dt/" + getCommonTopicString + "/param_info"` through `getDeviceParamInfoTopic` @0x34d01fc, literals @0x34d0234 and @0x34d0278) |
+| h9 | `payload` | key `"payload"` of the body; null returns; String decoded a second time to a `Map` | | yes | iot_anker_controller.dart @0x3b69b58 to @0x3b69be0 |
 | h10 | `data` | key `"data"` of the inner map; String, `base64Decode` to bytes, then `_handleResponse(bytes)` | | yes | @0x3b69c5c, @0x3b69cc4, @0x3b69cd4 |
 | h11 | defer | when `AnimationCriticalWindow.isInCriticalWindow` is true the call is wrapped in `defer(...)` and re-entered later | | no | @0x3b69960 to @0x3b6997c (late static field table 0x2060, pool [pp+0x1b938]); re-entry closure @0x3b6aa9c calls the handler at @0x3b6aad0 |
 
-The same six steps (decode body, topic gate, `payload`, `data`, base64, `_handleResponse`) are in the other controllers' `handleMQTTDeviceResponse`; the A17C1 copy is @0x3b54fc0 (size 0x68) plus `_dealWithMqttResponse` @0x3b55028 (size 0x43c). The BLE entry point of the fallback controller, `handleZXProtocolDeviceResponse` @0x3b90454 (size 0xd0), calls the same `_handleResponse` @0x3b904f4 and then `handleDeviceLogParser` @0x3b90508 under the same deferral; this page does not describe the BLE transport and makes no claim that it serves as a fallback for the cloud path (see [../ble/README.md](../ble/README.md)).
+The same six steps (decode body, topic gate, `payload`, `data`, base64, `_handleResponse`) are in the other controllers' `handleMQTTDeviceResponse`; the A17C1 copy is a17c1_device_controller.dart @0x3b54fc0 (size 0x68) plus `_dealWithMqttResponse` @0x3b55028 (size 0x43c). The BLE entry point of the fallback controller, `handleZXProtocolDeviceResponse` iot_anker_controller.dart @0x3b90454 (size 0xd0), calls the same `_handleResponse` @0x3b904f4 and then `handleDeviceLogParser` @0x3b90508 under the same deferral; this page does not describe the BLE transport and makes no claim that it serves as a fallback for the cloud path (see [../ble/README.md](../ble/README.md)).
 
 #### Example
 
@@ -102,7 +102,7 @@ Both versions have the topic predicates and the `_manager` getter with equal fun
 
 #### Known unknowns
 
-- The two chained property reads that give the body and the topic of the event are dynamic calls through one shared pool object (`IMM 0x10fd1fba4`, @0x3b69a9c to @0x3b69af4 and @0x3b69998 to @0x3b699d4), so the property names are not visible. The event is a `Map<String, dynamic>` (type test @0x2855168); a single-entry topic-to-body map fits both reads but is not confirmed.
+- The two chained property reads that give the body and the topic of the event are dynamic calls through one shared pool object (`IMM 0x10fd1fba4`, iot_anker_controller.dart @0x3b69a9c to @0x3b69af4 and @0x3b69998 to @0x3b699d4), so the property names are not visible. The event is a `Map<String, dynamic>` (type test sdk_imp_mqtt_manager.dart @0x2855168); a single-entry topic-to-body map fits both reads but is not confirmed.
 - The two device selectors tested by `isCurrentDeviceMqttResponse` are dispatch-table getters without names (offsets 0x2b43b and 0x2abf7). By the topic layout they are the PN and the serial; the second selector is also the key suffix of the debounce strings in `parseCommonData`, with the BLE MAC as fallback, which agrees with a serial.
 - What the `DemoSiteUtil` bool (`field_7`) means (the class is `DemoSiteUtilImpl`, size 0x18) and which manager production builds use is not established.
 - Where `MqttDecompressionUtil.decompressPayload` is applied: it has 12 call sites in 9 files (`ak_soft_ems`, `ats_ax170`, `scene_info_mgr`, `device_mode_tips_logic`, three `charging/ui/page/device/main` station pages, `micro_hes` station logic), none in `charging/ble/device`, `charging/mqtt` or `charging/command`. The per-device decode path above therefore has no gzip step; the topics that feed the station-level callers are not traced. This narrows the open question in [envelope.md](envelope.md#known-unknowns).
@@ -135,7 +135,7 @@ app-internal. Tag: asm-traced.
 
 #### Payload fields
 
-`DeviceFactory.createByProductCode` @0x24e2af8 (size 0x58) forwards to `DeviceFactoryImpl.createByProductCode` @0x240df30 (size 0x15b4). The function compares the PN with string literals through `==` in a fixed order, first `"A1781"` @0x240df58 and last `"AX1S0"` @0x240f45c: 52 literals. `createByDeviceModel` @0x240d5e4 calls it with `isInitListener` true @0x240d618 and, when the result is not null, `_generateAnkerDevice` @0x240d654 (size 0x7fc), which copies the model fields onto the device (it calls `getSkuBySN` @0x240d740). Class names are the allocation stubs in the asm; the constructor call after each allocation is labelled with another controller name in places (for example `A172xDeviceController` after `A17C0DeviceController`), which is a Blutter label for shared code, not a second object.
+`DeviceFactory.createByProductCode` device_factory.dart @0x24e2af8 (size 0x58) forwards to `DeviceFactoryImpl.createByProductCode` device_factory_impl.dart @0x240df30 (size 0x15b4). The function compares the PN with string literals through `==` in a fixed order, first `"A1781"` @0x240df58 and last `"AX1S0"` @0x240f45c: 52 literals. `createByDeviceModel` @0x240d5e4 calls it with `isInitListener` true @0x240d618 and, when the result is not null, `_generateAnkerDevice` @0x240d654 (size 0x7fc), which copies the model fields onto the device (it calls `getSkuBySN` @0x240d740). Class names are the allocation stubs in the asm; the constructor call after each allocation is labelled with another controller name in places (for example `A172xDeviceController` after `A17C0DeviceController`), which is a Blutter label for shared code, not a second object.
 
 | controller class | commands class | PN literals (compare address) | device classes | page |
 |---|---|---|---|---|
@@ -186,7 +186,7 @@ The PN comes from the device model passed to `createByDeviceModel`; which API re
 
 #### Since/changed
 
-The 52 literals and their order are identical in 3.18.0 (compare chain @0x1993e20 to @0x19955e0). The allocated classes are identical per PN; the differences in a name comparison come only from the constructor labels. In 3.18.0 the A17A3, A17A4 and A17A5 blocks additionally stored the string `Removable Battery` (for A17A3 @0x1994378 and @0x19943f8); the 3.24.3 blocks store no string. Tag: asm-traced (3.24.3 side).
+The 52 literals and their order are identical in 3.18.0 (3.18.0 `device_factory_impl.dart`, compare chain @0x1993e20 to @0x19955e0). The allocated classes are identical per PN; the differences in a name comparison come only from the constructor labels. In 3.18.0 the A17A3, A17A4 and A17A5 blocks additionally stored the string `Removable Battery` (3.18.0 `device_factory_impl.dart`, for A17A3 @0x1994378 and @0x19943f8); the 3.24.3 blocks store no string. Tag: asm-traced (3.24.3 side).
 
 #### Known unknowns
 
@@ -210,7 +210,7 @@ none. Upstream splits a frame in `DeviceHexDataHeader.__post_init__` and `Device
 
 #### Command code
 
-Hex strings built by `bytesToHexString` (two lowercase digits per byte: `_toPow2String(16)` @0x21d4f60 and, for a one-digit result, a leading `0` written first, `cmp x2,#2` @0x21d4f74 and `toString` of 0 @0x21d4f80 in `cmd_util.dart`), used as map keys; string literals, never halved. The two maps are listed under Payload fields.
+Hex strings built by `bytesToHexString` (two lowercase digits per byte: `_toPow2String(16)` cmd_util.dart @0x21d4f60 and, for a one-digit result, a leading `0` written first, `cmp x2,#2` @0x21d4f74 and `toString` of 0 @0x21d4f80 in `cmd_util.dart`), used as map keys; string literals, never halved. The two maps are listed under Payload fields.
 
 #### Direction
 
@@ -222,7 +222,7 @@ device→app (the same helpers also resolve the opcode of requests through `getO
 
 #### Payload fields
 
-`parseResponse(bytes, bleMac, device:)` @0x241c8bc (size 0x560) returns a `Map<String, dynamic>`; every index below is a byte offset of the frame. Sublist starts are unboxed (real), sublist ends are tagged (raw/2).
+`parseResponse(bytes, bleMac, device:)` pps_device_commands.dart @0x241c8bc (size 0x560) returns a `Map<String, dynamic>`; every index below is a byte offset of the frame. Sublist starts are unboxed (real), sublist ends are tagged (raw/2).
 
 | tag | name | rule | unit/scale | required | source |
 |---|---|---|---|---|---|
@@ -237,7 +237,7 @@ device→app (the same helpers also resolve the opcode of requests through `getO
 | p9 | `BLE_CMD_STATUS_KEY` | `BleStatusCode.getCmdStatus(payload["a0"])` when the payload map has key `a0` (`indexString(0xa0)`, argument 160) | enum | no | @0x241cc80, @0x241cd04, @0x241cd28 |
 | p10 | `OPCODE_KEY` | the opcode bytes with element 0 replaced by `element0 & 0xf` | 2 bytes | yes | mask @0x241cd74, store @0x241cddc |
 
-No XOR checksum is compared on the receive side: `pps_device_commands.dart` has no `eor` instruction and no call to a checksum function (grep), and the length check above is the only frame check. The checksum builders belong to the send side ([envelope.md](envelope.md#binary-layer), audit row 14).
+No XOR checksum is compared on this path (`parseResponse`, `_parsePayloadData`, `parseCommonData` and `iot_anker_controller.dart`): `pps_device_commands.dart` has no `eor` instruction and no call to a checksum function (grep), and the length check above is the only frame check. A receive-side XOR validator does exist on the BLE reassembly path: `ZXCmdUtil._isLegallyCmd` in ak_cmd_util.dart @0x478a2e8 calls `getCheckSum` @0x478a348 and compares the result with the last byte (`cmp x2,x1` @0x478a37c); it is called from `ZXCommandTransformer.validateCommand` (zx_command_transformer.dart @0x4789138, call @0x4789240). Whether any MQTT frame reaches `validateCommand` was not traced (no caller of the form `r0 = validateCommand()` was found, grep); the checksum builders of the send side are in [envelope.md](envelope.md#binary-layer) (audit row 14).
 
 `getOpcodeFromCmd(bytes)` @0x2634538 (size 0xac) is the entry the controllers call: `getOpcodeType(bytes.sublist(7, 9), bytes[6])` with start raw 7 @0x263456c, end raw 18 = 9 @0x2634560 and index raw 12 = 6 @0x263459c. `getOpcodeType` @0x2425dc8 (size 0x2f0) copies the two bytes, replaces element 0 by `element0 & 0xf` @0x2425f60, builds the hex key, and looks it up in `commonOpcodeMap` when the group byte equals 1 (`cmp x0,#1` @0x2425fcc) and in `chargingOpcodeMap` otherwise; a missing key gives the enum value `unknown` (index 0x61, pool [pp+0x10e80]) @0x2426088. `getOpcodeFromType(type, group)` @0x241ff90 (size 0xd4) is the reverse: `forEach` over the same maps, `hexStringToBytes(key)` for each matching value.
 
@@ -268,7 +268,7 @@ No XOR checksum is compared on the receive side: `pps_device_commands.dart` has 
 | `0831` | `requestModuleLogUploadRes` | 0x8a | @0x2422de4 |
 | `0032` | `moduleLogUploadRes` | 0x8b | @0x2422e28 |
 
-**chargingOpcodeMap** (built @0x2420104, size 0x274c; array length raw 500 = 250 elements = 125 pairs @0x242012c, 118 distinct keys). Selected for every other group byte. Seven keys occur twice; the map literal keeps the later value, so the earlier type can never come out of `getOpcodeType` (the table marks both rows).
+**chargingOpcodeMap** (built @0x2420104, size 0x274c; array length raw 500 = 250 elements = 125 pairs @0x242012c, 118 distinct keys). Selected for every other group byte. Seven keys occur twice; by Dart map-literal semantics (a later entry replaces the earlier value; not an asm citation) the later value is kept, so the earlier type can never come out of `getOpcodeType`; `getOpcodeFromType` runs `forEach` over the stored entries, so it never yields a key for a shadowed type either (the table marks both rows).
 
 | opcode key | ZXOpcodeType | enum index | source |
 |---|---|---|---|
@@ -426,7 +426,7 @@ Cross-check against the opcodes that have a `### <opcode>` section on the PN pag
 | `postPbFormatBackupMindData` (0x23) | `parseCommonDataWithCustomLengthBytes` with the literal map `{0xa2: 2}` (raw key 324 and value 4 stored into the map-literal array, array length raw 4, halved) | map @0x241d47c, @0x241d484; call @0x241d4b0 |
 | every other type (including `unknown` and all post/get/set types of the PN pages) | `isResponseOrRequest(getOpcodeFromType(type, group) or opcodeBytes)` (byte 0 bit 3, [envelope.md](envelope.md#direction-detection)), debug line `isResponse common:`, then `parseCommonData` | @0x241d4e4 to @0x241d600 |
 
-In the last four rows the first TLV parser argument "isResponse" comes from the canonical opcode bytes of the type, not from the received bytes (the received bytes are used only when `getOpcodeFromType` finds no key). The parsers share a decrypt step: when the encrypted flag (p7) is set, `AesHelper.aesGcmDecrypt(payload, bleMac)` @0x241fb70 runs if the bool `field_3f` of the device object is true, otherwise `AesHelper.decrypt(payload, bleMac)` @0x241fb88 (a null result becomes an empty list); `parseCommonDataWithDataType` has the same step @0x241e4f8 and @0x241e510. With the flag clear the payload is copied unchanged.
+In the three rows after the six-type group the first TLV parser argument "isResponse" comes from the canonical opcode bytes of the type, not from the received bytes (the received bytes are used only when `getOpcodeFromType` finds no key). The parsers share a decrypt step: when the encrypted flag (p7) is set, `AesHelper.aesGcmDecrypt(payload, bleMac)` @0x241fb70 runs if the bool `field_3f` of the device object is true, otherwise `AesHelper.decrypt(payload, bleMac)` @0x241fb88 (a null result becomes an empty list); `parseCommonDataWithDataType` has the same step @0x241e4f8 and @0x241e510. With the flag clear the payload is copied unchanged.
 
 `parseCommonData(payload, isResponse, bleMac, device, encrypted)` @0x241f9a0 (size 0x538), the TLV parser behind the per-PN `parseDeviceAllInfo` maps:
 
@@ -439,11 +439,11 @@ In the last four rows the first TLV parser argument "isResponse" comes from the 
 
 `parseCommonDataWithCustomLengthBytes` @0x241d664 (size 0x800) reads the width of the length field of a tag from its map argument and defaults to 1 byte (`r5 = 1` @0x241d940), builds `lenList = payload.sublist(i, i+width)` @0x241da24 and `length = listToInt(lenList)` (little endian, audit row 52) @0x241da30; tag 0xa1 is special-cased (`cmp w3,#0x142`, tagged, = 0xa1 @0x241db5c, audit row 50). The caller literal above fills audit row 51: only `postPbFormatBackupMindData` passes a width, tag 0xa2 with 2 bytes. The superseded `BLE_COMMAND_MAP.md` at the repository root says tag `0xA2` "might use a 4-byte length prefix": the raw immediate 4 sits in a 32-bit array slot, so the real width is 2 bytes (Smi rule); the same file lists five parsers for the dispatch, the table above has all of them. `parseCommonDataWithDataType` @0x241e3d8 (size 0x424) reads tag, length and a type byte per entry and returns entries with the keys `index` (tag, two hex digits, `padLeft` with `"0"` @0x241e718), `length`, `dataType` and `data` @0x241e740 to @0x241e77c.
 
-`BleStatusCode.getCmdStatus(int)` @0x241ce1c (size 0x60) looks the status byte up in a 17-entry const map `Map<int, BleCmdStatus>` ([pp+0xe480], keys 0x0 to 0x6, 0x21 to 0x25, 0x71, 0x72, 0x9, 0xa, 0xb) and returns the enum value `unknown` (index 0x11, [pp+0xe488]) for a miss. Only four values have a name in `pp.txt`: key 0x0 `success` (index 0x0), key 0x5 `noMoreData` (0x5), key 0x9 `needAuthentication` (0xe), key 0xa `passwordWrongAuthenticationFailed` (0xf), key 0xb `passwordRetryCountExceededAuthenticationFailed` (0x10).
+`BleStatusCode.getCmdStatus(int)` ble_status_code.dart @0x241ce1c (size 0x60) looks the status byte up in a 17-entry const map `Map<int, BleCmdStatus>` ([pp+0xe480], keys 0x0 to 0x6, 0x21 to 0x25, 0x71, 0x72, 0x9, 0xa, 0xb) and returns the enum value `unknown` (index 0x11, [pp+0xe488]) for a miss. Only four values have a name in `pp.txt`: key 0x0 `success` (index 0x0), key 0x5 `noMoreData` (0x5), key 0x9 `needAuthentication` (0xe), key 0xa `passwordWrongAuthenticationFailed` (0xf), key 0xb `passwordRetryCountExceededAuthenticationFailed` (0x10).
 
 #### Example
 
-synthesized (built from the rules above, not a capture; XOR byte computed over the 16 preceding bytes)
+synthesized decode-side example (built from the rules above, not a capture; XOR byte computed over the 16 preceding bytes; the send-side convention and its worked example live on [a17x8.md](a17x8.md#007a-setrelayswitchcmd))
 
 ```text
 ff 09 11 00 03 00 0f 04 05 a1 01 22 a2 02 01 07 ce
@@ -459,17 +459,17 @@ none; the typed fields of these frames are documented per PN, see [upstream_comm
 
 #### Since/changed
 
-The `pps_device_commands.dart` helper constants are unchanged in 3.18.0: `parseResponse`, `parseCommonData` and the dispatch chain use the same compare values (0x40 after the 0xf0 mask, 0xa1, 0xa2, 10, the 7/9 opcode window) and the same parser order. The two opcode maps are identical: 125 and 22 pairs with the same keys, enum names and enum indices (3.18.0 maps @0x1e22a48 and @0x1e25194, same sizes 0x274c and 0x608). Function sizes shrank because debug logging was removed (3.18.0 logged `parseResponse,data:` and `,bleMac:`): `parseResponse` 0x5e8 to 0x560, `_parsePayloadData` 0x9e8 to 0x7e8, `parseCommonData` 0x578 to 0x538, `parseCommonDataWithCustomLengthBytes` 0xa2c to 0x800, `getOpcodeType` 0x308 to 0x2f0, `getOpcodeFromCmd` 0xa4 to 0xac. Tag: asm-traced (3.24.3 side).
+The `pps_device_commands.dart` helper constants are unchanged in 3.18.0: `parseResponse`, `parseCommonData` and the dispatch chain use the same compare values (0x40 after the 0xf0 mask, 0xa1, 0xa2, 10, the 7/9 opcode window) and the same parser order. The two opcode maps are identical: 125 and 22 pairs with the same keys, enum names and enum indices (3.18.0 `pps_device_commands.dart` maps @0x1e22a48 and @0x1e25194, same sizes 0x274c and 0x608). Function sizes shrank because debug logging was removed (3.18.0 logged `parseResponse,data:` and `,bleMac:`): `parseResponse` 0x5e8 to 0x560, `_parsePayloadData` 0x9e8 to 0x7e8, `parseCommonData` 0x578 to 0x538, `parseCommonDataWithCustomLengthBytes` 0xa2c to 0x800, `getOpcodeType` 0x308 to 0x2f0, `getOpcodeFromCmd` 0xa4 to 0xac. Tag: asm-traced (3.24.3 side).
 
 #### Known unknowns
 
 - Which frames carry an opcode byte with upper nibble 4 (the encrypted flag) is open. The status frames of the PN pages use `04 05` (upper nibble 0), so they are parsed without a decrypt step. The AES key and IV derivation of `AesHelper` (`charging/ble_zx/helper/aes_helper.dart`) from `bleMac` is not read here.
-- The value range of the first (`a1`) entry rests on the start register left by @0x241fca4 at the `sublist` call @0x241fcdc; the generic branch passes its start explicitly. If the Mint-allocation path of `BoxInt64Instr` @0x241fcbc ran it would clobber that register; the inline path does not.
+- The value range of the first (`a1`) entry rests on the start register left by pps_device_commands.dart @0x241fca4 at the `sublist` call @0x241fcdc; the generic branch passes its start explicitly. If the Mint-allocation path of `BoxInt64Instr` @0x241fcbc ran it would clobber that register; the inline path does not.
 - Byte 9 is the status byte of a response in the app (only when the canonical opcode of the type has bit 3 set); upstream calls byte 9 an optional increment byte (`api/mqtttypes.py` lines 71-76). How the two views fit for a response with a non-response opcode key is not established.
 - `getCmdStatus` names are known for five of the 17 keys; the other twelve enum objects have no printed name in `pp.txt`.
 - Several names look swapped relative to the response bit (`0069` is `deviceFactorySettingRes` and `0869` is `deviceFactorySettingReq`; `0406` is listed as `postUpgradeStateRes` and then `postUpgradeStateReq`), and seven keys are shadowed duplicates; whether this is intended is unknown.
-- `ZXCommandTransformer.validateCommand` @0x4789138, `unpackCmd` @0x478a3a0 and `_checkStickyPack` @0x478a5dc (BLE multi-packet reassembly with `_isLegallyCmd`) are not on the MQTT path and were not read.
-- `parseDeviceInfoData` and the other ZX common parsers (Wi-Fi provisioning and key exchange) are listed but their field maps are out of scope; `decodeResponse` @0x3b45e64 (a second decrypt entry, only called from the A1790 controller) was not read.
+- `ZXCommandTransformer.validateCommand` zx_command_transformer.dart @0x4789138 (XOR check through `_isLegallyCmd`, see above), `unpackCmd` @0x478a3a0 and `_checkStickyPack` @0x478a5dc form the BLE multi-packet reassembly; they were not traced as MQTT-reachable and only the checksum compare was read.
+- `parseDeviceInfoData` and the other ZX common parsers (Wi-Fi provisioning and key exchange) are listed but their field maps are out of scope; `decodeResponse` pps_device_commands.dart @0x3b45e64 (a second decrypt entry, only called from the A1790 controller) was not read.
 
 #### Device-tested by
 
@@ -499,7 +499,7 @@ device→app. Tag: asm-traced.
 
 #### Payload fields
 
-`IotDeviceController._handleResponse(bytes)` @0x3b69dd8 (size 0xcc4):
+`IotDeviceController._handleResponse(bytes)` iot_anker_controller.dart @0x3b69dd8 (size 0xcc4):
 
 | tag | name | rule | unit/scale | required | source |
 |---|---|---|---|---|---|
@@ -513,9 +513,9 @@ device→app. Tag: asm-traced.
 | f6b | event 2 | `MessageEvent(code 0x10cd = 4301, {data: progress})` | | | @0x3b6a620, fire @0x3b6a638 |
 | f7 | branch 3 | type `postPbFormatBackupMindData` (0x23, [pp+0xe568]): returns early when a boolean getter of the payload (selector not resolved) is true; else `a2` (`indexString(162)`) base64-encoded, `a3` (`indexString(163)`) UTF-8 decoded with `\x00` removed (file name), then `MessageEvent(code 1357, {device, data, pbFileName})` and `postEventData(..., "pb")` | | no | compare @0x3b6a654, reads @0x3b6a708 and @0x3b6a7b4, event @0x3b6a9b0, call @0x3b6aa64 |
 
-Any other type is ignored after `parseResponse` has run: the controller has no per-PN field map, so a `postDeviceAllInfoReq` (`0405`) frame is decoded into its tag map and dropped. The file contains no reference to `parseDeviceAllInfo` or to a per-PN command class (grep, 0 hits in `iot_anker_controller.dart` and `iot_anker_device.dart`). In the per-PN controllers the same type names lead to the `parseDeviceAllInfo` calls: the nearest preceding `ZXOpcodeType` constants are `postDeviceAllInfoReq`/`getAllDeviceInfoRes` in the A1753 (@0x3b754c4), A17C0 (@0x3b4f938) and A17X8 (@0x3b62800) controllers, `postDeviceAllInfoReq` in the Shelly controller (@0x3b61028) and `postA17b1DeviceInfoReq` in the A17B1 controller (@0x3b48a38).
+Any other type is ignored after `parseResponse` has run: the controller has no per-PN field map, so a `postDeviceAllInfoReq` (`0405`) frame is decoded into its tag map and dropped. The file contains no reference to `parseDeviceAllInfo` or to a per-PN command class (grep, 0 hits in `iot_anker_controller.dart` and `iot_anker_device.dart`). In the per-PN controllers the same type names lead to the `parseDeviceAllInfo` calls: the nearest preceding `ZXOpcodeType` constants are `postDeviceAllInfoReq`/`getAllDeviceInfoRes` in the A1753 (a1753_device_controller.dart @0x3b754c4), A17C0 (a17C0_device_controller.dart @0x3b4f938) and A17X8 (a17x8_device_controller.dart @0x3b62800) controllers, `postDeviceAllInfoReq` in the Shelly controller (shelly_device_controller.dart @0x3b61028) and `postA17b1DeviceInfoReq` in the A17B1 controller (a17b1_device_controller.dart @0x3b48a38).
 
-The send side of the fallback controller builds only OTA and info requests: `getOTAState` sends `[0, 0x30]` @0x24104f0, `getDeviceOTAState` `[0, 0x89]` @0x2410a3c, and the sub-package sender uses the pool lists `[0, 0x2e]` @0x45636bc and `[0, 0x2f]` @0x4614744 through `sendCommandWithParam` @0x2410528 (pool lists are real byte values). These opcodes are request keys of the charging map (`0030` is `getZXOTAStateReq`, `0089` is `getOTAStateReq`, `002e` is `sendOtaSubPackageReq`).
+The send side of the fallback controller builds only OTA and info requests: `getOTAState` sends `[0, 0x30]` iot_anker_controller.dart @0x24104f0, `getDeviceOTAState` `[0, 0x89]` @0x2410a3c, and the sub-package sender uses the pool lists `[0, 0x2e]` @0x45636bc and `[0, 0x2f]` @0x4614744 through `sendCommandWithParam` @0x2410528 (pool lists are real byte values). These opcodes are request keys of the charging map (`0030` is `getZXOTAStateReq`, `0089` is `getOTAStateReq`, `002e` is `sendOtaSubPackageReq`).
 
 #### Example
 
@@ -532,11 +532,11 @@ none; the OTA progress is consumed by the OTA UI pages through the event bus, no
 
 #### Since/changed
 
-`_handleResponse` is 0xe1c bytes in 3.18.0 (@0x341fc38) and 0xcc4 in 3.24.3; the 3.24.3 body has the same gate, the same three branches, the same tags (161, 162, 163) and the same event codes (588, 4301, 1357). The 3.18.0 version also logged the OTA progress (`准备发送进度 iot上报OTA升级进度：opcode: ... , payload: ...`, debounce key `iot_ota_progress_`); that log is gone. The classes moved: 3.18.0 kept `IotAnkerDevice` in one 11033-line file with instance size 0x19c; 3.24.3 splits it into `iot_anker_device.dart` (687 lines, size 0x20c) and the new `base_service/device/iot_device_adapter.dart`, `device_iot_base.dart` and `ak_base_contract/src/iot_ak_result.dart` (none of the three exists in the 3.18.0 tree). `IotDeviceController` went from 0x74 to 0x68 bytes. Tag: asm-traced (3.24.3 side).
+`_handleResponse` is 0xe1c bytes in 3.18.0 (combine_progress_ota_logic.dart @0x341fc38) and 0xcc4 in 3.24.3; the 3.24.3 body has the same gate, the same three branches, the same tags (161, 162, 163) and the same event codes (588, 4301, 1357). The 3.18.0 version also logged the OTA progress (`准备发送进度 iot上报OTA升级进度：opcode: ... , payload: ...`, debounce key `iot_ota_progress_`); that log is gone. The classes moved: 3.18.0 kept `IotAnkerDevice` in one 11033-line file with instance size 0x19c; 3.24.3 splits it into `iot_anker_device.dart` (687 lines, size 0x20c) and the new `base_service/device/iot_device_adapter.dart`, `device_iot_base.dart` and `ak_base_contract/src/iot_ak_result.dart` (none of the three exists in the 3.18.0 tree). `IotDeviceController` went from 0x74 to 0x68 bytes. Tag: asm-traced (3.24.3 side).
 
 #### Known unknowns
 
-- The two device properties that receive the module version strings in branch 1 (dispatch-table setters, selectors not resolved) and the meaning of the two tags: `IotDeviceAdapter` has `otaMcuVersion` @0x3b161d4 and `otaModuleVersion` @0x407bd9c as getters, which would fit the two strings; the setters were not matched to them.
+- The two device properties that receive the module version strings in branch 1 (dispatch-table setters, selectors not resolved) and the meaning of the two tags: `IotDeviceAdapter` has `otaMcuVersion` iot_device_adapter.dart @0x3b161d4 and `otaModuleVersion` @0x407bd9c as getters, which would fit the two strings; the setters were not matched to them.
 - Whether the opcode `0306` ever occurs on the wire: branch 2 accepts it, but no frame source or builder for it was found.
 - Which products reach this controller in practice (the factory's fallback is for every PN not in the 50 routed literals; see [Product routing](#product-routing-createbyproductcode)).
 - The `postPbFormatBackupMindData` data (tag `a2`, tag `a3` as a file name) is only forwarded as an event; its consumer page and format were not read.

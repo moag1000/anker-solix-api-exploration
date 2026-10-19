@@ -61,6 +61,7 @@ Audit rows without an MQTT page: 189-198 are API response models and examples (n
 - Opcode `005a` for A17C2: upstream binds it (parallel-system max load), the app has no builder in the audited files (audit row 222). See [a17c2.md](a17c2.md#known-unknowns-1) and [upstream_commands.md](upstream_commands.md).
 - Upstream `CMD_SOC_LIMITS_V2` describes `fd` as a timestamp, the app writes a CRC32 (audit rows 599, 219); same finding as the `fd` item above.
 - Old doc Shelly strings: only `shellyPlugOutPutPower` and `shellyPlugSwitch` exist in the Shelly parser; `fromGrid`, `toGrid`, `fromGridSum`, `toGridSum` and `totalChargingPower` belong to other models (AE1R0, A17X7) or app-wide keys. See [shelly.md](shelly.md#old-doc-shelly-status-strings).
+- Frame byte 6: [envelope.md](envelope.md#binary-layer) records it as `0F` in captures with its source unresolved; [iot.md](iot.md#frame-decode-and-opcode-dispatch) shows the app reads byte 6 as the group byte that selects `commonOpcodeMap` (value 1) or `chargingOpcodeMap` (any other value). Refinement, not a contradiction; envelope.md is not edited here.
 - `charging/mqtt/local.dart` holds certificate and key material, not a local MQTT client. See [envelope.md](envelope.md#infrastructure).
 
 ## Not covered by 3.6a and 3.6b
