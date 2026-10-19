@@ -88,7 +88,7 @@ None recorded for the app payload above. For a different payload (upstream libra
 ## Callers in app
 
 - `StationPowerLimitLogic::_setOutputPowerLimit` (`station_power_limit_logic.dart @0x4355598`) calls `setSiteDevicePowerLimit` at `@0x435567c`. UI: station settings, power limit page, output power slider; see [../../../flows/system_output_limit.md](../../../flows/system_output_limit.md). `setSiteDevicePowerLimit` has no other caller in the 3.24.3 asm.
-- The URL string has 32 references in 20 files of the 3.24.3 asm (other wrappers such as `setSiteDeviceParam`, `setSafetySocParams`, `set17C1SiteDeviceParam`, `setStationCountryCode`, `setDynamicPrice`, `setThreePvInstallSwitch`, plus feature controllers). They belong to other param_types and are documented per row in [../../param_types.md](../../param_types.md) (pending Task 3.4).
+- The URL string has 32 references in 20 files of the 3.24.3 asm (other wrappers such as `setSiteDeviceParam`, `setSafetySocParams`, `set17C1SiteDeviceParam`, `setStationCountryCode`, `setDynamicPrice`, `setThreePvInstallSwitch`, plus feature controllers). They belong to other param_types and are documented per row in [../../param_types.md](../../param_types.md).
 
 ## Since/changed
 

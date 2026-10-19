@@ -66,6 +66,8 @@ ota_complete_status, solar_sn
 
 ## CombineBoxEntity
 
+Corrected 2026-10-19 (App 3.24.3): the field list below is outdated; `CombineBoxEntity` is owned by [`models/combine_box_entity.md`](combine_box_entity.md).
+
 Source: `ui/page/device/main/sitation_energy_system/station_home_settings/manage_devices/CombineBoxEntity.dart`
 
 ```
@@ -153,6 +155,8 @@ context
 ```
 
 ## PeakTimeModel
+
+Corrected 2026-10-19 (App 3.24.3): the field list below is outdated; `PeakTimeModel` and `Data` are owned by [`models/peak_time_model.md`](peak_time_model.md).
 
 Source: `model/peak_time_model.dart`
 
