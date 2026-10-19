@@ -91,7 +91,7 @@ Response, synthesized (shape only; `<...>` marks values that are not shown here)
 
 ## Errors seen
 
-`api/errors.md` does not exist yet (Task 4.2). Codes the login screen reacts to, from `LoginLogic::handleLoginFail` (`login_logic.dart @0x3bd2210`). All compares are 64-bit on an untagged int (`cmp x0, x17`), so the numbers are real:
+Catalog: [api/errors.md](../errors.md). Codes the login screen reacts to, from `LoginLogic::handleLoginFail` (`login_logic.dart @0x3bd2210`). All compares are 64-bit on an untagged int (`cmp x0, x17`), so the numbers are real:
 
 | code | where | what the app shows (localization key, meaning taken from the key name) | upstream |
 |---|---|---|---|
