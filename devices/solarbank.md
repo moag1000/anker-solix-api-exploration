@@ -1,133 +1,87 @@
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Page type: device · Owner page: this page
+
 # Solarbank — A17C0, A17C1, A17C2, A17C3, A17C5
 
-> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/devices.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+Row numbers ("audit row N") count the table rows of [../docs/audit/devices.md](../docs/audit/devices.md) from the top; this page consumes rows 1 to 35. Method, tags and the Smi rule: [../METHODOLOGY.md](../METHODOLOGY.md). Payloads, commands and field maps live on the owner pages linked below; this page keeps the product overview and the device-test record. The finished Gen 3 page is [a17c5.md](a17c5.md).
 
-> **Priority**: P1 (Core) — largest user base, 70+ upstream issues
-> Most actively developed device category in thomluther's integration
+## PN, marketing name, generation/family
 
-## Product Info
+| PN | marketing name | generation / role | source |
+|---|---|---|---|
+| `A17C0` | Solarbank E1600 | Gen 1 | upstream-confirmed (old page; names are product names, not asm facts) |
+| `A17C1` | Solarbank 2 E1600 Pro | Gen 2, flagship | upstream-confirmed |
+| `A17C2` | Solarbank 2 E1600 AC | Gen 2, AC-coupled | upstream-confirmed |
+| `A17C3` | Solarbank 2 E1600 Plus | Gen 2, budget | upstream-confirmed |
+| `A17C5` | Solarbank 3 E2700 Pro | Gen 3, bidirectional | upstream-confirmed, see [a17c5.md](a17c5.md) |
 
-- **A17C0** — Solarbank E1600 (Gen 1)
-- **A17C1** — Solarbank 2 E1600 Pro (Gen 2, flagship)
-- **A17C2** — Solarbank 2 E1600 AC (AC-coupled)
-- **A17C3** — Solarbank 2 E1600 Plus (budget Gen 2)
-- **A17C5** — Solarbank 3 E2700 Pro (Gen 3, bidirectional)
-- All consumer balcony solar, sold on anker.com / Amazon EU
+Consumer balcony solar, sold on anker.com and Amazon EU. Product codes are classified in [../reference/enums.md](../reference/enums.md). This is the largest user base of the repository (more than 70 upstream issues, audit row 34 NOT-FROM-ASM) and the most actively developed device category of the upstream integration.
 
-## Related Files in This Repo
+## Features matrix
 
-- [PARAM_DATA_STRUCTURES.md](../PARAM_DATA_STRUCTURES.md) — All param_type payload structures
-- [VALIDATION_MODEL.md](../VALIDATION_MODEL.md) — 33 GET→SET flows (power limit, SOC, schedule, etc.)
-- [ENDPOINT_FIELDS.md](../ENDPOINT_FIELDS.md#set_site_device_param) — set_site_device_param variants
-- [ENDPOINT_FIELDS.md](../ENDPOINT_FIELDS.md#set_device_attrs) — set_device_attrs with confirmed nesting
-- [FIELD_TYPES.md](../FIELD_TYPES.md) — 234+ field types with examples
-- [FIELD_TYPES.md](../FIELD_TYPES.md#attributes-inner-fields-soc_modeldart--all-go-inside-attributes-dict) — Full attributes field list
-- [ENUMS.md](../ENUMS.md) — EMS modes, usage modes, energy flow types
-- [models/solarbank.md](../models/solarbank.md) — Response models
-- [models/power.md](../models/power.md) — StationPowerLimitModel, DevicePowerLimit
-- [RESPONSE_EXAMPLES.md](../RESPONSE_EXAMPLES.md) — 71 real API response examples
-- [endpoints/power_service_site.md](../endpoints/power_service_site.md) — Site management endpoints
-- [endpoints/power_service_device.md](../endpoints/power_service_device.md) — Device control endpoints
+| feature | API (link) | MQTT (link) | BLE (link) | device-tested? |
+|---|---|---|---|---|
+| schedule (`param_type` of the 17C1 schedule) | [set_site_device_param](../api/power_service/site/set_site_device_param.md), [get_site_device_param](../api/power_service/site/get_site_device_param.md), table [param_types](../api/param_types.md); flow: [solarbank2_schedule](../flows/solarbank2_schedule.md) | [a17c1](../mqtt/a17c1.md) | [ble/a17c1.md](../ble/a17c1.md) | upstream-confirmed (upstream library), no record here |
+| system output power limit | [set_site_device_param](../api/power_service/site/set_site_device_param.md) (`SOLARBANK_POWER_LIMIT`); flows: [solarbank_power_limit_change](../flows/solarbank_power_limit_change.md), [system_output_limit](../flows/system_output_limit.md) | `0080` [setDevicePowerLimit](../mqtt/a17c1.md#0080-setdevicepowerlimit), `setDevicePowerLimit` (a17c1_device_controller.dart @0x2277580) | [ble/a17c1.md](../ble/a17c1.md) | yes, only for values from `power_limit_option`; see [owner](../api/power_service/site/set_site_device_param.md#device-tested-by) |
+| safety SOC / reserve | [set_site_device_param](../api/power_service/site/set_site_device_param.md); flow: [solarbank_soc_reserve_change](../flows/solarbank_soc_reserve_change.md) | `0067` [setSoc](../mqtt/a17c1.md#0067-setsoc), `setSoc` (a17c1_device_controller.dart @0x3d95578) | [ble/a17c1.md](../ble/a17c1.md) | yes: mqtt_monitor, A17C1 FW 1.0.6.10 |
+| temperature unit | none | `0050` [setTempUnit](../mqtt/a17c1.md#0050-settempunit), `setTempUnit` (a17c1_device_controller.dart @0x3d98ffc); flow: [solarbank_temperature_unit](../flows/solarbank_temperature_unit.md) | [ble/a17c1.md](../ble/a17c1.md) | yes: mqtt_monitor, A17C1 FW 1.0.6.10 |
+| usage mode | [set_site_device_param](../api/power_service/site/set_site_device_param.md); values: [enums](../reference/enums.md#solarbank-usage-mode-upstream) | `005e` [setBackPower, setTacticsTime, setPeakValley](../mqtt/a17c1.md#005e-setbackpower-settacticstime-setpeakvalley), sites in a17c1_device_controller.dart @0x288b284, @0x281aadc, @0x428b0f4 | [ble/a17c1.md](../ble/a17c1.md) | yes: mqtt_monitor, usage modes 1 and 3 only |
+| AC socket / off-grid switch | none | `0073` [setOffGridSwitch](../mqtt/a17c1.md#0073-setoffgridswitch), `setOffGridSwitch` (a17c1_device_controller.dart @0x3d79d44) | [ble/a17c1.md](../ble/a17c1.md) | no (upstream only) |
+| grid export (`0080` fields, `setDevicePowerLimit` in a17c1_device_controller.dart @0x2277580) | [set_device_attrs](../api/power_service/app/device/set_device_attrs.md); flow: [solarbank_toggle_grid_export](../flows/solarbank_toggle_grid_export.md) | `0080` [setDevicePowerLimit](../mqtt/a17c1.md#0080-setdevicepowerlimit) | [ble/a17c1.md](../ble/a17c1.md) | no (upstream only) |
+| inverter type (A17C0 only) | none | `0068` `setMicroInversionModel` (a17C0_device_controller.dart @0x261d4c8), see [a17c0](../mqtt/a17c0.md#setters-0050-005e-0067-0068-0071) | [ble/a17c0.md](../ble/a17c0.md) | no |
+| light mode (A17C1) | none | `0068` [setDeviceLightMode](../mqtt/a17c1.md#0068-setdevicelightmode) (upstream-confirmed `CMD_SB_LIGHT_MODE`) | [ble/a17c1.md](../ble/a17c1.md) | no |
+| max load | none | `005a`, no app builder, see [a17c1](../mqtt/a17c1.md#opcodes-without-a-confirmed-app-builder-005a-0082-006a-0069) | none | yes: mqtt_monitor, A17C1 FW 1.0.6.10 (upstream-confirmed; audit row 24 UNVERIFIABLE for the app side) |
+| third-party PV | [set_site_device_param](../api/power_service/site/set_site_device_param.md) (cloud) | `0085`, cloud-driven, upstream-confirmed only; see [upstream_commands](../mqtt/upstream_commands.md) | none | no |
 
-## param_type System
+All other features: unknown (not researched for this page).
 
-The core control mechanism. `get_site_device_param` / `set_site_device_param`
-with numbered types. See [PARAM_DATA_STRUCTURES.md](../PARAM_DATA_STRUCTURES.md).
+## Commands, fields and values consumed from the audit
 
-| type | Function | Purpose | Confidence |
-|------|----------|---------|------------|
-| 1 | `getSiteGreenModeDeviceParam` | Green mode settings | APK-extracted |
-| 2 | `getSitePeakTimeDeviceParam` | Peak/valley time | APK-extracted |
-| 3 | `getSiteEnablePeakDeviceParam` | Peak shaving enable | APK-extracted |
-| 5 | `getSiteLowerLimitDeviceParam` | Lower limit / min power | APK-extracted |
-| 6 | `set17C1SiteDeviceParam` | SB2/SB3 schedule | Upstream-confirmed |
-| 18 | `setSafetySocParams` | Safety SOC | Upstream-confirmed |
-| 19 | `setSiteDevicePowerLimit` | Power limit | Device-tested only for option-list values, see [owner page](../api/power_service/site/set_site_device_param.md#device-tested-by) |
-| 20 | `get/setStationCountryCode` | Country/grid code | APK-extracted |
-| 23 | — | Switch config | Upstream-confirmed |
-| 26 | `getThreePvParam` | Third-party PV | Upstream-confirmed |
+Tag: asm-traced unless stated.
 
-### param_type 6 — Schedule Structure (upstream-confirmed)
-```json
-{"mode_type": 3, "custom_rate_plan": [
-  {"index": 0, "week": [0, 6], "ranges": [
-    {"start_time": "00:00", "end_time": "24:00", "power": 110}
-  ]}
-]}
-```
+- The `param_type` list (1, 2, 3, 5, 6, 18, 19, 20, 23, 26) is a table of string literals in the request map, not Smi values (audit rows 1 to 10 NOT-FROM-ASM). The old table is replaced by the owner: [../api/param_types.md](../api/param_types.md). The example payloads of types 6 and 18 (audit rows 11 to 13) are owned by the same page and by [set_site_device_param](../api/power_service/site/set_site_device_param.md); `"mode_type": 3` is `ModeTypeCustom` (pool object, `AiModeEnum`, audit row 11; value table in [../reference/enums.md](../reference/enums.md)). The `feed-in_power_limit` key is spelled with a hyphen, not an underscore (old page, upstream-confirmed).
+- `param_type` 19 (power limit): the app and the upstream library send different `cmd` values (`http_request_repository_impl.dart` `setSiteDevicePowerLimit` @0x43558c4, audit row 14); the values and the acceptance status are owned by [../api/param_types.md](../api/param_types.md) and [the endpoint page](../api/power_service/site/set_site_device_param.md). The old section "Corrected 2026-10-19" is superseded by those pages.
+- Opcodes (pool lists `[0, 0x..]`, real bytes, audit rows 22 to 28), all in `a17c1_device_controller.dart` unless stated: `0050` temperature unit (`setTempUnit` @0x3d98ffc), `0067` power cutoff (`setSoc` @0x3d95578), `005e` usage mode (`setTacticsTime` @0x288b284, `setBackPower` @0x281aadc, `setPeakValley` @0x428b0f4), `0073` AC socket (`setOffGridSwitch` @0x3d79d44), `0080` grid export (`setDevicePowerLimit` @0x2277580). `0068` inverter type is `a17C0_device_controller.dart` `setMicroInversionModel` @0x261d4c8.
+- `0068` fields `a5` brand, `a6` model, `a7` minimum load and `a8` maximum load: the keys of `setMicroInversionModel` in `a17C0_device_controller.dart` are 330, 332, 334, 336 halved (@0x261cf54, @0x261cfbc, @0x261d020, @0x261d0a8; audit row 31). This is the A17C0 reading. On A17C1 the app binds `0068` to the light function, so the old page's "Inverter Type" label is right only for A17C0 (see [../mqtt/a17c1.md](../mqtt/a17c1.md#0068-setdevicelightmode)).
+- `0080` fields: only `a2` to `a6` of `setDevicePowerLimit` were confirmed by the FLOWS and BLE audits; `a9` (key 338) was not found (audit row 30 UNVERIFIABLE).
+- `005a` (max load) and `0085` (third-party PV) have no builder in the app (audit rows 24 and 29 UNVERIFIABLE); they are known from upstream and mqtt_monitor only. Their field names (`a2` max_load, `a3` max_load_type; `a2` on or off) are upstream (audit rows 32 and 33).
+- Usage mode values (`smartmeter` 1 to `time_slot` 8) are upstream's `SolarbankUsageMode`, not an app enum (audit rows 15 to 21 NOT-FROM-ASM); the table is owned by [../reference/enums.md](../reference/enums.md#solarbank-usage-mode-upstream).
 
-### param_type 18 — Safety SOC (upstream-confirmed)
-```json
-{"soc_list": [{"id": 1, "is_selected": 1, "soc": 10}],
- "switch_0w": 0, "enable_0w": 0, "feed-in_power_limit": 0}
-```
-Note: `feed-in_power_limit` uses a **HYPHEN** (not underscore).
+### Attributes of `set_device_attrs` (upstream-confirmed)
 
-### param_type 19 — Power Limit (device-tested only for option-list values, see owner page)
-Corrected 2026-10-19 (App 3.24.3): the app sends cmd 123 and `param_data` carries `display_type`; the upstream library sends cmd 17 (works for values from `power_limit_option`, thomluther #423); acceptance of 123 vs 17 untested — see owner page [`api/power_service/site/set_site_device_param.md`](../api/power_service/site/set_site_device_param.md).
+Upstream's `set_device_attributes` and the station helpers in `api/api.py` write these keys inside `{"device_sn": ..., "attributes": {...}}` (audit row 35 NOT-FROM-ASM; field list: [../api/power_service/app/device/set_device_attrs.md](../api/power_service/app/device/set_device_attrs.md)).
 
-## Usage Modes (from ENUMS)
+| field | meaning | tag |
+|---|---|---|
+| `pv_power_limit` | PV input limit (W) | upstream-confirmed (`api.py`, `set_device_attributes` docstring) |
+| `ac_power_limit` | AC input limit (W) | upstream-confirmed |
+| `power_limit` | AC output limit (W) | upstream-confirmed |
+| `switch_0w` | grid export: 0 allow, 1 block (`0 if grid_export else 1`) | upstream-confirmed |
+| `enable_0w` | zero-feed-in enable | upstream-confirmed |
 
-| Value | Mode | Description |
-|-------|------|-------------|
-| 1 | `smartmeter` | Smart Meter driven |
-| 2 | `smartplugs` | Smart Plug driven |
-| 3 | `manual` | Manual fixed output |
-| 4 | `backup` | Backup power |
-| 5 | `use_time` | Time-of-use |
-| 7 | `smart` | AI/smart mode |
-| 8 | `time_slot` | Time slot schedule |
+## Response models
 
-## MQTT Commands (device-tested on A17C1 FW 1.0.6.10)
+[../models/solarbank.md](../models/solarbank.md) (`SiteConsumptionStrategyModel`, `A17C1DeviceHomeLoadData`), [../models/power.md](../models/power.md) (`StationPowerLimitModel`) and [../models/](../models/README.md) for `GetSiteDeviceParamResponse`.
 
-| Cmd | Name | Fields | Tested |
-|-----|------|--------|--------|
-| `0050` | Temp Unit | a2: 0=Celsius, 1=Fahrenheit | mqtt_monitor |
-| `0067` | Power Cutoff | a2=output_cutoff, a3=lowpower_input, a4=input_cutoff | mqtt_monitor |
-| `005a` | Max Load | a2=max_load (W), a3=max_load_type | mqtt_monitor |
-| `005e` | Usage Mode | a2=mode (1-8), complex multi-field | mqtt_monitor (modes 1+3) |
-| `0068` | Inverter Type | a5=brand, a6=model, a7=min_load, a8=max_load | upstream |
-| `0073` | AC Socket | a2: 0=off, 1=on | upstream |
-| `0080` | Grid Export | a6=disable_switch, a9=export_limit | upstream |
-| `0085` | 3rd Party PV | a2: 0=off, 1=on (cloud-driven) | upstream |
+## MQTT abbreviated status fields
 
-## Response Models
+Status keys of the A17B1 system context (`soc`, `bp`, `pp`, `gp`, `lp`, `op`, `mps`, the `p2bp` family and so on) are owned by [../mqtt/a17b1.md](../mqtt/a17b1.md); the Solarbank 2 status tags by [../mqtt/a17c1_status.md](../mqtt/a17c1_status.md). The old key table was a copy and is removed here.
 
-- `SiteConsumptionStrategyModel` — mode_type, min_load, max_load, step, reserved_soc, custom_rate_plan, ai_ems, exceed_alarm
-- `A17C1DeviceHomeLoadData` — schedule_mode, ranges, charge_priority, appliance_loads, device_power_loads
-- `GetSiteDeviceParamResponse` — param_data per param_type
-- `StationPowerLimitModel` — min, max, step, legal_limit, power_limit_option
+## Known firmware notes
 
-## Key Attributes (inside `attributes` dict)
-
-Upstream confirms these go **inside** `{"device_sn": "...", "attributes": {...}}`:
-
-| Field | Type | Notes |
-|-------|------|-------|
-| `pv_power_limit` | int | PV input limit (W) |
-| `ac_power_limit` | int | AC input limit (W) |
-| `power_limit` | int | AC output limit (W) |
-| `switch_0w` | int | Grid export: 0=allow, 1=block |
-| `enable_0w` | int | 0W mode enable |
-| `feeder0w` | int | Feeder 0W setting |
-| `pv_power_limit_option` | int | PV limit option |
-| `user_power_limit` | int | User-set limit |
-
-## MQTT Abbreviated Fields (A17B1 system context)
-
-| Key | Meaning | Key | Meaning |
-|-----|---------|-----|---------|
-| `soc` | State of charge | `m` | Mode |
-| `bp` | Battery power | `bpu` | Battery power unit |
-| `pp` | PV power | `ppu` | PV power unit |
-| `gp` | Grid power | `gpu` | Grid power unit |
-| `lp` | Load power | `lpu` | Load power unit |
-| `op` | Output power | `mps` | Master/parallel state |
-| `p2bp` | PV→Battery | `p2lp` | PV→Load |
-| `p2gp` | PV→Grid | `b2lp` | Battery→Load |
-| `b2gp` | Battery→Grid | `g2bp` | Grid→Battery |
-| `g2lp` | Grid→Load | `mpp` | Micro-inverter power |
+- The device test of the SET commands ran on A17C1 FW 1.0.6.10 only. Whether other firmware or the other PNs accept the same opcodes is unknown. See [../mqtt/a17c1.md](../mqtt/a17c1.md).
+- Acceptance of the 3.24.3 `cmd` for the power limit versus the upstream value, and which firmware accepts free 10 W values: [owner page](../api/power_service/site/set_site_device_param.md#known-unknowns).
 
 ## Known unknowns
 
-None recorded beyond the row-level notes above.
+Tag: untagged by design (no API fact).
+
+- `005a` and `0085`: the app has no builder; only upstream and mqtt_monitor know them (audit rows 24, 29, 32).
+- `0080` field `a9` (`export_limit`) is not in `setDevicePowerLimit` (audit row 30); the field names `a6` `disable_switch` and the `005e` `a2` mode range (1 to 8) are upstream's (audit rows 33).
+- Meaning of the attribute keys `feeder0w`, `pv_power_limit_option` and `user_power_limit` named on the old page: not found in the upstream `api/api.py` lines checked; no owner yet.
+- Which of the five PNs accept each opcode: only A17C1 is device-tested.
+- Open test requests for these products: [../docs/DEVICE_TEST_BACKLOG.md](../docs/DEVICE_TEST_BACKLOG.md).
+
+## Device-tested by
+
+- A17C1, FW 1.0.6.10, mqtt_monitor: `0050`, `0067`, `005a`, `005e` (usage modes 1 and 3 only). Client version, tester name and date are not recorded in the old page (audit row 34).
+- Power limit on A17C5: see [a17c5.md](a17c5.md) and the [owner page](../api/power_service/site/set_site_device_param.md#device-tested-by).

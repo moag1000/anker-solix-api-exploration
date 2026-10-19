@@ -1,89 +1,59 @@
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Page type: device · Owner page: this page
+
 # Smart Plug — A17X8
 
-> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/devices.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+Row numbers ("audit row N") count the table rows of [../docs/audit/devices.md](../docs/audit/devices.md) from the top; this page consumes rows 36 to 50. Method, tags and the Smi rule: [../METHODOLOGY.md](../METHODOLOGY.md).
 
-> **Priority**: P1 (Core)
-> [ha-anker-solix #150](https://github.com/thomluther/ha-anker-solix/issues/150) (61 comments) |
-> [anker-solix-api #124](https://github.com/thomluther/anker-solix-api/issues/124) |
-> Switch implemented in v3.5.0, timer/schedule still open
+## PN, marketing name, generation/family
 
-## Product Info
+- `A17X8`, SOLIX Smart Plug (2500 W, energy monitoring). Consumer accessory for the Solarbank ecosystem, used in the smart-plug driven "blend mode" (usage mode `smartplugs`, see [../reference/enums.md](../reference/enums.md#solarbank-usage-mode-upstream)). Marketing name, wattage and role: upstream-confirmed (upstream issues [ha-anker-solix #150](https://github.com/thomluther/ha-anker-solix/issues/150) and [anker-solix-api #124](https://github.com/thomluther/anker-solix-api/issues/124); audit row 49 NOT-FROM-ASM). Switch support is implemented in the upstream library; timer and schedule support were still open when the old page was written.
+- The `mini_power` endpoints belong to the Prime Chargers (A2345, A2687), not to the Smart Plug.
 
-- **A17X8** — SOLIX Smart Plug (2500W, energy monitoring)
-- Consumer accessory for Solarbank ecosystem
-- Part of "blend mode" for smart plug-driven solar optimization
+## Features matrix
 
-## MQTT Commands (device-tested on A17X8 FW 0.0.2.7)
+Opcodes are the pool lists `[0, 0x7a]` and so on, which are real bytes and never halved (audit rows 36 to 39); the field tags are halved Smi immediates (raw 324 is tag `a2`, audit rows 40, 41, 48). All fields of a command: [../mqtt/a17x8.md](../mqtt/a17x8.md).
 
-### 007a — Plug Switch
-| Field | Name | Values |
-|-------|------|--------|
-| a2 | `switch` | 0=OFF, 1=ON |
+| feature | API (link) | MQTT (link) | BLE (link) | device-tested? |
+|---|---|---|---|---|
+| relay switch on/off (`007a`) | [set_device_feature](../api/power_service/site/set_device_feature.md) (`setRemainPluginStatus`, `site_id` and a `smart_plug` list); flow: [smart_plug_relay_toggle](../flows/smart_plug_relay_toggle.md) | [007a](../mqtt/a17x8.md#007a-setrelayswitchcmd), `setRelaySwitchCmd` (a17x8_device_controller.dart @0x3073938) | [ble/a17x8.md](../ble/a17x8.md) | yes: FW 0.0.2.7, mqtt_monitor, see "Device-tested by" |
+| schedule (`007c`) | none | [007c](../mqtt/a17x8.md#007c-settimingcmd), `setTimingCmd` (a17x8_device_controller.dart @0x3de1eb8); flow: [smart_plug_schedule](../flows/smart_plug_schedule.md) | [ble/a17x8.md](../ble/a17x8.md) | yes: FW 0.0.2.7, mqtt_monitor |
+| delayed toggle / countdown timer (`007e`) | none | [007e](../mqtt/a17x8.md#007e-setcountdowncmd), `setCountdownCmd` (a17x8_device_controller.dart @0x3dcfee0); flow: [smart_plug_countdown_timer](../flows/smart_plug_countdown_timer.md) | [ble/a17x8.md](../ble/a17x8.md) | yes: start, pause, resume (upstream PR 283) |
+| timer state request (`007f`) | none | [007f](../mqtt/a17x8.md#007f-getcountdowncmd), `getCountdownCmd` (a17x8_device_controller.dart @0x2764034) | [ble/a17x8.md](../ble/a17x8.md) | no |
+| status (`0405`, upstream-confirmed message id) | none | [0405](../mqtt/a17x8.md#0405-status-message-param_info) | unknown | no |
+| plug data in the site scene info | [scene info](../models/energy.md) (upstream-confirmed; per-plug keys such as `current_power`, `auto_switch`, `running_time`) | none | none | no |
 
-Implemented in upstream v3.5.0.
+## Command facts consumed from the audit
 
-### 007c — Plug Schedule
-| Field | Name | Values |
-|-------|------|--------|
-| a2 | `action` | 0=delete, 1=create, 2=modify |
-| a3 | `slot` | Schedule slot number (1-x) |
-| a4 | `enabled` | 0=disabled, 1=enabled |
-| a5 | `time` | min:hour (2 bytes) |
-| a6 | `switch` | 0=OFF at time, 1=ON at time |
-| a7 | `weekdays` | Day numbers: 1=Mon..7=Sun, **variable length** |
+Tag: asm-traced unless stated. Each fact cites the 3.24.3 site; the field-level table is owned by [../mqtt/a17x8.md](../mqtt/a17x8.md).
 
-Important: a7 is **day numbers**, not a bitmask. 0x07 = Sunday (day 7), not 3 bits.
+- `007a`: one field, `a2` = switch, 0 off and 1 on (audit row 40; `a17x8_device_controller.dart` `setRelaySwitchCmd` key @0x307390c, opcode @0x3073938).
+- `007c`: tags `a2` to `a7` are action, slot, enabled, time, switch and weekdays (audit row 41; `a17x8_device_controller.dart` `setTimingCmd` @0x3de1b54, @0x3de1c0c, @0x3de1d34, @0x3de1d58, @0x3de1dd0, @0x3de1e8c). `a2` action: 0 delete, 1 create, 2 modify (audit row 42).
+- `007e`: `a2` = 0 is cancel (`a17x8countdown_logic.dart` `deleteCountdown` @0x3dcf9c4, audit row 44); 2 and 3 are pause and resume (`a17x8countdown_logic.dart` `changeStartOrPause` @0x3dd03e4 to @0x3dd04a8, audit row 46, discovered in an mqtt_monitor session and contributed upstream as PR 283). `a4` and `a5` carry the toggle-back switch (keys 328 and 330 halved, `a17x8_device_controller.dart` `setCountdownCmd` @0x3dcfe54, @0x3dcfe90, audit row 48).
+- `007e` `a3` (delay) and `a5` (toggle-back delay) are each one little-endian 3-byte integer built by a single `intToList3(value)` call (`a17x8_device_controller.dart` `setCountdownCmd` @0x3dcfbe4, `intToList` @0x3dcfdf0; audit row 47). The unit is seconds: the worked example 1800 s is the bytes `08 07 00` (FLOWS audit, worked example). See "Since/changed" for the old wording.
+- `007e` `a2` = 1 (start) is an upstream value (`CMD_PLUG_DELAYED_TOGGLE`: off 0, start 1, pause 2, resume 3; upstream-confirmed). The app's own start and resume path sends 3 (`changeStartOrPause`, same site as above; audit row 45 NOT-FROM-ASM).
+- `007c` `a7` weekdays: the old page said day numbers 1 (Monday) to 7 (Sunday), variable length, "0x07 = Sunday", not a bitmask. That is an upstream and device statement, not an asm fact (audit row 43 NOT-FROM-ASM); the 3.24.3 wire rules are in [../mqtt/a17x8.md](../mqtt/a17x8.md#007c-settimingcmd).
+- `007f`: the app polls the timer state with this request (`a17x8_device_controller.dart` opcode @0x2764034, audit row 39).
 
-### 007e — Plug Timer / Delayed Toggle
-| Field | Name | Values |
-|-------|------|--------|
-| a2 | `toggle_to_switch` | 0=cancel, 1=start, **2=pause, 3=resume** |
-| a3 | `toggle_to_delay_time` | 3 bytes (seconds:minutes:hours) |
-| a4 | `toggle_back_switch` | 0=no toggle back, 1=toggle back after delay |
-| a5 | `toggle_back_delay_time` | 3 bytes (seconds:minutes:hours) |
+## Since/changed
 
-Pause (a2=2) and resume (a2=3) were discovered in our mqtt_monitor session
-and contributed via [PR #283](https://github.com/thomluther/anker-solix-api/pull/283) (merged).
+| item | old page (3.18.0 reading) | 3.24.3 | audit row |
+|---|---|---|---|
+| `007e` `a3` and `a5` encoding | "3 bytes (seconds:minutes:hours)" | one little-endian 3-byte integer, unit seconds; no seconds, minutes, hours split is visible in `setCountdownCmd` (3-byte width unchanged); `intToList3` in `a17x8_device_controller.dart` @0x3dcfbe4 | 47 (WRONG) |
 
-### 007f — Timer Status Request
-Query command to get current timer state. Sent by app to poll active timers.
+## Known firmware notes
 
-## Related Files in This Repo
-
-- [VALIDATION_MODEL.md](../VALIDATION_MODEL.md#smart-plug-switch) — Verified MQTT command details
-- [ENDPOINT_FIELDS.md](../ENDPOINT_FIELDS.md) — setRemainPluginStatus
-- [ENUMS.md](../ENUMS.md) — A17X8 product code
-- [DART_PYTHON_MAPPING.md](../DART_PYTHON_MAPPING.md) — Field name mappings
-- [endpoints/power_service_site.md](../endpoints/power_service_site.md#power_servicev1siteset_device_feature) — set_device_feature endpoint
-
-## API Endpoints
-
-| Endpoint | Function | Notes |
-|----------|----------|-------|
-| `/power_service/v1/site/set_device_feature` | setRemainPluginStatus | `site_id, smart_plug` list |
-
-The `mini_power` endpoints are for Prime Chargers (A2345/A2687), **not** for Smart Plugs
-despite the naming similarity.
-
-## Smart Plug in Scene Info
-
-From upstream community testing, the scene_info response includes per-plug data:
-```json
-{"device_pn": "A17X8", "device_sn": "...", "device_name": "Smart Plug",
- "current_power": "0", "tag": "Living Room",
- "priority": 0, "auto_switch": false, "running_time": null}
-```
-
-## What's still needed
-
-Per thomluther (Issue #150, latest comments):
-1. **Timer field validation** — confirm seconds:minutes:hours byte order
-2. **Schedule state in 0405** — how saved schedules appear in status messages
-3. **System export ZIP** with MQTT data while toggling plug / running timer
-4. Schedule create → modify → delete full cycle documentation
+- A17X8 FW 0.0.2.7 is the firmware on which the commands were tested; no other firmware is recorded. Behavior per firmware is otherwise unknown. Opcodes and tags are owned by [../mqtt/a17x8.md](../mqtt/a17x8.md).
 
 ## Known unknowns
 
-None recorded beyond the row-level notes above. Open test requests for this product are listed in [docs/DEVICE_TEST_BACKLOG.md](../docs/DEVICE_TEST_BACKLOG.md) (pick a row).
+Tag: untagged by design (no API fact).
 
-Open requests to device owners are listed under "What's still needed" above.
+- Confirm the byte order and unit of the `007e` delay values on a device (the old issue request asked for "seconds:minutes:hours"; the asm shows one integer, audit row 47). [../mqtt/a17x8.md](../mqtt/a17x8.md) still says "seconds:minutes:hours per upstream" for these two fields; the two statements need one owner decision.
+- How saved schedules appear in the `0405` status message (TimingInfo readback) and the full schedule create, modify, delete cycle.
+- A system export ZIP with MQTT data recorded while the plug is toggled and while a timer runs (requested upstream).
+- Whether day numbers or a bitmask are used for `007c` weekdays on current firmware (audit row 43).
+- Open test requests for this product: [../docs/DEVICE_TEST_BACKLOG.md](../docs/DEVICE_TEST_BACKLOG.md).
+
+## Device-tested by
+
+mqtt_monitor session on A17X8 FW 0.0.2.7 (pause and resume, contributed as upstream PR 283); tester name, client version and date are not recorded in the old page.

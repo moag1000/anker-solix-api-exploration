@@ -1,191 +1,176 @@
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Page type: device · Owner page: this page
+
 # X1 HES / E10 Home Backup — A5101, A17E1, AX170
 
-> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/devices.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+## Contents
 
-> **Priority**: P2 (High demand)
-> [anker-solix-api #274](https://github.com/thomluther/anker-solix-api/issues/274) (E10, 80+ comments) |
-> [anker-solix-api #162](https://github.com/thomluther/anker-solix-api/issues/162) (X1) |
-> [ha-anker-solix PR #284](https://github.com/thomluther/anker-solix-api/pull/284) (AX170 mapping by nic-southern)
+1. [PN, marketing name, generation/family](#pn-marketing-name-generationfamily)
+2. [Features matrix](#features-matrix)
+3. [A5101DataCodeType vocabulary](#a5101datacodetype-vocabulary)
+4. [API endpoints](#api-endpoints)
+5. [Disaster payloads](#disaster-payloads)
+6. [Response models](#response-models)
+7. [Since/changed](#sincechanged)
+8. [Known firmware notes](#known-firmware-notes)
+9. [Known unknowns](#known-unknowns)
+10. [Device-tested by](#device-tested-by)
 
-## Product Info
+Row numbers ("audit row N") count the table rows of [../docs/audit/devices.md](../docs/audit/devices.md) from the top; this page consumes rows 123 to 193. Method, tags and the Smi rule: [../METHODOLOGY.md](../METHODOLOGY.md). Payloads, command fields and wire codes live on the owner pages linked below.
 
-- **A5101** — X1 Power Module P6K (US), single-phase
-- **A5102** — X1 Power Module 1P H(3.68-6)K (EU/AU)
-- **A5103** — X1 Power Module 3P H(5-12)K (three-phase)
-- **A17E1** — E10 Whole-Home Backup Module
-- **AX170** — Power Dock (connects E10 modules + generator)
-- **A7320** — Smart Generator 5500 (tri-fuel, pairs with E10)
-- **A5220** — X1 Battery Module (5kWh LFP)
-- All require certified installer. Owned by end users.
+## PN, marketing name, generation/family
 
-## MQTT Field Vocabulary — A5101DataCodeType
+| PN | marketing name | note |
+|---|---|---|
+| `A5101` | X1 Power Module P6K (US) | single-phase; untagged by design (product name) |
+| `A5102` | X1 Power Module 1P H(3.68-6)K (EU/AU) | untagged by design (product name) |
+| `A5103` | X1 Power Module 3P H(5-12)K | three-phase; untagged by design (product name) |
+| `A17E1` | E10 Whole-Home Backup Module | untagged by design (product name) |
+| `AX170` | Power Dock | connects E10 modules and a generator; untagged by design (product name) |
+| `A7320` | Smart Generator 5500 | tri-fuel, pairs with E10; untagged by design (product name) |
+| `A5220` | X1 Battery Module (5 kWh LFP) | untagged by design (product name) |
 
-These are the internal field names from the APK `A5101DataCodeType` enum. Use as
-**candidate names** when decoding MQTT binary messages with mqtt_monitor.
+Names, ratings and the priority label come from the old page and upstream issues [anker-solix-api #274](https://github.com/thomluther/anker-solix-api/issues/274) (E10, more than 80 comments), [#162](https://github.com/thomluther/anker-solix-api/issues/162) (X1) and [PR #284](https://github.com/thomluther/anker-solix-api/pull/284) (AX170 mapping); they are product facts, not asm facts (audit row 193 NOT-FROM-ASM). All products require a certified installer and are owned by end users. Product codes: [../reference/enums.md](../reference/enums.md).
 
-> These do NOT tell you which hex byte offset maps to which field — that requires
-> live device testing. They tell you what fields **exist** in the app's data model.
+## Features matrix
 
-### Power Flow
-| Hex | Field Name | Notes |
-|-----|-----------|-------|
-| 0x14 | `pvLoadPower` | PV → Load |
-| 0x15 | `pvGridPower` | PV → Grid |
-| 0x16 | `batteryLoadPower` | Battery → Load |
-| 0x17 | `batteryGridPower` | Battery → Grid |
-| 0x18 | `gridBatteryPower` | Grid → Battery |
-| 0x19 | `gridLoadPower` | Grid → Load |
-| 0x38 | `dieselLoadPower` | Generator → Load |
-| 0x39 | `dieselBatterPower` | Generator → Battery |
+| feature | API (link) | MQTT (link) | BLE (link) | device-tested? |
+|---|---|---|---|---|
+| status (JSON "trans" payload with abbreviated keys) | [get_hes_dev_info](../api/charging_hes_svc/get_hes_dev_info.md) and the energy endpoints | [JSON status](../mqtt/a5101.md#json-status-trans-payload) | none | no |
+| work mode, battery reserve, storm guard | [device_command](../api/charging_hes_svc/device_command.md); flows [a5101_work_mode_change](../flows/a5101_work_mode_change.md), [a5101_battery_reserve](../flows/a5101_battery_reserve.md), [a5101_storm_guard](../flows/a5101_storm_guard.md) | [data code maps](../mqtt/a5101.md#data-code-maps-setdatacodemap-and-getdatacodemap) | [ble/a5101.md](../ble/a5101.md) | no |
+| disaster preparedness | [charging_disaster_prepared](../api/charging_disaster_prepared/README.md) | [0115 sendAutoDisasterDataCmd](../mqtt/a5101.md) (upstream-confirmed owner page) | [ble/a5101.md](../ble/a5101.md) | no |
+| generator, heat pump, peak shaving, self-check | [device_command](../api/charging_hes_svc/device_command.md) | data codes below | [ble/a5101.md](../ble/a5101.md) | no |
 
-### Battery & SOC
-| Hex | Field Name | Notes |
-|-----|-----------|-------|
-| 0x3a | `soc` | State of charge |
-| 0x21 | `batteryReserve` | Reserve SOC setting |
-| 0x5e | `minSoc` | Minimum SOC |
-| 0x34 | `batState` | Battery state |
+## A5101DataCodeType vocabulary
 
-### Energy Totals
-| Hex | Field Name | Notes |
-|-----|-----------|-------|
-| 0x11 | `dailyPowerGeneration` | |
-| 0x12 | `totalPowerGeneration` | |
+Tag: asm-traced. The enum `A5101DataCodeType` has 133 members ([../mqtt/a5101.md](../mqtt/a5101.md#data-code-maps-setdatacodemap-and-getdatacodemap)). The names are the app's internal field names; use them as candidate names when decoding. The old tables headed their number column "Hex" and read like codes: those numbers are the enum index (`off_8` of the pool object), not the code sent or received. The wire code is a different 2-byte key in `setDataCodeMap` and `getDataCodeMap` of `charging/ble/device/A5101/a5101_commands.dart` (audit row 123, WRONG framing; the per-row values are audit rows 124 to 186, OK as enum indices). The 25 members whose codes are already in the owner page are not repeated: `pvLoadPower`, `batteryLoadPower`, `gridBatteryPower`, `gridLoadPower`, `dieselLoadPower`, `dieselBatterPower`, `soc`, `batteryReserve`, `minSoc`, `backupMode`, `workMode`, `manualBackupPower`, `x1AllowCharge`, `peakShaving`, `gridStandardCode`, `gridSensitivityEnable`, `gridSensitivity`, `softwarePowerExportLimitEnable`, `softwarePowerExportLimitInput`, `heatPumpSGEnable`, `outageFrequency`, `blackoutDuration`, `autoDisaster`, `supportFunction` and `selfCheckError`. The `diesel*` family (17 codes) is owned by the same page; the old page listed `dieselMode` at index 0x61 with normal, quiet and maintenance sub-ranges (0x62 to 0x71).
 
-### Operating Modes
-| Hex | Field Name | Notes |
-|-----|-----------|-------|
-| 0x10 | `backupMode` | Backup mode config |
-| 0x22 | `shiftMode` | Energy shift mode |
-| 0x23 | `gridCharging` | Grid charging enable |
-| 0x46 | `workMode` | Current work mode |
-| 0x47 | `manualBackupPowerEnable` | Manual backup enable |
-| 0x28 | `manualBackupPower` | Manual backup power level |
-| 0x81 | `x1AllowCharge` | X1 charge permission |
+### Power flow
 
-### Peak Shaving
-| Hex | Field Name | Notes |
-|-----|-----------|-------|
-| 0x24 | `peakShaving` | Peak shaving enable |
-| 0x25 | `peakShavingValue` | Peak shaving target |
-| 0x4f | `a5103PeakShavingValue` | Three-phase variant |
+| enum index | field | wire code | map | site in `a5101_commands.dart` |
+|---|---|---|---|---|
+| 0x15 | `pvGridPower` | `0x0038` | get and set | @0x3b8912c, @0x3b8afe0 |
+| 0x17 | `batteryGridPower` | `0x003e` | get and set | @0x3b891b4, @0x3b8b068 |
+
+### Battery and SOC
+
+| enum index | field | wire code | map | site in `a5101_commands.dart` |
+|---|---|---|---|---|
+| 0x34 | `batState` | `0x0002` | get and set | @0x3b89a4c, @0x3b8b76c |
+
+### Energy totals
+
+| enum index | field | wire code | map | site in `a5101_commands.dart` |
+|---|---|---|---|---|
+| 0x11 | `dailyPowerGeneration` | `0x0064` | get and set | @0x3b89060, @0x3b8aed0 |
+| 0x12 | `totalPowerGeneration` | `0x0086` | get and set | @0x3b890a4, @0x3b8af14 |
+
+### Operating modes
+
+| enum index | field | wire code | map | site in `a5101_commands.dart` |
+|---|---|---|---|---|
+| 0x22 | `shiftMode` | `0x0000` | set | @0x3b89464 |
+| 0x23 | `gridCharging` | `0x0003` | set | @0x3b894b8 |
+| 0x47 | `manualBackupPowerEnable` | `0x0005` | set | @0x3b89cec |
+
+### Peak shaving
+
+| enum index | field | wire code | map | site in `a5101_commands.dart` |
+|---|---|---|---|---|
+| 0x25 | `peakShavingValue` | `0x0007` | get and set | @0x3b89560, @0x3b8b328 |
+| 0x4f | `a5103PeakShavingValue` | `0x0028` | set | @0x3b89e90 |
 
 ### Grid
-| Hex | Field Name | Notes |
-|-----|-----------|-------|
-| 0x07 | `gridStandardCode` | Grid code |
-| 0x37 | `gridState` | Grid status |
-| 0x49 | `realGridState` | Real-time grid state |
-| 0x7b | `gridSensitivityEnable` | Grid sensitivity on/off |
-| 0x7c | `gridSensitivity` | Sensitivity level |
-| 0x7d | `softwarePowerExportLimitEnable` | Export limit on/off |
-| 0x7e | `softwarePowerExportLimitInput` | Export limit value |
+
+| enum index | field | wire code | map | site in `a5101_commands.dart` |
+|---|---|---|---|---|
+| 0x37 | `gridState` | `0x0003` | get | @0x3b8b910 |
+| 0x49 | `realGridState` | `0x0010` | get | @0x3b8bda8 |
 
 ### Generator (A7320)
-| Hex | Field Name | Notes |
-|-----|-----------|-------|
-| 0x29 | `onOrOffSwitch` | Generator on/off |
-| 0x2a | `startUpSOC` | Start threshold |
-| 0x2b | `closeSOC` | Stop threshold |
-| 0x2c | `startUpProtection` | Protection delay |
-| 0x2d | `controlMode` | Control mode |
-| 0x2f | `generatorRatedPower` | Rated power |
-| 0x61 | `dieselMode` | Diesel mode |
-| 0x62-63 | `dieselNormalStartSOC/StopSOC` | Normal mode thresholds |
-| 0x64-6a | `dieselQuiet*` | Quiet mode (enable, SOC, hours) |
-| 0x6b-71 | `dieselMaintenance*` | Maintenance schedule |
 
-### Heat Pump
-| Hex | Field Name | Notes |
-|-----|-----------|-------|
-| 0x57 | `heatPumpSGEnable` | SG-Ready enable |
-| 0x58 | `heatPumpWork` | Heat pump working state |
-| 0x59 | `heatPumpActiveRatePower` | Active rated power |
-| 0x5a | `heatPumpMode` | Operating mode |
-| 0x5b | `heatPumpActiveTime` | Active time |
-| 0x5c | `heatPumpStartingProtectionDelay` | Start protection |
+| enum index | field | wire code | map | site in `a5101_commands.dart` |
+|---|---|---|---|---|
+| 0x29 | `onOrOffSwitch` | `0x000c` | get and set | @0x3b896b0, @0x3b8b478 |
+| 0x2a | `startUpSOC` | `0x000d` | set | @0x3b89704 |
+| 0x2b | `closeSOC` | `0x000e` | get and set | @0x3b89758, @0x3b8b4cc |
+| 0x2c | `startUpProtection` | `0x0010` | get and set | @0x3b897ac, @0x3b8b520 |
+| 0x2d | `controlMode` | `0x0011` | get and set | @0x3b89800, @0x3b8b574 |
+| 0x2f | `generatorRatedPower` | `0x0013` | get and set | @0x3b898a8, @0x3b8b61c |
 
-### Disaster Preparedness / Storm Guard
-| Hex | Field Name | Notes |
-|-----|-----------|-------|
-| 0x42 | `outageFrequency` | Outage frequency |
-| 0x43 | `blackoutDuration` | Blackout duration |
-| 0x44 | `autoDisaster` | Auto disaster enable |
-| 0x45 | `autoDisasterData` | Auto disaster data |
+### Heat pump
 
-### System / Device Management
-| Hex | Field Name | Notes |
-|-----|-----------|-------|
-| 0x20 | `systemId` | System identifier |
-| 0x33 | `systemPackNumber` | Number of battery packs |
-| 0x3b | `getDeviceList` | Device list query |
-| 0x55 | `supportFunction` | Capability flags |
-| 0x56 | `supportFunction2` | Extended capabilities |
-| 0x0d | `startScanDevice` | BLE device scan |
+| enum index | field | wire code | map | site in `a5101_commands.dart` |
+|---|---|---|---|---|
+| 0x58 | `heatPumpWork` | `0x003a` | set | @0x3b89f38 |
+| 0x59 | `heatPumpActiveRatePower` | `0x003b` | set | @0x3b89f8c |
+| 0x5a | `heatPumpMode` | `0x003c` | set | @0x3b89fe0 |
+| 0x5b | `heatPumpActiveTime` | `0x003e` | set | @0x3b8a034 |
+| 0x5c | `heatPumpStartingProtectionDelay` | `0x003f` | set | @0x3b8a088 |
 
-### Self-Check (Italy compliance)
-| Hex | Field Name | Notes |
-|-----|-----------|-------|
-| 0x1a | `selfCheckResult` | Result |
-| 0x1b | `selfCheckError` | Error code |
-| 0x4a | `selfCheckEnable` | Enable |
-| 0x4b | `selfCheckItemSelect` | Item selection |
-| 0x4c | `selfCheckFaultClean` | Fault clear |
-| 0x4d | `selfCheckStatus` | Current status |
+### Disaster preparedness / storm guard
 
-## Related Files in This Repo
+| enum index | field | wire code | map | site in `a5101_commands.dart` |
+|---|---|---|---|---|
+| 0x45 | `autoDisasterData` | `0xf012` | get and set | @0x3b89c98, @0x3b8bd00 |
 
-- [PARAM_DATA_STRUCTURES.md](../PARAM_DATA_STRUCTURES.md#disaster-preparedness) — Disaster mode payloads
-- [PARAM_DATA_STRUCTURES.md](../PARAM_DATA_STRUCTURES.md#ax170-iot-action-payloads) — AX170 IoT actions
-- [VALIDATION_MODEL.md](../VALIDATION_MODEL.md) — GET→SET flows for power limit, SOC, grid export
-- [ENUMS.md](../ENUMS.md) — Product codes (A5101-A5103, A5220, A5341, A5450)
-- [FIELD_TYPES.md](../FIELD_TYPES.md#feature-flags-sceneinfofeatureswitch) — Feature flags (enable_aiems_v2, grid_to_ev)
-- [models/hes.md](../models/hes.md) — 14 HES response models
-- [ENDPOINT_FIELDS.md](../ENDPOINT_FIELDS.md) — sendDeviceCommand, changePriceUnit, updateWiFiConfig
-- [REQUIRED_FIELDS.md](../REQUIRED_FIELDS.md#charging_hes_svcdevice_command) — sendDeviceCommand required/optional
+### System / device management
 
-## API Endpoints
+| enum index | field | wire code | map | site in `a5101_commands.dart` |
+|---|---|---|---|---|
+| 0x20 | `systemId` | `0xf00b` | get and set | @0x3b893d4, @0x3b8b288 |
+| 0x33 | `systemPackNumber` | `0xe000` | get and set | @0x3b899f8, @0x3b8b718 |
+| 0x3b | `getDeviceList` | `0xf002` | get and set | @0x3b89bf0, @0x3b8ba0c |
+| 0x56 | `supportFunction2` | `0x0158` | get | @0x3b8c198 |
+| 0x0d | `startScanDevice` | `0xf002` | get and set | @0x3b88f50, @0x3b8adc0 |
 
-### HES Service (28 endpoints)
-See [endpoints/charging_hes_svc.md](../endpoints/charging_hes_svc.md)
+### Self-check (Italy compliance)
 
-### Disaster Preparedness (5 endpoints)
-See [endpoints/device_specific.md](../endpoints/device_specific.md#disaster-preparedness--storm-guard-endpoints-cross-device--p2)
+| enum index | field | wire code | map | site in `a5101_commands.dart` |
+|---|---|---|---|---|
+| 0x1a | `selfCheckResult` | `0x0136` | get and set | @0x3b89280, @0x3b8b134 |
+| 0x4a | `selfCheckEnable` | `0x0261` | get and set | @0x3b89d40, @0x3b8be50 |
+| 0x4b | `selfCheckItemSelect` | `0x0262` | get and set | @0x3b89d94, @0x3b8bea4 |
+| 0x4c | `selfCheckFaultClean` | `0x0263` | get and set | @0x3b89de8, @0x3b8bef8 |
+| 0x4d | `selfCheckStatus` | `0x014f` | get | @0x3b8bf4c |
 
-### Device-Specific HES (25+ endpoints)
-See [endpoints/device_specific.md](../endpoints/device_specific.md#hes--x1-endpoints-a5101--p2)
+## API endpoints
 
-## Disaster Payload Structures (structurally inferred)
+The old counts ("HES Service 28", "Disaster Preparedness 5", "Device-Specific HES 25+") were prose counts and are removed (audit row 187); the old endpoint files list 50 path headings for `charging_hes_svc`, 31 endpoint lines in the HES / X1 section of `device_specific.md` and 6 in the disaster section. Current pages: [api/charging_hes_svc](../api/charging_hes_svc/README.md), [api/charging_disaster_prepared](../api/charging_disaster_prepared/README.md), and the old lists [endpoints/charging_hes_svc.md](../endpoints/charging_hes_svc.md) and [endpoints/device_specific.md](../endpoints/device_specific.md#hes--x1-endpoints-a5101--p2).
 
-```json
-// Manual disaster mode
-{"type": 2, "identifier_id": "<siteid>", "manual_disaster_switch": 1,
- "start_time": "...", "end_time": "..."}
+## Disaster payloads
 
-// Auto disaster mode
-{"type": 2, "identifier_id": "<siteid>", "auto_disaster_switch": 1}
+The three request shapes of the old page (manual, auto, quit) are not repeated; the 3.24.3 values of the manual request are owned by the section "Manual request values (3.24.3)" of [home_power_panel.md](home_power_panel.md#manual-request-values-3243) and the endpoint pages above. What changed for the X1 page:
 
-// Quit disaster mode
-{"type": 2, "identifier_id": "<siteid>"}
-```
+- `manual_disaster_switch` is the JSON boolean `true` in the manual request, not the integer 1 (`manual_power_backup_logic.dart` @0x25ecd50; audit row 189, WRONG).
+- `type` is 1 or 2 (`manual_power_backup_logic.dart` @0x25ecd1c to @0x25ecd28); the old example's 2 is one of the two possible values (the `"type": 2` row of the X1 section of the audit, OK).
+- `auto_disaster_switch` in a request: no request map with this key exists in 3.24.3, only read sites (audit row 190, UNVERIFIABLE).
 
-## Response Models
+## Response models
 
-See [models/hes.md](../models/hes.md) — 14 models including:
-- `A5101DeviceCommandModel` (17 top-level fields, 4 levels deep nesting)
-- `AutoDisasterPrepareStatusModel`
-- `CheckFunctionModel` (capability flags)
+[../models/hes.md](../models/hes.md) holds 14 HES models, every class of which exists in the 3.24.3 asm (audit row 192, prose count confirmed by the heading count). `A5101DeviceCommandModel` (class size 0x54) has 19 field slots and its `toJson` writes 19 keys (`a5101_device_command_model.dart` `toJson` @0x277d908; audit row 191); the old "17 top-level fields" is corrected. Other models: `AutoDisasterPrepareStatusModel`, `CheckFunctionModel` (capability flags).
 
-## What's needed from device owners
+## Since/changed
 
-Per thomluther:
-1. **Owner account** system exports (shared accounts lack permissions)
-2. MQTT monitoring with mqtt_monitor to validate field-to-hex mapping
-3. Compare abbreviated MQTT field values with App display values
-4. X1 uses JSON "trans" payloads with abbreviations — easier to decode than binary
+| item | old page (3.18.0 reading) | 3.24.3 |
+|---|---|---|
+| numbers in the vocabulary tables | "Hex" codes | enum indices; wire codes in the tables above and in the owner page |
+| `manual_disaster_switch` in the manual request | `1` | `true` (bool), `manual_power_backup_logic.dart` @0x25ecd50 |
+| `A5101DeviceCommandModel` top-level fields | 17 | 19 (`toJson` @0x277d908 in `a5101_device_command_model.dart`); untagged by design (product name) |
+| endpoint counts | 28, 5, 25+ | 50 path headings, 6 disaster lines, 31 HES / X1 lines in the old endpoint files (prose counts; untagged by design) |
+
+## Known firmware notes
+
+- No firmware is recorded for any statement on this page.
 
 ## Known unknowns
 
-None recorded beyond the row-level notes above. Open test requests for this product are listed in [docs/DEVICE_TEST_BACKLOG.md](../docs/DEVICE_TEST_BACKLOG.md) (pick a row).
+Tag: untagged by design (no API fact).
 
-Open requests to device owners are listed under "What's needed from device owners" above.
+- Which wire code maps to which field is asm-traced (tables above), but what each field means on the device needs a live capture; the vocabulary tells what fields exist, not their units or scales.
+- Whether the app ever sends `auto_disaster_switch` in a request body in 3.24.3 (audit row 190).
+- Wire codes of the `diesel*` family beyond the range in the owner page, and the A5103 variants: see [../mqtt/a5101.md](../mqtt/a5101.md).
+- Needed from device owners (per upstream): system exports as owner account (shared accounts lack permissions); MQTT monitoring with mqtt_monitor to validate the field to code mapping; comparing abbreviated MQTT values with the app display. X1 uses JSON "trans" payloads with abbreviations, which are easier to decode than binary. Open requests: [../docs/DEVICE_TEST_BACKLOG.md](../docs/DEVICE_TEST_BACKLOG.md).
+
+## Device-tested by
+
+none

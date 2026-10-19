@@ -1,337 +1,157 @@
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Page type: device · Owner page: this page
+
 # Home Power Panel (A17B1)
 
-> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/devices.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+## Contents
 
-> SOLIX Home Power Panel — gateway for SOLIX F3800 battery system
->
-> **Product Code**: A17B1
-> **Device Type**: `powerpanel` / `SolixDeviceType.POWERPANEL`
-> **Site Type**: `t_4` (mapped to `SolixDeviceType.POWERPANEL`)
-> **Virtual Capacity**: Inherits from A1790 (F3800) = 3840 Wh per unit
->
-> **Relevant Issues**: [ha-anker-solix #480](https://github.com/thomluther/ha-anker-solix/issues/480), #447
+1. [PN, marketing name, generation/family](#pn-marketing-name-generationfamily)
+2. [Features matrix](#features-matrix)
+3. [Communication channels](#communication-channels)
+4. [Cloud API service layers](#cloud-api-service-layers)
+5. [Mode and EMS enums](#mode-and-ems-enums)
+6. [Backup and disaster mode control](#backup-and-disaster-mode-control)
+7. [BLE battery reserve command](#ble-battery-reserve-command)
+8. [Device command control](#device-command-control)
+9. [App structure (Dart)](#app-structure-dart)
+10. [Python API implementation (upstream)](#python-api-implementation-upstream)
+11. [Since/changed](#sincechanged)
+12. [Known firmware notes](#known-firmware-notes)
+13. [Known unknowns](#known-unknowns)
+14. [Device-tested by](#device-tested-by)
 
-## Communication Channels
+Row numbers ("audit row N") count the table rows of [../docs/audit/devices.md](../docs/audit/devices.md) from the top; this page consumes rows 75 to 122. Method, tags and the Smi rule: [../METHODOLOGY.md](../METHODOLOGY.md). Payload and field facts live on the owner pages linked below.
 
-| Channel | Support | Details |
-|---------|---------|---------|
-| **MQTT Status** | Read-only | JSON format via topic `{SN}/0505/a2` (not binary TLV) |
-| **MQTT Commands** | None | Zero entries in `mqttcmdmap.py` — "Minimal-Command Device" |
-| **BLE** | Minimal | Only Realtime Trigger (0x0057) + EV Charger BLE commands |
-| **Cloud API** | **Primary** | 3 service layers (see below) |
+## PN, marketing name, generation/family
 
-**Key constraint**: HPP is controlled exclusively via Cloud API. MQTT delivers status only.
-BLE is disabled when WiFi is active (see `feedback_ble_wifi_exclusion.md`).
+`A17B1`, SOLIX Home Power Panel, the gateway of the SOLIX F3800 battery system. Upstream device type `powerpanel` (`SolixDeviceType.POWERPANEL`), site type `t_4`; the virtual capacity inherits from A1790 (F3800), 3840 Wh per unit (upstream-confirmed, `powerpanel.py`; audit row 75 NOT-FROM-ASM). Upstream issues: [ha-anker-solix #480](https://github.com/thomluther/ha-anker-solix/issues/480) and #447 (audit row 122 NOT-FROM-ASM). Product codes: [../reference/enums.md](../reference/enums.md).
 
-## API Service Layers
+## Features matrix
 
-The HPP uses **three separate Cloud API service prefixes**:
+| feature | API (link) | MQTT (link) | BLE (link) | device-tested? |
+|---|---|---|---|---|
+| status (power flow, SOC, per-battery data) | [get_system_running_info](../api/charging_hes_svc/get_system_running_info.md) and the energy service | [JSON status 0500, 0502, 0503, 0505](../mqtt/a17b1.md#0500-0502-0503-0505-json-status-messages) (message ids upstream-confirmed) | none | no |
+| backup and disaster mode | [charging_disaster_prepared](../api/charging_disaster_prepared/README.md), [device_command](../api/charging_hes_svc/device_command.md) | none | none | no |
+| EMS mode, electricity strategy, off-grid switching | [device_command](../api/charging_hes_svc/device_command.md), [get_device_command](../api/charging_hes_svc/get_device_command.md); model [A5101DeviceCommandModel](../models/hes.md#a5101devicecommandmodel) | none | none | no |
+| battery reserve (`scp`) | `syncSiteConfig` over HTTP (persists the value) | none | [ble/a17b1.md](../ble/a17b1.md) | no |
+| realtime trigger (`0057`) | none | [0057](../mqtt/a17b1.md#0057-realtime-trigger) (upstream-confirmed binding) | not found in the A17B1 controller | no |
 
-| Service | Purpose | Endpoint Count |
-|---------|---------|---------------|
-| `charging_energy_service/` | Energy data, configs, rate plans, firmware | 12+ |
-| `charging_hes_svc/` | Device commands, station config, EV charger binding | 28+ |
-| `charging_disaster_prepared/` | Backup/disaster mode control (auto + manual) | 5+ |
+## Communication channels
 
-## MQTT Status Fields (_PP_JSON)
+| channel | support | details | tag |
+|---|---|---|---|
+| MQTT status | read-only | JSON inside the `a2` field of the messages 0500, 0502, 0503 and 0505, not binary TLV; topic and field map: [../mqtt/a17b1.md](../mqtt/a17b1.md) | upstream-confirmed (`mqttmap.py` lines 5807 to 5826) |
+| MQTT commands | none | the `A17B1` group of upstream's `mqttmap.py` carries only the status messages, `0601` and `0057`; the old "zero entries in `mqttcmdmap.py`" is consistent | upstream-confirmed |
+| BLE | minimal | the controller is a dual stack, ZX BLE plus MQTT transformer; commands: [../ble/a17b1.md](../ble/a17b1.md). The old claim "only Realtime Trigger (0x0057) plus EV charger commands" is not an asm fact: no `[0, 0x57]` list exists in the A17B1 controller (see Known unknowns) | asm-traced |
+| Cloud API | primary | three service layers, below | upstream-confirmed |
 
-Topic: `{DEVICE_SN}/0505/a2` — JSON payload with abbreviated keys.
+The panel is controlled through the cloud API; MQTT delivers status only. BLE is disabled while WiFi is active, so BLE is never a live fallback for the cloud path.
 
-### Power Flow
+## Cloud API service layers
 
-| Key | Mapped Name | Unit | Notes |
-|-----|-------------|------|-------|
-| `bp` | `battery_power_signed` | W | Negative = charging (FACTOR: -1) |
-| `pp` | `photovoltaic_power` | W | |
-| `gp` | `grid_power_signed` | W | |
-| `lp` | `home_demand` | W | |
-| `p2lp` | `pv_to_home_power` | W | |
-| `p2bp` | `pv_to_battery_power` | W | |
-| `p2gp` | `pv_to_grid_power` | W | |
-| `b2lp` | `battery_to_home_power` | W | |
-| `b2gp` | `battery_to_grid_power` | W | |
-| `g2bp` | `grid_to_battery_power` | W | |
-| `g2lp` | `grid_to_home_power` | W | |
+Three service prefixes serve the panel (audit row 80 NOT-FROM-ASM, prose). The old endpoint counts (12+, 28+, 5+) were prose counts and are removed (audit rows 77 to 79); the directories list every endpoint page.
 
-### State Fields
+| service | purpose | pages |
+|---|---|---|
+| `charging_energy_service/` | energy data, configs, rate plans, firmware | [api/charging_energy_service](../api/README.md) |
+| `charging_hes_svc/` | device commands, station config, EV charger binding | [api/charging_hes_svc](../api/charging_hes_svc/README.md) |
+| `charging_disaster_prepared/` | backup and disaster mode control (auto and manual) | [api/charging_disaster_prepared](../api/charging_disaster_prepared/README.md) |
 
-| Key | Mapped Name | Values |
-|-----|-------------|--------|
-| `soc` | `battery_soc` | 0-100% |
-| `m` | `mode` | 0=off, 1=on, 2=auto |
-| `gs` | `grid_status` | 0=offline, 1=online |
-| `bs` | `battery_status` | 0=Standby, 1=Charging, 2=Discharging |
-| `ps` | `plant_status` | 0=Off, 1=On-grid |
-| `ws` | `working_status` | |
-| `bc` | `pps_count` | Number of attached F3800 units |
+## Mode and EMS enums
 
-### Battery Array (`bds`)
+The enum tables of the old page are owned by [../reference/enums.md](../reference/enums.md) and removed here.
 
-List of PPS (F3800) data dicts:
-```json
-[{"sn": "<pps_sn>", "soc": 61, "power": -1148, "error": 0}]
-```
+- Home Power System `ModeState` (11 members, indices 0 to 10, no wire value): [enums, ModeState](../reference/enums.md#modestate) (audit rows 82 to 92, pool objects, OK).
+- `EmsModeType` API values (selfConsumption, manualPowerBackup, timeOfUse, onlyBackupPower, severeWeatherMode, offGrid; the field `off_14` of the pool object): [enums, Energy, mode and price enums](../reference/enums.md#energy-mode-and-price-enums) (audit rows 93 to 98, OK). The `Index` column of the old table moved in 3.24.3, so only the API value is stable: see "Since/changed".
+- The state fields of the MQTT JSON (`m`, `gs`, `bs`, `ps`, `soc`, `cp`) and their meanings are upstream's (audit row 81 NOT-FROM-ASM); owner [../mqtt/a17b1.md](../mqtt/a17b1.md).
 
-### Settings & Schedule
+## Backup and disaster mode control
 
-| Key | Mapped Name | Default | Notes |
-|-----|-------------|---------|-------|
-| `cp` | charge_percent_target | 40 | Battery reserve percentage |
-| `rp` | rate_plan | [] | Schedule array |
-| `dpp` | discharge_power_plan | [] | Discharge plan |
-| `pu` | power_usage_mode | 0 | |
+Detail of every call: [../api/charging_disaster_prepared/README.md](../api/charging_disaster_prepared/README.md); step trace of the 3.24.3 values: [../docs/audit/charging_disaster_prepared.md](../docs/audit/charging_disaster_prepared.md).
 
-### Firmware & System
+Two independent modes can be active together: auto disaster (server-side weather alerts, `auto_disaster_switch`) and manual disaster (user picks a time window, `manual_disaster_switch` plus `manual_disaster_detail` with Unix timestamps). Reading and quitting: [get_site_device_disaster](../api/charging_disaster_prepared/get_site_device_disaster.md), [get_support_func](../api/charging_disaster_prepared/get_support_func.md), [quit_disaster_prepare](../api/charging_disaster_prepared/quit_disaster_prepare.md).
 
-| Key | Name | Type |
-|-----|------|------|
-| `mv` | main_firmware_version | string |
-| `mdv` | module_detail_version | string |
-| `tv` | total_version | string |
+### Manual request values (3.24.3)
 
-### Diesel/Generator Extension
+Tag: asm-traced. All sites are in `ak_soft_ems/manual_power_backup/manual_power_backup_logic.dart`.
 
-| Key | Name |
-|-----|------|
-| `hasDiesel` | Has diesel generator |
-| `dieselState` | Diesel generator state |
-| `o2lp` / `o2lpu` | Output2 load power / unit |
-| `o2pp` / `o2ppu` | Output2 PV power / unit |
+- `type`: 1 or 2, computed from a bit test (raw 4 or 2 stored with `stur w`; @0x25ecd1c to @0x25ecd28; audit row 102). Upstream sends `type` 2 for the power-panel site (`apitypes.py` comment on `get_site_device_disaster`, upstream-confirmed).
+- `manual_disaster_switch`: the JSON boolean `true`, not the integer 1 (`r16 = true`, @0x25ecd50; audit row 189 of the X1 section, see [x1_hes_e10.md](x1_hes_e10.md)).
+- `manual_disaster_detail.disaster_type`: 2 (raw 4 stored with `stur w` into the map slot, @0x25ecd80; audit rows 100 and 106). The old page said 4.
+- `start_time` and `end_time` are Unix seconds (audit row 101 NOT-FROM-ASM: the old numbers 1712160000 and 1712246400 were an example, not constants).
+- The quit request in 3.24.3 hardcodes its own `disaster_type` (2 in `showSevereWeatherModeDialog`, 1 in `showManualBackupModeDialog`); see the [charging_disaster_prepared audit](../docs/audit/charging_disaster_prepared.md).
 
-## Mode State (Home Power System)
+### Models (class sizes)
 
-| Value | Name | Description |
-|-------|------|-------------|
-| 0 | naStatus | N/A |
-| 1 | selfUserState | Self-consumption |
-| 2 | timeOfUserState | Time-of-use |
-| 3 | manualBackupState | Manual backup active |
-| 4 | automaticBackupState | Auto backup (weather) active |
-| 5 | onlyBackupPower | Backup-only mode |
-| 6 | manualGridOutage | Manual grid outage simulation |
-| 7 | socCalibration | SOC calibration |
-| 8 | physicalOffGrid | Physical off-grid |
-| 9 | lowSolarInput | Low solar input |
-| 10 | forcedRecharge | Forced recharge |
+Tag: asm-traced. Sizes are class-header values, not Smi immediates (audit rows 103, 104, 106).
 
-## EmsModeType (API values for device_command)
+| class | size | file | note |
+|---|---|---|---|
+| `DisasterSetting` | 0x30, extends `ChangeNotifier` | `device_disaster_model.dart` | fields `auto_disaster_switch`, `manual_disaster_switch`, `disaster_details` (class header) |
+| `DisasterStatus` (IoT kit) | 0xc | `device_disaster_model.dart` | two classes carry this name; the old page's 0x1c belongs to the station-mixin class in `auto_disaster.dart` |
+| `DisasterStatus` (station mixin) | 0x1c | `auto_disaster.dart` | same three keys: `auto_disaster_status`, `manual_disaster_status`, `current_disaster_detail` |
+| `DisasterPrepareDetail` | 0x10 (3.18.0: 0xc) | see [../models/hes.md](../models/hes.md#disasterpreparedetailsmodel) | 7 JSON keys; `disaster_type` is 2 for the manual request (`manual_power_backup_logic.dart` @0x25ecd80) |
 
-| Index | Name | API Value |
-|-------|------|-----------|
-| 0 | selfConsumption | 1 |
-| 1 | manualPowerBackup | 4 |
-| 2 | timeOfUse | 5 |
-| 3 | onlyBackupPower | 8 |
-| 4 | severeWeatherMode | 9 |
-| 5 | offGrid | 10 |
+## BLE battery reserve command
 
-## Backup/Disaster Mode Control
+Separate from the disaster system. Over BLE, `sendA17B1Command()` sends the command named `"scp"` (set cycle percent) with the battery reserve value (0 to 100, old page, not audited); the app then persists it with `syncSiteConfig()` over HTTP. The string `"scp"` is still in the 3.24.3 object pool (`[pp+0x979b0]`; 3.18.0: `[pp+0x757f8]`) and is used in `system_policy_logic.dart` and `electricity_scene_logic.dart` (audit row 107). The command frame: [../ble/a17b1.md](../ble/a17b1.md).
 
-> Full flow analysis: `endpoints/charging_disaster_prepared.md`
+## Device command control
 
-### Two Independent Modes
+`electricity_strategy` and `off_grid_switching` are nested objects of `device_command`; their field lists are owned by [../models/hes.md](../models/hes.md#a5101devicecommandmodel) and [device_command](../api/charging_hes_svc/device_command.md). The old example values (`conserve_percent` 20, `off_grid_enable` 1, `off_grid_sensitivity` 3) were examples (audit row 110 NOT-FROM-ASM); `mode` 1 is `EmsModeType.selfConsumption` (`off_14` of the pool object `[pp+0x6aee0]`, audit row 109).
 
-| Mode | Trigger | API field | Time format |
-|------|---------|-----------|-------------|
-| **Auto Disaster** | Server-side weather alerts | `auto_disaster_switch` (bool) | Server-controlled |
-| **Manual Disaster** | User picks time window | `manual_disaster_switch` (bool) + `manual_disaster_detail` | Unix timestamps |
+## App structure (Dart)
 
-Both can be active simultaneously.
+Tag: asm-traced (file and class names). Paths under `charging/ui/page/`.
 
-### Cloud API Flow (what thomluther should implement)
-
-**Enable manual backup**:
-```json
-POST /charging_disaster_prepared/set_site_device_disaster
-{
-  "type": "<device_type_int>",
-  "identifier_id": "<site_id>",
-  "manual_disaster_switch": true,
-  "manual_disaster_detail": {
-    "disaster_type": 4,
-    "start_time": 1712160000,
-    "end_time": 1712246400
-  }
-}
-```
-
-**Disable manual backup**:
-```json
-{
-  "type": "...", "identifier_id": "...",
-  "manual_disaster_switch": false
-}
-```
-
-**Read current settings**:
-```
-GET /charging_disaster_prepared/get_site_device_disaster
-→ DisasterSetting { auto_disaster_switch, manual_disaster_switch, disaster_details[] }
-```
-
-**Check feature support**:
-```
-GET /charging_disaster_prepared/get_support_func
-→ SupportFunc { support_auto_disaster, support_country_code[] }
-```
-
-### Key Models (Cloud API — from device_disaster_model.dart)
-
-**DisasterSetting** (size 0x30, extends ChangeNotifier):
-```
-auto_disaster_switch     bool    Auto disaster enabled
-manual_disaster_switch   bool    Manual disaster enabled
-disaster_details         list    Active events → List<DisasterEvent>
-```
-
-**DisasterStatus** (size 0x1c):
-```
-auto_disaster_status     int     Auto status (0 = inactive)
-manual_disaster_status   int     Manual status (0 = inactive)
-current_disaster_detail  object? → DisasterPrepareDetail (nullable)
-```
-
-**DisasterPrepareDetail**:
-```
-uuid            string   Event ID
-event           string   Event name
-event_key       string?  Event key
-start_time      int      Unix timestamp
-end_time        int      Unix timestamp
-charging_time   int?     Charging duration
-disaster_type   int      Type (4 = manual)
-```
-
-### BLE Battery Reserve Command
-
-Separate from disaster system. Via BLE `sendA17B1Command()`:
-- Command: `"scp"` [pp+0x757f8] (set cycle percent)
-- Parameter: battery reserve value (0-100)
-- Followed by `syncSiteConfig()` HTTP to persist
-- BLE opcodes: 0x233 (response), 0x45a (dismiss)
-
-## Device Command Control
-
-### electricity_strategy (nested in device_command)
-
-```json
-{
-  "electricity_strategy": {
-    "conserve_percent": 20,
-    "mode": 1,
-    "isAuthorizeAIEms": false,
-    "isEnableSmartMode": false
-  }
-}
-```
-
-### off_grid_switching (nested in device_command)
-
-```json
-{
-  "off_grid_switching": {
-    "off_grid_enable": 1,
-    "off_grid_sensitivity": 3
-  }
-}
-```
-
-## EMS Strategy Modes
-
-```
-self_consumption, manual_backup, peak_shaving,
-custom_mode, time_of_use, smart, dynamic, fixed
-```
-
-## Dart UI Pages (Blutter Decompilation)
-
-| Page | Path | Purpose |
-|------|------|---------|
-| A17B1HomePage | `device/a17b1/device_home/` | Main device view |
-| A17B1SystemPolicyLogic | `device/a17b1/system_policy/` | Backup/disaster strategy |
-| A17B1ManualBackupPowerLogic | `device/a17b1/device_setting/manual_backup_power/` | Manual backup config |
-| A17B1DeviceSettingLogic | `device/a17b1/device_setting/` | Device settings root |
-| A17B1ElectricitySceneLogic | `device/a17b1/a17b1electricity_scene/` | Electricity management |
-| A17B1FixedRateLogic | `device_setting/utility_rate_plan/fixed_rate/` | Fixed rate plan |
-| A17B1SystemTestLogic | `device/a17b1/a17b1system_test/` | Diagnostics |
+| page | path | purpose |
+|---|---|---|
+| A17B1HomePage | `device/a17b1/device_home/` | main device view |
+| A17B1SystemPolicyLogic | `device/a17b1/system_policy/` | backup and disaster strategy |
+| A17B1ManualBackupPowerLogic | `device/a17b1/device_setting/manual_backup_power/` | manual backup config |
+| A17B1ElectricitySceneLogic | `device/a17b1/a17b1electricity_scene/` | electricity management |
+| A17B1SystemTestLogic | `device/a17b1/a17b1system_test/` | diagnostics |
 | A17B1FirmwareLogic | `device/a17b1/a17b1firmware/` | OTA updates |
-| A17B1SelectDevicesLogic | `device/a17b1/a17b1select_devices/` | Device binding |
-| ThirdAtsSetting | `device_setting/third_ats_setting/` | ATS configuration |
+| A17B1SelectDevicesLogic | `device/a17b1/a17b1select_devices/` | device binding |
+| A17b1StationLogic, A17B1AutoDisasterMixin | `station/A17b1/` | station overview, auto disaster handling |
+| AutoDisasterSetting, ManualDisasterSetting | `station/view/auto_disaster/` | auto and manual disaster config |
 
-### Station-Level Pages
+BLE device files in `charging/ble/device/A17B1/`: `a17b1_anker_device.dart` (core device abstraction), `a17b1_device_commands.dart` (static command parsing), `a17b1_device_controller.dart` (dual protocol, ZX BLE plus MQTT), `mqtt_set_order_model.dart` (MQTT command serialization). The command architecture (`sendA17B1Command()` assembles `messageId`, `config`, `cmdId`, `data`; `handleMQTTDeviceResponse()` and `handleZXProtocolDeviceResponse()` for responses) is described in [../ble/a17b1.md](../ble/a17b1.md).
 
-| Page | Path | Purpose |
-|------|------|---------|
-| A17b1StationLogic | `station/A17b1/` | Station overview |
-| A17B1AutoDisasterMixin | `station/A17b1/` | Auto disaster handling |
-| AutoDisasterSetting | `station/view/auto_disaster/` | Auto disaster config |
-| ManualDisasterSetting | `station/view/auto_disaster/` | Manual disaster config |
+## Python API implementation (upstream)
 
-## BLE Device Files
+Tag: upstream-confirmed. `AnkerSolixPowerpanelApi` in `api/powerpanel.py` of thomluther/anker-solix-api. The old page gave method line numbers for a 1452-line file; the local checkout (17d85d0, 2026-03-27) has 1574 lines and the numbers no longer match, so they are removed (audit rows 111 to 120 NOT-FROM-ASM).
 
-| File | Class | Purpose |
-|------|-------|---------|
-| `a17b1_anker_device.dart` | A17B1AnkerDevice | Core device abstraction |
-| `a17b1_device_commands.dart` | A17B1DeviceCommands | Command parsing (static) |
-| `a17b1_device_controller.dart` | A17B1DeviceController | Dual protocol: ZX BLE + MQTT |
-| `mqtt_set_order_model.dart` | MqttSetOrderModel | MQTT command serialization |
+Methods: `_update_dev()` (device data consolidation, A17B1 to A1790 capacity mapping), `update_sites()`, `update_site_details()`, `update_device_energy()`, `get_system_running_info()`, `get_avg_power_from_energy()` (5-minute average power from multi-source energy), `energy_statistics()` (hes, solar, home, grid, pps, diesel), `energy_daily()`, `extract_energy()`.
 
-### Command Architecture
+`API_CHARGING_ENDPOINTS` in `apitypes.py` lines 205 to 218 has 12 entries in the current checkout (audit row 121): `get_error_info`, `get_system_running_info`, `energy_statistics`, `get_rom_versions`, `get_device_info`, `get_wifi_info`, `get_installation_inspection`, `get_utility_rate_plan`, `report_device_data`, `get_configs`, `get_sns`, `get_monetary_units`.
 
-- Dual protocol stack: `ZXCommandTransformer` (BLE) + `MqttCommandTransformer` (MQTT)
-- `sendA17B1Command()` assembles: `{messageId, config, cmdId, data}`
-- `handleMQTTDeviceResponse()` and `handleZXProtocolDeviceResponse()` for response handling
+## Since/changed
 
-## Python API Implementation
+| item | old page (3.18.0 reading) | 3.24.3 |
+|---|---|---|
+| manual `disaster_type` in the request | 4 | 2 (`manual_power_backup_logic.dart` @0x25ecd80) |
+| `DisasterPrepareDetail.disaster_type` | "4 = manual" | 2 (same site @0x25ecd80) |
+| BLE opcodes "0x233 response, 0x45a dismiss" | listed as BLE opcodes | not BLE opcodes: 563 is a `MessageEvent` code fired in `a17b1_device_controller.dart` @0x3b4a000 and in `back_power_logic.dart` @0x26e3214, 1114 is a request-timeout compare in `request_timeout_util.dart` @0x33d6238; both are unboxed 64-bit values, so the numbers are right but the role is not; the labels "response" and "dismiss" are not visible in asm |
+| `EmsModeType` `Index` column 0..5 | indices of six members | indices moved: 3.24.3 added `normalMode` (`power_usage_scenario_controller.dart` @0x37aec0c), `customMode`, `timeSlot` and `smartMode`, see [enums](../reference/enums.md#energy-mode-and-price-enums); use the API value |
+| `"scp"` pool offset | `[pp+0x757f8]` | `[pp+0x979b0]` (string unchanged) |
+| `DisasterStatus` size | 0x1c | 0xc for the IoT-kit class, 0x1c for the station-mixin class |
 
-### AnkerSolixPowerpanelApi (powerpanel.py, 1452 lines)
+Audit rows in table order: 100 and 106 (WRONG), 108 (WRONG), 99 (CHANGED), 107 (CHANGED), 104 (OK, two classes with one name).
 
-| Method | Lines | Purpose |
-|--------|-------|---------|
-| `_update_dev()` | 78-204 | Device data consolidation, A17B1→A1790 capacity mapping |
-| `update_sites()` | 206-377 | Main site update, processes `powerpanel_list` |
-| `update_site_details()` | 379-420 | Less-frequent detail updates |
-| `update_device_energy()` | 422-494 | Energy statistics |
-| `get_system_running_info()` | 518-581 | Cumulative runtime stats |
-| `get_avg_power_from_energy()` | 583-858 | 5-min average power from multi-source energy |
-| `energy_statistics()` | 860-921 | Core energy query (hes, solar, home, grid, pps, diesel) |
-| `energy_daily()` | 923-1317 | Daily energy aggregation |
-| `extract_energy()` | 1319-1452 | Energy extraction helper |
+## Known firmware notes
 
-### API_CHARGING_ENDPOINTS (apitypes.py)
-
-Currently implemented (12):
-```python
-"get_error_info", "get_system_running_info", "energy_statistics",
-"get_rom_versions", "get_device_info", "get_wifi_info",
-"get_installation_inspection", "get_utility_rate_plan",
-"report_device_data", "get_configs", "get_sns", "get_monetary_units"
-```
-
-**Not implemented** (6 known):
-```
-sync_installation_inspection, sync_config, restart_peak_session,
-preprocess_utility_rate_plan, ack_utility_rate_plan, adjust_station_price_unit
-```
-
-## Implementation Gaps (for ha-anker-solix)
-
-### Critical for Issue #480
-
-1. **`charging_disaster_prepared/` endpoints** — Entire service layer missing from Python API
-2. **`charging_hes_svc/device_command`** — SET endpoint not implemented
-3. **`charging_hes_svc/get_device_command`** — GET counterpart not implemented
-4. **DisasterPreparednessInfo model** — Not defined in Python
-5. **ElectricityStrategy model** — Not defined in Python
-6. **OffGridSwitching model** — Not defined in Python
-
-### Secondary Gaps
-
-7. `charging_hes_svc/check_function` — Feature detection (auto_disaster support)
-8. `charging_energy_service/get_configs` — param_types still unknown
-9. `charging_hes_svc/get_station_config_and_status` — Station grid config
-10. Disaster-prepare status/detail/quit endpoints
+- No firmware is recorded for any statement on this page.
 
 ## Known unknowns
 
-None recorded beyond the row-level notes above.
+Tag: untagged by design (no API fact).
+
+- The meaning of `auto_disaster_status` and `manual_disaster_status` equal to 0 ("inactive" in the old page): the keys are read (strings @0x22d6af0 and @0x22d6b48 in `device_disaster_model.dart`), the meaning is not an asm fact (audit row 105).
+- Which A17B1 call path reaches the realtime trigger `0057`, if any (audit row 76).
+- The old "Implementation gaps for ha-anker-solix" list (disaster service, `device_command` and `get_device_command` SET and GET, `check_function`, `get_configs` param types, `get_station_config_and_status`, six endpoints not implemented upstream) and the old `API_CHARGING_ENDPOINTS` "not implemented" names were not re-checked against the current upstream checkout (audit row 122 NOT-FROM-ASM); the endpoint strings named in them appear in `apitypes.py` lines 430 to 485 of the checkout.
+- The old list of EMS strategy mode strings (`self_consumption`, `manual_backup`, `peak_shaving`, `custom_mode`, `time_of_use`, `smart`, `dynamic`, `fixed`) was not audited; the numeric values are in the `EmsModeType` enum.
+- Open test requests for this product: [../docs/DEVICE_TEST_BACKLOG.md](../docs/DEVICE_TEST_BACKLOG.md).
+
+## Device-tested by
+
+none
