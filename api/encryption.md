@@ -83,7 +83,7 @@ Header names only; each line is a meaning, not a value rule. Dart builds this se
 |---|---|---|---|
 | `X-Encryption-Info` | marks the scheme; the constant `algo_ecdh` | `@0x40170a8`, value `@0x40170b0` | `x-encryption-info: algo_ecdh` |
 | `X-Replay-Info` | replay-protection marker; the constant `replay` | `@0x401702c`, value `@0x4017034` | `x-replay-info: replay` |
-| `X-Request-Ts` | request timestamp in seconds (the app's 461 message blames the device clock, see below); built by `getTimeStamp` (`@0x40175dc`: the microsecond clock `_getCurrentMicros` divided by 1000 twice, `sdiv` at `@0x4017644` and `@0x4017648`, constant `r0 = 1000` at `@0x401763c` used in arithmetic, so raw equals real: 1000) | `@0x401705c` | `x-request-ts` |
+| `X-Request-Ts` | request timestamp in seconds (the app's 461 message blames the device clock, see below); built by `getTimeStamp` (`@0x40175dc`) | `@0x401705c` | `x-request-ts` |
 | `X-Request-Once` | a per-request unique value (replay protection); built by `getRequestOnce` (`@0x4017488`) | `@0x4017084` | `x-request-once` |
 | `X-Key-Ident` | identifier of the negotiated session key; read from storage by `getIdentifyKey` (`@0x40170dc`) | `@0x40170f8` | `x-key-ident` |
 | `X-Signature` | request signature, built by `getSignature` (`@0x4017200`) | `@0x4017150` | `x-signature` |
@@ -104,7 +104,7 @@ Scope note: intentionally not documented here (vendor protection; decision pendi
 
 ## Terminal id
 
-`POST {base URL}/passport/terminal_id` with the body key `gen_key` (empty string), owned by [passport/terminal_id.md](passport/terminal_id.md). It is requested by `HttpEncryptionDecorator::request` (`@0x4869310`) for any call with `needTerminalId` (default true) while no account is logged in, once (an `HttpEncryptionDecorator` lock serializes callers, a stored id is reused). It is not part of the signature headers; it travels as `Openudid` on login calls, as `X-Terminal-ID` on the plain path when there is no `gtoken`, and to the SDK as `terminalId`.
+`POST {base URL}/passport/terminal_id` owned by [passport/terminal_id.md](passport/terminal_id.md). It is requested by `HttpEncryptionDecorator::request` (`@0x4869310`) for any call with `needTerminalId` (default true) while no account is logged in, once (an `HttpEncryptionDecorator` lock serializes callers, a stored id is reused). It is not in `commonHeaders` (Dart); whether the native SDK includes it in its headers is unknown. The app sends it as `Openudid` on the calls listed on that page, as `X-Terminal-ID` on the plain path when there is no `gtoken`, and to the SDK as `terminalId`.
 
 ## Response handling and error codes
 
@@ -160,6 +160,7 @@ Compared with the 3.18.0 asm: the decorator layout, `needEncryption` default (`t
 - The selector of the URL predicate in `request` (`@0x4869544`) and the exact meaning of its result for relative paths.
 - The numeric thresholds in `_getErrorMsg` (`@0x486bd64`).
 - Whether an SDK request also needs the visitor/terminal id to be present, and what the SDK does on 461 or 463 beyond reporting them.
+- Whether the native SDK includes the terminal id in its request headers (the Dart `commonHeaders` does not).
 - Whether `libecc-encryption.so` implements the `encryption` channel (no native analysis).
 
 ## Device-tested by

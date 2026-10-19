@@ -38,7 +38,9 @@ Other call arguments: `showLoading: false` (`r30 = false`, `@0x3bd7294`; the app
 
 What upstream sends in addition (upstream-confirmed, `session.py`): the body keys `ab` (country id), `enc` (`0`), `time_zone` and `transaction`. The 3.24.3 `iotLoginRequest` has none of these four keys, and upstream sends no `Openudid` header. The server accepts the upstream form, so the four keys are not rejected; whether the app-style body without them is accepted by the server for every account is not tested here.
 
-`processPassword` (`validate_account_model.dart @0x2faf368`) leaves the password unchanged or replaces it with a one-way digest, depending on the `EncType` of the account (`raw` or `sha256`, enum names from pool entries `pp+0xc19d8` and `pp+0xc19e0`); the account's `enc_text` field comes from [validate_email](validate_email.md). Upstream sends the raw password with `enc: 0`.
+What `processPassword` (`validate_account_model.dart @0x2faf368`) does to the password is selected by the `EncType` of the account (`raw` or `sha256`, enum names from pool entries `pp+0xc19d8` and `pp+0xc19e0`); the account's `enc_text` field comes from [validate_email](validate_email.md). Upstream sends the raw password with `enc: 0`.
+
+Scope note: pre-processing named only; not described (vendor protection; decision pending with the repo owner).
 
 ## `param_type`/`cmd`
 
