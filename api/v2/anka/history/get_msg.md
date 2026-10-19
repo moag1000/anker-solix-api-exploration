@@ -1,0 +1,70 @@
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+
+# get_msg
+
+## Purpose
+
+<!-- TODO -->
+
+## Upstream name
+
+`none` (no upstream name)
+
+## Method+URL
+
+`/v2/anka/history/get_msg`, method: not extracted by the inventory <!-- TODO -->; string-only: `anka_agent/http/request.dart @0x2dba1e8`
+
+## Encrypted?
+
+encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+
+## Request
+
+| field | type | required | example | source |
+|---|---|---|---|---|
+| `url` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+| `method` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+| `country` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+| `cloudVersion` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+| `useWebsocket` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+| `isAIotEnv` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+| `user_id` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+| `msg_list` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+| `page` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+| `num` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+
+## `param_type`/`cmd`
+
+n/a
+
+## Response model (link)
+
+<!-- TODO -->
+
+## Response
+
+<!-- TODO -->
+
+## Example request/response
+
+<!-- TODO -->
+
+## Errors seen
+
+`api/errors.md`: <!-- TODO -->
+
+## Callers in app
+
+- `anka_agent/http/request.dart`: `data` @0x2dba16c (URL literal only, no `*Http*` call)
+
+## Since/changed
+
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+
+## Known unknowns
+
+- <!-- TODO -->
+
+## Device-tested by
+
+none

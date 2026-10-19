@@ -1,0 +1,14 @@
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Page type: guidance (no API facts) · Owner page: this page
+
+# v2
+
+Service index for the URL prefix `/v2/`. Each endpoint page is the single owner of its request, response and tags; a skeleton page (status "skeleton", purpose TODO) carries only what `data/endpoints.json` knows and has `Confidence: string-only` until a human reads the asm. Upstream keys are `API_ENDPOINTS` keys of `api/apitypes.py`.
+
+| endpoint | purpose | upstream key | status |
+|---|---|---|---|
+| [`/v2/anka/devmgr/sync`](anka/devmgr/sync.md) | TODO | - | removed in 3.24.3, skeleton |
+| [`/v2/anka/history/del_msg`](anka/history/del_msg.md) | TODO | - | skeleton |
+| [`/v2/anka/history/get_msg`](anka/history/get_msg.md) | TODO | - | skeleton |
+| [`/v2/anka/history/update_msg`](anka/history/update_msg.md) | TODO | - | skeleton |
+
+Not here: MQTT or BLE facts ([../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

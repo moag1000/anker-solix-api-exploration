@@ -52,54 +52,75 @@ def _yn(v):
     return {True: 'yes', False: 'no', None: 'unknown'}[v]
 
 
+def _enc_state(r):
+    """Per-row encrypted value as written on the page."""
+    if r['role'] != 'sender':
+        return 'unknown (URL literal only, no `*Http*` call)'
+    if r['encrypted']:
+        return 'true'
+    if r.get('encryption_note'):
+        return 'default-true (requestHttp) — verify'
+    return 'false'
+
+
+def _is_removed(rows):
+    return all(r.get('removed_in') for r in rows)
+
+
 def render_endpoint(rows, date=None, version='3.24.3'):
+    """One skeleton for ALL rows (senders and URL providers) of one URL."""
     date = date or datetime.date.today().isoformat()
     first = rows[0]
     url = first['url']
     last = url.rsplit('/', 1)[-1]
-    L = [header(date), '', '# %s' % last, '', '## Purpose', '', TODO, '',
-         '## Upstream name', '']
+    removed = _is_removed(rows)
+    L = [header(date), '']
+    if removed:
+        L += ['Removed in %s — present in 3.18.0 only' % version, '']
+    L += ['# %s' % last, '', '## Purpose', '', TODO, '', '## Upstream name', '']
     keys = sorted({r['upstream_key'] for r in rows if r.get('upstream_key')})
     if keys:
         L.append('%s in `API_ENDPOINTS` of `api/apitypes.py` (upstream-confirmed).'
                  % ', '.join('`%s`' % k for k in keys))
     else:
         L.append('`none` (no upstream name)')
+    addrs = sorted({(r['dart_file'], r['url_addr']) for r in rows})
     L += ['', '## Method+URL', '',
-          '`%s` (method: %s), string-only: `%s @%s`' % (
-              url, TODO, _base(first['dart_file']), first['url_addr']), '',
-          '## Encrypted?', '']
-    enc = sorted({r['encrypted'] for r in rows})
+          '`%s`, method: not extracted by the inventory %s; string-only: `%s @%s`'
+          % (url, TODO, addrs[0][0], addrs[0][1])]
+    if len(addrs) > 1:
+        L.append('(literal also at %d more site(s) in `data/endpoints.json`)'
+                 % (len(addrs) - 1))
     senders = [r for r in rows if r['role'] == 'sender']
-    if True in enc and False in enc:
-        L.append('Mixed across callers, see the per-sender list below; scheme in '
-                 '`api/encryption.md`.')
-    elif enc == [True]:
-        L.append('Yes, see `api/encryption.md`.')
-    else:
-        L.append('No encryption helper seen at the sender; see `api/encryption.md` '
-                 'and the notes below. %s' % TODO)
-    for r in senders:
-        note = ' (%s)' % r['encryption_note'] if r.get('encryption_note') else ''
-        L.append('- `%s` calls %s at `%s @%s`%s' % (
-            r['function'], ', '.join('`%s`' % c for c in r['http_callees']),
-            _base(r['dart_file']), r['addr'], note))
+    L += ['', '## Encrypted?', '']
+    states = sorted({_enc_state(r) for r in (senders or rows)})
+    L.append('encrypted: %s. Scheme and header rules: `api/encryption.md`; '
+             'per-sender values are in "Callers in app".'
+             % ' / '.join('`%s`' % x if x in ('true', 'false') else '"%s"' % x
+                          for x in states))
     L += ['', '## Request', '']
     shown = [r for r in rows if r['params'] or r['envelope']]
     if not shown:
         L += ['No request keys found by the extractor. %s' % TODO, '']
-    for r in shown:
-        src = '%s @%s' % (_base(r['dart_file']), r['addr'])
-        L.append('### Sender `%s` (%s)' % (r['function'], src))
-        L.append('')
-        if r['param_data_is_json']:
-            L.append('The sender wraps these keys in `param_data` as a JSON string '
-                     '(`jsonEncode`); outer keys: %s.' % ', '.join(
-                         '`%s`' % k for k in r['envelope']))
-            L.append('')
-        L += ['| field | type | required | example | source |', '|---|---|---|---|---|']
-        for p in r['params'] or r['envelope']:
-            L.append('| `%s` | ? | ? | ? | `%s` |' % (p, src))
+    else:
+        env = sorted({k for r in shown if r['param_data_is_json']
+                      for k in r['envelope']})
+        if env:
+            L += ['Some senders wrap these keys in `param_data` as a JSON string '
+                  '(`jsonEncode`); outer keys: %s.' % ', '.join(
+                      '`%s`' % k for k in env), '']
+        L += ['| field | type | required | example | source |',
+              '|---|---|---|---|---|']
+        seen_p = set()
+        for r in shown:
+            src = '%s @%s' % (r['dart_file'], r['addr'])
+            for p in r['params'] or r['envelope']:
+                if p not in seen_p:
+                    seen_p.add(p)
+                    L.append('| `%s` | ? | ? | ? | `%s` |' % (p, src))
+        if len(shown) > 1:
+            L += ['', 'Rows are the union over %d senders; `source` is the first '
+                  'sender that sets the key.' % len(shown)]
         L.append('')
     L += ['## `param_type`/`cmd`', '']
     if any(r['param_type'] or r['cmd'] is not None for r in rows):
@@ -107,33 +128,42 @@ def render_endpoint(rows, date=None, version='3.24.3'):
         if any(r.get('param_type_source') == 'variable' for r in rows):
             L.append('')
             L.append('param_type is a variable at this sender (traced by heuristic '
-                     '\u2014 verify against the callers in `data/param_types.json`).')
+                     '— verify against the callers in `data/param_types.json`).')
     else:
         L.append('n/a')
     L += ['', '## Response model (link)', '', TODO, '', '## Response', '', TODO, '',
           '## Example request/response', '', TODO, '', '## Errors seen', '',
           '`api/errors.md`: %s' % TODO, '', '## Callers in app', '']
-    seen = set()
+    by_file = {}
     for r in rows:
-        for c in r['callers']:
-            if c not in seen:
-                seen.add(c)
-                L.append('- `%s` (calls `%s`)' % (c, r['function']))
-    for r in rows:
-        if r['role'] == 'url_provider':
-            L.append('- `%s @%s` holds the URL literal only (no `*Http*` call in '
-                     'that function)' % (r['dart_file'], r['addr']))
-    if not seen and not any(r['role'] == 'url_provider' for r in rows):
-        L.append('No callers found by the extractor.')
+        by_file.setdefault(r['dart_file'], []).append(r)
+    for f, rs in sorted(by_file.items()):
+        parts = []
+        for r in rs:
+            if r['role'] == 'sender':
+                pt = ', param_type/cmd: see `api/param_types.md`' if (
+                    r['param_type'] or r['cmd'] is not None) else ''
+                parts.append('`%s` @%s (%s; encrypted: %s%s)' % (
+                    r['function'], r['addr'],
+                    ', '.join(c.split('::')[-1] for c in r['http_callees']),
+                    _enc_state(r), pt))
+            else:
+                parts.append('`%s` @%s (URL literal only, no `*Http*` call)'
+                             % (r['function'], r['addr']))
+        L.append('- `%s`: %s' % (f, '; '.join(parts)))
+    ui = sorted({c for r in rows for c in r['callers']})
+    if ui:
+        L += ['', 'Called from: %s' % ', '.join('`%s`' % c for c in ui)]
     L += ['', '## Since/changed', '']
     sinces = sorted({r['since'] for r in rows if r.get('since')})
-    if any(r.get('removed_in') for r in rows):
-        L.append('3.18.0: present. 3.24.3: absent (removed).')
+    if removed:
+        L.append('3.18.0: present. 3.24.3: absent (removed). since: %s.'
+                 % ', '.join(sinces))
     elif sinces == [version]:
-        L.append('3.18.0: absent. 3.24.3: present (new).')
+        L.append('3.18.0: absent. 3.24.3: present (new). since: %s.' % version)
     else:
-        L.append('3.18.0: present. 3.24.3: present. %s (compare params in '
-                 '`tools/out/diff_3.18.0_3.24.3.md`)' % TODO)
+        L.append('3.18.0: present. 3.24.3: present. since: %s. %s (compare params in '
+                 '`tools/out/diff_3.18.0_3.24.3.md`)' % (', '.join(sinces), TODO))
     L += ['', '## Known unknowns', '', '- %s' % TODO, '', '## Device-tested by', '',
           'none', '']
     return '\n'.join(L)
@@ -188,8 +218,6 @@ def render_all(endpoints, models, out, date=None):
     n_ep = n_md = 0
     by_url = {}
     for r in endpoints['rows']:
-        if r.get('removed_in'):
-            continue
         by_url.setdefault(r['url'], []).append(r)
     paths = {}
     for url in by_url:

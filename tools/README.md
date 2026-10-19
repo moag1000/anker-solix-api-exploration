@@ -30,7 +30,7 @@ python3 -I tools/render_pages.py                                           # too
 python3 -I tools/smi.py <asm_file> <0xADDR> [--dump]                       # check one number by eye
 ```
 
-`data/*.json` is committed (envelope: `generated_by`, `app_version`, `snapshot`, `rows`; keys sorted). `tools/out/` is scratch and git-ignored. `render_pages.py` never writes into `api/` or `models/`: copy a skeleton over by hand after writing its prose.
+`data/*.json` is committed (envelope: `generated_by`, `app_version`, `snapshot`, `rows`; keys sorted). `tools/out/` is scratch and git-ignored. `render_pages.py` never writes into `api/` or `models/`: render into `tools/out/pages/`, then copy into `api/` with a no-clobber copy (`cp -n`, or a loop that skips existing files) so hand-written pages are never overwritten. It renders one page per distinct URL (all senders listed under "Callers in app"), including URLs removed in 3.24.3.
 
 ## 3. Reading the output
 

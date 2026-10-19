@@ -40,6 +40,11 @@ Pick the line that matches what you want to do. Each links to a persona section 
 
 These paths point at the current file layout and will move to the new layout during the rework; see [METHODOLOGY.md](METHODOLOGY.md).
 
+**Coverage**
+
+Endpoint pages: 406 of 406 distinct URLs (3.24.3) — 3 hand-written, 403 skeletons  
+Generated from data/endpoints.json by tools/render_pages.py on 2026-10-19
+
 ---
 
 ## How this was built

@@ -210,6 +210,30 @@ class RenderTests(unittest.TestCase):
         self.assertIn('traced by heuristic', page)
         self.assertIn('verify', page)
 
+    def test_removed_url_gets_page_with_note_and_one_page_per_url(self):
+        import render_pages
+        rows = inventory_new()['rows']
+        removed = [r for r in rows if r['url'] == '/charging_disaster_prepared/clear']
+        self.assertTrue(removed and all(r.get('removed_in') for r in removed))
+        page = render_pages.render_endpoint(removed, date='2026-10-19')
+        lines = page.splitlines()
+        self.assertIn('Confidence: string-only', lines[0])
+        self.assertEqual(lines[2], 'Removed in 3.24.3 \u2014 present in 3.18.0 only')
+        self.assertIn('absent (removed)', page)
+        # several senders of one URL share one page that lists all of them
+        many = [r for r in rows if r['url'] == '/power_service/v1/site/get_site_device_param']
+        self.assertGreater(len(many), 1)
+        page = render_pages.render_endpoint(many, date='2026-10-19')
+        self.assertEqual(page.count('# get_site_device_param'), 1)
+        for r in many:
+            if r['role'] == 'sender':
+                self.assertIn('`%s` @%s' % (r['function'], r['addr']), page)
+        import tempfile
+        with tempfile.TemporaryDirectory() as td:
+            n_ep, _ = render_pages.render_all(
+                {'rows': rows}, {'rows': []}, td, '2026-10-19')
+        self.assertEqual(n_ep, len({r['url'] for r in rows}))
+
 
 SYNTH = """// lib: , url: package:x/y.dart
 
