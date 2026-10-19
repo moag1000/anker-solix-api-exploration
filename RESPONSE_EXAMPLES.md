@@ -1,6 +1,6 @@
 # Response Examples from thomluther's API
 
-> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/RESPONSE_EXAMPLES.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+> **3.18.0 reference, superseded (2026-10-19).** Owner pages on 3.24.3: [api/README.md](api/README.md) (response of each endpoint page). This file is deleted in Task 4.9; its audit table is docs/audit/RESPONSE_EXAMPLES.md.
 
 > These are **real API response examples** documented in thomluther's code.
 > They show the actual JSON structure returned by the Anker API.

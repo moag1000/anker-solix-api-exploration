@@ -1,6 +1,6 @@
 # Required vs Optional Fields per API Endpoint
 
-> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/field_docs.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+> **3.18.0 reference, superseded (2026-10-19).** Owner pages on 3.24.3: [api/README.md](api/README.md) (parameter table of each endpoint page). This file is deleted in Task 4.9; its audit table is docs/audit/field_docs.md.
 
 > Derived from conditional branching patterns in decompiled Dart code.
 > Fields marked **required** are always included in the request body.

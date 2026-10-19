@@ -1,6 +1,6 @@
 # Command Flows — Step-by-Step Traces
 
-> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/FLOWS.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+> **3.18.0 reference, superseded (2026-10-19).** Owner pages on 3.24.3: [flows/README.md](flows/README.md) (one page per flow). This file is deleted in Task 4.9; its audit table is docs/audit/FLOWS.md.
 
 > Complete traces from UI button press to wire bytes.
 > Each flow shows: what the user does → what the app validates →

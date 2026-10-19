@@ -1,6 +1,6 @@
 # BLE/MQTT Command Map — Static Cross-Reference
 
-> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/BLE_COMMAND_MAP.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+> **3.18.0 reference, superseded (2026-10-19).** Owner pages on 3.24.3: [ble/protocol.md](ble/protocol.md), [ble/handshake.md](ble/handshake.md), [ble/README.md](ble/README.md) (one page per product number), [mqtt/envelope.md](mqtt/envelope.md), [mqtt/README.md](mqtt/README.md), [api/errors.md](api/errors.md), [reference/enums.md](reference/enums.md), [reference/validation_model.md](reference/validation_model.md). This file is deleted in Task 4.9; its audit table is docs/audit/BLE_COMMAND_MAP.md.
 
 > **New methodology (2026-03-28)**: This mapping was produced by cross-referencing
 > decompiled APK command builder functions (field order + Dart Smi constants) with

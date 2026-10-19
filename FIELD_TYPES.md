@@ -1,6 +1,6 @@
 # Field Types and Examples
 
-> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/field_docs.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+> **3.18.0 reference, superseded (2026-10-19).** Owner pages on 3.24.3: [models/README.md](models/README.md), [data/models.json](data/models.json). This file is deleted in Task 4.9; its audit table is docs/audit/field_docs.md.
 
 > Cross-referenced from Blutter decompilation (B), thomluther's API examples (U),
 > and MQTT field mappings (M). Types marked with `?` are inferred from naming

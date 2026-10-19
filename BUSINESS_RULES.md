@@ -1,6 +1,6 @@
 # Business Rules — A17C1 Solarbank 2 Pro
 
-> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/BUSINESS_RULES.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+> **3.18.0 reference, superseded (2026-10-19).** Owner pages on 3.24.3: [reference/business_rules.md](reference/business_rules.md). This file is deleted in Task 4.9; its audit table is docs/audit/BUSINESS_RULES.md.
 
 > Extracted from APK UI controller and device controller assembly.
 > These rules determine WHEN a SET command is allowed and WHAT values are valid.
