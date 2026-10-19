@@ -28,7 +28,7 @@ The body starts as a one-pair map literal (2 slots, raw `r2 = 4`, `@0x30bc150`) 
 | `device_sn` | String | only if a device serial is passed; then `site_id` is not sent | `"<device_sn>"` | `http_request_repository_impl.dart @0x30bc1b4` (value from parameter r2) |
 | `site_id` | String | only if no device serial is passed | `"<site_id>"` | `http_request_repository_impl.dart @0x30bc204` (value from parameter r5) |
 
-In the only caller (station power limit page) no device serial is passed, so the app sends `unlock_code` and `site_id`: the sheet field that feeds the serial argument (`DiyLegalPowerLimitSheet` field at offset 0x23, read at `diy_legal_power_limit_sheet.dart @0x30b9454`) is not set by `showOutputPowerPicker`'s closure (`station_power_limit_logic.dart @0x43554c4` to `@0x4355520` sets the type, two callbacks, image, content and the site id only).
+In the station power limit page caller no device serial is passed (see Callers in app for the two callers that pass one), so the app sends `unlock_code` and `site_id`: the sheet field that feeds the serial argument (`DiyLegalPowerLimitSheet` field at offset 0x23, read at `diy_legal_power_limit_sheet.dart @0x30b9454`) is not set by `showOutputPowerPicker`'s closure (`station_power_limit_logic.dart @0x43554c4` to `@0x4355520` sets the type, two callbacks, image, content and the site id only).
 
 ## `param_type`/`cmd`
 
@@ -65,6 +65,7 @@ None recorded. On a transport or server error the app logs `verifyUnlockDefaultP
 ## Callers in app
 
 - `_ImagePasswordContentState::_onConfirm` (`diy_legal_power_limit_sheet.dart @0x30bbea4`, call at `@0x30bc02c`), the confirm button of the image-plus-password variant of `DiyLegalPowerLimitSheet`. It returns without a request when the typed code is empty (`@0x30bbef4`). On `verify_result == true` it calls the sheet's success callback (`@0x30bc0ac`), which closes the sheet and sets the output limit; see [../../../flows/system_output_limit.md](../../../flows/system_output_limit.md).
+- Two more callers (flow trace, [../../../flows/diy_unlock.md](../../../flows/diy_unlock.md)): the A17C1 settings power picker callback (`a17c1setting_logic.dart @0x3d91bd4`, sheet allocated at `@0x3d91fa8`, serial slot set at `@0x3d92004`) and the grid-connected settings (`grid_connected_settings_controller.dart`, `showBottomLegal` `@0x2aefffc`, serial store at `@0x2af0164` unless the page is in a site context). Both fill the serial slot (sheet offset 0x23) and not the site id, so the request carries `device_sn` instead of `site_id` there. The station page remains the caller that sends `site_id`.
 
 ## Since/changed
 

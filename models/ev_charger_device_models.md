@@ -214,6 +214,19 @@ The EV charger settings screens (RFID cards, security logs, load balancing, OCPP
 
 All classes are present in 3.18.0 (`since` column); no key is new in 3.24.3 and the tool reports no removed keys.
 
+## ChargeControlType (EV charger command value)
+
+Tag: asm-traced. Not a response model: the enum whose wire value the app sends as `controlType` in the property write `action_control_charging` ([../flows/ev_charger_start_charging.md](../flows/ev_charger_start_charging.md)). The wire value is the field `off_14` of the pool object; `off_8` is the enum index and differs.
+
+| member | pool object and page call site | wire value `controlType` |
+|---|---|---|
+| `start` | `pp+0xe0048`, `a5190_home_page.dart @0x43b1b94` | `off_14` is 1 |
+| `cancel` (stop) | `pp+0xe0050`, `a5190_home_page.dart @0x43b1c34` | `off_14` is 2 |
+| `startNow` | `pp+0xe0040`, `a5190_home_page.dart @0x43b1af4` | `off_14` is 3 |
+| `boost` | `pp+0xdfed8`, `a5190_home_page.dart @0x43b1a54` | `off_14` is 4 |
+
+The values are pool object fields, not Smi immediates (audit row 16 of docs/audit/FLOWS.md).
+
 ## Known unknowns
 
 - `rel_bizs` is typed `String` in `DeviceFeature` but `List` in `SubDeviceModel`; the senders send a list of strings (`["greenpro","elb"]`, see `set_device_feature`).
