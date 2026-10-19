@@ -49,7 +49,10 @@ n/a
 
 - `base_service/view/general_setting/remove_device_controller.dart`: `_clearShareDevice` @0x2816cb0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `balcony/src/ae100/settings/ae100_remove_device_controller.dart::_handleDeviceRemoval`, `base_service/view/general_setting/remove_device_controller.dart::_handleDeviceRemoval`
+Called from:
+
+- `balcony/src/ae100/settings/ae100_remove_device_controller.dart::_handleDeviceRemoval`
+- `base_service/view/general_setting/remove_device_controller.dart::_handleDeviceRemoval`
 
 ## Since/changed
 

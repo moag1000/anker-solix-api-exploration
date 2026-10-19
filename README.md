@@ -42,7 +42,7 @@ These paths point at the current file layout and will move to the new layout dur
 
 **Coverage**
 
-Endpoint pages: 406 of 406 distinct URLs (3.24.3) — 3 hand-written, 403 skeletons  
+Endpoint pages: 406 of 406 distinct URLs (394 in 3.24.3, 12 only in 3.18.0) — 3 hand-written, 403 skeletons  
 Generated from data/endpoints.json by tools/render_pages.py on 2026-10-19
 
 ---

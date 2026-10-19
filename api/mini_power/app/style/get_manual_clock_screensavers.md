@@ -48,7 +48,17 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getA2345CustomClockScreenSavers` @0x276bae4 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getA2345CustomClockScreenSavers`, `charging/ui/page/device/a2345/a2345clock_display/a2345clock_display_logic.dart::_loadCustomScreensavers`, `charging/ui/page/device/a2345/a2345clock_display/a2345clock_display_logic.dart::_refreshCustomScreensaversData`, `charging/ui/page/device/a2345/a2345clock_display/a2345clock_display_logic.dart::_refreshCustomThemeUrl`, `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart::_refreshCustomCategoryData`, `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart::getCustomClockScreenSavers`, `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart::initCustomizeCategoryThemeData`, `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart::_appendNewThemeByFetch`, `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart::getA2345CustomClockScreenSaversData`
+Called from:
+
+- `charging/http/http_request_repository.dart::getA2345CustomClockScreenSavers`
+- `charging/ui/page/device/a2345/a2345clock_display/a2345clock_display_logic.dart::_loadCustomScreensavers`
+- `charging/ui/page/device/a2345/a2345clock_display/a2345clock_display_logic.dart::_refreshCustomScreensaversData`
+- `charging/ui/page/device/a2345/a2345clock_display/a2345clock_display_logic.dart::_refreshCustomThemeUrl`
+- `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart::_refreshCustomCategoryData`
+- `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart::getCustomClockScreenSavers`
+- `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart::initCustomizeCategoryThemeData`
+- `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart::_appendNewThemeByFetch`
+- `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart::getA2345CustomClockScreenSaversData`
 
 ## Since/changed
 

@@ -53,7 +53,9 @@ n/a
 
 - `charging/ui/widget/home_assitent/home_assistant_logic.dart`: `saveSetId` @0x38db0b8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/widget/home_assitent/home_assistant_logic.dart::openSwichRequest`
+Called from:
+
+- `charging/ui/widget/home_assitent/home_assistant_logic.dart::openSwichRequest`
 
 ## Since/changed
 

@@ -49,7 +49,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `updateSiteDevices` @0x278e680 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::updateSiteDevices`, `charging/ui/page/device/greenpower/recharge/select_pps/select_pps_logic.dart::updateSelectPPSDevice`
+Called from:
+
+- `charging/http/http_request_repository.dart::updateSiteDevices`
+- `charging/ui/page/device/greenpower/recharge/select_pps/select_pps_logic.dart::updateSelectPPSDevice`
 
 ## Since/changed
 

@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getSiteRules` @0x2910b84 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getSiteRules`, `charging/ui/page/green_energy/site/site_logic.dart::_getSiteRules`, `charging/ui/page/home/home_base_http_reposity.dart::checkNetworkConnect`
+Called from:
+
+- `charging/http/http_request_repository.dart::getSiteRules`
+- `charging/ui/page/green_energy/site/site_logic.dart::_getSiteRules`
+- `charging/ui/page/home/home_base_http_reposity.dart::checkNetworkConnect`
 
 ## Since/changed
 

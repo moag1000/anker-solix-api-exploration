@@ -50,7 +50,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `addA2345CustomClockScreenSavers` @0x3e19ca0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::addA2345CustomClockScreenSavers`, `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart::addCustomClockScreenSavers`, `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart::addCustomClockScreenSavers`
+Called from:
+
+- `charging/http/http_request_repository.dart::addA2345CustomClockScreenSavers`
+- `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart::addCustomClockScreenSavers`
+- `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart::addCustomClockScreenSavers`
 
 ## Since/changed
 

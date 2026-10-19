@@ -59,7 +59,14 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `createSiteRequest` @0x27b23f8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::createSiteRequest`, `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::createSite`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::createSite`, `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::create`, `charging/ui/page/device/connect/create_join_device_to_system/create_system/create_system_logic.dart::create`, `charging/ui/page/green_energy/site/site_logic.dart::createSiteDirectly`
+Called from:
+
+- `charging/http/http_request_repository.dart::createSiteRequest`
+- `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::createSite`
+- `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::createSite`
+- `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::create`
+- `charging/ui/page/device/connect/create_join_device_to_system/create_system/create_system_logic.dart::create`
+- `charging/ui/page/green_energy/site/site_logic.dart::createSiteDirectly`
 
 ## Since/changed
 

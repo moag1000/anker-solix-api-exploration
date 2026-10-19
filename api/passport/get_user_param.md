@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getAppSwitchApi` @0x293e778 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getAppSwitchApi`, `charging/ui/page/account/splash/splash_logic.dart::requestAppSwitchApi`, `charging/ui/page/user/about/analyticsAndImprovement/analytics_and_improvement_logic.dart::requestAppSwitchApi`
+Called from:
+
+- `charging/http/http_request_repository.dart::getAppSwitchApi`
+- `charging/ui/page/account/splash/splash_logic.dart::requestAppSwitchApi`
+- `charging/ui/page/user/about/analyticsAndImprovement/analytics_and_improvement_logic.dart::requestAppSwitchApi`
 
 ## Since/changed
 

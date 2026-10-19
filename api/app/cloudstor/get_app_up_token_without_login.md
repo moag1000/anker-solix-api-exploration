@@ -51,7 +51,13 @@ n/a
 - `charging/ui/page/user/feedback/feedback_logic.dart`: `<anonymous closure> in FeedbackLogic::clickSubmit` @0x31208a4 (URL literal only, no `*Http*` call); `upLoadSingleFile` @0x31211e0 (URL literal only, no `*Http*` call)
 - `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/crop_logic.dart`: `_uploadCroppedImage` @0x3313658 (URL literal only, no `*Http*` call)
 
-Called from: `charging/ui/page/device/a2345/a2345_media_ability/custom_crop_widget.dart::_cropImage`, `charging/ui/page/user/feedback/feedback_logic.dart::clickSubmit`, `charging/ui/page/user/feedback/feedback_logic.dart::upLoadSingleFile`, `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/crop_logic.dart::_retryUpload`, `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/crop_logic.dart::cropImage`
+Called from:
+
+- `charging/ui/page/device/a2345/a2345_media_ability/custom_crop_widget.dart::_cropImage`
+- `charging/ui/page/user/feedback/feedback_logic.dart::clickSubmit`
+- `charging/ui/page/user/feedback/feedback_logic.dart::upLoadSingleFile`
+- `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/crop_logic.dart::_retryUpload`
+- `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/crop_logic.dart::cropImage`
 
 ## Since/changed
 

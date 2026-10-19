@@ -59,7 +59,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `postFeedback` @0x311f7dc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::postFeedback`, `charging/ui/page/user/feedback/feedback_logic.dart::submit`
+Called from:
+
+- `charging/http/http_request_repository.dart::postFeedback`
+- `charging/ui/page/user/feedback/feedback_logic.dart::submit`
 
 ## Since/changed
 

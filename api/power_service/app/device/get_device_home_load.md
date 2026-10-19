@@ -61,7 +61,31 @@ param_type is a variable at this sender (traced by heuristic — verify against 
 - `electricity_price/components/tou/impl_v2/service/tou_http_service.dart`: `getDeviceHomeLoad` @0x4878c74 (request; encrypted: default-true (requestHttp) — verify, param_type/cmd: see `api/param_types.md`)
 - `ev_charger/src/ev_charger/page/home/a5190_home_logic.dart`: `_fetchDeviceStationInfo` @0x3504e80 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::get17C1DeviceHomeLoadPort`, `charging/http/http_request_repository.dart::getDeviceHomeLoadPort`, `charging/http/http_request_repository.dart::getDeviceHomeLoadRes`, `charging/ui/page/device/a17c0/a17c0SwitchMode/a17c0_switch_mode_logic.dart::deviceConnect`, `charging/ui/page/device/a17c0/a17c0energyPlan/a17c0energy_plan_logic.dart::getDeviceHomeLoadData`, `charging/ui/page/device/a17c0/a17c0home/a17c0home_logic.dart::getDeviceHomeLoad`, `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart::onInit`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::_preloadHomeLoadData`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::getDeviceHomeLoad`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::_ensureHomeLoadData`, `charging/ui/page/device/a17c1/energy_plan/energy_plan_logic.dart::getHomeLoadSiteParam`, `charging/ui/page/device/a17x7/a17x7home/a17x7home_logic.dart::_fetchDeviceStationInfo`, `charging/ui/page/device/a17x8/a17x8home/a17x8home_logic.dart::_fetchDeviceStationInfo`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy/merge_system_energy_plan_logic.dart::getHomeLoadSiteParam`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getHomeLoadDeviceParam`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::detectionDeviceJoinSystem`, `electricity_price/components/electricity_module/electricity_price_serviceImpl.dart::getCurEmsModeType`, `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::getCurEmsModeType`, `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::getManualSetTOUDetail`, `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::parserRouterInfo`, `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::updateData`, `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::onReady`, `ev_charger/src/ev_charger/page/home/a5190_home_logic.dart::onInit`
+Called from:
+
+- `charging/http/http_request_repository.dart::get17C1DeviceHomeLoadPort`
+- `charging/http/http_request_repository.dart::getDeviceHomeLoadPort`
+- `charging/http/http_request_repository.dart::getDeviceHomeLoadRes`
+- `charging/ui/page/device/a17c0/a17c0SwitchMode/a17c0_switch_mode_logic.dart::deviceConnect`
+- `charging/ui/page/device/a17c0/a17c0energyPlan/a17c0energy_plan_logic.dart::getDeviceHomeLoadData`
+- `charging/ui/page/device/a17c0/a17c0home/a17c0home_logic.dart::getDeviceHomeLoad`
+- `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart::onInit`
+- `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::_preloadHomeLoadData`
+- `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::getDeviceHomeLoad`
+- `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::_ensureHomeLoadData`
+- `charging/ui/page/device/a17c1/energy_plan/energy_plan_logic.dart::getHomeLoadSiteParam`
+- `charging/ui/page/device/a17x7/a17x7home/a17x7home_logic.dart::_fetchDeviceStationInfo`
+- `charging/ui/page/device/a17x8/a17x8home/a17x8home_logic.dart::_fetchDeviceStationInfo`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy/merge_system_energy_plan_logic.dart::getHomeLoadSiteParam`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getHomeLoadDeviceParam`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::detectionDeviceJoinSystem`
+- `electricity_price/components/electricity_module/electricity_price_serviceImpl.dart::getCurEmsModeType`
+- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::getCurEmsModeType`
+- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::getManualSetTOUDetail`
+- `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::parserRouterInfo`
+- `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::updateData`
+- `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::onReady`
+- `ev_charger/src/ev_charger/page/home/a5190_home_logic.dart::onInit`
 
 ## Since/changed
 

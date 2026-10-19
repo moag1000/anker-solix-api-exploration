@@ -52,7 +52,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getMessage` @0x297c340 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getMessage`, `charging/ui/page/message/Main/message_main_logic.dart::requestCloudMessage`, `charging/ui/page/message/Main/message_main_logic.dart::requestOtherCloudMessage`, `charging/ui/page/message/system/message_system_logic.dart::requestCloudMessage`
+Called from:
+
+- `charging/http/http_request_repository.dart::getMessage`
+- `charging/ui/page/message/Main/message_main_logic.dart::requestCloudMessage`
+- `charging/ui/page/message/Main/message_main_logic.dart::requestOtherCloudMessage`
+- `charging/ui/page/message/system/message_system_logic.dart::requestCloudMessage`
 
 ## Since/changed
 

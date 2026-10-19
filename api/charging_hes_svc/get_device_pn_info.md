@@ -51,7 +51,9 @@ n/a
 - `charging/ui/page/device/a5101/setting/sn_number/device_img_controller.dart`: `getDevicePnInfo` @0x2789468 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/util/demosite_util_impl.dart`: `DemoSiteUtilImpl` @0x4a33a6c (URL literal only, no `*Http*` call)
 
-Called from: `charging/boostrap_impl.dart::DIInit`
+Called from:
+
+- `charging/boostrap_impl.dart::DIInit`
 
 ## Since/changed
 

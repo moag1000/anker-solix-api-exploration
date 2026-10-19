@@ -51,7 +51,10 @@ param_type is a variable at this sender (traced by heuristic — verify against 
 
 - `charging/http/http_request_repository_impl.dart`: `setAppSwitchApi` @0x293f888 (encryptionRequestHttp; encrypted: true, param_type/cmd: see `api/param_types.md`)
 
-Called from: `charging/http/http_request_repository.dart::setAppSwitchApi`, `charging/ui/page/user/about/analyticsAndImprovement/analytics_and_improvement_logic.dart::setAppSwitchStatus`
+Called from:
+
+- `charging/http/http_request_repository.dart::setAppSwitchApi`
+- `charging/ui/page/user/about/analyticsAndImprovement/analytics_and_improvement_logic.dart::setAppSwitchStatus`
 
 ## Since/changed
 

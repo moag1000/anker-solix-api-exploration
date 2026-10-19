@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getConfirmPermissionsApi` @0x26f8bf4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getConfirmPermissionsApi`, `charging/ui/page/device/connect/zx_config_wifi_success/zx_config_wifi_succees_logic.dart::done`
+Called from:
+
+- `charging/http/http_request_repository.dart::getConfirmPermissionsApi`
+- `charging/ui/page/device/connect/zx_config_wifi_success/zx_config_wifi_succees_logic.dart::done`
 
 ## Since/changed
 

@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getA2687ProtocolAgreementStatus` @0x26c2280 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ak_iot_kit/business/A2687/service/a2687_device_info_service.dart::_fetchProtocolAgreementStatus`, `charging/ak_iot_kit/business/A2687/service/a2687_device_info_service.dart::_resetProtocolAgreementForUserChange`
+Called from:
+
+- `charging/ak_iot_kit/business/A2687/service/a2687_device_info_service.dart::_fetchProtocolAgreementStatus`
+- `charging/ak_iot_kit/business/A2687/service/a2687_device_info_service.dart::_resetProtocolAgreementForUserChange`
 
 ## Since/changed
 

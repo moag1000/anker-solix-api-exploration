@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getDisCountDesc` @0x291c764 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/common_business/sms/sms_manager.dart::_getDisCountDesc`, `charging/http/http_request_repository.dart::getDisCountDesc`
+Called from:
+
+- `charging/common_business/sms/sms_manager.dart::_getDisCountDesc`
+- `charging/http/http_request_repository.dart::getDisCountDesc`
 
 ## Since/changed
 

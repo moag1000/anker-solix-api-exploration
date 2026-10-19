@@ -50,7 +50,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `addEasterEggStatusRecord` @0x3e3bf9c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::addEasterEggStatusRecord`, `charging/ui/page/device/a2345/a2345easter_egg/a2345easter_egg_logic.dart::requestAddEasterEggStatusRecord`, `charging/ui/page/device/a91b2/a91b2easter_egg/a91b2easter_egg_logic.dart::requestAddEasterEggStatusRecord`
+Called from:
+
+- `charging/http/http_request_repository.dart::addEasterEggStatusRecord`
+- `charging/ui/page/device/a2345/a2345easter_egg/a2345easter_egg_logic.dart::requestAddEasterEggStatusRecord`
+- `charging/ui/page/device/a91b2/a91b2easter_egg/a91b2easter_egg_logic.dart::requestAddEasterEggStatusRecord`
 
 ## Since/changed
 

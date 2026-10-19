@@ -49,7 +49,9 @@ n/a
 
 - `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart`: `cancelOtaUpdate` @0x479e240 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart::checkOtaVersion`
+Called from:
+
+- `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart::checkOtaVersion`
 
 ## Since/changed
 

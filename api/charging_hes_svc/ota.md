@@ -52,7 +52,11 @@ n/a
 
 - `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart`: `sendSetTimeOta` @0x42ea618 (requestHttp; encrypted: default-true (requestHttp) — verify); `sendStartOtaUpdate` @0x347bee8 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart::_parseMinSoc`, `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart::onInit`, `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart::showChooseTimerView`
+Called from:
+
+- `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart::_parseMinSoc`
+- `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart::onInit`
+- `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart::showChooseTimerView`
 
 ## Since/changed
 

@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `queryA17Y0Popup` @0x23f1ad4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::queryA17Y0Popup`, `charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart::getShow17YOPopup`
+Called from:
+
+- `charging/http/http_request_repository.dart::queryA17Y0Popup`
+- `charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart::getShow17YOPopup`
 
 ## Since/changed
 

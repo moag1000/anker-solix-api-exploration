@@ -53,7 +53,13 @@ n/a
 - `ak_soft_ems/ems_list/power_usage_scenario_controller.dart`: `checkFeatureVisibility` @0x3565f9c (encryptionRequestHttp; encrypted: true)
 - `charging/http/http_request_repository_impl.dart`: `getWhiteListStatusRes` @0x26ffad4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::_updateFeatureVisibility`, `charging/http/http_request_repository.dart::getWhiteListStatusRes`, `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart::_requestEvChargerWhiteList`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getWhiteListStatus`, `charging/ui/page/user/main/user_main_page_logic.dart::_getWhileList`
+Called from:
+
+- `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::_updateFeatureVisibility`
+- `charging/http/http_request_repository.dart::getWhiteListStatusRes`
+- `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart::_requestEvChargerWhiteList`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getWhiteListStatus`
+- `charging/ui/page/user/main/user_main_page_logic.dart::_getWhileList`
 
 ## Since/changed
 

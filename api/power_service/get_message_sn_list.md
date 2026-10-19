@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getMessageSnList` @0x34e0aa0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getMessageSnList`, `charging/ui/page/message/Main/message_main_logic.dart::requestMessageSnList`
+Called from:
+
+- `charging/http/http_request_repository.dart::getMessageSnList`
+- `charging/ui/page/message/Main/message_main_logic.dart::requestMessageSnList`
 
 ## Since/changed
 

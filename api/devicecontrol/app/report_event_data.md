@@ -51,7 +51,9 @@ n/a
 
 - `business_common/msg/device_fault_manager.dart`: `_reportEventToServer` @0x2412574 (encryptionRequestHttp; encrypted: true)
 
-Called from: `business_common/msg/device_fault_manager.dart::_handleEventReport425`
+Called from:
+
+- `business_common/msg/device_fault_manager.dart::_handleEventReport425`
 
 ## Since/changed
 

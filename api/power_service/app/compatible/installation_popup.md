@@ -48,7 +48,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getIncompatiblePopupApi` @0x23f26dc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getIncompatiblePopupApi`, `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getSiteInstallationPopup`, `charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart::getSiteInstallationPopup`
+Called from:
+
+- `charging/http/http_request_repository.dart::getIncompatiblePopupApi`
+- `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getSiteInstallationPopup`
+- `charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart::getSiteInstallationPopup`
 
 ## Since/changed
 

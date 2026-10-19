@@ -49,7 +49,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `shiftPowerSite` @0x238c7c4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::shiftPowerSite`, `charging/ui/page/device/a17c0/remove_station_devices/remove_station_devices_logic.dart::shiftC1toC0`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::checkC1ToC0Station`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/manage_devices/manage_devices_logic.dart::checkC1ToC0Station`
+Called from:
+
+- `charging/http/http_request_repository.dart::shiftPowerSite`
+- `charging/ui/page/device/a17c0/remove_station_devices/remove_station_devices_logic.dart::shiftC1toC0`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::checkC1ToC0Station`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/manage_devices/manage_devices_logic.dart::checkC1ToC0Station`
 
 ## Since/changed
 

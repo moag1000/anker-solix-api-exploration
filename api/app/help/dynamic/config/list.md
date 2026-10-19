@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getCustomerServicePhoneList` @0x2983e74 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getCustomerServicePhoneList`, `charging/ui/page/user/callUs/user_call_us_logic.dart::onReady`
+Called from:
+
+- `charging/http/http_request_repository.dart::getCustomerServicePhoneList`
+- `charging/ui/page/user/callUs/user_call_us_logic.dart::onReady`
 
 ## Since/changed
 

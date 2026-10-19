@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getInstallerInfo` @0x2971b34 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getInstallerInfo`, `charging/ui/page/device/a5101/setting/install_information/a5101_install_information_logic.dart::_getInstallerInfo`
+Called from:
+
+- `charging/http/http_request_repository.dart::getInstallerInfo`
+- `charging/ui/page/device/a5101/setting/install_information/a5101_install_information_logic.dart::_getInstallerInfo`
 
 ## Since/changed
 

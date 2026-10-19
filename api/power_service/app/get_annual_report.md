@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getAnnualReport` @0x2404b98 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getAnnualReport`, `charging/ui/page/home/home_base_http_reposity.dart::getAnnualReportPost`
+Called from:
+
+- `charging/http/http_request_repository.dart::getAnnualReport`
+- `charging/ui/page/home/home_base_http_reposity.dart::getAnnualReportPost`
 
 ## Since/changed
 

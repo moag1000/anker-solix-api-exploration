@@ -50,7 +50,9 @@ n/a
 - `ak_soft_ems/http/ems_api.dart`: `enableAiEmsMode` @0x379e6d0 (URL literal only, no `*Http*` call)
 - `charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart`: `enableSmartMode` @0x3eaee94 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/a5101/setting/smartMode/smart_mode_view.dart::build`
+Called from:
+
+- `charging/ui/page/device/a5101/setting/smartMode/smart_mode_view.dart::build`
 
 ## Since/changed
 

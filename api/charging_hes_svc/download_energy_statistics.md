@@ -55,7 +55,9 @@ n/a
 - `charging/ui/page/device/a5101/charts/chart_http_repository.dart`: `getDownloadEnergyStatistics` @0x301c460 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/util/demosite_util_impl.dart`: `DemoSiteUtilImpl` @0x4a33a6c (URL literal only, no `*Http*` call)
 
-Called from: `charging/boostrap_impl.dart::DIInit`
+Called from:
+
+- `charging/boostrap_impl.dart::DIInit`
 
 ## Since/changed
 

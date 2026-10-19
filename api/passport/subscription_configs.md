@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getSubscriptionConfigs` @0x291b824 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/common_business/sms/sms_manager.dart::getIsSHowSmsSubscribe`, `charging/http/http_request_repository.dart::getSubscriptionConfigs`, `charging/ui/page/user/subscribe/subscribe_email_logic.dart::_getIsSHowSmsSubscribe`
+Called from:
+
+- `charging/common_business/sms/sms_manager.dart::getIsSHowSmsSubscribe`
+- `charging/http/http_request_repository.dart::getSubscriptionConfigs`
+- `charging/ui/page/user/subscribe/subscribe_email_logic.dart::_getIsSHowSmsSubscribe`
 
 ## Since/changed
 

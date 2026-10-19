@@ -48,7 +48,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getA2345DeviceIdentityStatus` @0x28d828c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getA2345DeviceIdentityStatus`, `charging/ui/page/device/a2345/a2345home/a2345home_logic.dart::getDeviceIdentityStatusSwitch`, `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart::getDeviceIdentityStatusSwitch`
+Called from:
+
+- `charging/http/http_request_repository.dart::getA2345DeviceIdentityStatus`
+- `charging/ui/page/device/a2345/a2345home/a2345home_logic.dart::getDeviceIdentityStatusSwitch`
+- `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart::getDeviceIdentityStatusSwitch`
 
 ## Since/changed
 

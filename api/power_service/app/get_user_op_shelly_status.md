@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `checkIsGrantedDeviceChanged` @0x3f2a9d4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::checkIsGrantedDeviceChanged`, `charging/ui/page/device/connect/third_party_platform/third_party_platform_logic.dart::selectDone`
+Called from:
+
+- `charging/http/http_request_repository.dart::checkIsGrantedDeviceChanged`
+- `charging/ui/page/device/connect/third_party_platform/third_party_platform_logic.dart::selectDone`
 
 ## Since/changed
 

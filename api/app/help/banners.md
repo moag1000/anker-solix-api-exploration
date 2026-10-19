@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getBanners` @0x2608a60 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getBanners`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getBannerData`
+Called from:
+
+- `charging/http/http_request_repository.dart::getBanners`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getBannerData`
 
 ## Since/changed
 

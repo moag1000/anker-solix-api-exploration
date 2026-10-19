@@ -49,7 +49,9 @@ n/a
 
 - `charging/ui/page/device/a17b1/check_update/check_update_logic.dart`: `getDeviceSnByMac` @0x36dd6a0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/device/a17b1/check_update/check_update_logic.dart::matchDeviceMac`
+Called from:
+
+- `charging/ui/page/device/a17b1/check_update/check_update_logic.dart::matchDeviceMac`
 
 ## Since/changed
 

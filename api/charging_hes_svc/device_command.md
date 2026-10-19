@@ -77,7 +77,43 @@ n/a
 - `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart`: `savePlanPrice` @0x278dc40 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/util/demosite_util_impl.dart`: `DemoSiteUtilImpl` @0x4a33a6c (URL literal only, no `*Http*` call)
 
-Called from: `charging/boostrap_impl.dart::DIInit`, `charging/http/http_request_repository.dart::sendDeviceCommand`, `charging/ui/page/device/a5101/setting/advanced_config/advanced_config_logic.dart::setAdvancedConfig`, `charging/ui/page/device/a5101/setting/bluetooth_control/bleTest/peak_valley_test/peak_valley_test_logic.dart::sendDeviceCommondOfNetWork`, `charging/ui/page/device/a5101/setting/cls_setting/cls_setting_logic.dart::remoteResetCls`, `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart::addHeatPump`, `charging/ui/page/device/a5101/setting/device_manager/ev_charger/ev_charger_manager_logic.dart::handleIsAllowChargerSwitch`, `charging/ui/page/device/a5101/setting/device_manager/ev_charger/ev_charger_manager_logic.dart::setChargeState`, `charging/ui/page/device/a5101/setting/device_manager/heat_pump/controller.dart::setHeatPumpConfig`, `charging/ui/page/device/a5101/setting/device_manager/heat_pump/timer_setting/timer_setting_logic.dart::cloudSynchronizationData`, `charging/ui/page/device/a5101/setting/device_manager/oil_engine/manage_devices_logic.dart::setDiesel`, `charging/ui/page/device/a5101/setting/device_manager/oil_engine/manage_devices_logic.dart::setDieselNearby`, `charging/ui/page/device/a5101/setting/device_manager/oil_engine/manage_devices_logic.dart::setNearbyOilTwoSetting`, `charging/ui/page/device/a5101/setting/device_manager/oil_engine/manage_devices_logic.dart::setRemoteOilTwoSetting`, `charging/ui/page/device/a5101/setting/grid_sensitivity/a5101_grid_sensitivity_logic.dart::_syncData`, `charging/ui/page/device/a5101/setting/screen_timeout/screen_timeout_logic.dart::handlerDeviceCommandRadarSwitch`, `charging/ui/page/device/a5101/setting/screen_timeout/screen_timeout_logic.dart::handlerDeviceCommandScreenSwitch`, `charging/ui/page/device/a5101/setting/screen_timeout/screen_timeout_logic.dart::handlerDeviceCommandScreenTime`, `charging/ui/page/device/a5101/setting/screen_timeout/screen_timeout_logic.dart::setRadarControl`, `charging/ui/page/device/a5101/setting/screen_timeout/screen_timeout_logic.dart::setScreenBrightnessControl`, `charging/ui/page/device/a5101/setting/screen_timeout/screen_timeout_logic.dart::setScreenSwitch`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerDeviceCommandOfAutoDisaster`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerDeviceCommandOfConservepercent`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerDeviceCommandOfGridRecharging`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerDeviceCommandOfManualBackupPower`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerDeviceCommandOfMode`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerDeviceCommandOfPeckShaving`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerHesToCharger`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::sendDeviceCommandWithDebounce`, `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart::deleteData`, `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart::onMessageDispatch`, `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart::sendDeviceCommandOfMode`, `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart::sendDeviceCommondOfNetWork`, `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_plan_edit/nem_plan_edit_logic.dart::sendPeakValleyData`, `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_rate_plan/nem_rate_plan_logic.dart::sendPeakValleyData`
+Called from:
+
+- `charging/boostrap_impl.dart::DIInit`
+- `charging/http/http_request_repository.dart::sendDeviceCommand`
+- `charging/ui/page/device/a5101/setting/advanced_config/advanced_config_logic.dart::setAdvancedConfig`
+- `charging/ui/page/device/a5101/setting/bluetooth_control/bleTest/peak_valley_test/peak_valley_test_logic.dart::sendDeviceCommondOfNetWork`
+- `charging/ui/page/device/a5101/setting/cls_setting/cls_setting_logic.dart::remoteResetCls`
+- `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart::addHeatPump`
+- `charging/ui/page/device/a5101/setting/device_manager/ev_charger/ev_charger_manager_logic.dart::handleIsAllowChargerSwitch`
+- `charging/ui/page/device/a5101/setting/device_manager/ev_charger/ev_charger_manager_logic.dart::setChargeState`
+- `charging/ui/page/device/a5101/setting/device_manager/heat_pump/controller.dart::setHeatPumpConfig`
+- `charging/ui/page/device/a5101/setting/device_manager/heat_pump/timer_setting/timer_setting_logic.dart::cloudSynchronizationData`
+- `charging/ui/page/device/a5101/setting/device_manager/oil_engine/manage_devices_logic.dart::setDiesel`
+- `charging/ui/page/device/a5101/setting/device_manager/oil_engine/manage_devices_logic.dart::setDieselNearby`
+- `charging/ui/page/device/a5101/setting/device_manager/oil_engine/manage_devices_logic.dart::setNearbyOilTwoSetting`
+- `charging/ui/page/device/a5101/setting/device_manager/oil_engine/manage_devices_logic.dart::setRemoteOilTwoSetting`
+- `charging/ui/page/device/a5101/setting/grid_sensitivity/a5101_grid_sensitivity_logic.dart::_syncData`
+- `charging/ui/page/device/a5101/setting/screen_timeout/screen_timeout_logic.dart::handlerDeviceCommandRadarSwitch`
+- `charging/ui/page/device/a5101/setting/screen_timeout/screen_timeout_logic.dart::handlerDeviceCommandScreenSwitch`
+- `charging/ui/page/device/a5101/setting/screen_timeout/screen_timeout_logic.dart::handlerDeviceCommandScreenTime`
+- `charging/ui/page/device/a5101/setting/screen_timeout/screen_timeout_logic.dart::setRadarControl`
+- `charging/ui/page/device/a5101/setting/screen_timeout/screen_timeout_logic.dart::setScreenBrightnessControl`
+- `charging/ui/page/device/a5101/setting/screen_timeout/screen_timeout_logic.dart::setScreenSwitch`
+- `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerDeviceCommandOfAutoDisaster`
+- `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerDeviceCommandOfConservepercent`
+- `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerDeviceCommandOfGridRecharging`
+- `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerDeviceCommandOfManualBackupPower`
+- `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerDeviceCommandOfMode`
+- `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerDeviceCommandOfPeckShaving`
+- `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::handlerHesToCharger`
+- `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::sendDeviceCommandWithDebounce`
+- `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart::deleteData`
+- `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart::onMessageDispatch`
+- `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart::sendDeviceCommandOfMode`
+- `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart::sendDeviceCommondOfNetWork`
+- `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_plan_edit/nem_plan_edit_logic.dart::sendPeakValleyData`
+- `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_rate_plan/nem_rate_plan_logic.dart::sendPeakValleyData`
 
 ## Since/changed
 

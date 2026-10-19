@@ -11,4 +11,4 @@ Service index for the URL prefix `/v2/`. Each endpoint page is the single owner 
 | [`/v2/anka/history/get_msg`](anka/history/get_msg.md) | TODO | - | skeleton |
 | [`/v2/anka/history/update_msg`](anka/history/update_msg.md) | TODO | - | skeleton |
 
-Not here: MQTT or BLE facts ([../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
+Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

@@ -50,7 +50,13 @@ n/a
 
 - `charging/http/http_business_impl.dart`: `afterSaleMarkSn` @0x28605c0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_business_impl.dart::showNoIceBoxReplaceDialog`, `charging/ui/page/device/cooler/Battery_Relace_Ment/Battery_Replace_Contact_Sales/battery_replace_contact_sales_logic.dart::done`, `charging/ui/page/device/cooler/Battery_Relace_Ment/Battery_Replace_WebView/battery_replace_web_view.dart::build`, `charging/ui/page/device/cooler/Battery_Relace_Ment/battery_replace_ment_logic.dart::applicationSubmitted`, `charging/ui/page/user/feedback/feedback_logic.dart::showSuccessDialog`
+Called from:
+
+- `charging/http/http_business_impl.dart::showNoIceBoxReplaceDialog`
+- `charging/ui/page/device/cooler/Battery_Relace_Ment/Battery_Replace_Contact_Sales/battery_replace_contact_sales_logic.dart::done`
+- `charging/ui/page/device/cooler/Battery_Relace_Ment/Battery_Replace_WebView/battery_replace_web_view.dart::build`
+- `charging/ui/page/device/cooler/Battery_Relace_Ment/battery_replace_ment_logic.dart::applicationSubmitted`
+- `charging/ui/page/user/feedback/feedback_logic.dart::showSuccessDialog`
 
 ## Since/changed
 

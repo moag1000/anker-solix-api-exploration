@@ -48,7 +48,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `sendVerifyEmailRequest` @0x2fb004c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::sendVerifyEmailRequest`, `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart::activeEmail`, `charging/ui/page/account/login/login_logic.dart::activeEmail`, `charging/ui/page/account/privacy_policy/verification/verification_logic.dart::_activeEmail`
+Called from:
+
+- `charging/http/http_request_repository.dart::sendVerifyEmailRequest`
+- `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart::activeEmail`
+- `charging/ui/page/account/login/login_logic.dart::activeEmail`
+- `charging/ui/page/account/privacy_policy/verification/verification_logic.dart::_activeEmail`
 
 ## Since/changed
 

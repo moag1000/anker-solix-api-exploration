@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getChargingDeviceRequest` @0x286afb8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getChargingDeviceRequest`, `charging/ui/page/device/a1340/a1340charge_device/a1340charge_device_logic.dart::getA1340ChargeDeviceListForOther`, `charging/ui/page/device/a1340/a1340home/a1340home_logic.dart::_getA1340ChargeDeviceListForOther`
+Called from:
+
+- `charging/http/http_request_repository.dart::getChargingDeviceRequest`
+- `charging/ui/page/device/a1340/a1340charge_device/a1340charge_device_logic.dart::getA1340ChargeDeviceListForOther`
+- `charging/ui/page/device/a1340/a1340home/a1340home_logic.dart::_getA1340ChargeDeviceListForOther`
 
 ## Since/changed
 

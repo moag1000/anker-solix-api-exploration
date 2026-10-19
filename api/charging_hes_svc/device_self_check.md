@@ -48,7 +48,10 @@ n/a
 
 - `charging/ui/page/device/a5101/setting/system_self_check/system_testing/system_testing_logic.dart`: `setSelfCheckCommand` @0x432ffa8 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/device/a5101/setting/system_self_check/system_testing/system_testing_logic.dart::_showTip`, `charging/ui/page/device/a5101/setting/system_self_check/system_testing/widgets/system_testing_timeOut_view.dart::build`
+Called from:
+
+- `charging/ui/page/device/a5101/setting/system_self_check/system_testing/system_testing_logic.dart::_showTip`
+- `charging/ui/page/device/a5101/setting/system_self_check/system_testing/widgets/system_testing_timeOut_view.dart::build`
 
 ## Since/changed
 

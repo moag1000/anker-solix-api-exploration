@@ -53,7 +53,11 @@ n/a
 - `charging/ui/page/device/a5140/a5140home/a5140home_logic.dart`: `getA17C0Info` @0x34ced84 (encryptionRequestHttp; encrypted: true)
 - `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`: `getSolarBankParticleData` @0x244350c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart::requestInfo`, `charging/ui/page/device/a5140/a5140home/a5140home_logic.dart::onInit`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getDeviceList`
+Called from:
+
+- `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart::requestInfo`
+- `charging/ui/page/device/a5140/a5140home/a5140home_logic.dart::onInit`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getDeviceList`
 
 ## Since/changed
 

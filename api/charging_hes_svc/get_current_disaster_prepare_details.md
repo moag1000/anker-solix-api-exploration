@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getCurrentDisasterPrepareDetails` @0x3ebe5d8 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getCurrentDisasterPrepareDetails`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::deviceToAutoDisasterStatus`, `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::_quitAutoDisasterPrepareFromDevice`
+Called from:
+
+- `charging/http/http_request_repository.dart::getCurrentDisasterPrepareDetails`
+- `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::deviceToAutoDisasterStatus`
+- `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::_quitAutoDisasterPrepareFromDevice`
 
 ## Since/changed
 

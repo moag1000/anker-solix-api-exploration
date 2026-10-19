@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `changeA17B1PriceUnit` @0x2fa73e0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::changeA17B1PriceUnit`, `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart::switchPriceUnit`, `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart::switchPriceUnit`
+Called from:
+
+- `charging/http/http_request_repository.dart::changeA17B1PriceUnit`
+- `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart::switchPriceUnit`
+- `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart::switchPriceUnit`
 
 ## Since/changed
 

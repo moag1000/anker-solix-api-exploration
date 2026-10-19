@@ -52,7 +52,13 @@ n/a
 - `base_service/api_url.dart`: `getPriceUnitsConfig` @0x29ae8dc (URL literal only, no `*Http*` call)
 - `charging/http/http_request_repository_impl.dart`: `getPriceUnits` @0x28e9994 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getPriceUnits`, `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart::_getCurrency`, `charging/ui/page/device/a5101/setting/peaksAndValleys/peaks_valleys_logic.dart::fetchPriceUnits`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::getCurrency`, `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart::getCurrency`
+Called from:
+
+- `charging/http/http_request_repository.dart::getPriceUnits`
+- `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart::_getCurrency`
+- `charging/ui/page/device/a5101/setting/peaksAndValleys/peaks_valleys_logic.dart::fetchPriceUnits`
+- `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::getCurrency`
+- `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart::getCurrency`
 
 ## Since/changed
 

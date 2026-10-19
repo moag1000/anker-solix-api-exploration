@@ -53,7 +53,10 @@ n/a
 - `flutter_charging_beginning/beginning/state_cards/self_check/new_system_test_controller.dart`: `_fetchSelfCheckRecord` @0x2aca588 (encryptionRequestHttp; encrypted: true)
 - `flutter_charging_beginning/beginning/state_cards/self_check/self_check_fail_controller.dart`: `_fetchSelfCheckRecord` @0x2ad2f1c (encryptionRequestHttp; encrypted: true)
 
-Called from: `flutter_charging_beginning/beginning/state_cards/self_check/new_system_test_controller.dart::onReady`, `flutter_charging_beginning/beginning/state_cards/self_check/self_check_fail_controller.dart::onReady`
+Called from:
+
+- `flutter_charging_beginning/beginning/state_cards/self_check/new_system_test_controller.dart::onReady`
+- `flutter_charging_beginning/beginning/state_cards/self_check/self_check_fail_controller.dart::onReady`
 
 ## Since/changed
 

@@ -49,7 +49,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `updatePeakAndValley` @0x4326d40 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::updatePeakAndValley`, `charging/ui/page/device/a5101/setting/peaksAndValleys/peaks_valleys_logic.dart::submitPeakAndValley`
+Called from:
+
+- `charging/http/http_request_repository.dart::updatePeakAndValley`
+- `charging/ui/page/device/a5101/setting/peaksAndValleys/peaks_valleys_logic.dart::submitPeakAndValley`
 
 ## Since/changed
 

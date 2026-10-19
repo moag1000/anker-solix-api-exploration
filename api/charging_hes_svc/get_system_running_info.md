@@ -52,7 +52,9 @@ n/a
 - `charging/ui/page/family/family_main_http_reposity.dart`: `getSystemProfit` @0x23e2edc (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart`: `_requestHesSiteInfo` @0x2923848 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart::fetchHesSites`
+Called from:
+
+- `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart::fetchHesSites`
 
 ## Since/changed
 

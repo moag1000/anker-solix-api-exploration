@@ -48,7 +48,9 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `selectUserTieredElecPrice` @0x24013a0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::selectUserTieredElecPrice`
+Called from:
+
+- `charging/http/http_request_repository.dart::selectUserTieredElecPrice`
 
 ## Since/changed
 

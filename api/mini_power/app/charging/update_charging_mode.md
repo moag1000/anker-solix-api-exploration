@@ -58,7 +58,16 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `updateCustomChargeMode` @0x3469a84 (encryptionRequestHttp; encrypted: true)
 - `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart`: `updateCustomChargeMode` @0x319249c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::updateCustomChargeMode`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_charging_edit_logic.dart::_applySCPBackwardCompatFixIfNeeded`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_charging_edit_logic.dart::_updateCustomChargeModeToCloud`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart::_updateCustomChargeModeToCloud`, `charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart::_applySCPBackwardCompatFixIfNeeded`, `charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart::_updateCustomChargeModeToCloud`, `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_edit/a2687_custom_charge_edit_logic.dart::_updateCustomChargeModeToCloud`, `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_edit/a2687_custom_platform_charge_edit_logic.dart::_updateCustomChargeModeToCloud`
+Called from:
+
+- `charging/http/http_request_repository.dart::updateCustomChargeMode`
+- `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_charging_edit_logic.dart::_applySCPBackwardCompatFixIfNeeded`
+- `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_charging_edit_logic.dart::_updateCustomChargeModeToCloud`
+- `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart::_updateCustomChargeModeToCloud`
+- `charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart::_applySCPBackwardCompatFixIfNeeded`
+- `charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart::_updateCustomChargeModeToCloud`
+- `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_edit/a2687_custom_charge_edit_logic.dart::_updateCustomChargeModeToCloud`
+- `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_edit/a2687_custom_platform_charge_edit_logic.dart::_updateCustomChargeModeToCloud`
 
 ## Since/changed
 

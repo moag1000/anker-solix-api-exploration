@@ -50,7 +50,9 @@ n/a
 - `ak_soft_ems/http/ems_api.dart`: `authorizeAiEms` @0x37a447c (URL literal only, no `*Http*` call)
 - `charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart`: `authorizeAiEmsToCloud` @0x3eb25d8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart::showDataAuthorizationDialog`
+Called from:
+
+- `charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart::showDataAuthorizationDialog`
 
 ## Since/changed
 

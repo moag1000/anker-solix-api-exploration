@@ -24,7 +24,6 @@ encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header r
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `path` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d200` |
-| `method` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d200` |
 | `param` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d200` |
 
 Rows are the union over 2 senders; `source` is the first sender that sets the key.
@@ -60,7 +59,25 @@ n/a
 - `micro_hes/src/common_business/basic_station/basic_station_setting/component/general_setting/station_firmware_update_controller.dart`: `checkDeviceUpdate` @0x2cd17b8 (encryptionRequestHttp; encrypted: true)
 - `micro_hes/src/common_business/basic_station/station/basic_station_logic.dart`: `checkDeviceUpdate` @0x235b830 (encryptionRequestHttp; encrypted: true)
 
-Called from: `ats_ax170/src/ats_ax170/page/station/ax170_station_controller.dart::updateBusinessMessages`, `charging/http/http_request_repository.dart::checkBatchOTAUpdateWifi`, `charging/impl/ems_station_service_impl.dart::checkBatchOTA`, `charging/ui/page/device/a1782/a1782_setting/group_setting/a1782_group_setting_logic2.dart::getGroupOtaInfo`, `charging/ui/page/device/a1782/station/setting/menu_controller/general/station_firmware_update_controller2.dart::getDeviceList`, `charging/ui/page/device/a1790/batch_ota/device_pop_ota_manager.dart::checkGroupOta`, `charging/ui/page/device/a1790/setting/group/a1790_setting_group_logic.dart::getGroupOtaInfo`, `charging/ui/page/device/anker_ota/batch_ota/batch_device_ota.dart::requestBateOta`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::toDeviceUpdatePage`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::checkBatchOTA`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_home_settings_logic.dart::getDeviceList`, `device/src/station_setting/controller/common_station_firmware_update/station_firmware_update_controller.dart::didPopNext`, `device/src/station_setting/controller/common_station_firmware_update/station_firmware_update_controller.dart::onInit`, `device/src/station_setting/controller/common_station_firmware_update/station_firmware_update_view_model.dart::onInit`, `micro_hes/src/common_business/basic_station/basic_station_setting/component/general_setting/station_firmware_update_controller.dart::onInit`, `micro_hes/src/common_business/basic_station/basic_station_setting/component/general_setting/station_firmware_update_controller.dart::onTapMenu`, `micro_hes/src/common_business/basic_station/station/basic_station_logic.dart::updateBusinessMessages`
+Called from:
+
+- `ats_ax170/src/ats_ax170/page/station/ax170_station_controller.dart::updateBusinessMessages`
+- `charging/http/http_request_repository.dart::checkBatchOTAUpdateWifi`
+- `charging/impl/ems_station_service_impl.dart::checkBatchOTA`
+- `charging/ui/page/device/a1782/a1782_setting/group_setting/a1782_group_setting_logic2.dart::getGroupOtaInfo`
+- `charging/ui/page/device/a1782/station/setting/menu_controller/general/station_firmware_update_controller2.dart::getDeviceList`
+- `charging/ui/page/device/a1790/batch_ota/device_pop_ota_manager.dart::checkGroupOta`
+- `charging/ui/page/device/a1790/setting/group/a1790_setting_group_logic.dart::getGroupOtaInfo`
+- `charging/ui/page/device/anker_ota/batch_ota/batch_device_ota.dart::requestBateOta`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::toDeviceUpdatePage`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::checkBatchOTA`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_home_settings_logic.dart::getDeviceList`
+- `device/src/station_setting/controller/common_station_firmware_update/station_firmware_update_controller.dart::didPopNext`
+- `device/src/station_setting/controller/common_station_firmware_update/station_firmware_update_controller.dart::onInit`
+- `device/src/station_setting/controller/common_station_firmware_update/station_firmware_update_view_model.dart::onInit`
+- `micro_hes/src/common_business/basic_station/basic_station_setting/component/general_setting/station_firmware_update_controller.dart::onInit`
+- `micro_hes/src/common_business/basic_station/basic_station_setting/component/general_setting/station_firmware_update_controller.dart::onTapMenu`
+- `micro_hes/src/common_business/basic_station/station/basic_station_logic.dart::updateBusinessMessages`
 
 ## Since/changed
 

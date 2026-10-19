@@ -46,7 +46,9 @@ n/a
 
 - `charging/http/user/profile/profile_http_request_repository_impl.dart`: `checkBackupReportPopup` @0x260eff0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::_checkBackupReportPopup`
+Called from:
+
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::_checkBackupReportPopup`
 
 ## Since/changed
 

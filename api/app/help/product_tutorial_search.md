@@ -46,7 +46,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `searchUserManualsDeviceDataList` @0x291a52c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::searchUserManualsDeviceDataList`, `charging/ui/page/device/main/station_device_home/StationUsermanuals/station_usermanuals_logic.dart::_getDevicesList`, `charging/ui/page/user/userManuals/searchDeviceUserManuals/search_device_user_manuals_logic.dart::searchDeviceNameList`, `charging/ui/page/user/userManuals/searchDeviceUserManuals/search_device_user_manuals_logic.dart::searchDeviceUserManualsList`
+Called from:
+
+- `charging/http/http_request_repository.dart::searchUserManualsDeviceDataList`
+- `charging/ui/page/device/main/station_device_home/StationUsermanuals/station_usermanuals_logic.dart::_getDevicesList`
+- `charging/ui/page/user/userManuals/searchDeviceUserManuals/search_device_user_manuals_logic.dart::searchDeviceNameList`
+- `charging/ui/page/user/userManuals/searchDeviceUserManuals/search_device_user_manuals_logic.dart::searchDeviceUserManualsList`
 
 ## Since/changed
 

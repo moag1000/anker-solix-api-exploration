@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `deleteInviteMember` @0x405e294 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::deleteInviteMember`, `charging/ui/page/user/share_site/home_center/home_center_logic.dart::deleteInviteMemberReq`
+Called from:
+
+- `charging/http/http_request_repository.dart::deleteInviteMember`
+- `charging/ui/page/user/share_site/home_center/home_center_logic.dart::deleteInviteMemberReq`
 
 ## Since/changed
 

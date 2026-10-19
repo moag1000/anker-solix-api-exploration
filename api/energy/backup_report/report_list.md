@@ -46,7 +46,9 @@ n/a
 
 - `charging/http/user/profile/profile_http_request_repository_impl.dart`: `getBackupReportList` @0x298c4b4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/anker_post/anker_monthly_report_list_logic.dart::getBackupReportList`
+Called from:
+
+- `charging/ui/page/anker_post/anker_monthly_report_list_logic.dart::getBackupReportList`
 
 ## Since/changed
 

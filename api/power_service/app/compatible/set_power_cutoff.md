@@ -59,7 +59,12 @@ n/a
 - `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart`: `_dealWithBleResponse` @0x263087c (encryptionRequestHttp; encrypted: true)
 - `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart`: `requestNewSetSoc` @0x3d95764 (encryptionRequestHttp; encrypted: true); `requestToSetSoc` @0x3d94c6c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart::showSocDialog`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::onMessageDispatch`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::onTapSafetySoC`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::showSocDialog`
+Called from:
+
+- `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart::showSocDialog`
+- `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::onMessageDispatch`
+- `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::onTapSafetySoC`
+- `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::showSocDialog`
 
 ## Since/changed
 

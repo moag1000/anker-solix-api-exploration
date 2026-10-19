@@ -25,7 +25,6 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 |---|---|---|---|---|
 | `sn_list` | ? | ? | ? | `base_service/ak_iot_kit/business/basic/model/station_device_relation.dart @0x22a4864` |
 | `path` | ? | ? | ? | `ota_kit/src/providers/sub_package_info_provider.dart @0x2b0b4ec` |
-| `method` | ? | ? | ? | `ota_kit/src/providers/sub_package_info_provider.dart @0x2b0b4ec` |
 | `param.sn_list` | ? | ? | ? | `ota_kit/src/providers/sub_package_info_provider.dart @0x2b0b4ec` |
 
 Rows are the union over 2 senders; `source` is the first sender that sets the key.

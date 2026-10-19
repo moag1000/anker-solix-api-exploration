@@ -49,7 +49,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getThirdOtaStatus` @0x33fbb74 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getThirdOtaStatus`, `charging/ui/page/device/a17c0/ez1_select_mode/ez1_select_mode_logic.dart::getOTAUpdateStatus`, `charging/ui/page/device/a17c0/select_solar_power/select_solar_power_logic.dart::getThirdOtaStatusRes`, `charging/ui/page/qr_Scanner/qr_scanner_logic.dart::getOTAUpdateStatus`
+Called from:
+
+- `charging/http/http_request_repository.dart::getThirdOtaStatus`
+- `charging/ui/page/device/a17c0/ez1_select_mode/ez1_select_mode_logic.dart::getOTAUpdateStatus`
+- `charging/ui/page/device/a17c0/select_solar_power/select_solar_power_logic.dart::getThirdOtaStatusRes`
+- `charging/ui/page/qr_Scanner/qr_scanner_logic.dart::getOTAUpdateStatus`
 
 ## Since/changed
 

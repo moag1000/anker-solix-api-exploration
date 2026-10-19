@@ -49,7 +49,13 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `checkFirmwareWifi` @0x25facf0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::checkFirmwareWifi`, `charging/ui/page/device/a17b1/a17b1firmware/firmware_logic.dart::otaPageResumedCheck`, `charging/ui/page/device/a17b1/a17b1firmware/firmware_logic.dart::requestOTA`, `charging/ui/page/device/a17b1/device_setting/a17b1device_setting_logic.dart::checkOtaVersion`, `charging/ui/page/device/a17b1/home_setting/home_setting_logic.dart::checkOtaVersion`
+Called from:
+
+- `charging/http/http_request_repository.dart::checkFirmwareWifi`
+- `charging/ui/page/device/a17b1/a17b1firmware/firmware_logic.dart::otaPageResumedCheck`
+- `charging/ui/page/device/a17b1/a17b1firmware/firmware_logic.dart::requestOTA`
+- `charging/ui/page/device/a17b1/device_setting/a17b1device_setting_logic.dart::checkOtaVersion`
+- `charging/ui/page/device/a17b1/home_setting/home_setting_logic.dart::checkOtaVersion`
 
 ## Since/changed
 

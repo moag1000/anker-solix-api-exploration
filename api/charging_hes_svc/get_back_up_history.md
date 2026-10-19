@@ -50,7 +50,10 @@ n/a
 - `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart`: `getBackupHistoryListFromNet` @0x28ef504 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/util/demosite_util_impl.dart`: `DemoSiteUtilImpl` @0x4a33a6c (URL literal only, no `*Http*` call)
 
-Called from: `charging/boostrap_impl.dart::DIInit`, `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart::onReady`
+Called from:
+
+- `charging/boostrap_impl.dart::DIInit`
+- `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart::onReady`
 
 ## Since/changed
 

@@ -47,7 +47,13 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `checkCanCreateSite` @0x2902144 (encryptionRequestHttp; encrypted: true); `createSiteHomeRequest` @0x290487c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::checkCanCreateSite`, `charging/http/http_request_repository.dart::createSiteHomeRequest`, `charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart::checkCanCreateStation`, `charging/ui/page/green_energy/site/site_logic.dart::_deleteGroupDevices`, `charging/ui/page/green_energy/site/site_logic.dart::createSiteHome`
+Called from:
+
+- `charging/http/http_request_repository.dart::checkCanCreateSite`
+- `charging/http/http_request_repository.dart::createSiteHomeRequest`
+- `charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart::checkCanCreateStation`
+- `charging/ui/page/green_energy/site/site_logic.dart::_deleteGroupDevices`
+- `charging/ui/page/green_energy/site/site_logic.dart::createSiteHome`
 
 ## Since/changed
 

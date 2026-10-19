@@ -46,7 +46,13 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getProductAccessories` @0x33cb1c8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getProductAccessories`, `charging/ui/page/device/a17c0/a17c0accessory/add_accessory/a17c0add_accessory_logic.dart::onInit`, `charging/ui/page/device/a17c0/a17c0home/a17c0home_logic.dart::onInit`, `charging/ui/page/device/anker_ota/a17y0_ble_ota/a17y0_ota_logic.dart::onInit`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::_initLogic`
+Called from:
+
+- `charging/http/http_request_repository.dart::getProductAccessories`
+- `charging/ui/page/device/a17c0/a17c0accessory/add_accessory/a17c0add_accessory_logic.dart::onInit`
+- `charging/ui/page/device/a17c0/a17c0home/a17c0home_logic.dart::onInit`
+- `charging/ui/page/device/anker_ota/a17y0_ble_ota/a17y0_ota_logic.dart::onInit`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::_initLogic`
 
 ## Since/changed
 

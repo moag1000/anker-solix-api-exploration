@@ -51,7 +51,9 @@ n/a
 
 - `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`: `_uploadLowBatteryWarning` @0x26031c4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onMessageDispatch`
+Called from:
+
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onMessageDispatch`
 
 ## Since/changed
 

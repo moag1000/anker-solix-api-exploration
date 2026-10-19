@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `checkUpdateForApp` @0x260915c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::checkUpdateForApp`, `charging/util/app_update_util.dart::checkAppUpdate`
+Called from:
+
+- `charging/http/http_request_repository.dart::checkUpdateForApp`
+- `charging/util/app_update_util.dart::checkAppUpdate`
 
 ## Since/changed
 

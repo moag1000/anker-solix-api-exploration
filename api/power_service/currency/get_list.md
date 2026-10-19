@@ -52,7 +52,12 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `getCurrencyGetList` @0x29ad540 (encryptionRequestHttp; encrypted: true)
 - `micro_hes/src/a17ex/home/components/electricity_price/a17ex_electricity_price_logic.dart`: `_fetchCurrencyFromServer` @0x35fdabc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/common_bussiness/currency/app_currency_process_list_controller.dart::getUnitCurrency`, `charging/http/http_request_repository.dart::getCurrencyGetList`, `charging/impl/http_service_impl.dart::getCurrencyGetList`, `micro_hes/src/a17ex/home/components/electricity_price/a17ex_electricity_price_logic.dart::getSPList`
+Called from:
+
+- `charging/common_bussiness/currency/app_currency_process_list_controller.dart::getUnitCurrency`
+- `charging/http/http_request_repository.dart::getCurrencyGetList`
+- `charging/impl/http_service_impl.dart::getCurrencyGetList`
+- `micro_hes/src/a17ex/home/components/electricity_price/a17ex_electricity_price_logic.dart::getSPList`
 
 ## Since/changed
 

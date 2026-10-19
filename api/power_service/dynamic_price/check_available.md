@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `postHasChangeCountry` @0x273bf40 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/account/handlers/login_handler.dart::_postHasChangeCountryAsync`, `charging/http/http_request_repository.dart::postHasChangeCountry`, `charging/ui/page/account/login/login_logic.dart::handleLoginSuccess`
+Called from:
+
+- `charging/account/handlers/login_handler.dart::_postHasChangeCountryAsync`
+- `charging/http/http_request_repository.dart::postHasChangeCountry`
+- `charging/ui/page/account/login/login_logic.dart::handleLoginSuccess`
 
 ## Since/changed
 

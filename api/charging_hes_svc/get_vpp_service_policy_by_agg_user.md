@@ -48,7 +48,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getVppDisclaimer` @0x2979a6c (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getVppDisclaimer`, `charging/ui/page/device/a5101/setting/vpp/controller.dart::requestVppDisclaimer`, `charging/ui/page/user/main/user_main_page_logic.dart::requestVppDisclaimer`
+Called from:
+
+- `charging/http/http_request_repository.dart::getVppDisclaimer`
+- `charging/ui/page/device/a5101/setting/vpp/controller.dart::requestVppDisclaimer`
+- `charging/ui/page/user/main/user_main_page_logic.dart::requestVppDisclaimer`
 
 ## Since/changed
 

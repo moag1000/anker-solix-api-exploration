@@ -46,7 +46,14 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `saveCompatibleSolarApi` @0x2753564 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::saveCompatibleSolarApi`, `charging/ui/page/device/a17c0/ez1_select_mode/ez1_select_mode_logic.dart::next`, `charging/ui/page/device/a17c0/select_brand/select_brand_logic.dart::saveSelectSolarInfo`, `charging/ui/page/device/a17c0/select_solar_power/select_solar_power_logic.dart::saveSelectSolarInfo`, `charging/ui/page/qr_Scanner/qr_scanner_logic.dart::checkDeviceSnCode`, `charging/ui/page/qr_Scanner/qr_scanner_logic.dart::saveCompatibleSolar`
+Called from:
+
+- `charging/http/http_request_repository.dart::saveCompatibleSolarApi`
+- `charging/ui/page/device/a17c0/ez1_select_mode/ez1_select_mode_logic.dart::next`
+- `charging/ui/page/device/a17c0/select_brand/select_brand_logic.dart::saveSelectSolarInfo`
+- `charging/ui/page/device/a17c0/select_solar_power/select_solar_power_logic.dart::saveSelectSolarInfo`
+- `charging/ui/page/qr_Scanner/qr_scanner_logic.dart::checkDeviceSnCode`
+- `charging/ui/page/qr_Scanner/qr_scanner_logic.dart::saveCompatibleSolar`
 
 ## Since/changed
 

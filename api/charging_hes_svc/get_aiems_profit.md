@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `queryLargeChargerAiEmsProfit` @0x23e3ab4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::queryLargeChargerAiEmsProfit`, `charging/ui/page/device/a5101/setting/smartMode/smart_mode_card_logic.dart::getAiModeStatus`
+Called from:
+
+- `charging/http/http_request_repository.dart::queryLargeChargerAiEmsProfit`
+- `charging/ui/page/device/a5101/setting/smartMode/smart_mode_card_logic.dart::getAiModeStatus`
 
 ## Since/changed
 

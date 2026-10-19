@@ -46,7 +46,14 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `deleteSitePPSRequest` @0x30c5eb0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::deleteSitePPSRequest`, `charging/ui/page/device/a17c0/remove_station_devices/remove_station_devices_logic.dart::deleteSiteDevice`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices/add_devices_logic.dart::deleteGroup`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/manage_devices/manage_devices_logic.dart::deleteSiteDevice`, `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::deleteSitePPS`, `charging/ui/page/green_energy/site/site_logic.dart::_deleteGroupDevices`
+Called from:
+
+- `charging/http/http_request_repository.dart::deleteSitePPSRequest`
+- `charging/ui/page/device/a17c0/remove_station_devices/remove_station_devices_logic.dart::deleteSiteDevice`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices/add_devices_logic.dart::deleteGroup`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/manage_devices/manage_devices_logic.dart::deleteSiteDevice`
+- `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::deleteSitePPS`
+- `charging/ui/page/green_energy/site/site_logic.dart::_deleteGroupDevices`
 
 ## Since/changed
 

@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_business_impl.dart`: `clearBaiDuPushBadge` @0x296d444 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/base/app_life_cycle_delegate.dart::didChangeAppLifecycleState`, `charging/util/third_party_service.dart::openAppOptional`
+Called from:
+
+- `charging/base/app_life_cycle_delegate.dart::didChangeAppLifecycleState`
+- `charging/util/third_party_service.dart::openAppOptional`
 
 ## Since/changed
 

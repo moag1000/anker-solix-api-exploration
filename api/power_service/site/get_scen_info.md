@@ -54,7 +54,36 @@ n/a
 - `charging/ui/page/device/a1782/station/station_main_page/chart/chart_http_repository.dart`: `querySceneInfo` @0x23630a4 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `electricity_price/components/dynamic_price/setting/electricty_company_select_logic.dart`: `querySceneInfo` @0x29aa478 (encryptionRequestHttp; encrypted: true)
 
-Called from: `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart::onReady`, `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart::refreshPagePurely`, `charging/feature/backup_power/back_power_logic.dart::onReady`, `charging/feature/utilitiy_rate_plan/dynamic_price/detail/dynamic_price_detail_logic.dart::getSiteInfo`, `charging/feature/utilitiy_rate_plan/station_price_mode/station_price_mode_logic.dart::getSiteInfo`, `charging/http/http_request_repository.dart::querySceneInfo`, `charging/ui/page/device/a1782/station/add_devices/a1782_add_devices_logic.dart::getSiteInfo`, `charging/ui/page/device/a1782/station/setting/power_station_setting_logic.dart::getSiteInfo`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::_queryStationInfo`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::addSiteDevice`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::getAiModeStatus`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::_ensureHomeLoadData`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::getSiteScenInfo`, `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::join`, `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::next`, `charging/ui/page/device/a17c5/ai_mode_condition/ai_mode_condition_logic.dart::getSiteInfo`, `charging/ui/page/device/connect/create_join_device_to_system/join_system/join_system_logic.dart::getScanInfoStationHome`, `charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getScanInfo`, `charging/ui/page/device/main/sitation_energy_system/ai_mode_study/ai_mode_study_logic.dart::initModeData`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getSiteInfo`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices/add_devices_logic.dart::getSiteInfo`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices/add_devices_logic.dart::manualInit`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::initSceneInfo`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_home_settings_logic.dart::getSiteInfo`, `charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart::quieryStationHomePage`, `charging/ui/page/station/A17b1/a17b1_station_logic.dart::getStationScenceDetail`, `charging/ui/page/user/share_site/home_center/home_center_logic.dart::checkCreateSiteProgressOpening`, `electricity_price/components/dynamic_price/setting/electricty_company_select_logic.dart::getSceneInfoEnableAIEMS`
+Called from:
+
+- `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart::onReady`
+- `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart::refreshPagePurely`
+- `charging/feature/backup_power/back_power_logic.dart::onReady`
+- `charging/feature/utilitiy_rate_plan/dynamic_price/detail/dynamic_price_detail_logic.dart::getSiteInfo`
+- `charging/feature/utilitiy_rate_plan/station_price_mode/station_price_mode_logic.dart::getSiteInfo`
+- `charging/http/http_request_repository.dart::querySceneInfo`
+- `charging/ui/page/device/a1782/station/add_devices/a1782_add_devices_logic.dart::getSiteInfo`
+- `charging/ui/page/device/a1782/station/setting/power_station_setting_logic.dart::getSiteInfo`
+- `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::_queryStationInfo`
+- `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::addSiteDevice`
+- `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::getAiModeStatus`
+- `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::_ensureHomeLoadData`
+- `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::getSiteScenInfo`
+- `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::join`
+- `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::next`
+- `charging/ui/page/device/a17c5/ai_mode_condition/ai_mode_condition_logic.dart::getSiteInfo`
+- `charging/ui/page/device/connect/create_join_device_to_system/join_system/join_system_logic.dart::getScanInfoStationHome`
+- `charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getScanInfo`
+- `charging/ui/page/device/main/sitation_energy_system/ai_mode_study/ai_mode_study_logic.dart::initModeData`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getSiteInfo`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices/add_devices_logic.dart::getSiteInfo`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices/add_devices_logic.dart::manualInit`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::initSceneInfo`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_home_settings_logic.dart::getSiteInfo`
+- `charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart::quieryStationHomePage`
+- `charging/ui/page/station/A17b1/a17b1_station_logic.dart::getStationScenceDetail`
+- `charging/ui/page/user/share_site/home_center/home_center_logic.dart::checkCreateSiteProgressOpening`
+- `electricity_price/components/dynamic_price/setting/electricty_company_select_logic.dart::getSceneInfoEnableAIEMS`
 
 ## Since/changed
 

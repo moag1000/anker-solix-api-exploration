@@ -46,7 +46,15 @@ n/a
 
 - `charging/http/http_business_impl.dart`: `afterSalesCheckSn` @0x2618594 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/account/handlers/login_handler.dart::_handleLoginSuccessAndReturnResult`, `charging/ui/page/account/login/login_logic.dart::_loginSuccessAction`, `charging/ui/page/account/region/region_logic.dart::confirmSwitchRegion`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onMessageDispatch`, `charging/ui/page/device/rename/rename_logic.dart::onInit`, `charging/ui/page/home/home_page.dart::initMessageListener`, `charging/util/third_party_service.dart::openAppOptional`
+Called from:
+
+- `charging/account/handlers/login_handler.dart::_handleLoginSuccessAndReturnResult`
+- `charging/ui/page/account/login/login_logic.dart::_loginSuccessAction`
+- `charging/ui/page/account/region/region_logic.dart::confirmSwitchRegion`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onMessageDispatch`
+- `charging/ui/page/device/rename/rename_logic.dart::onInit`
+- `charging/ui/page/home/home_page.dart::initMessageListener`
+- `charging/util/third_party_service.dart::openAppOptional`
 
 ## Since/changed
 

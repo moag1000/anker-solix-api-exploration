@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getAccessTokenByUserID` @0x3f2dfb0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getAccessTokenByUserID`, `charging/ui/page/device/connect/third_party_platform_list/third_party_platform_list_logic.dart::navigateToShellyPage`
+Called from:
+
+- `charging/http/http_request_repository.dart::getAccessTokenByUserID`
+- `charging/ui/page/device/connect/third_party_platform_list/third_party_platform_list_logic.dart::navigateToShellyPage`
 
 ## Since/changed
 

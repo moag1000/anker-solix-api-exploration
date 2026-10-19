@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `sharePhoneCode` @0x2917cf4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::sharePhoneCode`, `charging/ui/page/user/share_site/invite_members/invite_members_logic.dart::getSharePhoneCode`
+Called from:
+
+- `charging/http/http_request_repository.dart::sharePhoneCode`
+- `charging/ui/page/user/share_site/invite_members/invite_members_logic.dart::getSharePhoneCode`
 
 ## Since/changed
 

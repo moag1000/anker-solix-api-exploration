@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getRelateAccessory` @0x33f7688 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getRelateAccessory`, `charging/ui/page/device/a17c0/a17c0home/a17c0home_logic.dart::_getCloudA17Y0Info`
+Called from:
+
+- `charging/http/http_request_repository.dart::getRelateAccessory`
+- `charging/ui/page/device/a17c0/a17c0home/a17c0home_logic.dart::_getCloudA17Y0Info`
 
 ## Since/changed
 

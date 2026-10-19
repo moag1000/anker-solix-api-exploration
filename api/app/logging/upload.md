@@ -23,7 +23,6 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `url` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
 | `source` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
 | `logging_time` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
 | `level` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
@@ -60,7 +59,10 @@ n/a
 - `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart`: `_notifyServer` @0x3133b80 (encryptionRequestHttp; encrypted: true)
 - `charging/ui/page/user/upload_log/upload_log_logic.dart`: `uploadLogURL` @0x46b62e0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart::_putFile`, `charging/ui/page/user/upload_log/upload_log_logic.dart::uploadAppLogData`
+Called from:
+
+- `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart::_putFile`
+- `charging/ui/page/user/upload_log/upload_log_logic.dart::uploadAppLogData`
 
 ## Since/changed
 

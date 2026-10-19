@@ -51,7 +51,9 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `setThirdOta` @0x406ba10 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::setThirdOta`
+Called from:
+
+- `charging/http/http_request_repository.dart::setThirdOta`
 
 ## Since/changed
 

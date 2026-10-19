@@ -56,7 +56,31 @@ n/a
 - `electricity_price/components/electricity_price_common/electricity_usage_helper.dart`: `getSetElectricityUsagePolicyUrl` @0x31b9e50 (URL literal only, no `*Http*` call); `setManualSetTOUDetail` @0x31b8da8 (URL literal only, no `*Http*` call)
 - `electricity_price/components/tou/impl_v2/service/tou_http_service.dart`: `setDeviceHomeLoad` @0x4882f10 (request; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/feature/backup_power/back_power_logic.dart::onDoneClick`, `charging/feature/peak_valley/confirm/confirm_peak_valley_logic.dart::onDoneClick`, `charging/http/http_request_repository.dart::postCloudSiteOrDeviceEms`, `charging/http/http_request_repository.dart::set17C1DeviceHomeLoadRes`, `charging/http/http_request_repository.dart::setDeviceHomeLoadRes`, `charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::setMode`, `charging/ui/page/device/a17c0/a17c0energyPlan/a17c0energy_plan_logic.dart::setDeviceHomeLoadData`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::_dealWithBleResponse`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::closeBackPower`, `charging/ui/page/device/a17c1/energy_deploy/energy_deploy_logic.dart::saveHomeLoadData`, `charging/ui/page/device/a17c1/energy_plan/energy_plan_logic.dart::deleteHomeLoadData`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::closeBackPower`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy/merge_system_energy_plan_logic.dart::deleteHomeLoadData`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart::showModeUpgradeDialog`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/detail/custom_mode_usage_scenario_detail_logic.dart::_saveToDeviceAndCloud`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::closeBackPower`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::setHomeLoadSiteParam`, `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::setManualSetTOUDetail`, `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::savePlan`, `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart::saveMode`, `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart::savePlan`, `electricity_price/components/tou/page/tou_result_view/tou_result/tou_result_logic.dart::_cyclePowerResultCallback`, `electricity_price/components/tou/page/tou_result_view/tou_result/tou_result_logic.dart::saveMode`
+Called from:
+
+- `charging/feature/backup_power/back_power_logic.dart::onDoneClick`
+- `charging/feature/peak_valley/confirm/confirm_peak_valley_logic.dart::onDoneClick`
+- `charging/http/http_request_repository.dart::postCloudSiteOrDeviceEms`
+- `charging/http/http_request_repository.dart::set17C1DeviceHomeLoadRes`
+- `charging/http/http_request_repository.dart::setDeviceHomeLoadRes`
+- `charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::setMode`
+- `charging/ui/page/device/a17c0/a17c0energyPlan/a17c0energy_plan_logic.dart::setDeviceHomeLoadData`
+- `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::_dealWithBleResponse`
+- `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::closeBackPower`
+- `charging/ui/page/device/a17c1/energy_deploy/energy_deploy_logic.dart::saveHomeLoadData`
+- `charging/ui/page/device/a17c1/energy_plan/energy_plan_logic.dart::deleteHomeLoadData`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::closeBackPower`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy/merge_system_energy_plan_logic.dart::deleteHomeLoadData`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart::showModeUpgradeDialog`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/detail/custom_mode_usage_scenario_detail_logic.dart::_saveToDeviceAndCloud`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::closeBackPower`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::setHomeLoadSiteParam`
+- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::setManualSetTOUDetail`
+- `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::savePlan`
+- `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart::saveMode`
+- `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart::savePlan`
+- `electricity_price/components/tou/page/tou_result_view/tou_result/tou_result_logic.dart::_cyclePowerResultCallback`
+- `electricity_price/components/tou/page/tou_result_view/tou_result/tou_result_logic.dart::saveMode`
 
 ## Since/changed
 

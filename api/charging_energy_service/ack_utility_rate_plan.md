@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `ackUtilityRatePlanData` @0x26eabe0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::ackUtilityRatePlanData`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::ackUtilityRatePlan`, `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley_price_diff_secondary_edit/a17b1_peak_valley_price_diff_secondary_edit_logic.dart::ackUtilityRatePlan`
+Called from:
+
+- `charging/http/http_request_repository.dart::ackUtilityRatePlanData`
+- `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::ackUtilityRatePlan`
+- `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley_price_diff_secondary_edit/a17b1_peak_valley_price_diff_secondary_edit_logic.dart::ackUtilityRatePlan`
 
 ## Since/changed
 

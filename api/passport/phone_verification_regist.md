@@ -53,7 +53,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `verifyCodeRegisterRequest` @0x3be30a0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::verifyCodeRegisterRequest`, `charging/ui/page/account/register/register_logic.dart::startRegister`
+Called from:
+
+- `charging/http/http_request_repository.dart::verifyCodeRegisterRequest`
+- `charging/ui/page/account/register/register_logic.dart::startRegister`
 
 ## Since/changed
 

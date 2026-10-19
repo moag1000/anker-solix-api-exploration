@@ -49,7 +49,13 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `sendVerifyCodeRequest` @0x3bc5750 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::sendVerifyCodeRequest`, `charging/ui/page/account/bind_phone_number/bind_phone_number_logic.dart::sendVerifyCode`, `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart::sendVerifyCode`, `charging/ui/page/account/login/login_logic.dart::sendVerifyCode`, `charging/ui/page/account/register/register_logic.dart::sendVerifyCode`
+Called from:
+
+- `charging/http/http_request_repository.dart::sendVerifyCodeRequest`
+- `charging/ui/page/account/bind_phone_number/bind_phone_number_logic.dart::sendVerifyCode`
+- `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart::sendVerifyCode`
+- `charging/ui/page/account/login/login_logic.dart::sendVerifyCode`
+- `charging/ui/page/account/register/register_logic.dart::sendVerifyCode`
 
 ## Since/changed
 

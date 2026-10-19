@@ -50,7 +50,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getDayPowerData` @0x28a8454 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getDayPowerData`, `charging/impl/http_service_impl.dart::getDayPowerData`, `charging/ui/page/device/a2345/a2345power_curve/a2345power_curve_logic.dart::_getPowerCurveData`, `charging/ui/page/device/a91b2/a91b2power_curve/a91b2power_curve_logic.dart::_getPowerCurveData`
+Called from:
+
+- `charging/http/http_request_repository.dart::getDayPowerData`
+- `charging/impl/http_service_impl.dart::getDayPowerData`
+- `charging/ui/page/device/a2345/a2345power_curve/a2345power_curve_logic.dart::_getPowerCurveData`
+- `charging/ui/page/device/a91b2/a91b2power_curve/a91b2power_curve_logic.dart::_getPowerCurveData`
 
 ## Since/changed
 

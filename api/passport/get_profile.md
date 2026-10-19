@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getUserProfileRequest` @0x34e6d48 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getUserProfileRequest`, `charging/ui/page/user/main/user_main_page_logic.dart::_listenEvenBus`
+Called from:
+
+- `charging/http/http_request_repository.dart::getUserProfileRequest`
+- `charging/ui/page/user/main/user_main_page_logic.dart::_listenEvenBus`
 
 ## Since/changed
 

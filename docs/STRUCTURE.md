@@ -69,6 +69,7 @@ If a fact is needed on a non-owner page, link to the owner. When an owner page i
 - Endpoint pages are named exactly after the last URL segment, for example `set_site_device_param.md`.
 - PN pages use the lowercase product number, for example `a17c5.md`.
 - Service directories are named exactly after the URL prefix, for example `charging_hes_svc/`.
+- Endpoint page path: `api/<service>/<intermediate segments>/<last_segment>.md`. The `v1` segment (the default API version) is dropped; any other version segment (`v2`, `v3`, ...) is kept as a path segment. Example: `/power_service/v1/site/get_power_limit` is `api/power_service/site/get_power_limit.md`, `/power_service/v2/device/energy_options` is `api/power_service/v2/device/energy_options.md`. A URL that starts with a version segment (`/v2/anka/...`) follows the URL-prefix rule: `api/v2/anka/...`. `tools/render_pages.py` (`endpoint_path`) implements this and refuses to render two URLs to one path.
 - Upstream names (apitypes.py keys, mqttmap names) win over ours.
 
 ## Page-length and split rules

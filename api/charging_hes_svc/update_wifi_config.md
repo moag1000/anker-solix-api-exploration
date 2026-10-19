@@ -51,7 +51,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `updateWiFiConfig` @0x25f5c00 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::updateWiFiConfig`, `charging/ui/page/device/a5101/deploy_wifi/deploy_wifi_progress_logic.dart::_updateWifiInfo`
+Called from:
+
+- `charging/http/http_request_repository.dart::updateWiFiConfig`
+- `charging/ui/page/device/a5101/deploy_wifi/deploy_wifi_progress_logic.dart::_updateWifiInfo`
 
 ## Since/changed
 

@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `sendForgetPwdEmailRequest` @0x3bc9ee4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::sendForgetPwdEmailRequest`, `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart::requestForgetPwdApi`
+Called from:
+
+- `charging/http/http_request_repository.dart::sendForgetPwdEmailRequest`
+- `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart::requestForgetPwdApi`
 
 ## Since/changed
 

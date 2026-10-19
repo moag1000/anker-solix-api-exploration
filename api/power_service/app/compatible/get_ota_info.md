@@ -49,7 +49,9 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getThirdOtaInfo` @0x36c7d88 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getThirdOtaInfo`
+Called from:
+
+- `charging/http/http_request_repository.dart::getThirdOtaInfo`
 
 ## Since/changed
 

@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getDeviceBindInfo` @0x33d3d80 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getDeviceBindInfo`, `charging/ui/page/device/a1790/a1790home_logic.dart::getA1790DeviceBindInfo`
+Called from:
+
+- `charging/http/http_request_repository.dart::getDeviceBindInfo`
+- `charging/ui/page/device/a1790/a1790home_logic.dart::getA1790DeviceBindInfo`
 
 ## Since/changed
 

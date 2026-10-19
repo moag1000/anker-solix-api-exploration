@@ -49,7 +49,9 @@ n/a
 
 - `charging/widgets/data_export/energy_flow/site_energy_export_logic.dart`: `_checkDataOfSiteSupportExport` @0x2c34c20 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/widgets/data_export/energy_flow/site_energy_export_logic.dart::updateMode`
+Called from:
+
+- `charging/widgets/data_export/energy_flow/site_energy_export_logic.dart::updateMode`
 
 ## Since/changed
 

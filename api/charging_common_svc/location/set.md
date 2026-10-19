@@ -61,7 +61,10 @@ n/a
 - `ak_iot_common_charging/src/weather/weather_impl.dart`: `saveLocation` @0x2bb0ef0 (request; encrypted: default-true (requestHttp) — verify)
 - `electricity_price/components/dynamic_price/util/local_auto_disaster_feature.dart`: `_setLocation` @0x2c142c0 (request; encrypted: default-true (requestHttp) — verify)
 
-Called from: `electricity_price/components/dynamic_price/util/local_auto_disaster_feature.dart::pushToMap`, `station_home/src/weather/weather_service.dart::syncLocation`
+Called from:
+
+- `electricity_price/components/dynamic_price/util/local_auto_disaster_feature.dart::pushToMap`
+- `station_home/src/weather/weather_service.dart::syncLocation`
 
 ## Since/changed
 

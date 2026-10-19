@@ -55,7 +55,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `postEventData` @0x263e8c4 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ble/base_ble_controller.dart::postEventDataRequest`, `charging/ble/device/iot_anker_controller.dart::_handleResponse`, `charging/http/http_request_repository.dart::postEventData`, `charging/impl/http_service_impl.dart::postEventData`
+Called from:
+
+- `charging/ble/base_ble_controller.dart::postEventDataRequest`
+- `charging/ble/device/iot_anker_controller.dart::_handleResponse`
+- `charging/http/http_request_repository.dart::postEventData`
+- `charging/impl/http_service_impl.dart::postEventData`
 
 ## Since/changed
 

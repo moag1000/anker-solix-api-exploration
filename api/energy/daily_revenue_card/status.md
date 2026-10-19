@@ -48,7 +48,10 @@ n/a
 
 - `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart`: `fetchCardStatus` @0x27e8698 (encryptionRequestHttp; encrypted: true)
 
-Called from: `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart::onMessageDispatch`, `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart::updateSiteId`
+Called from:
+
+- `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart::onMessageDispatch`
+- `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart::updateSiteId`
 
 ## Since/changed
 

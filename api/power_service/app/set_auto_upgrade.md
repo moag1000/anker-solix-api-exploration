@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `setAutoUpgrade` @0x404af14 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::setAutoUpgrade`, `charging/ui/page/user/firmware_updates/firmware_updates_page/firmware_updates_logic.dart::setDeviceAutoMessage`
+Called from:
+
+- `charging/http/http_request_repository.dart::setAutoUpgrade`
+- `charging/ui/page/user/firmware_updates/firmware_updates_page/firmware_updates_logic.dart::setDeviceAutoMessage`
 
 ## Since/changed
 

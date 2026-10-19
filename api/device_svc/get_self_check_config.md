@@ -48,7 +48,12 @@ n/a
 - `flutter_charging_beginning/beginning/state_cards/self_check/self_check_controller.dart`: `_loadCloudSelfCheckConfig` @0x2ad0f98 (encryptionRequestHttp; encrypted: true)
 - `flutter_charging_beginning/beginning/state_cards/self_check/self_check_fail_controller.dart`: `loadCloudSelfCheckConfig` @0x2ad2054 (encryptionRequestHttp; encrypted: true)
 
-Called from: `flutter_charging_beginning/beginning/state_cards/self_check/self_check_controller.dart::onReady`, `flutter_charging_beginning/beginning/state_cards/self_check/self_check_controller.dart::selfCheck`, `flutter_charging_beginning/beginning/state_cards/self_check/self_check_fail_controller.dart::onReady`, `flutter_charging_beginning/beginning/state_cards/self_check/self_check_fail_page.dart::_buildFailView`
+Called from:
+
+- `flutter_charging_beginning/beginning/state_cards/self_check/self_check_controller.dart::onReady`
+- `flutter_charging_beginning/beginning/state_cards/self_check/self_check_controller.dart::selfCheck`
+- `flutter_charging_beginning/beginning/state_cards/self_check/self_check_fail_controller.dart::onReady`
+- `flutter_charging_beginning/beginning/state_cards/self_check/self_check_fail_page.dart::_buildFailView`
 
 ## Since/changed
 

@@ -50,7 +50,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getAutoDisasterPrepareDetail` @0x43694a4 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getAutoDisasterPrepareDetail`, `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::clickAutoDisasterTips`
+Called from:
+
+- `charging/http/http_request_repository.dart::getAutoDisasterPrepareDetail`
+- `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::clickAutoDisasterTips`
 
 ## Since/changed
 

@@ -24,7 +24,6 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `path` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart @0x32558c0` |
-| `method` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart @0x32558c0` |
 | `param` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart @0x32558c0` |
 
 ## `param_type`/`cmd`
@@ -55,7 +54,12 @@ n/a
 - `settings/src/common/page/grid_param_setting/grid_param_setting_controller.dart`: `updateCloudSetting` @0x3a57130 (encryptionRequestHttp; encrypted: true)
 - `settings/src/common/page/grid_param_setting/grid_protect_setting_controller.dart`: `saveProtectParam` @0x3a59ff0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart::onEnwg14aSwitchChanged`, `device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart::setGridInfo`, `settings/src/common/page/grid_param_setting/grid_param_setting_controller.dart::setGridInfo`, `settings/src/common/page/grid_param_setting/grid_protect_setting_controller.dart::handleSave`
+Called from:
+
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart::onEnwg14aSwitchChanged`
+- `device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart::setGridInfo`
+- `settings/src/common/page/grid_param_setting/grid_param_setting_controller.dart::setGridInfo`
+- `settings/src/common/page/grid_param_setting/grid_protect_setting_controller.dart::handleSave`
 
 ## Since/changed
 

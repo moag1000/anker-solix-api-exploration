@@ -59,7 +59,14 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `addCustomChargeMode` @0x38b7458 (encryptionRequestHttp; encrypted: true)
 - `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart`: `addCustomChargeMode` @0x3aa5e14 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::addCustomChargeMode`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_charging_edit_logic.dart::_addCustomChargeModeToCloud`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart::_addCustomChargeModeToCloud`, `charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart::_addCustomChargeModeToCloud`, `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_edit/a2687_custom_charge_edit_logic.dart::_addCustomChargeModeToCloud`, `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_edit/a2687_custom_platform_charge_edit_logic.dart::_addCustomChargeModeToCloud`
+Called from:
+
+- `charging/http/http_request_repository.dart::addCustomChargeMode`
+- `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_charging_edit_logic.dart::_addCustomChargeModeToCloud`
+- `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart::_addCustomChargeModeToCloud`
+- `charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart::_addCustomChargeModeToCloud`
+- `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_edit/a2687_custom_charge_edit_logic.dart::_addCustomChargeModeToCloud`
+- `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_edit/a2687_custom_platform_charge_edit_logic.dart::_addCustomChargeModeToCloud`
 
 ## Since/changed
 

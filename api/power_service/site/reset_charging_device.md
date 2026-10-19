@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `resetChargingDevice` @0x3c0079c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::resetChargingDevice`, `charging/ui/page/device/a1340/a1340charge_device_manager/a1340charge_device_manager_logic.dart::setOtherDevice`
+Called from:
+
+- `charging/http/http_request_repository.dart::resetChargingDevice`
+- `charging/ui/page/device/a1340/a1340charge_device_manager/a1340charge_device_manager_logic.dart::setOtherDevice`
 
 ## Since/changed
 

@@ -32,7 +32,6 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 | `upgrade_time` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3422678` |
 | `site_id` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3422678` |
 | `path` | ? | ? | ? | `ota_kit/src/services/ota_upgrade_record_reporter.dart @0x280a890` |
-| `method` | ? | ? | ? | `ota_kit/src/services/ota_upgrade_record_reporter.dart @0x280a890` |
 | `param` | ? | ? | ? | `ota_kit/src/services/ota_upgrade_record_reporter.dart @0x280a890` |
 
 Rows are the union over 2 senders; `source` is the first sender that sets the key.
@@ -62,7 +61,10 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `getReportBleUpgrade` @0x3422678 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `ota_kit/src/services/ota_upgrade_record_reporter.dart`: `_reportSingle` @0x280a890 (URL literal only, no `*Http*` call)
 
-Called from: `charging/http/http_request_repository.dart::getReportBleUpgrade`, `charging/ui/page/device/anker_ota/base/anker_ota_base_logic.dart::reportBleOtaRecord`
+Called from:
+
+- `charging/http/http_request_repository.dart::getReportBleUpgrade`
+- `charging/ui/page/device/anker_ota/base/anker_ota_base_logic.dart::reportBleOtaRecord`
 
 ## Since/changed
 

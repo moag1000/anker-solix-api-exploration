@@ -51,7 +51,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `bindUnX1Charger` @0x226c334 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::bindUnX1Charger`, `charging/ui/page/device/a5101/setting/device_manager/ev_charger/add_ev_charger_logic.dart::pushToStation`, `charging/ui/page/device/a5101/setting/device_manager/ev_charger/ev_charger_manager_logic.dart::unBindEvCharger`
+Called from:
+
+- `charging/http/http_request_repository.dart::bindUnX1Charger`
+- `charging/ui/page/device/a5101/setting/device_manager/ev_charger/add_ev_charger_logic.dart::pushToStation`
+- `charging/ui/page/device/a5101/setting/device_manager/ev_charger/ev_charger_manager_logic.dart::unBindEvCharger`
 
 ## Since/changed
 

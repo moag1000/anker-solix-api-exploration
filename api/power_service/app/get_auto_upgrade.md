@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getAutoUpgrade` @0x2914404 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getAutoUpgrade`, `charging/ui/page/user/firmware_updates/firmware_updates_page/firmware_updates_logic.dart::getDeviceAutoUpGradMessage`
+Called from:
+
+- `charging/http/http_request_repository.dart::getAutoUpgrade`
+- `charging/ui/page/user/firmware_updates/firmware_updates_page/firmware_updates_logic.dart::getDeviceAutoUpGradMessage`
 
 ## Since/changed
 

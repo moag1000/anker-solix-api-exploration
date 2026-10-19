@@ -20,17 +20,28 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 TODO = '<!-- TODO -->'
-VERSION_SEG = re.compile(r'^v\d+$')
 
 
 def _clean(seg):
     return re.sub(r'[^a-z0-9_]+', '_', seg.lower()).strip('_') or 'x'
 
 
-def endpoint_path(url, keep_version=False):
+NOISE_KEYS = {'url', 'method', 'useWebsocket', 'isAIotEnv'}
+
+
+def is_noise_key(k):
+    """Extractor noise: local-variable fragments and transport envelope keys."""
+    return (k in NOISE_KEYS or k.endswith(':') or '.isEmpty' in k
+            or k.startswith(' '))
+
+
+def endpoint_path(url):
+    """`v1` (the default API version) is dropped; any other version segment
+    (v2, v3, ...) is kept.  The first segment is the service directory."""
+
     segs = [s for s in url.split('/') if s]
     service, last = _clean(segs[0]), _clean(segs[-1])
-    mid = [s for s in segs[1:-1] if keep_version or not VERSION_SEG.match(s)]
+    mid = [s for s in segs[1:-1] if s != 'v1']
     return '/'.join(['api', service] + [_clean(m) for m in mid] + [last + '.md'])
 
 
@@ -99,12 +110,13 @@ def render_endpoint(rows, date=None, version='3.24.3'):
              % ' / '.join('`%s`' % x if x in ('true', 'false') else '"%s"' % x
                           for x in states))
     L += ['', '## Request', '']
-    shown = [r for r in rows if r['params'] or r['envelope']]
+    shown = [r for r in rows if any(
+        not is_noise_key(k) for k in (r['params'] or r['envelope']))]
     if not shown:
         L += ['No request keys found by the extractor. %s' % TODO, '']
     else:
         env = sorted({k for r in shown if r['param_data_is_json']
-                      for k in r['envelope']})
+                      for k in r['envelope'] if not is_noise_key(k)})
         if env:
             L += ['Some senders wrap these keys in `param_data` as a JSON string '
                   '(`jsonEncode`); outer keys: %s.' % ', '.join(
@@ -115,7 +127,7 @@ def render_endpoint(rows, date=None, version='3.24.3'):
         for r in shown:
             src = '%s @%s' % (r['dart_file'], r['addr'])
             for p in r['params'] or r['envelope']:
-                if p not in seen_p:
+                if p not in seen_p and not is_noise_key(p):
                     seen_p.add(p)
                     L.append('| `%s` | ? | ? | ? | `%s` |' % (p, src))
         if len(shown) > 1:
@@ -153,7 +165,7 @@ def render_endpoint(rows, date=None, version='3.24.3'):
         L.append('- `%s`: %s' % (f, '; '.join(parts)))
     ui = sorted({c for r in rows for c in r['callers']})
     if ui:
-        L += ['', 'Called from: %s' % ', '.join('`%s`' % c for c in ui)]
+        L += ['', 'Called from:', ''] + ['- `%s`' % c for c in ui]
     L += ['', '## Since/changed', '']
     sinces = sorted({r['since'] for r in rows if r.get('since')})
     if removed:
@@ -219,14 +231,14 @@ def render_all(endpoints, models, out, date=None):
     by_url = {}
     for r in endpoints['rows']:
         by_url.setdefault(r['url'], []).append(r)
-    paths = {}
-    for url in by_url:
-        paths.setdefault(endpoint_path(url), []).append(url)
-    for path, urls in sorted(paths.items()):
-        for url in urls:
-            p = path if len(urls) == 1 else endpoint_path(url, keep_version=True)
-            _write(os.path.join(out, p), render_endpoint(by_url[url], date))
-            n_ep += 1
+    seen = {}
+    for url in sorted(by_url):
+        p = endpoint_path(url)
+        if p in seen:
+            raise ValueError('path collision: %s and %s -> %s' % (seen[p], url, p))
+        seen[p] = url
+        _write(os.path.join(out, p), render_endpoint(by_url[url], date))
+        n_ep += 1
     mrows = [r for r in models['rows'] if not r.get('removed_in')]
     count = {}
     for r in mrows:

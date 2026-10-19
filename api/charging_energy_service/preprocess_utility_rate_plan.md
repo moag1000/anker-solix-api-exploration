@@ -60,7 +60,12 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `dealUtilityRatePlanData` @0x3d0377c (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart`: `savePlanPrice` @0x3d3f658 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::dealUtilityRatePlanData`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::sendPeakValleyData`, `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley_price_diff_secondary_edit/a17b1_peak_valley_price_diff_secondary_edit_logic.dart::sendPeakValleyData`, `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart::save`
+Called from:
+
+- `charging/http/http_request_repository.dart::dealUtilityRatePlanData`
+- `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::sendPeakValleyData`
+- `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley_price_diff_secondary_edit/a17b1_peak_valley_price_diff_secondary_edit_logic.dart::sendPeakValleyData`
+- `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart::save`
 
 ## Since/changed
 

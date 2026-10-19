@@ -51,7 +51,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `reportHesEvents` @0x23ce394 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::reportHesEvents`, `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::enterLowPowerEvent`, `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::updateSpecialEvent`
+Called from:
+
+- `charging/http/http_request_repository.dart::reportHesEvents`
+- `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::enterLowPowerEvent`
+- `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::updateSpecialEvent`
 
 ## Since/changed
 

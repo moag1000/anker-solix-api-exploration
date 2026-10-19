@@ -34,8 +34,6 @@ encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header r
 | `attributes.price_type` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
 | `attributes.fixed_price` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
 | `attributes.currency` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `fixedPrice.value.isEmpty:` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| ` salePrice.value.isEmpty:` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
 | `id` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
 | `buy` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
 | `sell` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
@@ -77,7 +75,23 @@ n/a
 - `electricity_price/components/tou/impl_v2/service/tou_http_service.dart`: `updateSitePrice` @0x4883d48 (request; encrypted: default-true (requestHttp) — verify)
 - `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart`: `<anonymous closure> in TOUEditPreviewLogic::savePlan` @0x31df304 (URL literal only, no `*Http*` call); `savePlan` @0x31de7dc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/feature/peak_valley/confirm/confirm_peak_valley_logic.dart::setSitePrice`, `charging/feature/utilitiy_rate_plan/dynamic_price/confirm/dynamic_price_confirm_logic.dart::save`, `charging/feature/utilitiy_rate_plan/fixed_rate/fixed_rate_v2_logic.dart::save`, `charging/feature/utilitiy_rate_plan/station_price_mode/station_price_mode_logic.dart::setSitePrice`, `charging/http/http_request_repository.dart::postCloudSitePrice`, `charging/http/http_request_repository.dart::updateSitePriceRequest`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/electricity_price/electricity_price_logic.dart::savePrice`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/utility_rate_plan/site_utility_rate_logic.dart::save`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/utility_rate_plan/site_utility_rate_plan_logic.dart::setTOUPrice`, `charging/ui/page/device/main/station_device_home/station_price_setting/station_price_setting_logic.dart::savePrice`, `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::setDeviceEMSPriceArgument`, `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::clickSeasonItem`, `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::setFixedPriceV2`, `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart::onDoneClick`, `electricity_price/components/tou_pct/page/electricity_price_pad_preview/electricity_price_pad_preview_logic.dart::setSitePrice`
+Called from:
+
+- `charging/feature/peak_valley/confirm/confirm_peak_valley_logic.dart::setSitePrice`
+- `charging/feature/utilitiy_rate_plan/dynamic_price/confirm/dynamic_price_confirm_logic.dart::save`
+- `charging/feature/utilitiy_rate_plan/fixed_rate/fixed_rate_v2_logic.dart::save`
+- `charging/feature/utilitiy_rate_plan/station_price_mode/station_price_mode_logic.dart::setSitePrice`
+- `charging/http/http_request_repository.dart::postCloudSitePrice`
+- `charging/http/http_request_repository.dart::updateSitePriceRequest`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/electricity_price/electricity_price_logic.dart::savePrice`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/utility_rate_plan/site_utility_rate_logic.dart::save`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/utility_rate_plan/site_utility_rate_plan_logic.dart::setTOUPrice`
+- `charging/ui/page/device/main/station_device_home/station_price_setting/station_price_setting_logic.dart::savePrice`
+- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::setDeviceEMSPriceArgument`
+- `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::clickSeasonItem`
+- `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::setFixedPriceV2`
+- `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart::onDoneClick`
+- `electricity_price/components/tou_pct/page/electricity_price_pad_preview/electricity_price_pad_preview_logic.dart::setSitePrice`
 
 ## Since/changed
 

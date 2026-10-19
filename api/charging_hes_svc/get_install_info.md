@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getDeviceInstallAddress` @0x34d8160 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getDeviceInstallAddress`, `charging/ui/page/device/a5101/setting/install_address/a5101_install_address_logic.dart::_getInstallAddressInfo`
+Called from:
+
+- `charging/http/http_request_repository.dart::getDeviceInstallAddress`
+- `charging/ui/page/device/a5101/setting/install_address/a5101_install_address_logic.dart::_getInstallAddressInfo`
 
 ## Since/changed
 

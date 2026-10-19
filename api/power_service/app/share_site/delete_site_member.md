@@ -51,7 +51,12 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `deleteSiteMember` @0x405cac0 (encryptionRequestHttp; encrypted: true)
 - `charging/util/demosite_util_impl.dart`: `anonymousQuitSite` @0x23f0cf4 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::deleteSiteMember`, `charging/ui/page/home/home_base_logic.dart::useA5101StationWidget`, `charging/ui/page/user/share_site/home_center/home_center_logic.dart::deleteInviteMemberAlreadyInvited`, `charging/util/demosite_util_impl.dart::exitDemo`
+Called from:
+
+- `charging/http/http_request_repository.dart::deleteSiteMember`
+- `charging/ui/page/home/home_base_logic.dart::useA5101StationWidget`
+- `charging/ui/page/user/share_site/home_center/home_center_logic.dart::deleteInviteMemberAlreadyInvited`
+- `charging/util/demosite_util_impl.dart::exitDemo`
 
 ## Since/changed
 

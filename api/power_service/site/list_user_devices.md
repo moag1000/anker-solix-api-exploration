@@ -48,7 +48,16 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getUserPPSDevice` @0x23f42a4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getUserPPSDevice`, `charging/ui/page/device/a1782/station/add_devices/a1782_add_devices_logic.dart::getUserDeviceList`, `charging/ui/page/device/a17b1/a17b1select_devices/a17b1select_devices_logic.dart::_getUserDeviceList`, `charging/ui/page/device/a17c0/select_station/select_station_logic.dart::getUserDeviceList`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices/add_devices_logic.dart::deleteGroup`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices/add_devices_logic.dart::getUserDeviceList`, `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getUserPPSDeviceList`, `charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart::getUserPPSDeviceList`
+Called from:
+
+- `charging/http/http_request_repository.dart::getUserPPSDevice`
+- `charging/ui/page/device/a1782/station/add_devices/a1782_add_devices_logic.dart::getUserDeviceList`
+- `charging/ui/page/device/a17b1/a17b1select_devices/a17b1select_devices_logic.dart::_getUserDeviceList`
+- `charging/ui/page/device/a17c0/select_station/select_station_logic.dart::getUserDeviceList`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices/add_devices_logic.dart::deleteGroup`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices/add_devices_logic.dart::getUserDeviceList`
+- `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getUserPPSDeviceList`
+- `charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart::getUserPPSDeviceList`
 
 ## Since/changed
 

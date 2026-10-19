@@ -29,7 +29,6 @@ encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header r
 | `device_sn` | ? | ? | ? | `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x3564988` |
 | `parallel_type` | ? | ? | ? | `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x3564988` |
 | `path` | ? | ? | ? | `device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4` |
-| `method` | ? | ? | ? | `device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4` |
 | `param.site_id` | ? | ? | ? | `device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4` |
 | `param.param_type` | ? | ? | ? | `device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4` |
 | `feed_switch` | ? | ? | ? | `micro_hes/src/a17e2/station/home/a17e2_station_logic.dart @0x233e8c0` |
@@ -87,7 +86,96 @@ param_type is a variable at this sender (traced by heuristic — verify against 
 - `settings/src/sdk/util/grid_connect_util.dart`: `fetchSiteGridPowerList` @0x2af5dfc (encryptionRequestHttp; encrypted: true, param_type/cmd: see `api/param_types.md`); `getGroupedOutputPowerSum` @0x2aee464 (encryptionRequestHttp; encrypted: true, param_type/cmd: see `api/param_types.md`)
 - `soc/soc_setting/station_soc_data_source.dart`: `query` @0x2afe7a0 (encryptionRequestHttp; encrypted: true, param_type/cmd: see `api/param_types.md`)
 
-Called from: `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::handleItemToggle`, `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::onInit`, `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::onReady`, `charging/http/http_request_repository.dart::get17C1SiteDeviceParam`, `charging/http/http_request_repository.dart::getCombineBoxListData`, `charging/http/http_request_repository.dart::getSafetySocParams`, `charging/http/http_request_repository.dart::getSiteDeviceParam`, `charging/http/http_request_repository.dart::getSiteEnablePeakDeviceParam`, `charging/http/http_request_repository.dart::getSiteGreenModeDeviceParam`, `charging/http/http_request_repository.dart::getSiteLowerLimitDeviceParam`, `charging/http/http_request_repository.dart::getSitePeakTimeDeviceParam`, `charging/http/http_request_repository.dart::getStationCountryCode`, `charging/impl/http_service_impl.dart::get17C1SiteDeviceParam`, `charging/ui/page/device/a1782/a1782_setting/locale_settings/locale_settings_list_controller.dart::LocaleSettingsListController`, `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::_getSiteConfig`, `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::next`, `charging/ui/page/device/a1782/station/setting/menu_controller/station_locale_settings_controller.dart::getStationLocale`, `charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::_getSystemPolicySetting`, `charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::setBatteryReserve`, `charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::setMode`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::setSelfUseMode`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::getCombinerBoxInfo`, `charging/ui/page/device/a17c1/energy_plan/energy_plan_logic.dart::getHomeLoadSiteParam`, `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::getSiteHomeLoad`, `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::mainDeviceJoin`, `charging/ui/page/device/a17c5/ai_mode_condition/ai_mode_condition_logic.dart::getSiteDataAuth`, `charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getSiteDeviceParamData`, `charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getSiteEnablePeak`, `charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getSiteGreenMode`, `charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getSiteLowerLimit`, `charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getSitePeakTimeDevice`, `charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getHomeLoadSiteDeviceParam`, `charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getSiteHomeLoadData`, `charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::getSiteEnablePeak`, `charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::getSiteGreenMode`, `charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::getSiteLowerLimit`, `charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::getSitePeakTimeDevice`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::_updateSafetySocStatus`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::checkIfNeedShowSetLocaleDialog`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::fetchThirdPvSetting`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getSiteHomeLoad`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getSiteInfo`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::hasAE100FeederStatusChange`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::updateEquipmentFeedNetworkStatus`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::emetySiteSitePramar`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::multiAddDevices`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/chargers_management/chargers_manage_logic.dart::getInitSwitchStatus`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/feed_network_limit/feed_network_limit_logic.dart::getFeedLimitStatus`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/feed_network_limit_new/feed_network_limit_new_logic.dart::onReady`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/manage_devices/manage_devices_logic.dart::getCombineBoxList`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy/merge_system_energy_plan_logic.dart::getHomeLoadSiteParam`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::_getMinCutoffPowerBySiteId`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::_refreshScheduleModeStatus`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getHomeLoadSiteParam`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getSiteDataAuth`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_home_settings_logic.dart::updateSafetySocAndFeedNetworkStatus`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/utility_rate_plan/site_utility_rate_plan_logic.dart::getSiteTOUParams`, `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getSiteEnablePeak`, `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getSiteGreenMode`, `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getSiteLowerLimit`, `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getSitePeakTimeDevice`, `charging/ui/page/device/main/station_device_home/station_set_time/station_set_time_logic.dart::getSiteGreenMode`, `charging/ui/page/device/main/station_device_home/station_set_time/station_set_time_logic.dart::getSitePeakTimeDevice`, `device/src/setting/controller/location/sub_page/list/sub_location_list_controller.dart::SubLocationListController`, `device/src/station_setting/controller/common_third_pv/page/third_pv_logic.dart::_loadCurrentPvType`, `device/src/station_setting/controller/station_soc_settings_v2/station_soc_settings_v2_controller.dart::getSocSetting`, `electricity_price/components/electricity_module/electricity_price_serviceImpl.dart::getCurEmsModeType`, `electricity_price/components/electricity_module/page/tou_and_timeslot_settings_detail_logic.dart::onReady`, `electricity_price/components/electricity_module/page/tou_and_timeslot_settings_poly_logic.dart::onReady`, `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::getCurEmsModeType`, `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::getManualSetTOUDetail`, `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::onReady`, `flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart::checkATSInstalled`, `flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart::onInit`, `flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart::onInit`, `micro_hes/src/a17e2/station/home/a17e2_station_logic.dart::updateFeeder0w`, `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart::_setupEventBusListener`, `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart::onInit`, `settings/src/common/menu_controller/gateway_current_limit_menu_controller.dart::onInit`, `settings/src/common/menu_controller/monitoring_device_menu_controller.dart::_navigateToMonitoringDevicePage`, `settings/src/common/menu_controller/monitoring_device_menu_controller.dart::onInit`, `settings/src/common/page/ev_charger/ev_charger_setting_controller.dart::onReady`, `settings/src/common/page/feed_grid/feed_grid_controller.dart::onReady`, `settings/src/common/page/hardware_feed_grid/hardware_feed_grid_controller.dart::onReady`, `settings/src/common/page/heat_pump/heat_pump_setting_controller.dart::onReady`, `settings/src/common/page/station_advanced_setting/station_advanced_setting_controller.dart::onReady`, `settings/src/common/station_page/station_peak_shaving/station_peak_shaving_controller.dart::onReady`, `soc/soc_setting/soc_setting_logic.dart::_querySiteDeviceParam`
+Called from:
+
+- `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::handleItemToggle`
+- `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::onInit`
+- `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::onReady`
+- `charging/http/http_request_repository.dart::get17C1SiteDeviceParam`
+- `charging/http/http_request_repository.dart::getCombineBoxListData`
+- `charging/http/http_request_repository.dart::getSafetySocParams`
+- `charging/http/http_request_repository.dart::getSiteDeviceParam`
+- `charging/http/http_request_repository.dart::getSiteEnablePeakDeviceParam`
+- `charging/http/http_request_repository.dart::getSiteGreenModeDeviceParam`
+- `charging/http/http_request_repository.dart::getSiteLowerLimitDeviceParam`
+- `charging/http/http_request_repository.dart::getSitePeakTimeDeviceParam`
+- `charging/http/http_request_repository.dart::getStationCountryCode`
+- `charging/impl/http_service_impl.dart::get17C1SiteDeviceParam`
+- `charging/ui/page/device/a1782/a1782_setting/locale_settings/locale_settings_list_controller.dart::LocaleSettingsListController`
+- `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::_getSiteConfig`
+- `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::next`
+- `charging/ui/page/device/a1782/station/setting/menu_controller/station_locale_settings_controller.dart::getStationLocale`
+- `charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::_getSystemPolicySetting`
+- `charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::setBatteryReserve`
+- `charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::setMode`
+- `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::setSelfUseMode`
+- `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::getCombinerBoxInfo`
+- `charging/ui/page/device/a17c1/energy_plan/energy_plan_logic.dart::getHomeLoadSiteParam`
+- `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::getSiteHomeLoad`
+- `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::mainDeviceJoin`
+- `charging/ui/page/device/a17c5/ai_mode_condition/ai_mode_condition_logic.dart::getSiteDataAuth`
+- `charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getSiteDeviceParamData`
+- `charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getSiteEnablePeak`
+- `charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getSiteGreenMode`
+- `charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getSiteLowerLimit`
+- `charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getSitePeakTimeDevice`
+- `charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getHomeLoadSiteDeviceParam`
+- `charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getSiteHomeLoadData`
+- `charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::getSiteEnablePeak`
+- `charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::getSiteGreenMode`
+- `charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::getSiteLowerLimit`
+- `charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::getSitePeakTimeDevice`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::_updateSafetySocStatus`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::checkIfNeedShowSetLocaleDialog`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::fetchThirdPvSetting`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getSiteHomeLoad`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getSiteInfo`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::hasAE100FeederStatusChange`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::updateEquipmentFeedNetworkStatus`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::emetySiteSitePramar`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::multiAddDevices`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/chargers_management/chargers_manage_logic.dart::getInitSwitchStatus`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/feed_network_limit/feed_network_limit_logic.dart::getFeedLimitStatus`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/feed_network_limit_new/feed_network_limit_new_logic.dart::onReady`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/manage_devices/manage_devices_logic.dart::getCombineBoxList`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy/merge_system_energy_plan_logic.dart::getHomeLoadSiteParam`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::_getMinCutoffPowerBySiteId`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::_refreshScheduleModeStatus`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getHomeLoadSiteParam`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getSiteDataAuth`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_home_settings_logic.dart::updateSafetySocAndFeedNetworkStatus`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/utility_rate_plan/site_utility_rate_plan_logic.dart::getSiteTOUParams`
+- `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getSiteEnablePeak`
+- `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getSiteGreenMode`
+- `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getSiteLowerLimit`
+- `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getSitePeakTimeDevice`
+- `charging/ui/page/device/main/station_device_home/station_set_time/station_set_time_logic.dart::getSiteGreenMode`
+- `charging/ui/page/device/main/station_device_home/station_set_time/station_set_time_logic.dart::getSitePeakTimeDevice`
+- `device/src/setting/controller/location/sub_page/list/sub_location_list_controller.dart::SubLocationListController`
+- `device/src/station_setting/controller/common_third_pv/page/third_pv_logic.dart::_loadCurrentPvType`
+- `device/src/station_setting/controller/station_soc_settings_v2/station_soc_settings_v2_controller.dart::getSocSetting`
+- `electricity_price/components/electricity_module/electricity_price_serviceImpl.dart::getCurEmsModeType`
+- `electricity_price/components/electricity_module/page/tou_and_timeslot_settings_detail_logic.dart::onReady`
+- `electricity_price/components/electricity_module/page/tou_and_timeslot_settings_poly_logic.dart::onReady`
+- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::getCurEmsModeType`
+- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::getManualSetTOUDetail`
+- `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::onReady`
+- `flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart::checkATSInstalled`
+- `flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart::onInit`
+- `flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart::onInit`
+- `micro_hes/src/a17e2/station/home/a17e2_station_logic.dart::updateFeeder0w`
+- `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart::_setupEventBusListener`
+- `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart::onInit`
+- `settings/src/common/menu_controller/gateway_current_limit_menu_controller.dart::onInit`
+- `settings/src/common/menu_controller/monitoring_device_menu_controller.dart::_navigateToMonitoringDevicePage`
+- `settings/src/common/menu_controller/monitoring_device_menu_controller.dart::onInit`
+- `settings/src/common/page/ev_charger/ev_charger_setting_controller.dart::onReady`
+- `settings/src/common/page/feed_grid/feed_grid_controller.dart::onReady`
+- `settings/src/common/page/hardware_feed_grid/hardware_feed_grid_controller.dart::onReady`
+- `settings/src/common/page/heat_pump/heat_pump_setting_controller.dart::onReady`
+- `settings/src/common/page/station_advanced_setting/station_advanced_setting_controller.dart::onReady`
+- `settings/src/common/station_page/station_peak_shaving/station_peak_shaving_controller.dart::onReady`
+- `soc/soc_setting/soc_setting_logic.dart::_querySiteDeviceParam`
 
 ## Since/changed
 

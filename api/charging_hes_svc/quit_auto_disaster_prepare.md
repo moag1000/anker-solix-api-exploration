@@ -50,7 +50,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `quitAutoDisasterPrepare` @0x27ad518 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::quitAutoDisasterPrepare`, `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::_quitAutoDisasterPrepareFromNet`, `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::onMessageDispatch`
+Called from:
+
+- `charging/http/http_request_repository.dart::quitAutoDisasterPrepare`
+- `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::_quitAutoDisasterPrepareFromNet`
+- `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::onMessageDispatch`
 
 ## Since/changed
 

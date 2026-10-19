@@ -56,7 +56,21 @@ n/a
 - `micro_hes/src/a17ex/station_setting/device_wifi_info_controller.dart`: `fetchDeviceWifiInfo` @0x29ec464 (encryptionRequestHttp; encrypted: true)
 - `micro_hes/src/common_business/basic_station/module/navigation_bar/basic_station_navigation_bar_logic.dart`: `getSiteWifiInfo` @0x27db43c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getSiteWifiInfoRequest`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getSiteWifiInfo`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/system_wifi_info/system_wifi_info_logic.dart::getSiteWifiInfo`, `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getSiteWifiInfo`, `device/src/station_setting/controller/common_station_wifi/page/device_wifi_info_setting_controller.dart::_syncStatePageOnDone`, `device/src/station_setting/controller/common_station_wifi/page/device_wifi_info_setting_controller.dart::onReady`, `device/src/station_setting/controller/common_station_wifi/page/wifi_management_controller.dart::_syncStatePageOnDone`, `device/src/station_setting/controller/common_station_wifi/page/wifi_management_controller.dart::onReady`, `device/src/station_setting/controller/common_station_wifi/page/wifi_management_page.dart::didPopNext`, `flutter_charging_beginning/beginning/state_cards/add_devices/select_power_device/select_power_device_controller.dart::_startWifiRefresh`, `micro_hes/src/a17e2/station/home/base_station_logic.dart::_updateWeakWifiInfo`, `micro_hes/src/a17ex/station_setting/device_wifi_info_controller.dart::_syncStatePageOnDone`, `micro_hes/src/a17ex/station_setting/device_wifi_info_controller.dart::onReady`
+Called from:
+
+- `charging/http/http_request_repository.dart::getSiteWifiInfoRequest`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getSiteWifiInfo`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/system_wifi_info/system_wifi_info_logic.dart::getSiteWifiInfo`
+- `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::getSiteWifiInfo`
+- `device/src/station_setting/controller/common_station_wifi/page/device_wifi_info_setting_controller.dart::_syncStatePageOnDone`
+- `device/src/station_setting/controller/common_station_wifi/page/device_wifi_info_setting_controller.dart::onReady`
+- `device/src/station_setting/controller/common_station_wifi/page/wifi_management_controller.dart::_syncStatePageOnDone`
+- `device/src/station_setting/controller/common_station_wifi/page/wifi_management_controller.dart::onReady`
+- `device/src/station_setting/controller/common_station_wifi/page/wifi_management_page.dart::didPopNext`
+- `flutter_charging_beginning/beginning/state_cards/add_devices/select_power_device/select_power_device_controller.dart::_startWifiRefresh`
+- `micro_hes/src/a17e2/station/home/base_station_logic.dart::_updateWeakWifiInfo`
+- `micro_hes/src/a17ex/station_setting/device_wifi_info_controller.dart::_syncStatePageOnDone`
+- `micro_hes/src/a17ex/station_setting/device_wifi_info_controller.dart::onReady`
 
 ## Since/changed
 

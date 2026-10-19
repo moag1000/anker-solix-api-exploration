@@ -49,7 +49,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `setA2687ProtocolAgreementStatus` @0x35406a8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ak_iot_kit/business/A2687/service/a2687_device_info_service.dart::<anonymous closure>@0x3540538`, `charging/ak_iot_kit/business/A2687/service/a2687_device_info_service.dart::<anonymous closure>@0x3540844`, `charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_lab_function_logic.dart::setProtocolAgreementStatus`, `charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_new_lab_function_logic.dart::setProtocolAgreementStatus`
+Called from:
+
+- `charging/ak_iot_kit/business/A2687/service/a2687_device_info_service.dart::<anonymous closure>@0x3540538`
+- `charging/ak_iot_kit/business/A2687/service/a2687_device_info_service.dart::<anonymous closure>@0x3540844`
+- `charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_lab_function_logic.dart::setProtocolAgreementStatus`
+- `charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_new_lab_function_logic.dart::setProtocolAgreementStatus`
 
 ## Since/changed
 

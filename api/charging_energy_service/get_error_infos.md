@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getErrorInfos` @0x26ebfbc (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getErrorInfos`, `charging/ui/page/device/a17b1/a17b1system_test/system_test_logic.dart::handlerSelfCheckError`
+Called from:
+
+- `charging/http/http_request_repository.dart::getErrorInfos`
+- `charging/ui/page/device/a17b1/a17b1system_test/system_test_logic.dart::handlerSelfCheckError`
 
 ## Since/changed
 

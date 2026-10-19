@@ -46,7 +46,13 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getMessageDisturb` @0x273a54c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getMessageDisturb`, `charging/ui/page/message/settingDetail/ev_charger_message_setting_logic.dart::requestCloudPushMessageSetting`, `charging/ui/page/message/settingDetail/guardian_diary_message_setting_logic.dart::requestCloudPushMessageSetting`, `charging/ui/page/message/settingDetail/message_setting_detail_logic.dart::requestCloudMessageDisturb`, `charging/util/message_disturb_cache_util.dart::fetchAndCacheDisturbSetting`
+Called from:
+
+- `charging/http/http_request_repository.dart::getMessageDisturb`
+- `charging/ui/page/message/settingDetail/ev_charger_message_setting_logic.dart::requestCloudPushMessageSetting`
+- `charging/ui/page/message/settingDetail/guardian_diary_message_setting_logic.dart::requestCloudPushMessageSetting`
+- `charging/ui/page/message/settingDetail/message_setting_detail_logic.dart::requestCloudMessageDisturb`
+- `charging/util/message_disturb_cache_util.dart::fetchAndCacheDisturbSetting`
 
 ## Since/changed
 

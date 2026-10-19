@@ -54,7 +54,14 @@ n/a
 - `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart`: `getSupportLocation` @0x2a2fa38 (encryptionRequestHttp; encrypted: true)
 - `charging/http/http_request_repository_impl.dart`: `getLocationSupport` @0x2892e34 (encryptionRequestHttp; encrypted: true)
 
-Called from: `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart::goToMap`, `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart::onReady`, `charging/http/http_request_repository.dart::getLocationSupport`, `charging/ui/page/device/a17c5/ai_mode_condition/ai_mode_condition_logic.dart::getSupportLocation`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_home_settings_logic.dart::getSupportLocation`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/system_info/system_info_logic.dart::getSupportLocation`
+Called from:
+
+- `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart::goToMap`
+- `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart::onReady`
+- `charging/http/http_request_repository.dart::getLocationSupport`
+- `charging/ui/page/device/a17c5/ai_mode_condition/ai_mode_condition_logic.dart::getSupportLocation`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_home_settings_logic.dart::getSupportLocation`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/system_info/system_info_logic.dart::getSupportLocation`
 
 ## Since/changed
 

@@ -46,7 +46,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `checkDevicePopUpApi` @0x28c1464 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::checkDevicePopUpApi`, `charging/ui/page/device/a17c0/a17c0energyPlan/a17c0energy_plan_logic.dart::getCheckDevicePopUp`, `charging/ui/page/device/a17c1/energy_deploy/energy_deploy_logic.dart::getCheckDevicePopUp`, `charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getCheckDevicePopUp`
+Called from:
+
+- `charging/http/http_request_repository.dart::checkDevicePopUpApi`
+- `charging/ui/page/device/a17c0/a17c0energyPlan/a17c0energy_plan_logic.dart::getCheckDevicePopUp`
+- `charging/ui/page/device/a17c1/energy_deploy/energy_deploy_logic.dart::getCheckDevicePopUp`
+- `charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getCheckDevicePopUp`
 
 ## Since/changed
 

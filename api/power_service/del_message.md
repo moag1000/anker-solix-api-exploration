@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `delMessage` @0x3bb49a8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::delMessage`, `charging/ui/page/message/Main/message_main_logic.dart::deleteMsg`, `charging/ui/page/message/system/message_system_logic.dart::deleteMessage`
+Called from:
+
+- `charging/http/http_request_repository.dart::delMessage`
+- `charging/ui/page/message/Main/message_main_logic.dart::deleteMsg`
+- `charging/ui/page/message/system/message_system_logic.dart::deleteMessage`
 
 ## Since/changed
 

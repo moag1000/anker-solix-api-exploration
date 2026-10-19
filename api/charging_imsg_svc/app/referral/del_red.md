@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `delReferralRedDot` @0x46ada3c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::delReferralRedDot`, `charging/ui/page/user/main/user_main_page_logic.dart::_delReferralRedDot`
+Called from:
+
+- `charging/http/http_request_repository.dart::delReferralRedDot`
+- `charging/ui/page/user/main/user_main_page_logic.dart::_delReferralRedDot`
 
 ## Since/changed
 

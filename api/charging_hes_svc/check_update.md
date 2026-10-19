@@ -54,7 +54,15 @@ n/a
 - `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart`: `checkOtaVersion` @0x292d4d4 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/util/demosite_util_impl.dart`: `DemoSiteUtilImpl` @0x4a33a6c (URL literal only, no `*Http*` call)
 
-Called from: `charging/boostrap_impl.dart::DIInit`, `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart::updateDeviceStationId`, `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart::bottomButtonTap`, `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart::onReady`, `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart::resetDevice`, `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart::didPopNext`, `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart::onReady`
+Called from:
+
+- `charging/boostrap_impl.dart::DIInit`
+- `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart::updateDeviceStationId`
+- `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart::bottomButtonTap`
+- `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart::onReady`
+- `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart::resetDevice`
+- `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart::didPopNext`
+- `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart::onReady`
 
 ## Since/changed
 

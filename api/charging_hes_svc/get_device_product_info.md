@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getHesDeviceIcons` @0x26078cc (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getHesDeviceIcons`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::_initLogic`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onMessageDispatch`
+Called from:
+
+- `charging/http/http_request_repository.dart::getHesDeviceIcons`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::_initLogic`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onMessageDispatch`
 
 ## Since/changed
 

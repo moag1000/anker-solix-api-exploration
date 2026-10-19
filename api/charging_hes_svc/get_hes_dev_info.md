@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getHesDeviceList` @0x28e5dc0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getHesDeviceList`, `charging/ui/page/device/a5101/setting/sn_number/sn_number_logic.dart::_getSnList`
+Called from:
+
+- `charging/http/http_request_repository.dart::getHesDeviceList`
+- `charging/ui/page/device/a5101/setting/sn_number/sn_number_logic.dart::_getSnList`
 
 ## Since/changed
 

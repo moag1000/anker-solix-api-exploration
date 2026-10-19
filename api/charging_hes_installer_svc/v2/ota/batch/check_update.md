@@ -24,7 +24,6 @@ encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rul
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `path` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d200` |
-| `method` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d200` |
 | `param` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d200` |
 
 Rows are the union over 2 senders; `source` is the first sender that sets the key.

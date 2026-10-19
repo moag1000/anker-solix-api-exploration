@@ -46,7 +46,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `joinSite` @0x26075c0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::joinSite`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::shareSiteMembersDialog`, `charging/ui/page/message/messageSystemDetail/message_system_detail_logic.dart::shareSiteJoin`, `charging/ui/page/message/messageSystemDetail/message_system_detail_logic.dart::shareSiteRefuse`
+Called from:
+
+- `charging/http/http_request_repository.dart::joinSite`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::shareSiteMembersDialog`
+- `charging/ui/page/message/messageSystemDetail/message_system_detail_logic.dart::shareSiteJoin`
+- `charging/ui/page/message/messageSystemDetail/message_system_detail_logic.dart::shareSiteRefuse`
 
 ## Since/changed
 

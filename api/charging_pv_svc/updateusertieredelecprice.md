@@ -46,7 +46,9 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `updateUserTieredElecPrice` @0x304f960 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::updateUserTieredElecPrice`
+Called from:
+
+- `charging/http/http_request_repository.dart::updateUserTieredElecPrice`
 
 ## Since/changed
 

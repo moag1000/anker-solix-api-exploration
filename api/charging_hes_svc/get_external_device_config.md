@@ -49,7 +49,12 @@ n/a
 
 - `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart`: `getExternalDeviceList` @0x28dfd20 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart::addHeatPump`, `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart::didPopNext`, `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart::onReady`, `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart::pushPage`
+Called from:
+
+- `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart::addHeatPump`
+- `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart::didPopNext`
+- `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart::onReady`
+- `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart::pushPage`
 
 ## Since/changed
 

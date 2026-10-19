@@ -51,7 +51,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `registerRequest` @0x3be23dc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::registerRequest`, `charging/ui/page/account/register/register_logic.dart::register`
+Called from:
+
+- `charging/http/http_request_repository.dart::registerRequest`
+- `charging/ui/page/account/register/register_logic.dart::register`
 
 ## Since/changed
 

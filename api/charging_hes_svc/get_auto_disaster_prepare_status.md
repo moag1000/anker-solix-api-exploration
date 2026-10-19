@@ -50,7 +50,11 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `getAutoDisasterPrepareStatus` @0x34b6ba0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/util/demosite_util_impl.dart`: `DemoSiteUtilImpl` @0x4a33a6c (URL literal only, no `*Http*` call)
 
-Called from: `charging/boostrap_impl.dart::DIInit`, `charging/http/http_request_repository.dart::getAutoDisasterPrepareStatus`, `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::_getNetAutoDisasterPrepareStatus`
+Called from:
+
+- `charging/boostrap_impl.dart::DIInit`
+- `charging/http/http_request_repository.dart::getAutoDisasterPrepareStatus`
+- `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::_getNetAutoDisasterPrepareStatus`
 
 ## Since/changed
 

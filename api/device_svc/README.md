@@ -10,4 +10,4 @@ Service index for the URL prefix `/device_svc/`. Each endpoint page is the singl
 | [`/device_svc/v1/get_self_check_config`](get_self_check_config.md) | TODO | - | skeleton |
 | [`/device_svc/v1/get_url_by_country_code`](get_url_by_country_code.md) | TODO | - | skeleton |
 
-Not here: MQTT or BLE facts ([../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
+Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

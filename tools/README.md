@@ -27,10 +27,11 @@ python3 -I tools/model_fields.py       $N --version 3.24.3 --old-root $O   # dat
 python3 -I tools/param_types.py        $N --version 3.24.3                 # data/param_types.json
 python3 -I tools/diff_versions.py $O $N                                    # tools/out/diff_3.18.0_3.24.3.md
 python3 -I tools/render_pages.py                                           # tools/out/pages/{api,models}/
+python3 -I tools/service_index.py                                          # api/README.md + api/<service>/README.md
 python3 -I tools/smi.py <asm_file> <0xADDR> [--dump]                       # check one number by eye
 ```
 
-`data/*.json` is committed (envelope: `generated_by`, `app_version`, `snapshot`, `rows`; keys sorted). `tools/out/` is scratch and git-ignored. `render_pages.py` never writes into `api/` or `models/`: render into `tools/out/pages/`, then copy into `api/` with a no-clobber copy (`cp -n`, or a loop that skips existing files) so hand-written pages are never overwritten. It renders one page per distinct URL (all senders listed under "Callers in app"), including URLs removed in 3.24.3.
+`data/*.json` is committed (envelope: `generated_by`, `app_version`, `snapshot`, `rows`; keys sorted). `tools/out/` is scratch and git-ignored. `render_pages.py` never writes into `api/` or `models/`: render into `tools/out/pages/`, then copy into `api/` with a no-clobber copy (`cp -n`, or a loop that skips existing files) so hand-written pages are never overwritten. After copying, run `tools/service_index.py` (reads `data/endpoints.json` and the pages on disk, rewrites `api/README.md` and every `api/<service>/README.md`; idempotent, purpose column comes from each page's "Purpose" line). Page paths: `v1` is dropped, other version segments are kept ([../docs/STRUCTURE.md](../docs/STRUCTURE.md#naming-conventions)). `render_pages.py` renders one page per distinct URL (all senders listed under "Callers in app"), including URLs removed in 3.24.3.
 
 ## 3. Reading the output
 

@@ -52,7 +52,12 @@ n/a
 
 - `third_device/src/module/ae1x0/history/widget/meter_chart_logic.dart`: `requestChartData` @0x2ca26f8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `third_device/src/module/ae1x0/history/ae1x0_history_page.dart::didPop`, `third_device/src/module/ae1x0/history/widget/meter_chart_widget.dart::build`, `third_device/src/module/ae1x0/history/widget/meter_chart_widget.dart::initState`, `third_device/src/module/ae1x0/home/ae1x0_home_logic.dart::_updateWifiSignal`
+Called from:
+
+- `third_device/src/module/ae1x0/history/ae1x0_history_page.dart::didPop`
+- `third_device/src/module/ae1x0/history/widget/meter_chart_widget.dart::build`
+- `third_device/src/module/ae1x0/history/widget/meter_chart_widget.dart::initState`
+- `third_device/src/module/ae1x0/home/ae1x0_home_logic.dart::_updateWifiSignal`
 
 ## Since/changed
 

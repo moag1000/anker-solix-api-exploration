@@ -53,7 +53,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getAlexaLinkCodeRequest` @0x3bce744 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getAlexaLinkCodeRequest`, `charging/ui/page/account/login/alexa_link_logic.dart::getAlexaLinkCode`
+Called from:
+
+- `charging/http/http_request_repository.dart::getAlexaLinkCodeRequest`
+- `charging/ui/page/account/login/alexa_link_logic.dart::getAlexaLinkCode`
 
 ## Since/changed
 

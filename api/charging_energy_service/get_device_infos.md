@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getDeviceInfos` @0x25f9824 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getDeviceInfos`, `charging/ui/page/station/A17b1/a17b1_station_logic.dart::onA1790CardPressed`
+Called from:
+
+- `charging/http/http_request_repository.dart::getDeviceInfos`
+- `charging/ui/page/station/A17b1/a17b1_station_logic.dart::onA1790CardPressed`
 
 ## Since/changed
 

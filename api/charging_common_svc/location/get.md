@@ -57,7 +57,15 @@ n/a
 - `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart`: `_fetchLocation` @0x2e8cf84 (encryptionRequestHttp; encrypted: true)
 - `unity/src/main/weather/weather_manager.dart`: `fetchDefaultLocation` @0x451c05c (encryptionRequestHttp; encrypted: true)
 
-Called from: `electricity_price/components/dynamic_price/setting/electricty_place_smart_view.dart::_refreshAutoDisasterLocation`, `electricity_price/components/dynamic_price/setting/electricty_place_smart_view.dart::_updateAutoDisasterLocation`, `electricity_price/components/dynamic_price/util/place_selection_helper.dart::_loadInitialPlace`, `electricity_price/components/dynamic_price/util/place_selection_helper.dart::_loadSelectedPlace`, `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart::beginTapFlow`, `station_home/src/weather/weather_service.dart::_fetchWeatherData`, `unity/src/main/weather/weather_display_view.dart::_navigateToPlaceSelectionView`
+Called from:
+
+- `electricity_price/components/dynamic_price/setting/electricty_place_smart_view.dart::_refreshAutoDisasterLocation`
+- `electricity_price/components/dynamic_price/setting/electricty_place_smart_view.dart::_updateAutoDisasterLocation`
+- `electricity_price/components/dynamic_price/util/place_selection_helper.dart::_loadInitialPlace`
+- `electricity_price/components/dynamic_price/util/place_selection_helper.dart::_loadSelectedPlace`
+- `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart::beginTapFlow`
+- `station_home/src/weather/weather_service.dart::_fetchWeatherData`
+- `unity/src/main/weather/weather_display_view.dart::_navigateToPlaceSelectionView`
 
 ## Since/changed
 

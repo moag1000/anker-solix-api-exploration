@@ -47,7 +47,10 @@ n/a
 
 - `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart`: `_handleNewOtaVersion` @0x23b06a0 (requestHttp; encrypted: default-true (requestHttp) — verify); `_updateVersionInfo` @0x23b895c (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart::_handleOTAVersion`, `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart::_listenEvenBus`
+Called from:
+
+- `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart::_handleOTAVersion`
+- `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart::_listenEvenBus`
 
 ## Since/changed
 

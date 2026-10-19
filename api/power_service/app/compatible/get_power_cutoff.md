@@ -54,7 +54,12 @@ n/a
 - `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart`: `requestSoc` @0x3454154 (encryptionRequestHttp; encrypted: true)
 - `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`: `requestSoc` @0x244434c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart::requestInfo`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::_preloadSettingsData`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::requestInfo`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getSolarBankParticleData`
+Called from:
+
+- `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart::requestInfo`
+- `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::_preloadSettingsData`
+- `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::requestInfo`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getSolarBankParticleData`
 
 ## Since/changed
 

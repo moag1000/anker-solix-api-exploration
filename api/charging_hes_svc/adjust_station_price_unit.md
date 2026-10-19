@@ -51,7 +51,10 @@ n/a
 - `base_service/api_url.dart`: `adjustStationPriceUnit` @0x29ae7dc (URL literal only, no `*Http*` call)
 - `charging/http/http_request_repository_impl.dart`: `changePriceUnit` @0x3ecf954 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::changePriceUnit`, `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart::switchPriceUnit`
+Called from:
+
+- `charging/http/http_request_repository.dart::changePriceUnit`
+- `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart::switchPriceUnit`
 
 ## Since/changed
 

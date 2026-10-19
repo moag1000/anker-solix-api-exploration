@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getPortRemarks` @0x3473abc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getPortRemarks`, `charging/ui/page/device/a2345/a2345home/a2345home_logic.dart::getDevicePortNames`
+Called from:
+
+- `charging/http/http_request_repository.dart::getPortRemarks`
+- `charging/ui/page/device/a2345/a2345home/a2345home_logic.dart::getDevicePortNames`
 
 ## Since/changed
 

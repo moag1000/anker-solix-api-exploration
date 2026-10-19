@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getA2345CustomClockScreenSaversRealUrl` @0x26c8af0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/clock_style_manage_logic.dart::_getRealUrl`, `small_charging_platform/src/screen_setting/clock_style/page/clock_style_logic.dart::_getRealUrl`
+Called from:
+
+- `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/clock_style_manage_logic.dart::_getRealUrl`
+- `small_charging_platform/src/screen_setting/clock_style/page/clock_style_logic.dart::_getRealUrl`
 
 ## Since/changed
 

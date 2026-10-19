@@ -58,7 +58,15 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `setEvChargerPushMessage` @0x402b348 (encryptionRequestHttp; encrypted: true); `setMessageDisturb` @0x402c798 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::setEvChargerPushMessage`, `charging/http/http_request_repository.dart::setMessageDisturb`, `charging/ui/page/message/settingDetail/ev_charger_message_setting_logic.dart::chargerPushMessageHasChanged`, `charging/ui/page/message/settingDetail/guardian_diary_message_setting_logic.dart::guardianDiaryPushValueChange`, `charging/ui/page/message/settingDetail/message_setting_detail_logic.dart::disturbHasChanged`, `charging/ui/page/message/settingDetail/message_setting_detail_logic.dart::showEndPicker`, `charging/ui/page/message/settingDetail/message_setting_detail_logic.dart::showStartPicker`
+Called from:
+
+- `charging/http/http_request_repository.dart::setEvChargerPushMessage`
+- `charging/http/http_request_repository.dart::setMessageDisturb`
+- `charging/ui/page/message/settingDetail/ev_charger_message_setting_logic.dart::chargerPushMessageHasChanged`
+- `charging/ui/page/message/settingDetail/guardian_diary_message_setting_logic.dart::guardianDiaryPushValueChange`
+- `charging/ui/page/message/settingDetail/message_setting_detail_logic.dart::disturbHasChanged`
+- `charging/ui/page/message/settingDetail/message_setting_detail_logic.dart::showEndPicker`
+- `charging/ui/page/message/settingDetail/message_setting_detail_logic.dart::showStartPicker`
 
 ## Since/changed
 

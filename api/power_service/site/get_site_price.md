@@ -61,7 +61,32 @@ n/a
 - `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart`: `<anonymous closure> in TOUPlanLogic::getDataFromAPi` @0x2c49658 (URL literal only, no `*Http*` call); `getDataFromAPi` @0x2c49144 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart`: `<anonymous closure> in GeneralPriceSettingLogic::getDevicePriceType` @0x29a4e04 (URL literal only, no `*Http*` call); `getDevicePriceType` @0x29a4974 (encryptionRequestHttp; encrypted: true); `getPriceTypeUrl` @0x29a4d20 (URL literal only, no `*Http*` call)
 
-Called from: `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart::onReady`, `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart::refreshPagePurely`, `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::onReady`, `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::requestSitePriceType`, `ak_soft_ems/ems_list/power_usage_scenario_page.dart::didPopNext`, `charging/feature/utilitiy_rate_plan/station_price_mode/station_price_mode_logic.dart::getSitePrice`, `charging/http/http_request_repository.dart::getSitePriceRequest`, `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::getCurrency`, `charging/ui/page/device/a1782/station/setting/menu_controller/electricity_price_controller.dart::onTapMenu`, `charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::getCurrency`, `charging/ui/page/device/a17c5/ai_mode_condition/ai_mode_condition_logic.dart::getSitePrice`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getAiModeStatus`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/electricity_price/electricity_price_logic.dart::getSitePrice`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getPriceType`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getSitePrice`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_home_settings_logic.dart::getPriceType`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/utility_rate_plan/site_utility_rate_plan_logic.dart::getSitePrice`, `charging/ui/page/device/main/station_device_home/station_price_setting/station_price_setting_logic.dart::getSitePrice`, `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::parserRouterInfo`, `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::updateData`, `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::getDevicePriceType`, `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::onReady`, `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::setFixedPriceV2`, `electricity_price/components/tou/page/tou_result_view/tou_result/tou_result_logic.dart::onReady`
+Called from:
+
+- `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart::onReady`
+- `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart::refreshPagePurely`
+- `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::onReady`
+- `ak_soft_ems/ems_list/power_usage_scenario_controller.dart::requestSitePriceType`
+- `ak_soft_ems/ems_list/power_usage_scenario_page.dart::didPopNext`
+- `charging/feature/utilitiy_rate_plan/station_price_mode/station_price_mode_logic.dart::getSitePrice`
+- `charging/http/http_request_repository.dart::getSitePriceRequest`
+- `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::getCurrency`
+- `charging/ui/page/device/a1782/station/setting/menu_controller/electricity_price_controller.dart::onTapMenu`
+- `charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::getCurrency`
+- `charging/ui/page/device/a17c5/ai_mode_condition/ai_mode_condition_logic.dart::getSitePrice`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getAiModeStatus`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/electricity_price/electricity_price_logic.dart::getSitePrice`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getPriceType`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getSitePrice`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_home_settings_logic.dart::getPriceType`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/utility_rate_plan/site_utility_rate_plan_logic.dart::getSitePrice`
+- `charging/ui/page/device/main/station_device_home/station_price_setting/station_price_setting_logic.dart::getSitePrice`
+- `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::parserRouterInfo`
+- `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart::updateData`
+- `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::getDevicePriceType`
+- `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::onReady`
+- `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::setFixedPriceV2`
+- `electricity_price/components/tou/page/tou_result_view/tou_result/tou_result_logic.dart::onReady`
 
 ## Since/changed
 

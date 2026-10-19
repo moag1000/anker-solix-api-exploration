@@ -234,6 +234,52 @@ class RenderTests(unittest.TestCase):
                 {'rows': rows}, {'rows': []}, td, '2026-10-19')
         self.assertEqual(n_ep, len({r['url'] for r in rows}))
 
+    def test_path_scheme_keeps_non_v1_versions(self):
+        import render_pages
+        ep = render_pages.endpoint_path
+        self.assertEqual(ep('/power_service/v2/device/energy_options'),
+                         'api/power_service/v2/device/energy_options.md')
+        self.assertEqual(
+            ep('/charging_hes_installer_svc/v2/app/third/platform/list'),
+            'api/charging_hes_installer_svc/v2/app/third/platform/list.md')
+        self.assertEqual(ep('/v2/anka/history/get_msg'),
+                         'api/v2/anka/history/get_msg.md')
+        self.assertEqual(ep('/power_service/v1/site/get_power_limit'),
+                         'api/power_service/site/get_power_limit.md')
+        urls = {r['url'] for r in inventory_new()['rows']}
+        paths = [ep(u) for u in urls]
+        self.assertEqual(len(paths), len(set(paths)))
+
+    def test_noise_keys_filtered_from_request_table(self):
+        import render_pages
+        for k in ('url', 'method', 'useWebsocket', 'isAIotEnv', 'fixedPrice:',
+                  'a.value.isEmpty:', ' salePrice'):
+            self.assertTrue(render_pages.is_noise_key(k), k)
+        self.assertFalse(render_pages.is_noise_key('site_id'))
+        base = dict(
+            addr='0x1', callers=[], cmd=None, dart_file='x/y.dart', encrypted=True,
+            encryption_note=None, envelope=[], function='f', http_callees=['A::b'],
+            param_data_is_json=False, param_type=None, params=['site_id', 'method',
+            'url', 'fixedPrice:'], role='sender', since='3.24.3', url='/s/v1/a/b',
+            url_addr='0x2')
+        page = render_pages.render_endpoint([base], date='2026-10-19')
+        self.assertIn('| `site_id` |', page)
+        for k in ('method', 'url', 'fixedPrice:'):
+            self.assertNotIn('| `%s` |' % k, page)
+
+    def test_service_index_idempotent(self):
+        import service_index, tempfile, shutil
+        inv = inventory_new()
+        with tempfile.TemporaryDirectory() as td:
+            api = os.path.join(td, 'api')
+            shutil.copytree(os.path.join(REPO, 'api'), api)
+            first, _ = service_index.build(inv, api)
+            for path, text in first.items():
+                with open(path, 'w', encoding='utf-8') as fh:
+                    fh.write(text)
+            second, _ = service_index.build(inv, api)
+            self.assertEqual(first, second)
+
 
 SYNTH = """// lib: , url: package:x/y.dart
 

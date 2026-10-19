@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getAllQaEnvConfig` @0x2986280 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getAllQaEnvConfig`, `charging/ui/page/user/envList/env_list_page_logic.dart::getAllEnvList`
+Called from:
+
+- `charging/http/http_request_repository.dart::getAllQaEnvConfig`
+- `charging/ui/page/user/envList/env_list_page_logic.dart::getAllEnvList`
 
 ## Since/changed
 

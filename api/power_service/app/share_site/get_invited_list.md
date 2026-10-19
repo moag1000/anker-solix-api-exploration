@@ -49,7 +49,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getInviteMember` @0x2916284 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getInviteMember`, `charging/ui/page/user/share_site/home_center/home_center_logic.dart::getInviteMemberAlreadyInvited`, `charging/ui/page/user/share_site/home_center/home_center_logic.dart::getInviteMemberInviting`
+Called from:
+
+- `charging/http/http_request_repository.dart::getInviteMember`
+- `charging/ui/page/user/share_site/home_center/home_center_logic.dart::getInviteMemberAlreadyInvited`
+- `charging/ui/page/user/share_site/home_center/home_center_logic.dart::getInviteMemberInviting`
 
 ## Since/changed
 

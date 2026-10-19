@@ -67,7 +67,9 @@ n/a
 
 - `anka_agent/pages/home/controller/ai_chat_controller.dart`: `getHomePageInitData` @0x35c9f48 (URL literal only, no `*Http*` call)
 
-Called from: `anka_agent/pages/home/controller/ai_chat_controller.dart::initAnkaAgentKit`
+Called from:
+
+- `anka_agent/pages/home/controller/ai_chat_controller.dart::initAnkaAgentKit`
 
 ## Since/changed
 

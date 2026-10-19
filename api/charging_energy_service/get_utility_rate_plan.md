@@ -49,7 +49,13 @@ n/a
 - `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/a17b1_utility_rate_plan_logic.dart`: `_getRatePlanData` @0x293842c (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart`: `_getSystemPolicySetting` @0x288cf18 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::_getSiteConfig`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::didPopNext`, `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/a17b1_utility_rate_plan_logic.dart::onReady`, `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart::didPopNext`, `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart::requestSiteConfig`
+Called from:
+
+- `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::_getSiteConfig`
+- `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::didPopNext`
+- `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/a17b1_utility_rate_plan_logic.dart::onReady`
+- `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart::didPopNext`
+- `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart::requestSiteConfig`
 
 ## Since/changed
 

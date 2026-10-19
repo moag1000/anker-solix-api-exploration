@@ -46,7 +46,13 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `deleteSite` @0x30c53a0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::deleteSite`, `charging/ui/page/device/a17b1/system_info/system_info_logic.dart::deleteSiteRes`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/system_info/system_info_logic.dart::deleteSiteRes`, `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::deleteSiteRes`, `charging/ui/page/user/share_site/home_center/home_center_logic.dart::deleteSiteRes`
+Called from:
+
+- `charging/http/http_request_repository.dart::deleteSite`
+- `charging/ui/page/device/a17b1/system_info/system_info_logic.dart::deleteSiteRes`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/system_info/system_info_logic.dart::deleteSiteRes`
+- `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::deleteSiteRes`
+- `charging/ui/page/user/share_site/home_center/home_center_logic.dart::deleteSiteRes`
 
 ## Since/changed
 

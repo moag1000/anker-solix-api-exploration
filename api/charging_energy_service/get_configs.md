@@ -49,7 +49,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getSiteConfigs` @0x2890b84 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getSiteConfigs`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::_getSiteConfig`, `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/a17b1_utility_rate_plan_logic.dart::_getSiteConfig`, `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart::requestSiteConfig`
+Called from:
+
+- `charging/http/http_request_repository.dart::getSiteConfigs`
+- `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::_getSiteConfig`
+- `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/a17b1_utility_rate_plan_logic.dart::_getSiteConfig`
+- `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart::requestSiteConfig`
 
 ## Since/changed
 

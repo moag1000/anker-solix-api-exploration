@@ -48,7 +48,9 @@ n/a
 
 - `charging/http/user/profile/profile_http_request_repository_impl.dart`: `getShopUrlFromCountryCode` @0x2988680 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/user/main/user_main_page_logic.dart::requestShopLink`
+Called from:
+
+- `charging/ui/page/user/main/user_main_page_logic.dart::requestShopLink`
 
 ## Since/changed
 

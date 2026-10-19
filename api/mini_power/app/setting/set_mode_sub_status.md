@@ -51,7 +51,9 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `setA2687ModeSubStatus` @0x38aa3fc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_charge_mode_logic.dart::setModeSubStatus`
+Called from:
+
+- `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_charge_mode_logic.dart::setModeSubStatus`
 
 ## Since/changed
 

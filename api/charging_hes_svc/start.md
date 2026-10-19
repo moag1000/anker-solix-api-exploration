@@ -49,7 +49,9 @@ n/a
 
 - `charging/ui/page/device/a5101/setting/remote_switch/remote_switch_logic.dart`: `remoteRequestDeviceStart` @0x3ea956c (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/device/a5101/setting/remote_switch/remote_switch_logic.dart::chooseEvent`
+Called from:
+
+- `charging/ui/page/device/a5101/setting/remote_switch/remote_switch_logic.dart::chooseEvent`
 
 ## Since/changed
 

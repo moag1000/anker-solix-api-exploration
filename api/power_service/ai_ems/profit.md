@@ -55,7 +55,10 @@ n/a
 - `ak_soft_ems/aiems/api/ai_ems_request.dart`: `getProfitInfo` @0x27e20b4 (URL literal only, no `*Http*` call)
 - `charging/http/http_request_repository_impl.dart`: `getAiEmsProfit` @0x2925858 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getAiEmsProfit`, `charging/ui/page/device/a17c1/cost_savings/cost_savings_logic.dart::getAiProfit`
+Called from:
+
+- `charging/http/http_request_repository.dart::getAiEmsProfit`
+- `charging/ui/page/device/a17c1/cost_savings/cost_savings_logic.dart::getAiProfit`
 
 ## Since/changed
 

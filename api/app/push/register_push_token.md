@@ -50,7 +50,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `uploadDeviceToken` @0x2741818 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::uploadDeviceToken`, `charging/http/http_request_repository_impl.dart::uploadDeviceToken`
+Called from:
+
+- `charging/http/http_request_repository.dart::uploadDeviceToken`
+- `charging/http/http_request_repository_impl.dart::uploadDeviceToken`
 
 ## Since/changed
 

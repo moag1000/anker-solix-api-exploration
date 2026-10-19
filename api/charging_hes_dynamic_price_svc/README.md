@@ -13,4 +13,4 @@ Service index for the URL prefix `/charging_hes_dynamic_price_svc/`. Each endpoi
 | [`/charging_hes_dynamic_price_svc/save_dynamic_price`](save_dynamic_price.md) | TODO | - | skeleton |
 | [`/charging_hes_dynamic_price_svc/save_time_of_use`](save_time_of_use.md) | TODO | - | skeleton |
 
-Not here: MQTT or BLE facts ([../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
+Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

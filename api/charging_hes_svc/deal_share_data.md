@@ -49,7 +49,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `agreeOrRefuseVppDisclaimer` @0x3edb5c8 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::agreeOrRefuseVppDisclaimer`, `charging/ui/page/device/a5101/setting/vpp/controller.dart::agreeOrRefuseVpp`
+Called from:
+
+- `charging/http/http_request_repository.dart::agreeOrRefuseVppDisclaimer`
+- `charging/ui/page/device/a5101/setting/vpp/controller.dart::agreeOrRefuseVpp`
 
 ## Since/changed
 

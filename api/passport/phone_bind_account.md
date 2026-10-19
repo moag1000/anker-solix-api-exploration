@@ -53,7 +53,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `bindPhoneNumberRequest` @0x3bc2f9c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::bindPhoneNumberRequest`, `charging/ui/page/account/bind_phone_number/bind_phone_number_logic.dart::bindPhoneNumberWithApple`, `charging/ui/page/account/bind_phone_number/bind_phone_number_logic.dart::bindPhoneNumberWithWechat`
+Called from:
+
+- `charging/http/http_request_repository.dart::bindPhoneNumberRequest`
+- `charging/ui/page/account/bind_phone_number/bind_phone_number_logic.dart::bindPhoneNumberWithApple`
+- `charging/ui/page/account/bind_phone_number/bind_phone_number_logic.dart::bindPhoneNumberWithWechat`
 
 ## Since/changed
 

@@ -46,7 +46,9 @@ n/a
 
 - `charging/http/user/about/about_http_request_repository_impl.dart`: `getPersonalizationOptionsApi` @0x298e7d8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/user/about/personalizationOptions/personalization_options_logic.dart::requestPersonalizationOptionsStatus`
+Called from:
+
+- `charging/ui/page/user/about/personalizationOptions/personalization_options_logic.dart::requestPersonalizationOptionsStatus`
 
 ## Since/changed
 

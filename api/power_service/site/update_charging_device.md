@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `updateChargingDevice` @0x3bf49d4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::updateChargingDevice`, `charging/ui/page/device/a1340/a1340add_device/a1340add_device_logic.dart::updateChargeDevice`
+Called from:
+
+- `charging/http/http_request_repository.dart::updateChargingDevice`
+- `charging/ui/page/device/a1340/a1340add_device/a1340add_device_logic.dart::updateChargeDevice`
 
 ## Since/changed
 

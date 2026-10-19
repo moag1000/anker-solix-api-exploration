@@ -49,7 +49,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `checkSolarForceUpdateState` @0x26734ec (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::checkSolarForceUpdateState`, `charging/ui/page/device/a17c0/a17c0home/a17c0home_logic.dart::checkSolarForceUpdate`, `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart::checkSolarForceUpdate`, `charging/ui/page/device/connect/zx_config_wifi_success/zx_config_wifi_succees_logic.dart::checkSolarForceUpdate`
+Called from:
+
+- `charging/http/http_request_repository.dart::checkSolarForceUpdateState`
+- `charging/ui/page/device/a17c0/a17c0home/a17c0home_logic.dart::checkSolarForceUpdate`
+- `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart::checkSolarForceUpdate`
+- `charging/ui/page/device/connect/zx_config_wifi_success/zx_config_wifi_succees_logic.dart::checkSolarForceUpdate`
 
 ## Since/changed
 

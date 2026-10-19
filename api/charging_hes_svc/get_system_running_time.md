@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getDeviceRunTime` @0x293a034 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getDeviceRunTime`, `charging/ui/page/device/a5101/setting/system_info/system_info_logic.dart::_getSystemRunTime`
+Called from:
+
+- `charging/http/http_request_repository.dart::getDeviceRunTime`
+- `charging/ui/page/device/a5101/setting/system_info/system_info_logic.dart::_getSystemRunTime`
 
 ## Since/changed
 

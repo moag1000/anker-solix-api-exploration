@@ -46,7 +46,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `updateUserProfileRequest` @0x403b524 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::updateUserProfileRequest`, `charging/ui/page/user/accountSetting/account_setting_page_logic.dart::changeNickname`, `charging/ui/page/user/accountSetting/account_setting_page_logic.dart::changePhoneNumber`, `charging/ui/page/user/language/language_logic.dart::updateLanguage`
+Called from:
+
+- `charging/http/http_request_repository.dart::updateUserProfileRequest`
+- `charging/ui/page/user/accountSetting/account_setting_page_logic.dart::changeNickname`
+- `charging/ui/page/user/accountSetting/account_setting_page_logic.dart::changePhoneNumber`
+- `charging/ui/page/user/language/language_logic.dart::updateLanguage`
 
 ## Since/changed
 

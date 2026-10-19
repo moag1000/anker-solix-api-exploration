@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getWifiInfoOf17B1` @0x344b324 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getWifiInfoOf17B1`, `charging/ui/page/device/a17b1/wifi_info/wifi_info_logic.dart::_getWifiInfo`
+Called from:
+
+- `charging/http/http_request_repository.dart::getWifiInfoOf17B1`
+- `charging/ui/page/device/a17b1/wifi_info/wifi_info_logic.dart::_getWifiInfo`
 
 ## Since/changed
 

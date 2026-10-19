@@ -50,7 +50,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `checkUpgradeRecord` @0x2913854 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::checkUpgradeRecord`, `charging/ui/page/device/anker_ota/ats_ota/ats_ota_logic.dart::getCheckUpgradeRecordApi`, `charging/ui/page/device/anker_ota/base/anker_ota_base_logic.dart::getCheckUpgradeRecordApi`, `charging/ui/page/user/firmware_updates/firmware_updates_page/firmware_updates_logic.dart::getCheckUpgradeRecord`
+Called from:
+
+- `charging/http/http_request_repository.dart::checkUpgradeRecord`
+- `charging/ui/page/device/anker_ota/ats_ota/ats_ota_logic.dart::getCheckUpgradeRecordApi`
+- `charging/ui/page/device/anker_ota/base/anker_ota_base_logic.dart::getCheckUpgradeRecordApi`
+- `charging/ui/page/user/firmware_updates/firmware_updates_page/firmware_updates_logic.dart::getCheckUpgradeRecord`
 
 ## Since/changed
 

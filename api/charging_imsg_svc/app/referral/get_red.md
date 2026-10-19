@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getReferralRedDot` @0x34e66e4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getReferralRedDot`, `charging/ui/page/user/main/user_main_page_logic.dart::_requestReferralRedDot`
+Called from:
+
+- `charging/http/http_request_repository.dart::getReferralRedDot`
+- `charging/ui/page/user/main/user_main_page_logic.dart::_requestReferralRedDot`
 
 ## Since/changed
 

@@ -46,7 +46,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getMessageUnread` @0x297b55c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getMessageUnread`, `charging/ui/page/home/home_base_logic.dart::initBadge`, `charging/ui/page/message/Main/message_main_logic.dart::getMessageReadStatus`, `charging/ui/page/message/system/message_system_logic.dart::getMessageReadStatus`
+Called from:
+
+- `charging/http/http_request_repository.dart::getMessageUnread`
+- `charging/ui/page/home/home_base_logic.dart::initBadge`
+- `charging/ui/page/message/Main/message_main_logic.dart::getMessageReadStatus`
+- `charging/ui/page/message/system/message_system_logic.dart::getMessageReadStatus`
 
 ## Since/changed
 

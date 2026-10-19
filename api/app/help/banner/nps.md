@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getNpsSurveyList` @0x22a7b88 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getNpsSurveyList`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getNpsBannerData`, `charging/ui/page/user/discover/user_discover_logic.dart::getNpsBannerData`
+Called from:
+
+- `charging/http/http_request_repository.dart::getNpsSurveyList`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getNpsBannerData`
+- `charging/ui/page/user/discover/user_discover_logic.dart::getNpsBannerData`
 
 ## Since/changed
 

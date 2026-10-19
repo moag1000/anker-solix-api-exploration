@@ -51,7 +51,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getDynamicPriceDetail` @0x26e3cbc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/feature/utilitiy_rate_plan/dynamic_price/detail/dynamic_price_detail_logic.dart::requestDynamicPriceDetail`, `charging/http/http_request_repository.dart::getDynamicPriceDetail`, `charging/impl/http_service_impl.dart::getDynamicPriceDetail`
+Called from:
+
+- `charging/feature/utilitiy_rate_plan/dynamic_price/detail/dynamic_price_detail_logic.dart::requestDynamicPriceDetail`
+- `charging/http/http_request_repository.dart::getDynamicPriceDetail`
+- `charging/impl/http_service_impl.dart::getDynamicPriceDetail`
 
 ## Since/changed
 

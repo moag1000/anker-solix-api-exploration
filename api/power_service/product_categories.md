@@ -46,7 +46,16 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getProductCategories` @0x2619a10 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getProductCategories`, `charging/impl/http_service_impl.dart::getProductCategories`, `charging/ui/page/device/a5150/wifiConfig/a5150_deploy_wifi_logic.dart::_getApGuideImageFromCloud`, `charging/ui/page/device/connect/scan_logic.dart::onInit`, `charging/ui/page/device/main/sitation_energy_system/scan_appoint_device/scan_appoint_device_logic.dart::onInit`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::_initLogic`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onMessageDispatch`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::pullToRefresh`
+Called from:
+
+- `charging/http/http_request_repository.dart::getProductCategories`
+- `charging/impl/http_service_impl.dart::getProductCategories`
+- `charging/ui/page/device/a5150/wifiConfig/a5150_deploy_wifi_logic.dart::_getApGuideImageFromCloud`
+- `charging/ui/page/device/connect/scan_logic.dart::onInit`
+- `charging/ui/page/device/main/sitation_energy_system/scan_appoint_device/scan_appoint_device_logic.dart::onInit`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::_initLogic`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onMessageDispatch`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::pullToRefresh`
 
 ## Since/changed
 

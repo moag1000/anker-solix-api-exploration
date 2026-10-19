@@ -49,7 +49,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `changePwdRequest` @0x4041e8c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::changePwdRequest`, `charging/ui/page/user/changePassword/user_change_password_logic.dart::changePassword`
+Called from:
+
+- `charging/http/http_request_repository.dart::changePwdRequest`
+- `charging/ui/page/user/changePassword/user_change_password_logic.dart::changePassword`
 
 ## Since/changed
 

@@ -48,7 +48,9 @@ n/a
 
 - `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart`: `_updateRevenueStatus` @0x2e8dd9c (encryptionRequestHttp; encrypted: true)
 
-Called from: `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart::completeTapFlow`
+Called from:
+
+- `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart::completeTapFlow`
 
 ## Since/changed
 

@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getPreDirectionPhoneCode` @0x34e8f48 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/common_business/sms/sms_manager.dart::getDirectionPhoneNum`, `charging/http/http_request_repository.dart::getPreDirectionPhoneCode`
+Called from:
+
+- `charging/common_business/sms/sms_manager.dart::getDirectionPhoneNum`
+- `charging/http/http_request_repository.dart::getPreDirectionPhoneCode`
 
 ## Since/changed
 

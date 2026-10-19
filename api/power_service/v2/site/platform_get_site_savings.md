@@ -53,7 +53,10 @@ n/a
 - `charging/ui/page/device/a17e2/benifits/a17e2_benifits_http_repository.dart`: `getChartStatistics` @0x2a47fd4 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `station_home/src/ui/shared/income/income_detail/income_detail_controller.dart`: `getChartStatistics` @0x2a43540 (request; encrypted: default-true (requestHttp) — verify)
 
-Called from: `station_home/src/ui/shared/income/income_detail/income_detail_controller.dart::_executeChartDataRequest`, `station_home/src/ui/shared/income/income_detail/income_detail_controller.dart::_updateCurrentMonthDataIfNeeded`
+Called from:
+
+- `station_home/src/ui/shared/income/income_detail/income_detail_controller.dart::_executeChartDataRequest`
+- `station_home/src/ui/shared/income/income_detail/income_detail_controller.dart::_updateCurrentMonthDataIfNeeded`
 
 ## Since/changed
 

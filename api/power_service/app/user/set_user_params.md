@@ -48,7 +48,9 @@ n/a
 
 - `charging/http/user/about/about_http_request_repository_impl.dart`: `setPersonalizationOptionsApi` @0x4036308 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/user/about/personalizationOptions/personalization_options_logic.dart::setPersonalizationOptionsStatus`
+Called from:
+
+- `charging/ui/page/user/about/personalizationOptions/personalization_options_logic.dart::setPersonalizationOptionsStatus`
 
 ## Since/changed
 

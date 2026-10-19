@@ -46,7 +46,10 @@ n/a
 
 - `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart`: `getThirdPartyPlatformList` @0x24e60d8 (URL literal only, no `*Http*` call)
 
-Called from: `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart::afterPermissionEnable`, `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart::onInit`
+Called from:
+
+- `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart::afterPermissionEnable`
+- `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart::onInit`
 
 ## Since/changed
 

@@ -50,7 +50,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `editA2345CustomClockScreenSaversName` @0x3e22940 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::editA2345CustomClockScreenSaversName`, `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart::_saveScreenName`
+Called from:
+
+- `charging/http/http_request_repository.dart::editA2345CustomClockScreenSaversName`
+- `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart::_saveScreenName`
 
 ## Since/changed
 

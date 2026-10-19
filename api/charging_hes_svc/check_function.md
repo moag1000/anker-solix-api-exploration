@@ -50,7 +50,11 @@ n/a
 - `base_service/api_url.dart`: `checkFunction` @0x2349c50 (URL literal only, no `*Http*` call)
 - `charging/http/http_request_repository_impl.dart`: `checkFunction` @0x28e7e58 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::checkFunction`, `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart::_checkNemFunction`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::getLatestSystemFunction`
+Called from:
+
+- `charging/http/http_request_repository.dart::checkFunction`
+- `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart::_checkNemFunction`
+- `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart::getLatestSystemFunction`
 
 ## Since/changed
 

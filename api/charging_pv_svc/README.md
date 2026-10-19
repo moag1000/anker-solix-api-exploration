@@ -14,4 +14,4 @@ Service index for the URL prefix `/charging_pv_svc/`. Each endpoint page is the 
 | [`/charging_pv_svc/statisticsPv`](statisticspv.md) | TODO | `get_device_pv_statistics` | skeleton |
 | [`/charging_pv_svc/updateUserTieredElecPrice`](updateusertieredelecprice.md) | TODO | `set_device_pv_price` | skeleton |
 
-Not here: MQTT or BLE facts ([../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
+Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

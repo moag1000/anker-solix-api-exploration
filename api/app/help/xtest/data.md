@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `postJML` @0x22682ac (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::postJML`, `charging/ui/page/user/main/user_main_page_logic.dart::_requestJMLInfoByAnker`
+Called from:
+
+- `charging/http/http_request_repository.dart::postJML`
+- `charging/ui/page/user/main/user_main_page_logic.dart::_requestJMLInfoByAnker`
 
 ## Since/changed
 

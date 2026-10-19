@@ -25,7 +25,6 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 |---|---|---|---|---|
 | `product_code` | ? | ? | ? | `base_service/view/grid/grid_param_util.dart @0x28f5f1c` |
 | `path` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart @0x2b07c9c` |
-| `method` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart @0x2b07c9c` |
 | `param` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart @0x2b07c9c` |
 
 Rows are the union over 2 senders; `source` is the first sender that sets the key.
@@ -55,7 +54,13 @@ n/a
 - `base_service/view/grid/grid_param_util.dart`: `requestRegionCodes` @0x28f5f1c (encryptionRequestHttp; encrypted: true)
 - `flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart`: `<anonymous closure> in PowerPlantConfigController::requestRegionCodes` @0x2b07c9c (URL literal only, no `*Http*` call)
 
-Called from: `base_service/view/grid/choose_grid_view.dart::_fetchRegionCodes`, `base_service/view/grid/choose_grid_view_v2.dart::_fetchRegionCodes`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart::_getGridSetting`, `device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart::onReady`, `settings/src/common/page/grid_param_setting/grid_param_setting_controller.dart::onReady`
+Called from:
+
+- `base_service/view/grid/choose_grid_view.dart::_fetchRegionCodes`
+- `base_service/view/grid/choose_grid_view_v2.dart::_fetchRegionCodes`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart::_getGridSetting`
+- `device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart::onReady`
+- `settings/src/common/page/grid_param_setting/grid_param_setting_controller.dart::onReady`
 
 ## Since/changed
 

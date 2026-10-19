@@ -48,7 +48,9 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `selfCheckNetwork` @0x2ad04bc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/a1782/station/self_test/a1782_self_test_logic.dart::startSelfCheckNet`
+Called from:
+
+- `charging/ui/page/device/a1782/station/self_test/a1782_self_test_logic.dart::startSelfCheckNet`
 
 ## Since/changed
 

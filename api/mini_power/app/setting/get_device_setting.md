@@ -48,7 +48,14 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getCustomChargeModeSetting` @0x28a7c38 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getCustomChargeModeSetting`, `charging/ui/page/device/a2345/a2345charging_model/a2345charging_model_logic.dart::getLaboratorySwitch`, `charging/ui/page/device/a2345/a2345home/a2345home_logic.dart::getLaboratorySwitch`, `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart::getLaboratorySwitch`, `charging/ui/page/device/a2345/a2345setting/a2345setting_logic.dart::getLaboratorySwitch`, `charging/ui/page/device/a2687/a2687home/a2687_home_logic.dart::getLaboratorySwitch`
+Called from:
+
+- `charging/http/http_request_repository.dart::getCustomChargeModeSetting`
+- `charging/ui/page/device/a2345/a2345charging_model/a2345charging_model_logic.dart::getLaboratorySwitch`
+- `charging/ui/page/device/a2345/a2345home/a2345home_logic.dart::getLaboratorySwitch`
+- `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart::getLaboratorySwitch`
+- `charging/ui/page/device/a2345/a2345setting/a2345setting_logic.dart::getLaboratorySwitch`
+- `charging/ui/page/device/a2687/a2687home/a2687_home_logic.dart::getLaboratorySwitch`
 
 ## Since/changed
 

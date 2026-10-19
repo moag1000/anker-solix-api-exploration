@@ -55,7 +55,11 @@ n/a
 - `charging/ui/page/device/a5101/ota/a5101_base_ota_logic.dart`: `getOtaUpgradeRecord` @0x28d9db0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/ui/page/device/a5101/setting/firmware_update_record/firmware_update_record_logic.dart`: `_getOtaUpgradeRecord` @0x297165c (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getUpgradeRecord`, `charging/ui/page/device/a5101/setting/firmware_update_record/firmware_update_record_logic.dart::onReady`, `charging/ui/page/user/firmware_updates/firmware_updates_history/firmware_updates_history_logic.dart::getUpgradeRecordReq`
+Called from:
+
+- `charging/http/http_request_repository.dart::getUpgradeRecord`
+- `charging/ui/page/device/a5101/setting/firmware_update_record/firmware_update_record_logic.dart::onReady`
+- `charging/ui/page/user/firmware_updates/firmware_updates_history/firmware_updates_history_logic.dart::getUpgradeRecordReq`
 
 ## Since/changed
 

@@ -64,7 +64,7 @@ None recorded. On a transport or server error the app logs `verifyUnlockDefaultP
 
 ## Callers in app
 
-- `_ImagePasswordContentState::_onConfirm` (`diy_legal_power_limit_sheet.dart @0x30bbea4`, call at `@0x30bc02c`), the confirm button of the image-plus-password variant of `DiyLegalPowerLimitSheet`. It returns without a request when the typed code is empty (`@0x30bbef4`). On `verify_result == true` it calls the sheet's success callback (`@0x30bc0ac`), which closes the sheet and sets the output limit; see [../../flows/system_output_limit.md](../../flows/system_output_limit.md).
+- `_ImagePasswordContentState::_onConfirm` (`diy_legal_power_limit_sheet.dart @0x30bbea4`, call at `@0x30bc02c`), the confirm button of the image-plus-password variant of `DiyLegalPowerLimitSheet`. It returns without a request when the typed code is empty (`@0x30bbef4`). On `verify_result == true` it calls the sheet's success callback (`@0x30bc0ac`), which closes the sheet and sets the output limit; see [../../../flows/system_output_limit.md](../../../flows/system_output_limit.md).
 
 ## Since/changed
 

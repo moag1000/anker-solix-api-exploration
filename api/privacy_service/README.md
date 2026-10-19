@@ -9,4 +9,4 @@ Service index for the URL prefix `/privacy_service/`. Each endpoint page is the 
 | [`/privacy_service/v1/export_account_data`](export_account_data.md) | TODO | - | skeleton |
 | [`/privacy_service/v1/export_record_list`](export_record_list.md) | TODO | - | skeleton |
 
-Not here: MQTT or BLE facts ([../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
+Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

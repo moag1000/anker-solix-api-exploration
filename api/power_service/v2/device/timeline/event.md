@@ -1,6 +1,6 @@
 > Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
 
-# batch_read
+# event
 
 ## Purpose
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/power_service/v2/device/timeline/event/batch_read`, method: not extracted by the inventory <!-- TODO -->; string-only: `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2a09748`
+`/power_service/v2/device/timeline/event`, method: not extracted by the inventory <!-- TODO -->; string-only: `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2a0b814`
 
 ## Encrypted?
 
@@ -22,10 +22,8 @@ encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rul
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `path` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2a096ec` |
-| `method` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2a096ec` |
-| `param.device_sn` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2a096ec` |
-| `param.event_ids` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2a096ec` |
+| `path` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2a0b7bc` |
+| `param.device_sn` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2a0b7bc` |
 
 ## `param_type`/`cmd`
 
@@ -49,7 +47,7 @@ n/a
 
 ## Callers in app
 
-- `s1_s2/src/sdk/command/s1_s2_device_command.dart`: `markGuardianEventsAsRead` @0x2a096ec (URL literal only, no `*Http*` call)
+- `s1_s2/src/sdk/command/s1_s2_device_command.dart`: `getGuardianJournalEvents` @0x2a0b7bc (URL literal only, no `*Http*` call)
 
 ## Since/changed
 

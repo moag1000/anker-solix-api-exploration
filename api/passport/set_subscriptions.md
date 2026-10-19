@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `setSubscription` @0x35a38ac (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/common_business/sms/sms_manager.dart::subscribeSms`, `charging/http/http_request_repository.dart::setSubscription`, `charging/ui/page/user/subscribe/subscribe_email_logic.dart::_setSubscribe`
+Called from:
+
+- `charging/common_business/sms/sms_manager.dart::subscribeSms`
+- `charging/http/http_request_repository.dart::setSubscription`
+- `charging/ui/page/user/subscribe/subscribe_email_logic.dart::_setSubscribe`
 
 ## Since/changed
 

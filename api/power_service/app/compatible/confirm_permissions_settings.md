@@ -49,7 +49,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getConfirmPermissionsSettingsApi` @0x2444ebc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getConfirmPermissionsSettingsApi`, `charging/ui/page/device/a17c0/select_brand/select_brand_logic.dart::getConfirmPermissionsSettings`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getSolarBankParticleData`
+Called from:
+
+- `charging/http/http_request_repository.dart::getConfirmPermissionsSettingsApi`
+- `charging/ui/page/device/a17c0/select_brand/select_brand_logic.dart::getConfirmPermissionsSettings`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getSolarBankParticleData`
 
 ## Since/changed
 

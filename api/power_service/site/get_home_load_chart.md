@@ -49,7 +49,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getSiteHomeLoadChat` @0x28cce04 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getSiteHomeLoadChat`, `charging/ui/page/device/a17c1/energy_plan/energy_plan_logic.dart::getSiteHomeLoadChatDate`, `charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getSiteHomeLoadChatDate`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy/merge_system_energy_plan_logic.dart::getSiteHomeLoadChatDate`
+Called from:
+
+- `charging/http/http_request_repository.dart::getSiteHomeLoadChat`
+- `charging/ui/page/device/a17c1/energy_plan/energy_plan_logic.dart::getSiteHomeLoadChatDate`
+- `charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getSiteHomeLoadChatDate`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy/merge_system_energy_plan_logic.dart::getSiteHomeLoadChatDate`
 
 ## Since/changed
 

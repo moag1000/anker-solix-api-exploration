@@ -54,7 +54,9 @@ n/a
 
 - `flutter_charging_beginning/beginning/state_cards/self_check/self_check_controller.dart`: `_reportSelfCheckResult` @0x2acd180 (encryptionRequestHttp; encrypted: true)
 
-Called from: `flutter_charging_beginning/beginning/state_cards/self_check/self_check_controller.dart::selfCheck`
+Called from:
+
+- `flutter_charging_beginning/beginning/state_cards/self_check/self_check_controller.dart::selfCheck`
 
 ## Since/changed
 

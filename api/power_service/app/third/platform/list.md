@@ -50,7 +50,16 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `getThirdPartyPlatformList` @0x2619228 (encryptionRequestHttp; encrypted: true)
 - `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart`: `getThirdPartyPlatformList` @0x24e60d8 (URL literal only, no `*Http*` call)
 
-Called from: `charging/http/http_request_repository.dart::getThirdPartyPlatformList`, `charging/ui/page/device/connect/scan_logic.dart::onInit`, `charging/ui/page/device/connect/third_party_platform_list/third_party_platform_list_logic.dart::requestThirdPartyPlatformList`, `charging/ui/page/device/main/sitation_energy_system/scan_appoint_device/scan_appoint_device_logic.dart::onInit`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::_initLogic`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onMessageDispatch`, `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart::afterPermissionEnable`, `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart::onInit`
+Called from:
+
+- `charging/http/http_request_repository.dart::getThirdPartyPlatformList`
+- `charging/ui/page/device/connect/scan_logic.dart::onInit`
+- `charging/ui/page/device/connect/third_party_platform_list/third_party_platform_list_logic.dart::requestThirdPartyPlatformList`
+- `charging/ui/page/device/main/sitation_energy_system/scan_appoint_device/scan_appoint_device_logic.dart::onInit`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::_initLogic`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onMessageDispatch`
+- `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart::afterPermissionEnable`
+- `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart::onInit`
 
 ## Since/changed
 

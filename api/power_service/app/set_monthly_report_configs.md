@@ -46,7 +46,9 @@ n/a
 
 - `charging/http/user/msg/msg_http_request_repository_impl.dart`: `setMonthlyReportConfigs` @0x402ea60 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/message/settingDetail/message_setting_detail_logic.dart::monthlyReportHasChanged`
+Called from:
+
+- `charging/ui/page/message/settingDetail/message_setting_detail_logic.dart::monthlyReportHasChanged`
 
 ## Since/changed
 

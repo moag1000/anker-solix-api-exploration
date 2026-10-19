@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `logOutRequest` @0x38d65c0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/account/handlers/logout_handler.dart::performLogoutWithRequest`, `charging/http/http_request_repository.dart::logOutRequest`
+Called from:
+
+- `charging/account/handlers/logout_handler.dart::performLogoutWithRequest`
+- `charging/http/http_request_repository.dart::logOutRequest`
 
 ## Since/changed
 

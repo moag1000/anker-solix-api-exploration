@@ -52,7 +52,9 @@ n/a
 
 - `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart`: `syncBackUpHistory` @0x2791310 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart::onMessageDispatch`
+Called from:
+
+- `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart::onMessageDispatch`
 
 ## Since/changed
 

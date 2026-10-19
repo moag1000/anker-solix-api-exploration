@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getX1BindChargerList` @0x28e0b20 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getX1BindChargerList`, `charging/ui/page/device/a5101/setting/device_manager/ev_charger/ev_charger_manager_logic.dart::_getBindList`
+Called from:
+
+- `charging/http/http_request_repository.dart::getX1BindChargerList`
+- `charging/ui/page/device/a5101/setting/device_manager/ev_charger/ev_charger_manager_logic.dart::_getBindList`
 
 ## Since/changed
 

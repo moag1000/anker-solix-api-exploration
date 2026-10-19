@@ -26,7 +26,6 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | `site_id` | ? | ? | ? | `device/src/station_setting/controller/common_station_name/station_name_view_model.dart @0x2cb53ec` |
 | `site_name` | ? | ? | ? | `device/src/station_setting/controller/common_station_name/station_name_view_model.dart @0x2cb53ec` |
 | `path` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart @0x47a6694` |
-| `method` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart @0x47a6694` |
 | `param` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart @0x47a6694` |
 
 Rows are the union over 3 senders; `source` is the first sender that sets the key.
@@ -58,7 +57,16 @@ n/a
 - `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart`: `<anonymous closure> in RenameSiteController::save` @0x47a6694 (URL literal only, no `*Http*` call)
 - `micro_hes/src/common_business/basic_station/basic_station_setting/component/general_setting/station_name_controller.dart`: `requestRenameStation` @0x2cd3010 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::updateSiteNameInfoRequest`, `charging/ui/page/device/a17b1/system_info/system_info_logic.dart::renameDevice`, `charging/ui/page/device/a5101/setting/system_info/system_info_logic.dart::renameDevice`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/system_info/system_info_logic.dart::resetSiteName`, `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::renameSiteName`, `charging/ui/page/user/share_site/home_center/home_center_logic.dart::renameSiteName`, `device/src/station_setting/controller/common_station_name/station_name_controller.dart::renameStation`, `micro_hes/src/common_business/basic_station/basic_station_setting/component/general_setting/station_name_controller.dart::renameStation`
+Called from:
+
+- `charging/http/http_request_repository.dart::updateSiteNameInfoRequest`
+- `charging/ui/page/device/a17b1/system_info/system_info_logic.dart::renameDevice`
+- `charging/ui/page/device/a5101/setting/system_info/system_info_logic.dart::renameDevice`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/system_info/system_info_logic.dart::resetSiteName`
+- `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::renameSiteName`
+- `charging/ui/page/user/share_site/home_center/home_center_logic.dart::renameSiteName`
+- `device/src/station_setting/controller/common_station_name/station_name_controller.dart::renameStation`
+- `micro_hes/src/common_business/basic_station/basic_station_setting/component/general_setting/station_name_controller.dart::renameStation`
 
 ## Since/changed
 

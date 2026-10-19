@@ -48,7 +48,14 @@ n/a
 - `base_service/service/business_service.dart`: `fetchDevicesListDirect` @0x2ac44b8 (encryptionRequestHttp; encrypted: true)
 - `charging/http/http_request_repository_impl.dart`: `getDevicesList` @0x2289700 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getDevicesList`, `charging/ui/page/device/a17b1/check_update/check_update_logic.dart::getDeviceList`, `charging/ui/page/device/anker_ota/base/anker_ota_base_logic.dart::specialHandleOta`, `charging/ui/page/device/connect/scan_logic.dart::getDeviceList`, `charging/ui/page/device/main/sitation_energy_system/scan_appoint_device/scan_appoint_device_logic.dart::getDeviceList`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getDeviceList`
+Called from:
+
+- `charging/http/http_request_repository.dart::getDevicesList`
+- `charging/ui/page/device/a17b1/check_update/check_update_logic.dart::getDeviceList`
+- `charging/ui/page/device/anker_ota/base/anker_ota_base_logic.dart::specialHandleOta`
+- `charging/ui/page/device/connect/scan_logic.dart::getDeviceList`
+- `charging/ui/page/device/main/sitation_energy_system/scan_appoint_device/scan_appoint_device_logic.dart::getDeviceList`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getDeviceList`
 
 ## Since/changed
 

@@ -52,7 +52,13 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `getCustomChargeModeList` @0x26c12e0 (encryptionRequestHttp; encrypted: true)
 - `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart`: `getCustomChargeModeList` @0x2afb74c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getCustomChargeModeList`, `charging/ui/page/device/a2345/a2345charging_model/a2345charging_model_logic.dart::getCustomChargeModelList`, `charging/ui/page/device/a2345/a2345custom_charging_mode/a2345custom_charging_mode_logic.dart::_getCustomChargeModeListByCloud`, `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_charge_mode_logic.dart::getCustomChargeModelList`, `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_mode/a2687_custom_charge_mode_logic.dart::_getCustomChargeModeListByCloud`
+Called from:
+
+- `charging/http/http_request_repository.dart::getCustomChargeModeList`
+- `charging/ui/page/device/a2345/a2345charging_model/a2345charging_model_logic.dart::getCustomChargeModelList`
+- `charging/ui/page/device/a2345/a2345custom_charging_mode/a2345custom_charging_mode_logic.dart::_getCustomChargeModeListByCloud`
+- `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_charge_mode_logic.dart::getCustomChargeModelList`
+- `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_mode/a2687_custom_charge_mode_logic.dart::_getCustomChargeModeListByCloud`
 
 ## Since/changed
 

@@ -50,7 +50,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `removeParamConfigKey` @0x428b9e4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/feature/peak_valley/confirm/confirm_peak_valley_logic.dart::onDeletePeakValleyClick`, `charging/http/http_request_repository.dart::removeParamConfigKey`
+Called from:
+
+- `charging/feature/peak_valley/confirm/confirm_peak_valley_logic.dart::onDeletePeakValleyClick`
+- `charging/http/http_request_repository.dart::removeParamConfigKey`
 
 ## Since/changed
 

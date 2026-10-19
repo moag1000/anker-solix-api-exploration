@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getX1BindUserUnbindChargerList` @0x2264418 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getX1BindUserUnbindChargerList`, `charging/ui/page/device/a5101/setting/device_manager/ev_charger/add_ev_charger_logic.dart::_getUnBindList`
+Called from:
+
+- `charging/http/http_request_repository.dart::getX1BindUserUnbindChargerList`
+- `charging/ui/page/device/a5101/setting/device_manager/ev_charger/add_ev_charger_logic.dart::_getUnBindList`
 
 ## Since/changed
 

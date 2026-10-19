@@ -49,7 +49,9 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `setA2687ChargingDeviceModelIdentityStatus` @0x38c75f0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_lab_function_logic.dart::setIdentityStatus`
+Called from:
+
+- `charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_lab_function_logic.dart::setIdentityStatus`
 
 ## Since/changed
 

@@ -48,7 +48,9 @@ n/a
 
 - `charging/ui/page/device/connect/third_party_platform_list/strategy/ever_home_navigation_strategy.dart`: `bind2Cloud` @0x3f29d24 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/connect/third_party_platform_list/strategy/ever_home_navigation_strategy.dart::addJsCallHandler`
+Called from:
+
+- `charging/ui/page/device/connect/third_party_platform_list/strategy/ever_home_navigation_strategy.dart::addJsCallHandler`
 
 ## Since/changed
 

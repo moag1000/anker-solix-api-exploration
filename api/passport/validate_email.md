@@ -52,7 +52,19 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `checkIsRegisterRequest` @0x3bc84c0 (encryptionRequestHttp; encrypted: true); `validateAccountRequest` @0x2915640 (encryptionRequestHttp; encrypted: true)
 - `charging/ui/page/account/login/installer_login_logic.dart`: `checkIsRegisterRequest` @0x31921c0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::checkIsRegisterRequest`, `charging/http/http_request_repository.dart::validateAccountRequest`, `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart::checkIsRegister`, `charging/ui/page/account/login/login_logic.dart::checkIsPwdEmpty`, `charging/ui/page/account/login/login_logic.dart::checkIsRegister`, `charging/ui/page/account/login/login_logic.dart::login`, `charging/ui/page/account/privacy_policy/verification/verification_logic.dart::passwordVerify`, `charging/ui/page/user/accountSetting/account_setting_page_logic.dart::checkIsPwdEmpty`, `charging/ui/page/user/changePassword/user_change_password_logic.dart::changePassword`, `charging/ui/page/user/routerInfo/account_verification/account_verification_logic.dart::confirmChangePwd`, `charging/ui/page/user/routerInfo/router_info_logic.dart::checkIsPwdEmpty`
+Called from:
+
+- `charging/http/http_request_repository.dart::checkIsRegisterRequest`
+- `charging/http/http_request_repository.dart::validateAccountRequest`
+- `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart::checkIsRegister`
+- `charging/ui/page/account/login/login_logic.dart::checkIsPwdEmpty`
+- `charging/ui/page/account/login/login_logic.dart::checkIsRegister`
+- `charging/ui/page/account/login/login_logic.dart::login`
+- `charging/ui/page/account/privacy_policy/verification/verification_logic.dart::passwordVerify`
+- `charging/ui/page/user/accountSetting/account_setting_page_logic.dart::checkIsPwdEmpty`
+- `charging/ui/page/user/changePassword/user_change_password_logic.dart::changePassword`
+- `charging/ui/page/user/routerInfo/account_verification/account_verification_logic.dart::confirmChangePwd`
+- `charging/ui/page/user/routerInfo/router_info_logic.dart::checkIsPwdEmpty`
 
 ## Since/changed
 

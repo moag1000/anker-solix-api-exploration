@@ -46,7 +46,9 @@ n/a
 
 - `charging/aiot/EncryptionUtilImpl.dart`: `exchangeKey` @0x4016d54 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/home/gdpr/gdpr_page_logic.dart::allow`
+Called from:
+
+- `charging/ui/page/home/gdpr/gdpr_page_logic.dart::allow`
 
 ## Since/changed
 

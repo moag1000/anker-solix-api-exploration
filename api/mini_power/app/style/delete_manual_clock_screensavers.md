@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `deleteA2345CustomClockScreenSavers` @0x3e20f2c (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::deleteA2345CustomClockScreenSavers`, `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart::deleteCustomClockScreenSavers`
+Called from:
+
+- `charging/http/http_request_repository.dart::deleteA2345CustomClockScreenSavers`
+- `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart::deleteCustomClockScreenSavers`
 
 ## Since/changed
 

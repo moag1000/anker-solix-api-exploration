@@ -33,4 +33,4 @@ Service index for the URL prefix `/passport/`. Each endpoint page is the single 
 | [`/passport/validate_email`](validate_email.md) | TODO | - | skeleton |
 | [`/passport/validate_pass`](validate_pass.md) | TODO | - | skeleton |
 
-Not here: MQTT or BLE facts ([../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
+Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

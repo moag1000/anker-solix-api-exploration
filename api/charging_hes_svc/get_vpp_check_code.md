@@ -54,7 +54,12 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `getVppInfo` @0x292c5a0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `settings/src/common/menu_controller/vpp_menu_controller.dart`: `checkSupport` @0x367abf4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getVppInfo`, `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart::requestVppInfo`, `charging/ui/page/device/a5101/setting/vpp/controller.dart::requestVppInfo`, `settings/src/common/menu_controller/vpp_menu_controller.dart::onInit`
+Called from:
+
+- `charging/http/http_request_repository.dart::getVppInfo`
+- `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart::requestVppInfo`
+- `charging/ui/page/device/a5101/setting/vpp/controller.dart::requestVppInfo`
+- `settings/src/common/menu_controller/vpp_menu_controller.dart::onInit`
 
 ## Since/changed
 

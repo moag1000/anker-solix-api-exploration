@@ -50,7 +50,10 @@ n/a
 
 - `charging/http/http_business_impl.dart`: `addEasterEggRecord` @0x3b2d58c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ble/device/A2345/a2345_device_commands.dart::parseUploadEasterEggTrigger`, `charging/ble/device/A91B2/a91b2_device_commands.dart::parseUploadEasterEggTrigger`
+Called from:
+
+- `charging/ble/device/A2345/a2345_device_commands.dart::parseUploadEasterEggTrigger`
+- `charging/ble/device/A91B2/a91b2_device_commands.dart::parseUploadEasterEggTrigger`
 
 ## Since/changed
 

@@ -46,7 +46,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getUserManualsDeviceList` @0x2700d90 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getUserManualsDeviceList`, `charging/ui/page/user/main/user_main_page_logic.dart::_updateTutorial`, `charging/ui/page/user/userManuals/user_manuals_logic.dart::getUserManualsDataList`
+Called from:
+
+- `charging/http/http_request_repository.dart::getUserManualsDeviceList`
+- `charging/ui/page/user/main/user_main_page_logic.dart::_updateTutorial`
+- `charging/ui/page/user/userManuals/user_manuals_logic.dart::getUserManualsDataList`
 
 ## Since/changed
 

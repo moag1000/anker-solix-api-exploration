@@ -49,7 +49,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `saveCompatibilityStatusSetting` @0x3e55e80 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::saveCompatibilityStatusSetting`, `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart::setCompatibilityStatusWithDevice`
+Called from:
+
+- `charging/http/http_request_repository.dart::saveCompatibilityStatusSetting`
+- `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart::setCompatibilityStatusWithDevice`
 
 ## Since/changed
 

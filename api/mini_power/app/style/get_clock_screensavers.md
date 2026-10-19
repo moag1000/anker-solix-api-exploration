@@ -51,7 +51,15 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getA2345ClockScreenSavers` @0x28add4c (requestHttp; encrypted: default-true (requestHttp) — verify); `getScreenSaversByCategory` @0x29de9f4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getA2345ClockScreenSavers`, `charging/ui/page/device/a1782/screen_saver/screen_theme_setting/screen_theme_setting_logic.dart::_updateNetworkThemeList`, `charging/ui/page/device/a2345/a2345clock_display/a2345clock_display_logic.dart::getCategoryClockScreenSavers`, `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart::getCategoryClockScreenSavers`, `charging/ui/page/device/a25x7/a25x7screensaver/a25x7screensaver_logic.dart::_updateNetworkThemeList`, `charging/ui/page/device/a25x7/a25x7screensaver_style/a25x7screensaver_style_logic.dart::_updateNetworkThemeCategory`, `small_charging_platform/src/screen_setting/clock_style/page/clock_style_logic.dart::_getNetworkClockScreenSavers`
+Called from:
+
+- `charging/http/http_request_repository.dart::getA2345ClockScreenSavers`
+- `charging/ui/page/device/a1782/screen_saver/screen_theme_setting/screen_theme_setting_logic.dart::_updateNetworkThemeList`
+- `charging/ui/page/device/a2345/a2345clock_display/a2345clock_display_logic.dart::getCategoryClockScreenSavers`
+- `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart::getCategoryClockScreenSavers`
+- `charging/ui/page/device/a25x7/a25x7screensaver/a25x7screensaver_logic.dart::_updateNetworkThemeList`
+- `charging/ui/page/device/a25x7/a25x7screensaver_style/a25x7screensaver_style_logic.dart::_updateNetworkThemeCategory`
+- `small_charging_platform/src/screen_setting/clock_style/page/clock_style_logic.dart::_getNetworkClockScreenSavers`
 
 ## Since/changed
 

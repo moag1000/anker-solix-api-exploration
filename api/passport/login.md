@@ -51,7 +51,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `iotLoginRequest` @0x3bd7084 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::iotLoginRequest`, `charging/ui/page/account/login/login_logic.dart::startLogin`
+Called from:
+
+- `charging/http/http_request_repository.dart::iotLoginRequest`
+- `charging/ui/page/account/login/login_logic.dart::startLogin`
 
 ## Since/changed
 

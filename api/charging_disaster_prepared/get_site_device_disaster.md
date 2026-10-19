@@ -49,7 +49,10 @@ n/a
 
 - `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart`: `_fetchDisasterSetting` @0x3561310 (encryptionRequestHttp; encrypted: true)
 
-Called from: `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart::_setupEventBusListener`, `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart::onInit`
+Called from:
+
+- `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart::_setupEventBusListener`
+- `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart::onInit`
 
 ## Since/changed
 

@@ -51,7 +51,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `verifyCodeLoginRequest` @0x3bd833c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::verifyCodeLoginRequest`, `charging/ui/page/account/login/login_logic.dart::verifyCodeLogin`
+Called from:
+
+- `charging/http/http_request_repository.dart::verifyCodeLoginRequest`
+- `charging/ui/page/account/login/login_logic.dart::verifyCodeLogin`
 
 ## Since/changed
 

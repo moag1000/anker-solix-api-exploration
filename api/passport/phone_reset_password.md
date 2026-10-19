@@ -51,7 +51,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `sendForgetPwdPhoneRequest` @0x3bc89cc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::sendForgetPwdPhoneRequest`, `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart::startResetPwd`
+Called from:
+
+- `charging/http/http_request_repository.dart::sendForgetPwdPhoneRequest`
+- `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart::startResetPwd`
 
 ## Since/changed
 

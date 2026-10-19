@@ -2,11 +2,11 @@
 
 # API
 
-This directory holds one page per cloud endpoint, grouped by service (the first URL segment after the host), plus the cross-cutting pages `param_types.md`, `errors.md`, `auth.md` and `encryption.md`. An endpoint page is the single owner of that endpoint's request parameters, response payload and confidence tags.
+This directory holds one page per cloud endpoint, grouped by service (the first URL segment after the host), plus the cross-cutting pages `param_types.md`, `errors.md`, `auth.md` and `encryption.md`. An endpoint page is the single owner of that endpoint's request parameters, response payload and confidence tags. Paths follow the naming rule in [../docs/STRUCTURE.md](../docs/STRUCTURE.md#naming-conventions): `v1` is dropped from the path, any other version segment is kept.
 
 ## Service index
 
-One directory per URL prefix of App 3.24.3 (406 distinct URLs, 12 of them only in 3.18.0). Counts include hand-written pages; all other pages are skeletons rendered from `data/endpoints.json` by `tools/render_pages.py`.
+One directory per URL prefix: 406 distinct URLs (394 in 3.24.3, 12 only in 3.18.0). Counts include hand-written pages; all other pages are skeletons rendered from `data/endpoints.json` by `tools/render_pages.py`.
 
 | service | pages | index |
 |---|---|---|
@@ -35,7 +35,7 @@ One directory per URL prefix of App 3.24.3 (406 distinct URLs, 12 of them only i
 | `smart_service/` | 13 | [smart_service/README.md](smart_service/README.md) |
 | `v2/` | 4 | [v2/README.md](v2/README.md) |
 
-## Prefixes that are not services
+## Ambiguous prefixes (resolved: all five are real services)
 
 Checked on 2026-10-19 against the 3.24.3 asm (`blutter_output/asm`, grep only). Five prefixes looked ambiguous in the object-pool strings:
 
@@ -47,6 +47,6 @@ Checked on 2026-10-19 against the 3.24.3 asm (`blutter_output/asm`, grep only). 
 | `energy` | 4 | 6 (`.../src/energy/model/...`) | real service: 4 endpoints (`/energy/v1/...`). The package paths are unrelated Dart directories and are not endpoints |
 | `site` | 2 | 12 (`.../family/site/...`) | real service: 2 endpoints (`/site/v1/...`). The package paths are unrelated Dart directories and are not endpoints |
 
-Result: none of the five is only a Dart package path; every one has URL literals with a leading `/` that a `*Http*` sender uses, so all five are inventoried and have their own directory above. Related oddities, not errors: `v2/` holds four `/v2/anka/...` URLs (version segment first, four rows are URL literals with no traced sender; one of them is removed in 3.24.3), and `ems/`, `generator/` and `marketing/` hold one endpoint each.
+Result: none of the five is only a Dart package path; every one has URL literals with a leading `/` that a `*Http*` sender uses, so all five are inventoried and have their own directory above. Related oddities, not errors: `v2/` holds four `/v2/anka/...` URLs (the version segment comes first, so the URL prefix rule makes `v2` the service directory; the four rows are URL literals with no traced sender, one of them removed in 3.24.3), and `ems/`, `generator/` and `marketing/` hold one endpoint each.
 
 Not here: MQTT or BLE facts (see [../mqtt/README.md](../mqtt/README.md), [../ble/README.md](../ble/README.md)), step-by-step flows ([../flows/README.md](../flows/README.md)); ownership rules are in [../docs/STRUCTURE.md](../docs/STRUCTURE.md).

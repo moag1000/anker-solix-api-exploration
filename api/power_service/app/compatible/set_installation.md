@@ -51,7 +51,13 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `setInstallationApi` @0x3d6528c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::setInstallationApi`, `charging/ui/page/device/a17c0/ez1_select_mode/ez1_select_mode_logic.dart::getOTAUpdateStatus`, `charging/ui/page/device/a17c0/ez1_select_mode/ez1_select_mode_logic.dart::next`, `charging/ui/page/device/a17y0/a17y0ota/a17y0_use_a17c0_ota_logic.dart::startOTA`, `charging/ui/page/device/anker_ota/poll_progress_ota_page/poll_progress_ota_logic.dart::startOTA`
+Called from:
+
+- `charging/http/http_request_repository.dart::setInstallationApi`
+- `charging/ui/page/device/a17c0/ez1_select_mode/ez1_select_mode_logic.dart::getOTAUpdateStatus`
+- `charging/ui/page/device/a17c0/ez1_select_mode/ez1_select_mode_logic.dart::next`
+- `charging/ui/page/device/a17y0/a17y0ota/a17y0_use_a17c0_ota_logic.dart::startOTA`
+- `charging/ui/page/device/anker_ota/poll_progress_ota_page/poll_progress_ota_logic.dart::startOTA`
 
 ## Since/changed
 

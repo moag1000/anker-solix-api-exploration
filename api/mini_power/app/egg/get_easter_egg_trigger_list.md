@@ -48,7 +48,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getEasterEggRecord` @0x276fbe0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getEasterEggRecord`, `charging/ui/page/device/a2345/a2345easter_egg/a2345easter_egg_logic.dart::requestEasterEggRecord`, `charging/ui/page/device/a91b2/a91b2easter_egg/a91b2easter_egg_logic.dart::_requestEasterEggRecord`
+Called from:
+
+- `charging/http/http_request_repository.dart::getEasterEggRecord`
+- `charging/ui/page/device/a2345/a2345easter_egg/a2345easter_egg_logic.dart::requestEasterEggRecord`
+- `charging/ui/page/device/a91b2/a91b2easter_egg/a91b2easter_egg_logic.dart::_requestEasterEggRecord`
 
 ## Since/changed
 

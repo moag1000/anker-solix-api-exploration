@@ -48,7 +48,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getPvStatus` @0x2446f1c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getPvStatus`, `charging/ui/page/device/a5140/a5140home/a5140home_logic.dart::_isOffline`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getDeviceList`
+Called from:
+
+- `charging/http/http_request_repository.dart::getPvStatus`
+- `charging/ui/page/device/a5140/a5140home/a5140home_logic.dart::_isOffline`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getDeviceList`
 
 ## Since/changed
 

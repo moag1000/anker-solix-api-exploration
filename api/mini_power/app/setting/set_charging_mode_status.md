@@ -49,7 +49,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `saveCustomChargeModeSetting` @0x3e57a38 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::saveCustomChargeModeSetting`, `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart::setLaboratorySwitch`
+Called from:
+
+- `charging/http/http_request_repository.dart::saveCustomChargeModeSetting`
+- `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart::setLaboratorySwitch`
 
 ## Since/changed
 

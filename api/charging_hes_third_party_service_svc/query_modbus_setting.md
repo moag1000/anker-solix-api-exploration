@@ -54,7 +54,13 @@ n/a
 - `charging/ui/widget/home_assitent/home_assistant_logic.dart`: `requestData` @0x38db78c (encryptionRequestHttp; encrypted: true)
 - `settings/src/common/menu_controller/communication_setting_menu_controller.dart`: `requestData` @0x2cd4c00 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/a17x8/a17x8setting/a17x8setting_logic.dart::onInit`, `charging/ui/page/device/a17x8/a17x8setting/a17x8setting_logic.dart::tapEnterHA`, `charging/ui/widget/home_assitent/home_assistant_logic.dart::_retryFetchIp`, `settings/src/common/menu_controller/communication_setting_menu_controller.dart::onInit`, `settings/src/common/menu_controller/communication_setting_menu_controller.dart::onTapMenu`
+Called from:
+
+- `charging/ui/page/device/a17x8/a17x8setting/a17x8setting_logic.dart::onInit`
+- `charging/ui/page/device/a17x8/a17x8setting/a17x8setting_logic.dart::tapEnterHA`
+- `charging/ui/widget/home_assitent/home_assistant_logic.dart::_retryFetchIp`
+- `settings/src/common/menu_controller/communication_setting_menu_controller.dart::onInit`
+- `settings/src/common/menu_controller/communication_setting_menu_controller.dart::onTapMenu`
 
 ## Since/changed
 

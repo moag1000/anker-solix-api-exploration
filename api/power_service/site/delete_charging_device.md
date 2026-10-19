@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `deleteChargingDevice` @0x3bfae8c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::deleteChargingDevice`, `charging/ui/page/device/a1340/a1340charge_device/a1340charge_device_logic.dart::_deleteA1340ChargeDeviceForOther`
+Called from:
+
+- `charging/http/http_request_repository.dart::deleteChargingDevice`
+- `charging/ui/page/device/a1340/a1340charge_device/a1340charge_device_logic.dart::_deleteA1340ChargeDeviceForOther`
 
 ## Since/changed
 

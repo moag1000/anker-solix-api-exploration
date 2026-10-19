@@ -49,7 +49,9 @@ n/a
 
 - `unity/src/main/weather/weather_manager.dart`: `fetchSupportCountryCodes` @0x451d6dc (encryptionRequestHttp; encrypted: true)
 
-Called from: `unity/src/main/weather/weather_display_view.dart::_navigateToPlaceSelectionView`
+Called from:
+
+- `unity/src/main/weather/weather_display_view.dart::_navigateToPlaceSelectionView`
 
 ## Since/changed
 

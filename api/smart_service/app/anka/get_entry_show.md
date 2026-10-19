@@ -50,7 +50,9 @@ n/a
 
 - `ak_soft_ems/aiems/public_widget/anka_entry_button.dart`: `<anonymous closure>@0x2bf0e34` @0x2bf0e34 (URL literal only, no `*Http*` call); `<anonymous closure>@0x2bf0ec4` @0x2bf0ec4 (URL literal only, no `*Http*` call); `checkAnkaSupport` @0x2bf0cc0 (encryptionRequestHttp; encrypted: true)
 
-Called from: `ak_soft_ems/aiems/public_widget/anka_entry_button.dart::_checkSupport`
+Called from:
+
+- `ak_soft_ems/aiems/public_widget/anka_entry_button.dart::_checkSupport`
 
 ## Since/changed
 

@@ -43,8 +43,6 @@ Some senders wrap these keys in `param_data` as a JSON string (`jsonEncode`); ou
 | `price_type` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
 | `site_co2` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
 | `accuracy` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `fixedPrice.value.isEmpty:` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| ` salePrice.value.isEmpty:` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
 | `id` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
 | `buy` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
 | `sell` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
@@ -99,7 +97,41 @@ n/a
 - `settings/src/sdk/util/load_port_util.dart`: `<anonymous closure>@0x3291c54` @0x3291c54 (encryptionRequestHttp; encrypted: true)
 - `station_home/src/ui/shared/node_dialog/dialog_widget/pv_dialog_helper.dart`: `editSolarPvName` @0x3328374 (request; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/account/handlers/login_handler.dart::_reportDeviceGameStatus`, `charging/common_bussiness/currency/app_currency_process_list_controller.dart::getAppDeciceSetCurrency`, `charging/http/http_request_repository.dart::getCurrencySetDeviceAttrs`, `charging/http/http_request_repository.dart::reportDeviceGameStatus`, `charging/http/http_request_repository.dart::setDeviceAttrsInfo`, `charging/http/http_request_repository.dart::setDeviceFeedGridSwitch`, `charging/http/http_request_repository.dart::setDevicePowerOptionsReq`, `charging/http/http_request_repository.dart::setDevicePvPowerOptionsReq`, `charging/http/http_request_repository.dart::setLocationTag`, `charging/http/http_request_repository.dart::setPpsSolarName`, `charging/http/http_request_repository.dart::setSolarName`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::setDevicePvPowerLimit`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::setFeedGridValue`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::setPowerLimit`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::showGridConnectedInputPicker`, `charging/ui/page/device/a17x8/a17x8scene_start/a17x8scene_start_logic.dart::setLocationTags`, `charging/ui/page/device/a17x8/space_setup/space_setup_controller.dart::saveDeviceInfo`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::sendCommand`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::setSolarBankName`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::setSolarBankPpsName`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_power_limit/station_power_limit_logic.dart::showPowerLimitPicker`, `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::setDeviceEMSPriceArgument`, `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::build`, `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::setFixedPriceV2`, `micro_hes/src/a17ex/home/components/electricity_price/a17ex_electricity_price_logic.dart::savePrice`, `micro_hes/src/common_business/basic_station/module/system_flow/common/energy_system_cover_helper.dart::showEditPvNameDialog`, `settings/src/common/page/load_port_setting/load_port_settings_controller.dart::autoStartTapped`, `settings/src/common/page/load_port_setting/load_port_settings_controller.dart::changeToManual`, `settings/src/common/page/load_port_setting/load_port_settings_controller.dart::manualControlTapped`, `settings/src/common/page/load_port_setting/load_port_settings_controller.dart::smartSchedulingTapped`, `settings/src/common/page/load_port_setting/load_port_settings_controller.dart::timeScheduleTapped`, `settings/src/common/page/load_port_setting/load_port_settings_page.dart::_showRenameDialog`, `settings/src/common/page/timing_setting/timing_setting_controller.dart::sendTimingToDeviceThenCloud`
+Called from:
+
+- `charging/account/handlers/login_handler.dart::_reportDeviceGameStatus`
+- `charging/common_bussiness/currency/app_currency_process_list_controller.dart::getAppDeciceSetCurrency`
+- `charging/http/http_request_repository.dart::getCurrencySetDeviceAttrs`
+- `charging/http/http_request_repository.dart::reportDeviceGameStatus`
+- `charging/http/http_request_repository.dart::setDeviceAttrsInfo`
+- `charging/http/http_request_repository.dart::setDeviceFeedGridSwitch`
+- `charging/http/http_request_repository.dart::setDevicePowerOptionsReq`
+- `charging/http/http_request_repository.dart::setDevicePvPowerOptionsReq`
+- `charging/http/http_request_repository.dart::setLocationTag`
+- `charging/http/http_request_repository.dart::setPpsSolarName`
+- `charging/http/http_request_repository.dart::setSolarName`
+- `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::setDevicePvPowerLimit`
+- `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::setFeedGridValue`
+- `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::setPowerLimit`
+- `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart::showGridConnectedInputPicker`
+- `charging/ui/page/device/a17x8/a17x8scene_start/a17x8scene_start_logic.dart::setLocationTags`
+- `charging/ui/page/device/a17x8/space_setup/space_setup_controller.dart::saveDeviceInfo`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::sendCommand`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::setSolarBankName`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::setSolarBankPpsName`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_power_limit/station_power_limit_logic.dart::showPowerLimitPicker`
+- `electricity_price/components/electricity_price_common/electricity_usage_helper.dart::setDeviceEMSPriceArgument`
+- `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::build`
+- `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart::setFixedPriceV2`
+- `micro_hes/src/a17ex/home/components/electricity_price/a17ex_electricity_price_logic.dart::savePrice`
+- `micro_hes/src/common_business/basic_station/module/system_flow/common/energy_system_cover_helper.dart::showEditPvNameDialog`
+- `settings/src/common/page/load_port_setting/load_port_settings_controller.dart::autoStartTapped`
+- `settings/src/common/page/load_port_setting/load_port_settings_controller.dart::changeToManual`
+- `settings/src/common/page/load_port_setting/load_port_settings_controller.dart::manualControlTapped`
+- `settings/src/common/page/load_port_setting/load_port_settings_controller.dart::smartSchedulingTapped`
+- `settings/src/common/page/load_port_setting/load_port_settings_controller.dart::timeScheduleTapped`
+- `settings/src/common/page/load_port_setting/load_port_settings_page.dart::_showRenameDialog`
+- `settings/src/common/page/timing_setting/timing_setting_controller.dart::sendTimingToDeviceThenCloud`
 
 ## Since/changed
 

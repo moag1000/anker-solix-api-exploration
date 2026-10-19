@@ -54,7 +54,6 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/app/get_extender_system_detail`](app/get_extender_system_detail.md) | TODO | `get_extender_system_detail` | skeleton |
 | [`/power_service/v1/app/get_extender_system_list`](app/get_extender_system_list.md) | TODO | `get_extender_system_list` | skeleton |
 | [`/power_service/v1/app/get_extender_system_pn_ota`](app/get_extender_system_pn_ota.md) | TODO | `get_extender_system_pn_ota` | skeleton |
-| [`/power_service/v2/app/get_hardware_relation`](app/get_hardware_relation.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/get_model_list`](app/get_model_list.md) | TODO | `get_vehicle_year_attributes` | skeleton |
 | [`/power_service/v1/app/get_model_years`](app/get_model_years.md) | TODO | `get_vehicle_model_years` | skeleton |
 | [`/power_service/v1/app/get_models`](app/get_models.md) | TODO | `get_vehicle_brand_models` | skeleton |
@@ -74,7 +73,6 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/app/mothly_report_show`](app/mothly_report_show.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/report_tlv_event`](app/report_tlv_event.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/set_auto_upgrade`](app/set_auto_upgrade.md) | TODO | `set_auto_upgrade` | skeleton |
-| [`/power_service/v2/app/set_device_pv_name`](app/set_device_pv_name.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/set_extender_system_cumulative_data`](app/set_extender_system_cumulative_data.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/set_extender_system_name`](app/set_extender_system_name.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/set_maintain_parts_ignore_reminders`](app/set_maintain_parts_ignore_reminders.md) | TODO | - | skeleton |
@@ -103,11 +101,6 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/app/whitelist/feature/check`](app/whitelist/feature/check.md) | TODO | - | skeleton |
 | [`/power_service/v1/currency/get_list`](currency/get_list.md) | TODO | `get_currency_list` | skeleton |
 | [`/power_service/v1/del_message`](del_message.md) | TODO | - | skeleton |
-| [`/power_service/v2/device/energy_analysis`](device/energy_analysis.md) | TODO | - | skeleton |
-| [`/power_service/v2/device/energy_options`](device/energy_options.md) | TODO | - | skeleton |
-| [`/power_service/v2/device/report_data`](device/report_data.md) | TODO | - | skeleton |
-| [`/power_service/v2/device/timeline/event`](device/timeline/event.md) | TODO | - | skeleton |
-| [`/power_service/v2/device/timeline/event/batch_read`](device/timeline/event/batch_read.md) | TODO | - | skeleton |
 | [`/power_service/v1/dynamic_price/check_adjust`](dynamic_price/check_adjust.md) | TODO | - | skeleton |
 | [`/power_service/v1/dynamic_price/check_available`](dynamic_price/check_available.md) | TODO | `get_dynamic_price_sites` | skeleton |
 | [`/power_service/v1/dynamic_price/price_detail`](dynamic_price/price_detail.md) | TODO | `get_dynamic_price_details` | skeleton |
@@ -119,9 +112,6 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/get_message_sn_list`](get_message_sn_list.md) | TODO | - | skeleton |
 | [`/power_service/v1/get_message_unread`](get_message_unread.md) | TODO | `get_message_unread` | skeleton |
 | [`/power_service/v1/message_not_disturb`](message_not_disturb.md) | TODO | - | skeleton |
-| [`/power_service/v2/platform_get_pn_region_code`](platform_get_pn_region_code.md) | TODO | - | skeleton |
-| [`/power_service/v2/platform_get_user_region_param`](platform_get_user_region_param.md) | TODO | - | skeleton |
-| [`/power_service/v2/platform_set_user_region_param`](platform_set_user_region_param.md) | TODO | - | skeleton |
 | [`/power_service/v1/product_accessories`](product_accessories.md) | TODO | `get_product_accessories` | skeleton |
 | [`/power_service/v1/product_categories`](product_categories.md) | TODO | `get_product_categories` | skeleton |
 | [`/power_service/v1/read_message`](read_message.md) | TODO | - | skeleton |
@@ -150,8 +140,6 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/site/get_wifi_info_list`](site/get_wifi_info_list.md) | TODO | `wifi_list` | skeleton |
 | [`/power_service/v1/site/list_user_devices`](site/list_user_devices.md) | TODO | `user_devices` | skeleton |
 | [`/power_service/v1/site/local_net`](site/local_net.md) | TODO | - | skeleton |
-| [`/power_service/v2/site/platform_get_site_savings`](site/platform_get_site_savings.md) | TODO | - | skeleton |
-| [`/power_service/v2/site/platform_get_site_scene`](site/platform_get_site_scene.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/reset_charging_device`](site/reset_charging_device.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/set_device_feature`](site/set_device_feature.md) | TODO | - | removed in 3.24.3, skeleton |
 | [`/power_service/v1/site/set_site_device_param`](site/set_site_device_param.md) | Writes one site-level parameter set, selected by `param_type`, for a site; with `param_type` 19 it sets the system output power limit of a station. | `set_device_parm` | hand-written |
@@ -162,5 +150,17 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/site/update_site`](site/update_site.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/update_site_devices`](site/update_site_devices.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/update_site_price`](site/update_site_price.md) | TODO | `update_site_price` | skeleton |
+| [`/power_service/v2/app/get_hardware_relation`](v2/app/get_hardware_relation.md) | TODO | - | skeleton |
+| [`/power_service/v2/app/set_device_pv_name`](v2/app/set_device_pv_name.md) | TODO | - | skeleton |
+| [`/power_service/v2/device/energy_analysis`](v2/device/energy_analysis.md) | TODO | - | skeleton |
+| [`/power_service/v2/device/energy_options`](v2/device/energy_options.md) | TODO | - | skeleton |
+| [`/power_service/v2/device/report_data`](v2/device/report_data.md) | TODO | - | skeleton |
+| [`/power_service/v2/device/timeline/event`](v2/device/timeline/event.md) | TODO | - | skeleton |
+| [`/power_service/v2/device/timeline/event/batch_read`](v2/device/timeline/event/batch_read.md) | TODO | - | skeleton |
+| [`/power_service/v2/platform_get_pn_region_code`](v2/platform_get_pn_region_code.md) | TODO | - | skeleton |
+| [`/power_service/v2/platform_get_user_region_param`](v2/platform_get_user_region_param.md) | TODO | - | skeleton |
+| [`/power_service/v2/platform_set_user_region_param`](v2/platform_set_user_region_param.md) | TODO | - | skeleton |
+| [`/power_service/v2/site/platform_get_site_savings`](v2/site/platform_get_site_savings.md) | TODO | - | skeleton |
+| [`/power_service/v2/site/platform_get_site_scene`](v2/site/platform_get_site_scene.md) | TODO | - | skeleton |
 
-Not here: MQTT or BLE facts ([../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
+Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

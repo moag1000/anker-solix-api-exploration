@@ -53,7 +53,15 @@ n/a
 - `charging/http/http_business_impl.dart`: `getDeviceIsJoinedSite` @0x239b964 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/http/http_request_repository_impl.dart`: `getAddableSiteList` @0x262e088 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getAddableSiteList`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::_getAddableSiteList`, `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart::_getSiteConfig`, `charging/ui/page/device/a17c0/a17c0SwitchMode/a17c0_switch_mode_logic.dart::deviceConnect`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::getUserSiteListReq`, `charging/ui/page/device/connect/create_join_device_to_system/join_system/join_system_logic.dart::queryExistSystems`, `charging/ui/page/device/main/sitation_energy_system/create_site_progress_handler/create_site_progress_handler.dart::checkCreateSiteProgressIsComplete`
+Called from:
+
+- `charging/http/http_request_repository.dart::getAddableSiteList`
+- `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::_getAddableSiteList`
+- `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart::_getSiteConfig`
+- `charging/ui/page/device/a17c0/a17c0SwitchMode/a17c0_switch_mode_logic.dart::deviceConnect`
+- `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::getUserSiteListReq`
+- `charging/ui/page/device/connect/create_join_device_to_system/join_system/join_system_logic.dart::queryExistSystems`
+- `charging/ui/page/device/main/sitation_energy_system/create_site_progress_handler/create_site_progress_handler.dart::checkCreateSiteProgressIsComplete`
 
 ## Since/changed
 

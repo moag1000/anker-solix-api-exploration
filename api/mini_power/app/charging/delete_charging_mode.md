@@ -52,7 +52,11 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `deleteCustomChargeMode` @0x26c3f3c (encryptionRequestHttp; encrypted: true)
 - `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart`: `deleteCustomChargeMode` @0x3a9f464 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::deleteCustomChargeMode`, `charging/ui/page/device/a2345/a2345custom_charging_mode/a2345custom_charging_mode_logic.dart::_deleteCustomChargeModeByCloud`, `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_mode/a2687_custom_charge_mode_logic.dart::_deleteCustomChargeModeByCloud`
+Called from:
+
+- `charging/http/http_request_repository.dart::deleteCustomChargeMode`
+- `charging/ui/page/device/a2345/a2345custom_charging_mode/a2345custom_charging_mode_logic.dart::_deleteCustomChargeModeByCloud`
+- `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_mode/a2687_custom_charge_mode_logic.dart::_deleteCustomChargeModeByCloud`
 
 ## Since/changed
 

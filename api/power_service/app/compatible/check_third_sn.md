@@ -50,7 +50,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `checkThirdSN` @0x33fa4e8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::checkThirdSN`, `charging/ui/page/qr_Scanner/qr_scanner_logic.dart::checkDeviceSnCode`
+Called from:
+
+- `charging/http/http_request_repository.dart::checkThirdSN`
+- `charging/ui/page/qr_Scanner/qr_scanner_logic.dart::checkDeviceSnCode`
 
 ## Since/changed
 

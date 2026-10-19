@@ -46,7 +46,13 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `setMessageRead` @0x3bb5760 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::setMessageRead`, `charging/ui/page/message/Main/message_main_logic.dart::markAllMessageIsReaded`, `charging/ui/page/message/Main/message_main_logic.dart::pushToDetailPage`, `charging/ui/page/message/system/message_system_logic.dart::pushToDetail`, `charging/ui/page/message/system/message_system_logic.dart::readAllMsg`
+Called from:
+
+- `charging/http/http_request_repository.dart::setMessageRead`
+- `charging/ui/page/message/Main/message_main_logic.dart::markAllMessageIsReaded`
+- `charging/ui/page/message/Main/message_main_logic.dart::pushToDetailPage`
+- `charging/ui/page/message/system/message_system_logic.dart::pushToDetail`
+- `charging/ui/page/message/system/message_system_logic.dart::readAllMsg`
 
 ## Since/changed
 

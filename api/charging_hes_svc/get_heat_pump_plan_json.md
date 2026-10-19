@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getHeatPumpTimePlan` @0x3e8b75c (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getHeatPumpTimePlan`, `charging/ui/page/device/a5101/setting/device_manager/heat_pump/timer_setting/timer_setting_logic.dart::getJsonData`
+Called from:
+
+- `charging/http/http_request_repository.dart::getHeatPumpTimePlan`
+- `charging/ui/page/device/a5101/setting/device_manager/heat_pump/timer_setting/timer_setting_logic.dart::getJsonData`
 
 ## Since/changed
 

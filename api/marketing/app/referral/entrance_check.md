@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getReferralEntranceCheck` @0x2701a04 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getReferralEntranceCheck`, `charging/ui/page/user/main/user_main_page_logic.dart::_updateReferralEnabled`
+Called from:
+
+- `charging/http/http_request_repository.dart::getReferralEntranceCheck`
+- `charging/ui/page/user/main/user_main_page_logic.dart::_updateReferralEnabled`
 
 ## Since/changed
 

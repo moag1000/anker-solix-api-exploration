@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `sendDeviceReport` @0x26055b4 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::sendDeviceReport`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::requesetDeviceReport`
+Called from:
+
+- `charging/http/http_request_repository.dart::sendDeviceReport`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::requesetDeviceReport`
 
 ## Since/changed
 

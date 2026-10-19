@@ -50,7 +50,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `userSetPasswordApi` @0x4055530 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::userSetPasswordApi`, `charging/ui/page/user/routerInfo/account_set_password/account_set_password_logic.dart::changePassword`
+Called from:
+
+- `charging/http/http_request_repository.dart::userSetPasswordApi`
+- `charging/ui/page/user/routerInfo/account_set_password/account_set_password_logic.dart::changePassword`
 
 ## Since/changed
 

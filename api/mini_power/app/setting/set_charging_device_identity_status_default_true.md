@@ -49,7 +49,9 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `setA2345DeviceIdentityStatus` @0x3e55868 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart::setChargingDeviceModeSwitch`
+Called from:
+
+- `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart::setChargingDeviceModeSwitch`
 
 ## Since/changed
 

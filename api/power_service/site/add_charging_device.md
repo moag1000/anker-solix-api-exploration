@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `addChargingDevice` @0x3bf4284 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::addChargingDevice`, `charging/ui/page/device/a1340/a1340add_device/a1340add_device_logic.dart::addChargeDevice`
+Called from:
+
+- `charging/http/http_request_repository.dart::addChargingDevice`
+- `charging/ui/page/device/a1340/a1340add_device/a1340add_device_logic.dart::addChargeDevice`
 
 ## Since/changed
 

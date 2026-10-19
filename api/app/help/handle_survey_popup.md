@@ -49,7 +49,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `handleSurveyPopup` @0x4699864 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::handleSurveyPopup`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::bannerClick`
+Called from:
+
+- `charging/http/http_request_repository.dart::handleSurveyPopup`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::bannerClick`
 
 ## Since/changed
 

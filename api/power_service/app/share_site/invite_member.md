@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `inviteMemberSite` @0x4061788 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::inviteMemberSite`, `charging/ui/page/user/share_site/invite_members/invite_members_logic.dart::sendInviteMessage`
+Called from:
+
+- `charging/http/http_request_repository.dart::inviteMemberSite`
+- `charging/ui/page/user/share_site/invite_members/invite_members_logic.dart::sendInviteMessage`
 
 ## Since/changed
 

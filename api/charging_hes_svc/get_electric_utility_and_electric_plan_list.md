@@ -50,7 +50,9 @@ n/a
 
 - `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_rate_logic.dart`: `getNemRatePlan` @0x2973cf0 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_rate_logic.dart::onReady`
+Called from:
+
+- `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_rate_logic.dart::onReady`
 
 ## Since/changed
 

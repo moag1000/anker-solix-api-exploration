@@ -46,7 +46,20 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `multiAddDeviceInfo` @0x26f6f78 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::multiAddDeviceInfo`, `charging/ui/page/device/a1782/station/ac_params_settings/ac_params_settings_logic.dart::next`, `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::createSite`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::createSite`, `charging/ui/page/device/a17b1/a17b1select_devices/a17b1select_devices_logic.dart::addDeviceToStation`, `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::join`, `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::mainDeviceJoin`, `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::next`, `charging/ui/page/device/connect/create_join_device_to_system/join_system/join_system_logic.dart::join`, `charging/ui/page/device/connect/zx_config_wifi_success/zx_config_wifi_succees_logic.dart::addDeviceToStation`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::multiAddDevices`, `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::addSitePPS`
+Called from:
+
+- `charging/http/http_request_repository.dart::multiAddDeviceInfo`
+- `charging/ui/page/device/a1782/station/ac_params_settings/ac_params_settings_logic.dart::next`
+- `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::createSite`
+- `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::createSite`
+- `charging/ui/page/device/a17b1/a17b1select_devices/a17b1select_devices_logic.dart::addDeviceToStation`
+- `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::join`
+- `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::mainDeviceJoin`
+- `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::next`
+- `charging/ui/page/device/connect/create_join_device_to_system/join_system/join_system_logic.dart::join`
+- `charging/ui/page/device/connect/zx_config_wifi_success/zx_config_wifi_succees_logic.dart::addDeviceToStation`
+- `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::multiAddDevices`
+- `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::addSitePPS`
 
 ## Since/changed
 

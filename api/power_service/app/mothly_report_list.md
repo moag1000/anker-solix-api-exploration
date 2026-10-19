@@ -46,7 +46,9 @@ n/a
 
 - `charging/http/user/profile/profile_http_request_repository_impl.dart`: `getMonthlyReportList` @0x2989de8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/anker_post/anker_monthly_report_list_logic.dart::getMonthlyReportList`
+Called from:
+
+- `charging/ui/page/anker_post/anker_monthly_report_list_logic.dart::getMonthlyReportList`
 
 ## Since/changed
 

@@ -46,7 +46,9 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `addMessage` @0x261b534 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ble/ble_business_impl.dart::addCloudLoMessage`
+Called from:
+
+- `charging/ble/ble_business_impl.dart::addCloudLoMessage`
 
 ## Since/changed
 

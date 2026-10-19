@@ -50,7 +50,9 @@ n/a
 
 - `charging/http/aiot/aiot_http_request_repository_impl.dart`: `reportAIOTPopupApi` @0x2618388 (aiotPlatformRequestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getAIOTPopupList`
+Called from:
+
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getAIOTPopupList`
 
 ## Since/changed
 

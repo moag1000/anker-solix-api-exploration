@@ -51,7 +51,13 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getCloudCurrentTimezone` @0x33c8864 (requestHttp; encrypted: default-true (requestHttp) — verify); `getDaylightSavingTime` @0x286bbe8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getCloudCurrentTimezone`, `charging/http/http_request_repository.dart::getDaylightSavingTime`, `charging/ui/page/device/a1340/a1340home/a1340home_logic.dart::_getDst`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::didChangeAppLifecycleState`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onInit`
+Called from:
+
+- `charging/http/http_request_repository.dart::getCloudCurrentTimezone`
+- `charging/http/http_request_repository.dart::getDaylightSavingTime`
+- `charging/ui/page/device/a1340/a1340home/a1340home_logic.dart::_getDst`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::didChangeAppLifecycleState`
+- `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::onInit`
 
 ## Since/changed
 

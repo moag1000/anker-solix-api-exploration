@@ -49,7 +49,12 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getRegionHostRequest` @0x274080c (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/account/handlers/region_switch_handler.dart::_getRegionHostAsync`, `charging/http/http_request_repository.dart::getRegionHostRequest`, `charging/ui/page/account/region/region_logic.dart::showConfirmDialog`, `charging/ui/page/account/splash/splash_logic.dart::requestHostByRegion`
+Called from:
+
+- `charging/account/handlers/region_switch_handler.dart::_getRegionHostAsync`
+- `charging/http/http_request_repository.dart::getRegionHostRequest`
+- `charging/ui/page/account/region/region_logic.dart::showConfirmDialog`
+- `charging/ui/page/account/splash/splash_logic.dart::requestHostByRegion`
 
 ## Since/changed
 

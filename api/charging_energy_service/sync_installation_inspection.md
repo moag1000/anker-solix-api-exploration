@@ -50,7 +50,13 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `syncInstallation` @0x26eb06c (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::syncInstallation`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::createOrJoinSuccess`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::syncGoHome`, `charging/ui/page/device/a17b1/a17b1system_test/system_test_logic.dart::handlerSelfCheckComplete`, `charging/ui/page/green_energy/site/site_logic.dart::toHomeInitialProcess`
+Called from:
+
+- `charging/http/http_request_repository.dart::syncInstallation`
+- `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::createOrJoinSuccess`
+- `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart::syncGoHome`
+- `charging/ui/page/device/a17b1/a17b1system_test/system_test_logic.dart::handlerSelfCheckComplete`
+- `charging/ui/page/green_energy/site/site_logic.dart::toHomeInitialProcess`
 
 ## Since/changed
 

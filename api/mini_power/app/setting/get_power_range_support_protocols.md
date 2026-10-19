@@ -53,7 +53,10 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `getPowerSupportProtocols` @0x3472ea8 (encryptionRequestHttp; encrypted: true)
 - `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart`: `getPowerSupportProtocols` @0x2afcf10 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/a2345/a2345home/a2345home_logic.dart::getRangeProtocols`, `charging/ui/page/device/a2687/a2687home/a2687_home_logic.dart::getRangeProtocols`
+Called from:
+
+- `charging/ui/page/device/a2345/a2345home/a2345home_logic.dart::getRangeProtocols`
+- `charging/ui/page/device/a2687/a2687home/a2687_home_logic.dart::getRangeProtocols`
 
 ## Since/changed
 

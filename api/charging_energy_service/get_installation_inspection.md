@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getInstallation` @0x2375b38 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getInstallation`, `charging/ui/page/device/a17b1/device_home/a17b1home_logic.dart::getHomeLatestPage`
+Called from:
+
+- `charging/http/http_request_repository.dart::getInstallation`
+- `charging/ui/page/device/a17b1/device_home/a17b1home_logic.dart::getHomeLatestPage`
 
 ## Since/changed
 

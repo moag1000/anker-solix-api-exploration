@@ -25,7 +25,6 @@ encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rul
 | `brand_name` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6af74` |
 | `model_name` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6af74` |
 | `path` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6af74` |
-| `method` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6af74` |
 | `param` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6af74` |
 
 ## `param_type`/`cmd`

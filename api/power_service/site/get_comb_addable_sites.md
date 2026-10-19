@@ -48,7 +48,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getDeviceJoinSiteList` @0x28bb164 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getDeviceJoinSiteList`, `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::_getAddableSiteList`, `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::getUserSiteListReq`
+Called from:
+
+- `charging/http/http_request_repository.dart::getDeviceJoinSiteList`
+- `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::_getAddableSiteList`
+- `charging/ui/page/device/a17c1/open_process/open_process_logic.dart::getUserSiteListReq`
 
 ## Since/changed
 

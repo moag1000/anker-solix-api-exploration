@@ -53,7 +53,10 @@ n/a
 - `ak_iot_common_charging/src/weather/weather_impl.dart`: `fetchWeather` @0x2b11570 (request; encrypted: default-true (requestHttp) — verify)
 - `unity/src/main/weather/weather_manager.dart`: `_fetchWeatherFromAPI` @0x22e46b8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `station_home/src/weather/weather_service.dart::_fetchWeatherFromCoordinates`, `unity/src/main/weather/weather_manager.dart::fetchWeatherDataWithCoordinates`
+Called from:
+
+- `station_home/src/weather/weather_service.dart::_fetchWeatherFromCoordinates`
+- `unity/src/main/weather/weather_manager.dart::fetchWeatherDataWithCoordinates`
 
 ## Since/changed
 

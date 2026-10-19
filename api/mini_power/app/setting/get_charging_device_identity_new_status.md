@@ -48,7 +48,9 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getA2687StandardChargingDeviceModelIdentityStatus` @0x353da0c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/ui/page/device/a2687/a2687home/a2687_home_logic.dart::getLaboratorySwitch`
+Called from:
+
+- `charging/ui/page/device/a2687/a2687home/a2687_home_logic.dart::getLaboratorySwitch`
 
 ## Since/changed
 

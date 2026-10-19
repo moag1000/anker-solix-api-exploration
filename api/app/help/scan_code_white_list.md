@@ -46,7 +46,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `scanodeWhiteListReq` @0x33fd8cc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::scanodeWhiteListReq`, `charging/ui/page/qr_Scanner/qr_scanner_logic.dart::checkUrlOptional`
+Called from:
+
+- `charging/http/http_request_repository.dart::scanodeWhiteListReq`
+- `charging/ui/page/qr_Scanner/qr_scanner_logic.dart::checkUrlOptional`
 
 ## Since/changed
 

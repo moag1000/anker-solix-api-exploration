@@ -54,7 +54,12 @@ n/a
 - `charging/http/http_request_repository_impl.dart`: `changeShellyDeviceStatus` @0x3073d34 (encryptionRequestHttp; encrypted: true)
 - `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart`: `changeShellyDeviceStatus` @0x3291774 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::changeShellyDeviceStatus`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::changeShellyPlugSwitch`, `charging/ui/page/device/third_party_device/shelly/shellyhome/shellyhome_logic.dart::changeShellyPlugSwitch`, `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart::homeLoadSwitchChanged`
+Called from:
+
+- `charging/http/http_request_repository.dart::changeShellyDeviceStatus`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::changeShellyPlugSwitch`
+- `charging/ui/page/device/third_party_device/shelly/shellyhome/shellyhome_logic.dart::changeShellyPlugSwitch`
+- `micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart::homeLoadSwitchChanged`
 
 ## Since/changed
 

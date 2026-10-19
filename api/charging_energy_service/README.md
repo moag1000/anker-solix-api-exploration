@@ -25,4 +25,4 @@ Service index for the URL prefix `/charging_energy_service/`. Each endpoint page
 | [`/charging_energy_service/sync_config`](sync_config.md) | TODO | - | skeleton |
 | [`/charging_energy_service/sync_installation_inspection`](sync_installation_inspection.md) | TODO | - | skeleton |
 
-Not here: MQTT or BLE facts ([../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
+Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

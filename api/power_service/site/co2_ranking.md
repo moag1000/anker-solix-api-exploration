@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `queryRankingInfo` @0x23a8df8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::queryRankingInfo`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getRankingInfo`
+Called from:
+
+- `charging/http/http_request_repository.dart::queryRankingInfo`
+- `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getRankingInfo`
 
 ## Since/changed
 

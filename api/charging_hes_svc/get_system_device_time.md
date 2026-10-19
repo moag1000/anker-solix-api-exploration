@@ -48,7 +48,10 @@ n/a
 
 - `charging/ui/page/device/a5101/setting/manual_backup_power/manual_backup_power_logic.dart`: `_getDeviceCurrentTime` @0x29733e8 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/device/a5101/setting/manual_backup_power/manual_backup_power_logic.dart::retryGet`, `charging/ui/page/device/a5101/setting/manual_backup_power/manual_backup_power_logic.dart::updateUiAndParams`
+Called from:
+
+- `charging/ui/page/device/a5101/setting/manual_backup_power/manual_backup_power_logic.dart::retryGet`
+- `charging/ui/page/device/a5101/setting/manual_backup_power/manual_backup_power_logic.dart::updateUiAndParams`
 
 ## Since/changed
 

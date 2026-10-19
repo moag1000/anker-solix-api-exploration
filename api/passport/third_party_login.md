@@ -53,7 +53,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `thirdLoginRequest` @0x3bd1858 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::thirdLoginRequest`, `charging/ui/page/account/login/login_logic.dart::amazonLogin`
+Called from:
+
+- `charging/http/http_request_repository.dart::thirdLoginRequest`
+- `charging/ui/page/account/login/login_logic.dart::amazonLogin`
 
 ## Since/changed
 

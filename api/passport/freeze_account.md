@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `freezeAccount` @0x404c6bc (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::freezeAccount`, `charging/ui/page/user/freeze_account/freeze_account_logic.dart::_freezeAccountRequest`
+Called from:
+
+- `charging/http/http_request_repository.dart::freezeAccount`
+- `charging/ui/page/user/freeze_account/freeze_account_logic.dart::_freezeAccountRequest`
 
 ## Since/changed
 

@@ -48,7 +48,9 @@ n/a
 
 - `charging/util/demosite_util_impl.dart`: `anonymousJoinSite` @0x23f0b70 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/ui/page/home/home_base_logic.dart::useA5101StationWidget`
+Called from:
+
+- `charging/ui/page/home/home_base_logic.dart::useA5101StationWidget`
 
 ## Since/changed
 

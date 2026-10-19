@@ -48,7 +48,10 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getDeviceLaserSn` @0x343b0d4 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/http/http_request_repository.dart::getDeviceLaserSn`, `charging/ui/page/device/a1340/a1340setting/a1340setting_logic.dart::_getDeviceLaserSn`
+Called from:
+
+- `charging/http/http_request_repository.dart::getDeviceLaserSn`
+- `charging/ui/page/device/a1340/a1340setting/a1340setting_logic.dart::_getDeviceLaserSn`
 
 ## Since/changed
 

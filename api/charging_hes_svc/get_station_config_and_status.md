@@ -48,7 +48,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getA5101StationConfigDetail` @0x27c871c (requestHttp; encrypted: default-true (requestHttp) — verify)
 
-Called from: `charging/http/http_request_repository.dart::getA5101StationConfigDetail`, `charging/ui/page/device/a5101/setting/grid_dispatch/grid_dispatch_logic.dart::getAdvancedConfigStateFromCloud`, `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::_getNetAutoDisasterPrepareStatus`
+Called from:
+
+- `charging/http/http_request_repository.dart::getA5101StationConfigDetail`
+- `charging/ui/page/device/a5101/setting/grid_dispatch/grid_dispatch_logic.dart::getAdvancedConfigStateFromCloud`
+- `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::_getNetAutoDisasterPrepareStatus`
 
 ## Since/changed
 

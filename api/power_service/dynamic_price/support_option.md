@@ -49,7 +49,11 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getDynamicPriceSupportOption` @0x28a46e8 (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/feature/utilitiy_rate_plan/dynamic_price/detail/dynamic_price_detail_logic.dart::getSupportOption`, `charging/feature/utilitiy_rate_plan/station_price_mode/station_price_mode_logic.dart::requestCloud`, `charging/http/http_request_repository.dart::getDynamicPriceSupportOption`
+Called from:
+
+- `charging/feature/utilitiy_rate_plan/dynamic_price/detail/dynamic_price_detail_logic.dart::getSupportOption`
+- `charging/feature/utilitiy_rate_plan/station_price_mode/station_price_mode_logic.dart::requestCloud`
+- `charging/http/http_request_repository.dart::getDynamicPriceSupportOption`
 
 ## Since/changed
 

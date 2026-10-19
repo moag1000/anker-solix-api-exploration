@@ -11,4 +11,4 @@ Service index for the URL prefix `/energy/`. Each endpoint page is the single ow
 | [`/energy/v1/daily_revenue_card/status`](daily_revenue_card/status.md) | TODO | - | skeleton |
 | [`/energy/v1/daily_revenue_card/update_status`](daily_revenue_card/update_status.md) | TODO | - | skeleton |
 
-Not here: MQTT or BLE facts ([../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
+Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

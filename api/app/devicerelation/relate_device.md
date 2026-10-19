@@ -60,7 +60,20 @@ n/a
 - `charging/http/http_business_impl.dart`: `deviceBind` @0x33f802c (encryptionRequestHttp; encrypted: true)
 - `charging/http/http_request_repository_impl.dart`: `deviceBind` @0x26ff01c (encryptionRequestHttp; encrypted: true)
 
-Called from: `charging/account/handlers/login_handler.dart::_bindAndMigrateDevice`, `charging/account/handlers/login_navigation_handler.dart::_bindDeviceBle`, `charging/ble/device/A17C0/a17C0_device_commands.dart::_cloudA17Y0InfoSync`, `charging/http/http_request_repository.dart::deviceBind`, `charging/ui/page/account/bind_phone_number/bind_phone_number_logic.dart::_bindDeviceBle`, `charging/ui/page/account/login/login_logic.dart::_bindDeviceBle`, `charging/ui/page/device/a17c0/a17c0accessory/bind_accessory/a17c0bind_accessory_logic.dart::_bindA17Y0`, `charging/ui/page/device/a17c0/a17c0home/a17c0home_logic.dart::_cloudA17Y0InfoSync`, `charging/ui/page/device/a5140/wifi/network_inspection/network_inspection_logic.dart::_bindDevice`, `charging/ui/page/device/a5143/match_scan/a5143_match_scan_logic.dart::_bindDevice`, `charging/ui/page/device/connect/connect_logic.dart::initDeviceResponse`, `charging/ui/page/device/connect/zx_connect_ble/zx_connect_ble_logic.dart::bindDevice`
+Called from:
+
+- `charging/account/handlers/login_handler.dart::_bindAndMigrateDevice`
+- `charging/account/handlers/login_navigation_handler.dart::_bindDeviceBle`
+- `charging/ble/device/A17C0/a17C0_device_commands.dart::_cloudA17Y0InfoSync`
+- `charging/http/http_request_repository.dart::deviceBind`
+- `charging/ui/page/account/bind_phone_number/bind_phone_number_logic.dart::_bindDeviceBle`
+- `charging/ui/page/account/login/login_logic.dart::_bindDeviceBle`
+- `charging/ui/page/device/a17c0/a17c0accessory/bind_accessory/a17c0bind_accessory_logic.dart::_bindA17Y0`
+- `charging/ui/page/device/a17c0/a17c0home/a17c0home_logic.dart::_cloudA17Y0InfoSync`
+- `charging/ui/page/device/a5140/wifi/network_inspection/network_inspection_logic.dart::_bindDevice`
+- `charging/ui/page/device/a5143/match_scan/a5143_match_scan_logic.dart::_bindDevice`
+- `charging/ui/page/device/connect/connect_logic.dart::initDeviceResponse`
+- `charging/ui/page/device/connect/zx_connect_ble/zx_connect_ble_logic.dart::bindDevice`
 
 ## Since/changed
 
