@@ -104,7 +104,7 @@ Each `fields` entry has `json_key` (str), `dart_type` (str, `unknown` when no ca
 
 `key` is the package (first directory of `dart_file`) and the class name. Where two classes would still share that key, the package part is extended to the shortest unique directory path and, if needed, to the file path without `.dart`, for example `charging/model/a5101::Power` and `charging/model/a1782::Power`. The result is unique in every file this tool writes (no collisions). A key is stable while the Dart file stays where it is; a moved file is a changed key, announced like any other change.
 
-Noise filter: by default the file lists only classes with at least one field and not in the `sentry` package (the error-reporting SDK, 20 classes in 3.24.3: 16 without fields, 4 Sentry classes with fields). `--include-noise` keeps them. Keys do not depend on the flag.
+Noise filter: dropped by default are the 15 classes of the `sentry` package (the error-reporting SDK; 11 without fields, 4 with). `--include-noise` keeps them. Field-less app classes are kept with an empty `fields` list (5 in 3.24.3): a field-less `fromJson` may be an extractor limit rather than a class without keys, so consumers should see that the class exists. Keys do not depend on the flag.
 
 ## param_types.json
 
