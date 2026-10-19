@@ -6,6 +6,6 @@ Service index for the URL prefix `/ems/`. Each endpoint page is the single owner
 
 | endpoint | purpose | upstream key | status |
 |---|---|---|---|
-| [`/ems/v1/strategy/visualization`](strategy/visualization.md) | TODO | - | skeleton |
+| [`/ems/v1/strategy/visualization`](strategy/visualization.md) | Reads the AI EMS strategy visualization of a site: the planned energy chart (solar, battery, home load and grid per period with the strategy type), the current strategy and the price chart; the AI strategy page and the A5101 system policy page use it. | - | hand-written |
 
 Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

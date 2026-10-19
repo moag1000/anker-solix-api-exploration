@@ -6,6 +6,6 @@ Service index for the URL prefix `/marketing/`. Each endpoint page is the single
 
 | endpoint | purpose | upstream key | status |
 |---|---|---|---|
-| [`/marketing/v1/app/referral/entrance_check`](app/referral/entrance_check.md) | TODO | - | skeleton |
+| [`/marketing/v1/app/referral/entrance_check`](app/referral/entrance_check.md) | Asks whether the referral (invite-a-friend) entrance should be shown to the user; the user main page calls it to set the visibility of the referral entry. | - | hand-written |
 
 Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

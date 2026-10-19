@@ -8,6 +8,6 @@ Service index for the URL prefix `/generator/`. Each endpoint page is the single
 |---|---|---|---|
 | [`/generator/v1/app/get_standby_exercise_plan`](app/get_standby_exercise_plan.md) | Reads the standby exercise plan of a third-party (oil-machine) generator that is attached to an AX170 (ATS) system: the schedule on which the generator is exercised while in standby. | - | hand-written |
 | [`/generator/v1/app/set_standby_exercise_plan`](app/set_standby_exercise_plan.md) | Saves the standby exercise plan of a third-party (oil-machine) generator attached to an AX170 (ATS) system: when the next maintenance run is due, the interval in weeks, the maintenance time and the plan status. | - | hand-written |
-| [`/generator/v1/app/wakeup_oil_machine_bluetooth`](app/wakeup_oil_machine_bluetooth.md) | TODO | - | skeleton |
+| [`/generator/v1/app/wakeup_oil_machine_bluetooth`](app/wakeup_oil_machine_bluetooth.md) | Asks the cloud to wake up the Bluetooth of an oil-machine generator (A7320) by serial number; the generator home logic sends it when the generator's Bluetooth must be woken. | - | hand-written |
 
 Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

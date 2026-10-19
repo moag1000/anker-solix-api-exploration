@@ -9,8 +9,10 @@ Not here: which endpoint returns a model (see [../api/README.md](../api/README.m
 ## Dedicated model pages (template layout)
 
 - [a5190_device_info.md](a5190_device_info.md): `A5190DeviceInfo`, the EV charger device state (Modbus TCP keys only).
+- [backup_report_models.md](backup_report_models.md): `BackupReportPopupModel`, `BackupReportListModel` and their item classes, the answers of the backup-report endpoints.
 - [branch_icon_models.md](branch_icon_models.md): `BranchIconModel` and `BranchIconInfo`, the AX170 branch icon catalogue (`get_custom_branch_icon`).
 - [combine_box_entity.md](combine_box_entity.md): `CombineBoxEntity`, combiner box serial and image (`param_type` 16).
+- [daily_revenue_card_status.md](daily_revenue_card_status.md): `DailyRevenueCardStatus`, the answer of `daily_revenue_card/status`.
 - [device_power_config.md](device_power_config.md): `DevicePowerConfigItem`, the answer of `get_devices_power_config`.
 - [device_share_models.md](device_share_models.md): `DeviceShareListResponse`, `DeviceShareListModel`, `DeviceShareInstallerListModel` and `DeviceShareInstallerItem`, the device-sharing answers of the EV charger app.
 - [dynamic_price_company_model.md](dynamic_price_company_model.md): `DynamicPriceCompanyModel` and its provider classes, the answer of `get_price_company` (installer service).
@@ -34,12 +36,14 @@ Not here: which endpoint returns a model (see [../api/README.md](../api/README.m
 - [peak_time_model.md](peak_time_model.md): `PeakTimeModel` and `Data`, the peak-time plan (`param_type` 2).
 - [s1_s2_charger_session_chart_model.md](s1_s2_charger_session_chart_model.md): `S1S2ChargerSessionChartModel`, the S1/S2 charge-session chart (`v2/device/energy_analysis`).
 - [scene_info_model.md](scene_info_model.md): `SceneInfoModel`, the IoT kit scene document (`platform_get_site_scene`).
+- [self_check_config_model.md](self_check_config_model.md): `SelfCheckConfigItem`, an entry of the answer of `get_self_check_config`.
 - [self_check_record_model.md](self_check_record_model.md): `SelfCheckRecordModel`, the answer of `get_self_check_record`.
 - [site_device_param_response.md](site_device_param_response.md): `SiteDeviceParamResponse`, the TOU response of the electricity-price module (`param_type` 6).
 - [site_sn_relation_list.md](site_sn_relation_list.md): `SiteSnRelationList`, the answer of `get_hardware_relation`.
 - [soc_setting_param.md](soc_setting_param.md): `SocSettingParam`, SOC limits (`param_type` 27).
 - [soc_settings.md](soc_settings.md): `SocSettings`, the SOC limits reported by the device through the IoT kit (not a cloud response).
 - [station_power_limit.md](station_power_limit.md): `StationPowerLimitModel` and its element classes (`get_power_limit`).
+- [strategy_visualization_models.md](strategy_visualization_models.md): `StrategyVisualizationDetail` and its chart classes, the answer of `ems/strategy/visualization`.
 - [utility_rate_plans_response.md](utility_rate_plans_response.md): `UtilityRatePlansResponse`, the answer of `get_utility_rate_plans` in the new TOU flow.
 - [weather_models.md](weather_models.md): `WeatherApiResult` and `WeatherResponseData`, the answer of `get_weather`.
 
