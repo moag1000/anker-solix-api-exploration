@@ -135,7 +135,7 @@ Tag: asm-traced. The enum `A5101DataCodeType` has 133 members ([../mqtt/a5101.md
 
 ## API endpoints
 
-The old counts ("HES Service 28", "Disaster Preparedness 5", "Device-Specific HES 25+") were prose counts and are removed (audit row 187); the old endpoint files list 50 path headings for `charging_hes_svc`, 31 endpoint lines in the HES / X1 section of `device_specific.md` and 6 in the disaster section. Current pages: [api/charging_hes_svc](../api/charging_hes_svc/README.md), [api/charging_disaster_prepared](../api/charging_disaster_prepared/README.md), and the old lists [endpoints/charging_hes_svc.md](../endpoints/charging_hes_svc.md) and [endpoints/device_specific.md](../endpoints/device_specific.md#hes--x1-endpoints-a5101--p2).
+The old counts ("HES Service 28", "Disaster Preparedness 5", "Device-Specific HES 25+") were prose counts and are removed (audit row 187); the old endpoint files list 50 path headings for `charging_hes_svc`, 31 endpoint lines in the HES / X1 section of `device_specific.md` and 6 in the disaster section. Current pages: [api/charging_hes_svc](../api/charging_hes_svc/README.md), [api/charging_disaster_prepared](../api/charging_disaster_prepared/README.md), and the owner pages above replace the deleted lists `endpoints/charging_hes_svc.md` and `endpoints/device_specific.md`.
 
 ## Disaster payloads
 

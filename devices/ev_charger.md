@@ -16,13 +16,13 @@ Row numbers ("audit row N") count the table rows of [../docs/audit/devices.md](.
 | device settings (`prop_write_evcharger`) | none | unknown; candidate tags below | [iot_kit_channels](../reference/iot_kit_channels.md), [sdk_senders](../api/sdk_senders.md) | no |
 | load balancing, green energy priority | none | unknown; candidate tags below | same | no |
 | charging schedule | none | unknown | `action_set_schedule` (invokeAction) | no |
-| OCPP, RFID | `get_ocpp_info` and device-card endpoints, see [device_specific](../endpoints/device_specific.md#ev-charger-endpoints-a5190--p2) | unknown | same | no |
+| OCPP, RFID | `get_ocpp_info` and device-card endpoints, see [get_ocpp_info](../api/power_service/app/get_ocpp_info.md) | unknown | same | no |
 | Modbus TCP switch | none | unknown (upstream has `b7`, `modbus_switch`) | [modbus](modbus.md#ev-charger-modbus-tcp-device-properties) | no |
 | vehicles, sessions, groups, sharing | 42 endpoints in nine groups, see below | none | none | no |
 
 ## API endpoint groups
 
-The old page counted 35 endpoints; its own sub-lists add up to 42 (11, 8, 3, 5, 2, 2, 5, 4, 2) and [../endpoints/device_specific.md](../endpoints/device_specific.md#ev-charger-endpoints-a5190--p2) has 42 endpoint lines in the EV charger section (audit rows 51 to 54, prose counts). Groups: Vehicle Management 11, Charging Sessions 8, RFID 3, Groups 5, OCPP 2, Security 2, Sharing 5, HES Integration 4, Faults 2. Per-endpoint payloads: the pages under [../api/power_service/app/](../api/README.md) (for example [add_vehicle](../api/power_service/app/vehicle/add_vehicle.md)); the old per-endpoint tables are removed here. The HES binding body uses camelCase keys (`stationId`, `evChargers`, `deleteFlag`, `forceBindFlag`), see [../endpoints/device_specific.md](../endpoints/device_specific.md) and [set_station_evchargers](../api/charging_hes_svc/set_station_evchargers.md).
+The old page counted 35 endpoints; its own sub-lists add up to 42 (11, 8, 3, 5, 2, 2, 5, 4, 2) and the deleted `endpoints/device_specific.md` (EV charger section) had 42 endpoint lines in the EV charger section (audit rows 51 to 54, prose counts). Groups: Vehicle Management 11, Charging Sessions 8, RFID 3, Groups 5, OCPP 2, Security 2, Sharing 5, HES Integration 4, Faults 2. Per-endpoint payloads: the pages under [../api/power_service/app/](../api/README.md) (for example [add_vehicle](../api/power_service/app/vehicle/add_vehicle.md)); the old per-endpoint tables are removed here. The HES binding body uses camelCase keys (`stationId`, `evChargers`, `deleteFlag`, `forceBindFlag`), see [set_station_evchargers](../api/charging_hes_svc/set_station_evchargers.md).
 
 ## MQTT/BLE Command → TLV Tag → APK Field Name Mapping
 

@@ -157,22 +157,22 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the device-tested record template, ho
 
 ## 9. 3.18.0 reference, superseded
 
-These root files still carry 3.18.0 content and are kept only until their deletion after the rework. Each starts with a banner naming its owner pages on 3.24.3; do not use them as a source. The old `endpoints/` pages and the legacy group pages in [models/](models/README.md) and [devices/](devices/README.md) are covered by the migration map in [docs/STRUCTURE.md](docs/STRUCTURE.md#migration-map).
+These root files carried 3.18.0 content and were deleted in the cleanup after the rework; they stay reachable in git history (tag `v2026.04-app3.18.0`). The table names the owner of each on 3.24.3. The old `endpoints/` pages were deleted the same way, and the legacy group pages in [models/](models/README.md) and [devices/](devices/README.md) were rebuilt in place; all of them are covered by the migration map in [docs/STRUCTURE.md](docs/STRUCTURE.md#migration-map).
 
-| Superseded file | Owner on 3.24.3 |
+| Deleted file | Owner on 3.24.3 |
 |---|---|
-| [BLE_COMMAND_MAP.md](BLE_COMMAND_MAP.md) | [ble/](ble/README.md), [mqtt/](mqtt/README.md) |
-| [BUSINESS_RULES.md](BUSINESS_RULES.md) | [reference/business_rules.md](reference/business_rules.md) |
-| [DART_PYTHON_MAPPING.md](DART_PYTHON_MAPPING.md) | [data/models.json](data/models.json), [models/](models/README.md) (some content not yet moved, see the migration map) |
-| [ENDPOINT_FIELDS.md](ENDPOINT_FIELDS.md) | [api/](api/README.md) |
-| [ENUMS.md](ENUMS.md) | [reference/enums.md](reference/enums.md) |
-| [FIELD_TYPES.md](FIELD_TYPES.md) | [models/](models/README.md), [data/models.json](data/models.json) (some content not yet moved, see the migration map) |
-| [FLOWS.md](FLOWS.md) | [flows/](flows/README.md) (some content not yet moved, see the migration map) |
-| [JSON_EXAMPLES.md](JSON_EXAMPLES.md) | [api/](api/README.md) |
-| [PARAM_DATA_STRUCTURES.md](PARAM_DATA_STRUCTURES.md) | [api/param_types.md](api/param_types.md) |
-| [REQUIRED_FIELDS.md](REQUIRED_FIELDS.md) | [api/](api/README.md) |
-| [RESPONSE_EXAMPLES.md](RESPONSE_EXAMPLES.md) | [api/](api/README.md) |
-| [VALIDATION_MODEL.md](VALIDATION_MODEL.md) | [reference/validation_model.md](reference/validation_model.md) (some content not yet moved, see the migration map) |
+| `BLE_COMMAND_MAP.md` | [ble/](ble/README.md), [mqtt/](mqtt/README.md) |
+| `BUSINESS_RULES.md` | [reference/business_rules.md](reference/business_rules.md) |
+| `DART_PYTHON_MAPPING.md` | [data/models.json](data/models.json), [models/](models/README.md) (some content not yet moved, see the migration map) |
+| `ENDPOINT_FIELDS.md` | [api/](api/README.md) |
+| `ENUMS.md` | [reference/enums.md](reference/enums.md) |
+| `FIELD_TYPES.md` | [models/](models/README.md), [data/models.json](data/models.json) (some content not yet moved, see the migration map) |
+| `FLOWS.md` | [flows/](flows/README.md) (some content not yet moved, see the migration map) |
+| `JSON_EXAMPLES.md` | [api/](api/README.md) |
+| `PARAM_DATA_STRUCTURES.md` | [api/param_types.md](api/param_types.md) |
+| `REQUIRED_FIELDS.md` | [api/](api/README.md) |
+| `RESPONSE_EXAMPLES.md` | [api/](api/README.md) |
+| `VALIDATION_MODEL.md` | [reference/validation_model.md](reference/validation_model.md) (some content not yet moved, see the migration map) |
 
 ---
 

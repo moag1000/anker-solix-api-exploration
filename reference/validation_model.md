@@ -4,7 +4,7 @@
 
 Closest template: [../docs/templates/flow.md](../docs/templates/flow.md) (Preconditions, Failure paths, Known unknowns); the sections below are grouped by the question "where does the limit of this value come from", because that is the question a library author asks before sending a value. The page is `Page type: reference`.
 
-It replaces the 3.18.0 root page [../VALIDATION_MODEL.md](../VALIDATION_MODEL.md). It does not copy `api/param_types.md`: the `param_type` list, the `cmd` values and the `param_data` keys stay on [../api/param_types.md](../api/param_types.md); this page only says which read comes before which write and which limits the app itself applies. Timing, gates and polling are on [business_rules.md](business_rules.md).
+It replaces the deleted 3.18.0 root page `VALIDATION_MODEL.md`. It does not copy `api/param_types.md`: the `param_type` list, the `cmd` values and the `param_data` keys stay on [../api/param_types.md](../api/param_types.md); this page only says which read comes before which write and which limits the app itself applies. Timing, gates and polling are on [business_rules.md](business_rules.md).
 
 ## Contents
 

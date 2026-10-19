@@ -33,7 +33,7 @@ Tag is the status-header tag of the page (the lowest tag among its facts, see [.
 
 ## From the old FLOWS.md
 
-The old [../FLOWS.md](../FLOWS.md) is a 3.18.0 reference with known Smi errors (see the Errata in [../CHANGELOG.md](../CHANGELOG.md)). Its 14 flows now live on the pages below; the old file stays in place until the migration map of [../docs/STRUCTURE.md](../docs/STRUCTURE.md) retires it.
+The old `FLOWS.md` was a 3.18.0 reference with known Smi errors (see the Errata in [../CHANGELOG.md](../CHANGELOG.md)); it is deleted. Its 14 flows live on the pages below, as listed in the migration map of [../docs/STRUCTURE.md](../docs/STRUCTURE.md).
 
 | old flow | page |
 |---|---|

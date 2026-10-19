@@ -4,7 +4,7 @@
 
 Closest template: [../docs/templates/flow.md](../docs/templates/flow.md) (Preconditions, Timing, Failure paths, Known unknowns), but the sections here are grouped by topic instead of by one flow, because a rule belongs to a topic and not to one UI action. The page is `Page type: reference`; its header carries the lowest tag among its rows (`string-only`, because some rules are log or localization strings without a decoded caller).
 
-This page owns the client-side rules of the 3.24.3 app: when it polls, how long it waits, when it refuses to send, which hardcoded limits it applies. It replaces the 3.18.0 root page [../BUSINESS_RULES.md](../BUSINESS_RULES.md). Protocol facts stay with their owners: opcodes and TLV tags on the [mqtt pages](../mqtt/README.md), `param_type` and `cmd` on [../api/param_types.md](../api/param_types.md), signing and the 461/463 headers on [../api/encryption.md](../api/encryption.md), sequences on [../flows/README.md](../flows/README.md). What the app checks before it sends a value is on [validation_model.md](validation_model.md).
+This page owns the client-side rules of the 3.24.3 app: when it polls, how long it waits, when it refuses to send, which hardcoded limits it applies. It replaces the deleted 3.18.0 root page `BUSINESS_RULES.md`. Protocol facts stay with their owners: opcodes and TLV tags on the [mqtt pages](../mqtt/README.md), `param_type` and `cmd` on [../api/param_types.md](../api/param_types.md), signing and the 461/463 headers on [../api/encryption.md](../api/encryption.md), sequences on [../flows/README.md](../flows/README.md). What the app checks before it sends a value is on [validation_model.md](validation_model.md).
 
 ## Contents
 

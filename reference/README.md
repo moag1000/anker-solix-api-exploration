@@ -9,6 +9,6 @@
 | [iot_kit_channels.md](iot_kit_channels.md) | asm-traced | The 90 `akiot.*` IoT-Kit identifiers (3.18.0: 68; 22 new in 3.24.3), transport (`ak_iot_kit_flutter` MethodChannel + 3 EventChannels), call sites |
 | [validation_model.md](validation_model.md) | asm-traced | Client-side validation before sending (ranges, pairs, checks) + pointer table to the mqtt/ owners |
 
-The 3.18.0 root pages are superseded by the pages above; their old content stays in the 3.18.0 root pages [../ENUMS.md](../ENUMS.md), [../BUSINESS_RULES.md](../BUSINESS_RULES.md) and [../VALIDATION_MODEL.md](../VALIDATION_MODEL.md), whose numbers are under review (audit tables in [../docs/audit/](../docs/audit/)).
+The 3.18.0 root pages are superseded by the pages above; their old content was in the 3.18.0 root pages `ENUMS.md`, `BUSINESS_RULES.md` and `VALIDATION_MODEL.md` (deleted; their numbers were under review, audit tables in [../docs/audit/](../docs/audit/)).
 
 Not here: per-endpoint payloads ([../api/README.md](../api/README.md)); owner map in [../docs/STRUCTURE.md](../docs/STRUCTURE.md).
