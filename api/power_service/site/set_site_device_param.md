@@ -96,19 +96,20 @@ None recorded for the app payload above. For a different payload (upstream libra
 
 ## Known unknowns
 
-- Server-side meaning of `display_type` beyond the observed behaviour. The device test recorded under Device-tested by shows that `display_type: 1` makes free 10 W values acceptable and that `display_type: 0` works only for `power_limit_option` values; why the server draws this line, and what other values do, is not known.
-- Whether the server really never checks `legal_limit`. One test (A17C5, below) saw no enforcement; other devices and firmware are untested.
+- Server-side meaning of `display_type` beyond the behaviour recorded under [Device-tested by](#device-tested-by): why the server draws that line, and what other values do, is not known.
+- Behaviour of `display_type` 0 or an absent key with non-option values: not reported as tested.
+- Whether the server checks `legal_limit` at all. One test (A17C5) saw it apparently ignored; other devices and firmware are untested.
 - Whether the server accepts the upstream library's `cmd` value as well as the app's for param_type 19 (both values are owned by [../../param_types.md](../../param_types.md)). The issue #1 test recorded below does not establish which `cmd` value was used, so this stays open.
 - Whether the encrypted request path is required, or whether a plain request with the same body is accepted.
 - The response body for a successful type-19 call (not read by the app).
 
 ## Device-tested by
 
-Records below. The 2026-10-19 rows are from [anker-solix-api-exploration issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) (comment of 2026-10-19T11:49Z; tester thomluther, device A17C5, firmware not recorded, client: anker-solix-api raw requests, client version not recorded). The earlier rows used the upstream library payload (firmware not recorded). Result of the issue #1 test, device-tested: `display_type: 1` makes free 10 W values acceptable; `display_type: 0` works only for values that are in `power_limit_option`; the API does not enforce `legal_limit` (the legal-limit popup exists only in the app). The 3.24.3 app always sends `display_type: 1` (asm-traced, see Request), so the app payload and the working device request agree on this key.
+Rows dated 2026-10-19 come from [anker-solix-api-exploration issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) (comment of 2026-10-19T11:49Z; client: anker-solix-api raw requests, client version not recorded); earlier rows used the upstream library payload. The 3.24.3 app always sends `display_type: 1` (asm-traced, see Request).
 
 | who | device | request | value | result | date | source |
 |---|---|---|---|---|---|---|
 | thomluther | not recorded in the reference | upstream `cmd` value (owner: param_types.md), `param_data` `{"power_limit":{"limit":N,"limit_real":N}}` | N from `power_limit_option` | accepted | not recorded | [ha-anker-solix#423](https://github.com/thomluther/ha-anker-solix/issues/423#issuecomment-4135301109) |
 | thomluther | A17C5 | same as above (no `display_type`) | 790 W (not in `power_limit_option`) | rejected, `10004` ItemNotFoundError | 2026-10-18 | [anker-solix-api#339](https://github.com/thomluther/anker-solix-api/issues/339) |
-| thomluther | A17C5 (firmware not recorded) | raw request, `param_data` with `display_type` 1 | free 10 W value (not in `power_limit_option`) | accepted | 2026-10-19 | [issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) |
-| thomluther | A17C5 (firmware not recorded) | raw request, `param_data` with `display_type` 0 | value not in `power_limit_option` | `display_type` 0 works only for `power_limit_option` values | 2026-10-19 | [issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) |
+| thomluther | A17C5 (firmware not recorded) | raw request, `param_data` with `display_type` 1 | free 10 W value (not in `power_limit_option`) | accepted; the API appeared not to enforce `legal_limit` ("seems to be ignored", thomluther) | 2026-10-19 | [issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) |
+| thomluther | A17C5 (firmware not recorded) | raw request, `param_data` with `display_type` 0 | option-list values (`power_limit_option`) | accepted ("works ... only for the dedicated options", thomluther) | 2026-10-19 | [issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) |
