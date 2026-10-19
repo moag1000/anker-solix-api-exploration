@@ -2,55 +2,76 @@
 
 # Template: MQTT command page
 
-Copy to a section (or page) of `mqtt/<pn>.md`, the owner of MQTT field maps. Tags (see `METHODOLOGY.md`): `asm-traced` · `string-only` · `upstream-confirmed` · `device-tested`. Integers from asm follow the Smi rule in [../../METHODOLOGY.md](../../METHODOLOGY.md); cite `file.dart @0xADDR` next to every number. A fact lives on one owner page (see [../STRUCTURE.md](../STRUCTURE.md)); other pages link. Section order is fixed.
+`mqtt/<pn>.md` is ONE page per PN, the owner of MQTT field maps. The page has ONE status header (lowest tag across the page) and ONE H1; each command is an H3 section `### <command>`, and the sections below are its H4 subsections. A single-command page is allowed only when the PN has exactly one command. Length: under 600 lines; add a table of contents above 150 lines (see [../STRUCTURE.md](../STRUCTURE.md)). Section order is fixed.
 
-## Status header
+Tags (see [../../METHODOLOGY.md](../../METHODOLOGY.md)): `asm-traced` · `string-only` · `upstream-confirmed` · `device-tested`. Integers from asm follow the Smi rule in the same file; cite `file.dart @0xADDR` next to every number. A fact lives on one owner page (see [../STRUCTURE.md](../STRUCTURE.md)); other pages link.
 
-One line, first line of the page: `> Verified against: App 3.24.3 · Date: YYYY-MM-DD · Confidence: <tag> · Owner page: <path or "this page">`.
+Link if the target file exists today, otherwise write a code span.
 
-## Purpose
+The status header is the first line of the page, before the H1; it is NOT a section heading. Its format: `> Verified against: App 3.24.3 · Date: YYYY-MM-DD · Confidence: <tag> · Owner page: <path or "this page">`. The status-header tag is the LOWEST tag among the facts on the page (METHODOLOGY.md).
+
+Sections that carry no API fact (Known unknowns, link-only "Related ..." sections, "Device-tested by" lists) are untagged by design; their instruction says `Tag: untagged by design (no API fact)`. Every fact-bearing table or section carries a tag.
+
+Section order (status header line first, then):
+
+0. Status header line (first line, before H1)
+1. Purpose
+2. Upstream name
+3. Command code
+4. Direction
+5. Topic pattern
+6. Payload fields
+7. Example
+8. Related API endpoint
+9. Since/changed
+10. Known unknowns
+11. Device-tested by
+
+Per command, under `### <command>`:
+
+#### Purpose
 
 One sentence: what the command does. Tag: any.
 
-## Upstream name
+#### Upstream name
 
 `mqttmap.py` / `mqttcmdmap.py` name, or `none` (mark ours `(no upstream name)`). Tag: `upstream-confirmed` if matched.
 
-## Command code
+#### Command code
 
 Hex string exactly as in Dart, e.g. `"007c"`. Hex-string opcodes are string literals, not Smi: no halving. Tag: `asm-traced` / `string-only`.
 
-## Direction
+#### Direction
 
 `app→device`, `device→app` or `both`. Tag: `asm-traced`.
 
-## Topic pattern
+#### Topic pattern
 
 Link to `mqtt/envelope.md`; never copy the topic or envelope here. Tag: per owner page.
 
-## Payload fields
+#### Payload fields
 
-Table `tag | name | type | unit/scale | required | source`. Integers follow the Smi rule; scale factors link to `ble/protocol.md`. Tag: per row.
+Table `tag | name | type | unit/scale | required | source`. Scale factors link to `ble/protocol.md`. Row tag goes in the `source` column: an asm citation `file.dart @0xADDR` (= asm-traced), `string-only`, `upstream-confirmed (apitypes.py key)`, or `device-tested (who/device/date)`.
 
-## Example
+#### Example
 
 Code block preceded by a label line `captured (client, version, date)` or `synthesized`. Tag: `device-tested` only if captured and accepted.
 
-## Related API endpoint
+#### Related API endpoint
 
-Link to the `api/<service>/<endpoint>.md` owner, if the same function exists over the cloud API. Tag: none.
+Link to the `api/<service>/<endpoint>.md` owner. Tag: untagged by design (no API fact).
 
-## Since/changed
+#### Since/changed
 
 3.18.0 to 3.24.3 change. Tag: `asm-traced` (3.24.3 side).
 
-## Known unknowns
+#### Known unknowns
 
-Bullet list of open questions. Tag: none.
+Bullet list of open questions. Tag: untagged by design (no API fact).
 
-## Device-tested by
+#### Device-tested by
 
-Who, device PN and firmware, client and version, date; `none` if untested. Tag: `device-tested`.
+Who, device PN and firmware, client and version, date; `none` if untested. Tag: untagged by design (no API fact).
 
 ---
 
@@ -58,58 +79,58 @@ Who, device PN and firmware, client and version, date; `none` if untested. Tag: 
 
 > Verified against: App 3.24.3 · Date: YYYY-MM-DD · Confidence: <tag> · Owner page: <path or "this page">
 
-# A17X8 command `"007c"`
+# <PN> MQTT commands
 
-## Status header
+<!-- brief example: A17X8 `"007c"` -->
 
-(see first line above)
+### <command name>
 
-## Purpose
+#### Purpose
 
 <one sentence>
 
-## Upstream name
+#### Upstream name
 
 `<mqttmap_name>` or `none`
 
-## Command code
+#### Command code
 
 `"<hex>"` — string literal, `<file.dart @0xADDR>`
 
-## Direction
+#### Direction
 
 <app→device / device→app / both>
 
-## Topic pattern
+#### Topic pattern
 
 `mqtt/envelope.md`
 
-## Payload fields
+#### Payload fields
 
 | tag | name | type | unit/scale | required | source |
 |---|---|---|---|---|---|
 | `<tag>` | <name> | <type> | <unit/scale> | <yes/no> | `<file.dart @0xADDR>` |
 
-## Example
+#### Example
 
 synthesized
 
-```json
-{ "<field>": "<value>" }
+```
+<payload>
 ```
 
-## Related API endpoint
+#### Related API endpoint
 
 `api/<service>/<endpoint>.md`
 
-## Since/changed
+#### Since/changed
 
 3.18.0: <state>. 3.24.3: <state>.
 
-## Known unknowns
+#### Known unknowns
 
 - <open question>
 
-## Device-tested by
+#### Device-tested by
 
 <who>, <PN> fw <version>, <client version>, <YYYY-MM-DD>

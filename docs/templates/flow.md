@@ -2,11 +2,26 @@
 
 # Template: flow page
 
-Copy to `flows/<name>.md`. Tags (see `METHODOLOGY.md`): `asm-traced` · `string-only` · `upstream-confirmed` · `device-tested`. Integers from asm follow the Smi rule in [../../METHODOLOGY.md](../../METHODOLOGY.md); cite `file.dart @0xADDR` next to every number. A fact lives on one owner page (see [../STRUCTURE.md](../STRUCTURE.md)); other pages link. A flow page links to owners and never copies payloads. Section order is fixed.
+Copy to `flows/<name>.md`. A flow page links to owners and never copies payloads. Section order is fixed.
 
-## Status header
+Tags (see [../../METHODOLOGY.md](../../METHODOLOGY.md)): `asm-traced` · `string-only` · `upstream-confirmed` · `device-tested`. Integers from asm follow the Smi rule in the same file; cite `file.dart @0xADDR` next to every number. A fact lives on one owner page (see [../STRUCTURE.md](../STRUCTURE.md)); other pages link.
 
-One line, first line of the page: `> Verified against: App 3.24.3 · Date: YYYY-MM-DD · Confidence: <tag> · Owner page: <path or "this page">`.
+Link if the target file exists today, otherwise write a code span.
+
+The status header is the first line of the page, before the H1; it is NOT a section heading. Its format: `> Verified against: App 3.24.3 · Date: YYYY-MM-DD · Confidence: <tag> · Owner page: <path or "this page">`. The status-header tag is the LOWEST tag among the facts on the page (METHODOLOGY.md).
+
+Sections that carry no API fact (Known unknowns, link-only "Related ..." sections, "Device-tested by" lists) are untagged by design; their instruction says `Tag: untagged by design (no API fact)`. Every fact-bearing table or section carries a tag.
+
+Section order (status header line first, then):
+
+0. Status header line (first line, before H1)
+1. Trigger (UI action)
+2. Preconditions
+3. Steps
+4. Side effects
+5. Timing (delays/polling)
+6. Failure paths
+7. Known unknowns
 
 ## Trigger (UI action)
 
@@ -18,7 +33,7 @@ State required before the trigger (login, site, device state, BLE vs cloud). Lin
 
 ## Steps
 
-Table `# | actor | action | owner page link | asm citation`. Actor is app, cloud, device or user. Link to the owner for every payload. Tag: per row.
+Table `# | actor | action | owner page link | asm citation`. Actor is app, cloud, device or user. Row tag goes in the `asm citation` column: an asm citation `file.dart @0xADDR` (= asm-traced), `string-only`, `upstream-confirmed (apitypes.py key)`, or `device-tested (who/device/date)`. For rows whose actor is cloud or device (no asm site): cite the owner page link and tag `string-only` or `device-tested (who/device/date)` in that column.
 
 ## Side effects
 
@@ -34,7 +49,7 @@ What happens on error or timeout, linking `api/errors.md`. Tag: any.
 
 ## Known unknowns
 
-Bullet list of open questions. Tag: none.
+Bullet list of open questions. Tag: untagged by design (no API fact).
 
 ---
 
@@ -43,10 +58,6 @@ Bullet list of open questions. Tag: none.
 > Verified against: App 3.24.3 · Date: YYYY-MM-DD · Confidence: <tag> · Owner page: <path or "this page">
 
 # system output limit
-
-## Status header
-
-(see first line above)
 
 ## Trigger (UI action)
 

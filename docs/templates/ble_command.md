@@ -2,61 +2,83 @@
 
 # Template: BLE command page
 
-Copy to a section (or page) of `ble/<pn>.md`, the owner of BLE opcodes and TLV. Tags (see `METHODOLOGY.md`): `asm-traced` · `string-only` · `upstream-confirmed` · `device-tested`. Integers from asm follow the Smi rule in [../../METHODOLOGY.md](../../METHODOLOGY.md); cite `file.dart @0xADDR` next to every number. A fact lives on one owner page (see [../STRUCTURE.md](../STRUCTURE.md)); other pages link. Section order is fixed.
+`ble/<pn>.md` is ONE page per PN, the owner of BLE opcodes and TLV. The page has ONE status header (lowest tag across the page) and ONE H1; each command is an H3 section `### <command>`, and the sections below are its H4 subsections. A single-command page is allowed only when the PN has exactly one command. Length: under 600 lines; add a table of contents above 150 lines (see [../STRUCTURE.md](../STRUCTURE.md)). Section order is fixed.
 
-## Status header
+Tags (see [../../METHODOLOGY.md](../../METHODOLOGY.md)): `asm-traced` · `string-only` · `upstream-confirmed` · `device-tested`. Integers from asm follow the Smi rule in the same file; cite `file.dart @0xADDR` next to every number. A fact lives on one owner page (see [../STRUCTURE.md](../STRUCTURE.md)); other pages link.
 
-One line, first line of the page: `> Verified against: App 3.24.3 · Date: YYYY-MM-DD · Confidence: <tag> · Owner page: <path or "this page">`.
+Link if the target file exists today, otherwise write a code span.
 
-## Purpose
+The status header is the first line of the page, before the H1; it is NOT a section heading. Its format: `> Verified against: App 3.24.3 · Date: YYYY-MM-DD · Confidence: <tag> · Owner page: <path or "this page">`. The status-header tag is the LOWEST tag among the facts on the page (METHODOLOGY.md).
+
+Sections that carry no API fact (Known unknowns, link-only "Related ..." sections, "Device-tested by" lists) are untagged by design; their instruction says `Tag: untagged by design (no API fact)`. Every fact-bearing table or section carries a tag.
+
+Section order (status header line first, then):
+
+0. Status header line (first line, before H1)
+1. Purpose
+2. Upstream name
+3. Opcode
+4. Direction
+5. Packet framing
+6. Handshake prerequisite
+7. TLV tags
+8. Example
+9. Related API endpoint
+10. Since/changed
+11. Known unknowns
+12. Device-tested by
+
+Per command, under `### <command>`:
+
+#### Purpose
 
 One sentence: what the command does. Tag: any.
 
-## Upstream name
+#### Upstream name
 
 Upstream (AnkerSolixBLE / SolixBLE / mqttmap) name, or `none` (mark ours `(no upstream name)`). Tag: `upstream-confirmed` if matched.
 
-## Opcode
+#### Opcode
 
 Opcode as in Dart. A hex string (`"005e"`) is a string literal, not Smi; an int literal follows the Smi rule. Tag: `asm-traced` / `string-only`.
 
-## Direction
+#### Direction
 
 `app→device`, `device→app` or `both`. Tag: `asm-traced`.
 
-## Packet framing
+#### Packet framing
 
 Link to `ble/protocol.md`; never restate frame layout. Tag: per owner page.
 
-## Handshake prerequisite
+#### Handshake prerequisite
 
 Link to `ble/handshake.md`; state only whether the command needs a completed handshake. Tag: per owner page.
 
-## TLV tags
+#### TLV tags
 
-Table `tag | name | type | length | source`. Integers follow the Smi rule. Tag: per row.
+Table `tag | name | type | length | source`. Row tag goes in the `source` column: an asm citation `file.dart @0xADDR` (= asm-traced), `string-only`, `upstream-confirmed (apitypes.py key)`, or `device-tested (who/device/date)`.
 
-## Example
+#### Example
 
 Code block preceded by a label line `captured (client, version, date)` or `synthesized`. Tag: `device-tested` only if captured and accepted.
 
-## Related API endpoint
+#### Related API endpoint
 
-Link to the `api/<service>/<endpoint>.md` owner, or the MQTT twin in `mqtt/<pn>.md`. Tag: none.
+Link to the `api/<service>/<endpoint>.md` owner, or the MQTT twin in `mqtt/<pn>.md`. Tag: untagged by design (no API fact).
 
-## Since/changed
+#### Since/changed
 
 3.18.0 to 3.24.3 change. Tag: `asm-traced` (3.24.3 side).
 
-## Known unknowns
+#### Known unknowns
 
-Bullet list of open questions. Tag: none.
+Bullet list of open questions. Tag: untagged by design (no API fact). The section ends with the fixed note line below.
 
-## Device-tested by
+BLE is unavailable while the device is on WiFi; see `ble/protocol.md`.
 
-Who, device PN and firmware, client and version, date; `none` if untested. Tag: `device-tested`.
+#### Device-tested by
 
-Every BLE page carries this note line, verbatim: `BLE is unavailable while the device is on WiFi; see ble/protocol.md` (link to the `ble/protocol.md` owner; do not restate details here).
+Who, device PN and firmware, client and version, date; `none` if untested. Tag: untagged by design (no API fact).
 
 ---
 
@@ -64,64 +86,64 @@ Every BLE page carries this note line, verbatim: `BLE is unavailable while the d
 
 > Verified against: App 3.24.3 · Date: YYYY-MM-DD · Confidence: <tag> · Owner page: <path or "this page">
 
-# A17C1 opcode `005e`
+# <PN> BLE commands
 
-## Status header
+<!-- brief example: A17C1 `005e` -->
 
-(see first line above)
+### <command name>
 
-## Purpose
+#### Purpose
 
 <one sentence>
 
-## Upstream name
+#### Upstream name
 
 `<upstream_name>` or `none`
 
-## Opcode
+#### Opcode
 
 `<opcode>` — `<file.dart @0xADDR>`
 
-## Direction
+#### Direction
 
 <app→device / device→app / both>
 
-## Packet framing
+#### Packet framing
 
 `ble/protocol.md`
 
-## Handshake prerequisite
+#### Handshake prerequisite
 
 `ble/handshake.md` — <needed / not needed>
 
-## TLV tags
+#### TLV tags
 
 | tag | name | type | length | source |
 |---|---|---|---|---|
 | `<tag>` | <name> | <type> | <N> | `<file.dart @0xADDR>` |
 
-## Example
+#### Example
 
 synthesized
 
 ```
-<hex bytes>
+<payload>
 ```
 
-## Related API endpoint
+#### Related API endpoint
 
 `api/<service>/<endpoint>.md`
 
-## Since/changed
+#### Since/changed
 
 3.18.0: <state>. 3.24.3: <state>.
 
-## Known unknowns
+#### Known unknowns
 
 - <open question>
 
-## Device-tested by
+BLE is unavailable while the device is on WiFi; see `ble/protocol.md`.
+
+#### Device-tested by
 
 <who>, <PN> fw <version>, <client version>, <YYYY-MM-DD>
-
-BLE is unavailable while the device is on WiFi; see `ble/protocol.md`.
