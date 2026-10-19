@@ -418,7 +418,7 @@ The old root page also listed sets of names. Each member below was checked as a 
 - Dynamic price providers: `Nordpool`, `Tibber`, `Flatpeak`, `Octopus Energy` (all four are pool strings).
 - Schedule constants: `blend_plan`, `custom_rate_plan`, `manual_backup`, `peak_sessions`, `peak_valley_prices`, `use_time` are pool strings; `ai_ems` is not a standalone pool string in 3.24.3. Day types `weekday`, `weekend`, `everyday` are pool strings.
 - Fault info fields: `failureCode`, `failureDesc`, `failureLevel`, `failureActualLevel`, `failureTime`, `failureTimeUnix`, `failureType`, `handlingSuggestion`, `stationId`, `sn`, `subSn`, `pn`, `compositeSystemId`, `allow_delete` (all are pool strings).
-- KV config keys (per-device feature flags): `bindConfig`, `is_share`, `needCheckBind`, `needCheckOTA`, `needUserLogin`, `otaConfig`, `otaLimitType`, `otaProgressTimeout`, `requires_bluetooth_pwd`, `supportEthernet`, `support_dual_mode_online` (all are pool strings; the last one is the dual-mode flag discussed on [../ble/protocol.md](../ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule)).
+- KV config keys (per-device feature flags): `bindConfig`, `is_share`, `needCheckBind`, `needCheckOTA`, `needUserLogin`, `otaConfig`, `otaLimitType`, `otaProgressTimeout`, `requires_bluetooth_pwd`, `supportEthernet`, `support_dual_mode_online` (all are pool strings; the last one, `support_dual_mode_online`, is a KV-config string whose use was not traced — see ble/protocol.md)).
 - App module names from the log registration: the old list has 55 names; 53 are pool strings, `dynamic_price` and `fixed_price` are not.
 - The A17C5 timer duration labels `30min`, `hr`, `hrs`, `never` (audit row 353) are pool strings; they are display labels of the device timeout, not wire values.
 
@@ -448,4 +448,4 @@ Tag: untagged by design (no API fact).
 - Which `ModeState` enum each screen uses, and the wire values of the mode-state numbers (none are declared).
 - The meaning of the 15 products without a BLE class in the ProductModel table beyond their names (A25X7, A2687 and A120J, for example, have a ProductModel and the ZX UUIDs but no `charging/ble/device` class).
 
-BLE is unavailable while the device is on WiFi; see `ble/protocol.md`.
+BLE is unavailable while the device is on WiFi (community finding, see `ble/protocol.md`; not asm-traced).
