@@ -63,7 +63,7 @@ python3 -I tools/lint_docs.py --summary            # counts per rule; exit 1 whe
 python3 -I tools/lint_docs.py [--rule header,links] [--json] [--warn-only] [--strict]
 ```
 
-`lint_docs.py` checks every Markdown page of the repo (not `.superpowers/`, `tools/out/`, `patches/`, nor an old root doc listed in the migration map of [../docs/STRUCTURE.md](../docs/STRUCTURE.md) that still has no status header). Output lines are `path:line: ERROR|WARN rule: message`. Rules:
+`lint_docs.py` checks every Markdown page of the repo (not `.superpowers/` nor `tools/out/`; an old page listed in the migration map of [../docs/STRUCTURE.md](../docs/STRUCTURE.md) that still has no status header is checked for the `links` rule only, so a broken link in CHANGELOG.md or a root page is reported). Output lines are `path:line: ERROR|WARN rule: message`. Rules:
 
 | Rule | Checks |
 |---|---|

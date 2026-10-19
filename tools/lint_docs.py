@@ -18,7 +18,7 @@ Rules (each finding is printed as `path:line: ERROR|WARN rule: message`):
 
 Exit 1 when any error is reported. `--warn-only` runs only the warning rules and exits 0.
 Old root docs listed in the migration map of docs/STRUCTURE.md that still lack a status
-header (legacy, bannered later) are skipped entirely. Standard library only.
+header (legacy, bannered later) are exempt from every rule except `links`. Standard library only.
 """
 import argparse
 import collections
@@ -57,7 +57,7 @@ def valid_header(line):
 RULES = ('header', 'sections', 'uncited-int', 'tag-overclaim', 'inferred-as-traced-sequence',
          'todo-purpose', 'links', 'length', 'dup-payload', 'secret', 'owner-cmd')
 SOFT = ('todo-purpose', 'length')
-SKIP_DIRS = {'.git', '.superpowers', 'out', 'patches', '__pycache__', 'easter_eggs', 'node_modules'}
+SKIP_DIRS = {'.git', '.superpowers', 'out', '__pycache__', 'easter_eggs', 'node_modules'}
 HEADER_DIRS = ('api', 'models', 'flows', 'devices', 'mqtt', 'ble', 'reference')
 # non-command pages under mqtt/ and ble/ (template does not apply)
 PROTOCOL_PAGES = {'README.md', 'envelope.md', 'protocol.md', 'handshake.md'}
@@ -79,6 +79,7 @@ class Finding:
 class Page:
     def __init__(self, root, rel):
         self.rel = rel
+        self.legacy = False       # headerless page of the migration map: link check only
         with open(os.path.join(root, rel), encoding='utf-8') as fh:
             self.lines = fh.read().split('\n')
         self.fenced = []          # per line: True inside a fence (fence lines included)
@@ -161,8 +162,7 @@ def collect(root):
                 continue
             rel = os.path.relpath(os.path.join(dp, f), root).replace(os.sep, '/')
             pg = Page(root, rel)
-            if rel in legacy and not pg.has_header():
-                continue
+            pg.legacy = rel in legacy and not pg.has_header()
             pages.append(pg)
     return pages
 
@@ -561,7 +561,10 @@ def lint_repo(root, rules=None, strict=False):
     ctx = Ctx(root, pages)
     out = []
     for pg in pages:
+        # a headerless legacy page is exempt from every rule except the link check
         for name in rules:
+            if pg.legacy and name != 'links':
+                continue
             for res in PAGE_RULES[name](pg, ctx) or ():
                 ln, msg, text = res
                 sev = 'warning' if (name == 'todo-purpose' or (name == 'length' and '(limit 600)' not in msg)) else 'error'

@@ -974,6 +974,15 @@ class LintDocsTests(unittest.TestCase):
         r = self.lint({'docs/STRUCTURE.md': self.HDR + mig, 'old.md': '# old\n'}, ['header'])
         self.assertEqual(r, [])
 
+    def test_legacy_page_is_link_checked(self):
+        legacy = '| `old.md` | `new.md` | x | pending |\n'
+        mig = '## Migration map\n\n| Old path | New | What | Status |\n|---|---|---|---|\n' + legacy
+        files = {'docs/STRUCTURE.md': self.HDR + mig, 'old.md': '# old\n[bad](nope.md) [ok](new.md)\n',
+                 'new.md': '# new\n'}
+        r = self.lint(files, ['links'])
+        self.assertEqual([(f.path, f.rule) for f in r], [('old.md', 'links')])
+        self.assertEqual(self.lint(files, ['header']), [])
+
 
 class LintDocsRound1Tests(LintDocsTests):
     """Exemptions and CLI of lint_docs; inherits the helpers (its own tests run again, cheap)."""
