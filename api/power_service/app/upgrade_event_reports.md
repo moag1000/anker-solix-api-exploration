@@ -25,6 +25,7 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 |---|---|---|---|---|
 | `upgrade_even_device_infos` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3423398` |
 | `path` | ? | ? | ? | `ota_kit/src/services/ota_upgrade_record_reporter.dart @0x280a11c` |
+| `method` | ? | ? | ? | `ota_kit/src/services/ota_upgrade_record_reporter.dart @0x280a11c` |
 | `param.upgrade_even_device_infos` | ? | ? | ? | `ota_kit/src/services/ota_upgrade_record_reporter.dart @0x280a11c` |
 
 Rows are the union over 2 senders; `source` is the first sender that sets the key.

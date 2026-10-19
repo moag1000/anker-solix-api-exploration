@@ -29,6 +29,7 @@ encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header r
 | `device_sn` | ? | ? | ? | `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x3564988` |
 | `parallel_type` | ? | ? | ? | `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x3564988` |
 | `path` | ? | ? | ? | `device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4` |
+| `method` | ? | ? | ? | `device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4` |
 | `param.site_id` | ? | ? | ? | `device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4` |
 | `param.param_type` | ? | ? | ? | `device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4` |
 | `feed_switch` | ? | ? | ? | `micro_hes/src/a17e2/station/home/a17e2_station_logic.dart @0x233e8c0` |

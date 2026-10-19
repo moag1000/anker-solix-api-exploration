@@ -22,8 +22,12 @@ encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rul
 
 | field | type | required | example | source |
 |---|---|---|---|---|
+| `url` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+| `method` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
 | `country` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
 | `cloudVersion` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+| `useWebsocket` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
+| `isAIotEnv` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
 | `user_id` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
 | `msg_list` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |
 | `page` | ? | ? | ? | `anka_agent/http/request.dart @0x2dba16c` |

@@ -24,6 +24,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `path` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart @0x32558c0` |
+| `method` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart @0x32558c0` |
 | `param` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart @0x32558c0` |
 
 ## `param_type`/`cmd`

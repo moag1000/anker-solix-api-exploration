@@ -25,6 +25,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 |---|---|---|---|---|
 | `product_code` | ? | ? | ? | `base_service/view/grid/grid_param_util.dart @0x28f5f1c` |
 | `path` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart @0x2b07c9c` |
+| `method` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart @0x2b07c9c` |
 | `param` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart @0x2b07c9c` |
 
 Rows are the union over 2 senders; `source` is the first sender that sets the key.

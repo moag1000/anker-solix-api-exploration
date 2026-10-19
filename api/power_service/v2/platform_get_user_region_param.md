@@ -30,6 +30,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | `country_code` | ? | ? | ? | `device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x2a4f638` |
 | `grid_code` | ? | ? | ? | `device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x2a4f638` |
 | `path` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart @0x3256434` |
+| `method` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart @0x3256434` |
 | `param` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart @0x3256434` |
 
 Rows are the union over 3 senders; `source` is the first sender that sets the key.

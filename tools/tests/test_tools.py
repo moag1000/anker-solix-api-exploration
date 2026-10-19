@@ -252,20 +252,26 @@ class RenderTests(unittest.TestCase):
 
     def test_noise_keys_filtered_from_request_table(self):
         import render_pages
-        for k in ('url', 'method', 'useWebsocket', 'isAIotEnv', 'fixedPrice:',
-                  'a.value.isEmpty:', ' salePrice'):
+        for k in ('fixedPrice:', 'a.value.isEmpty:', ' salePrice'):
             self.assertTrue(render_pages.is_noise_key(k), k)
-        self.assertFalse(render_pages.is_noise_key('site_id'))
+        for k in ('url', 'method', 'useWebsocket', 'isAIotEnv'):
+            self.assertTrue(render_pages.is_noise_key(k, envelope=True), k)
+            self.assertFalse(render_pages.is_noise_key(k), k)
         base = dict(
             addr='0x1', callers=[], cmd=None, dart_file='x/y.dart', encrypted=True,
-            encryption_note=None, envelope=[], function='f', http_callees=['A::b'],
-            param_data_is_json=False, param_type=None, params=['site_id', 'method',
-            'url', 'fixedPrice:'], role='sender', since='3.24.3', url='/s/v1/a/b',
-            url_addr='0x2')
+            encryption_note=None, envelope=['url', 'useWebsocket'], function='f',
+            http_callees=['A::b'], param_data_is_json=False, param_type=None,
+            params=['site_id', 'method', 'url', 'fixedPrice:'], role='sender',
+            since='3.24.3', url='/s/v1/a/b', url_addr='0x2')
         page = render_pages.render_endpoint([base], date='2026-10-19')
-        self.assertIn('| `site_id` |', page)
-        for k in ('method', 'url', 'fixedPrice:'):
-            self.assertNotIn('| `%s` |' % k, page)
+        for k in ('site_id', 'method', 'url'):
+            self.assertIn('| `%s` |' % k, page)
+        self.assertNotIn('fixedPrice:', page)
+        env_only = dict(base, params=[], envelope=['url', 'method', 'foo'])
+        page = render_pages.render_endpoint([env_only], date='2026-10-19')
+        self.assertIn('| `foo` |', page)
+        self.assertNotIn('| `url` |', page)
+        self.assertNotIn('| `method` |', page)
 
     def test_service_index_idempotent(self):
         import service_index, tempfile, shutil

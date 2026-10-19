@@ -26,13 +26,24 @@ def _clean(seg):
     return re.sub(r'[^a-z0-9_]+', '_', seg.lower()).strip('_') or 'x'
 
 
-NOISE_KEYS = {'url', 'method', 'useWebsocket', 'isAIotEnv'}
+ENVELOPE_NOISE = {'url', 'method', 'useWebsocket', 'isAIotEnv'}
 
 
-def is_noise_key(k):
-    """Extractor noise: local-variable fragments and transport envelope keys."""
-    return (k in NOISE_KEYS or k.endswith(':') or '.isEmpty' in k
-            or k.startswith(' '))
+def is_noise_key(k, envelope=False):
+    """Extractor noise.  Local-variable fragments (trailing `:`, `.isEmpty`,
+    leading space) are noise anywhere; the transport names url/method/
+    useWebsocket/isAIotEnv are noise only in `envelope` (in `params` they are
+    real request keys)."""
+    if k.endswith(':') or '.isEmpty' in k or k.startswith(' '):
+        return True
+    return envelope and k in ENVELOPE_NOISE
+
+
+def request_keys(r):
+    """Request keys of one row: params if any, else envelope; noise removed."""
+    if r['params']:
+        return [k for k in r['params'] if not is_noise_key(k)]
+    return [k for k in r['envelope'] if not is_noise_key(k, envelope=True)]
 
 
 def endpoint_path(url):
@@ -110,13 +121,12 @@ def render_endpoint(rows, date=None, version='3.24.3'):
              % ' / '.join('`%s`' % x if x in ('true', 'false') else '"%s"' % x
                           for x in states))
     L += ['', '## Request', '']
-    shown = [r for r in rows if any(
-        not is_noise_key(k) for k in (r['params'] or r['envelope']))]
+    shown = [r for r in rows if request_keys(r)]
     if not shown:
         L += ['No request keys found by the extractor. %s' % TODO, '']
     else:
         env = sorted({k for r in shown if r['param_data_is_json']
-                      for k in r['envelope'] if not is_noise_key(k)})
+                      for k in request_keys(r)})
         if env:
             L += ['Some senders wrap these keys in `param_data` as a JSON string '
                   '(`jsonEncode`); outer keys: %s.' % ', '.join(
@@ -126,8 +136,8 @@ def render_endpoint(rows, date=None, version='3.24.3'):
         seen_p = set()
         for r in shown:
             src = '%s @%s' % (r['dart_file'], r['addr'])
-            for p in r['params'] or r['envelope']:
-                if p not in seen_p and not is_noise_key(p):
+            for p in request_keys(r):
+                if p not in seen_p:
                     seen_p.add(p)
                     L.append('| `%s` | ? | ? | ? | `%s` |' % (p, src))
         if len(shown) > 1:

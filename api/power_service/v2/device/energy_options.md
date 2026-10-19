@@ -23,6 +23,7 @@ encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rul
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `path` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2998e7c` |
+| `method` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2998e7c` |
 | `param.device_sn` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2998e7c` |
 
 ## `param_type`/`cmd`

@@ -21,7 +21,7 @@ encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header r
 
 ## Request
 
-Some senders wrap these keys in `param_data` as a JSON string (`jsonEncode`); outer keys: `attributes`, `device_sn`.
+Some senders wrap these keys in `param_data` as a JSON string (`jsonEncode`); outer keys: `init_status`, `pps_use_time`.
 
 | field | type | required | example | source |
 |---|---|---|---|---|

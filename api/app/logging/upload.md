@@ -23,6 +23,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
+| `url` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
 | `source` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
 | `logging_time` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
 | `level` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |

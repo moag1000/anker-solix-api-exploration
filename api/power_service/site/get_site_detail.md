@@ -25,6 +25,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 |---|---|---|---|---|
 | `site_id` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x28f4c38` |
 | `path` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart @0x47add6c` |
+| `method` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart @0x47add6c` |
 | `param.site_id` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart @0x47add6c` |
 
 Rows are the union over 3 senders; `source` is the first sender that sets the key.
