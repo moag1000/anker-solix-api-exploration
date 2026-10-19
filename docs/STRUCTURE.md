@@ -198,7 +198,7 @@ One row per tracked Markdown file outside `docs/` (root docs, `devices/`, `endpo
 | `models/pricing.md` | `models/pricing.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: CurrencyElecModel, CurrencyInfo, DynamicPriceCountryAreaModel, DynamicPriceDetailModel, SitePriceModel, TouBenifitsModel, TouDeviceAttrsModel; fields confirmed against 3.24.3 `toJson`/`fromJson` | partial |
 | `models/products.md` | `models/products.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: BrandModel, ConfirmModel, ProductCategoriesModel; fields confirmed against 3.24.3 `toJson`/`fromJson` | partial |
 | `models/solarbank.md` | `models/solarbank.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: A17C1DeviceHomeLoadData, GetSiteDeviceParamResponse, SiteConsumptionStrategyModel, SiteDeviceParamData, SiteHomeLoadModel; fields confirmed against 3.24.3 `toJson`/`fromJson`. GetSiteDeviceParamResponse, SiteDeviceParamData (with SiteSocItem, FeedTimes) are now owned by `models/get_site_device_param_response.md` (2026-10-19) | partial |
-| `patches/README.md` | `tools/` (patch notes), `devices/<pn>.md` (device-tested status) | Patch usage notes; the patch file itself is tooling, not documentation | partial |
+| `patches/README.md` | `docs/archive/patches-2026-03/README.md` (archived with both patch files), `tools/` (patch notes), `devices/<pn>.md` (device-tested status) | Patch usage notes; the patch files are tooling, not documentation, and are stale (3.18.0, Smi misreads, superseded by `mqtt/a17c1.md`) | partial |
 
 ## Notes on consistency with PERSONAS.md
 

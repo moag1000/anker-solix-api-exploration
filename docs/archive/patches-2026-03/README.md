@@ -1,8 +1,6 @@
 # Patches for Local Testing
 
-> **STALE (3.18.0; contains Smi misreads — 'value 2 = enabled' is really 1, fc indexes [1],[7],[9]); see [docs/audit/patches_README.md](../docs/audit/patches_README.md); archived in Task 4.9.**
-
-> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/patches_README.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+> **Stale archive (2026-03).** Based on app 3.18.0, contains Smi misreads (a stored value 2 is really 1; the fc indexes are [1], [7], [9]), and the upstream PRs #281 and #283 are closed. Superseded by [../../../mqtt/a17c1.md](../../../mqtt/a17c1.md). The number-by-number record is [../../audit/patches_README.md](../../audit/patches_README.md). Kept for provenance only, do not apply.
 
 These patches apply APK-extracted tag names to thomluther's mqtt_monitor
 for local verification. They are NOT upstream PRs.
@@ -11,7 +9,7 @@ for local verification. They are NOT upstream PRs.
 
 ```bash
 cd /path/to/anker-solix-api
-git apply /path/to/anker-solix-api-exploration/patches/a17c1_apk_tags.patch
+git apply /path/to/anker-solix-api-exploration/docs/archive/patches-2026-03/a17c1_apk_tags.patch
 ```
 
 To revert:

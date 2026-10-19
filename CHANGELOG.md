@@ -62,7 +62,7 @@ Corrected facts (old statement to the 3.24.3 reading; the value is on the owner 
 
 ### Removed / superseded
 
-- The 12 superseded root pages of 3.18.0 content ([README section 9](README.md#9-3180-reference-superseded)), the legacy `endpoints/`, `devices/` and `models/` group pages, and `patches/` are scheduled for deletion in the cleanup commit; see the migration map in [docs/STRUCTURE.md](docs/STRUCTURE.md#migration-map).
+- The 12 superseded root pages of 3.18.0 content ([README section 9](README.md#9-3180-reference-superseded)), the legacy `endpoints/`, `devices/` and `models/` group pages, and `patches/` (now `docs/archive/patches-2026-03/`) are scheduled for deletion in the cleanup commit; see the migration map in [docs/STRUCTURE.md](docs/STRUCTURE.md#migration-map).
 - Until then each of them carries a banner that names its owner pages. Their wrong numbers are not fixed in place; use the Errata and [docs/audit/](docs/audit/).
 
 <!-- cleanup result: filled by the controller after Task 4.9 -->
