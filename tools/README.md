@@ -67,8 +67,8 @@ python3 -I tools/lint_docs.py [--rule header,links] [--json] [--warn-only]
 | `header` | first non-blank line is the status header (App 3.24.3, date, `Confidence:` one of the 4 tags or `Page type:`, `Owner page:`) on api/, models/, flows/, devices/, mqtt/, ble/, reference/, docs/ top level and docs/audit/, METHODOLOGY, GLOSSARY |
 | `sections` | H2 order of endpoint/model/flow/device pages (extras allowed, template sections required and ordered) or H4 order under each H3 of mqtt/ble command pages (`envelope`, `protocol`, `handshake`, README excluded); the lists are read from `docs/templates/` |
 | `uncited-int` | integer >= 2 in a table row of a fact page (header has `Confidence:`) with no `@0x` citation and no row tag. Not checked: audit tables, METHODOLOGY (the Smi rule itself), Known unknowns and Device-tested by sections, sections with a `Tag:` line of a non-asm tag, tables whose header names a tally (`set / get`, `calls`, `count`, `total`), versions, dates, years, hex, line numbers, `step N`, `N sends/calls/functions` |
-| `tag-overclaim` | a sentence (or a section headed or opened by `Tag: asm-traced`) with `asm-traced` that says presumably, likely, inferred, not traced, assumed. `is not traced` and `(..., not traced)` state a limit of the evidence and pass |
-| `inferred-as-traced-sequence` | a line with a `[T]` / `[T ...]` traced-step marker that says the same words |
+| `tag-overclaim` | a sentence (or a section headed or opened by `Tag: asm-traced`) with `asm-traced` that contains one of the hedge words listed in `OVERCLAIM` in the script. `is not traced` and `(..., not traced)` state a limit of the evidence and pass |
+| `inferred-as-traced-sequence` | a line carrying a traced-step marker (the letter T in square brackets) and the same hedge words |
 | `todo-purpose` | warning: `## Purpose` is `<!-- TODO -->`, printed as one count per service |
 | `links` | every relative link resolves, and every `#anchor` matches a GitHub slug of the target page; code spans and fences are not links |
 | `length` | error above 600 lines; warning above 150 lines without a Contents section (docs/audit tables are exempt from the limit) |
