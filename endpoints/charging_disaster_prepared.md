@@ -1,5 +1,7 @@
 # Charging Disaster Prepared
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/charging_disaster_prepared.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > Controls backup/disaster modes for Home Power Panel (A17B1) and HES (A5101).
 > Separate from `charging_energy_service/` and `charging_hes_svc/`.
 >

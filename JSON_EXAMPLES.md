@@ -1,5 +1,7 @@
 # JSON Request Examples per Endpoint
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/JSON_EXAMPLES.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > Request payloads extracted from thomluther's Python code (marked **upstream-sourced**)
 > and supplemented with Blutter-decompiled parameters (marked *inferred*).
 > Replace placeholder values (siteId, deviceSn, etc.) with actual IDs.

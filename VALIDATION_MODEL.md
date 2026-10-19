@@ -1,5 +1,7 @@
 # Validation Model — How the Anker App determines allowed values
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/VALIDATION_MODEL.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > The Anker App does NOT hardcode validation ranges. It queries the server for
 > device-specific limits and builds UI controls dynamically from the response.
 > This document describes the query→validate→set flow for each setting category.

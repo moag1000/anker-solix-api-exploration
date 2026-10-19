@@ -1,5 +1,7 @@
 # param_data JSON Structures
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/PARAM_DATA_STRUCTURES.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > Extracted from Blutter decompilation by tracing Map construction patterns
 > near `jsonEncode()` calls and `set_site_device_param` invocations.
 >

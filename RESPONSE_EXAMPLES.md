@@ -1,5 +1,7 @@
 # Response Examples from thomluther's API
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/RESPONSE_EXAMPLES.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > These are **real API response examples** documented in thomluther's code.
 > They show the actual JSON structure returned by the Anker API.
 > Extracted from api.py, schedule.py, apibase.py (71 examples).
