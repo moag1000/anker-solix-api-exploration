@@ -1,0 +1,213 @@
+"""Generate the README statistics/coverage block and the migration-map statuses.
+
+Usage (repo root):
+  python3 -I tools/readme_stats.py [--repo .] [--check]
+
+Rewrites the block between the `readme_stats:begin/end` markers in README.md and
+the Status column of the migration map in docs/STRUCTURE.md.  Every number comes
+from data/*.json or from the files on disk, so nothing is typed by hand and a
+second run changes nothing.  With --check nothing is written; exit 1 when a file
+would change.  Standard library only.
+"""
+import argparse
+import glob
+import json
+import os
+import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import service_index  # noqa: E402
+
+DATE = '2026-10-19'
+TOOL = 'tools/readme_stats.py'
+BEGIN = '<!-- readme_stats:begin -->'
+END = '<!-- readme_stats:end -->'
+VERDICT = re.compile(r'^(OK|WRONG|NOT-FROM-ASM|UNVERIFIABLE|CHANGED-IN-3\.24\.3)\b')
+
+
+def _load(repo, name):
+    with open(os.path.join(repo, 'data', name), encoding='utf-8') as fh:
+        return json.load(fh)
+
+
+def _audit(repo):
+    """Count verdict rows and WRONG rows in docs/audit/*.md tables."""
+    rows = wrong = 0
+    d = os.path.join(repo, 'docs', 'audit')
+    for f in sorted(os.listdir(d)):
+        if not f.endswith('.md'):
+            continue
+        col = None
+        for line in open(os.path.join(d, f), encoding='utf-8'):
+            if not line.startswith('|'):
+                col = None
+                continue
+            cells = [c.strip() for c in re.split(r'(?<!\\)\|', line.strip().strip('|'))]
+            if col is None:
+                low = [c.lower() for c in cells]
+                col = low.index('verdict') if 'verdict' in low else None
+                continue
+            if set(line.strip()) <= set('|-: '):
+                continue
+            if col is not None and col < len(cells) and VERDICT.match(cells[col]):
+                rows += 1
+                wrong += cells[col].startswith('WRONG')
+    return rows, wrong
+
+
+def _md_pages(directory):
+    out = []
+    for dp, _, files in os.walk(directory):
+        out += [os.path.join(dp, f) for f in sorted(files)
+                if f.endswith('.md') and f != 'README.md']
+    return out
+
+
+def compute(repo):
+    ep = _load(repo, 'endpoints.json')
+    by = {}
+    for r in ep['rows']:
+        by.setdefault(r['url'], []).append(r)
+    gone = sum(1 for rs in by.values() if all(r.get('removed_in') for r in rs))
+    pool = sum(1 for rs in by.values()
+               if all(r.get('reference') == 'pool-only' for r in rs))
+    api = os.path.join(repo, 'api')
+    services = [d for d in sorted(os.listdir(api)) if os.path.isdir(os.path.join(api, d))]
+    pages = [p for s in services for p in _md_pages(os.path.join(api, s))]
+    skel = 0
+    for p in pages:
+        txt = open(p, encoding='utf-8').read()
+        conf = re.search(r'Confidence: ([a-z-]+)', txt.splitlines()[0])
+        skel += bool(conf and conf.group(1) == 'string-only'
+                     and txt.count('<!-- TODO -->') >= 5)
+    models = _load(repo, 'models.json')['rows']
+    ptypes = {r['param_type'] for r in _load(repo, 'param_types.json')['rows']
+              if str(r['param_type']).isdigit()}
+    arows, awrong = _audit(repo)
+    return {
+        'urls': len(by), 'code_ref': len(by) - gone - pool, 'pool_only': pool,
+        'removed': gone, 'services': len(services), 'pages': len(pages),
+        'url_pages': len(by), 'orphan_pages': len(pages) - len(by),
+        'skeleton': skel, 'hand_written': len(pages) - skel,
+        'model_classes': len(models),
+        'model_classes_with_fields': sum(1 for m in models if m.get('fields')),
+        'model_pages': len(_md_pages(os.path.join(repo, 'models'))),
+        'mqtt_pages': len(_md_pages(os.path.join(repo, 'mqtt'))),
+        'flow_pages': len(_md_pages(os.path.join(repo, 'flows'))),
+        'param_types': len(ptypes),
+        'audit_rows': arows, 'audit_wrong': awrong,
+        'audit_files': len([f for f in os.listdir(os.path.join(repo, 'docs', 'audit'))
+                            if f.endswith('.md')]),
+    }
+
+
+def render(s):
+    return '\n'.join([
+        'This block was generated on %s by `%s` from `data/*.json` and the files on disk; '
+        'do not edit by hand (run the tool again).' % (DATE, TOOL), '',
+        '**Coverage**', '',
+        '- Endpoint pages: %(url_pages)d of %(urls)d distinct URLs in '
+        '`data/endpoints.json` have a page (%(code_ref)d with a code reference in '
+        '3.24.3, %(pool_only)d only in the 3.24.3 object pool with no code '
+        'reference, %(removed)d only in 3.18.0), plus %(orphan_pages)d hand-written '
+        'pages with no inventory row; %(pages)d endpoint pages in total.' % s,
+        '- Of these pages, %(hand_written)d are hand-written and %(skeleton)d are '
+        'skeletons (`Confidence: string-only` with unfilled `<!-- TODO -->` '
+        'purpose); the skeletons carry only what `data/endpoints.json` knows.' % s,
+        '', '**Statistics**', '',
+        '- %(services)d API services (directories under [api/](api/README.md))' % s,
+        '- %(model_classes)d model classes in `data/models.json` (%(model_classes_with_fields)d '
+        'with fields), %(model_pages)d pages in [models/](models/README.md)' % s,
+        '- %(param_types)d distinct param_type values sent by 3.24.3 '
+        '(`data/param_types.json`, owner page [api/param_types.md](api/param_types.md))' % s,
+        '- %(mqtt_pages)d MQTT pages in [mqtt/](mqtt/README.md), %(flow_pages)d flow '
+        'pages in [flows/](flows/README.md)' % s,
+        '- Smi audit of the old root pages ([docs/audit/](docs/audit/)): %(audit_rows)d '
+        'audited claims in %(audit_files)d tables, of which %(audit_wrong)d are WRONG '
+        '(the real value is in each table)' % s,
+        ''])
+
+
+def replace_block(text, block):
+    i, j = text.find(BEGIN), text.find(END)
+    if i < 0 or j < i:
+        raise ValueError('readme_stats markers not found')
+    return text[:i + len(BEGIN)] + '\n' + block.rstrip('\n') + '\n' + text[j:]
+
+
+PATHLIKE = re.compile(r'^[\w./<>*-]+$')
+
+
+def _exists(repo, token):
+    """Return (present, conclusive).  A wildcard or a bare directory proves that
+    something exists, not that everything the row names does; only wildcards
+    under api/ are conclusive, because every inventory URL has a page there."""
+    pat = re.sub(r'<[^>]*>', '*', token)
+    if pat.endswith('/'):
+        return os.path.isdir(os.path.join(repo, pat)), False
+    if pat.endswith(('.md', '.json')):
+        if '*' in pat:
+            rec = re.sub(r'/(\*[^/]*)$', r'/**/\1', pat)
+            hits = [h for h in glob.glob(os.path.join(repo, rec), recursive=True)
+                    if os.path.basename(h) != 'README.md']
+            return bool(hits), pat.startswith('api/')
+        return os.path.isfile(os.path.join(repo, pat)), True
+    return bool(glob.glob(os.path.join(repo, pat + '*'))), False
+
+
+def _status(repo, old, targets):
+    tokens = [t for t in re.findall(r'`([^`]+)`', targets)
+              if PATHLIKE.match(t) and ('/' in t or '.' in t)]
+    if not [t for t in tokens if t != old]:
+        return 'kept'
+    res = [_exists(repo, t) for t in tokens if t != old]
+    # a self target (page rebuilt in place) is not yet an owner page
+    total = len(res) + (1 if old in tokens else 0)
+    n = sum(1 for hit, _ in res if hit)
+    sure = all(c for hit, c in res if hit)
+    return 'done' if n == total and sure else 'partial' if n else 'pending'
+
+
+def migration_statuses(repo, text):
+    head = '## Migration map'
+    i = text.find(head)
+    if i < 0:
+        raise ValueError('migration map not found')
+    j = text.find('\n## ', i + len(head))
+    j = len(text) if j < 0 else j
+    out = []
+    for line in text[i:j].split('\n'):
+        m = re.match(r'^\| `([^`]+)` \| (.*) \| ([^|]*) \| (\w+) \|$', line)
+        if m:
+            line = '| `%s` | %s | %s | %s |' % (
+                m.group(1), m.group(2), m.group(3),
+                _status(repo, m.group(1), m.group(2)))
+        out.append(line)
+    return text[:i] + '\n'.join(out) + text[j:]
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
+    ap.add_argument('--repo', default='.')
+    ap.add_argument('--check', action='store_true')
+    a = ap.parse_args(argv)
+    st = compute(a.repo)
+    changed = []
+    for rel, fn in (('README.md', lambda t: replace_block(t, render(st))),
+                    ('docs/STRUCTURE.md', lambda t: migration_statuses(a.repo, t))):
+        path = os.path.join(a.repo, rel)
+        old = open(path, encoding='utf-8').read()
+        new = fn(old)
+        if new != old:
+            changed.append(rel)
+            if not a.check:
+                with open(path, 'w', encoding='utf-8') as fh:
+                    fh.write(new)
+    print(json.dumps(st, sort_keys=True))
+    print('changed: %s' % (', '.join(changed) or 'none'))
+    return 1 if (a.check and changed) else 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

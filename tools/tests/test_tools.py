@@ -521,6 +521,111 @@ class ServiceIndexOrphanTests(unittest.TestCase):
             # orphans are listed but not counted as inventory URLs
             self.assertEqual(summary, [('passport', 0, 0)])
 
+class ServiceIndexPagesColumnTests(unittest.TestCase):
+    def test_pages_column_counts_pages_on_disk_including_orphans(self):
+        import service_index
+        import tempfile
+        page = ('> Verified against: App 3.24.3 · Date: x · Confidence: asm-traced '
+                '· Owner page: this page\n\n# t\n\n## Purpose\n\nx.\n')
+        rows = {'rows': [{'url': '/passport/a', 'reference': 'code'}]}
+        with tempfile.TemporaryDirectory() as td:
+            os.makedirs(os.path.join(td, 'passport'))
+            for n in ('a.md', 'orphan.md'):
+                with open(os.path.join(td, 'passport', n), 'w') as fh:
+                    fh.write(page)
+            out, _ = service_index.build(rows, td)
+            txt = out[os.path.join(td, 'README.md')]
+            self.assertIn('| `passport/` | 2 | [passport/README.md]', txt)
+            self.assertIn('1 distinct URLs', txt)
+
+
+class ReadmeStatsTests(unittest.TestCase):
+    def test_real_repo_numbers_come_from_data(self):
+        import json
+        import readme_stats
+        st = readme_stats.compute(REPO)
+        with open(os.path.join(REPO, 'data', 'endpoints.json')) as fh:
+            urls = {r['url'] for r in json.load(fh)['rows']}
+        self.assertEqual(st['urls'], len(urls))
+        self.assertEqual(st['skeleton'] + st['hand_written'], st['url_pages'] + st['orphan_pages'])
+        self.assertEqual(st['url_pages'], len(urls))
+        self.assertEqual(st['audit_wrong'] <= st['audit_rows'], True)
+        self.assertEqual(st['mqtt_pages'],
+                         len([f for f in os.listdir(os.path.join(REPO, 'mqtt'))
+                              if f.endswith('.md') and f != 'README.md']))
+
+    def test_audit_rows_equal_declared_totals(self):
+        import re
+        import readme_stats
+        st = readme_stats.compute(REPO)
+        rows = wrong = 0
+        d = os.path.join(REPO, 'docs', 'audit')
+        for f in os.listdir(d):
+            txt = open(os.path.join(d, f), encoding='utf-8').read()
+            m = re.search(r'^Rows: (\d+)\.(.*)$', txt, re.M)
+            if m:
+                rows += int(m.group(1))
+                w = re.search(r'WRONG (\d+)', m.group(2))
+                wrong += int(w.group(1)) if w else 0
+        self.assertEqual((st['audit_rows'], st['audit_wrong']), (rows, wrong))
+
+    def test_block_replacement_is_idempotent(self):
+        import readme_stats
+        st = readme_stats.compute(REPO)
+        base = 'a\n' + readme_stats.BEGIN + '\nold\n' + readme_stats.END + '\nz\n'
+        once = readme_stats.replace_block(base, readme_stats.render(st))
+        twice = readme_stats.replace_block(once, readme_stats.render(st))
+        self.assertEqual(once, twice)
+        self.assertIn('generated on', once)
+        self.assertIn('tools/readme_stats.py', once)
+        self.assertNotIn('old\n', once)
+
+    def test_committed_readme_and_structure_equal_fresh_run(self):
+        import readme_stats
+        st = readme_stats.compute(REPO)
+        readme = open(os.path.join(REPO, 'README.md'), encoding='utf-8').read()
+        self.assertEqual(readme_stats.replace_block(readme, readme_stats.render(st)), readme)
+        structure = open(os.path.join(REPO, 'docs', 'STRUCTURE.md'), encoding='utf-8').read()
+        self.assertEqual(readme_stats.migration_statuses(REPO, structure), structure)
+
+    def test_missing_markers_raise(self):
+        import readme_stats
+        with self.assertRaises(ValueError):
+            readme_stats.replace_block('no markers', 'x')
+
+    def test_migration_status_derived_from_disk(self):
+        import readme_stats
+        import tempfile
+        table = ('| Old path | New owner location(s) | What moves there | Status |\n'
+                 '|---|---|---|---|\n'
+                 '| `A.md` | `api/x/one.md` | t | pending |\n'
+                 '| `B.md` | `api/x/one.md`, `api/x/two.md` | t | pending |\n'
+                 '| `C.md` | `api/y/three.md` | t | done |\n'
+                 '| `D.md` | `devices/<pn>.md` | t | pending |\n'
+                 '| `E.md` | `E.md` (kept) | t | pending |\n'
+                 '| `F.md` | `F.md` (rebuilt in place) and `api/x/one.md` | t | pending |\n'
+                 '| `G.md` | `api/x/<endpoint>.md` | t | pending |\n'
+                 '| `H.md` | `devices/<pn>.md`, `api/x/one.md` | t | pending |\n'
+                 '| `I.md` | `api/x/one.md`, `api/x/` | t | pending |\n'
+                 '| `J.md` | `flows/<n>.md` | t | pending |\n')
+        text = '## Migration map\n\n' + table + '\n## Notes\n'
+        with tempfile.TemporaryDirectory() as td:
+            os.makedirs(os.path.join(td, 'api', 'x'))
+            os.makedirs(os.path.join(td, 'devices'))
+            os.makedirs(os.path.join(td, 'flows'))
+            open(os.path.join(td, 'flows', 'README.md'), 'w').close()
+            open(os.path.join(td, 'api', 'x', 'one.md'), 'w').close()
+            open(os.path.join(td, 'devices', 'README.md'), 'w').close()
+            open(os.path.join(td, 'devices', 'a1.md'), 'w').close()
+            out = readme_stats.migration_statuses(td, text)
+            st = {l.split('|')[1].strip(' `'): l.rstrip(' |').rsplit('|', 1)[1].strip()
+                  for l in out.splitlines() if l.startswith('| `')}
+            self.assertEqual(st, {'A.md': 'done', 'B.md': 'partial', 'C.md': 'pending',
+                                  'D.md': 'partial', 'E.md': 'kept', 'F.md': 'partial',
+                                  'G.md': 'done', 'H.md': 'partial', 'I.md': 'partial', 'J.md': 'pending'})
+            self.assertEqual(readme_stats.migration_statuses(td, out), out)
+
+
 class SyntheticToolTests(unittest.TestCase):
     """Tests on tiny synthetic trees; no Blutter output needed."""
 

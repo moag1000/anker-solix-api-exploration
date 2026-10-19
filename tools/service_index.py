@@ -99,6 +99,7 @@ def build(endpoints, api):
                 svc.setdefault(service, []).append((url, p))
     out = {}
     summary = []
+    pages_on_disk = {}
     for s in sorted(svc):
         L = [HDR, '', '# %s' % s, '',
              'Service index for the URL prefix `/%s/`. Each endpoint page is the '
@@ -125,6 +126,7 @@ def build(endpoints, api):
         L += ['', NOT_HERE.replace('../', '../../'), '']
         out[os.path.join(api, s, 'README.md')] = '\n'.join(L)
         summary.append((s, sum(1 for u, _ in svc[s] if u in by), nskel))
+        pages_on_disk[s] = len(svc[s])
     total = sum(n for _, n, _ in summary)
     gone = sum(1 for u, rs in by.items() if all(r.get('removed_in') for r in rs))
     pool = sum(1 for u, rs in by.items()
@@ -132,12 +134,16 @@ def build(endpoints, api):
     L = [HDR, '', '# API', '', INTRO, '', '## Service index', '',
          'One directory per URL prefix: %d distinct URLs (%d with a code reference '
          'in 3.24.3, %d only in the 3.24.3 object pool with no code reference, %d '
-         'absent from 3.24.3 and only in 3.18.0). Counts include hand-written pages; all other pages are '
+         'absent from 3.24.3 and only in 3.18.0). The pages column counts the pages '
+         'on disk per service: one per URL plus hand-written pages that have no '
+         'inventory row (%d in total). Pages that are not hand-written are '
          'skeletons rendered from `data/endpoints.json` by '
-         '`tools/render_pages.py`.' % (total, total - gone - pool, pool, gone), '',
+         '`tools/render_pages.py`.' % (total, total - gone - pool, pool, gone,
+                                       sum(pages_on_disk.values()) - total), '',
          '| service | pages | index |', '|---|---|---|']
     for n, c, _ in summary:
-        L.append('| `%s/` | %d | [%s/README.md](%s/README.md) |' % (n, c, n, n))
+        L.append('| `%s/` | %d | [%s/README.md](%s/README.md) |' % (
+            n, pages_on_disk[n], n, n))
     L += ['', AMBIGUOUS, NOT_HERE, '']
     out[os.path.join(api, 'README.md')] = '\n'.join(L)
     return out, summary

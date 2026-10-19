@@ -28,8 +28,11 @@ python3 -I tools/param_types.py        $N --version 3.24.3                 # dat
 python3 -I tools/diff_versions.py $O $N                                    # tools/out/diff_3.18.0_3.24.3.md
 python3 -I tools/render_pages.py                                           # tools/out/pages/{api,models}/
 python3 -I tools/service_index.py                                          # api/README.md + api/<service>/README.md
+python3 -I tools/readme_stats.py [--check]                                 # README statistics block + migration-map statuses (docs/STRUCTURE.md)
 python3 -I tools/smi.py <asm_file> <0xADDR> [--dump]                       # check one number by eye
 ```
+
+`readme_stats.py` rewrites the block between the `readme_stats:begin/end` markers of `README.md` and the Status column of the migration map in `docs/STRUCTURE.md` from `data/*.json` and the files on disk (idempotent; `--check` exits 1 when a file is stale). `service_index.py` overwrites `api/charging_hes_installer_svc/README.md` with a generated version that loses its hand-written groups; after a run, `git checkout` that file.
 
 `data/*.json` is committed (envelope: `generated_by`, `app_version`, `snapshot`, `rows`; keys sorted). `tools/out/` is scratch and git-ignored. `render_pages.py` never writes into `api/` or `models/`: render into `tools/out/pages/`, then copy into `api/` with a no-clobber copy (`cp -n`, or a loop that skips existing files) so hand-written pages are never overwritten. After copying, run `tools/service_index.py` (reads `data/endpoints.json` and the pages on disk, rewrites `api/README.md` and every `api/<service>/README.md`; idempotent, purpose column comes from each page's "Purpose" line). Page paths: `v1` is dropped, other version segments are kept ([../docs/STRUCTURE.md](../docs/STRUCTURE.md#naming-conventions)). `render_pages.py` renders one page per distinct URL (all senders listed under "Callers in app"), including URLs removed in 3.24.3.
 
