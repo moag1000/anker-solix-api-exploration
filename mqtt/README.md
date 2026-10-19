@@ -19,7 +19,13 @@ Not here: endpoint payloads ([../api/README.md](../api/README.md)), BLE opcodes 
 | [a17b1.md](a17b1.md) | A17B1 JSON status messages and the app model with DataFlow and Bd | 100-101, 350-354 |
 | [a5101.md](a5101.md) | A5101 JSON status, BLE data code maps (corrected pairing), 002d, 0030 | 199-216, 316-317, 651 (189-198 are API models owned by `models/hes.md`) |
 
-Pages carry their own status header; the lowest tag on every page is `asm-traced`. The three enum references (audit rows 103-160) are linked from the PN pages and will be owned by `reference/enums.md`.
+Pages carry their own status header with the lowest tag on that page: `asm-traced` on envelope, a17c1, a17c1_status, a17c5, a17b1 and a5101; `string-only` on a17x8 (the 0040/0057 binding) and a17x7 (the `ad` alternate source). The three enum references (audit rows 103-160) are linked from the PN pages and will be owned by `reference/enums.md`.
+
+## Source conflicts (unresolved)
+
+- Tag `fd`: upstream describes a millisecond timestamp string, the app builders write a CRC32 (audit rows 24, 219-221). See [envelope.md](envelope.md#tlv-frame) and [a17c1.md](a17c1.md#005e-setbackpower-settacticstime-setpeakvalley). Untested here.
+- A17C1 tag `e0`: the parser tests `== 7` (audit row 395), upstream lists 1, 6 and 3. See [a17c1_status.md](a17c1_status.md#payload-fields).
+- Opcode `005a`: the app has no builder (audit row 222) while [../devices/solarbank.md](../devices/solarbank.md) lists it as tested. See [a17c1.md](a17c1.md#opcodes-without-a-confirmed-app-builder-005a-0082-006a-0069).
 
 ## Pending (Task 3.6b)
 

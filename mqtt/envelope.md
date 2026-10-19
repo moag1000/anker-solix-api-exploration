@@ -106,9 +106,9 @@ All topics are built in `charging/mqtt/business/mqtt_serve.dart`. `getCommonTopi
 | subscribe (basic info) | `dt/anker_power/<pn>/<sn>/basic_info` | mqtt_serve.dart @0x2207cf8..0x2207d3c |
 | subscribe (parameter info, the 0405 family) | `dt/anker_power/<pn>/<sn>/param_info` | mqtt_serve.dart @0x2207de0..0x2207e24; upstream-confirmed (TOPIC `param_info` in `api/mqttmap.py`, for example line 1798) |
 | subscribe (state info, the 0408 family) | `dt/anker_power/<pn>/<sn>/state_info` | mqtt_serve.dart @0x3b59c84..0x3b59cc8; upstream-confirmed (`api/mqttmap.py` line 1867) |
-| other topics found | `cmd/anker_power/<pn>/<sn>/res` @0x2447e30..0x2447e70 and `dt/anker_power/<pn>/<sn>/power_site` @0x2359f7c..0x2359fbc | mqtt_serve.dart (asm-traced literal and site; payload not documented) |
+| other topics found | `cmd/anker_power/<pn>/<sn>/res` @0x2447e30..0x2447e70, `dt/anker_power/<pn>/<sn>/power_site` @0x2359f7c..0x2359fbc and the fixed literal `cmd/anker_power/anonymous/req` @0x2447c0c (pool string [pp+0x2dac0]) | mqtt_serve.dart (asm-traced literal and site; payload not documented) |
 
-Upstream extracts the model and serial of a received message from topic segments 2 and 3 (`api/mqtt.py` lines 136-139, upstream-confirmed). The old doc listed only four topics; `state_info`, `res` and `power_site` were not in it.
+Upstream extracts the model and serial of a received message from topic segments 2 and 3 (`api/mqtt.py` lines 136-139, upstream-confirmed). The old doc listed only four topics; `state_info`, `res`, `power_site` and the anonymous literal were not in it.
 
 ## Receive path and gzip
 
@@ -124,7 +124,7 @@ Built by `ZXCommandTransformer._getNormalCommand` (`charging/communication/trans
 | 2-3 | length, 16-bit little endian | total length including the header; the header is 9 bytes (`add x0,x1,#9`) | audit row 4 @0x22742a8; upstream-confirmed (`api/mqtttypes.py` lines 39-45: the length includes prefix and the XOR byte) |
 | 4 | `03` | constant (raw immediate 6, halved) | audit row 5; @0x2274368 |
 | 5 | `00` | the app writes the zero register; the receive variant `01` was not found in the app | audit row 6; @0x22743b8; upstream-confirmed (`api/mqtttypes.py` line 42, `03 00/01 0f` for send and receive) |
-| 6 | `0F` in captures | loaded from transformer field `field_23`, value not traced | audit row 6; @0x22743f8; upstream-confirmed (`api/mqtttypes.py` line 82) |
+| 6 | `0F` in captures | loaded from transformer field `field_23`, value unresolved | audit row 6; @0x22743f8; upstream-confirmed (`api/mqtttypes.py` line 82) |
 | 7-8 | opcode as written in the Dart hex string, for example `00 7A` for `"007a"` | pool lists such as `[0, 0x7a]` are the same two bytes in order | audit row 165 (pool list `[0, 0x5e]`), audit row 167; byte order on the wire: upstream-confirmed (`api/mqtttypes.py` line 43, `04 05` for status `0405`) |
 | last | XOR of all preceding bytes, start value 0 | checksum, included in the length | audit row 14; ZXCmdUtil.getCheckSum @0x2272e9c, _getNormalCommand @0x22744a4 (start value @0x2272e2c) |
 
@@ -145,15 +145,9 @@ Generic single-value builder: `_getSettingCommand` (same file), used by every se
 | CRC trailer | tag `FD`, 4 bytes: CRC32 of the payload | newer format (A17C1 builders), NOT a millisecond timestamp | audit row 24 @0x281aa44..0x281aa94 (setBackPower), @0x288b224..0x288b238 (setTacticsTime); key raw 506 = 0xFD; audit row 219 |
 | checksum | XOR byte | see Binary layer | audit row 14 @0x22744a4 |
 
-With a one-byte length the type byte sits at field offset 2, with a two-byte length at offset 3 (audit row 12). Disagreement with upstream, recorded rather than resolved: upstream describes tag `fd` as a timestamp in milliseconds sent as a string (`api/mqttcmdmap.py` lines 163-169, TIMESTAMP_FD) and `fe` as a 4-byte value (lines 172-178). The app builders write a CRC32 under 0xFD (asm wins for what the app sends); whether a device accepts a timestamp there has no device-tested record in this repo.
+With a one-byte length the type byte sits at field offset 2, with a two-byte length at offset 3 (audit row 12). Disagreement with upstream, recorded rather than resolved: upstream describes tag `fd` as a timestamp in milliseconds sent as a string (`api/mqttcmdmap.py` lines 163-169, TIMESTAMP_FD) and `fe` as a 4-byte value (lines 172-178). The app builders write a CRC32 under 0xFD. Both statements stand side by side; whether a device accepts either form under tag 0xFD is untested in this repo.
 
-synthesized
-
-```text
-ff 09 | 18 00 | 03 00 0f | 00 7a | a1 01 22 | a2 02 01 01 | fe 05 03 00 00 00 00 | xor
-```
-
-The example is a `007a` switch-on frame built from the rules above with a zeroed timestamp; its length byte counts the whole frame including the XOR byte (upstream rule); the XOR byte is left symbolic. It was not captured.
+A worked synthesized frame (a `007a` switch-on) is kept once, on [a17x8.md](a17x8.md#007a-setrelayswitchcmd), built from these rules; no example in this repo is a capture.
 
 ## Data type codes
 
@@ -201,6 +195,8 @@ The head immediates and the `cmdMap` immediates are the same raw values at the 3
 
 ## Known unknowns
 
+- Data type codes 0 (`str`) and 5 (`sfle`) are never produced by `_getDataType` (audit row 20, UNVERIFIABLE; searched the function and its inlined copies); they are known from upstream only.
+- Whether the app sends `encoding_type` at all: the audit searched `pp.txt` and `ev_charger/` for it without a hit (audit row 315, UNVERIFIABLE).
 - Byte 5 value `01` (receive variant) and the source of byte 6 (`field_23`) were not found (audit row 6).
 - Where `decompressPayload` is applied (whole MQTT body or `data` field) is open; upstream shows no gzip step.
 - `version` and `client_id` values the APK itself sends were not audited.

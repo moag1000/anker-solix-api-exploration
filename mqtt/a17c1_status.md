@@ -87,6 +87,7 @@ Byte lists of tags `fb` and `fc` (`field` = 3.24.3 store offset; both tags write
 | `[11]` | bool, element == 1 | 1307 (0x51b) | audit row 409; @0x48667c0 (raw index 22, tagged) |
 | `[12]`, `[13]` | read with `safeGet` (unboxed indexes) | not stored by the cited sites | audit row 409; @0x4866660, @0x48666b0 |
 | `[14]` | bool, element == 1, only when the list has at least 15 bytes (`cmp x1,#0xf`); the app logs "supports10DevicesNetwork" | 283 (0x11b) | audit row 409; @0x4866858 (raw index 28, tagged) |
+| element stores | the element stores of row 407 not tied to a named element above | 711 (0x2c7), 1131 (0x46b), 1135 (0x46f) | audit row 407; list stored @0x4866564 |
 
 The old doc compared elements with 2; every such compare is a tagged compare and means 1 (audit rows 61, 411-413). Upstream decodes only byte `00` of `fb` as `grid_export_disabled` with mask 0x01 (`mqttmap.py` lines 1837-1841, upstream-confirmed); the app reads `[0]` raw (row `[0]` above) and does not apply that mask in the parser.
 
