@@ -57,12 +57,12 @@ The repository is being rebuilt on App 3.24.3 (branch `rework/3.24.3`). Each ste
 
 BLE is a local channel. It is not a live fallback for the cloud: the app disables BLE while WiFi is active, so do not plan a design around switching between the two.
 
-The [ble/](../ble/README.md) pages are planned (Task 3.7/4.x) and nothing is there yet. The shared TLV frame and the per-product command tags are written down in the MQTT pages, because the same frame carries them.
+The [ble/](../ble/README.md) pages exist: [protocol](../ble/protocol.md), [handshake](../ble/handshake.md) and one page per product number. The shared TLV frame and the per-product command tags stay on the MQTT pages, because the same frame carries them; the BLE pages link them.
 
 | Step | Now | Planned |
 |---|---|---|
 | 1 | [mqtt/envelope.md](../mqtt/envelope.md) (TLV frame) and [mqtt/README.md](../mqtt/README.md) (command tags per PN) | `ble/protocol.md`, `ble/<pn>.md` |
-| 2 | [ble/README.md](../ble/README.md) (what is planned) | `ble/handshake.md` |
+| 2 | [ble/README.md](../ble/README.md) | [ble/handshake.md](../ble/handshake.md) |
 | 3 | [ENUMS.md](../ENUMS.md) (3.18.0 reference) | `reference/enums.md` |
 | 4 | [METHODOLOGY.md](../METHODOLOGY.md) (Smi rule for reading numbers) | unchanged |
 
