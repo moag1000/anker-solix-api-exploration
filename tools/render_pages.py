@@ -89,6 +89,10 @@ def _is_removed(rows):
     return all(r.get('removed_in') for r in rows)
 
 
+def _is_pool_only(rows):
+    return all(r.get('reference') == 'pool-only' for r in rows)
+
+
 def render_endpoint(rows, date=None, version='3.24.3'):
     """One skeleton for ALL rows (senders and URL providers) of one URL."""
     date = date or datetime.date.today().isoformat()
@@ -97,8 +101,12 @@ def render_endpoint(rows, date=None, version='3.24.3'):
     last = url.rsplit('/', 1)[-1]
     removed = _is_removed(rows)
     L = [header(date), '']
+    pool_only = _is_pool_only(rows)
     if removed:
         L += ['Removed in %s — present in 3.18.0 only' % version, '']
+    elif pool_only:
+        L += ['%s: string present in the object pool, no code reference found '
+              '(present in 3.18.0 with a sender)' % version, '']
     L += ['# %s' % last, '', '## Purpose', '', TODO, '', '## Upstream name', '']
     keys = sorted({r['upstream_key'] for r in rows if r.get('upstream_key')})
     if keys:
@@ -182,6 +190,9 @@ def render_endpoint(rows, date=None, version='3.24.3'):
     if removed:
         L.append('3.18.0: present. 3.24.3: absent (removed). since: %s.'
                  % ', '.join(sinces))
+    elif pool_only:
+        L.append('3.18.0: present. %s: string present in the object pool, no code '
+                 'reference found. since: %s.' % (version, ', '.join(sinces)))
     elif sinces == [version]:
         L.append('3.18.0: absent. 3.24.3: present (new). since: %s.' % version)
     else:

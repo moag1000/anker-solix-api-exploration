@@ -20,7 +20,7 @@ Service index for the URL prefix `/charging_energy_service/`. Each endpoint page
 | [`/charging_energy_service/get_wifi_info`](get_wifi_info.md) | TODO | - | skeleton |
 | [`/charging_energy_service/get_world_monetary_unit`](get_world_monetary_unit.md) | TODO | - | skeleton |
 | [`/charging_energy_service/preprocess_utility_rate_plan`](preprocess_utility_rate_plan.md) | TODO | - | skeleton |
-| [`/charging_energy_service/report_device_data`](report_device_data.md) | TODO | - | removed in 3.24.3, skeleton |
+| [`/charging_energy_service/report_device_data`](report_device_data.md) | TODO | - | pool-only in 3.24.3, skeleton |
 | [`/charging_energy_service/restart_peak_session`](restart_peak_session.md) | TODO | - | skeleton |
 | [`/charging_energy_service/sync_config`](sync_config.md) | TODO | - | skeleton |
 | [`/charging_energy_service/sync_installation_inspection`](sync_installation_inspection.md) | TODO | - | skeleton |

@@ -62,7 +62,9 @@ def page_info(path, rows):
         purpose = m.group(1) if m else 'TODO'
     keys = sorted({r['upstream_key'] for r in rows if r.get('upstream_key')})
     removed = all(r.get('removed_in') for r in rows)
-    status = ('removed in 3.24.3, ' if removed else '') + (
+    pool_only = all(r.get('reference') == 'pool-only' for r in rows)
+    status = ('removed in 3.24.3, ' if removed else
+              'pool-only in 3.24.3, ' if pool_only else '') + (
         'skeleton' if skel else 'hand-written')
     return skel, purpose, ', '.join('`%s`' % k for k in keys) or '-', status
 
@@ -115,7 +117,7 @@ def build(endpoints, api):
                 if skel:
                     status = 'skeleton, not in `data/endpoints.json`'
                     purpose = 'TODO'
-            nskel += skel
+            nskel += bool(skel and url in by)
             L.append('| [`%s`](%s) | %s | %s | %s |' % (
                 url, os.path.relpath(p, 'api/' + s), purpose, keys, status))
         L += ['', NOT_HERE.replace('../', '../../'), '']
@@ -123,11 +125,14 @@ def build(endpoints, api):
         summary.append((s, sum(1 for u, _ in svc[s] if u in by), nskel))
     total = sum(n for _, n, _ in summary)
     gone = sum(1 for u, rs in by.items() if all(r.get('removed_in') for r in rs))
+    pool = sum(1 for u, rs in by.items()
+               if all(r.get('reference') == 'pool-only' for r in rs))
     L = [HDR, '', '# API', '', INTRO, '', '## Service index', '',
-         'One directory per URL prefix: %d distinct URLs (%d in 3.24.3, %d only in '
-         '3.18.0). Counts include hand-written pages; all other pages are '
+         'One directory per URL prefix: %d distinct URLs (%d with a code reference '
+         'in 3.24.3, %d only in the 3.24.3 object pool with no code reference, %d '
+         'absent from 3.24.3 and only in 3.18.0). Counts include hand-written pages; all other pages are '
          'skeletons rendered from `data/endpoints.json` by '
-         '`tools/render_pages.py`.' % (total, total - gone, gone), '',
+         '`tools/render_pages.py`.' % (total, total - gone - pool, pool, gone), '',
          '| service | pages | index |', '|---|---|---|']
     for n, c, _ in summary:
         L.append('| `%s/` | %d | [%s/README.md](%s/README.md) |' % (n, c, n, n))

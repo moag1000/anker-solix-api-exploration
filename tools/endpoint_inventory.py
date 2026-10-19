@@ -367,6 +367,20 @@ def service_of(url):
     return url.split('/')[1]
 
 
+def pool_text(root):
+    """Object-pool dump (`pp.txt`, one level above the asm root), '' if missing."""
+    p = os.path.join(os.path.dirname(os.path.abspath(root)), 'pp.txt')
+    if not os.path.isfile(p):
+        return ''
+    with open(p, encoding='utf-8', errors='replace') as fh:
+        return fh.read()
+
+
+def in_pool(pool, url):
+    """Is the URL string (with or without leading slash) in the pool dump?"""
+    return ('"%s"' % url in pool) or ('"%s"' % url.lstrip('/') in pool)
+
+
 def build_inventory(root, version, old_root=None, upstream=None, log=None):
     records, callee_stats = scan_root(root, log)
     callers = find_callers(root, records, log)
@@ -381,6 +395,7 @@ def build_inventory(root, version, old_root=None, upstream=None, log=None):
         for k, v in eps.items():
             up_eps.setdefault('/' + v.lstrip('/'), []).append(k)
     new_urls = {r['url'] for r in records}
+    pool = pool_text(root) if old_root else ''
     rows = []
     for r in records:
         req = r['_req'] or {}
@@ -432,8 +447,14 @@ def build_inventory(root, version, old_root=None, upstream=None, log=None):
                 'encryption_note': encryption_note(r),
                 'http_callees': r['http_callees'],
                 'callers': [], 'upstream_key': keys[0] if keys else None,
-                'since': '≤3.18.0', 'removed_in': version,
+                'since': '≤3.18.0',
             })
+            # removed_in = no literal at all in the new pool; a string that is
+            # still in the pool but has no asm load is "pool-only", not removed
+            if in_pool(pool, r['url']):
+                rows[-1]['reference'] = 'pool-only'
+            else:
+                rows[-1]['removed_in'] = version
     rows.sort(key=lambda x: (x['url'], x['dart_file'], x['function']))
     return {'rows': rows, 'http_callees': callee_stats}
 

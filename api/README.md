@@ -6,7 +6,7 @@ This directory holds one page per cloud endpoint, grouped by service (the first 
 
 ## Service index
 
-One directory per URL prefix: 450 distinct URLs (439 in 3.24.3, 11 only in 3.18.0). Counts include hand-written pages; all other pages are skeletons rendered from `data/endpoints.json` by `tools/render_pages.py`.
+One directory per URL prefix: 450 distinct URLs (439 with a code reference in 3.24.3, 9 only in the 3.24.3 object pool with no code reference, 2 absent from 3.24.3 and only in 3.18.0). Counts include hand-written pages; all other pages are skeletons rendered from `data/endpoints.json` by `tools/render_pages.py`.
 
 | service | pages | index |
 |---|---|---|

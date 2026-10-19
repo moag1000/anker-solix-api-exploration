@@ -68,7 +68,7 @@ Service index for the URL prefix `/charging_hes_svc/`. Each endpoint page is the
 | [`/charging_hes_svc/update_device_info_by_app`](update_device_info_by_app.md) | TODO | - | skeleton |
 | [`/charging_hes_svc/update_hes_utility_rate_plan`](update_hes_utility_rate_plan.md) | TODO | - | skeleton |
 | [`/charging_hes_svc/update_wifi_config`](update_wifi_config.md) | TODO | - | skeleton |
-| [`/charging_hes_svc/upload_device_status`](upload_device_status.md) | TODO | - | removed in 3.24.3, skeleton |
+| [`/charging_hes_svc/upload_device_status`](upload_device_status.md) | TODO | - | pool-only in 3.24.3, skeleton |
 | [`/charging_hes_svc/user_event_alarm`](user_event_alarm.md) | TODO | - | skeleton |
 | [`/charging_hes_svc/user_fault_alarm`](user_fault_alarm.md) | TODO | - | skeleton |
 

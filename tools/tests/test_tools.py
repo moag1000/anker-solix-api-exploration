@@ -97,8 +97,14 @@ class InventoryTests(unittest.TestCase):
         # present in both versions (see DiffTests), so not removed
         self.assertNotIn('removed_in', by_url[
             '/power_service/v1/app/get_device_last_exercise_log'])
+        # truly absent from the 3.24.3 pool (no string at all): removed
         self.assertEqual(
-            by_url['/charging_disaster_prepared/clear']['removed_in'], '3.24.3')
+            by_url['/smart_service/v1/app/anka/get_entry_config']['removed_in'],
+            '3.24.3')
+        # string still in the 3.24.3 pool, no asm load: pool-only, not removed
+        self.assertNotIn('removed_in', by_url['/charging_disaster_prepared/clear'])
+        self.assertEqual(
+            by_url['/charging_disaster_prepared/clear']['reference'], 'pool-only')
         # set_device_feature is still used in 3.24.3 as a literal without leading
         # slash (ev_charge_command.dart), so it is not removed
         self.assertNotIn('removed_in', by_url[
@@ -189,7 +195,8 @@ class DiffTests(unittest.TestCase):
         gone = '/power_service/v1/app/get_device_last_exercise_log'
         self.assertNotIn(gone, d['removed_endpoints'])
         self.assertNotIn(gone, d['added_endpoints'])
-        self.assertIn('/charging_disaster_prepared/clear', d['removed_endpoints'])
+        self.assertIn('/smart_service/v1/app/anka/get_entry_config',
+                      d['removed_endpoints'])
         self.assertNotIn('/power_service/v1/site/set_device_feature',
                          d['removed_endpoints'])
         md = diff_versions.render_markdown(d, '3.18.0', '3.24.3')
@@ -232,8 +239,15 @@ class RenderTests(unittest.TestCase):
     def test_removed_url_gets_page_with_note_and_one_page_per_url(self):
         import render_pages
         rows = inventory_new()['rows']
-        removed = [r for r in rows if r['url'] == '/charging_disaster_prepared/clear']
+        removed = [r for r in rows
+                   if r['url'] == '/smart_service/v1/app/anka/get_entry_config']
         self.assertTrue(removed and all(r.get('removed_in') for r in removed))
+        pool = [r for r in rows if r['url'] == '/charging_disaster_prepared/clear']
+        ppage = render_pages.render_endpoint(pool, date='2026-10-19')
+        self.assertIn('string present in the object pool, no code reference found',
+                      ppage)
+        self.assertNotIn('Removed in', ppage)
+        self.assertNotIn('absent (removed)', ppage)
         page = render_pages.render_endpoint(removed, date='2026-10-19')
         lines = page.splitlines()
         self.assertIn('Confidence: string-only', lines[0])
@@ -424,10 +438,6 @@ class OutputGuardTests(unittest.TestCase):
             render_pages.render_all, render_pages._write = saved
 
 
-if __name__ == '__main__':
-    unittest.main()
-
-
 class UrlLiteralTests(unittest.TestCase):
     """URL literals without a leading slash (synthetic, fast)."""
 
@@ -449,6 +459,16 @@ class UrlLiteralTests(unittest.TestCase):
                     'charging_uikit/widget/y.dart'):
             self.assertIsNone(asmparse.url_literal('r16 = "%s"' % lit))
             self.assertIsNone(asmparse.URL_PRECHECK_RE.search('= "%s"' % lit))
+
+    def test_generic_two_segment_literal_rejected_by_inventory_filter(self):
+        import asmparse
+        import endpoint_inventory
+        # the literal regex accepts a known prefix; the inventory filter rejects
+        # a bare two-segment shape for url_provider rows (see tools/README.md)
+        self.assertEqual(asmparse.url_literal('r0 = "app/foo"'), ('r0', '/app/foo'))
+        self.assertFalse(endpoint_inventory.url_ok('/app/foo', 'url_provider', set()))
+        self.assertTrue(endpoint_inventory.url_ok(
+            '/app/rfid/get_cards', 'url_provider', set()))
 
 
 @need(ROOT_NEW, ROOT_OLD)
@@ -482,3 +502,25 @@ class ServiceIndexOrphanTests(unittest.TestCase):
             self.assertIn('[`/passport/external_login`](external_login.md) | '
                           'A hand-written purpose.', txt)
             self.assertIn('not in `data/endpoints.json`', txt)
+
+    def test_skeleton_orphan_count_exclusion_and_readme_skipped(self):
+        import service_index
+        import tempfile
+        skel = ('> Verified against: App 3.24.3 · Date: x · Confidence: string-only '
+                '· Owner page: this page\n\n# t\n\n' + '<!-- TODO -->\n' * 6)
+        with tempfile.TemporaryDirectory() as td:
+            os.makedirs(os.path.join(td, 'passport'))
+            for n, body in (('t.md', skel), ('README.md', 'not a page\n')):
+                with open(os.path.join(td, 'passport', n), 'w') as fh:
+                    fh.write(body)
+            out, summary = service_index.build({'rows': []}, td)
+            txt = out[os.path.join(td, 'passport', 'README.md')]
+            self.assertIn('[`/passport/t`](t.md) | TODO | - | skeleton, not in '
+                          '`data/endpoints.json`', txt)
+            self.assertNotIn('README.md](README.md)', txt)
+            # orphans are listed but not counted as inventory URLs
+            self.assertEqual(summary, [('passport', 0, 0)])
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -173,7 +173,7 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/site/set_site_device_param`](site/set_site_device_param.md) | Writes one site-level parameter set, selected by `param_type`, for a site; with `param_type` 19 it sets the system output power limit of a station. | `set_device_parm` | hand-written |
 | [`/power_service/v1/site/shift_power_site_type`](site/shift_power_site_type.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/site_data_check`](site/site_data_check.md) | TODO | - | skeleton |
-| [`/power_service/v1/site/site_data_exported`](site/site_data_exported.md) | TODO | `get_site_csv_export` | removed in 3.24.3, skeleton |
+| [`/power_service/v1/site/site_data_exported`](site/site_data_exported.md) | TODO | `get_site_csv_export` | pool-only in 3.24.3, skeleton |
 | [`/power_service/v1/site/update_charging_device`](site/update_charging_device.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/update_site`](site/update_site.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/update_site_devices`](site/update_site_devices.md) | TODO | - | skeleton |

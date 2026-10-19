@@ -32,11 +32,11 @@ Method mapping on the SDK path (`_handlerHttpBySdk`): the `Method` enum index is
 
 ### How the wrappers reach the paths
 
-Rows are `sender` rows of `data/endpoints.json` (598 of the 709 rows; the other 111 are URL-provider rows without a traced sender). `encrypted: true` = the wrapper name contains `encryptionRequestHttp` (449 rows); "note" rows (149) call a plain `requestHttp`/`request` wrapper; `false` rows (111) are URL providers.
+Rows are `sender` rows of `data/endpoints.json` (610 of the 764 rows; the other 154 are URL-provider rows without a traced sender). `encrypted: true` = the wrapper name contains `encryptionRequestHttp` (448 rows); "note" rows (162) call a plain `requestHttp`/`request` wrapper; `false` rows (154) are URL providers, for which the flag means "encryption not determined" (no `*Http*` call in the same function). Counts regenerated on 2026-10-19 after the inventory learned URL literals without a leading slash (Task 3.1b); before that the file had 709 rows (598 sender, 449 true, 149 note, 111 url_provider). The true count fell by one (449 to 448) because one row left the file, not because a flag flipped: the 3.18.0-only row `setRemainPluginStatus` (`charging/http/http_request_repository_impl.dart @0x3097764`, `encryptionRequestHttp`, URL `/power_service/v1/site/set_device_feature`) is no longer emitted, since 3.24.3 still holds that URL as the slashless literal `power_service/v1/site/set_device_feature` (`ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x396035c`, a `url_provider` row).
 
 | wrapper (callee name in the inventory) | next hop (asm-traced unless marked) | path | rows true / note |
 |---|---|---|---|
-| `HttpRequestControllerImpl::encryptionRequestHttp` (`http_request_repository_impl.dart @0x2264510`) | forwards all arguments, `needEncryption` default true (`@0x226451c`), to `HttpRequestControllerImpl::requestHttp` (`@0x2264924`) | A | 199 / 0 |
+| `HttpRequestControllerImpl::encryptionRequestHttp` (`http_request_repository_impl.dart @0x2264510`) | forwards all arguments, `needEncryption` default true (`@0x226451c`), to `HttpRequestControllerImpl::requestHttp` (`@0x2264924`) | A | 198 / 0 |
 | `HttpRequestControllerImpl::requestHttp` (`@0x2264938`) | checks `isDemoBlockPath` (`@0x2264df0`), logs, then calls the static `HttpRequest` (an `IHttpRequest`, set to a `HttpEncryptionDecorator` around a `HttpRequestImpl` in `charging/boostrap_impl.dart @0x49e0218`, `@0x49e0220`, `@0x49e0288`) with `needEncryption` and `needTerminalId` (`@0x2265018`) | A | 0 / 59 + 1 |
 | `HttpServiceImpl::encryptionRequestHttp` (`charging/impl/http_service_impl.dart @0x2284214`) | calls `HttpRequestControllerImpl::encryptionRequestHttp` (`@0x2284520`) | A | 197 / 0 |
 | `HttpServiceImpl::encryptionRequestHttpByGHttpRequest` (`@0x2737114`) | forwards to `HttpRequestControllerImpl::encryptionRequestHttp` (`@0x2737230`; the object is the global `gHttpRequest`, static field `0x1094`, `@0x27371cc`) | A | 14 / 0 |
@@ -47,10 +47,10 @@ Rows are `sender` rows of `data/endpoints.json` (598 of the 709 rows; the other 
 | `HttpHelper::request` (`electricity_price/.../http_helper.dart`) | calls `HttpServiceImpl::encryptionRequestHttp` (`@0x2c146c8`, `@0x27bdbc8`, `@0x4393190`) | A | 0 / 7 |
 | `HttpRequestControllerImpl::aiotPlatformRequestHttp` (`@0x260dde0`) | calls `HttpRequestControllerImpl::requestHttp` (`@0x260df68`) | A | 0 / 2 |
 | mixin applications of `HttpRequestMixin` (`_MixinApplication313&...`, `_MixinApplication417&...`, `_FamilyMainHttpReposity&...`) | no asm: Blutter does not emit `dart:mixin_deduplication` code. `HttpRequestMixin` is declared as `extends BaseGetController` (`charging/http/http_request_mixin.dart`, class header), so the likely target is `BaseGetController` (not traced) | A (inferred) | 13 / 23 |
-| `AkNetwork::requestHttp` | `AKIoTKitManagerImpl::handle` (`@0x21c3544`) | C | 0 / 16 |
+| `AkNetwork::requestHttp` | `AKIoTKitManagerImpl::handle` (`@0x21c3544`) | C | 0 / 26 |
 | `StationApiClient::request` | `AkIotKitFlutter::handle` (`@0x2a444c0`) | C | 0 / 5 |
-| `ScheduleNetwork::_requestHttp` | `AKIoTKitManagerImpl::handle` (`@0x284f790`) | C | 0 / 2 |
-| total | | | 449 / 149 |
+| `ScheduleNetwork::_requestHttp` | `AKIoTKitManagerImpl::handle` (`@0x284f790`) | C | 0 / 5 |
+| total | | | 448 / 162 |
 
 Senders that pass `needEncryption` explicitly (the call descriptors that name it; values decoded from the argument slots, tag asm-traced):
 
@@ -67,13 +67,13 @@ Senders that pass `needEncryption` explicitly (the call descriptors that name it
 
 The flag `encrypted` does not say "encrypted on the wire". Read each sender row with this rule instead:
 
-1. If the sender is on path C (`AkNetwork`, `StationApiClient`, `ScheduleNetwork`): the SDK sends it, whatever the flag says. **23 rows** (all in the 149 "note" rows).
-2. Else, if the sender passes `needEncryption: false` (table above): plain path, **3 rows** (`logOutRequest` is in the 449 "true" rows, `getRegionHostRequest` and `exchangeKey` in the 149 "note" rows).
-3. Else (default `needEncryption: true`): the call takes the SDK path whenever the SDK is logged in (visitor sessions count) and the URL passes the base-URL predicate, otherwise the plain path. **572 rows** = 448 "true" rows + 124 "note" rows. Of them, 36 rows go through mixin stubs whose asm is not available (13 + 23); their target is inferred.
+1. If the sender is on path C (`AkNetwork`, `StationApiClient`, `ScheduleNetwork`): the SDK sends it, whatever the flag says. **36 rows** (all in the 162 "note" rows).
+2. Else, if the sender passes `needEncryption: false` (table above): plain path, **3 rows** (`logOutRequest` is in the 448 "true" rows, `getRegionHostRequest` and `exchangeKey` in the 162 "note" rows).
+3. Else (default `needEncryption: true`): the call takes the SDK path whenever the SDK is logged in (visitor sessions count) and the URL passes the base-URL predicate, otherwise the plain path. **571 rows** = 447 "true" rows + 124 "note" rows. Of them, 36 rows go through mixin stubs whose asm is not available (13 + 23); their target is inferred.
 
-Check: 23 + 3 + 572 = 598 sender rows; the 111 `false` rows are URL-provider rows: the flag is not applicable to them (45 of those rows, 41 distinct URLs, have no sender row at all).
+Check: 36 + 3 + 571 = 610 sender rows; the 154 `false` rows are URL-provider rows: the flag is not applicable to them, encryption is not determined (79 of those rows, 75 distinct URLs, have no sender row at all).
 
-The reading for a client author: for a logged-in app session almost every ordinary call (572 of 598 sender rows) is an SDK call. The server also accepts plain calls for the endpoints the upstream library uses: the library keeps payload encryption off by default (`session.py`, `self.encrypt_payload: bool = False`, upstream-confirmed) and has an experimental encrypted mode for the same endpoints. Which endpoints reject a plain call is not recorded in this repository.
+The reading for a client author: for a logged-in app session almost every ordinary call (571 of 610 sender rows) is an SDK call. The server also accepts plain calls for the endpoints the upstream library uses: the library keeps payload encryption off by default (`session.py`, `self.encrypt_payload: bool = False`, upstream-confirmed) and has an experimental encrypted mode for the same endpoints. Which endpoints reject a plain call is not recorded in this repository.
 
 ## Request headers on encrypted calls
 

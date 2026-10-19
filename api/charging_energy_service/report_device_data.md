@@ -1,6 +1,6 @@
 > Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
 
-Removed in 3.24.3 — present in 3.18.0 only
+3.24.3: string present in the object pool, no code reference found (present in 3.18.0 with a sender)
 
 # report_device_data
 
@@ -50,7 +50,7 @@ n/a
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: absent (removed). since: ≤3.18.0.
+3.18.0: present. 3.24.3: string present in the object pool, no code reference found. since: ≤3.18.0.
 
 ## Known unknowns
 
