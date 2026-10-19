@@ -57,7 +57,7 @@ python3 -I tools/check_citations.py <asm_root> <page.md> ...                    
 
 ```bash
 python3 -I tools/lint_docs.py --summary            # counts per rule; exit 1 when any error
-python3 -I tools/lint_docs.py [--rule header,links] [--json] [--warn-only]
+python3 -I tools/lint_docs.py [--rule header,links] [--json] [--warn-only] [--strict]
 ```
 
 `lint_docs.py` checks every Markdown page of the repo (not `.superpowers/`, `tools/out/`, `patches/`, nor an old root doc listed in the migration map of [../docs/STRUCTURE.md](../docs/STRUCTURE.md) that still has no status header). Output lines are `path:line: ERROR|WARN rule: message`. Rules:
@@ -66,15 +66,15 @@ python3 -I tools/lint_docs.py [--rule header,links] [--json] [--warn-only]
 |---|---|
 | `header` | first non-blank line is the status header (App 3.24.3, date, `Confidence:` one of the 4 tags or `Page type:`, `Owner page:`) on api/, models/, flows/, devices/, mqtt/, ble/, reference/, docs/ top level and docs/audit/, METHODOLOGY, GLOSSARY |
 | `sections` | H2 order of endpoint/model/flow/device pages (extras allowed, template sections required and ordered) or H4 order under each H3 of mqtt/ble command pages (`envelope`, `protocol`, `handshake`, README excluded); the lists are read from `docs/templates/` |
-| `uncited-int` | integer >= 2 in a table row of a fact page (header has `Confidence:`) with no `@0x` citation and no row tag. Not checked: audit tables, METHODOLOGY (the Smi rule itself), Known unknowns and Device-tested by sections, sections with a `Tag:` line of a non-asm tag, tables whose header names a tally (`set / get`, `calls`, `count`, `total`), versions, dates, years, hex, line numbers, `step N`, `N sends/calls/functions` |
-| `tag-overclaim` | a sentence (or a section headed or opened by `Tag: asm-traced`) with `asm-traced` that contains one of the hedge words listed in `OVERCLAIM` in the script. `is not traced` and `(..., not traced)` state a limit of the evidence and pass |
+| `uncited-int` | integer >= 2 in a table row of a fact page (header has `Confidence:`, or a `Page type:` other than guidance) with no `@0x` citation and no row tag. Not checked: audit tables, Known unknowns and Device-tested by sections, sections with the line `Tag: untagged by design`, cells of a count column (header has count, rows, calls or total; never the first column) and of a `param_type` id column, ISO dates (`2026-10-19`), versions, hex, line numbers, `step N`, `N sends/calls/functions/endpoints/pages/files/rows`. A section tagged `string-only`, `upstream-confirmed` or `device-tested` still needs a citation or a row tag per row |
+| `tag-overclaim` | scope: the same sentence (cells of a table row are split into sentences), or a section headed or opened by `Tag: asm-traced`; the sentence carries `asm-traced` and one of the hedge words in `OVERCLAIM` in the script. `is not traced` and `(..., not traced)` state a limit of the evidence and pass. It does not look across sentences or at page-header tags; `--strict` additionally reports the hedge words on table rows that cite `@0x` under an `asm-traced` page header, as warnings |
 | `inferred-as-traced-sequence` | a line carrying a traced-step marker (the letter T in square brackets) and the same hedge words |
 | `todo-purpose` | warning: `## Purpose` is `<!-- TODO -->`, printed as one count per service |
 | `links` | every relative link resolves, and every `#anchor` matches a GitHub slug of the target page; code spans and fences are not links |
 | `length` | error above 600 lines; warning above 150 lines without a Contents section (docs/audit tables are exempt from the limit) |
 | `dup-payload` | identical ```json block on more than one page. Not checked: docs/templates, docs/audit, the empty success envelope, and identical shapes that each sit in their own endpoint page's `Example request/response` section |
-| `secret` | 32+ hex run outside docs/audit (a line naming sha256, sha1, md5, snapshot or checksum with a 32/40/64 hex run is a build identifier, not a secret) |
-| `owner-cmd` | `"cmd": N`, `cmd = N`, `cmd N` (also with the backticked word) on a fact page other than `api/param_types.md`; METHODOLOGY (worked Smi examples) and docs/audit are exempt |
+| `secret` | 32+ hex run outside docs/audit. A run of exactly 32, 40 or 64 characters directly after `sha256`, `sha1`, `md5`, `snapshot` or `checksum` is a build identifier, not a secret |
+| `owner-cmd` | `"cmd": N`, `cmd = N`, `cmd N` (also with the backticked word) on a fact page other than `api/param_types.md`. Exempt: docs/audit, and a line carrying the marker `<!-- lint: owner-cmd example -->` (the worked Smi example in METHODOLOGY) |
 
 ## 5. Tests
 

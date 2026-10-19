@@ -720,6 +720,148 @@ class LintDocsTests(unittest.TestCase):
         self.assertEqual(r, [])
 
 
+class LintDocsRound1Tests(LintDocsTests):
+    """Exemptions and CLI of lint_docs; inherits the helpers (its own tests run again, cheap)."""
+
+    def ui(self, rows, pre='', hdr=None):
+        body = (hdr or self.HDR) + '# x\n\n' + pre + '| k | v |\n|---|---|\n' + rows
+        return self.lint({'reference/a.md': body}, ['uncited-int'])
+
+    def test_year_regex_only_real_dates(self):
+        self.assertEqual(len(self.ui('| max | 2000 |\n')), 1)
+        self.assertEqual(len(self.ui('| max | 2048 |\n')), 1)
+        self.assertEqual(len(self.ui('| Date: 2026-10-19 | x |\n')), 0)
+
+    def test_year_not_exempt_with_unit(self):
+        r = self.ui('| max | 2000 W |\n')
+        self.assertEqual(len(r), 1)
+
+    def test_tag_section_exemption_only_untagged(self):
+        for tag, n in (('untagged by design', 0), ('string-only', 1),
+                       ('upstream-confirmed', 1), ('device-tested', 1)):
+            self.assertEqual(len(self.ui('| a | 17 |\n', pre='Tag: %s\n\n' % tag)), n, tag)
+
+    def test_untagged_sections_by_heading(self):
+        body = self.HDR + '# x\n\n## Known unknowns\n\n| a | b |\n|--|--|\n| 1 | 17 |\n'
+        self.assertEqual(self.lint({'reference/a.md': body}, ['uncited-int']), [])
+
+    def test_tally_columns(self):
+        ok = '| name | calls |\n|---|---|\n| `x` | 17 |\n'
+        bad = '| name | calls |\n|---|---|\n| 17 | 3 |\n'
+        ids = '| param_type | other |\n|---|---|\n| 17 | text |\n'
+        notcount = '| name | value |\n|---|---|\n| `x` | 17 |\n'
+        for tbl, n in ((ok, 0), (bad, 1), (ids, 0), (notcount, 1)):
+            self.assertEqual(len(self.lint({'reference/a.md': self.HDR + tbl}, ['uncited-int'])), n, tbl)
+
+    def test_step_and_count_noun(self):
+        self.assertEqual(len(self.ui('| see step 10 | 38 sends |\n')), 0)
+        self.assertEqual(len(self.ui('| 38 cloud sends | x |\n')), 1)
+
+    def test_header_variants(self):
+        import lint_docs as L
+        base = '> Verified against: App 3.24.3 · Date: 2026-10-19 · '
+        good = [base + 'Confidence: asm-traced · Page type: audit table · Owner page: this page',
+                base + 'Confidence: string-only (note) · Owner page: x · Page type: feature',
+                base + 'Page type: guidance (no API facts) · Owner page: this page']
+        bad = [base + 'Confidence: guess · Owner page: x', base + 'Owner page: x',
+               base + 'Confidence: asm-traced', base + 'Confidence: asm-traced · Owner page: x · Extra: y']
+        for g in good:
+            self.assertTrue(L.valid_header(g), g)
+        for b in bad:
+            self.assertFalse(L.valid_header(b), b)
+
+    def test_scope_limit(self):
+        ok = 'The element is not traced (asm-traced elsewhere). Also (analogy, not traced) asm-traced.\n'
+        self.assertEqual(self.lint({'reference/a.md': self.HDR + ok}, ['tag-overclaim']), [])
+        sec = self.HDR + '## S\n\nTag: asm-traced\n\nthis is likely.\n'
+        self.assertEqual(len(self.lint({'reference/a.md': sec}, ['tag-overclaim'])), 1)
+
+    def test_dup_payload_exemptions(self):
+        env = '```json\n{"code": 0, "msg": "success", "data": {}}\n```\n'
+        shape = '```json\n{"vehicle_id": "<vehicle id>", "other_key_padding": 1}\n```\n'
+        ex = lambda blk: self.endpoint().replace(
+            '## Example request/response\n\ntext', '## Example request/response\n\n' + blk)
+        r = self.lint({'api/s/a.md': ex(env), 'api/s/b.md': ex(env)}, ['dup-payload'])
+        self.assertEqual(r, [])
+        r = self.lint({'api/s/a.md': ex(shape), 'api/s/b.md': ex(shape)}, ['dup-payload'])
+        self.assertEqual(r, [])
+        r = self.lint({'api/s/a.md': ex(shape), 'reference/b.md': self.HDR + shape}, ['dup-payload'])
+        self.assertEqual(len(r), 2)
+
+    def test_secret_keyword_adjacent(self):
+        h = 'a' * 64
+        self.assertEqual(self.lint({'reference/a.md': self.HDR + 'XAPK sha256 %s\n' % h}, ['secret']), [])
+        far = self.HDR + 'sha256 is mentioned here ' + 'x' * 80 + ' %s\n' % h
+        self.assertEqual(len(self.lint({'reference/a.md': far}, ['secret'])), 1)
+        self.assertEqual(len(self.lint({'reference/a.md': self.HDR + 'sha256 %s\n' % ('a' * 50)}, ['secret'])), 1)
+
+    def test_owner_cmd_exemptions(self):
+        txt = 'x "cmd": 17\n'
+        r = self.lint({'METHODOLOGY.md': self.HDR + txt + 'y cmd 5 <!-- lint: owner-cmd example -->\n',
+                       'docs/plan.md': '# plan\n' + txt}, ['owner-cmd'])
+        self.assertEqual([(f.path, f.line) for f in r], [('METHODOLOGY.md', 3)])
+
+    def test_page_type_header_is_fact_page(self):
+        feat = self.HDR.replace('Confidence: asm-traced', 'Page type: feature') + '| a | 17 |\n'
+        self.assertEqual(len(self.lint({'reference/a.md': feat}, ['uncited-int'])), 1)
+        guide = self.HDR.replace('Confidence: asm-traced', 'Page type: guidance (no API facts)') + '| a | 17 |\n'
+        self.assertEqual(self.lint({'reference/a.md': guide}, ['uncited-int']), [])
+
+    def test_audit_length_warning(self):
+        big = self.HDR + 'line\n' * 610
+        r = self.lint({'docs/audit/a.md': big}, ['length'])
+        self.assertEqual([(f.rule, f.severity) for f in r], [('length', 'warning')])
+
+    def test_strict_hedge_on_cited_rows(self):
+        import lint_docs
+        row = '| `k` | presumably x | `f.dart @0x1234` |\n'
+        body = self.endpoint('| a | b | c |\n|---|---|---|\n' + row)
+        self.assertEqual(self.lint({'api/s/x.md': body}, ['tag-overclaim']), [])
+        import tempfile
+        with tempfile.TemporaryDirectory() as root:
+            os.makedirs(os.path.join(root, 'api/s'))
+            with open(os.path.join(root, 'api/s/x.md'), 'w') as fh:
+                fh.write(body)
+            r = lint_docs.lint_repo(root, ['tag-overclaim'], strict=True)
+        self.assertEqual([(f.rule, f.severity) for f in r], [('tag-overclaim', 'warning')])
+
+    def run_main(self, args, files):
+        import contextlib
+        import io
+        import tempfile
+        import lint_docs
+        with tempfile.TemporaryDirectory() as root:
+            for rel, text in files.items():
+                path = os.path.join(root, rel)
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                with open(path, 'w', encoding='utf-8') as fh:
+                    fh.write(text)
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                code = lint_docs.main(['--root', root] + args)
+        return code, out.getvalue()
+
+    def test_cli(self):
+        import json
+        files = {'reference/a.md': '# no header\n', 'reference/b.md': self.HDR + '# b\n\n## Purpose\n\n<!-- TODO -->\n'}
+        code, out = self.run_main(['--summary'], files)
+        self.assertEqual(code, 1)
+        self.assertIn('header', out)
+        self.assertRegex(out, r'TOTAL\s+errors\s+1')
+        code, out = self.run_main(['--json', '--rule', 'header'], files)
+        data = json.loads(out)
+        self.assertEqual([d['path'] for d in data], ['reference/a.md'])
+        code, out = self.run_main(['--rule', 'links'], files)
+        self.assertEqual(code, 0)
+        code, out = self.run_main(['--warn-only'], files)
+        self.assertEqual(code, 0)
+        self.assertNotIn('ERROR', out)
+        code, out = self.run_main(['--rule', 'nope'], files)
+        self.assertEqual(code, 2)
+        code, out = self.run_main(['--strict', '--summary'], files)
+        self.assertEqual(code, 1)
+
+
 def open_line(finding, case):
     return finding.text
 

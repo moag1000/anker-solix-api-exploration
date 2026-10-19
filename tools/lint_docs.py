@@ -1,13 +1,13 @@
 """Repo-wide documentation linter and link checker.
 
 Usage (from the repo root):
-  python3 -I tools/lint_docs.py [--rule NAME[,NAME]] [--summary] [--json] [--warn-only] [--root DIR]
+  python3 -I tools/lint_docs.py [--rule NAME[,NAME]] [--summary] [--json] [--warn-only] [--strict] [--root DIR]
 
 Rules (each finding is printed as `path:line: ERROR|WARN rule: message`):
   header                      status header on the first non-blank line of every fact page
   sections                    H2 (endpoint/model/flow/device) or H3/H4 (mqtt/ble) order matches docs/templates
   uncited-int                 integer >= 2 in a table row without `@0xADDR` or a row tag
-  tag-overclaim               `asm-traced` unit that says presumably/likely/inferred/not traced/assumed
+  tag-overclaim               `asm-traced` sentence or `Tag: asm-traced` section that says presumably/likely/inferred/not traced/assumed (--strict: also warns on @0x rows under an asm-traced header)
   inferred-as-traced-sequence a `[T]` traced-step line that says the same words
   todo-purpose  (warning)     `## Purpose` is `<!-- TODO -->` (grouped per service in text output)
   links                       relative link or #anchor does not resolve
@@ -202,6 +202,15 @@ def page_type(rel):
     return None
 
 
+def is_fact_page(pg):
+    """Header carries `Confidence:` or a `Page type:` other than guidance."""
+    h = pg.first[1]
+    if 'Confidence:' in h:
+        return True
+    m = re.search(r'Page type: ([^\u00b7]+)', h)
+    return bool(m) and not m.group(1).strip().lower().startswith('guidance')
+
+
 def in_header_scope(rel):
     parts = rel.split('/')
     if len(parts) == 1:
@@ -268,31 +277,35 @@ INT = re.compile(r'(?<![\w.#/@+-])\d+(?![\w])')
 ROW_STRIP = [
     re.compile(r'@0x[0-9a-fA-F]+'), re.compile(r'\b0x[0-9a-fA-F]+'),
     re.compile(r'\]\([^)]*\)'), re.compile(r'https?://\S+'),
-    re.compile(r'\d+(?:\.\d+)+'), re.compile(r'\b(?:19|20)\d\d\b'),
+    re.compile(r'\d+(?:\.\d+)+'), re.compile(r'\b20\d\d-\d\d(?:-\d\d)?\b'),
     re.compile(r'\.dart:\d+(?::\d+)?'), re.compile(r'\b[Ll]ines? \d+(?:\s*(?:-|to|–)\s*\d+)?'),
     re.compile(r'\bL\d+\b'),
 ]
 
 
 UNTAGGED_SECTIONS = ('Known unknowns', 'Device-tested by')   # untagged by design (templates)
-TALLY_HEADER = re.compile(r'set / get|rows true|\bcounts?\b|\bcalls\b|\bsenders\b|\btotal\b', re.I)
-COUNT_NOUN = re.compile(r'\b\d+\s+(?:[\w-]+\s+)?(?:sends|senders|calls|call sites|functions|endpoints|pages|files|rows)\b', re.I)
+COUNT_COL = re.compile(r'\b(?:counts?|rows|calls|total)\b', re.I)
+ID_COL = re.compile(r'^`?param_type`?$', re.I)    # param_type ids are string literals
+COUNT_NOUN = re.compile(r'\b\d+\s+(?:sends|senders|calls|call sites|functions|endpoints|pages|files|rows)\b', re.I)
 STEP_REF = re.compile(r'\b[Ss]teps? \d+(?:\s*(?:-|to|and)\s*\d+)?')
 
 
+def cells(row):
+    return [c.strip() for c in row.strip().strip('|').split('|')]
+
+
 def rule_uncited_int(pg, ctx):
-    # Fact pages only: a `Confidence:` header. Guidance pages and headerless pages carry no
-    # API facts, audit tables cite through their raw/decoded columns, METHODOLOGY.md defines
-    # the Smi rule itself (its integers are the rule, not app facts).
-    if pg.rel in ('METHODOLOGY.md',) or pg.rel.startswith(('docs/audit/', 'docs/templates/')) \
-            or 'Confidence:' not in pg.first[1]:
+    # Fact pages only (see is_fact_page). Audit tables cite through their raw/decoded
+    # columns. Cells of a count column (never the first) and of a `param_type` id column are
+    # tool-derived tallies / string literals, not decoded immediates.
+    if pg.rel.startswith(('docs/audit/', 'docs/templates/')) or not is_fact_page(pg):
         return
-    section, sec_exempt, tally, in_table = '', False, False, False
+    sec_exempt, in_table, skip_cols = False, False, set()
     heads = {ln: tx for ln, _, tx in pg.headings}
     for i, ln in enumerate(pg.lines):
         if (i + 1) in heads:
-            section, sec_exempt, tally = heads[i + 1], heads[i + 1] in UNTAGGED_SECTIONS, False
-        elif re.match(r'^Tag:\s*(untagged by design|upstream-confirmed|device-tested|string-only)', ln.strip()):
+            sec_exempt = heads[i + 1] in UNTAGGED_SECTIONS
+        elif re.match(r'^Tag:\s*untagged by design', ln.strip()):
             sec_exempt = True
         s = ln.strip()
         if pg.fenced[i] or not s.startswith('|'):
@@ -300,12 +313,13 @@ def rule_uncited_int(pg, ctx):
             continue
         if not in_table:
             in_table = True
-            tally = bool(TALLY_HEADER.search(s))      # header row of a tool-derived tally table
-        if sec_exempt or tally or re.match(r'^\|[\s:|-]+\|?$', s):
+            skip_cols = {k for k, h in enumerate(cells(s))
+                         if ID_COL.match(h) or (k > 0 and COUNT_COL.search(h))}
+        if sec_exempt or re.match(r'^\|[\s:|-]+\|?$', s):
             continue
         if re.search(r'@0x[0-9a-fA-F]+', s) or ROW_TAG.search(s):
             continue
-        t = s
+        t = ' | '.join(c for k, c in enumerate(cells(s)) if k not in skip_cols)
         for r in ROW_STRIP + [COUNT_NOUN, STEP_REF]:
             t = r.sub(' ', t)
         bad = [m.group(0) for m in INT.finditer(t) if int(m.group(0)) >= 2]
@@ -476,9 +490,10 @@ def rule_secret(pg, ctx):
         return
     for i, ln in enumerate(pg.lines):
         m = re.search(r'[0-9a-fA-F]{32,}', ln)
-        # public build identifiers (sha256 of the XAPK, Dart snapshot hash) are not secrets
-        if m and re.search(r'sha256|sha1|md5|snapshot|checksum', ln, re.I) \
-                and len(m.group(0)) in (32, 40, 64):
+        # public build identifiers (sha256 of the XAPK, Dart snapshot hash): keyword right
+        # next to the run and a 32/40/64 length
+        if m and len(m.group(0)) in (32, 40, 64) and re.search(
+                r'(sha256|sha1|md5|snapshot|checksum)\W{0,12}$', ln[:m.start()], re.I):
             continue
         if m:
             yield i + 1, '32+ hex run (%d chars) outside docs/audit: possible secret' % len(m.group(0)), ''
@@ -488,15 +503,14 @@ CMD = re.compile(r'"cmd"\s*:\s*\d+|\bcmd`?\s*=\s*\d+|\bcmd`?\s+\d+\b', re.I)
 
 
 def rule_owner_cmd(pg, ctx):
-    # Fact pages only (`Confidence:` header). Exempt: the owner page; METHODOLOGY.md (its
-    # worked Smi examples); docs/audit (frozen records of the old values, including wrong
-    # ones); plans and issue notes (no header, no facts).
-    if pg.rel in ('api/param_types.md', 'METHODOLOGY.md') or pg.rel.startswith('docs/audit/') \
-            or 'Confidence:' not in pg.first[1]:
+    # Fact pages only. Exempt: the owner page; docs/audit (frozen records of the old values,
+    # including wrong ones); plans and issue notes (no header); a line carrying the marker
+    # `<!-- lint: owner-cmd example -->` (METHODOLOGY's worked Smi example).
+    if pg.rel == 'api/param_types.md' or pg.rel.startswith('docs/audit/') or not is_fact_page(pg):
         return
     for i, ln in enumerate(pg.lines):
         m = CMD.search(ln)
-        if m:
+        if m and 'lint: owner-cmd example' not in ln:
             yield i + 1, 'numeric cmd value "%s" belongs on api/param_types.md' % m.group(0), ln
 
 
@@ -529,7 +543,19 @@ class Ctx:
         return self._extra[rel]
 
 
-def lint_repo(root, rules=None):
+def strict_hedges(pg):
+    """--strict: hedge words in table rows that cite `@0x` under an asm-traced page header."""
+    if 'Confidence: asm-traced' not in pg.first[1]:
+        return
+    for i, ln in enumerate(pg.lines):
+        s = ln.strip()
+        if not pg.fenced[i] and s.startswith('|') and re.search(r'@0x[0-9a-fA-F]+', s):
+            w = overclaim_word(s)
+            if w:
+                yield i + 1, 'row cites @0x under an asm-traced header and says "%s"' % w, ln
+
+
+def lint_repo(root, rules=None, strict=False):
     rules = list(rules or RULES)
     pages = collect(root)
     ctx = Ctx(root, pages)
@@ -540,6 +566,12 @@ def lint_repo(root, rules=None):
                 ln, msg, text = res
                 sev = 'warning' if (name == 'todo-purpose' or (name == 'length' and '(limit 600)' not in msg)) else 'error'
                 out.append(Finding(name, sev, pg.rel, ln, msg, text))
+    if strict and 'tag-overclaim' in rules:
+        seen = {(f.path, f.line) for f in out if f.rule == 'tag-overclaim'}
+        for pg in pages:
+            for ln, msg, text in strict_hedges(pg):
+                if (pg.rel, ln) not in seen:
+                    out.append(Finding('tag-overclaim', 'warning', pg.rel, ln, msg, text))
     if 'dup-payload' in rules:
         for p, ln, msg in finish_dup(ctx):
             out.append(Finding('dup-payload', 'error', p, ln, msg))
@@ -552,6 +584,7 @@ def main(argv=None):
     ap.add_argument('--rule', help='comma-separated rule names (default: all)')
     ap.add_argument('--summary', action='store_true', help='print counts per rule only')
     ap.add_argument('--json', action='store_true', help='machine output')
+    ap.add_argument('--strict', action='store_true', help='also warn on hedge words in @0x rows under an asm-traced header')
     ap.add_argument('--warn-only', action='store_true', help='run only the warning rules, exit 0')
     ap.add_argument('--root', default=os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
     a = ap.parse_args(argv)
@@ -562,7 +595,7 @@ def main(argv=None):
         return 2
     if a.warn_only:
         rules = [r for r in rules if r in SOFT]
-    found = lint_repo(a.root, rules)
+    found = lint_repo(a.root, rules, strict=a.strict)
     if a.warn_only:
         found = [f for f in found if f.severity == 'warning']
     errors = [f for f in found if f.severity == 'error']
