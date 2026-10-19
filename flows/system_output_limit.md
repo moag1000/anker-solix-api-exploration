@@ -8,12 +8,15 @@ How the app sets the system output power limit of a station in 10 W steps (param
 
 On the station power limit page (station settings), the user taps the output power entry. The tap handler is a closure built in `_StationPowerLimitContentView::_buildSingleDeviceLayout` (`station_power_limit_view.dart @0x4354f3c`, created at `@0x43545a8`); it calls `StationPowerLimitLogic::showOutputPowerPicker` (`station_power_limit_view.dart @0x4354f6c`, function `station_power_limit_logic.dart @0x4354f88`).
 
+Legacy picker, not this flow: the page has a second picker, `showPowerLimitPicker` (`station_power_limit_view.dart @0x4355f04` and `@0x4357f7c`, logic `@0x4355f20`), which opens the older `PowerSliderView` and ends in `_setDevicePowerLimit` with `set_device_attrs {device_sn, attributes: {ac_power_limit}}` (asm-traced, confirmed in 3.24.3). That is the per-device AC input limit, not the system output limit: upstream maps `ac_power_limit` to the AC input (`api/api.py` around line 1925, upstream-confirmed). The single-device layout closure in `_buildSingleDeviceLayout` checks for `A17C1` and `A17C3` and shows the `noCapabilityForCharging` toast otherwise; `_updateSupportFlags` (`station_power_limit_logic.dart`, lines 471 to 816 of the asm dump) derives `supportAcLimit` for `AE103`, `A17E2` and `AE111` (strings `1200W` and `inputPower` nearby); in the multi-device layout `_buildDeviceRow` calls the picker per device. Only one output-limit path exists in 3.24.3: `showOutputPowerPicker` leading to `NewPowerSliderView` (`station_power_limit_view.dart @0x4354f6c`).
+
 ## Preconditions
 
 - Logged-in account and a site id: `_getStationPowerLimit` returns without a request when the site id is empty (`station_power_limit_logic.dart @0x28cab98`). Upstream notes that `get_power_limit` needs the site owner (`api/apitypes.py`, comment on `get_site_power_limit`, upstream-confirmed).
 - The station power limit page has loaded the model through [`get_power_limit`](../api/power_service/site/get_power_limit.md), and `power_limit_option` is not empty: the picker returns without showing anything when the option list is empty (`station_power_limit_logic.dart @0x4354fc8`).
 - Cloud path only. This flow makes no BLE or MQTT call.
-- Which sites and devices get this page is not traced (`_updateSupportFlags`, `station_power_limit_logic.dart @0x28caf78`, not analysed).
+- Entry gate (asm-traced): the entry to this page is guarded by `_updateStationPowerLimitStatus` (`station_home_settings_logic.dart`, around line 4530 of the asm dump). It calls `getSitePowerLimit` with the body `{"site_id": ..., "app_ability": {"site_power_limit": true}}` (the `app_ability` key is part of the [get_power_limit](../api/power_service/site/get_power_limit.md) request). If that call fails, the status flag (Rx field `field_c3`) becomes `false`; on success the flag is `true` when model field 13 is non-null. That field is inferred to be `legal_power_limit` from the constructor store order (inferred, not confirmed by a name in the asm). `gotoStationOutPutPowerPage` routes to `/stationPowerLimit`.
+- Which devices show which rows on the page is only partly traced: `_updateSupportFlags` (`station_power_limit_logic.dart`) derives per-model flags, see the legacy AC input picker note in Trigger.
 
 ## Steps
 
@@ -58,9 +61,9 @@ All of these run right after the request is handed to the HTTP layer, without wa
 
 ## Known unknowns
 
-- Whether the server validates the value and rejects some of them (for example 790 W, which is not in `power_limit_option`); the app does not check, it only logs a failure.
+- Server validation, partly answered by a device test (device-tested, thomluther, A17C5, firmware not recorded, 2026-10-19, [issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1); details on [set_site_device_param](../api/power_service/site/set_site_device_param.md#device-tested-by)): with `display_type: 1` free 10 W values are accepted, with `display_type: 0` only `power_limit_option` values work. The app never sends `display_type: 0`. Other devices and firmware are untested.
 - Whether the server accepts every 10 W value between 100 W and the maximum, or only some of them, for a given device and firmware.
-- Whether the server enforces the legal limit itself, or relies on the app prompt (steps 9 to 12).
+- Whether the server enforces the legal limit on other devices. On the A17C5 the API did not enforce `legal_limit` (device-tested, see above); the prompt in steps 9 to 12 is app-only there.
 - The confirm path of the `h5` prompt variant.
 - What the internal boolean toggled around the 3 s delay controls in the UI.
 - The server meaning of `display_type` and whether the upstream library's `cmd` value is accepted as well as the app's; both are tracked on [set_site_device_param](../api/power_service/site/set_site_device_param.md#known-unknowns).

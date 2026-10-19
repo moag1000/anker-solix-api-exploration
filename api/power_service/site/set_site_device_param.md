@@ -92,20 +92,23 @@ None recorded for the app payload above. For a different payload (upstream libra
 
 ## Since/changed
 
-3.18.0: `setSiteDevicePowerLimit` (3.18.0 `http_request_repository_impl.dart @0x327fdc0`) sent the same four top-level keys with `param_type` `"19"` and the same `cmd` (3.18.0 value on [../../param_types.md](../../param_types.md)); its `param_data` held only `power_limit` (`limit`, `limit_real`), typed `Map<String, Map<String, int>>`, with no `display_type`. 3.24.3: `display_type` (constant 1) is new in `param_data` (`@0x43557b0`); `cmd` is unchanged (see [../../param_types.md](../../param_types.md)); the request is still sent encrypted.
+3.18.0: `setSiteDevicePowerLimit` (3.18.0 `http_request_repository_impl.dart @0x327fdc0`) sent the same four top-level keys with `param_type` `"19"` and the same `cmd` (3.18.0 value on [../../param_types.md](../../param_types.md)); its `param_data` held only `power_limit` (`limit`, `limit_real`), typed `Map<String, Map<String, int>>`, with no `display_type`. 3.18.0 never sent a `display_type` key, so the app never sent `display_type: 0` in either version. 3.24.3: `display_type` (constant 1) is new in `param_data` (`@0x43557b0`); `cmd` is unchanged (see [../../param_types.md](../../param_types.md)); the request is still sent encrypted.
 
 ## Known unknowns
 
-- What `display_type` means on the server side. A plausible reading is that it marks the value as a free slider value rather than an entry of `power_limit_option`; this is not verified.
-- Whether the server accepts the upstream library's `cmd` value as well as the app's for param_type 19 (both values are owned by [../../param_types.md](../../param_types.md)), with and without `display_type`. A test matrix is pending with thomluther; no outcome is recorded here.
+- Server-side meaning of `display_type` beyond the observed behaviour. The device test recorded under Device-tested by shows that `display_type: 1` makes free 10 W values acceptable and that `display_type: 0` works only for `power_limit_option` values; why the server draws this line, and what other values do, is not known.
+- Whether the server really never checks `legal_limit`. One test (A17C5, below) saw no enforcement; other devices and firmware are untested.
+- Whether the server accepts the upstream library's `cmd` value as well as the app's for param_type 19 (both values are owned by [../../param_types.md](../../param_types.md)). The issue #1 test recorded below does not establish which `cmd` value was used, so this stays open.
 - Whether the encrypted request path is required, or whether a plain request with the same body is accepted.
 - The response body for a successful type-19 call (not read by the app).
 
 ## Device-tested by
 
-No device test of the app payload above exists. Records for the upstream library payload (client: thomluther/anker-solix-api; firmware not recorded):
+Records below. The 2026-10-19 rows are from [anker-solix-api-exploration issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) (comment of 2026-10-19T11:49Z; tester thomluther, device A17C5, firmware not recorded, client: anker-solix-api raw requests, client version not recorded). The earlier rows used the upstream library payload (firmware not recorded). Result of the issue #1 test, device-tested: `display_type: 1` makes free 10 W values acceptable; `display_type: 0` works only for values that are in `power_limit_option`; the API does not enforce `legal_limit` (the legal-limit popup exists only in the app). The 3.24.3 app always sends `display_type: 1` (asm-traced, see Request), so the app payload and the working device request agree on this key.
 
 | who | device | request | value | result | date | source |
 |---|---|---|---|---|---|---|
 | thomluther | not recorded in the reference | upstream `cmd` value (owner: param_types.md), `param_data` `{"power_limit":{"limit":N,"limit_real":N}}` | N from `power_limit_option` | accepted | not recorded | [ha-anker-solix#423](https://github.com/thomluther/ha-anker-solix/issues/423#issuecomment-4135301109) |
 | thomluther | A17C5 | same as above (no `display_type`) | 790 W (not in `power_limit_option`) | rejected, `10004` ItemNotFoundError | 2026-10-18 | [anker-solix-api#339](https://github.com/thomluther/anker-solix-api/issues/339) |
+| thomluther | A17C5 (firmware not recorded) | raw request, `param_data` with `display_type` 1 | free 10 W value (not in `power_limit_option`) | accepted | 2026-10-19 | [issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) |
+| thomluther | A17C5 (firmware not recorded) | raw request, `param_data` with `display_type` 0 | value not in `power_limit_option` | `display_type` 0 works only for `power_limit_option` values | 2026-10-19 | [issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) |
