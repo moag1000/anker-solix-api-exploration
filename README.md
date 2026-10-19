@@ -157,7 +157,7 @@ Start here if you own a specific device:
 
 ## Endpoints
 
-Now: every endpoint has its own page under [api/](api/README.md) (service index with page counts and purposes); the machine-readable inventory is [data/endpoints.json](data/endpoints.json).
+Now: every endpoint has its own page under [api/](api/README.md) (service index with page counts and purposes); the machine-readable inventory is [data/endpoints.json](data/endpoints.json) (schemas, identity keys and the stability promise of all four JSON exports: [data/README.md](data/README.md), validated by `tools/schema_check.py --check`).
 The old per-file counts and links below are 3.18.0 data and do not add up to the current inventory.
 The old content below (3.18.0 reference, superseded — kept until Task 4.9).
 
