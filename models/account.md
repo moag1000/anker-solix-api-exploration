@@ -1,5 +1,7 @@
 # Account / Sharing — Response Models
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/models.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > 10 models
 
 ## IotUserModel
@@ -89,3 +91,6 @@ Source: `model/validate_account_model.dart`
 enc_text, pass_empty, result, status
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

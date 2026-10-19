@@ -1,5 +1,7 @@
 # Solarbank (A17C0-C5) — Response Models
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/models.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > 5 models
 
 ## A17C1DeviceHomeLoadData
@@ -21,6 +23,8 @@ start_time, step, switch, turnOn, turn_on
 
 ## GetSiteDeviceParamResponse
 
+Corrected 2026-10-19 (App 3.24.3): `GetSiteDeviceParamResponse`, `SiteDeviceParamData`, `SiteSocItem` and `FeedTimes` are owned by [`models/get_site_device_param_response.md`](get_site_device_param_response.md).
+
 Source: `model/site_setting/get_site_device_param_model.dart`
 
 *(no fields extracted)*
@@ -36,6 +40,8 @@ reserved_soc, start_time, status, step, week
 ```
 
 ## SiteDeviceParamData
+
+Corrected 2026-10-19 (App 3.24.3): owned by [`models/get_site_device_param_response.md`](get_site_device_param_response.md); this section is outdated.
 
 Source: `model/site_setting/get_site_device_param_model.dart`
 
@@ -58,3 +64,6 @@ priority_discharge_upgrade_devices, ranges, schedule_mode, site_id, startTime,
 start_time, step, switch, turnOn, turn_on
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

@@ -1,5 +1,7 @@
 # Green Energy / Site — Response Models
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/models.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > 3 models
 
 ## GreenPPSSiteDetailModel
@@ -28,3 +30,6 @@ Source: `model/green_energy/station/scene_info.dart`
 country_code, device_pn, device_sn, multi_pv, site_id, solarbank_list, type
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

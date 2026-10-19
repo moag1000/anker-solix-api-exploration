@@ -1,5 +1,7 @@
 # Firmware / OTA — Response Models
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/models.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > 9 models
 
 ## BatchDeviceModel
@@ -90,3 +92,6 @@ sub_device_list, upgrade_desc, upgrade_record_list, upgrade_record_type,
 upgrade_time, upgrade_type, upgrade_version
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

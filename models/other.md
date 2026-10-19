@@ -1,5 +1,7 @@
 # Other — Response Models
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/models.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > 28 models
 
 ## A17B1AddableSiteModel
@@ -63,6 +65,8 @@ ota_complete_status, solar_sn
 ```
 
 ## CombineBoxEntity
+
+Corrected 2026-10-19 (App 3.24.3): the field list below is outdated; `CombineBoxEntity` is owned by [`models/combine_box_entity.md`](combine_box_entity.md).
 
 Source: `ui/page/device/main/sitation_energy_system/station_home_settings/manage_devices/CombineBoxEntity.dart`
 
@@ -152,6 +156,8 @@ context
 
 ## PeakTimeModel
 
+Corrected 2026-10-19 (App 3.24.3): the field list below is outdated; `PeakTimeModel` and `Data` are owned by [`models/peak_time_model.md`](peak_time_model.md).
+
 Source: `model/peak_time_model.dart`
 
 ```
@@ -221,3 +227,6 @@ Source: `base:bean/model/third_party/shelly/third_party_platform_info_model.dart
 callBackUrl, content, index, logo, name, products, tag, tagCode, url
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

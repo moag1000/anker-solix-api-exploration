@@ -1,0 +1,1688 @@
+{
+  "app_version": "3.24.3",
+  "generated_by": "tools/param_types.py asm_root --version 3.24.3",
+  "rows": [
+    {
+      "cmd": 17,
+      "cmd_addr": "0x2404444",
+      "cmd_by_function": {
+        "addSitePPS (via setSiteDeviceParam)": 17,
+        "cmdGreenPowerData (via setSiteDeviceParam)": 17,
+        "getData (via setSiteDeviceParam)": 17,
+        "setLoopMode (via setSiteDeviceParam)": 17,
+        "updateCurrentStationWidget (via setSiteDeviceParam)": 17
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 34,
+      "cmd_set": 17,
+      "cmd_set_addr": "0x2404444",
+      "cmd_set_raw": 34,
+      "dart_files": [
+        "charging/http/http_request_repository_impl.dart"
+      ],
+      "function_sources": {
+        "addSitePPS (via setSiteDeviceParam)": "traced",
+        "cmdGreenPowerData (via setSiteDeviceParam)": "traced",
+        "getData (via setSiteDeviceParam)": "traced",
+        "getSiteGreenModeDeviceParam": "literal",
+        "setLoopMode (via setSiteDeviceParam)": "traced",
+        "updateCurrentStationWidget (via setSiteDeviceParam)": "traced"
+      },
+      "get_function": [
+        "getSiteGreenModeDeviceParam"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": null,
+      "param_type": "1",
+      "param_type_source": "literal",
+      "set_function": [
+        "getData (via setSiteDeviceParam)",
+        "setLoopMode (via setSiteDeviceParam)",
+        "addSitePPS (via setSiteDeviceParam)",
+        "cmdGreenPowerData (via setSiteDeviceParam)",
+        "updateCurrentStationWidget (via setSiteDeviceParam)"
+      ],
+      "traced_from": [
+        {
+          "chain": [
+            "charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getData"
+          ],
+          "value_addr": "0x28f3994",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/greenpower/recharge/recharge_logic.dart::setLoopMode"
+          ],
+          "value_addr": "0x3f5c4e8",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::getData"
+          ],
+          "value_addr": "0x2bdb32c",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::setLoopMode"
+          ],
+          "value_addr": "0x2e7b7f8",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::addSitePPS"
+          ],
+          "value_addr": "0x27a1668",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::cmdGreenPowerData"
+          ],
+          "value_addr": "0x27a17b0",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/home/home_base_logic.dart::updateCurrentStationWidget"
+          ],
+          "value_addr": "0x22a962c",
+          "wrapper": "setSiteDeviceParam"
+        }
+      ],
+      "unresolved": []
+    },
+    {
+      "cmd": 17,
+      "cmd_addr": "0x2404444",
+      "cmd_by_function": {
+        "cmdGreenPowerData (via setSiteDeviceParam)": 17,
+        "dataAnalysis (via setSiteDeviceParam)": 17,
+        "deletePeakPlan (via setSiteDeviceParam)": 17,
+        "savePeakPlanNew (via setSiteDeviceParam)": 17
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 34,
+      "cmd_set": 17,
+      "cmd_set_addr": "0x2404444",
+      "cmd_set_raw": 34,
+      "dart_files": [
+        "charging/http/http_request_repository_impl.dart"
+      ],
+      "function_sources": {
+        "cmdGreenPowerData (via setSiteDeviceParam)": "traced",
+        "dataAnalysis (via setSiteDeviceParam)": "traced",
+        "deletePeakPlan (via setSiteDeviceParam)": "traced",
+        "getSitePeakTimeDeviceParam": "literal",
+        "savePeakPlanNew (via setSiteDeviceParam)": "traced"
+      },
+      "get_function": [
+        "getSitePeakTimeDeviceParam"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": null,
+      "param_type": "2",
+      "param_type_source": "literal",
+      "set_function": [
+        "dataAnalysis (via setSiteDeviceParam)",
+        "cmdGreenPowerData (via setSiteDeviceParam)",
+        "savePeakPlanNew (via setSiteDeviceParam)",
+        "deletePeakPlan (via setSiteDeviceParam)"
+      ],
+      "traced_from": [
+        {
+          "chain": [
+            "charging/ui/page/device/greenpower/recharge/recharge_logic.dart::dataAnalysis"
+          ],
+          "value_addr": "0x28f4174",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::dataAnalysis"
+          ],
+          "value_addr": "0x2bdbb2c",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::cmdGreenPowerData"
+          ],
+          "value_addr": "0x27a18d0",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/station_device_home/station_set_time/station_set_time_logic.dart::savePeakPlanNew"
+          ],
+          "value_addr": "0x30de0b0",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/station_device_home/station_set_time/station_set_time_logic.dart::deletePeakPlan"
+          ],
+          "value_addr": "0x30e0ca8",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/station_device_home/station_set_time/station_set_time_logic.dart::dataAnalysis"
+          ],
+          "value_addr": "0x34b535c",
+          "wrapper": "setSiteDeviceParam"
+        }
+      ],
+      "unresolved": []
+    },
+    {
+      "cmd": 17,
+      "cmd_addr": "0x2404444",
+      "cmd_by_function": {
+        "cmdGreenPowerData (via setSiteDeviceParam)": 17,
+        "getData (via setSiteDeviceParam)": 17,
+        "setEnablePeakValue (via setSiteDeviceParam)": 17
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 34,
+      "cmd_set": 17,
+      "cmd_set_addr": "0x2404444",
+      "cmd_set_raw": 34,
+      "dart_files": [
+        "charging/http/http_request_repository_impl.dart"
+      ],
+      "function_sources": {
+        "cmdGreenPowerData (via setSiteDeviceParam)": "traced",
+        "getData (via setSiteDeviceParam)": "traced",
+        "getSiteEnablePeakDeviceParam": "literal",
+        "setEnablePeakValue (via setSiteDeviceParam)": "traced"
+      },
+      "get_function": [
+        "getSiteEnablePeakDeviceParam"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": null,
+      "param_type": "3",
+      "param_type_source": "literal",
+      "set_function": [
+        "getData (via setSiteDeviceParam)",
+        "setEnablePeakValue (via setSiteDeviceParam)",
+        "cmdGreenPowerData (via setSiteDeviceParam)"
+      ],
+      "traced_from": [
+        {
+          "chain": [
+            "charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getData"
+          ],
+          "value_addr": "0x28f3888",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/greenpower/recharge/recharge_logic.dart::setEnablePeakValue"
+          ],
+          "value_addr": "0x3f5aa74",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::getData"
+          ],
+          "value_addr": "0x2bdb224",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::setEnablePeakValue"
+          ],
+          "value_addr": "0x2e79b30",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::cmdGreenPowerData"
+          ],
+          "value_addr": "0x27a1970",
+          "wrapper": "setSiteDeviceParam"
+        }
+      ],
+      "unresolved": []
+    },
+    {
+      "cmd": 17,
+      "cmd_addr": "0x2404444",
+      "cmd_by_function": {
+        "setHomeLoadValue (via setSiteDeviceParam)": 17,
+        "setSiteHomeLoadDevicePower (via setSiteDeviceParam)": 17,
+        "siteSetHomeLoadDataParam (via setSiteDeviceParam)": 17
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 34,
+      "cmd_set": 17,
+      "cmd_set_addr": "0x2404444",
+      "cmd_set_raw": 34,
+      "dart_files": [
+        "charging/http/http_request_repository_impl.dart"
+      ],
+      "function_sources": {
+        "getSiteDeviceParamData (via getSiteDeviceParam)": "traced",
+        "setHomeLoadValue (via setSiteDeviceParam)": "traced",
+        "setSiteHomeLoadDevicePower (via setSiteDeviceParam)": "traced",
+        "siteSetHomeLoadDataParam (via setSiteDeviceParam)": "traced"
+      },
+      "get_function": [
+        "getSiteDeviceParamData (via getSiteDeviceParam)"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": "SOLARBANK_SCHEDULE",
+      "param_type": "4",
+      "param_type_source": "traced",
+      "set_function": [
+        "setHomeLoadValue (via setSiteDeviceParam)",
+        "setSiteHomeLoadDevicePower (via setSiteDeviceParam)",
+        "siteSetHomeLoadDataParam (via setSiteDeviceParam)"
+      ],
+      "traced_from": [
+        {
+          "chain": [
+            "charging/ui/page/device/greenpower/recharge/recharge_logic.dart::setHomeLoadValue"
+          ],
+          "value_addr": "0x3f5b75c",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_distrbution_controller.dart::setSiteHomeLoadDevicePower"
+          ],
+          "value_addr": "0x305b6b8",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_distrbution_controller.dart::setSiteHomeLoadDevicePower"
+          ],
+          "value_addr": "0x305b78c",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::siteSetHomeLoadDataParam"
+          ],
+          "value_addr": "0x3f5eebc",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getSiteDeviceParamData"
+          ],
+          "value_addr": "0x28f46e4",
+          "wrapper": "getSiteDeviceParam"
+        }
+      ],
+      "unresolved": []
+    },
+    {
+      "cmd": 17,
+      "cmd_addr": "0x2404444",
+      "cmd_by_function": {
+        "cmdGreenPowerData (via setSiteDeviceParam)": 17,
+        "getData (via setSiteDeviceParam)": 17,
+        "setRechargeValue (via setSiteDeviceParam)": 17
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 34,
+      "cmd_set": 17,
+      "cmd_set_addr": "0x2404444",
+      "cmd_set_raw": 34,
+      "dart_files": [
+        "charging/http/http_request_repository_impl.dart"
+      ],
+      "function_sources": {
+        "cmdGreenPowerData (via setSiteDeviceParam)": "traced",
+        "getData (via setSiteDeviceParam)": "traced",
+        "getSiteLowerLimitDeviceParam": "literal",
+        "setRechargeValue (via setSiteDeviceParam)": "traced"
+      },
+      "get_function": [
+        "getSiteLowerLimitDeviceParam"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": null,
+      "param_type": "5",
+      "param_type_source": "literal",
+      "set_function": [
+        "getData (via setSiteDeviceParam)",
+        "setRechargeValue (via setSiteDeviceParam)",
+        "cmdGreenPowerData (via setSiteDeviceParam)"
+      ],
+      "traced_from": [
+        {
+          "chain": [
+            "charging/ui/page/device/greenpower/recharge/recharge_logic.dart::getData"
+          ],
+          "value_addr": "0x28f37bc",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/greenpower/recharge/recharge_logic.dart::setRechargeValue"
+          ],
+          "value_addr": "0x3f5afac",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::getData"
+          ],
+          "value_addr": "0x2bdb164",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_pps/controller/energy_pps_controller.dart::setRechargeValue"
+          ],
+          "value_addr": "0x2e799e0",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart::cmdGreenPowerData"
+          ],
+          "value_addr": "0x27a1868",
+          "wrapper": "setSiteDeviceParam"
+        }
+      ],
+      "unresolved": []
+    },
+    {
+      "cmd": 123,
+      "cmd_addr": "0x31fb44c",
+      "cmd_by_function": {
+        "_checkPlatformHasSetTOUData": 123,
+        "_createSiteSuccess (via set17C1SiteDeviceParam)": 123,
+        "_dealWithBleResponse (via set17C1SiteDeviceParam)": 123,
+        "_getSiteConfig (via get17C1SiteDeviceParam)": 123,
+        "_getSiteConfig (via set17C1SiteDeviceParam)": 123,
+        "_getSystemPolicySetting (via get17C1SiteDeviceParam)": 123,
+        "_setCxPlatformSmartMode": 123,
+        "continueStudy (via set17C1SiteDeviceParam)": 123,
+        "createSiteDirectly (via set17C1SiteDeviceParam)": 123,
+        "deleteHomeLoadData (via set17C1SiteDeviceParam)": 123,
+        "emetySiteSitePramar (via get17C1SiteDeviceParam)": 123,
+        "emetySiteSitePramar (via set17C1SiteDeviceParam)": 123,
+        "getHomeLoadSiteParam (via get17C1SiteDeviceParam)": 123,
+        "getSiteDeviceParam": 123,
+        "getSiteHomeLoad (via get17C1SiteDeviceParam)": 123,
+        "getSiteTOUParams (via get17C1SiteDeviceParam)": 123,
+        "join (via set17C1SiteDeviceParam)": 123,
+        "mainDeviceJoin (via get17C1SiteDeviceParam)": 123,
+        "multiAddDevices (via get17C1SiteDeviceParam)": 123,
+        "multiAddDevices (via set17C1SiteDeviceParam)": 123,
+        "next (via get17C1SiteDeviceParam)": 123,
+        "next (via set17C1SiteDeviceParam)": 123,
+        "queryMediumChargingDeviceHasSetMode": 123,
+        "saveHomeLoadData (via set17C1SiteDeviceParam)": 123,
+        "selectScene (via setDynamicPrice)": 123,
+        "setBatteryReserve (via get17C1SiteDeviceParam)": 123,
+        "setBatteryReserve (via set17C1SiteDeviceParam)": 123,
+        "setDynamicPrice (via setDynamicPrice)": 123,
+        "setHomeLoadSiteParam (via set17C1SiteDeviceParam)": 123,
+        "setMode (via get17C1SiteDeviceParam)": 123,
+        "setMode (via set17C1SiteDeviceParam)": 123,
+        "setSelfUseMode (via get17C1SiteDeviceParam)": 123,
+        "setSelfUseMode (via set17C1SiteDeviceParam)": 123
+      },
+      "cmd_get": 123,
+      "cmd_get_addr": "0x48795a8",
+      "cmd_get_raw": 246,
+      "cmd_raw": 246,
+      "cmd_set": 123,
+      "cmd_set_addr": "0x31fb44c",
+      "cmd_set_raw": 246,
+      "dart_files": [
+        "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart",
+        "ak_soft_ems/ems_list/power_usage_scenario_controller.dart",
+        "charging/http/http_request_repository_impl.dart",
+        "electricity_price/components/electricity_module/page/tou_and_timeslot_settings_detail_logic.dart",
+        "electricity_price/components/electricity_module/page/tou_and_timeslot_settings_poly_logic.dart",
+        "electricity_price/components/tou/impl_v2/service/tou_http_service.dart"
+      ],
+      "function_sources": {
+        "_checkPlatformHasSetTOUData": "literal",
+        "_createSiteSuccess (via set17C1SiteDeviceParam)": "traced",
+        "_dealWithBleResponse (via set17C1SiteDeviceParam)": "traced",
+        "_getSiteConfig (via get17C1SiteDeviceParam)": "traced",
+        "_getSiteConfig (via set17C1SiteDeviceParam)": "traced",
+        "_getSystemPolicySetting (via get17C1SiteDeviceParam)": "traced",
+        "_refreshScheduleModeStatus (via getSiteDeviceParam)": "traced",
+        "_setCxPlatformSmartMode": "literal",
+        "continueStudy (via set17C1SiteDeviceParam)": "traced",
+        "createSiteDirectly (via set17C1SiteDeviceParam)": "traced",
+        "deleteHomeLoadData (via set17C1SiteDeviceParam)": "traced",
+        "emetySiteSitePramar (via get17C1SiteDeviceParam)": "traced",
+        "emetySiteSitePramar (via set17C1SiteDeviceParam)": "traced",
+        "getHomeLoadSiteParam (via get17C1SiteDeviceParam)": "traced",
+        "getSiteDeviceParam": "literal",
+        "getSiteHomeLoad (via get17C1SiteDeviceParam)": "traced",
+        "getSiteTOUParams (via get17C1SiteDeviceParam)": "traced",
+        "join (via set17C1SiteDeviceParam)": "traced",
+        "mainDeviceJoin (via get17C1SiteDeviceParam)": "traced",
+        "multiAddDevices (via get17C1SiteDeviceParam)": "traced",
+        "multiAddDevices (via set17C1SiteDeviceParam)": "traced",
+        "next (via get17C1SiteDeviceParam)": "traced",
+        "next (via set17C1SiteDeviceParam)": "traced",
+        "queryMediumChargingDeviceHasSetMode": "literal",
+        "saveHomeLoadData (via set17C1SiteDeviceParam)": "traced",
+        "selectScene (via setDynamicPrice)": "traced",
+        "setBatteryReserve (via get17C1SiteDeviceParam)": "traced",
+        "setBatteryReserve (via set17C1SiteDeviceParam)": "traced",
+        "setDynamicPrice (via setDynamicPrice)": "traced",
+        "setHomeLoadSiteParam (via set17C1SiteDeviceParam)": "traced",
+        "setMode (via get17C1SiteDeviceParam)": "traced",
+        "setMode (via set17C1SiteDeviceParam)": "traced",
+        "setSelfUseMode (via get17C1SiteDeviceParam)": "traced",
+        "setSelfUseMode (via set17C1SiteDeviceParam)": "traced"
+      },
+      "get_function": [
+        "_checkPlatformHasSetTOUData",
+        "_getSiteConfig (via get17C1SiteDeviceParam)",
+        "next (via get17C1SiteDeviceParam)",
+        "_getSystemPolicySetting (via get17C1SiteDeviceParam)",
+        "setBatteryReserve (via get17C1SiteDeviceParam)",
+        "setMode (via get17C1SiteDeviceParam)",
+        "setSelfUseMode (via get17C1SiteDeviceParam)",
+        "getHomeLoadSiteParam (via get17C1SiteDeviceParam)",
+        "getSiteHomeLoad (via get17C1SiteDeviceParam)",
+        "mainDeviceJoin (via get17C1SiteDeviceParam)",
+        "multiAddDevices (via get17C1SiteDeviceParam)",
+        "emetySiteSitePramar (via get17C1SiteDeviceParam)",
+        "getSiteTOUParams (via get17C1SiteDeviceParam)",
+        "_refreshScheduleModeStatus (via getSiteDeviceParam)",
+        "queryMediumChargingDeviceHasSetMode",
+        "getSiteDeviceParam"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": "SOLARBANK_2_SCHEDULE",
+      "param_type": "6",
+      "param_type_source": "literal",
+      "set_function": [
+        "_setCxPlatformSmartMode",
+        "_getSiteConfig (via set17C1SiteDeviceParam)",
+        "next (via set17C1SiteDeviceParam)",
+        "setBatteryReserve (via set17C1SiteDeviceParam)",
+        "setMode (via set17C1SiteDeviceParam)",
+        "_dealWithBleResponse (via set17C1SiteDeviceParam)",
+        "setSelfUseMode (via set17C1SiteDeviceParam)",
+        "saveHomeLoadData (via set17C1SiteDeviceParam)",
+        "deleteHomeLoadData (via set17C1SiteDeviceParam)",
+        "_createSiteSuccess (via set17C1SiteDeviceParam)",
+        "join (via set17C1SiteDeviceParam)",
+        "setHomeLoadSiteParam (via set17C1SiteDeviceParam)",
+        "continueStudy (via set17C1SiteDeviceParam)",
+        "emetySiteSitePramar (via set17C1SiteDeviceParam)",
+        "multiAddDevices (via set17C1SiteDeviceParam)",
+        "createSiteDirectly (via set17C1SiteDeviceParam)",
+        "setDynamicPrice (via setDynamicPrice)",
+        "selectScene (via setDynamicPrice)"
+      ],
+      "traced_from": [
+        {
+          "chain": [
+            "charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::_getSiteConfig"
+          ],
+          "value_addr": "0x28bb9c0",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::next"
+          ],
+          "value_addr": "0x3cdddb4",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::setBatteryReserve"
+          ],
+          "value_addr": "0x3ce7c50",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::setMode"
+          ],
+          "value_addr": "0x3ce9e24",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::_dealWithBleResponse"
+          ],
+          "value_addr": "0x263115c",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::setSelfUseMode"
+          ],
+          "value_addr": "0x33d20bc",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c1/energy_deploy/energy_deploy_logic.dart::saveHomeLoadData"
+          ],
+          "value_addr": "0x2b4adac",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c1/energy_plan/energy_plan_logic.dart::deleteHomeLoadData"
+          ],
+          "value_addr": "0x3dacd58",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c1/open_process/open_process_logic.dart::_createSiteSuccess"
+          ],
+          "value_addr": "0x28d4d44",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c1/open_process/open_process_logic.dart::next"
+          ],
+          "value_addr": "0x3db2c78",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c1/open_process/open_process_logic.dart::join"
+          ],
+          "value_addr": "0x3db4a5c",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c1/open_process/open_process_logic.dart::next"
+          ],
+          "value_addr": "0x3db8420",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c5/ai_mode_condition/ai_mode_condition_logic.dart::setHomeLoadSiteParam"
+          ],
+          "value_addr": "0x3dc0784",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/ai_mode_study/ai_mode_study_logic.dart::continueStudy"
+          ],
+          "value_addr": "0x3f717b0",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::setSelfUseMode"
+          ],
+          "value_addr": "0x238ca18",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::emetySiteSitePramar"
+          ],
+          "value_addr": "0x34a8e58",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::multiAddDevices"
+          ],
+          "value_addr": "0x34a8f4c",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy/merge_system_energy_plan_logic.dart::deleteHomeLoadData"
+          ],
+          "value_addr": "0x30b2888",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::setHomeLoadSiteParam"
+          ],
+          "value_addr": "0x289d4d4",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/green_energy/site/site_logic.dart::createSiteDirectly"
+          ],
+          "value_addr": "0x27b3338",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/green_energy/site/site_logic.dart::createSiteDirectly"
+          ],
+          "value_addr": "0x27b3524",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::_getSiteConfig"
+          ],
+          "value_addr": "0x28bb8d0",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::next"
+          ],
+          "value_addr": "0x3cddccc",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::_getSystemPolicySetting"
+          ],
+          "value_addr": "0x2891494",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::setBatteryReserve"
+          ],
+          "value_addr": "0x3ce7b00",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a1782/station/system_policy/a1782_system_policy_logic.dart::setMode"
+          ],
+          "value_addr": "0x3ce9c9c",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart::setSelfUseMode"
+          ],
+          "value_addr": "0x33d1fd0",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c1/energy_plan/energy_plan_logic.dart::getHomeLoadSiteParam"
+          ],
+          "value_addr": "0x28cf1c0",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c1/open_process/open_process_logic.dart::getSiteHomeLoad"
+          ],
+          "value_addr": "0x28d5b00",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c1/open_process/open_process_logic.dart::mainDeviceJoin"
+          ],
+          "value_addr": "0x3db7100",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart::getSiteHomeLoad"
+          ],
+          "value_addr": "0x3f82d00",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::multiAddDevices"
+          ],
+          "value_addr": "0x34a65b8",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart::emetySiteSitePramar"
+          ],
+          "value_addr": "0x34a8dbc",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy/merge_system_energy_plan_logic.dart::getHomeLoadSiteParam"
+          ],
+          "value_addr": "0x28fba84",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getHomeLoadSiteParam"
+          ],
+          "value_addr": "0x289f604",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/utility_rate_plan/site_utility_rate_plan_logic.dart::getSiteTOUParams"
+          ],
+          "value_addr": "0x279d170",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::_refreshScheduleModeStatus"
+          ],
+          "value_addr": "0x2896b64",
+          "wrapper": "getSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/impl/http_service_impl.dart::setDynamicPrice"
+          ],
+          "value_addr": "0x31fb38c",
+          "wrapper": "setDynamicPrice"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart::selectScene"
+          ],
+          "value_addr": "0x3cdd064",
+          "wrapper": "setDynamicPrice"
+        }
+      ],
+      "unresolved": []
+    },
+    {
+      "cmd": 123,
+      "cmd_addr": "0x238cca8",
+      "cmd_by_function": {
+        "get17C1SiteDeviceParam (via get17C1SiteDeviceParam)": 123,
+        "getSiteDataAuth (via get17C1SiteDeviceParam)": 123,
+        "setSiteDataAuth": 123,
+        "setSiteDataAuth (via set17C1SiteDeviceParam)": 123,
+        "stopAiModeStudy (via set17C1SiteDeviceParam)": 123
+      },
+      "cmd_get": 123,
+      "cmd_get_addr": "0x279d4b4",
+      "cmd_get_raw": 246,
+      "cmd_raw": 246,
+      "cmd_set": 123,
+      "cmd_set_addr": "0x238cca8",
+      "cmd_set_raw": 246,
+      "dart_files": [
+        "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart",
+        "charging/http/http_request_repository_impl.dart"
+      ],
+      "function_sources": {
+        "get17C1SiteDeviceParam (via get17C1SiteDeviceParam)": "traced",
+        "getSiteDataAuth (via get17C1SiteDeviceParam)": "traced",
+        "setSiteDataAuth": "literal",
+        "setSiteDataAuth (via set17C1SiteDeviceParam)": "traced",
+        "stopAiModeStudy (via set17C1SiteDeviceParam)": "traced"
+      },
+      "get_function": [
+        "get17C1SiteDeviceParam (via get17C1SiteDeviceParam)",
+        "getSiteDataAuth (via get17C1SiteDeviceParam)"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": "SOLARBANK_AUTHORIZATIONS",
+      "param_type": "13",
+      "param_type_source": "literal",
+      "set_function": [
+        "setSiteDataAuth",
+        "setSiteDataAuth (via set17C1SiteDeviceParam)",
+        "stopAiModeStudy (via set17C1SiteDeviceParam)"
+      ],
+      "traced_from": [
+        {
+          "chain": [
+            "charging/ui/page/device/a17c5/ai_mode_condition/ai_mode_condition_logic.dart::setSiteDataAuth"
+          ],
+          "value_addr": "0x3dc3d20",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::stopAiModeStudy"
+          ],
+          "value_addr": "0x289eecc",
+          "wrapper": "set17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/impl/http_service_impl.dart::get17C1SiteDeviceParam"
+          ],
+          "value_addr": "0x2a28e9c",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/a17c5/ai_mode_condition/ai_mode_condition_logic.dart::getSiteDataAuth"
+          ],
+          "value_addr": "0x28936f0",
+          "wrapper": "get17C1SiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart::getSiteDataAuth"
+          ],
+          "value_addr": "0x289383c",
+          "wrapper": "get17C1SiteDeviceParam"
+        }
+      ],
+      "unresolved": []
+    },
+    {
+      "cmd": 123,
+      "cmd_addr": "0x31fb44c",
+      "cmd_by_function": {
+        "setCombineBoxDevice (via setDynamicPrice)": 123
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 246,
+      "cmd_set": 123,
+      "cmd_set_addr": "0x31fb44c",
+      "cmd_set_raw": 246,
+      "dart_files": [
+        "charging/http/http_request_repository_impl.dart"
+      ],
+      "function_sources": {
+        "getCombineBoxListData": "literal",
+        "setCombineBoxDevice (via setDynamicPrice)": "traced"
+      },
+      "get_function": [
+        "getCombineBoxListData"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": "SOLARBANK_POWERDOCK",
+      "param_type": "16",
+      "param_type_source": "literal",
+      "set_function": [
+        "setCombineBoxDevice (via setDynamicPrice)"
+      ],
+      "traced_from": [
+        {
+          "chain": [
+            "charging/ui/page/qr_Scanner/qr_scanner_logic.dart::setCombineBoxDevice"
+          ],
+          "value_addr": "0x33fd140",
+          "wrapper": "setDynamicPrice"
+        }
+      ],
+      "unresolved": []
+    },
+    {
+      "cmd": 123,
+      "cmd_addr": "0x2aa91bc",
+      "cmd_by_function": {
+        "setSafetySocParams": 123,
+        "updateByCloud": 123
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 246,
+      "cmd_set": 123,
+      "cmd_set_addr": "0x2aa91bc",
+      "cmd_set_raw": 246,
+      "dart_files": [
+        "charging/http/http_request_repository_impl.dart",
+        "charging/ui/page/device/main/sitation_energy_system/station_home_settings/feed_network_limit_new/feed_network_limit_new_logic.dart"
+      ],
+      "function_sources": {
+        "getFeedGridParam": "literal",
+        "getSafetySocParams": "literal",
+        "setSafetySocParams": "literal",
+        "updateByCloud": "literal"
+      },
+      "get_function": [
+        "getSafetySocParams",
+        "getFeedGridParam"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": "SOLARBANK_STATION",
+      "param_type": "18",
+      "param_type_source": "literal",
+      "set_function": [
+        "setSafetySocParams",
+        "updateByCloud"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 123,
+      "cmd_addr": "0x43558c4",
+      "cmd_by_function": {
+        "setSiteDevicePowerLimit": 123
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 246,
+      "cmd_set": 123,
+      "cmd_set_addr": "0x43558c4",
+      "cmd_set_raw": 246,
+      "dart_files": [
+        "charging/http/http_request_repository_impl.dart"
+      ],
+      "function_sources": {
+        "setSiteDevicePowerLimit": "literal"
+      },
+      "get_function": [],
+      "get_model": null,
+      "keys": [
+        "display_type",
+        "power_limit.limit",
+        "power_limit.limit_real"
+      ],
+      "name": "SOLARBANK_POWER_LIMIT",
+      "param_type": "19",
+      "param_type_source": "literal",
+      "set_function": [
+        "setSiteDevicePowerLimit"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 123,
+      "cmd_addr": "0x317a14c",
+      "cmd_by_function": {
+        "setStationCountryCode": 123
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 246,
+      "cmd_set": 123,
+      "cmd_set_addr": "0x317a14c",
+      "cmd_set_raw": 246,
+      "dart_files": [
+        "charging/http/http_request_repository_impl.dart",
+        "device/src/setting/controller/location/sub_page/list/sub_location_list_controller.dart"
+      ],
+      "function_sources": {
+        "getStationCountryCode": "literal",
+        "setStationCountryCode": "literal"
+      },
+      "get_function": [
+        "getStationCountryCode"
+      ],
+      "get_model": null,
+      "keys": [
+        "country_code"
+      ],
+      "name": null,
+      "param_type": "20",
+      "param_type_source": "literal",
+      "set_function": [
+        "setStationCountryCode"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 17,
+      "cmd_addr": "0x2404444",
+      "cmd_by_function": {
+        "processSwitchChange (via setSiteDeviceParam)": 17
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 34,
+      "cmd_set": 17,
+      "cmd_set_addr": "0x2404444",
+      "cmd_set_raw": 34,
+      "dart_files": [
+        "charging/http/http_request_repository_impl.dart"
+      ],
+      "function_sources": {
+        "getInitSwitchStatus (via getSiteDeviceParam)": "traced",
+        "processSwitchChange (via setSiteDeviceParam)": "traced"
+      },
+      "get_function": [
+        "getInitSwitchStatus (via getSiteDeviceParam)"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": null,
+      "param_type": "23",
+      "param_type_source": "traced",
+      "set_function": [
+        "processSwitchChange (via setSiteDeviceParam)"
+      ],
+      "traced_from": [
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/chargers_management/chargers_manage_logic.dart::processSwitchChange"
+          ],
+          "value_addr": "0x3fae894",
+          "wrapper": "setSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/chargers_management/chargers_manage_logic.dart::getInitSwitchStatus"
+          ],
+          "value_addr": "0x28f8810",
+          "wrapper": "getSiteDeviceParam"
+        }
+      ],
+      "unresolved": []
+    },
+    {
+      "cmd": 0,
+      "cmd_addr": "0x3a5ec30",
+      "cmd_by_function": {
+        "setHeatPump": 0
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 0,
+      "cmd_set": 0,
+      "cmd_set_addr": "0x3a5ec30",
+      "cmd_set_raw": 0,
+      "dart_files": [
+        "settings/src/common/page/heat_pump/heat_pump_setting_controller.dart"
+      ],
+      "function_sources": {
+        "getHeatPumpParam": "literal",
+        "setHeatPump": "literal"
+      },
+      "get_function": [
+        "getHeatPumpParam"
+      ],
+      "get_model": null,
+      "keys": [
+        "enabled",
+        "activate_power",
+        "min_running_time",
+        "min_interval"
+      ],
+      "name": null,
+      "param_type": "24",
+      "param_type_source": "literal",
+      "set_function": [
+        "setHeatPump"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 0,
+      "cmd_addr": "0x3a4d9d4",
+      "cmd_by_function": {
+        "updateSettingInfo": 0
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 0,
+      "cmd_set": 0,
+      "cmd_set_addr": "0x3a4d9d4",
+      "cmd_set_raw": 0,
+      "dart_files": [
+        "settings/src/common/page/ev_charger/ev_charger_setting_controller.dart"
+      ],
+      "function_sources": {
+        "getSettingInfo": "literal",
+        "updateSettingInfo": "literal"
+      },
+      "get_function": [
+        "getSettingInfo"
+      ],
+      "get_model": null,
+      "keys": [
+        "enabled"
+      ],
+      "name": null,
+      "param_type": "25",
+      "param_type_source": "literal",
+      "set_function": [
+        "updateSettingInfo"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 123,
+      "cmd_addr": "0x42fd530",
+      "cmd_by_function": {
+        "getThreePvParam": 123,
+        "setThreePvInstallSwitch": 123
+      },
+      "cmd_get": 123,
+      "cmd_get_addr": "0x237dd0c",
+      "cmd_get_raw": 246,
+      "cmd_raw": 246,
+      "cmd_set": 123,
+      "cmd_set_addr": "0x42fd530",
+      "cmd_set_raw": 246,
+      "dart_files": [
+        "charging/http/http_request_repository_impl.dart"
+      ],
+      "function_sources": {
+        "getThreePvParam": "literal",
+        "setThreePvInstallSwitch": "literal"
+      },
+      "get_function": [
+        "getThreePvParam"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": "SOLARBANK_3RD_PARTY_PV",
+      "param_type": "26",
+      "param_type_source": "literal",
+      "set_function": [
+        "setThreePvInstallSwitch"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 0,
+      "cmd_addr": "0x45e78ec",
+      "cmd_by_function": {
+        "_saveSocSetting": 0
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 0,
+      "cmd_set": 0,
+      "cmd_set_addr": "0x45e78ec",
+      "cmd_set_raw": 0,
+      "dart_files": [
+        "charging/impl/url_launcher/handlers/soc_setting_handler.dart",
+        "settings/src/common/station_page/station_peak_shaving/station_peak_shaving_controller.dart",
+        "soc/soc_setting/station_soc_data_source.dart"
+      ],
+      "function_sources": {
+        "_saveSocSetting": "literal",
+        "getSocSetting": "literal",
+        "query": "literal"
+      },
+      "get_function": [
+        "getSocSetting",
+        "query"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": null,
+      "param_type": "27",
+      "param_type_source": "literal",
+      "set_function": [
+        "_saveSocSetting"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 0,
+      "cmd_addr": "0x22874f0",
+      "cmd_by_function": {
+        "updateByCloud": 0,
+        "updateFeeder0w": 0
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 0,
+      "cmd_set": 0,
+      "cmd_set_addr": "0x22874f0",
+      "cmd_set_raw": 0,
+      "dart_files": [
+        "ak_soft_ems/ems_list/power_usage_scenario_controller.dart",
+        "micro_hes/src/a17e2/station/home/a17e2_station_logic.dart",
+        "settings/src/common/page/feed_grid/feed_grid_controller.dart"
+      ],
+      "function_sources": {
+        "_getFeedGridConfig": "literal",
+        "fetchESeriesFeedGridParams": "literal",
+        "getFeedGridParam": "literal",
+        "updateByCloud": "literal",
+        "updateFeeder0w": "literal"
+      },
+      "get_function": [
+        "fetchESeriesFeedGridParams",
+        "_getFeedGridConfig",
+        "getFeedGridParam"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": null,
+      "param_type": "28",
+      "param_type_source": "literal",
+      "set_function": [
+        "updateFeeder0w",
+        "updateByCloud"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 0,
+      "cmd_addr": "0x45b8634",
+      "cmd_by_function": {
+        "_updateThirdPvByCloud": 0,
+        "handle": 0,
+        "updateThirdPvByCloud": 0
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 0,
+      "cmd_set": 0,
+      "cmd_set_addr": "0x45b8634",
+      "cmd_set_raw": 0,
+      "dart_files": [
+        "device/src/station_setting/controller/common_third_pv/page/third_pv_logic.dart",
+        "flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart",
+        "flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart",
+        "micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart",
+        "micro_hes/src/sdk/A17E2/a17e2_pv_default_handler.dart"
+      ],
+      "function_sources": {
+        "_fetchThirdPvConnectType": "literal",
+        "_getThirdPvFromCloud": "literal",
+        "_updateThirdPvByCloud": "literal",
+        "getThirdPv": "literal",
+        "handle": "literal",
+        "updateThirdPvByCloud": "literal"
+      },
+      "get_function": [
+        "_getThirdPvFromCloud",
+        "getThirdPv",
+        "_fetchThirdPvConnectType"
+      ],
+      "get_model": null,
+      "keys": [
+        "third_party_pv_install",
+        "master_used"
+      ],
+      "name": null,
+      "param_type": "29",
+      "param_type_source": "literal",
+      "set_function": [
+        "_updateThirdPvByCloud",
+        "updateThirdPvByCloud",
+        "handle"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 0,
+      "cmd_addr": "0x3a6da7c",
+      "cmd_by_function": {
+        "updatePeakShavingSetting": 0
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 0,
+      "cmd_set": 0,
+      "cmd_set_addr": "0x3a6da7c",
+      "cmd_set_raw": 0,
+      "dart_files": [
+        "settings/src/common/station_page/station_peak_shaving/station_peak_shaving_controller.dart"
+      ],
+      "function_sources": {
+        "getPeakShavingSetting": "literal",
+        "updatePeakShavingSetting": "literal"
+      },
+      "get_function": [
+        "getPeakShavingSetting"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": null,
+      "param_type": "30",
+      "param_type_source": "literal",
+      "set_function": [
+        "updatePeakShavingSetting"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 0,
+      "cmd_addr": "0x2aec114",
+      "cmd_by_function": {
+        "updateByCloud": 0
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 0,
+      "cmd_set": 0,
+      "cmd_set_addr": "0x2aec114",
+      "cmd_set_raw": 0,
+      "dart_files": [
+        "settings/src/common/page/hardware_feed_grid/hardware_feed_grid_controller.dart"
+      ],
+      "function_sources": {
+        "getFeedGridParam": "literal",
+        "updateByCloud": "literal"
+      },
+      "get_function": [
+        "getFeedGridParam"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": null,
+      "param_type": "31",
+      "param_type_source": "literal",
+      "set_function": [
+        "updateByCloud"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 0,
+      "cmd_addr": "0x2af07d4",
+      "cmd_by_function": {
+        "_fetchPowerLimits": 123,
+        "setGridPowerAsync": 0
+      },
+      "cmd_get": 123,
+      "cmd_get_addr": "0x3564eb0",
+      "cmd_get_raw": 246,
+      "cmd_raw": 0,
+      "cmd_set": 0,
+      "cmd_set_addr": "0x2af07d4",
+      "cmd_set_raw": 0,
+      "dart_files": [
+        "ak_soft_ems/ems_list/power_usage_scenario_controller.dart",
+        "settings/src/sdk/util/grid_connect_util.dart"
+      ],
+      "function_sources": {
+        "_fetchPowerLimits": "literal",
+        "fetchSiteGridPowerList": "literal",
+        "getGroupedOutputPowerSum": "literal",
+        "setGridPowerAsync": "literal"
+      },
+      "get_function": [
+        "_fetchPowerLimits",
+        "getGroupedOutputPowerSum",
+        "fetchSiteGridPowerList"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": null,
+      "param_type": "32",
+      "param_type_source": "literal",
+      "set_function": [
+        "setGridPowerAsync"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 0,
+      "cmd_addr": "0x39ba4b8",
+      "cmd_by_function": {
+        "updateExternalMeter": 0,
+        "updateMeterType": 0
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 0,
+      "cmd_set": 0,
+      "cmd_set_addr": "0x39ba4b8",
+      "cmd_set_raw": 0,
+      "dart_files": [
+        "flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart",
+        "flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart",
+        "settings/src/common/menu_controller/monitoring_device_menu_controller.dart"
+      ],
+      "function_sources": {
+        "_getMeterTypeAsync": "literal",
+        "_loadCurrentMeterType": "literal",
+        "updateExternalMeter": "literal",
+        "updateMeterType": "literal"
+      },
+      "get_function": [
+        "_getMeterTypeAsync",
+        "_loadCurrentMeterType"
+      ],
+      "get_model": null,
+      "keys": [
+        "meter_type"
+      ],
+      "name": null,
+      "param_type": "34",
+      "param_type_source": "literal",
+      "set_function": [
+        "updateMeterType",
+        "updateExternalMeter"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 0,
+      "cmd_addr": "0x2eb9ac4",
+      "cmd_by_function": {
+        "updateGatewayCurrentLimit": 0
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 0,
+      "cmd_set": 0,
+      "cmd_set_addr": "0x2eb9ac4",
+      "cmd_set_raw": 0,
+      "dart_files": [
+        "flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart",
+        "settings/src/common/menu_controller/gateway_current_limit_menu_controller.dart"
+      ],
+      "function_sources": {
+        "_loadCurrentLimit": "literal",
+        "getGatewayCurrentLimit": "literal",
+        "updateGatewayCurrentLimit": "literal"
+      },
+      "get_function": [
+        "getGatewayCurrentLimit",
+        "_loadCurrentLimit"
+      ],
+      "get_model": null,
+      "keys": [
+        "a_site"
+      ],
+      "name": null,
+      "param_type": "35",
+      "param_type_source": "literal",
+      "set_function": [
+        "updateGatewayCurrentLimit"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": 0,
+      "cmd_addr": "0x376fcf0",
+      "cmd_by_function": {
+        "_setGridOverloadAutoReduceSetting": 0
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": 0,
+      "cmd_set": 0,
+      "cmd_set_addr": "0x376fcf0",
+      "cmd_set_raw": 0,
+      "dart_files": [
+        "settings/src/common/page/station_advanced_setting/station_advanced_setting_controller.dart"
+      ],
+      "function_sources": {
+        "_getGridOverloadAutoReduceSetting": "literal",
+        "_setGridOverloadAutoReduceSetting": "literal"
+      },
+      "get_function": [
+        "_getGridOverloadAutoReduceSetting"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": null,
+      "param_type": "37",
+      "param_type_source": "literal",
+      "set_function": [
+        "_setGridOverloadAutoReduceSetting"
+      ],
+      "traced_from": [],
+      "unresolved": []
+    },
+    {
+      "cmd": null,
+      "cmd_addr": null,
+      "cmd_by_function": {
+        "get17C1SiteDeviceParam": 123,
+        "set17C1SiteDeviceParam": 123,
+        "setDynamicPrice": 123,
+        "setSiteDeviceParam": 17
+      },
+      "cmd_get": null,
+      "cmd_get_addr": null,
+      "cmd_get_raw": null,
+      "cmd_raw": null,
+      "cmd_set": null,
+      "cmd_set_addr": null,
+      "cmd_set_raw": null,
+      "dart_files": [
+        "charging/http/http_request_repository_impl.dart"
+      ],
+      "function_sources": {
+        "get17C1SiteDeviceParam": "variable",
+        "getSiteDeviceParam": "variable",
+        "set17C1SiteDeviceParam": "variable",
+        "setDynamicPrice": "variable",
+        "setSiteDeviceParam": "variable"
+      },
+      "get_function": [
+        "get17C1SiteDeviceParam",
+        "getSiteDeviceParam"
+      ],
+      "get_model": null,
+      "keys": [],
+      "name": null,
+      "param_type": "variable",
+      "param_type_source": "variable",
+      "set_function": [
+        "set17C1SiteDeviceParam",
+        "setSiteDeviceParam",
+        "setDynamicPrice"
+      ],
+      "traced_from": [],
+      "unresolved": [
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getHomeLoadSiteDeviceParam",
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_distrbution_controller.dart::onClose",
+            "(no call site)"
+          ],
+          "dart_file": "charging/http/http_request_repository_impl.dart",
+          "wrapper": "getSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getHomeLoadSiteDeviceParam",
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::onInit",
+            "(no call site)"
+          ],
+          "dart_file": "charging/http/http_request_repository_impl.dart",
+          "wrapper": "getSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getSiteHomeLoadData",
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::siteSetHomeLoadDataParam",
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::deleteHomeLoadData",
+            "(no numeric literal in look-back window)"
+          ],
+          "dart_file": "charging/http/http_request_repository_impl.dart",
+          "wrapper": "getSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getSiteHomeLoadData",
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::siteSetHomeLoadDataParam",
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::createHomeLoads",
+            "(no numeric literal in look-back window)"
+          ],
+          "dart_file": "charging/http/http_request_repository_impl.dart",
+          "wrapper": "getSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getSiteHomeLoadData",
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::showBottomSetPower",
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::bottomShellDialog",
+            "(no numeric literal in look-back window)"
+          ],
+          "dart_file": "charging/http/http_request_repository_impl.dart",
+          "wrapper": "getSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getSiteHomeLoadData",
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::showBottomSetPower",
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::showHomeLoadsShell",
+            "(no numeric literal in look-back window)"
+          ],
+          "dart_file": "charging/http/http_request_repository_impl.dart",
+          "wrapper": "getSiteDeviceParam"
+        },
+        {
+          "chain": [
+            "charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart::getSiteHomeLoadData",
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy_tab/system_energy_tab_logic.dart::onPageChanged",
+            "charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy_tab/system_energy_tab_page.dart::build",
+            "(no numeric literal in look-back window)"
+          ],
+          "dart_file": "charging/http/http_request_repository_impl.dart",
+          "wrapper": "getSiteDeviceParam"
+        }
+      ]
+    }
+  ],
+  "snapshot": "78da37fed6bf1489361a312568249f3f"
+}

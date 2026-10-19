@@ -1,5 +1,7 @@
 # Power Limits / SOC — Response Models
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/models.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > 2 models
 
 ## DevicePowerLimit
@@ -15,6 +17,8 @@ switch_0w, user_power_limit
 
 ## StationPowerLimitModel
 
+Corrected 2026-10-19 (App 3.24.3): the field list below is outdated; `StationPowerLimitModel`, `PowerLimitOption`, `DeviceInfo` and `Ae100Info` are owned by [`models/station_power_limit.md`](station_power_limit.md).
+
 Source: `ui/page/device/main/sitation_energy_system/station_home_settings/station_power_limit/station_power_limit_model.dart`
 
 ```
@@ -24,3 +28,6 @@ legal_power_limit, limit, limit_real, outputPower, parallel_type,
 power_limit_option, site_id, status, supportAcLimit
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

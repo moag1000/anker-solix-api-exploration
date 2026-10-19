@@ -1,0 +1,59 @@
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+
+# get_history_setting
+
+## Purpose
+
+<!-- TODO -->
+
+## Upstream name
+
+`none` (no upstream name)
+
+## Method+URL
+
+`/charging_hes_svc/get_history_setting`, method: not extracted by the inventory <!-- TODO -->; string-only: `base_service/api_url.dart @0x29a4968`
+
+## Encrypted?
+
+encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+
+## Request
+
+No request keys found by the extractor. <!-- TODO -->
+
+## `param_type`/`cmd`
+
+n/a
+
+## Response model (link)
+
+<!-- TODO -->
+
+## Response
+
+<!-- TODO -->
+
+## Example request/response
+
+<!-- TODO -->
+
+## Errors seen
+
+`api/errors.md`: <!-- TODO -->
+
+## Callers in app
+
+- `base_service/api_url.dart`: `getHistorySetting` @0x29a4950 (URL literal only, no `*Http*` call; sender `HttpHelper::getDataFromService` (`electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bda38`) (HTTP helper wrapper), called from `GeneralPriceSettingLogic::queryLargeChargingDeviceHasSetMode` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a412c`); also through `TouAndTimeSlotSettingsDetailLogic::queryLargeChargingDeviceHasSetMode`, `TouAndTimeslotSettingsPolyLogic::queryLargeChargingDeviceHasSetMode`; resolved from the URL literal at `base_service/api_url.dart @0x29a4968` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
+
+## Since/changed
+
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+
+## Known unknowns
+
+- <!-- TODO -->
+
+## Device-tested by
+
+none

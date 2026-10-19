@@ -1,0 +1,44 @@
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Page type: guidance (no API facts) · Owner page: this page
+
+# app
+
+Service index for the URL prefix `/app/`. Each endpoint page is the single owner of its request, response and tags; a skeleton page (status "skeleton", purpose TODO) carries only what `data/endpoints.json` knows and has `Confidence: string-only` until a human reads the asm. Upstream keys are `API_ENDPOINTS` keys of `api/apitypes.py`.
+
+| endpoint | purpose | upstream key | status |
+|---|---|---|---|
+| [`/app/ai/anka`](ai/anka.md) | TODO | - | skeleton |
+| [`/app/cloudstor/get_app_up_token_general`](cloudstor/get_app_up_token_general.md) | TODO | - | skeleton |
+| [`/app/cloudstor/get_app_up_token_without_login`](cloudstor/get_app_up_token_without_login.md) | TODO | - | skeleton |
+| [`/app/cloudstor/get_down_load_urls`](cloudstor/get_down_load_urls.md) | TODO | - | skeleton |
+| [`/app/devicemanage/update_relate_device_info`](devicemanage/update_relate_device_info.md) | TODO | - | skeleton |
+| [`/app/devicerelation/clear_share`](devicerelation/clear_share.md) | TODO | - | skeleton |
+| [`/app/devicerelation/confirm_invite`](devicerelation/confirm_invite.md) | Accepts an invitation to share an EV charger (the invited person confirms the share of a device). | - | owner |
+| [`/app/devicerelation/device_invite`](devicerelation/device_invite.md) | Invites a person (by email or phone) to share an EV charger: the owner enters a nick name and an email address or phone number and the cloud sends the invitation. | - | owner |
+| [`/app/devicerelation/get_shared_device`](devicerelation/get_shared_device.md) | Lists the share entries of a device (members the EV charger is shared with, with their status) so the owner can see who has access and how many more members can be invited. | `get_shared_device` | owner |
+| [`/app/devicerelation/ignore_invite`](devicerelation/ignore_invite.md) | Rejects or withdraws a device share: the invited member ignores an invitation, or the owner cancels an invitation to a given receiver. | - | owner |
+| [`/app/devicerelation/relate_device`](devicerelation/relate_device.md) | TODO | - | skeleton |
+| [`/app/devicerelation/un_relate_and_unbind_device`](devicerelation/un_relate_and_unbind_device.md) | TODO | - | skeleton |
+| [`/app/devicerelation/up_alias_name`](devicerelation/up_alias_name.md) | TODO | - | skeleton |
+| [`/app/devicerelation/update_share`](devicerelation/update_share.md) | Removes a member from the share of an EV charger: the owner deletes the share for a user (the request carries `is_delete: true`). | - | owner |
+| [`/app/help/add_feedback`](help/add_feedback.md) | TODO | - | skeleton |
+| [`/app/help/app_versions/check`](help/app_versions/check.md) | TODO | - | skeleton |
+| [`/app/help/banner/nps`](help/banner/nps.md) | TODO | - | skeleton |
+| [`/app/help/banners`](help/banners.md) | TODO | - | skeleton |
+| [`/app/help/dst`](help/dst.md) | TODO | - | skeleton |
+| [`/app/help/dynamic/config/list`](help/dynamic/config/list.md) | TODO | - | skeleton |
+| [`/app/help/faqs`](help/faqs.md) | TODO | - | skeleton |
+| [`/app/help/handle_survey_popup`](help/handle_survey_popup.md) | TODO | - | skeleton |
+| [`/app/help/manual_list`](help/manual_list.md) | TODO | - | skeleton |
+| [`/app/help/product_tutorial_search`](help/product_tutorial_search.md) | TODO | - | skeleton |
+| [`/app/help/scan_code_white_list`](help/scan_code_white_list.md) | TODO | - | skeleton |
+| [`/app/help/xtest/data`](help/xtest/data.md) | TODO | - | skeleton |
+| [`/app/logging/get_device_logging`](logging/get_device_logging.md) | TODO | - | skeleton |
+| [`/app/logging/upload`](logging/upload.md) | TODO | - | skeleton |
+| [`/app/logging/upload_pb_events`](logging/upload_pb_events.md) | TODO | - | skeleton |
+| [`/app/news/get_popups`](news/get_popups.md) | TODO | - | skeleton |
+| [`/app/news/popup_record`](news/popup_record.md) | TODO | - | skeleton |
+| [`/app/ota/batch/check_update`](ota/batch/check_update.md) | TODO | `get_ota_batch` | skeleton |
+| [`/app/push/clear_count`](push/clear_count.md) | TODO | - | skeleton |
+| [`/app/push/register_push_token`](push/register_push_token.md) | TODO | - | skeleton |
+
+Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
