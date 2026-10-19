@@ -109,8 +109,13 @@
       "params": [
         "File not exists: "
       ],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpRequestControllerImpl::getAppUpTokenGeneral @0x2d90ae4",
+      "sender_file": "charging/http/http_request_repository_impl.dart",
+      "sender_kind": "callee",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpRequestControllerImpl::encryptionRequestHttp",
       "service": "app",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -164,8 +169,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpRequestControllerImpl::getAppUpTokenGeneral @0x2d90ae4",
+      "sender_file": "charging/http/http_request_repository_impl.dart",
+      "sender_kind": "callee",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpRequestControllerImpl::encryptionRequestHttp",
       "service": "app",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -263,7 +273,7 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
+      "resolution": "mixin-gap",
       "role": "url_provider",
       "service": "app",
       "since": "≤3.18.0",
@@ -293,8 +303,13 @@
       "params": [
         "File not exists: "
       ],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpRequestControllerImpl::getAppUpTokenGeneral @0x2d90ae4",
+      "sender_file": "charging/http/http_request_repository_impl.dart",
+      "sender_kind": "callee",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpRequestControllerImpl::encryptionRequestHttp",
       "service": "app",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -348,8 +363,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpRequestControllerImpl::getAppUpTokenGeneral @0x2d90ae4",
+      "sender_file": "charging/http/http_request_repository_impl.dart",
+      "sender_kind": "callee",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpRequestControllerImpl::encryptionRequestHttp",
       "service": "app",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -377,7 +397,7 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
+      "resolution": "mixin-gap",
       "role": "url_provider",
       "service": "app",
       "since": "≤3.18.0",
@@ -1503,15 +1523,8 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
+      "resolution": "generic-path-check",
       "role": "url_provider",
-      "sender": "HttpRequestManager::encryptionRequestHttp @0x2cf6040",
-      "sender_file": "charging/util/manager/http_manager.dart",
-      "sender_via": [
-        "HttpRequestManager::encryptionRequestHttp @0x2cf6040"
-      ],
-      "sender_via_files": [
-        "charging/util/manager/http_manager.dart"
-      ],
       "service": "app",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -1538,15 +1551,8 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
+      "resolution": "generic-path-check",
       "role": "url_provider",
-      "sender": "HttpRequestManager::encryptionRequestHttp @0x2cf6040",
-      "sender_file": "charging/util/manager/http_manager.dart",
-      "sender_via": [
-        "HttpRequestManager::encryptionRequestHttp @0x2cf6040"
-      ],
-      "sender_via_files": [
-        "charging/util/manager/http_manager.dart"
-      ],
       "service": "app",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -2077,8 +2083,10 @@
       "role": "url_provider",
       "sender": "FirmwareUpgradeController::checkDeviceUpdate @0x2b0d200",
       "sender_file": "flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "app",
       "since": "≤3.18.0",
       "upstream_key": "get_ota_batch",
@@ -2110,8 +2118,10 @@
       "role": "url_provider",
       "sender": "FirmwareUpgradeController::checkUpgradeViaMultiDeploy @0x2b0f898",
       "sender_file": "flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "app",
       "since": "≤3.18.0",
       "upstream_key": "get_ota_batch",
@@ -3479,12 +3489,14 @@
       "role": "url_provider",
       "sender": "ElectricityPriceProviderLogic::fetchAreaByCode @0x41e44e4",
       "sender_file": "electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ElectricityPriceProviderLogic::fetchAreaByCode @0x41e44e4"
       ],
       "sender_via_files": [
         "electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_dynamic_price_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -3510,18 +3522,38 @@
       "param_type_source": null,
       "params": [],
       "role": "url_provider",
-      "sender": "PowerUsageScenarioController::getPriceDetail @0x25549d0",
+      "sender": "HttpHelper::getDataFromService @0x27bda38",
       "sender_also": [
+        "PowerUsageScenarioController::getPriceDetail @0x25549d0",
         "PowerUsageScenarioLogic::_requestDynamicPriceInfo @0x28a1f44",
         "SystemPolicyLogic::getPriceDetail @0x28ec184"
       ],
-      "sender_file": "ak_soft_ems/ems_list/power_usage_scenario_controller.dart",
+      "sender_file": "electricity_price/components/electricity_price_common/http/http_helper.dart",
+      "sender_kind": "wrapper",
       "sender_via": [
-        "PowerUsageScenarioController::getPriceDetail @0x25549d0"
+        "ChargeDischargeSettingLogic::getElectricityPrice @0x29b2c00"
+      ],
+      "sender_via_also": [
+        [
+          "ChargeDischargeSettingLogic_C5::getElectricityPrice @0x29b3774"
+        ],
+        [
+          "DynamicPriceDetailInfoViewState::getTodayAndTomorrowPrice @0x27d184c"
+        ],
+        [
+          "TOUAutoPricePkgResultLogic::getData @0x2c489dc"
+        ],
+        [
+          "TimeSlotPreviewLogic::getPriceDetail @0x2c56060"
+        ],
+        [
+          "TimeslotPreviewPolyLogic::getPriceDetail @0x2c51e8c"
+        ]
       ],
       "sender_via_files": [
-        "ak_soft_ems/ems_list/power_usage_scenario_controller.dart"
+        "electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart"
       ],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "charging_hes_dynamic_price_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -3547,19 +3579,39 @@
       "param_type_source": null,
       "params": [],
       "role": "url_provider",
-      "sender": "PowerUsageScenarioController::_requestDynamicPriceCompany @0x37b1a70",
+      "sender": "HttpHelper::getDataFromService @0x27bda38",
       "sender_also": [
+        "PowerUsageScenarioController::_requestDynamicPriceCompany @0x37b1a70",
         "PowerUsageScenarioController::getDynamicPriceCompany @0x2a2efb8",
         "PowerUsageScenarioLogic::_requestDynamicPriceCompany @0x28a1960",
         "SystemPolicyLogic::_getDynamicPriceCompany @0x28eb470"
       ],
-      "sender_file": "ak_soft_ems/ems_list/power_usage_scenario_controller.dart",
+      "sender_file": "electricity_price/components/electricity_price_common/http/http_helper.dart",
+      "sender_kind": "wrapper",
       "sender_via": [
-        "PowerUsageScenarioController::_requestDynamicPriceCompany @0x37b1a70"
+        "ChargeDischargeSettingLogic::getDynamicPriceCompany @0x29b6424"
+      ],
+      "sender_via_also": [
+        [
+          "ChargeDischargeSettingLogic_C5::getDynamicPriceCompany @0x29b78bc"
+        ],
+        [
+          "DynamicPriceDetailInfoViewState::getDynamicPriceCompany @0x27cf088"
+        ],
+        [
+          "ElectricityCompanySelectLogic::getDynamicPriceCompany @0x29aaab4"
+        ],
+        [
+          "ElectricityPriceProviderLogic::getDynamicPriceCompany @0x29a77ac"
+        ],
+        [
+          "ElectricityPriceServiceImpl::_supportAutoTou @0x2891a84"
+        ]
       ],
       "sender_via_files": [
-        "ak_soft_ems/ems_list/power_usage_scenario_controller.dart"
+        "electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart"
       ],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "charging_hes_dynamic_price_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -3584,8 +3636,22 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpHelper::getDataFromService @0x27bda38",
+      "sender_file": "electricity_price/components/electricity_price_common/http/http_helper.dart",
+      "sender_kind": "wrapper",
+      "sender_via": [
+        "ElectricityPlaceConfirmPageLogic::getDynamicPriceCompany @0x29ac204"
+      ],
+      "sender_via_also": [
+        [
+          "_DynamicPriceHttpServer::getThirdJumpUrl @0x43917b8"
+        ]
+      ],
+      "sender_via_files": [
+        "electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart"
+      ],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "charging_hes_dynamic_price_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -3620,12 +3686,14 @@
         "ElectricityPlaceConfirmPageLogic::save @0x4397b74"
       ],
       "sender_file": "electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ChargeDischargeSettingLogic::save @0x41b469c"
       ],
       "sender_via_files": [
         "electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_dynamic_price_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -3651,16 +3719,24 @@
       "param_type_source": null,
       "params": [],
       "role": "url_provider",
-      "sender": "GeneralPriceSettingLogic::setTOU @0x41a68ac",
-      "sender_file": "electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart",
+      "sender": "HttpHelper::getDataFromService @0x27bda38",
+      "sender_file": "electricity_price/components/electricity_price_common/http/http_helper.dart",
+      "sender_kind": "wrapper",
       "sender_via": [
-        "ElectricityPricePlanApiHelper::changeToTouPlan @0x31a9fdc",
-        "GeneralPriceSettingLogic::setTOU @0x41a68ac"
+        "ElectricityPriceModeApiHelper::changeToTouMode @0x2e821dc"
+      ],
+      "sender_via_also": [
+        [
+          "ElectricityPricePlanApiHelper::changeToTouPlan @0x31a9fdc"
+        ],
+        [
+          "TOUAutoPricePkgResultLogic::saveAuto @0x31b11dc"
+        ]
       ],
       "sender_via_files": [
-        "electricity_price/components/electricity_price_common/electricity_price_plan_api_helper.dart",
-        "electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart"
+        "electricity_price/components/electricity_price_common/electricity_price_model_api_helper.dart"
       ],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "charging_hes_dynamic_price_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -3688,12 +3764,14 @@
       "role": "url_provider",
       "sender": "ElectricityUsageHelper::changeCurrencyUnit @0x29ae5f0",
       "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ElectricityUsageHelper::changeCurrencyUnit @0x29ae5f0"
       ],
       "sender_via_files": [
         "electricity_price/components/electricity_price_common/electricity_usage_helper.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -3721,12 +3799,14 @@
       "role": "url_provider",
       "sender": "EmsAiModeConditionLogic::authorizeAiEmsToCloud @0x37a4244",
       "sender_file": "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "EmsAiModeConditionLogic::authorizeAiEmsToCloud @0x37a4244"
       ],
       "sender_via_files": [
         "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -3757,12 +3837,14 @@
         "PowerUsageScenarioController::checkVppFunction @0x2a273f4"
       ],
       "sender_file": "micro_hes/src/a17e2/station/home/a17e2_station_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "A17E2StationLogic::_checkVppFunction @0x2349388"
       ],
       "sender_via_files": [
         "micro_hes/src/a17e2/station/home/a17e2_station_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -3789,13 +3871,18 @@
       "params": [],
       "role": "url_provider",
       "sender": "TouHttpService::sendDeviceCommand @0x4884e40",
+      "sender_also": [
+        "ElectricityUsageHelper::setSiteTOUDetail @0x31b90a0"
+      ],
       "sender_file": "electricity_price/components/tou/impl_v2/service/tou_http_service.dart",
+      "sender_kind": "self",
       "sender_via": [
         "TouHttpService::sendDeviceCommand @0x4884e40"
       ],
       "sender_via_files": [
         "electricity_price/components/tou/impl_v2/service/tou_http_service.dart"
       ],
+      "sender_wrapper": "HttpHelper::request",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -3823,12 +3910,14 @@
       "role": "url_provider",
       "sender": "EmsAiModeConditionLogic::_enableLargeSmartMode @0x379e4b8",
       "sender_file": "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "EmsAiModeConditionLogic::_enableLargeSmartMode @0x379e4b8"
       ],
       "sender_via_files": [
         "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -3856,12 +3945,14 @@
       "role": "url_provider",
       "sender": "ElectricityPriceProviderLogic::fetchAreaByCode @0x41e44e4",
       "sender_file": "electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ElectricityPriceProviderLogic::fetchAreaByCode @0x41e44e4"
       ],
       "sender_via_files": [
         "electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -3886,8 +3977,25 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpHelper::getDataFromService @0x27bda38",
+      "sender_file": "electricity_price/components/electricity_price_common/http/http_helper.dart",
+      "sender_kind": "wrapper",
+      "sender_via": [
+        "GeneralPriceSettingLogic::queryLargeChargingDeviceHasSetMode @0x29a412c"
+      ],
+      "sender_via_also": [
+        [
+          "TouAndTimeSlotSettingsDetailLogic::queryLargeChargingDeviceHasSetMode @0x29af908"
+        ],
+        [
+          "TouAndTimeslotSettingsPolyLogic::queryLargeChargingDeviceHasSetMode @0x29afa60"
+        ]
+      ],
+      "sender_via_files": [
+        "electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart"
+      ],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -3913,18 +4021,38 @@
       "param_type_source": null,
       "params": [],
       "role": "url_provider",
-      "sender": "PowerUsageScenarioController::getPriceDetail @0x25549d0",
+      "sender": "HttpHelper::getDataFromService @0x27bda38",
       "sender_also": [
+        "PowerUsageScenarioController::getPriceDetail @0x25549d0",
         "PowerUsageScenarioLogic::_requestDynamicPriceInfo @0x28a1f44",
         "SystemPolicyLogic::getPriceDetail @0x28ec184"
       ],
-      "sender_file": "ak_soft_ems/ems_list/power_usage_scenario_controller.dart",
+      "sender_file": "electricity_price/components/electricity_price_common/http/http_helper.dart",
+      "sender_kind": "wrapper",
       "sender_via": [
-        "PowerUsageScenarioController::getPriceDetail @0x25549d0"
+        "ChargeDischargeSettingLogic::getElectricityPrice @0x29b2c00"
+      ],
+      "sender_via_also": [
+        [
+          "ChargeDischargeSettingLogic_C5::getElectricityPrice @0x29b3774"
+        ],
+        [
+          "DynamicPriceDetailInfoViewState::getTodayAndTomorrowPrice @0x27d184c"
+        ],
+        [
+          "TOUAutoPricePkgResultLogic::getData @0x2c489dc"
+        ],
+        [
+          "TimeSlotPreviewLogic::getPriceDetail @0x2c56060"
+        ],
+        [
+          "TimeslotPreviewPolyLogic::getPriceDetail @0x2c51e8c"
+        ]
       ],
       "sender_via_files": [
-        "ak_soft_ems/ems_list/power_usage_scenario_controller.dart"
+        "electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart"
       ],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -3950,19 +4078,39 @@
       "param_type_source": null,
       "params": [],
       "role": "url_provider",
-      "sender": "PowerUsageScenarioController::_requestDynamicPriceCompany @0x37b1a70",
+      "sender": "HttpHelper::getDataFromService @0x27bda38",
       "sender_also": [
+        "PowerUsageScenarioController::_requestDynamicPriceCompany @0x37b1a70",
         "PowerUsageScenarioController::getDynamicPriceCompany @0x2a2efb8",
         "PowerUsageScenarioLogic::_requestDynamicPriceCompany @0x28a1960",
         "SystemPolicyLogic::_getDynamicPriceCompany @0x28eb470"
       ],
-      "sender_file": "ak_soft_ems/ems_list/power_usage_scenario_controller.dart",
+      "sender_file": "electricity_price/components/electricity_price_common/http/http_helper.dart",
+      "sender_kind": "wrapper",
       "sender_via": [
-        "PowerUsageScenarioController::_requestDynamicPriceCompany @0x37b1a70"
+        "ChargeDischargeSettingLogic::getDynamicPriceCompany @0x29b6424"
+      ],
+      "sender_via_also": [
+        [
+          "ChargeDischargeSettingLogic_C5::getDynamicPriceCompany @0x29b78bc"
+        ],
+        [
+          "DynamicPriceDetailInfoViewState::getDynamicPriceCompany @0x27cf088"
+        ],
+        [
+          "ElectricityCompanySelectLogic::getDynamicPriceCompany @0x29aaab4"
+        ],
+        [
+          "ElectricityPriceProviderLogic::getDynamicPriceCompany @0x29a77ac"
+        ],
+        [
+          "ElectricityPriceServiceImpl::_supportAutoTou @0x2891a84"
+        ]
       ],
       "sender_via_files": [
-        "ak_soft_ems/ems_list/power_usage_scenario_controller.dart"
+        "electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart"
       ],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -3990,12 +4138,14 @@
       "role": "url_provider",
       "sender": "EmsAiModeConditionLogic::_getLargeAuthorizationStatus @0x2a31278",
       "sender_file": "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "EmsAiModeConditionLogic::_getLargeAuthorizationStatus @0x2a31278"
       ],
       "sender_via_files": [
         "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -4020,8 +4170,22 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpHelper::getDataFromService @0x27bda38",
+      "sender_file": "electricity_price/components/electricity_price_common/http/http_helper.dart",
+      "sender_kind": "wrapper",
+      "sender_via": [
+        "ElectricityPlaceConfirmPageLogic::getDynamicPriceCompany @0x29ac204"
+      ],
+      "sender_via_also": [
+        [
+          "_DynamicPriceHttpServer::getThirdJumpUrl @0x43917b8"
+        ]
+      ],
+      "sender_via_files": [
+        "electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart"
+      ],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -4050,18 +4214,20 @@
       "sender": "ElectricityPlaceConfirmPageLogic::_getUtilityRatePlan @0x29abe94",
       "sender_also": [
         "ElectricityUsageHelper::getCurEmsModeType @0x292e1f4",
+        "ElectricityUsageHelper::getManualSetTOUDetailWithUrl @0x2c4f910",
         "EmsAiModeConditionLogic::_getLargeUtilityRatePlan @0x2a30cd4",
         "GeneralPriceSettingLogic::getDevicePriceType @0x29a4974",
-        "SmartModeLogic::_getUtilityRatePlan @0x3eae334",
-        "SystemPolicyLogic::_getUtilityRatePlan @0x24a53e8"
+        "SmartModeLogic::_getUtilityRatePlan @0x3eae334"
       ],
       "sender_file": "electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ElectricityPlaceConfirmPageLogic::_getUtilityRatePlan @0x29abe94"
       ],
       "sender_via_files": [
         "electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -4089,12 +4255,14 @@
       "role": "url_provider",
       "sender": "ElectricityUsageHelper::getPriceUnits @0x29ae3f4",
       "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ElectricityUsageHelper::getPriceUnits @0x29ae3f4"
       ],
       "sender_via_files": [
         "electricity_price/components/electricity_price_common/electricity_usage_helper.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -4163,12 +4331,14 @@
         "ElectricityPlaceConfirmPageLogic::save @0x4397b74"
       ],
       "sender_file": "electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ChargeDischargeSettingLogic::save @0x41b469c"
       ],
       "sender_via_files": [
         "electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -4194,16 +4364,24 @@
       "param_type_source": null,
       "params": [],
       "role": "url_provider",
-      "sender": "GeneralPriceSettingLogic::setTOU @0x41a68ac",
-      "sender_file": "electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart",
+      "sender": "HttpHelper::getDataFromService @0x27bda38",
+      "sender_file": "electricity_price/components/electricity_price_common/http/http_helper.dart",
+      "sender_kind": "wrapper",
       "sender_via": [
-        "ElectricityPricePlanApiHelper::changeToTouPlan @0x31a9fdc",
-        "GeneralPriceSettingLogic::setTOU @0x41a68ac"
+        "ElectricityPriceModeApiHelper::changeToTouMode @0x2e821dc"
+      ],
+      "sender_via_also": [
+        [
+          "ElectricityPricePlanApiHelper::changeToTouPlan @0x31a9fdc"
+        ],
+        [
+          "TOUAutoPricePkgResultLogic::saveAuto @0x31b11dc"
+        ]
       ],
       "sender_via_files": [
-        "electricity_price/components/electricity_price_common/electricity_price_plan_api_helper.dart",
-        "electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart"
+        "electricity_price/components/electricity_price_common/electricity_price_model_api_helper.dart"
       ],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -4231,8 +4409,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "PlatformAppointAddDeviceController::getThirdPartyPlatformList @0x24e6bd8",
+      "sender_file": "flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart",
+      "sender_kind": "self",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -4264,8 +4447,10 @@
       "role": "url_provider",
       "sender": "FirmwareUpgradeController::checkDeviceUpdate @0x2b0d200",
       "sender_file": "flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -4297,8 +4482,10 @@
       "role": "url_provider",
       "sender": "FirmwareUpgradeController::checkUpgradeViaMultiDeploy @0x2b0f898",
       "sender_file": "flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "charging_hes_installer_svc",
       "since": "3.24.3",
       "upstream_key": null,
@@ -4326,12 +4513,14 @@
       "role": "url_provider",
       "sender": "ElectricityUsageHelper::changeCurrencyUnit @0x29ae5f0",
       "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ElectricityUsageHelper::changeCurrencyUnit @0x29ae5f0"
       ],
       "sender_via_files": [
         "electricity_price/components/electricity_price_common/electricity_usage_helper.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -4392,12 +4581,14 @@
       "role": "url_provider",
       "sender": "EmsAiModeConditionLogic::authorizeAiEmsToCloud @0x37a4244",
       "sender_file": "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "EmsAiModeConditionLogic::authorizeAiEmsToCloud @0x37a4244"
       ],
       "sender_via_files": [
         "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -4526,12 +4717,14 @@
         "PowerUsageScenarioController::checkVppFunction @0x2a273f4"
       ],
       "sender_file": "micro_hes/src/a17e2/station/home/a17e2_station_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "A17E2StationLogic::_checkVppFunction @0x2349388"
       ],
       "sender_via_files": [
         "micro_hes/src/a17e2/station/home/a17e2_station_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -4809,13 +5002,18 @@
       "params": [],
       "role": "url_provider",
       "sender": "TouHttpService::sendDeviceCommand @0x4884e40",
+      "sender_also": [
+        "ElectricityUsageHelper::setSiteTOUDetail @0x31b90a0"
+      ],
       "sender_file": "electricity_price/components/tou/impl_v2/service/tou_http_service.dart",
+      "sender_kind": "self",
       "sender_via": [
         "TouHttpService::sendDeviceCommand @0x4884e40"
       ],
       "sender_via_files": [
         "electricity_price/components/tou/impl_v2/service/tou_http_service.dart"
       ],
+      "sender_wrapper": "HttpHelper::request",
       "service": "charging_hes_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -5083,12 +5281,14 @@
       "role": "url_provider",
       "sender": "EmsAiModeConditionLogic::_enableLargeSmartMode @0x379e4b8",
       "sender_file": "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "EmsAiModeConditionLogic::_enableLargeSmartMode @0x379e4b8"
       ],
       "sender_via_files": [
         "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -5458,12 +5658,14 @@
       "role": "url_provider",
       "sender": "EmsAiModeConditionLogic::_getLargeAuthorizationStatus @0x2a31278",
       "sender_file": "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "EmsAiModeConditionLogic::_getLargeAuthorizationStatus @0x2a31278"
       ],
       "sender_via_files": [
         "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -5825,8 +6027,25 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpHelper::getDataFromService @0x27bda38",
+      "sender_file": "electricity_price/components/electricity_price_common/http/http_helper.dart",
+      "sender_kind": "wrapper",
+      "sender_via": [
+        "GeneralPriceSettingLogic::queryLargeChargingDeviceHasSetMode @0x29a412c"
+      ],
+      "sender_via_also": [
+        [
+          "TouAndTimeSlotSettingsDetailLogic::queryLargeChargingDeviceHasSetMode @0x29af908"
+        ],
+        [
+          "TouAndTimeslotSettingsPolyLogic::queryLargeChargingDeviceHasSetMode @0x29afa60"
+        ]
+      ],
+      "sender_via_files": [
+        "electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart"
+      ],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "charging_hes_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -6334,18 +6553,20 @@
       "sender": "ElectricityPlaceConfirmPageLogic::_getUtilityRatePlan @0x29abe94",
       "sender_also": [
         "ElectricityUsageHelper::getCurEmsModeType @0x292e1f4",
+        "ElectricityUsageHelper::getManualSetTOUDetailWithUrl @0x2c4f910",
         "EmsAiModeConditionLogic::_getLargeUtilityRatePlan @0x2a30cd4",
         "GeneralPriceSettingLogic::getDevicePriceType @0x29a4974",
-        "SmartModeLogic::_getUtilityRatePlan @0x3eae334",
-        "SystemPolicyLogic::_getUtilityRatePlan @0x24a53e8"
+        "SmartModeLogic::_getUtilityRatePlan @0x3eae334"
       ],
       "sender_file": "electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ElectricityPlaceConfirmPageLogic::_getUtilityRatePlan @0x29abe94"
       ],
       "sender_via_files": [
         "electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -6536,12 +6757,14 @@
       "role": "url_provider",
       "sender": "ElectricityUsageHelper::getPriceUnits @0x29ae3f4",
       "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ElectricityUsageHelper::getPriceUnits @0x29ae3f4"
       ],
       "sender_via_files": [
         "electricity_price/components/electricity_price_common/electricity_usage_helper.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "charging_hes_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -6814,8 +7037,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::setEvChargerHesStationFeature @0x3960414",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "charging_hes_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -6887,8 +7112,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::setStationEvChargers @0x3961580",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "charging_hes_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -7504,8 +7731,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::removeUserFloatingFaultInfo @0x3219f88",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "charging_imsg_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -7544,8 +7773,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::userFaultAlarm @0x2c67d64",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "charging_imsg_svc",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -8093,10 +8324,12 @@
         "param"
       ],
       "role": "url_provider",
-      "sender": "<anonymous closure>@0x2f437a4 @0x2f437a4",
+      "sender": "AKIotAX170Command::<anonymous closure>@0x2f437a4 @0x2f437a4",
       "sender_file": "ats_ax170/src/sdk/command/ax170_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "devicecontrol",
       "since": "3.24.3",
       "upstream_key": null,
@@ -8263,8 +8496,13 @@
       "params": [
         "site_id"
       ],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpHelper::getDataFromService @0x22ba2bc",
+      "sender_file": "ak_soft_ems/http/http_helper.dart",
+      "sender_kind": "wrapper",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "ems",
       "since": "3.24.3",
       "upstream_key": null,
@@ -8415,10 +8653,12 @@
         "param.device_sn"
       ],
       "role": "url_provider",
-      "sender": "<anonymous closure>@0x35e1f50 @0x35e1f50",
+      "sender": "AKIotAX170Command::<anonymous closure>@0x35e1f50 @0x35e1f50",
       "sender_file": "ats_ax170/src/sdk/command/ax170_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "generator",
       "since": "3.24.3",
       "upstream_key": null,
@@ -8452,10 +8692,12 @@
         "param.status"
       ],
       "role": "url_provider",
-      "sender": "<anonymous closure>@0x3823588 @0x3823588",
+      "sender": "AKIotAX170Command::<anonymous closure>@0x3823588 @0x3823588",
       "sender_file": "ats_ax170/src/sdk/command/ax170_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "generator",
       "since": "3.24.3",
       "upstream_key": null,
@@ -11027,8 +11269,13 @@
         "end_time",
         "type"
       ],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpHelper::getDataFromService @0x22ba2bc",
+      "sender_file": "ak_soft_ems/http/http_helper.dart",
+      "sender_kind": "wrapper",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_ai_ems_profit",
@@ -12277,8 +12524,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpHelper::getDataFromService @0x22ba2bc",
+      "sender_file": "ak_soft_ems/http/http_helper.dart",
+      "sender_kind": "wrapper",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_attributes",
@@ -12373,8 +12625,10 @@
       "role": "url_provider",
       "sender": "AKIotAX170Command::getCustomBranchList @0x27d664c",
       "sender_file": "ats_ax170/src/sdk/command/ax170_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_attributes",
@@ -12477,8 +12731,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "ElectricityUsageHelper::getPriceType @0x35f70c8",
+      "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_attributes",
@@ -12594,8 +12853,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "GeneralPriceSettingLogic::getDevicePriceType @0x29a4974",
+      "sender_file": "electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart",
+      "sender_kind": "self",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_attributes",
@@ -12691,12 +12955,14 @@
       "role": "url_provider",
       "sender": "GeneralPriceSettingLogic::getDevicePriceType @0x29a4974",
       "sender_file": "electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart",
+      "sender_kind": "self",
       "sender_via": [
         "GeneralPriceSettingLogic::getDevicePriceType @0x29a4974"
       ],
       "sender_via_files": [
         "electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_attributes",
@@ -13155,8 +13421,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "ElectricityUsageHelper::getCurEmsModeType @0x292e1f4",
+      "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_load",
@@ -13181,8 +13452,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "ElectricityUsageHelper::getManualSetTOUDetailWithUrl @0x2c4f910",
+      "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_load",
@@ -13271,12 +13547,14 @@
       "role": "url_provider",
       "sender": "ElectricityUsageHelper::getCurEmsModeType @0x292e1f4",
       "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ElectricityUsageHelper::getCurEmsModeType @0x292e1f4"
       ],
       "sender_via_files": [
         "electricity_price/components/electricity_price_common/electricity_usage_helper.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_load",
@@ -13634,8 +13912,10 @@
       "role": "url_provider",
       "sender": "AKIotAX170Command::setCustomBranchList @0x2f2cd4c",
       "sender_file": "ats_ax170/src/sdk/command/ax170_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "set_device_attributes",
@@ -14028,12 +14308,14 @@
       "role": "url_provider",
       "sender": "ElectricityUsageHelper::setDeviceEMSPriceArgument @0x249e2cc",
       "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ElectricityUsageHelper::setDeviceEMSPriceArgument @0x249e2cc"
       ],
       "sender_via_files": [
         "electricity_price/components/electricity_price_common/electricity_usage_helper.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "set_device_attributes",
@@ -14604,19 +14886,16 @@
       "param_type_source": null,
       "params": [],
       "role": "url_provider",
-      "sender": "TOUEditPreviewLogic::savePlan @0x31de7dc",
-      "sender_also": [
-        "TOUPlanLogic::savePlan @0x31b88b4"
-      ],
-      "sender_file": "electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart",
+      "sender": "ElectricityUsageHelper::setSiteTOUDetail @0x31b90a0",
+      "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "callee",
       "sender_via": [
-        "ElectricityUsageHelper::setManualSetTOUDetail @0x31b8da8",
-        "TOUEditPreviewLogic::savePlan @0x31de7dc"
+        "ElectricityUsageHelper::setManualSetTOUDetail @0x31b8da8"
       ],
       "sender_via_files": [
-        "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
-        "electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart"
+        "electricity_price/components/electricity_price_common/electricity_usage_helper.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "set_device_load",
@@ -14649,17 +14928,12 @@
       "param_type_source": null,
       "params": [],
       "role": "url_provider",
-      "sender": "TOUEditPreviewLogic::savePlan @0x31de7dc",
-      "sender_also": [
-        "TOUPlanLogic::savePlan @0x31b88b4"
-      ],
-      "sender_file": "electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart",
-      "sender_via": [
-        "TOUEditPreviewLogic::savePlan @0x31de7dc"
-      ],
-      "sender_via_files": [
-        "electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart"
-      ],
+      "sender": "ElectricityUsageHelper::setSiteTOUDetail @0x31b90a0",
+      "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "callee",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "set_device_load",
@@ -14782,8 +15056,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getEvBrandList @0x2c6b5a4",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_vehicle_brands",
@@ -15078,8 +15354,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getEvVersionList @0x2c6aa24",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_vehicle_year_attributes",
@@ -15116,8 +15394,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getEvYearList @0x2c6af74",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_vehicle_model_years",
@@ -15153,8 +15433,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getEvModelList @0x2c6b2b4",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_vehicle_brand_models",
@@ -15768,8 +16050,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::deleteGroupDevices @0x396062c",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -15805,8 +16089,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::forceSaveGroupDevices @0x3f9ac34",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -15843,8 +16129,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getGroupDevices @0x27e7154",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_group",
@@ -15881,8 +16169,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::updateGroupDevices @0x3f9b2e0",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -15918,8 +16208,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::saveGroupDevices @0x3f9b504",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -16012,8 +16304,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::deleteChargingSession @0x395b4e4",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -16050,8 +16344,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::fetchExportChargeOrderUrl @0x3956700",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -16088,8 +16384,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getChargeSessionChartModel @0x29a0f44",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_charge_order_stats",
@@ -16130,8 +16428,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getChargerSessionOrderList @0x29a2ef8",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_charge_order_stats_list",
@@ -16167,8 +16467,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getSessionsDetail @0x2aad688",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -16207,8 +16509,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getChargeSessions @0x3394738",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -16244,8 +16548,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getSessionsOrderSecDetail @0x35f23fc",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -16282,8 +16588,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getSessionsOrderSecPreview @0x35f2d18",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -17141,8 +17449,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "PlatformAppointAddDeviceController::getThirdPartyPlatformList @0x24e6bd8",
+      "sender_file": "flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart",
+      "sender_kind": "self",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_third_platforms",
@@ -17247,8 +17560,10 @@
       "role": "url_provider",
       "sender": "OTAUpgradeRecordReporter::_reportSingle @0x280a890",
       "sender_file": "ota_kit/src/services/ota_upgrade_record_reporter.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -17316,8 +17631,10 @@
       "role": "url_provider",
       "sender": "OTAUpgradeRecordReporter::_reportBatch @0x280a11c",
       "sender_file": "ota_kit/src/services/ota_upgrade_record_reporter.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -17412,8 +17729,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getUserParams @0x2700a98",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -17509,8 +17828,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::setUserParams @0x405be14",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -17545,8 +17866,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::addEv @0x3983e74",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "vehicle_add",
@@ -17581,8 +17904,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::deleteEv @0x398389c",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "vehicle_delete",
@@ -17617,8 +17942,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getEvDetail @0x2ab935c",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_user_vehicle_details",
@@ -17684,8 +18011,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getEvList @0x2ab3ebc",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_user_vehicles",
@@ -17722,8 +18051,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::setChargingVehicle @0x3948e9c",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "vehicle_set_charging",
@@ -17758,8 +18089,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::setDefaultEv @0x3984aec",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "vehicle_set_default",
@@ -17794,8 +18127,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::updateEv @0x2cf9cb0",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "vehicle_update",
@@ -17993,8 +18328,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getSecurityLogs @0x2a3da00",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_tamper_records",
@@ -18526,8 +18863,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::deleteDeviceCard @0x397a870",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -18561,8 +18900,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getDeviceCards @0x2ab2340",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_rfid_cards",
@@ -18599,8 +18940,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::saveDeviceCard @0x3216c54",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -18733,8 +19076,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::addSiteDevice @0x3964400",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -19009,8 +19354,10 @@
       "role": "url_provider",
       "sender": "TextInfoDialogLogic::_setElectricianInfo @0x2e22a60",
       "sender_file": "base_service/view/text_info_dialog/text_info_dialog_logic.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -19044,8 +19391,10 @@
       "role": "url_provider",
       "sender": "TextInfoDialogLogic::getElectricianInfo @0x2bc7bfc",
       "sender_file": "base_service/view/text_info_dialog/text_info_dialog_logic.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -19535,8 +19884,13 @@
       "params": [
         "site_id"
       ],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpHelper::getDataFromService @0x22ba2bc",
+      "sender_file": "ak_soft_ems/http/http_helper.dart",
+      "sender_kind": "wrapper",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_forecast_schedule",
@@ -19707,8 +20061,10 @@
       "role": "url_provider",
       "sender": "RenameSiteController::loadName @0x47add6c",
       "sender_file": "flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "site_detail",
@@ -19743,8 +20099,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getEvChargerSiteInfo @0x27e6e08",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "site_detail_by_sn",
@@ -20316,8 +20674,10 @@
       "role": "url_provider",
       "sender": "SocCommandCapabilityV2::fetchSocSetting @0x3677fc4",
       "sender_file": "device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_parm",
@@ -20380,8 +20740,13 @@
         "param_type",
         "cmd"
       ],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpHelper::getDataFromService @0x27bda38",
+      "sender_file": "electricity_price/components/electricity_price_common/http/http_helper.dart",
+      "sender_kind": "wrapper",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_parm",
@@ -20412,8 +20777,13 @@
         "param_type",
         "cmd"
       ],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "HttpHelper::getDataFromService @0x27bda38",
+      "sender_file": "electricity_price/components/electricity_price_common/http/http_helper.dart",
+      "sender_kind": "wrapper",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpHelper::getDataFromService",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_parm",
@@ -20438,8 +20808,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "ElectricityUsageHelper::getCurEmsModeType @0x292e1f4",
+      "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_parm",
@@ -20464,8 +20839,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "ElectricityUsageHelper::getManualSetTOUDetailWithUrl @0x2c4f910",
+      "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_parm",
@@ -20554,12 +20934,14 @@
       "role": "url_provider",
       "sender": "ElectricityUsageHelper::getCurEmsModeType @0x292e1f4",
       "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ElectricityUsageHelper::getCurEmsModeType @0x292e1f4"
       ],
       "sender_via_files": [
         "electricity_price/components/electricity_price_common/electricity_usage_helper.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_device_parm",
@@ -21273,8 +21655,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::getUserSiteList @0x2aaea38",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "site_list",
@@ -21441,8 +21825,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "ElectricityUsageHelper::getPriceType @0x35f70c8",
+      "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_site_price",
@@ -21558,8 +21947,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "GeneralPriceSettingLogic::getDevicePriceType @0x29a4974",
+      "sender_file": "electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart",
+      "sender_kind": "self",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_site_price",
@@ -21626,12 +22020,14 @@
       "role": "url_provider",
       "sender": "GeneralPriceSettingLogic::getDevicePriceType @0x29a4974",
       "sender_file": "electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart",
+      "sender_kind": "self",
       "sender_via": [
         "GeneralPriceSettingLogic::getDevicePriceType @0x29a4974"
       ],
       "sender_via_files": [
         "electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "get_site_price",
@@ -21991,8 +22387,10 @@
       "role": "url_provider",
       "sender": "AKIotEVChargeCommand::setEvChargerStationFeature @0x3960204",
       "sender_file": "ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -22534,8 +22932,10 @@
       "role": "url_provider",
       "sender": "SocCommandCapabilityV2::saveSocSetting @0x2ccc350",
       "sender_file": "device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "set_device_parm",
@@ -22599,19 +22999,16 @@
       "param_type_source": null,
       "params": [],
       "role": "url_provider",
-      "sender": "TOUEditPreviewLogic::savePlan @0x31de7dc",
-      "sender_also": [
-        "TOUPlanLogic::savePlan @0x31b88b4"
-      ],
-      "sender_file": "electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart",
+      "sender": "ElectricityUsageHelper::setSiteTOUDetail @0x31b90a0",
+      "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "callee",
       "sender_via": [
-        "ElectricityUsageHelper::setManualSetTOUDetail @0x31b8da8",
-        "TOUEditPreviewLogic::savePlan @0x31de7dc"
+        "ElectricityUsageHelper::setManualSetTOUDetail @0x31b8da8"
       ],
       "sender_via_files": [
-        "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
-        "electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart"
+        "electricity_price/components/electricity_price_common/electricity_usage_helper.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "set_device_parm",
@@ -22644,17 +23041,12 @@
       "param_type_source": null,
       "params": [],
       "role": "url_provider",
-      "sender": "TOUEditPreviewLogic::savePlan @0x31de7dc",
-      "sender_also": [
-        "TOUPlanLogic::savePlan @0x31b88b4"
-      ],
-      "sender_file": "electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart",
-      "sender_via": [
-        "TOUEditPreviewLogic::savePlan @0x31de7dc"
-      ],
-      "sender_via_files": [
-        "electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart"
-      ],
+      "sender": "ElectricityUsageHelper::setSiteTOUDetail @0x31b90a0",
+      "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "callee",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "set_device_parm",
@@ -23426,8 +23818,10 @@
       "role": "url_provider",
       "sender": "RenameSiteController::save @0x47a6694",
       "sender_file": "flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -23626,12 +24020,14 @@
       "role": "url_provider",
       "sender": "ElectricityUsageHelper::setDeviceEMSPriceArgument @0x249e2cc",
       "sender_file": "electricity_price/components/electricity_price_common/electricity_usage_helper.dart",
+      "sender_kind": "self",
       "sender_via": [
         "ElectricityUsageHelper::setDeviceEMSPriceArgument @0x249e2cc"
       ],
       "sender_via_files": [
         "electricity_price/components/electricity_price_common/electricity_usage_helper.dart"
       ],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "update_site_price",
@@ -23765,8 +24161,13 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
-      "resolution": "unresolved",
       "role": "url_provider",
+      "sender": "TOUEditPreviewLogic::savePlan @0x31de7dc",
+      "sender_file": "electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart",
+      "sender_kind": "self",
+      "sender_via": [],
+      "sender_via_files": [],
+      "sender_wrapper": "HttpServiceImpl::encryptionRequestHttp",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": "update_site_price",
@@ -23828,8 +24229,10 @@
       "role": "url_provider",
       "sender": "AKIotAX170Command::getCustomBranchIcons @0x27d5f64",
       "sender_file": "ats_ax170/src/sdk/command/ax170_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -23854,6 +24257,7 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
+      "resolution": "unresolved",
       "role": "url_provider",
       "service": "power_service",
       "since": "≤3.18.0",
@@ -23879,6 +24283,7 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
+      "resolution": "unresolved",
       "role": "url_provider",
       "service": "power_service",
       "since": "≤3.18.0",
@@ -23944,8 +24349,10 @@
       "role": "url_provider",
       "sender": "SubPackageInfoProvider::getHardwareRelation @0x2b0b4ec",
       "sender_file": "ota_kit/src/providers/sub_package_info_provider.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -24015,8 +24422,10 @@
       "role": "url_provider",
       "sender": "S1S2DeviceCommand::getChargeSessionChartModel @0x2991c18",
       "sender_file": "s1_s2/src/sdk/command/s1_s2_device_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "3.24.3",
       "upstream_key": null,
@@ -24088,8 +24497,10 @@
       "role": "url_provider",
       "sender": "S1S2DeviceCommand::getStartUseTime @0x2998e7c",
       "sender_file": "s1_s2/src/sdk/command/s1_s2_device_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "3.24.3",
       "upstream_key": null,
@@ -24159,8 +24570,10 @@
       "role": "url_provider",
       "sender": "S1S2DeviceCommand::getGuardianJournalEvents @0x2a0b7bc",
       "sender_file": "s1_s2/src/sdk/command/s1_s2_device_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "3.24.3",
       "upstream_key": null,
@@ -24196,8 +24609,10 @@
       "role": "url_provider",
       "sender": "S1S2DeviceCommand::markGuardianEventsAsRead @0x2a096ec",
       "sender_file": "s1_s2/src/sdk/command/s1_s2_device_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "3.24.3",
       "upstream_key": null,
@@ -24264,8 +24679,10 @@
       "role": "url_provider",
       "sender": "PowerPlantConfigController::requestRegionCodes @0x2b07c9c",
       "sender_file": "flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -24393,8 +24810,10 @@
       "role": "url_provider",
       "sender": "SystemConfigController::updateCountryCodeByCloud @0x3256434",
       "sender_file": "flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "3.24.3",
       "upstream_key": null,
@@ -24552,8 +24971,10 @@
       "role": "url_provider",
       "sender": "SystemConfigController::updateCountryCodeByCloud @0x32558c0",
       "sender_file": "flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "3.24.3",
       "upstream_key": null,
@@ -24649,8 +25070,10 @@
       "role": "url_provider",
       "sender": "AKIotAX170Command::getPlatformEnergyAnalysisOptions @0x2334664",
       "sender_file": "ats_ax170/src/sdk/command/ax170_command.dart",
+      "sender_kind": "self",
       "sender_via": [],
       "sender_via_files": [],
+      "sender_wrapper": "AKIoTKitManagerImpl::handle",
       "service": "power_service",
       "since": "≤3.18.0",
       "upstream_key": null,
@@ -25040,6 +25463,7 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
+      "resolution": "unresolved",
       "role": "url_provider",
       "service": "smart_service",
       "since": "3.24.3",
@@ -25065,6 +25489,7 @@
       "param_type": null,
       "param_type_source": null,
       "params": [],
+      "resolution": "unresolved",
       "role": "url_provider",
       "service": "smart_service",
       "since": "3.24.3",
@@ -25463,7 +25888,7 @@
         "page",
         "num"
       ],
-      "resolution": "unresolved",
+      "resolution": "mixin-gap",
       "role": "url_provider",
       "service": "v2",
       "since": "≤3.18.0",
@@ -25503,7 +25928,7 @@
         "page",
         "num"
       ],
-      "resolution": "unresolved",
+      "resolution": "mixin-gap",
       "role": "url_provider",
       "service": "v2",
       "since": "≤3.18.0",
@@ -25543,7 +25968,7 @@
         "page",
         "num"
       ],
-      "resolution": "unresolved",
+      "resolution": "mixin-gap",
       "role": "url_provider",
       "service": "v2",
       "since": "≤3.18.0",
