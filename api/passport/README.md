@@ -35,6 +35,4 @@ Service index for the URL prefix `/passport/`. Each endpoint page is the single 
 | [`/passport/validate_email`](validate_email.md) | TODO | - | skeleton |
 | [`/passport/validate_pass`](validate_pass.md) | TODO | - | skeleton |
 
-The two rows marked "not in `data/endpoints.json`" are URLs the inventory does not list (they are built by string interpolation or only compared as strings, not sent by a traced `*Http*` call); `tools/service_index.py` does not know them and would drop these two rows when it is run again, so they are added by hand.
-
 Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

@@ -12,7 +12,8 @@
 
 ## Method+URL
 
-`/power_service/v2/device/energy_analysis`, method: not extracted by the inventory <!-- TODO -->; string-only: `third_device/src/module/ae1x0/history/widget/meter_chart_logic.dart @0x2ca2ba8`
+`/power_service/v2/device/energy_analysis`, method: not extracted by the inventory <!-- TODO -->; string-only: `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2991c7c`
+(literal also at 1 more site(s) in `data/endpoints.json`)
 
 ## Encrypted?
 
@@ -22,11 +23,19 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
+| `path` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2991c18` |
+| `method` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2991c18` |
+| `param.device_sn` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2991c18` |
+| `param.start_time` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2991c18` |
+| `param.end_time` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2991c18` |
+| `param.type` | ? | ? | ? | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2991c18` |
 | `device_sn` | ? | ? | ? | `third_device/src/module/ae1x0/history/widget/meter_chart_logic.dart @0x2ca26f8` |
 | `start_time` | ? | ? | ? | `third_device/src/module/ae1x0/history/widget/meter_chart_logic.dart @0x2ca26f8` |
 | `end_time` | ? | ? | ? | `third_device/src/module/ae1x0/history/widget/meter_chart_logic.dart @0x2ca26f8` |
 | `phase` | ? | ? | ? | `third_device/src/module/ae1x0/history/widget/meter_chart_logic.dart @0x2ca26f8` |
 | `type` | ? | ? | ? | `third_device/src/module/ae1x0/history/widget/meter_chart_logic.dart @0x2ca26f8` |
+
+Rows are the union over 2 senders; `source` is the first sender that sets the key.
 
 ## `param_type`/`cmd`
 
@@ -50,6 +59,7 @@ n/a
 
 ## Callers in app
 
+- `s1_s2/src/sdk/command/s1_s2_device_command.dart`: `getChargeSessionChartModel` @0x2991c18 (URL literal only, no `*Http*` call)
 - `third_device/src/module/ae1x0/history/widget/meter_chart_logic.dart`: `requestChartData` @0x2ca26f8 (encryptionRequestHttp; encrypted: true)
 
 Called from:

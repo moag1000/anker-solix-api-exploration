@@ -58,7 +58,11 @@ Service index for the URL prefix `/charging_hes_svc/`. Each endpoint page is the
 | [`/charging_hes_svc/remove_user_fault_info`](remove_user_fault_info.md) | TODO | - | skeleton |
 | [`/charging_hes_svc/report_device_data`](report_device_data.md) | TODO | - | skeleton |
 | [`/charging_hes_svc/restart_peak_session`](restart_peak_session.md) | TODO | - | skeleton |
+| [`/charging_hes_svc/set_evcharger_station_feature`](set_evcharger_station_feature.md) | TODO | - | skeleton |
 | [`/charging_hes_svc/set_station_evchargers`](set_station_evchargers.md) | TODO | - | skeleton |
+| [`/charging_hes_svc/share_device/delete_installer_inviting_member`](share_device/delete_installer_inviting_member.md) | TODO | - | skeleton |
+| [`/charging_hes_svc/share_device/get_installer_invited_list`](share_device/get_installer_invited_list.md) | TODO | - | skeleton |
+| [`/charging_hes_svc/share_device/invite_installer_member`](share_device/invite_installer_member.md) | TODO | - | skeleton |
 | [`/charging_hes_svc/start`](start.md) | TODO | - | skeleton |
 | [`/charging_hes_svc/sync_back_up_history`](sync_back_up_history.md) | TODO | - | skeleton |
 | [`/charging_hes_svc/update_device_info_by_app`](update_device_info_by_app.md) | TODO | - | skeleton |

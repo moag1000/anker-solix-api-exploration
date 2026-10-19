@@ -13,6 +13,7 @@
 ## Method+URL
 
 `/charging_hes_svc/set_station_evchargers`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x226c47c`
+(literal also at 1 more site(s) in `data/endpoints.json`)
 
 ## Encrypted?
 
@@ -26,6 +27,11 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | `evChargers` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x226c334` |
 | `deleteFlag` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x226c334` |
 | `forceBindFlag` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x226c334` |
+| `path` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3961580` |
+| `method` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3961580` |
+| `param` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3961580` |
+
+Rows are the union over 2 senders; `source` is the first sender that sets the key.
 
 ## `param_type`/`cmd`
 
@@ -50,6 +56,7 @@ n/a
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `bindUnX1Charger` @0x226c334 (encryptionRequestHttp; encrypted: true)
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `setStationEvChargers` @0x3961580 (URL literal only, no `*Http*` call)
 
 Called from:
 

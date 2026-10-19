@@ -15,6 +15,34 @@ CALLEE_RE = re.compile(r'\bbl\s+#0x[0-9a-f]+\s+; \[([^\]]*)\] (\S+)')
 CLOSURE_REF_RE = re.compile(
     r'AnonymousClosure: \((0x[0-9a-f]+)\), in \[[^\]]*\] (\S+) \(0x[0-9a-f]+\)')
 URL_LIT_RE = re.compile(r'^(r\d+) = "(/[^"]*)"$')
+# URL literals without the leading slash ("devicecontrol/v1/app/..."): accepted only
+# when the first segment is a known service prefix or the string starts with
+# "<name>/v<N>/".  Dart package paths ("charging_platform/...") stay out.
+SERVICE_PREFIXES = (
+    'power_service', 'charging_hes_svc', 'charging_hes_installer_svc',
+    'charging_hes_third_party_service_svc', 'charging_energy_service',
+    'charging_hes_dynamic_price_svc', 'charging_pv_svc', 'charging_imsg_svc',
+    'charging_common_svc', 'charging_disaster_prepared', 'devicecontrol',
+    'generator', 'smart_service', 'device_svc', 'energy', 'site', 'marketing',
+    'ems', 'privacy_service', 'mini_power', 'app', 'passport', 'openapi', 'v2')
+URL_NOSLASH_RE = re.compile(
+    r'^(r\d+) = "((?:(?:%s)/|[a-z_]+/v[0-9]+/)[^"]*)"$' % '|'.join(SERVICE_PREFIXES))
+URL_PRECHECK_RE = re.compile(
+    r'= "(?:/|(?:%s)/|[a-z_]+/v[0-9]+/)' % '|'.join(SERVICE_PREFIXES))
+
+
+def url_literal(text):
+    """Return (register, url) for a URL literal instruction text, else None.
+
+    The url is stored with a leading slash whether or not the literal had one.
+    """
+    m = URL_LIT_RE.match(text)
+    if m:
+        return m.group(1), m.group(2)
+    m = URL_NOSLASH_RE.match(text)
+    if m:
+        return m.group(1), '/' + m.group(2)
+    return None
 
 
 class Instr:

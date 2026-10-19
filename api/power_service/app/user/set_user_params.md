@@ -13,16 +13,23 @@
 ## Method+URL
 
 `/power_service/v1/app/user/set_user_params`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/user/about/about_http_request_repository_impl.dart @0x4036440`
+(literal also at 2 more site(s) in `data/endpoints.json`)
 
 ## Encrypted?
 
-encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
 ## Request
 
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `params` | ? | ? | ? | `charging/http/user/about/about_http_request_repository_impl.dart @0x4036308` |
+| `params.driving_plan` | ? | ? | ? | `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart @0x39682d4` |
+| `path` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x405be14` |
+| `method` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x405be14` |
+| `param.params` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x405be14` |
+
+Rows are the union over 3 senders; `source` is the first sender that sets the key.
 
 ## `param_type`/`cmd`
 
@@ -47,6 +54,8 @@ n/a
 ## Callers in app
 
 - `charging/http/user/about/about_http_request_repository_impl.dart`: `setPersonalizationOptionsApi` @0x4036308 (encryptionRequestHttp; encrypted: true)
+- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_setUserParams` @0x39682d4 (_requestHttp; encrypted: default-true (requestHttp) — verify)
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `setUserParams` @0x405be14 (URL literal only, no `*Http*` call)
 
 Called from:
 

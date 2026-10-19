@@ -1,7 +1,5 @@
 > Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
 
-Removed in 3.24.3 — present in 3.18.0 only
-
 # set_device_feature
 
 ## Purpose
@@ -14,15 +12,21 @@ Removed in 3.24.3 — present in 3.18.0 only
 
 ## Method+URL
 
-`/power_service/v1/site/set_device_feature`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x3097764`
+`/power_service/v1/site/set_device_feature`, method: not extracted by the inventory <!-- TODO -->; string-only: `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x396035c`
 
 ## Encrypted?
 
-encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
 ## Request
 
-No request keys found by the extractor. <!-- TODO -->
+| field | type | required | example | source |
+|---|---|---|---|---|
+| `device_sn` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3960204` |
+| `rel_bizs` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3960204` |
+| `path` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3960204` |
+| `method` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3960204` |
+| `param` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3960204` |
 
 ## `param_type`/`cmd`
 
@@ -46,11 +50,11 @@ n/a
 
 ## Callers in app
 
-- `charging/http/http_request_repository_impl.dart`: `setRemainPluginStatus` @0x30976e4 (encryptionRequestHttp; encrypted: true)
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `setEvChargerStationFeature` @0x3960204 (URL literal only, no `*Http*` call)
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: absent (removed). since: ≤3.18.0.
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
 
 ## Known unknowns
 

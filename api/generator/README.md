@@ -6,6 +6,8 @@ Service index for the URL prefix `/generator/`. Each endpoint page is the single
 
 | endpoint | purpose | upstream key | status |
 |---|---|---|---|
+| [`/generator/v1/app/get_standby_exercise_plan`](app/get_standby_exercise_plan.md) | TODO | - | skeleton |
+| [`/generator/v1/app/set_standby_exercise_plan`](app/set_standby_exercise_plan.md) | TODO | - | skeleton |
 | [`/generator/v1/app/wakeup_oil_machine_bluetooth`](app/wakeup_oil_machine_bluetooth.md) | TODO | - | skeleton |
 
 Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).

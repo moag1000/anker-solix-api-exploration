@@ -36,6 +36,8 @@ python3 -I tools/smi.py <asm_file> <0xADDR> [--dump]                       # che
 ## 3. Reading the output
 
 - Everything is heuristic string-level evidence: a header of `Confidence: string-only` on rendered pages is deliberate. Promote a fact to `asm-traced` only after a human has read the cited asm site (and checked integers with `smi.py --dump`).
+- URL literals are found with and without the leading slash (`"/power_service/..."` and `"power_service/v1/..."`); the stored `url` always has the slash. A slashless literal counts only when its first segment is a known service prefix (`asmparse.SERVICE_PREFIXES`) or it matches `<name>/v<N>/`; Dart package paths such as `charging_platform/...` are not URLs. A literal with no `*Http*` call in the same function stays `role: url_provider` with `encrypted: false`.
+- `service_index.py` keeps a row for every page on disk that has no inventory row (hand-added pages such as `passport/external_login`), with status "hand-written, not in `data/endpoints.json`".
 - `encrypted` follows the callee name (`*encryptionRequestHttp*`). Plain `requestHttp` callees default to `needEncryption = true`; rows carry `encryption_note` for those.
 - `nullable: null` means the extractor could not tell. `param_type: "variable"` means the key is stored from a register (see `unresolved` in `param_types.json`).
 

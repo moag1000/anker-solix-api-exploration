@@ -6,30 +6,30 @@ This directory holds one page per cloud endpoint, grouped by service (the first 
 
 ## Service index
 
-One directory per URL prefix: 406 distinct URLs (394 in 3.24.3, 12 only in 3.18.0). Counts include hand-written pages; all other pages are skeletons rendered from `data/endpoints.json` by `tools/render_pages.py`.
+One directory per URL prefix: 450 distinct URLs (439 in 3.24.3, 11 only in 3.18.0). Counts include hand-written pages; all other pages are skeletons rendered from `data/endpoints.json` by `tools/render_pages.py`.
 
 | service | pages | index |
 |---|---|---|
-| `app/` | 29 | [app/README.md](app/README.md) |
+| `app/` | 34 | [app/README.md](app/README.md) |
 | `charging_common_svc/` | 3 | [charging_common_svc/README.md](charging_common_svc/README.md) |
 | `charging_disaster_prepared/` | 5 | [charging_disaster_prepared/README.md](charging_disaster_prepared/README.md) |
 | `charging_energy_service/` | 18 | [charging_energy_service/README.md](charging_energy_service/README.md) |
 | `charging_hes_dynamic_price_svc/` | 6 | [charging_hes_dynamic_price_svc/README.md](charging_hes_dynamic_price_svc/README.md) |
 | `charging_hes_installer_svc/` | 18 | [charging_hes_installer_svc/README.md](charging_hes_installer_svc/README.md) |
-| `charging_hes_svc/` | 61 | [charging_hes_svc/README.md](charging_hes_svc/README.md) |
+| `charging_hes_svc/` | 65 | [charging_hes_svc/README.md](charging_hes_svc/README.md) |
 | `charging_hes_third_party_service_svc/` | 2 | [charging_hes_third_party_service_svc/README.md](charging_hes_third_party_service_svc/README.md) |
-| `charging_imsg_svc/` | 2 | [charging_imsg_svc/README.md](charging_imsg_svc/README.md) |
+| `charging_imsg_svc/` | 4 | [charging_imsg_svc/README.md](charging_imsg_svc/README.md) |
 | `charging_pv_svc/` | 7 | [charging_pv_svc/README.md](charging_pv_svc/README.md) |
 | `device_svc/` | 3 | [device_svc/README.md](device_svc/README.md) |
-| `devicecontrol/` | 5 | [devicecontrol/README.md](devicecontrol/README.md) |
+| `devicecontrol/` | 6 | [devicecontrol/README.md](devicecontrol/README.md) |
 | `ems/` | 1 | [ems/README.md](ems/README.md) |
 | `energy/` | 4 | [energy/README.md](energy/README.md) |
-| `generator/` | 1 | [generator/README.md](generator/README.md) |
+| `generator/` | 3 | [generator/README.md](generator/README.md) |
 | `marketing/` | 1 | [marketing/README.md](marketing/README.md) |
 | `mini_power/` | 34 | [mini_power/README.md](mini_power/README.md) |
 | `openapi/` | 3 | [openapi/README.md](openapi/README.md) |
 | `passport/` | 26 | [passport/README.md](passport/README.md) |
-| `power_service/` | 156 | [power_service/README.md](power_service/README.md) |
+| `power_service/` | 186 | [power_service/README.md](power_service/README.md) |
 | `privacy_service/` | 2 | [privacy_service/README.md](privacy_service/README.md) |
 | `site/` | 2 | [site/README.md](site/README.md) |
 | `smart_service/` | 13 | [smart_service/README.md](smart_service/README.md) |

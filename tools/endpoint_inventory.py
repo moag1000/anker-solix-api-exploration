@@ -244,16 +244,17 @@ def scan_root(root, log=None):
     records = []
     callee_stats = {}
     for p, rel in A.iter_dart_files(root):
-        ok, text = A.file_contains(p, ['= "/'])
-        if not ok:
+        with open(p, encoding='utf-8', errors='replace') as fh:
+            text = fh.read()
+        if not A.URL_PRECHECK_RE.search(text):
             continue
         parents = None
         for fn in A.iter_functions(p, rel):
             urls = []
             for ins in fn.instrs:
-                m = A.URL_LIT_RE.match(ins.text)
-                if m and m.group(2) not in [u for u, _ in urls]:
-                    urls.append((m.group(2), ins.addr))
+                m = A.url_literal(ins.text)
+                if m and m[1] not in [u for u, _ in urls]:
+                    urls.append((m[1], ins.addr))
             if not urls:
                 continue
             callees = sorted({c for _, _, c in fn.callees()})

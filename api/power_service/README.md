@@ -58,6 +58,8 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/app/get_model_years`](app/get_model_years.md) | TODO | `get_vehicle_model_years` | skeleton |
 | [`/power_service/v1/app/get_models`](app/get_models.md) | TODO | `get_vehicle_brand_models` | skeleton |
 | [`/power_service/v1/app/get_monthly_report_configs`](app/get_monthly_report_configs.md) | TODO | - | skeleton |
+| [`/power_service/v1/app/get_ocpp_endpoint_list`](app/get_ocpp_endpoint_list.md) | TODO | `get_ocpp_endpoint_list` | skeleton |
+| [`/power_service/v1/app/get_ocpp_info`](app/get_ocpp_info.md) | TODO | `get_device_ocpp_info` | skeleton |
 | [`/power_service/v1/app/get_oil_consumption_reminder_plan_details`](app/get_oil_consumption_reminder_plan_details.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/get_parts_maintenance_logs`](app/get_parts_maintenance_logs.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/get_parts_maintenance_plan`](app/get_parts_maintenance_plan.md) | TODO | - | skeleton |
@@ -69,8 +71,21 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/app/get_upgrade_record`](app/get_upgrade_record.md) | TODO | `get_upgrade_record` | skeleton |
 | [`/power_service/v1/app/get_user_op_shelly_status`](app/get_user_op_shelly_status.md) | TODO | `get_shelly_status` | skeleton |
 | [`/power_service/v1/app/get_weather`](app/get_weather.md) | TODO | - | skeleton |
+| [`/power_service/v1/app/group/delete_group_devices`](app/group/delete_group_devices.md) | TODO | - | skeleton |
+| [`/power_service/v1/app/group/force_save_group_devices`](app/group/force_save_group_devices.md) | TODO | - | skeleton |
+| [`/power_service/v1/app/group/get_group_devices`](app/group/get_group_devices.md) | TODO | `get_device_group` | skeleton |
+| [`/power_service/v1/app/group/replace_group_devices`](app/group/replace_group_devices.md) | TODO | - | skeleton |
+| [`/power_service/v1/app/group/save_group_devices`](app/group/save_group_devices.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/mothly_report_list`](app/mothly_report_list.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/mothly_report_show`](app/mothly_report_show.md) | TODO | - | skeleton |
+| [`/power_service/v1/app/order/delete_charging_order`](app/order/delete_charging_order.md) | TODO | - | skeleton |
+| [`/power_service/v1/app/order/export_charge_order`](app/order/export_charge_order.md) | TODO | - | skeleton |
+| [`/power_service/v1/app/order/get_charge_order_stats`](app/order/get_charge_order_stats.md) | TODO | `get_device_charge_order_stats` | skeleton |
+| [`/power_service/v1/app/order/get_charge_order_stats_list`](app/order/get_charge_order_stats_list.md) | TODO | `get_device_charge_order_stats_list` | skeleton |
+| [`/power_service/v1/app/order/get_charging_order_detail`](app/order/get_charging_order_detail.md) | TODO | - | skeleton |
+| [`/power_service/v1/app/order/get_charging_order_list`](app/order/get_charging_order_list.md) | TODO | - | skeleton |
+| [`/power_service/v1/app/order/get_charging_order_sec_detail`](app/order/get_charging_order_sec_detail.md) | TODO | - | skeleton |
+| [`/power_service/v1/app/order/get_charging_order_sec_preview`](app/order/get_charging_order_sec_preview.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/report_tlv_event`](app/report_tlv_event.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/set_auto_upgrade`](app/set_auto_upgrade.md) | TODO | `set_auto_upgrade` | skeleton |
 | [`/power_service/v1/app/set_extender_system_cumulative_data`](app/set_extender_system_cumulative_data.md) | TODO | - | skeleton |
@@ -98,9 +113,16 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/app/user/get_user_params`](app/user/get_user_params.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/user/set_user_params`](app/user/set_user_params.md) | TODO | - | skeleton |
 | [`/power_service/v1/app/vehicle/add_vehicle`](app/vehicle/add_vehicle.md) | TODO | `vehicle_add` | skeleton |
+| [`/power_service/v1/app/vehicle/delete_vehicle`](app/vehicle/delete_vehicle.md) | TODO | `vehicle_delete` | skeleton |
+| [`/power_service/v1/app/vehicle/get_vehicle_detail`](app/vehicle/get_vehicle_detail.md) | TODO | `get_user_vehicle_details` | skeleton |
+| [`/power_service/v1/app/vehicle/get_vehicle_list`](app/vehicle/get_vehicle_list.md) | TODO | `get_user_vehicles` | skeleton |
+| [`/power_service/v1/app/vehicle/set_charging_vehicle`](app/vehicle/set_charging_vehicle.md) | TODO | `vehicle_set_charging` | skeleton |
+| [`/power_service/v1/app/vehicle/set_default`](app/vehicle/set_default.md) | TODO | `vehicle_set_default` | skeleton |
+| [`/power_service/v1/app/vehicle/update_vehicle`](app/vehicle/update_vehicle.md) | TODO | `vehicle_update` | skeleton |
 | [`/power_service/v1/app/whitelist/feature/check`](app/whitelist/feature/check.md) | TODO | - | skeleton |
 | [`/power_service/v1/currency/get_list`](currency/get_list.md) | TODO | `get_currency_list` | skeleton |
 | [`/power_service/v1/del_message`](del_message.md) | TODO | - | skeleton |
+| [`/power_service/v1/device/get_tamper_records`](device/get_tamper_records.md) | TODO | `get_tamper_records` | skeleton |
 | [`/power_service/v1/dynamic_price/check_adjust`](dynamic_price/check_adjust.md) | TODO | - | skeleton |
 | [`/power_service/v1/dynamic_price/check_available`](dynamic_price/check_available.md) | TODO | `get_dynamic_price_sites` | skeleton |
 | [`/power_service/v1/dynamic_price/price_detail`](dynamic_price/price_detail.md) | TODO | `get_dynamic_price_details` | skeleton |
@@ -115,6 +137,9 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/product_accessories`](product_accessories.md) | TODO | `get_product_accessories` | skeleton |
 | [`/power_service/v1/product_categories`](product_categories.md) | TODO | `get_product_categories` | skeleton |
 | [`/power_service/v1/read_message`](read_message.md) | TODO | - | skeleton |
+| [`/power_service/v1/rfid/delete_device_card`](rfid/delete_device_card.md) | TODO | - | skeleton |
+| [`/power_service/v1/rfid/get_device_cards`](rfid/get_device_cards.md) | TODO | `get_device_rfid_cards` | skeleton |
+| [`/power_service/v1/rfid/save_device_card`](rfid/save_device_card.md) | TODO | - | skeleton |
 | [`/power_service/v1/set_user_site_param`](set_user_site_param.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/add_charging_device`](site/add_charging_device.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/add_site_devices`](site/add_site_devices.md) | TODO | - | skeleton |
@@ -124,6 +149,8 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/site/delete_charging_device`](site/delete_charging_device.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/delete_site`](site/delete_site.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/delete_site_devices`](site/delete_site_devices.md) | TODO | - | skeleton |
+| [`/power_service/v1/site/electrician/add`](site/electrician/add.md) | TODO | - | skeleton |
+| [`/power_service/v1/site/electrician/get`](site/electrician/get.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/energy_analysis`](site/energy_analysis.md) | TODO | `energy_analysis` | skeleton |
 | [`/power_service/v1/site/get_addable_site_list`](site/get_addable_site_list.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/get_charging_device`](site/get_charging_device.md) | TODO | `charging_devices` | skeleton |
@@ -133,6 +160,7 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/site/get_scen_info`](site/get_scen_info.md) | TODO | `scene_info` | skeleton |
 | [`/power_service/v1/site/get_schedule`](site/get_schedule.md) | TODO | `get_forecast_schedule` | skeleton |
 | [`/power_service/v1/site/get_site_detail`](site/get_site_detail.md) | TODO | `site_detail` | skeleton |
+| [`/power_service/v1/site/get_site_detail_by_sn`](site/get_site_detail_by_sn.md) | TODO | `site_detail_by_sn` | skeleton |
 | [`/power_service/v1/site/get_site_device_param`](site/get_site_device_param.md) | TODO | `get_device_parm` | skeleton |
 | [`/power_service/v1/site/get_site_list`](site/get_site_list.md) | TODO | `site_list` | skeleton |
 | [`/power_service/v1/site/get_site_price`](site/get_site_price.md) | TODO | `get_site_price` | skeleton |
@@ -141,7 +169,7 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/site/list_user_devices`](site/list_user_devices.md) | TODO | `user_devices` | skeleton |
 | [`/power_service/v1/site/local_net`](site/local_net.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/reset_charging_device`](site/reset_charging_device.md) | TODO | - | skeleton |
-| [`/power_service/v1/site/set_device_feature`](site/set_device_feature.md) | TODO | - | removed in 3.24.3, skeleton |
+| [`/power_service/v1/site/set_device_feature`](site/set_device_feature.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/set_site_device_param`](site/set_site_device_param.md) | Writes one site-level parameter set, selected by `param_type`, for a site; with `param_type` 19 it sets the system output power limit of a station. | `set_device_parm` | hand-written |
 | [`/power_service/v1/site/shift_power_site_type`](site/shift_power_site_type.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/site_data_check`](site/site_data_check.md) | TODO | - | skeleton |
@@ -150,6 +178,7 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v1/site/update_site`](site/update_site.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/update_site_devices`](site/update_site_devices.md) | TODO | - | skeleton |
 | [`/power_service/v1/site/update_site_price`](site/update_site_price.md) | TODO | `update_site_price` | skeleton |
+| [`/power_service/v2/app/get_custom_branch_icon`](v2/app/get_custom_branch_icon.md) | TODO | - | skeleton |
 | [`/power_service/v2/app/get_hardware_relation`](v2/app/get_hardware_relation.md) | TODO | - | skeleton |
 | [`/power_service/v2/app/set_device_pv_name`](v2/app/set_device_pv_name.md) | TODO | - | skeleton |
 | [`/power_service/v2/device/energy_analysis`](v2/device/energy_analysis.md) | TODO | - | skeleton |
@@ -160,6 +189,7 @@ Service index for the URL prefix `/power_service/`. Each endpoint page is the si
 | [`/power_service/v2/platform_get_pn_region_code`](v2/platform_get_pn_region_code.md) | TODO | - | skeleton |
 | [`/power_service/v2/platform_get_user_region_param`](v2/platform_get_user_region_param.md) | TODO | - | skeleton |
 | [`/power_service/v2/platform_set_user_region_param`](v2/platform_set_user_region_param.md) | TODO | - | skeleton |
+| [`/power_service/v2/site/platform_energy_analysis_options`](v2/site/platform_energy_analysis_options.md) | TODO | - | skeleton |
 | [`/power_service/v2/site/platform_get_site_savings`](v2/site/platform_get_site_savings.md) | TODO | - | skeleton |
 | [`/power_service/v2/site/platform_get_site_scene`](v2/site/platform_get_site_scene.md) | TODO | - | skeleton |
 

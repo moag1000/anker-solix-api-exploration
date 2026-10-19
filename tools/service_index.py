@@ -72,9 +72,27 @@ def build(endpoints, api):
     for r in endpoints['rows']:
         by.setdefault(r['url'], []).append(r)
     svc = {}
+    covered = set()
     for url in sorted(by):
         p = render_pages.endpoint_path(url)  # api/<service>/.../<name>.md
+        covered.add(p)
         svc.setdefault(p.split('/')[1], []).append((url, p))
+    # pages on disk with no inventory row (hand-added, e.g. a URL the app never
+    # sends) keep their row; the url shown is the page path without `.md`
+    for service in sorted(os.listdir(api)):
+        top = os.path.join(api, service)
+        if not os.path.isdir(top):
+            continue
+        for dirpath, _, files in os.walk(top):
+            for f in sorted(files):
+                if not f.endswith('.md') or f == 'README.md':
+                    continue
+                rel = os.path.relpath(os.path.join(dirpath, f), api)
+                p = 'api/' + rel.replace(os.sep, '/')
+                if p in covered:
+                    continue
+                url = '/' + p[len('api/'):-len('.md')]
+                svc.setdefault(service, []).append((url, p))
     out = {}
     summary = []
     for s in sorted(svc):
@@ -89,13 +107,20 @@ def build(endpoints, api):
         nskel = 0
         for url, p in sorted(svc[s], key=lambda x: x[1]):
             disk = os.path.join(api, os.path.relpath(p, 'api'))
-            skel, purpose, keys, status = page_info(disk, by[url])
+            if url in by:
+                skel, purpose, keys, status = page_info(disk, by[url])
+            else:
+                skel, purpose, keys, status = page_info(disk, [])
+                status = 'hand-written, not in `data/endpoints.json`'
+                if skel:
+                    status = 'skeleton, not in `data/endpoints.json`'
+                    purpose = 'TODO'
             nskel += skel
             L.append('| [`%s`](%s) | %s | %s | %s |' % (
                 url, os.path.relpath(p, 'api/' + s), purpose, keys, status))
         L += ['', NOT_HERE.replace('../', '../../'), '']
         out[os.path.join(api, s, 'README.md')] = '\n'.join(L)
-        summary.append((s, len(svc[s]), nskel))
+        summary.append((s, sum(1 for u, _ in svc[s] if u in by), nskel))
     total = sum(n for _, n, _ in summary)
     gone = sum(1 for u, rs in by.items() if all(r.get('removed_in') for r in rs))
     L = [HDR, '', '# API', '', INTRO, '', '## Service index', '',

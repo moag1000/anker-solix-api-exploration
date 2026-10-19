@@ -7,6 +7,7 @@ Service index for the URL prefix `/devicecontrol/`. Each endpoint page is the si
 | endpoint | purpose | upstream key | status |
 |---|---|---|---|
 | [`/devicecontrol/v1/app/get_self_check_record`](app/get_self_check_record.md) | TODO | - | skeleton |
+| [`/devicecontrol/v1/app/record_device_command`](app/record_device_command.md) | TODO | - | skeleton |
 | [`/devicecontrol/v1/app/report_event_data`](app/report_event_data.md) | TODO | - | skeleton |
 | [`/devicecontrol/v1/app/self_check_report`](app/self_check_report.md) | TODO | - | skeleton |
 | [`/devicecontrol/v1/device/verify_unlock_default_power_code`](device/verify_unlock_default_power_code.md) | Checks an unlock code that the user types into the "DIY legal power limit" prompt before the app sets an output limit above the legal limit. | - | hand-written |

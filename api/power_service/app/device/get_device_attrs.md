@@ -13,7 +13,7 @@
 ## Method+URL
 
 `/power_service/v1/app/device/get_device_attrs`, method: not extracted by the inventory <!-- TODO -->; string-only: `ak_soft_ems/util/timezone_util.dart @0x22ba254`
-(literal also at 23 more site(s) in `data/endpoints.json`)
+(literal also at 24 more site(s) in `data/endpoints.json`)
 
 ## Encrypted?
 
@@ -33,7 +33,7 @@ encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header r
 | `not_include_nem` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4974` |
 | `currency` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4974` |
 
-Rows are the union over 6 senders; `source` is the first sender that sets the key.
+Rows are the union over 7 senders; `source` is the first sender that sets the key.
 
 ## `param_type`/`cmd`
 
@@ -60,6 +60,7 @@ n/a
 - `ak_soft_ems/util/timezone_util.dart`: `getDeviceTimezone` @0x22ba090 (URL literal only, no `*Http*` call)
 - `ak_soft_pps_ems/src/modules/pps_tou/service/pps_tou_http_service.dart`: `getTouElectricAttrs` @0x2a3ebd0 (encryptionRequestHttp; encrypted: true)
 - `as200/src/page/home/as200_home_logic.dart`: `_getLowLoadAutoShutdownTimeout` @0x29f088c (encryptionRequestHttp; encrypted: true)
+- `ats_ax170/src/sdk/command/ax170_command.dart`: `getCustomBranchList` @0x27d664c (URL literal only, no `*Http*` call)
 - `charging/http/http_request_repository_impl.dart`: `getDeviceAttrs` @0x239ec40 (encryptionRequestHttp; encrypted: true); `getDeviceAttrsInfo` @0x2384088 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/electricity_price_common/electricity_usage_helper.dart`: `<anonymous closure> in ElectricityUsageHelper::getPriceType` @0x35f72e8 (URL literal only, no `*Http*` call); `getPriceType` @0x35f70c8 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/electricity_price_common/tou_auto_preview/tou_auto_price_pkg_result_logic.dart`: `_getDevicePriceUnit` @0x31acd90 (encryptionRequestHttp; encrypted: true)

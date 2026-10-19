@@ -13,6 +13,7 @@
 ## Method+URL
 
 `/power_service/v1/site/add_site_devices`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x26f705c`
+(literal also at 1 more site(s) in `data/endpoints.json`)
 
 ## Encrypted?
 
@@ -20,7 +21,13 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-No request keys found by the extractor. <!-- TODO -->
+| field | type | required | example | source |
+|---|---|---|---|---|
+| `site_id` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3964400` |
+| `charging_pile_list` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3964400` |
+| `path` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3964400` |
+| `method` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3964400` |
+| `param` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3964400` |
 
 ## `param_type`/`cmd`
 
@@ -45,6 +52,7 @@ n/a
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `multiAddDeviceInfo` @0x26f6f78 (encryptionRequestHttp; encrypted: true)
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `addSiteDevice` @0x3964400 (URL literal only, no `*Http*` call)
 
 Called from:
 

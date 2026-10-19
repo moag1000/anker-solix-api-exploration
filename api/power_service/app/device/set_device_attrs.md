@@ -13,7 +13,7 @@
 ## Method+URL
 
 `/power_service/v1/app/device/set_device_attrs`, method: not extracted by the inventory <!-- TODO -->; string-only: `ak_soft_pps_ems/src/modules/pps_tou/service/pps_tou_http_service.dart @0x27e3cc4`
-(literal also at 25 more site(s) in `data/endpoints.json`)
+(literal also at 26 more site(s) in `data/endpoints.json`)
 
 ## Encrypted?
 
@@ -26,6 +26,12 @@ Some senders wrap these keys in `param_data` as a JSON string (`jsonEncode`); ou
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `pps_use_time` | ? | ? | ? | `ak_soft_pps_ems/src/modules/pps_tou/service/pps_tou_http_service.dart @0x27e3af8` |
+| `path` | ? | ? | ? | `ats_ax170/src/sdk/command/ax170_command.dart @0x2f2cd4c` |
+| `method` | ? | ? | ? | `ats_ax170/src/sdk/command/ax170_command.dart @0x2f2cd4c` |
+| `param.device_sn` | ? | ? | ? | `ats_ax170/src/sdk/command/ax170_command.dart @0x2f2cd4c` |
+| `param.attributes.custom_branch.custom_branches` | ? | ? | ? | `ats_ax170/src/sdk/command/ax170_command.dart @0x2f2cd4c` |
+| `param.attributes.custom_branch.third_party_pv_connect_status` | ? | ? | ? | `ats_ax170/src/sdk/command/ax170_command.dart @0x2f2cd4c` |
+| `param.attributes.custom_branch.third_party_diesel_connect_status` | ? | ? | ? | `ats_ax170/src/sdk/command/ax170_command.dart @0x2f2cd4c` |
 | `device_sn` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x2624ed8` |
 | `attributes.currency` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x2624ed8` |
 | `attributes.switch_0w` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3d90a90` |
@@ -56,7 +62,7 @@ Some senders wrap these keys in `param_data` as a JSON string (`jsonEncode`); ou
 | `attributes.load_port_setting` | ? | ? | ? | `settings/src/common/page/load_port_setting/load_port_settings_controller.dart @0x2e889f4` |
 | `attributes.load_port_name` | ? | ? | ? | `settings/src/common/page/load_port_setting/load_port_settings_controller.dart @0x3a68038` |
 
-Rows are the union over 24 senders; `source` is the first sender that sets the key.
+Rows are the union over 25 senders; `source` is the first sender that sets the key.
 
 ## `param_type`/`cmd`
 
@@ -81,6 +87,7 @@ n/a
 ## Callers in app
 
 - `ak_soft_pps_ems/src/modules/pps_tou/service/pps_tou_http_service.dart`: `setTouElectricAttrs` @0x27e3af8 (encryptionRequestHttp; encrypted: true)
+- `ats_ax170/src/sdk/command/ax170_command.dart`: `setCustomBranchList` @0x2f2cd4c (URL literal only, no `*Http*` call)
 - `charging/http/http_request_repository_impl.dart`: `getCurrencySetDeviceAttrs` @0x2624ed8 (encryptionRequestHttp; encrypted: true); `setDeviceAttrsInfo` @0x386acd0 (encryptionRequestHttp; encrypted: true); `setDeviceFeedGridSwitch` @0x3d90a90 (encryptionRequestHttp; encrypted: true); `setDeviceGameStatus` @0x2703b6c (encryptionRequestHttp; encrypted: true); `setDevicePowerOptionsReq` @0x2276948 (encryptionRequestHttp; encrypted: true); `setDevicePvPowerOptionsReq` @0x3d97864 (encryptionRequestHttp; encrypted: true); `setLocationTag` @0x386ae3c (encryptionRequestHttp; encrypted: true); `setPpsSolarName` @0x42b8c80 (encryptionRequestHttp; encrypted: true); `setSolarName` @0x307aea4 (encryptionRequestHttp; encrypted: true)
 - `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart`: `setGridConnectedInput` @0x3d91390 (encryptionRequestHttp; encrypted: true)
 - `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_power_limit/station_power_limit_logic.dart`: `_setDevicePowerLimit` @0x4356240 (encryptionRequestHttp; encrypted: true)

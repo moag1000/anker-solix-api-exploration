@@ -13,7 +13,7 @@
 ## Method+URL
 
 `/power_service/v1/site/get_site_list`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x28c2ffc`
-(literal also at 1 more site(s) in `data/endpoints.json`)
+(literal also at 2 more site(s) in `data/endpoints.json`)
 
 ## Encrypted?
 
@@ -24,6 +24,11 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `/power_service/v1/site/get_site_list` | ? | ? | ? | `charging/ui/page/home/home_base_http_reposity.dart @0x238e380` |
+| `path` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2aaea38` |
+| `method` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2aaea38` |
+| `param` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2aaea38` |
+
+Rows are the union over 2 senders; `source` is the first sender that sets the key.
 
 ## `param_type`/`cmd`
 
@@ -49,6 +54,7 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getUserSiteList` @0x28c2f6c (encryptionRequestHttp; encrypted: true)
 - `charging/ui/page/home/home_base_http_reposity.dart`: `querySiteList` @0x238e380 (encryptionRequestHttp; encrypted: true)
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getUserSiteList` @0x2aaea38 (URL literal only, no `*Http*` call)
 
 Called from:
 

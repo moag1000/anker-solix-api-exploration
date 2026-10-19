@@ -98,8 +98,11 @@ class InventoryTests(unittest.TestCase):
         self.assertNotIn('removed_in', by_url[
             '/power_service/v1/app/get_device_last_exercise_log'])
         self.assertEqual(
-            by_url['/power_service/v1/site/set_device_feature']['removed_in'],
-            '3.24.3')
+            by_url['/charging_disaster_prepared/clear']['removed_in'], '3.24.3')
+        # set_device_feature is still used in 3.24.3 as a literal without leading
+        # slash (ev_charge_command.dart), so it is not removed
+        self.assertNotIn('removed_in', by_url[
+            '/power_service/v1/site/set_device_feature'])
 
     def test_upstream_key(self):
         rows = inventory_new()['rows']
@@ -186,8 +189,9 @@ class DiffTests(unittest.TestCase):
         gone = '/power_service/v1/app/get_device_last_exercise_log'
         self.assertNotIn(gone, d['removed_endpoints'])
         self.assertNotIn(gone, d['added_endpoints'])
-        self.assertIn('/power_service/v1/site/set_device_feature',
-                      d['removed_endpoints'])
+        self.assertIn('/charging_disaster_prepared/clear', d['removed_endpoints'])
+        self.assertNotIn('/power_service/v1/site/set_device_feature',
+                         d['removed_endpoints'])
         md = diff_versions.render_markdown(d, '3.18.0', '3.24.3')
         for h in ('## Added endpoints', '## Removed endpoints',
                   '## Changed params', '## Added models', '## Removed models',
@@ -422,3 +426,59 @@ class OutputGuardTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class UrlLiteralTests(unittest.TestCase):
+    """URL literals without a leading slash (synthetic, fast)."""
+
+    def test_noslash_literals_found_and_normalised(self):
+        import asmparse
+        for lit in ('devicecontrol/v1/app/record_device_command',
+                    'generator/v1/app/get_standby_exercise_plan',
+                    'power_service/v1/app/order/get_charging_order_list',
+                    'foo_bar/v2/x/y'):
+            self.assertEqual(asmparse.url_literal('r16 = "%s"' % lit),
+                             ('r16', '/' + lit))
+        self.assertEqual(asmparse.url_literal('r0 = "/power_service/v1/x/y"'),
+                         ('r0', '/power_service/v1/x/y'))
+
+    def test_dart_package_paths_are_not_urls(self):
+        import asmparse
+        for lit in ('charging_platform/src/foo/bar.dart',
+                    'charging_beginning/ui/page/x.dart',
+                    'charging_uikit/widget/y.dart'):
+            self.assertIsNone(asmparse.url_literal('r16 = "%s"' % lit))
+            self.assertIsNone(asmparse.URL_PRECHECK_RE.search('= "%s"' % lit))
+
+
+@need(ROOT_NEW, ROOT_OLD)
+class NoSlashInventoryTests(unittest.TestCase):
+    def test_noslash_urls_in_inventory(self):
+        by_url = {}
+        for r in inventory_new()['rows']:
+            by_url.setdefault(r['url'], []).append(r)
+        for u in ('/devicecontrol/v1/app/record_device_command',
+                  '/generator/v1/app/get_standby_exercise_plan',
+                  '/power_service/v1/app/order/get_charging_order_list'):
+            self.assertIn(u, by_url)
+        self.assertFalse([u for u in by_url if u.startswith('/charging_platform')
+                          or u.startswith('/charging_beginning')
+                          or u.startswith('/charging_uikit')])
+        self.assertFalse([u for u in by_url if u.startswith('//')])
+
+
+class ServiceIndexOrphanTests(unittest.TestCase):
+    def test_page_without_inventory_row_keeps_its_row(self):
+        import service_index
+        import tempfile
+        with tempfile.TemporaryDirectory() as td:
+            os.makedirs(os.path.join(td, 'passport'))
+            with open(os.path.join(td, 'passport', 'external_login.md'), 'w') as fh:
+                fh.write('> Verified against: App 3.24.3 · Date: x · Confidence: '
+                         'asm-traced · Owner page: this page\n\n# external_login\n\n'
+                         '## Purpose\n\nA hand-written purpose.\n')
+            out, _ = service_index.build({'rows': []}, td)
+            txt = out[os.path.join(td, 'passport', 'README.md')]
+            self.assertIn('[`/passport/external_login`](external_login.md) | '
+                          'A hand-written purpose.', txt)
+            self.assertIn('not in `data/endpoints.json`', txt)
