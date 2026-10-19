@@ -12,14 +12,14 @@ Service index for the URL prefix `/app/`. Each endpoint page is the single owner
 | [`/app/cloudstor/get_down_load_urls`](cloudstor/get_down_load_urls.md) | TODO | - | skeleton |
 | [`/app/devicemanage/update_relate_device_info`](devicemanage/update_relate_device_info.md) | TODO | - | skeleton |
 | [`/app/devicerelation/clear_share`](devicerelation/clear_share.md) | TODO | - | skeleton |
-| [`/app/devicerelation/confirm_invite`](devicerelation/confirm_invite.md) | TODO | - | skeleton |
-| [`/app/devicerelation/device_invite`](devicerelation/device_invite.md) | TODO | - | skeleton |
-| [`/app/devicerelation/get_shared_device`](devicerelation/get_shared_device.md) | TODO | `get_shared_device` | skeleton |
-| [`/app/devicerelation/ignore_invite`](devicerelation/ignore_invite.md) | TODO | - | skeleton |
+| [`/app/devicerelation/confirm_invite`](devicerelation/confirm_invite.md) | Accepts an invitation to share an EV charger (the invited person confirms the share of a device). | - | hand-written |
+| [`/app/devicerelation/device_invite`](devicerelation/device_invite.md) | Invites a person (by email or phone) to share an EV charger: the owner enters a nick name and an email address or phone number and the cloud sends the invitation. | - | hand-written |
+| [`/app/devicerelation/get_shared_device`](devicerelation/get_shared_device.md) | Lists the share entries of a device (members the EV charger is shared with, with their status) so the owner can see who has access and how many more members can be invited. | `get_shared_device` | hand-written |
+| [`/app/devicerelation/ignore_invite`](devicerelation/ignore_invite.md) | Rejects or withdraws a device share: the invited member ignores an invitation, or the owner cancels an invitation to a given receiver. | - | hand-written |
 | [`/app/devicerelation/relate_device`](devicerelation/relate_device.md) | TODO | - | skeleton |
 | [`/app/devicerelation/un_relate_and_unbind_device`](devicerelation/un_relate_and_unbind_device.md) | TODO | - | skeleton |
 | [`/app/devicerelation/up_alias_name`](devicerelation/up_alias_name.md) | TODO | - | skeleton |
-| [`/app/devicerelation/update_share`](devicerelation/update_share.md) | TODO | - | skeleton |
+| [`/app/devicerelation/update_share`](devicerelation/update_share.md) | Removes a member from the share of an EV charger: the owner deletes the share for a user (the request carries `is_delete: true`). | - | hand-written |
 | [`/app/help/add_feedback`](help/add_feedback.md) | TODO | - | skeleton |
 | [`/app/help/app_versions/check`](help/app_versions/check.md) | TODO | - | skeleton |
 | [`/app/help/banner/nps`](help/banner/nps.md) | TODO | - | skeleton |

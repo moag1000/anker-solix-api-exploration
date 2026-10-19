@@ -1,31 +1,31 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Owner page: this page
 
 # delete_charging_order
 
 ## Purpose
 
-<!-- TODO -->
+Deletes one charging order of an EV charger from the account's history.
 
 ## Upstream name
 
-`none` (no upstream name)
+`none` (no upstream name). Upstream lists the URL without a key in `api/apitypes.py` (line 294, docstring list of endpoints "neither implemented nor explored"); the comment there (no comment on this entry) is the upstream author's note, not a test result.
 
 ## Method+URL
 
-`/power_service/v1/app/order/delete_charging_order`, method: not extracted by the inventory <!-- TODO -->; string-only: `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x395b540`
+`POST /power_service/v1/app/order/delete_charging_order` (asm-traced). Sender: `AKIotEVChargeCommand.deleteChargingSession` (`ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart` `@0x395b4e4`). The path literal has no leading slash (`@0x395b540`), the method is the string `"POST"` (`@0x395b558`), and the map keys `path`, `method`, `param` are stored at `@0x395b538`, `@0x395b54c`, `@0x395b564`.
 
 ## Encrypted?
 
-encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Direct SDK call, path C (asm-traced): the command function calls `AKIoTKitManagerImpl.handle` with the identifier `akiot.cloud_api` (`ev_charge_command.dart @0x395b5f4`, call `@0x395b604`) and no `*Http*` wrapper, so the inventory flag `encrypted: false` only says that no wrapper is called. The SDK sends the request natively; what it encrypts is not visible in Dart (mechanics: [../../../sdk_senders.md](../../../sdk_senders.md#the-common-envelope), background: [../../../encryption.md](../../../encryption.md#rule-and-resulting-counts)).
 
 ## Request
 
+Body (`param`) is a `<String, String>` map of two pairs (`r2 = 8`, `@0x395b574`).
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `path` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x395b4e4` |
-| `method` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x395b4e4` |
-| `param.order_id` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x395b4e4` |
-| `param.device_sn` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x395b4e4` |
+| `order_id` | String | yes | `<order id>` | `ev_charge_command.dart @0x395b57c` |
+| `device_sn` | String | yes | `<device sn>` | `ev_charge_command.dart @0x395b590` |
 
 ## `param_type`/`cmd`
 
@@ -33,31 +33,36 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+n/a (asm-traced): `handle` is called without a type argument (`stp x16, NULL`, `@0x395b5f0`); no model is parsed.
 
 ## Response
 
-<!-- TODO -->
+The sender returns the untyped `IoTAKResult`; the caller listed below receives it. What the answer body contains is not read by this sender.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized
+
+```json
+{ "order_id": "<order id>", "device_sn": "<device sn>" }
+```
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+No error code specific to this endpoint was traced; the shared transport codes are in [../../../encryption.md](../../../encryption.md#response-handling-and-error-codes). `api/errors.md` does not exist yet (Task 4.2).
 
 ## Callers in app
 
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `deleteChargingSession` @0x395b4e4 (URL literal only, no `*Http*` call)
+- `SessionsDetailLogic._performDeleteSession` (`ev_charger/src/ev_charger/page/home/charge_sessions/sessions_detail/sessions_detail_logic.dart @0x395b15c`)
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present (URL string in the 3.18.0 object pool, `pp+0x83520`); the sender function has the same sequence of string, integer and type literals in 3.18.0 (compared with a throwaway script, not committed). Not new in 3.24.3: the Task 3.1b inventory change (slashless URL literals) made the URL visible, nothing changed in the app. 3.24.3: present, unchanged. since: ≤3.18.0.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Whether the deletion is permanent and whether a charger-side record also disappears is not known.
+- How the caller reacts to a failure result was not read.
 
 ## Device-tested by
 

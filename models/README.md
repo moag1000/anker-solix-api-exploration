@@ -9,11 +9,16 @@ Not here: which endpoint returns a model (see [../api/README.md](../api/README.m
 ## Dedicated model pages (template layout)
 
 - [a5190_device_info.md](a5190_device_info.md): `A5190DeviceInfo`, the EV charger device state (Modbus TCP keys only).
+- [branch_icon_models.md](branch_icon_models.md): `BranchIconModel` and `BranchIconInfo`, the AX170 branch icon catalogue (`get_custom_branch_icon`).
 - [combine_box_entity.md](combine_box_entity.md): `CombineBoxEntity`, combiner box serial and image (`param_type` 16).
 - [device_power_config.md](device_power_config.md): `DevicePowerConfigItem`, the answer of `get_devices_power_config`.
+- [device_share_models.md](device_share_models.md): `DeviceShareListResponse`, `DeviceShareListModel`, `DeviceShareInstallerListModel` and `DeviceShareInstallerItem`, the device-sharing answers of the EV charger app.
 - [dynamic_price_company_model.md](dynamic_price_company_model.md): `DynamicPriceCompanyModel` and its provider classes, the answer of `get_price_company` (installer service).
 - [dynamic_price_server_model.md](dynamic_price_server_model.md): `ThirdJumpModel`, `SaveDynamicPriceResponse` and `FlatpeakSetting`, the Tibber/Flatpeak setup answers.
 - [electricity_price_model.md](electricity_price_model.md): `ElectricityPriceModel`, `TouPrice` and `DynamicPrice`, the answer of `get_price` (installer service).
+- [ev_charger_device_models.md](ev_charger_device_models.md): EV charger RFID, tamper-log, site-info, group-device and OCPP models (`A5190RfidCardModel`, `A5190SecurityLogsModel`, `EvChargerSiteInfoModel`, `GroupDeviceModel`, `OcppListModel`, `OCPPServerLinkInfoModel`).
+- [ev_charger_session_models.md](ev_charger_session_models.md): EV charger charging-order models (`A5190ChargeSessionsModel`, `A5190SessionsDetailModel`, `ChargerSessionChartModel`, `ChargerSessionOrderListModel`, order power-point models, export model).
+- [ev_charger_vehicle_models.md](ev_charger_vehicle_models.md): vehicle models (`EvListModel`, `VehicleModel`, `ScheduleVehicleModel`).
 - [feed_grid_setting_param.md](feed_grid_setting_param.md): `FeedGridSettingParam` and `FeedTimes`, two variants for `param_type` 28 and 18.
 - [feed_net_work_limit_entity.md](feed_net_work_limit_entity.md): `FeedNetWorkLimitEntity`, the cached UI state of the old feed-limit page.
 - [get_site_device_param_response.md](get_site_device_param_response.md): `GetSiteDeviceParamResponse`, `SiteDeviceParamData`, `SiteSocItem`, `FeedTimes` and the request object `SetSiteDeviceParamData` (`param_type` 18, 26).

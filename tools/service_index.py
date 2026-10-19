@@ -25,7 +25,9 @@ HDR = ('> Verified against: App 3.24.3 · Date: %s · Page type: guidance '
 INTRO = (
     "This directory holds one page per cloud endpoint, grouped by service (the "
     "first URL segment after the host), plus the cross-cutting pages "
-    "`param_types.md`, `errors.md`, `auth.md` and `encryption.md`. An endpoint "
+    "`param_types.md`, `errors.md`, `auth.md`, `encryption.md` and "
+    "`sdk_senders.md` (the direct SDK senders several endpoint groups share). "
+    "An endpoint "
     "page is the single owner of that endpoint's request parameters, response "
     "payload and confidence tags. Paths follow the naming rule in "
     "[../docs/STRUCTURE.md](../docs/STRUCTURE.md#naming-conventions): `v1` is "

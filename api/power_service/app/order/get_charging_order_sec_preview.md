@@ -1,33 +1,35 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Owner page: this page
 
 # get_charging_order_sec_preview
 
 ## Purpose
 
-<!-- TODO -->
+Reads a page of preview blocks of the second-level power points of one charging order of an EV charger (the overview that selects which block to zoom into).
 
 ## Upstream name
 
-`none` (no upstream name)
+`none` (no upstream name). Upstream lists the URL without a key in `api/apitypes.py` (line 292, docstring list of endpoints "neither implemented nor explored"); the comment there ("may need real EV_Charger? {\"order_id\": orderId}") is the upstream author's note, not a test result.
 
 ## Method+URL
 
-`/power_service/v1/app/order/get_charging_order_sec_preview`, method: not extracted by the inventory <!-- TODO -->; string-only: `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x35f2d78`
+`POST /power_service/v1/app/order/get_charging_order_sec_preview` (asm-traced). Sender: `AKIotEVChargeCommand.getSessionsOrderSecPreview` (`ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart` `@0x35f2d18`). The path literal has no leading slash (`@0x35f2d78`), the method is the string `"POST"` (`@0x35f2d90`), and the map keys `path`, `method`, `param` are stored at `@0x35f2d70`, `@0x35f2d84`, `@0x35f2d9c`.
 
 ## Encrypted?
 
-encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Direct SDK call, path C (asm-traced): the command function calls `AKIoTKitManagerImpl.handle` with the identifier `akiot.cloud_api` (`ev_charge_command.dart @0x35f2e74`, call `@0x35f2e84`) and no `*Http*` wrapper, so the inventory flag `encrypted: false` only says that no wrapper is called. The SDK sends the request natively; what it encrypts is not visible in Dart (mechanics: [../../../sdk_senders.md](../../../sdk_senders.md#the-common-envelope), background: [../../../encryption.md](../../../encryption.md#rule-and-resulting-counts)).
 
 ## Request
 
+Body (`param`) is a `<String, Object>` map of four pairs (`r2 = 16`, `@0x35f2dac`).
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `path` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x35f2d18` |
-| `method` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x35f2d18` |
-| `param.order_id` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x35f2d18` |
-| `param.page_num` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x35f2d18` |
-| `param.page_size` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x35f2d18` |
-| `param.device_sn` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x35f2d18` |
+| `order_id` | String | yes | `<order id>` | `ev_charge_command.dart @0x35f2db8` |
+| `page_num` | int | yes | `1` | `ev_charge_command.dart @0x35f2dcc`; boxed with `BoxInt64Instr` (`@0x35f2ddc`), unboxed int64 |
+| `page_size` | int | yes (constant) | `20` | `ev_charge_command.dart @0x35f2df4`; raw `40` at `@0x35f2e00`, `stur w16`, a Smi, so 20 (`tools/smi.py`) |
+| `device_sn` | String | yes | `<device sn>` | `ev_charge_command.dart @0x35f2e08` |
+
+Upstream's comment lists only `order_id`; the app sends the four keys above.
 
 ## `param_type`/`cmd`
 
@@ -35,31 +37,40 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+`A5190SessionsOrderSecPreview` ([../../../../models/ev_charger_session_models.md](../../../../models/ev_charger_session_models.md#a5190sessionsordersecpreview)), taken from the type argument of `handle<A5190SessionsOrderSecPreview>` (ev_charge_command.dart `@0x35f2e64`)
 
 ## Response
 
-<!-- TODO -->
+The SDK result is typed `IoTAKResult<A5190SessionsOrderSecPreview>`; the keys are on the model page. The wrapper `data` of `A5190SessionsOrderSecPreview.fromJson` is described there. The caller reads the result type before using the data.
+
+| field | type | required | example | source |
+|---|---|---|---|---|
+| `data` | String (JSON text) or map | no |  | `a5190_sessions_order_sec_preview.dart @0x45b1acc` |
+| `page_num`, `order_id`, `list`, `page_size`, `total` | see model page | no |  | [../../../../models/ev_charger_session_models.md](../../../../models/ev_charger_session_models.md#a5190sessionsordersecpreview) |
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized
+
+```json
+{ "order_id": "<order id>", "page_num": 1, "page_size": 20, "device_sn": "<device sn>" }
+```
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+No error code specific to this endpoint was traced; the shared transport codes are in [../../../encryption.md](../../../encryption.md#response-handling-and-error-codes). `api/errors.md` does not exist yet (Task 4.2).
 
 ## Callers in app
 
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getSessionsOrderSecPreview` @0x35f2d18 (URL literal only, no `*Http*` call)
+- `SecondPowerLogic.getSessionsOrderSecPreview` (`ev_charger/src/ev_charger/page/home/charge_sessions/second_power/second_power_logic.dart @0x35f2cd0`)
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present (URL string in the 3.18.0 object pool, `pp+0x83ae0`); the sender function has the same sequence of string, integer and type literals in 3.18.0 (compared with a throwaway script, not committed). Not new in 3.24.3: the Task 3.1b inventory change (slashless URL literals) made the URL visible, nothing changed in the app. 3.24.3: present, unchanged. since: ≤3.18.0.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- What a `list` block represents (its `start_time` and `power_unit` only are modelled) is not decoded; the actual power values arrive from [get_charging_order_sec_detail](get_charging_order_sec_detail.md).
 
 ## Device-tested by
 

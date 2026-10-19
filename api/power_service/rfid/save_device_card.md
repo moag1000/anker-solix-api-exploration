@@ -1,32 +1,32 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Owner page: this page
 
 # save_device_card
 
 ## Purpose
 
-<!-- TODO -->
+Stores one RFID card (number and alias) for an EV charger in the cloud; the add-card and edit-card screens call it after the card was written to the charger over BLE.
 
 ## Upstream name
 
-`none` (no upstream name)
+`none` (no upstream name). Upstream lists the URL without a key in `api/apitypes.py` (line 250, docstring list of endpoints "neither implemented nor explored"); the comment there (no comment on this entry) is the upstream author's note, not a test result.
 
 ## Method+URL
 
-`/power_service/v1/rfid/save_device_card`, method: not extracted by the inventory <!-- TODO -->; string-only: `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3216cb4`
+`POST /power_service/v1/rfid/save_device_card` (asm-traced). Sender: `AKIotEVChargeCommand.saveDeviceCard` (`ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart` `@0x3216c54`). The path literal has no leading slash (`@0x3216cb4`), the method is the string `"POST"` (`@0x3216ccc`), and the map keys `path`, `method`, `param` are stored at `@0x3216cac`, `@0x3216cc0`, `@0x3216cd8`.
 
 ## Encrypted?
 
-encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Direct SDK call, path C (asm-traced): the command function calls `AKIoTKitManagerImpl.handle` with the identifier `akiot.cloud_api` (`ev_charge_command.dart @0x3216d7c`, call `@0x3216d8c`) and no `*Http*` wrapper, so the inventory flag `encrypted: false` only says that no wrapper is called. The SDK sends the request natively; what it encrypts is not visible in Dart (mechanics: [../../sdk_senders.md](../../sdk_senders.md#the-common-envelope), background: [../../encryption.md](../../encryption.md#rule-and-resulting-counts)).
 
 ## Request
 
+Body (`param`) is a `<String, String>` map of three pairs (`r2 = 12`, `@0x3216ce8`).
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `path` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3216c54` |
-| `method` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3216c54` |
-| `param.device_sn` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3216c54` |
-| `param.card_number` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3216c54` |
-| `param.alias_name` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3216c54` |
+| `device_sn` | String | yes | `<device sn>` | `ev_charge_command.dart @0x3216cf0` |
+| `card_number` | String | yes | `<card number>` | `ev_charge_command.dart @0x3216d04` |
+| `alias_name` | String | yes | `Garage card` | `ev_charge_command.dart @0x3216d18` |
 
 ## `param_type`/`cmd`
 
@@ -34,31 +34,37 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+n/a (asm-traced): `handle` is called without a type argument.
 
 ## Response
 
-<!-- TODO -->
+Not parsed by the sender.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized
+
+```json
+{ "device_sn": "<device sn>", "card_number": "<card number>", "alias_name": "Garage card" }
+```
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+No error code specific to this endpoint was traced; the shared transport codes are in [../../encryption.md](../../encryption.md#response-handling-and-error-codes). `api/errors.md` does not exist yet (Task 4.2).
 
 ## Callers in app
 
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `saveDeviceCard` @0x3216c54 (URL literal only, no `*Http*` call)
+- `RfidTools.addRfidCard` (`ev_charger/src/ev_charger/page/home/setting/rfid_cards/tools/rfid_tools.dart @0x3216a70`)
+- an anonymous closure in `RfidDetailLogic` (`ev_charger/src/ev_charger/page/home/setting/rfid_cards/rfid_detail/rfid_detail_logic.dart @0x397b064`)
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present (URL string in the 3.18.0 object pool, `pp+0x68f60`); the sender function has the same sequence of string, integer and type literals in 3.18.0 (compared with a throwaway script, not committed). Not new in 3.24.3: the Task 3.1b inventory change (slashless URL literals) made the URL visible, nothing changed in the app. 3.24.3: present, unchanged. since: ≤3.18.0.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Whether the same call renames an existing card (same `card_number`) or creates a duplicate is not known.
+- Whether the app writes the card to the charger before or after this call is not traced here (the BLE command is `setRfidCard`).
 
 ## Device-tested by
 

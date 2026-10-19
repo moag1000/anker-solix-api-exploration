@@ -1,31 +1,30 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Owner page: this page
 
 # get_vehicle_detail
 
 ## Purpose
 
-<!-- TODO -->
+Reads one vehicle of the account (name, brand, model, year, battery capacity, AC charging power, consumption, Enode id) for the vehicle edit page.
 
 ## Upstream name
 
-`get_user_vehicle_details` in `API_ENDPOINTS` of `api/apitypes.py` (upstream-confirmed).
+`get_user_vehicle_details` (upstream-confirmed, `api/apitypes.py` line 157; upstream comment: "details for given vehicle id, {\"vehicle_id\": vehicleId}").
 
 ## Method+URL
 
-`/power_service/v1/app/vehicle/get_vehicle_detail`, method: not extracted by the inventory <!-- TODO -->; string-only: `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2ab93e4`
+`POST /power_service/v1/app/vehicle/get_vehicle_detail` (asm-traced). Sender: `AKIotEVChargeCommand.getEvDetail` (`ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart` `@0x2ab935c`). The path literal has no leading slash (`@0x2ab93e4`), the method is the string `"POST"` (`@0x2ab93fc`), and the map keys `path`, `method`, `param` are stored at `@0x2ab93dc`, `@0x2ab93f0`, `@0x2ab9408`.
 
 ## Encrypted?
 
-encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Direct SDK call, path C (asm-traced): the command function calls `AKIoTKitManagerImpl.handle` with the identifier `akiot.cloud_api` (`ev_charge_command.dart @0x2ab9438`, call `@0x2ab9448`) and no `*Http*` wrapper, so the inventory flag `encrypted: false` only says that no wrapper is called. The SDK sends the request natively; what it encrypts is not visible in Dart (mechanics: [../../../sdk_senders.md](../../../sdk_senders.md#the-common-envelope), background: [../../../encryption.md](../../../encryption.md#rule-and-resulting-counts)).
 
 ## Request
 
+Body (`param`) is a `<String, String>` map of one pair (`r2 = 4`, `@0x2ab9380`).
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `vehicle_id` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2ab935c` |
-| `path` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2ab935c` |
-| `method` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2ab935c` |
-| `param` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2ab935c` |
+| `vehicle_id` | String | yes | `<vehicle id>` | `ev_charge_command.dart @0x2ab9388` |
 
 ## `param_type`/`cmd`
 
@@ -33,31 +32,40 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+`VehicleModel` ([../../../../models/ev_charger_vehicle_models.md](../../../../models/ev_charger_vehicle_models.md#vehiclemodel)), taken from the type argument of `handle<VehicleModel>` (ev_charge_command.dart `@0x2ab9428`)
 
 ## Response
 
-<!-- TODO -->
+The SDK result is typed `IoTAKResult<VehicleModel>`; the keys are on the model page. The wrapper `data` of `VehicleModel.fromJson` is described there. The caller reads the result type before using the data.
+
+| field | type | required | example | source |
+|---|---|---|---|---|
+| `data` | String (JSON text) or map | no |  | `vehicle_model.dart @0x3222810` |
+| `vehicle_name`, `brand`, `model`, `productive_year`, `battery_capacity`, `ac_max_charging_power`, `energy_consumption_per_100km`, `enode_vehicle_id`, `vehicle_id` | see model page | no |  | [../../../../models/ev_charger_vehicle_models.md](../../../../models/ev_charger_vehicle_models.md#vehiclemodel) |
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized
+
+```json
+{ "vehicle_id": "<vehicle id>" }
+```
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+No error code specific to this endpoint was traced; the shared transport codes are in [../../../encryption.md](../../../encryption.md#response-handling-and-error-codes). `api/errors.md` does not exist yet (Task 4.2).
 
 ## Callers in app
 
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getEvDetail` @0x2ab935c (URL literal only, no `*Http*` call)
+- `VehicleEditLogic.getVehicleDetail` (`ev_charger/src/ev_charger/page/vehicle/vehicle_edit_logic.dart @0x2ab9278`)
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present (URL string in the 3.18.0 object pool, `pp+0xbde80`); the sender function has the same sequence of string, integer and type literals in 3.18.0 (compared with a throwaway script, not committed). Not new in 3.24.3: the Task 3.1b inventory change (slashless URL literals) made the URL visible, nothing changed in the app. 3.24.3: present, unchanged. since: ≤3.18.0.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- No response was captured.
 
 ## Device-tested by
 
