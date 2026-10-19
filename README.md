@@ -28,6 +28,20 @@
 
 ---
 
+## Start here by role
+
+Pick the line that matches what you want to do. Each links to a persona section (who it is for, reading path) and to the first page you need. Details are in [docs/PERSONAS.md](docs/PERSONAS.md).
+
+- **Library maintainer** ("what exactly does the app send?"): [persona](docs/PERSONAS.md#1-library-maintainer), first page [endpoints/power_service_site.md](endpoints/power_service_site.md).
+- **Home Assistant integration developer** ("which setting, which flow, which ranges?"): [persona](docs/PERSONAS.md#2-home-assistant-integration-developer), first page [FLOWS.md](FLOWS.md).
+- **mqtt_monitor user** ("what is field a8 / cmd 0x7c?"): [persona](docs/PERSONAS.md#3-mqtt_monitor-user), first page [BLE_COMMAND_MAP.md](BLE_COMMAND_MAP.md).
+- **BLE project developer** ("opcode, TLV, handshake?"): [persona](docs/PERSONAS.md#4-ble-project-developer), first page [BLE_COMMAND_MAP.md](BLE_COMMAND_MAP.md).
+- **Curious user / newcomer** ("what can be controlled, what is a site?"): [persona](docs/PERSONAS.md#5-curious-user--newcomer), first page [How to use this reference](#how-to-use-this-reference).
+
+These paths point at the current file layout and will move to the new layout during the rework; see [METHODOLOGY.md](METHODOLOGY.md).
+
+---
+
 ## How this was built
 
 | Source | Method | What it provides | Confidence |
