@@ -25,6 +25,7 @@ api/param_types.md        master table (owner of param_type/cmd facts)
 api/errors.md             error code catalog (Task 4.2)
 api/auth.md               login, headers, token, encryption pointer
 api/encryption.md         ECDH payload encryption
+api/sdk_senders.md        direct SDK senders (path C): command map, AkNetwork, ScheduleNetwork
 mqtt/<pn>.md              decoder per product (owner of MQTT field facts), mqtt/envelope.md
 ble/<pn>.md, ble/protocol.md, ble/handshake.md
 flows/<name>.md           step traces, link to owners
@@ -49,6 +50,7 @@ Payload facts live in `api/<service>/<endpoint>.md`; `devices/` and `flows/` lin
 | Error codes | `api/errors.md` |
 | Auth headers and login | `api/auth.md` |
 | Payload encryption and encryption headers | `api/encryption.md` |
+| How the direct SDK senders (command map, `AkNetwork.requestHttp`, `ScheduleNetwork`) build and send a request | `api/sdk_senders.md` |
 | MQTT field maps | `mqtt/<pn>.md` |
 | MQTT envelope | `mqtt/envelope.md` |
 | BLE opcodes and TLV | `ble/<pn>.md` (handshake: `ble/handshake.md`; frame format: `ble/protocol.md`) |
