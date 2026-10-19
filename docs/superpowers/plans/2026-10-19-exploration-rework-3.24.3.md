@@ -164,7 +164,7 @@ Method per task: list integers (not string literals, not upstream, not mqtt_moni
 ### Task 3.7: BLE per PN + new PNs
 - [ ] `ble/protocol.md`, `ble/handshake.md`, `ble/<pn>.md` from `*_device_commands.dart` (3.24.3); new model tokens (`a17c8, a17cx, a17e2, a17b6, a17a2, a1754, a110b/y, a1115, a1201, a120d, a1289, a146*, a1504/5, a156*, a166*, a546*, a556*, a5560, a566b`): classify, `reference/enums.md` product table, `devices/<pn>.md` where a UI page exists → commit.
 
-### Task 3.8: IoT-Kit channels (+24) 
+### Task 3.8: IoT-Kit channels (+22; plan said +24 — corrected 2026-10-19 from the pools: 68 → 90) 
 - [ ] `reference/iot_kit_channels.md`: all `akiot.*` channels, new ones marked (`monitor_ota*`, `is_ota_in_progress`, `get_sub_version_list`, `opening.installer_*`, `pairing.pro_*`, `activate_device_ethernet`, `receive.usb_connect`, `station_scene_bind_event`, `energy.set_device_attrs`, `platform_energy_filter_tree`) → commit.
 
 ### Task 3.9: Flows re-traced on 3.24.3
