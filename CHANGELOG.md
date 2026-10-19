@@ -2,11 +2,12 @@
 
 ## Errata 2026-10 (Smi decoding)
 
-One line per WRONG verdict of the Phase 2 Smi sweeps (full tables in `docs/audit/`).
+One line per WRONG verdict of the Phase 2 Smi sweeps (full tables in `docs/audit/`). Doc line numbers refer to the file BEFORE the banner was added (commit 68bc345); in the current file add 2.
 
 - FLOWS.md:29 — `"cmd": 246` (param_type 6 schedule) → cmd 123 (charging/http/http_request_repository_impl.dart set17C1SiteDeviceParam @0x238cca8 (3.24.3))
 - FLOWS.md:35-36 — "`cmd` = 246 (0xF6) for cloud, NOT 17 ... thomluther uses 17, APK uses 246" → APK sends 123 (0x7B); 17 = setSiteDeviceParam path (charging/http/http_request_repository_impl.dart set17C1SiteDeviceParam @0x238cca8 (3.24.3))
 - FLOWS.md:40 — "up to 30 TLV tags (a2-bb)" → 29 data tags a2-be (+ CRC tag 0xFD) (charging/ble/device/A17C1/a17c1_device_controller.dart setTacticsTime @0x288ac88 (AllocateArray), keys @0x288ac90..0x288ae50 (3.24.3))
+- FLOWS.md:40 — "timestamp (fd)": tag fd is a timestamp → tag 0xFD = CRC32, not a timestamp (charging/ble/device/A17C1/a17c1_device_controller.dart setTacticsTime @0x288b224 (intToList4 of the parsed Crc32.convert), @0x288b238 (3.24.3))
 - FLOWS.md:41 — "MTU = 400 (larger than default 200 ...)" → 200 (and only a non-zero flag) (charging/ble/device/A17C1/a17c1_device_controller.dart setTacticsTime @0x288b274 (3.24.3))
 - FLOWS.md:42 — CRC32 checksum appended as tag `0x1FA (506)` → 0xFD (253) (charging/ble/device/A17C1/a17c1_device_controller.dart setTacticsTime @0x288b238 (3.24.3))
 - FLOWS.md:56, 531 — "Maximum 14 time slots (from 14 buffer allocations)" → 7 slots (charging/ble/device/A17C1/a17c1_device_controller.dart setTacticsTime @0x288ac88 (3.24.3))
@@ -37,6 +38,7 @@ One line per WRONG verdict of the Phase 2 Smi sweeps (full tables in `docs/audit
 - BUSINESS_RULES.md:180-185 — `getPowerLimitList - 22 Attributes Fetched` → 11 (3.18.0) / 14 (3.24.3) (charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart @0x1b9f8bc (3.18.0))
 - BUSINESS_RULES.md:207, 272, 345 — "A17X8 Central Connection Guard ... Default timeout: 30 seconds for command response" (also lines 272, 345) → 5 s command wait (30 s = connect timeout) (charging/ble/device/A17X8/a17x8_device_controller.dart sendCommandWithParam @0x24190c0 (3.24.3))
 - BUSINESS_RULES.md:232 — weekday TLV tag `0x14E` → 0xA7 (charging/ble/device/A17X8/a17x8_device_controller.dart setTimingCmd @0x3de1e8c (3.24.3))
+- BUSINESS_RULES.md:345 — `30s` called the "BLE command timeout" (and background disconnect) → 30 s is the connect timeout; command wait 5 s; background disconnect 30 min (charging/communication/command_controller/ble_command_controller.dart sendCommand @0x226fc88 (3.24.3))
 - BUSINESS_RULES.md:469-475 — HES work modes `0 standBy`, `2 gridOff`, `6 working` → 0 standby, 1-8 working, 255 gridOff (charging/ui/page/device/a5101/setting/grid_dispatch/grid_dispatch_logic.dart WorkMode switch @0x27c7724-0x27c7810 (3.24.3))
 - BUSINESS_RULES.md:566, 571, 768 — Transaction lock "Default timeout: 12 seconds (when no device-specific config)" → 6 s (config present) / 15 s (default) (base_service/ak_iot_kit/transaction/transactionlock_interceptor.dart @0x221b1f0 (3.24.3))
 - BUSINESS_RULES.md:594-597 — Currency decimal places: most markets 5, 2 markets 4 → 5 (A5143, A1903) / 2 (others) (charging_pn.dart @0x29af0dc (3.24.3))
@@ -44,7 +46,7 @@ One line per WRONG verdict of the Phase 2 Smi sweeps (full tables in `docs/audit
 - BUSINESS_RULES.md:693-699 — BLE lockout `Status 15` / `Status 16` → 10 and 11 (pp.txt BleCmdStatus map [pp+0xe480] (3.24.3))
 - ENUMS.md:162-165 — Backup Mode `0 AUTO`, `1 MANUAL` → auto = 1, manual = 0 (charging disaster_preparedness_command.dart setBackup @0x3574770 (3.24.3, ak_soft_pps_ems))
 - ENUMS.md:166 — Backup Mode `4 CLEAR` → 2 (ak_soft_pps_ems/src/disaster_preparedness/command/disaster_preparedness_command.dart clearBackup @0x2603c00 (3.24.3))
-- ENUMS.md:331-337 — BLE Command Status `7 scanWifiFailed .. 13 fireWarmVeriryFailed` → 33, 34, 35, 36, 37, 113, 114 (pp.txt BleCmdStatus map [pp+0xe480] (3.24.3))
+- ENUMS.md:331-337 — BLE Command Status `7 scanWifiFailed .. 13 fireWarmVeriryFailed` → 33, 34, 35, 36, 37, 113, 114 (name-to-code binding inferred from pool instance order; keys 7–13 absence is direct) (pp.txt BleCmdStatus map [pp+0xe480] (3.24.3))
 - ENUMS.md:338-340 — BLE Command Status `14 needAuthentication, 15 passwordWrongAuthenticationFailed, 16 passwordRetryCountExceededAuthenticationFailed` → 9, 10, 11 (pp.txt BleCmdStatus [pp+0x50bb8], [pp+0x50be8], [pp+0x50bf8] and map [pp+0xe480] (3.24.3))
 - ENUMS.md:341 — BLE Command Status `17 unknown` → no wire code (fallback) (pp.txt BleCmdStatus [pp+0xe488])
 

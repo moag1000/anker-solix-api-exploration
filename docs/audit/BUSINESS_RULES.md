@@ -1,12 +1,14 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Page type: audit table · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Page type: audit table · Owner page: this page
 
 # Audit: BUSINESS_RULES.md (Smi sweep)
 
 Every integer in `BUSINESS_RULES.md` that could have come from a Blutter immediate, checked against the asm. Method and verdict meanings: [../../METHODOLOGY.md](../../METHODOLOGY.md) (Smi rule). Asm roots: 3.24.3 `v3.24.3/blutter_output/asm`, 3.18.0 `blutter_output/asm`; `pp.txt` entries are pool objects and are already untagged. Addresses are `file.dart @0xADDR` relative to the asm root. The document itself is left unchanged.
 
+Doc line numbers refer to the file BEFORE the banner was added (commit 68bc345); in the current file add 2.
+
 Verdicts: `OK`, `WRONG` (real value in the note), `NOT-FROM-ASM` (string, upstream, device test, example or prose count), `UNVERIFIABLE` (site not found; search listed), `CHANGED-IN-3.24.3` (doc matches 3.18.0 but not 3.24.3).
 
-Rows: 65. CHANGED-IN-3.24.3 5, NOT-FROM-ASM 15, OK 27, UNVERIFIABLE 3, WRONG 15.
+Rows: 66. CHANGED-IN-3.24.3 5, NOT-FROM-ASM 15, OK 27, UNVERIFIABLE 3, WRONG 16.
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
@@ -42,7 +44,8 @@ Rows: 65. CHANGED-IN-3.24.3 5, NOT-FROM-ASM 15, OK 27, UNVERIFIABLE 3, WRONG 15.
 | `900ms` safety SOC status update delay | 342 | pp.txt Duration 900000 us [pp+0x27d80] (3.24.3); [pp+0x24650] (3.18.0) | 900000 us | pool Duration | OK | Value exists as a pool Duration (untagged). The "used for" attribution was not traced (3.24.3 users: unity three-dot indicator, anka_agent banner only). |
 | `2000ms` MQTT message listener delay | 343 | pp.txt Duration 2,000,000 us [pp+0x18ac0] (3.24.3); [pp+0x1ae10] (3.18.0) | 2000000 us | pool Duration | OK | Value verified; attribution not traced. |
 | `5000ms` API polling interval | 344 | pp.txt Duration 5,000,000 us [pp+0x13850] (3.24.3); [pp+0x17918] (3.18.0) | 5000000 us | pool Duration | OK | Value verified; this is also the default BLE command wait (see the 30 s row). |
-| `30s` BLE command timeout + background disconnect | 345 | base_service/util/simple_ble_connector.dart @0x43181c8 (3.24.3); pp.txt Duration [pp+0x29af0] (3.24.3) | 30000000 us | pool Duration + string "Connection timeout (30s)" | OK | 30 s is the BLE connect timeout; it is not the command timeout and not the background-disconnect value (that is 30 min). |
+| `30s` value (BLE timeout) | 345 | base_service/util/simple_ble_connector.dart @0x43181c8 (3.24.3); pp.txt Duration [pp+0x29af0] (3.24.3) | 30000000 us | pool Duration + string "Connection timeout (30s)" | OK | 30 s exists: it is the BLE connect timeout. |
+| `30s` called the "BLE command timeout" (and background disconnect) | 345 | charging/communication/command_controller/ble_command_controller.dart sendCommand @0x226fc88 (3.24.3) | Duration [pp+0x13850] = 5,000,000 us | default `delay` Instance_Duration | WRONG -> 30 s is the connect timeout; command wait 5 s; background disconnect 30 min | Semantic: 30 s is the connect timeout, not the command timeout (command wait 5 s), and not the background disconnect (30 min). |
 | `60s` MQTT listener cycle | 346 | pp.txt Duration 60,000,000 us [pp+0x1d8e0] (3.24.3); [pp+0x20e08] (3.18.0) | 60000000 us | pool Duration | OK | Value verified; attribution not traced. |
 | `5 min` meter CT re-check interval (error 10) | 347 | pp.txt Duration 300,000,000 us [pp+0x1f438] (3.24.3); [pp+0x1d720] (3.18.0) | 300000000 us | pool Duration | OK | Value verified; the error text has no 5 min wording (it is in the A17C1 error-10 message only by the doc's reading). |
 | `30 min` background disconnect threshold | 348, 717 | charging/base/app_life_cycle_delegate.dart @0x2856970 (3.24.3); pp [pp+0xd7e8] | 1800000000 us | pool Duration (`r1 = Instance_Duration`) | OK | Also used by a17c1home_logic and a17c0home_logic. |
