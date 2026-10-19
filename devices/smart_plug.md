@@ -38,7 +38,7 @@ Tag: asm-traced unless stated. Each fact cites the 3.24.3 site; the field-level 
 
 | item | old page (3.18.0 reading) | 3.24.3 | audit row |
 |---|---|---|---|
-| `007e` `a3` and `a5` encoding | "3 bytes (seconds:minutes:hours)" | two readings, see [../mqtt/a17x8.md](../mqtt/a17x8.md); asm-traced `intToList3` @0x3dcfbe4 | 47 (WRONG) |
+| `007e` `a3` and `a5` encoding | "3 bytes (seconds:minutes:hours)" | two readings, see [../mqtt/a17x8.md](../mqtt/a17x8.md); asm-traced `intToList3` @0x3dcfbe4 | 47 (audit verdict WRONG for the old wording; the upstream reading stays recorded as a conflict) |
 
 ## Known firmware notes
 
