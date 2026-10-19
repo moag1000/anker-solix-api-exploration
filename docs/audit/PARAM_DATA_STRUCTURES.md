@@ -2,7 +2,7 @@
 
 # Audit: PARAM_DATA_STRUCTURES.md (Smi sweep)
 
-Every integer in `PARAM_DATA_STRUCTURES.md` that could have come from a Blutter immediate, checked against the asm and `data/param_types.json` (decoded `cmd` per `set_site_device_param` caller). The `cmd: 17` lines are upstream-confirmed (NOT-FROM-ASM); the APK value for the same param_type is stated in the note. The `power_limit` section was corrected in Task 1.1 and is referenced, not re-audited.
+Every integer in `PARAM_DATA_STRUCTURES.md` that could have come from a Blutter immediate, checked against the asm and `data/param_types.json` (decoded `cmd` per `set_site_device_param` caller). The `cmd: 17` lines are upstream-confirmed (NOT-FROM-ASM); the APK value for the same param_type is stated in the note. The `power_limit` section was corrected earlier and is referenced, not re-audited.
 
 Doc line numbers refer to the file BEFORE the banner was added (commit f105769); in the current file add 2.
 
@@ -12,7 +12,7 @@ Rows: 36. NOT-FROM-ASM 20, OK 13, UNVERIFIABLE 1, WRONG 2.
 
 | claim (as written) | doc line | asm site (file.dart @0xADDR, version) | raw | store/compare instruction | verdict | note |
 |---|---|---|---|---|---|---|
-| param_type 19 power-limit section: cmd, `display_type`, device-tested note | 10, 12-14, 332, 339 | charging/http/http_request_repository_impl.dart setSiteDevicePowerLimit, cmd site @0x43558c4 (3.24.3, per data/param_types.json) | 246 | `stur w` -> cmd 123 | OK | Already corrected on the owner page (cmd 123, `display_type`); the banner lines in this doc point to it. Owner page `api/power_service/site/set_site_device_param.md` (corrected in Task 1.1, not re-audited here). |
+| param_type 19 power-limit section: cmd, `display_type`, device-tested note | 10, 12-14, 332, 339 | charging/http/http_request_repository_impl.dart setSiteDevicePowerLimit, cmd site @0x43558c4 (3.24.3, per data/param_types.json) | 246 | `stur w` -> cmd 123 | OK | Already corrected on the owner page (cmd 123, `display_type`); the banner lines in this doc point to it. Owner page `api/power_service/site/set_site_device_param.md` (corrected earlier, not re-audited here). |
 | `updatePeakAndValley` note: type-19 keys belong to `setSiteDevicePowerLimit`; app sends cmd 123 | 425 | charging/http/http_request_repository_impl.dart (3.24.3) | 246 | `stur w` -> 123 | OK | Correction text already present on the line; see the owner page above. |
 | `"param_type": "18"` (getSafetySocParams / setSafetySocParams) | 25 | data/param_types.json row param_type 18, cmd_addr 0x2aa91bc (3.24.3) | string literal | param_type is a String in the request map | OK | The string literal matches the decoded row; not an integer. |
 | `"param_type": "20"` (get/setStationCountryCode) | 43 | data/param_types.json row param_type 20, cmd_addr 0x317a14c (3.24.3) | string literal | param_type is a String in the request map | OK | The string literal matches the decoded row; not an integer. |

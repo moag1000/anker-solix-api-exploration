@@ -70,7 +70,7 @@ Response, synthesized: same shape as the login response.
 
 ## Errors seen
 
-`api/errors.md` does not exist yet (Task 4.2). The failure closure of the Amazon login goes through the same `LoginLogic::handleLoginFail` as the password login; its code table is in [login.md](login.md#errors-seen). `/passport/third_party_login` is also exempted by name from the "start the login flow again" step after a forced logout (`HttpEncryptionDecorator.dart @0x486ba00`, see [../encryption.md](../encryption.md#response-handling-and-error-codes)).
+The code catalog is [errors.md](../errors.md). The failure closure of the Amazon login goes through the same `LoginLogic::handleLoginFail` as the password login; its code table is in [login.md](login.md#errors-seen). `/passport/third_party_login` is also exempted by name from the "start the login flow again" step after a forced logout (`HttpEncryptionDecorator.dart @0x486ba00`, see [../encryption.md](../encryption.md#response-handling-and-error-codes)).
 
 ## Callers in app
 

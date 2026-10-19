@@ -6,7 +6,7 @@ This directory holds one decoder page per product number (`<pn>.md`, lowercase P
 
 Not here: endpoint payloads ([../api/README.md](../api/README.md)), BLE opcodes and TLV ([../ble/README.md](../ble/README.md)); owner map in [../docs/STRUCTURE.md](../docs/STRUCTURE.md).
 
-## Pages written (Task 3.6a)
+## Pages written
 
 | page | covers | audit rows (docs/audit/BLE_COMMAND_MAP.md) |
 |---|---|---|
@@ -21,7 +21,7 @@ Not here: endpoint payloads ([../api/README.md](../api/README.md)), BLE opcodes 
 
 Pages carry their own status header with the lowest tag on that page. `asm-traced`: envelope, a17c1, a17c1_status, a17c5, a17b1, a5101, a172x, a1771, a1753, a1780, a1790, a2345, a91b2, a17c0, iot. `string-only`: a17x8 (the 0040/0057 binding), a17x7 (the `ad` alternate source), a17c2 (field labels from debug strings), a1340 (device-level debug strings) and shelly (strings and a new tag read, no audit row). `upstream-confirmed`: upstream_commands (index of upstream constants). The three enum references (audit rows 103-160) are linked from the PN pages and will be owned by `reference/enums.md`.
 
-## Pages written (Task 3.6b)
+## Pages written
 
 | page | covers | audit rows (docs/audit/BLE_COMMAND_MAP.md) |
 |---|---|---|
@@ -41,7 +41,7 @@ Pages carry their own status header with the lowest tag on that page. `asm-trace
 
 Audit rows without an MQTT page: 189-198 are API response models and examples (not MQTT facts); their owners are the `models/` pages ([../models/scene_info_model.md](../models/scene_info_model.md) for 189-190, [../models/site_device_param_response.md](../models/site_device_param_response.md) for 191, [../models/hes.md](../models/hes.md) for 193-195 and 197-198, [../models/heat_pump_param.md](../models/heat_pump_param.md) for 196; row 192 is a JSON example with no asm value). Rows 89-97 (data structures) are owned by [a1790.md](a1790.md) (SubBatteryInfo, 89-90) and [a2345.md](a2345.md) (OutputPortInfo, 91-97).
 
-## Pages written (Task 3.6c)
+## Pages written
 
 | page | covers | audit rows (docs/audit/BLE_COMMAND_MAP.md) |
 |---|---|---|

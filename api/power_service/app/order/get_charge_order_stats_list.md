@@ -61,7 +61,7 @@ Request, synthesized
 
 ## Errors seen
 
-No error code specific to this endpoint was traced; the shared transport codes are in [../../../encryption.md](../../../encryption.md#response-handling-and-error-codes). `api/errors.md` does not exist yet (Task 4.2).
+No error code specific to this endpoint was traced; the shared transport codes are in [../../../encryption.md](../../../encryption.md#response-handling-and-error-codes). The code catalog is [errors.md](../../../errors.md).
 
 ## Callers in app
 
@@ -70,7 +70,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Since/changed
 
-3.18.0: present (URL string in the 3.18.0 object pool, `pp+0x83ca8`); the sender function has no literal difference between 3.18.0 and 3.24.3 (`tools/cmp_since.py`: ordered string, integer and type literals compared; branch logic not compared). Not new in 3.24.3: the Task 3.1b inventory change (slashless URL literals) made the URL visible. 3.24.3: present. since: ≤3.18.0.
+3.18.0: present (URL string in the 3.18.0 object pool, `pp+0x83ca8`); the sender function has no literal difference between 3.18.0 and 3.24.3 (`tools/cmp_since.py`: ordered string, integer and type literals compared; branch logic not compared). Not new in 3.24.3: the inventory learned URL literals without a leading slash, which made the URL visible. 3.24.3: present. since: ≤3.18.0.
 
 ## Known unknowns
 

@@ -48,7 +48,7 @@ None: nothing to synthesize without a sender.
 
 ## Errors seen
 
-`api/errors.md` does not exist yet (Task 4.2). None specific.
+The code catalog is [errors.md](../errors.md). None specific.
 
 ## Callers in app
 

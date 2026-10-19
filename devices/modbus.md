@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced (lowest tag among the API facts; the UI-text table is excluded by design) · Owner page: this page · Page type: feature (not a PN page)
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only (lowest tag: the app-key to upstream-name mapping is a name match only; the other facts are asm-traced and the UI-text table is excluded by design) · Owner page: this page · Page type: feature (not a PN page)
 
 # Modbus (third-party control: Modbus TCP and RTU, Home Assistant, Homey)
 
@@ -79,7 +79,7 @@ When the device's Wi-Fi is offline but the app has a local connection to it, the
 
 `HomeAssistantLogic::bluetoothSend` (`home_assistant_logic.dart @0x38dbd50`, log prefix `HaBluetoothResponeseData: `) does not build a BLE frame itself. It calls the IoT kit (`AKIoTKitManagerImpl::handle`, `@0x38dbf18`) with the method string `"akiot.device.invoke_action"` (`@0x38dbf08`) and this argument map (asm-traced; outer map 3 pairs, raw `r2 = 12` at `@0x38dbd90`; `param` map 2 pairs, raw `r2 = 8` at `@0x38dbde4`):
 
-Interim owner — moves to `ble/a5190.md` / `mqtt/a5191.md` when those pages exist (Task 3.7).
+Interim owner: no dedicated A5190/A5191 page exists yet.
 
 | key | value | source |
 |---|---|---|
@@ -88,7 +88,7 @@ Interim owner — moves to `ble/a5190.md` / `mqtt/a5191.md` when those pages exi
 | `param.deviceID` | RTU id, `int.parse` of the RTU id text field | `home_assistant_logic.dart @0x38dbdf0`, parse at `@0x38dbe1c` |
 | `param.communicationProtocolConfig` | the same value as `modbusStatus` (`modbusState()`, `home_assistant_logic.dart @0x38dbe74`; values on [set_modbus_setting](../api/charging_hes_third_party_service_svc/set_modbus_setting.md#request)) | `@0x38dbe64` |
 
-The result is compared with `AKResultType.success` (pool `pp+0xa5b0`, `home_assistant_logic.dart @0x38daf04`). How the IoT kit turns this action into Bluetooth bytes (opcode, TLV) is not in the Dart code; no BLE command file in the asm names the action. The BLE owner page for the products concerned does not exist yet (`ble/<pn>.md`, Task 3.7).
+The result is compared with `AKResultType.success` (pool `pp+0xa5b0`, `home_assistant_logic.dart @0x38daf04`). How the IoT kit turns this action into Bluetooth bytes (opcode, TLV) is not in the Dart code; no BLE command file in the asm names the action. The BLE owner page for the products concerned does not exist yet (`ble/<pn>.md`).
 
 ### EV charger Modbus TCP (device properties)
 

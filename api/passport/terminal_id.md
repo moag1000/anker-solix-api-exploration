@@ -58,7 +58,7 @@ Response, synthesized (shape only)
 
 ## Errors seen
 
-`api/errors.md` does not exist yet (Task 4.2). If no non-empty id results, `HttpEncryptionDecorator::request` logs `TerminalIdError` (`@0x4869380`) and calls the failure callback with code -101 and an empty message (raw `mov x16, #-0xca` at `@0x486933c` is passed as an argument, so it is a tagged Smi and the code is -101) instead of sending the original request.
+The code catalog is [errors.md](../errors.md). If no non-empty id results, `HttpEncryptionDecorator::request` logs `TerminalIdError` (`@0x4869380`) and calls the failure callback with code -101 and an empty message (raw `mov x16, #-0xca` at `@0x486933c` is passed as an argument, so it is a tagged Smi and the code is -101) instead of sending the original request.
 
 ## Callers in app
 

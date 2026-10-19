@@ -56,7 +56,7 @@ Response, synthesized: the standard wrapper (`code`, `msg`, `data`), see [login]
 
 ## Errors seen
 
-`api/errors.md` does not exist yet (Task 4.2). No logout-specific code branch exists; the failure closure logs code and message and calls the failure callback of the caller.
+The code catalog is [errors.md](../errors.md). No logout-specific code branch exists; the failure closure logs code and message and calls the failure callback of the caller.
 
 ## Callers in app
 

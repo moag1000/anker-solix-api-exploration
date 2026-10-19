@@ -31,7 +31,7 @@ This page owns the client-side rules of the 3.24.3 app: when it polls, how long 
 
 ## Polling facts for library authors
 
-Tag: `asm-traced` unless a row says otherwise. This section is the input of Task 4.4 (safe-usage guidance). All timer rows were produced by one scan of the `Timer.periodic` call sites of the app files in the 3.24.3 dump (124 files, after excluding the Flutter framework, third-party packages, a few UI-only widgets; the `ota_kit` package was in the scan, but its timer bodies were not read) and then reading the owning function; the same timers with the same values exist in 3.18.0 (see [Changed since 3.18.0](#changed-since-3180)).
+Tag: `asm-traced` unless a row says otherwise. This section is the input of the safe-usage guidance ([docs/SAFE_USAGE.md](../docs/SAFE_USAGE.md)). All timer rows were produced by one scan of the `Timer.periodic` call sites of the app files in the 3.24.3 dump (124 files, after excluding the Flutter framework, third-party packages, a few UI-only widgets; the `ota_kit` package was in the scan, but its timer bodies were not read) and then reading the owning function; the same timers with the same values exist in 3.18.0 (see [Changed since 3.18.0](#changed-since-3180)).
 
 ### The short version
 

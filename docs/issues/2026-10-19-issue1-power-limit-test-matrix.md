@@ -1,3 +1,5 @@
+> **Historical (2026-10-19, before the device test).** The results are on [api/power_service/site/set_site_device_param.md](../../api/power_service/site/set_site_device_param.md#device-tested-by); do not use this file as a source.
+
 Hi @thomluther,
 
 quick update — the models still allow this, and the first run on the current APK is done.

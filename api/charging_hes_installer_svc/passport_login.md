@@ -62,7 +62,7 @@ Headers: `Openudid: <terminal id>`, `App-Name: anker_pros`. Response: no capture
 
 ## Errors seen
 
-No error code specific to this endpoint was traced. The failure closure of each sender passes the code and message to the caller or shows a toast; the shared transport codes are in [../encryption.md](../encryption.md#response-handling-and-error-codes). `api/errors.md` does not exist yet (Task 4.2). The login-screen codes of [../passport/login.md](../passport/login.md#errors-seen) are not confirmed for this endpoint.
+No error code specific to this endpoint was traced. The failure closure of each sender passes the code and message to the caller or shows a toast; the shared transport codes are in [../encryption.md](../encryption.md#response-handling-and-error-codes). The code catalog is [errors.md](../errors.md). The login-screen codes of [../passport/login.md](../passport/login.md#errors-seen) are not confirmed for this endpoint.
 
 ## Callers in app
 

@@ -60,7 +60,7 @@ Request, synthesized (owner withdraws)
 
 ## Errors seen
 
-No error code specific to this endpoint was traced; the shared transport codes are in [../../encryption.md](../../encryption.md#response-handling-and-error-codes). `api/errors.md` does not exist yet (Task 4.2).
+No error code specific to this endpoint was traced; the shared transport codes are in [../../encryption.md](../../encryption.md#response-handling-and-error-codes). The code catalog is [errors.md](../../errors.md).
 
 ## Callers in app
 

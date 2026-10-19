@@ -51,7 +51,7 @@ Request, synthesized
 
 ## Errors seen
 
-No error code specific to this endpoint was traced; the shared transport codes are in [../../encryption.md](../../encryption.md#response-handling-and-error-codes). `api/errors.md` does not exist yet (Task 4.2).
+No error code specific to this endpoint was traced; the shared transport codes are in [../../encryption.md](../../encryption.md#response-handling-and-error-codes). The code catalog is [errors.md](../../errors.md).
 
 ## Callers in app
 
@@ -62,7 +62,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Since/changed
 
-3.18.0: present (URL string in the 3.18.0 object pool as `pp+0x82f10` without and `pp+0x125a00` with a leading slash; the 3.18.0 sender of the slash form was `setRemainPluginStatus`, a smart-plug call, see Task 3.1b). 3.24.3: the EV charger command sender uses the no-slash literal (`ev_charge_command.dart @0x396035c`), and the pool still holds both forms. The sender function has no literal difference between 3.18.0 and 3.24.3 (`tools/cmp_since.py`: ordered string, integer and type literals compared; branch logic not compared). since: ≤3.18.0.
+3.18.0: present (URL string in the 3.18.0 object pool as `pp+0x82f10` without and `pp+0x125a00` with a leading slash; the 3.18.0 sender of the slash form was `setRemainPluginStatus`, a smart-plug call). 3.24.3: the EV charger command sender uses the no-slash literal (`ev_charge_command.dart @0x396035c`), and the pool still holds both forms. The sender function has no literal difference between 3.18.0 and 3.24.3 (`tools/cmp_since.py`: ordered string, integer and type literals compared; branch logic not compared). since: ≤3.18.0.
 
 ## Known unknowns
 

@@ -134,7 +134,7 @@ A page header reads `> Verified against: App 3.24.3 · Date · Confidence: <tag>
 | [mqtt/](mqtt/README.md) | one MQTT decoder page per product number, the shared [envelope](mqtt/envelope.md) |
 | [ble/](ble/README.md) | BLE [protocol](ble/protocol.md), [handshake](ble/handshake.md) and one page per product number |
 | [flows/](flows/README.md) | step traces of user-visible actions; links only, no payload copies |
-| [devices/](devices/README.md) | product pages (two on 3.24.3, [a17c5](devices/a17c5.md) and [Modbus](devices/modbus.md); the rest are 3.18.0 legacy pages) |
+| [devices/](devices/README.md) | product pages, all on 3.24.3 ([a17c5](devices/a17c5.md), [Modbus](devices/modbus.md) and five product pages) |
 | [models/](models/README.md) | response and request model pages that own the field lists |
 | [reference/](reference/README.md) | enums, business rules, validation model, IoT-Kit channels |
 | [data/](data/README.md) | machine-readable exports (generated, never hand-edited) |

@@ -80,7 +80,7 @@ No polling and no retry loop on this path. Timeouts exist only for the plain pat
 - HTTP 463, or a failed response signature check: failure callback with 463; the log says the key must be renegotiated, but no renegotiation is started there (`@0x486b100`, `@0x486c808`).
 - HTTP 401 or the SDK codes 401, 26085, 26084: forced logout, scene `tokenExpired` or `kickedOut` (`_handler401 @0x486b2bc`).
 - Content type error (no parsable result): code -100 (`@0x486b074`).
-- The catalog of codes is `api/errors.md` (not yet written, Task 4.2); the codes seen so far are in [encryption.md](../api/encryption.md#response-handling-and-error-codes).
+- The catalog of codes is [api/errors.md](../api/errors.md); the codes seen so far are in [encryption.md](../api/encryption.md#response-handling-and-error-codes).
 
 ## Known unknowns
 

@@ -60,7 +60,7 @@ Response, synthesized (shape only)
 
 ## Errors seen
 
-`api/errors.md` does not exist yet (Task 4.2). The failure closure of `exchangeKey` is not specific; generic transport codes are on [../../../encryption.md](../../../encryption.md#response-handling-and-error-codes). Upstream maps the server code 26070 to `ClientPublicKeyError` (upstream-confirmed, `errors.py`), which is the likely answer to a malformed client key; the app has no branch for it.
+The code catalog is [errors.md](../../../errors.md). The failure closure of `exchangeKey` is not specific; generic transport codes are on [../../../encryption.md](../../../encryption.md#response-handling-and-error-codes). Upstream maps the server code 26070 to `ClientPublicKeyError` (upstream-confirmed, `errors.py`), which is the likely answer to a malformed client key; the app has no branch for it.
 
 ## Callers in app
 
