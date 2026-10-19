@@ -28,3 +28,6 @@ Source: `model/a2687/power_range_protocols_model.dart`
 
 *(no fields extracted)*
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

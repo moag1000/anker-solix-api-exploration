@@ -127,3 +127,7 @@ Upstream confirms these go **inside** `{"device_sn": "...", "attributes": {...}}
 | `p2gp` | PV→Grid | `b2lp` | Battery→Load |
 | `b2gp` | Battery→Grid | `g2bp` | Grid→Battery |
 | `g2lp` | Grid→Load | `mpp` | Micro-inverter power |
+
+## Known unknowns
+
+None recorded beyond the row-level notes above.

@@ -183,3 +183,9 @@ Per thomluther:
 2. MQTT monitoring with mqtt_monitor to validate field-to-hex mapping
 3. Compare abbreviated MQTT field values with App display values
 4. X1 uses JSON "trans" payloads with abbreviations — easier to decode than binary
+
+## Known unknowns
+
+None recorded beyond the row-level notes above.
+
+Open requests to device owners are listed under "What's needed from device owners" above.

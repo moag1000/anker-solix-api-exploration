@@ -34,3 +34,6 @@ Source: `base:bean/model/device_model.dart`
 access_group, device_id, group_id, integrator, station_id
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

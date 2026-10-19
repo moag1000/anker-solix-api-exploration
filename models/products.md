@@ -37,3 +37,6 @@ net_guideline, net_img_url, p_code, p_codes, pn_in_site_type, product_code,
 products, sku
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

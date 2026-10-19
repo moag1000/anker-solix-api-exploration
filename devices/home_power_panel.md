@@ -331,3 +331,7 @@ preprocess_utility_rate_plan, ack_utility_rate_plan, adjust_station_price_unit
 8. `charging_energy_service/get_configs` — param_types still unknown
 9. `charging_hes_svc/get_station_config_and_status` — Station grid config
 10. Disaster-prepare status/detail/quit endpoints
+
+## Known unknowns
+
+None recorded beyond the row-level notes above.

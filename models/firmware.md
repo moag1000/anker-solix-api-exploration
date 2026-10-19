@@ -92,3 +92,6 @@ sub_device_list, upgrade_desc, upgrade_record_list, upgrade_record_type,
 upgrade_time, upgrade_type, upgrade_version
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

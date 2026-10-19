@@ -64,3 +64,6 @@ priority_discharge_upgrade_devices, ranges, schedule_mode, site_id, startTime,
 start_time, step, switch, turnOn, turn_on
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

@@ -231,3 +231,6 @@ Source: `ui/page/device/a5101/setting/vpp/vpp_info_model.dart`
 lastVersion, name, vppEnable
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

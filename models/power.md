@@ -28,3 +28,6 @@ legal_power_limit, limit, limit_real, outputPower, parallel_type,
 power_limit_option, site_id, status, supportAcLimit
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

@@ -91,3 +91,6 @@ Source: `model/validate_account_model.dart`
 enc_text, pass_empty, result, status
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

@@ -30,3 +30,6 @@ Source: `model/green_energy/station/scene_info.dart`
 country_code, device_pn, device_sn, multi_pv, site_id, solarbank_list, type
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

@@ -81,3 +81,9 @@ Per thomluther (Issue #150, latest comments):
 2. **Schedule state in 0405** — how saved schedules appear in status messages
 3. **System export ZIP** with MQTT data while toggling plug / running timer
 4. Schedule create → modify → delete full cycle documentation
+
+## Known unknowns
+
+None recorded beyond the row-level notes above.
+
+Open requests to device owners are listed under "What's still needed" above.

@@ -44,3 +44,6 @@ Source: `model/a17b1/a17b1_wifi_info_model.dart`
 rssi, ssid
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

@@ -22,3 +22,6 @@ Source: `model/a5140_device_info/a5140_device_status.dart`
 power, pvStatuses, sn, status
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

@@ -187,3 +187,9 @@ Per thomluther (Issue #322):
 4. MQTT monitoring during charging sessions
 5. The field→tag mapping above can be **quickly verified** by changing one setting
    and checking which TLV tag changes in mqtt_monitor
+
+## Known unknowns
+
+None recorded beyond the row-level notes above.
+
+Open requests to device owners are listed under "What's needed from device owners" above.

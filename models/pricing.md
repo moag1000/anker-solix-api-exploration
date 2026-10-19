@@ -59,3 +59,6 @@ attributes, device_sn, end_time, pps_use_time, price, prices, ranges,
 reserve_power, start_time, type, unit
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.

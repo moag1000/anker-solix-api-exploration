@@ -227,3 +227,6 @@ Source: `base:bean/model/third_party/shelly/third_party_platform_info_model.dart
 callBackUrl, content, index, logo, name, products, tag, tagCode, url
 ```
 
+## Known unknowns
+
+None recorded beyond the row-level notes above.
