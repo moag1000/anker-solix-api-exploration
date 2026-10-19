@@ -539,6 +539,105 @@ class ServiceIndexPagesColumnTests(unittest.TestCase):
             self.assertIn('1 distinct URLs', txt)
 
 
+PAGE_OWNER = ('> Verified against: App 3.24.3 · Date: x · Confidence: asm-traced '
+              '· Owner page: this page\n\n# t\n\n## Purpose\n\nA real purpose.\n')
+PAGE_SKEL = ('> Verified against: App 3.24.3 · Date: x · Confidence: string-only '
+             '· Owner page: this page\n\n# t\n\n' + '<!-- TODO -->\n' * 6)
+
+
+class ServiceIndexStatusAndGuardTests(unittest.TestCase):
+    def _tree(self, td, pages):
+        os.makedirs(os.path.join(td, 'api', 's'))
+        for n, body in pages.items():
+            with open(os.path.join(td, 'api', 's', n), 'w') as fh:
+                fh.write(body)
+        inv = {'rows': [
+            {'url': '/s/own'}, {'url': '/s/skel'},
+            {'url': '/s/pool', 'reference': 'pool-only'},
+            {'url': '/s/gone', 'removed_in': '3.24.3'}]}
+        import json
+        with open(os.path.join(td, 'inv.json'), 'w') as fh:
+            json.dump(inv, fh)
+        return ['--endpoints', os.path.join(td, 'inv.json'), '--api', os.path.join(td, 'api')]
+
+    def test_four_status_values_and_counts(self):
+        import service_index
+        import tempfile
+        import json
+        pages = {'own.md': PAGE_OWNER, 'skel.md': PAGE_SKEL,
+                 'pool.md': PAGE_SKEL, 'gone.md': PAGE_OWNER}
+        with tempfile.TemporaryDirectory() as td:
+            os.makedirs(os.path.join(td, 'api', 's'))
+            for n, body in pages.items():
+                open(os.path.join(td, 'api', 's', n), 'w').write(body)
+            inv = {'rows': [
+                {'url': '/s/own'}, {'url': '/s/skel'},
+                {'url': '/s/pool', 'reference': 'pool-only'},
+                {'url': '/s/gone', 'removed_in': '3.24.3'}]}
+            out, _ = service_index.build(inv, os.path.join(td, 'api'))
+            txt = out[os.path.join(td, 'api', 's', 'README.md')]
+            for url, st in (('own', 'owner'), ('skel', 'skeleton'),
+                            ('pool', 'pool-only'), ('gone', 'removed')):
+                row = [l for l in txt.splitlines() if '`/s/%s`' % url in l][0]
+                self.assertTrue(row.rstrip().endswith('| %s |' % st), row)
+            root = out[os.path.join(td, 'api', 'README.md')]
+            self.assertIn('`owner` 1, `skeleton` 1, `pool-only` 1, `removed` 1', root)
+
+    def test_refuses_service_readme_with_foreign_prose_and_no_marker(self):
+        import service_index
+        import tempfile
+        import io
+        import contextlib
+        with tempfile.TemporaryDirectory() as td:
+            args = self._tree(td, {'own.md': PAGE_OWNER, 'skel.md': PAGE_SKEL,
+                                   'pool.md': PAGE_SKEL, 'gone.md': PAGE_OWNER})
+            self.assertEqual(service_index.main(args), 0)
+            readme = os.path.join(td, 'api', 's', 'README.md')
+            first = open(readme).read()
+            self.assertEqual(service_index.main(args), 0)  # idempotent
+            self.assertEqual(open(readme).read(), first)
+            with open(readme, 'a') as fh:
+                fh.write('\n## Hand-written group\n\nExtra prose.\n')
+            err = io.StringIO()
+            with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
+                code = service_index.main(args)
+            self.assertNotEqual(code, 0)
+            self.assertIn(readme, err.getvalue())
+            self.assertIn('Extra prose.', open(readme).read())
+            # with the marker the tail survives and the run succeeds
+            txt = open(readme).read().replace(
+                '## Hand-written group', service_index.KEEP_MARKER + '\n## Hand-written group')
+            open(readme, 'w').write(txt)
+            self.assertEqual(service_index.main(args), 0)
+            self.assertIn('Extra prose.', open(readme).read())
+
+    def test_refusal_writes_nothing(self):
+        import service_index
+        import tempfile
+        import io
+        import contextlib
+        with tempfile.TemporaryDirectory() as td:
+            args = self._tree(td, {'own.md': PAGE_OWNER, 'skel.md': PAGE_SKEL,
+                                   'pool.md': PAGE_SKEL, 'gone.md': PAGE_OWNER})
+            readme = os.path.join(td, 'api', 's', 'README.md')
+            open(readme, 'w').write('> h\n\n# s\n\nhand prose\n')
+            with contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
+                self.assertNotEqual(service_index.main(args), 0)
+            self.assertFalse(os.path.exists(os.path.join(td, 'api', 'README.md')))
+
+    def test_ambiguous_counts_come_from_inventory(self):
+        import service_index
+        import tempfile
+        with tempfile.TemporaryDirectory() as td:
+            os.makedirs(os.path.join(td, 'smart_service'))
+            open(os.path.join(td, 'smart_service', 'a.md'), 'w').write(PAGE_OWNER)
+            inv = {'rows': [{'url': '/smart_service/v1/a'}]}
+            out, _ = service_index.build(inv, td)
+            txt = out[os.path.join(td, 'README.md')]
+            self.assertIn('real service: 1 endpoint', txt)
+            self.assertNotIn('real service: 13 endpoints', txt)
+
+
 class ReadmeStatsTests(unittest.TestCase):
     def test_real_repo_numbers_come_from_data(self):
         import json
@@ -576,7 +675,7 @@ class ReadmeStatsTests(unittest.TestCase):
         once = readme_stats.replace_block(base, readme_stats.render(st))
         twice = readme_stats.replace_block(once, readme_stats.render(st))
         self.assertEqual(once, twice)
-        self.assertIn('generated on', once)
+        self.assertIn('data snapshot 2026-10-19, generated by', once)
         self.assertIn('tools/readme_stats.py', once)
         self.assertNotIn('old\n', once)
 
@@ -587,6 +686,53 @@ class ReadmeStatsTests(unittest.TestCase):
         self.assertEqual(readme_stats.replace_block(readme, readme_stats.render(st)), readme)
         structure = open(os.path.join(REPO, 'docs', 'STRUCTURE.md'), encoding='utf-8').read()
         self.assertEqual(readme_stats.migration_statuses(REPO, structure), structure)
+
+    def test_cli_run_twice_is_idempotent(self):
+        import readme_stats
+        import shutil
+        import tempfile
+        with tempfile.TemporaryDirectory() as td:
+            dst = os.path.join(td, 'repo')
+            shutil.copytree(REPO, dst, ignore=shutil.ignore_patterns(
+                '.git', '.superpowers', 'out', '__pycache__', 'easter_eggs'))
+            import io
+            import contextlib
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(readme_stats.main(['--repo', dst]), 0)
+            snap = {f: open(os.path.join(dst, f), encoding='utf-8').read()
+                    for f in ('README.md', 'docs/STRUCTURE.md')}
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                self.assertEqual(readme_stats.main(['--repo', dst]), 0)
+            self.assertIn('changed: none', buf.getvalue())
+            for f, v in snap.items():
+                self.assertEqual(open(os.path.join(dst, f), encoding='utf-8').read(), v)
+
+    def test_done_rows_with_skeleton_owner_pages_are_labelled(self):
+        import readme_stats
+        import tempfile
+        skel = PAGE_SKEL
+        text = ('## Migration map\n\n| Old path | New | What | Status |\n|---|---|---|---|\n'
+                '| `A.md` | `api/x/s.md` | t | pending |\n'
+                '| `B.md` | `api/x/o.md` | t | pending |\n'
+                '| `C.md` | `api/x/s.md`, `api/x/o.md` | t | pending |\n')
+        with tempfile.TemporaryDirectory() as td:
+            os.makedirs(os.path.join(td, 'api', 'x'))
+            open(os.path.join(td, 'api', 'x', 's.md'), 'w').write(skel)
+            open(os.path.join(td, 'api', 'x', 'o.md'), 'w').write(PAGE_OWNER)
+            out = readme_stats.migration_statuses(td, text)
+            st = {l.split('|')[1].strip(' `'): l.rstrip(' |').rsplit('|', 1)[1].strip()
+                  for l in out.splitlines() if l.startswith('| `')}
+            self.assertEqual(st, {'A.md': 'done (skeleton pages)', 'B.md': 'done',
+                                  'C.md': 'done'})
+            self.assertEqual(readme_stats.migration_statuses(td, out), out)
+
+    def test_no_hand_typed_row_or_line_counts_in_structure(self):
+        import re
+        txt = open(os.path.join(REPO, 'docs', 'STRUCTURE.md'), encoding='utf-8').read()
+        self.assertIsNone(re.search(r'\(\d+ rows', txt))
+        self.assertNotIn('(2402 lines)', txt)
+        self.assertNotIn('1-2402', txt)
 
     def test_missing_markers_raise(self):
         import readme_stats

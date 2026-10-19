@@ -33,20 +33,30 @@ INTRO = (
     "[../docs/STRUCTURE.md](../docs/STRUCTURE.md#naming-conventions): `v1` is "
     "dropped from the path, any other version segment is kept.")
 
-AMBIGUOUS = """## Ambiguous prefixes (resolved: all five are real services)
+def _n(n, word='endpoint'):
+    return '%d %s%s' % (n, word, '' if n == 1 else 's')
 
-Checked on 2026-10-19 against the 3.24.3 asm (`blutter_output/asm`, grep only). Five prefixes looked ambiguous in the object-pool strings:
 
-| prefix | URL literals (`"/<prefix>/...`) | Dart package paths | verdict |
-|---|---|---|---|
-| `smart_service` | 13 | none | real service: 13 endpoints, sent through `encryptionRequestHttp`/`encryptionRequestHttpByGHttpRequest` in `anka_agent/http/` |
-| `device_svc` | 3 | none | real service: 3 endpoints, sent via `encryptionRequestHttp` |
-| `privacy_service` | 2 | none | real service: 2 endpoints (data export), sent via `encryptionRequestHttp` |
-| `energy` | 4 | 6 (`.../src/energy/model/...`) | real service: 4 endpoints (`/energy/v1/...`). The package paths are unrelated Dart directories and are not endpoints |
-| `site` | 2 | 12 (`.../family/site/...`) | real service: 2 endpoints (`/site/v1/...`). The package paths are unrelated Dart directories and are not endpoints |
+def ambiguous(c, v2_removed):
+    """The ambiguous-prefix section; every count comes from the inventory."""
+    g = lambda k: c.get(k, 0)  # noqa: E731
+    return """## Ambiguous prefixes (resolved: all five are real services)
 
-Result: none of the five is only a Dart package path; every one has URL literals with a leading `/` that a `*Http*` sender uses, so all five are inventoried and have their own directory above. Related oddities, not errors: `v2/` holds four `/v2/anka/...` URLs (the version segment comes first, so the URL prefix rule makes `v2` the service directory; the four rows are URL literals with no traced sender, one of them removed in 3.24.3), and `ems/`, `generator/` and `marketing/` hold one endpoint each.
-"""
+Checked on 2026-10-19 against the 3.24.3 asm (`blutter_output/asm`, grep only). Five prefixes looked ambiguous in the object-pool strings. The endpoint counts below are generated from `data/endpoints.json`; for the per-service pages see the service index above.
+
+| prefix | Dart package paths of the same name | verdict |
+|---|---|---|
+| `smart_service` | none | real service: %s, sent through `encryptionRequestHttp`/`encryptionRequestHttpByGHttpRequest` in `anka_agent/http/` |
+| `device_svc` | none | real service: %s, sent via `encryptionRequestHttp` |
+| `privacy_service` | none | real service: %s (data export), sent via `encryptionRequestHttp` |
+| `energy` | yes (`.../src/energy/model/...`) | real service: %s (`/energy/v1/...`). The package paths are unrelated Dart directories and are not endpoints |
+| `site` | yes (`.../family/site/...`) | real service: %s (`/site/v1/...`). The package paths are unrelated Dart directories and are not endpoints |
+
+Result: none of the five is only a Dart package path; every one has URL literals with a leading `/` that a `*Http*` sender uses, so all five are inventoried and have their own directory above. Related oddities, not errors: `v2/` holds %s of the form `/v2/anka/...` (the version segment comes first, so the URL prefix rule makes `v2` the service directory; %d removed in 3.24.3), and `ems/` (%s), `generator/` (%s) and `marketing/` (%s) are small services.
+""" % (_n(g('smart_service')), _n(g('device_svc')), _n(g('privacy_service')),
+       _n(g('energy')), _n(g('site')), _n(g('v2'), 'URL'), v2_removed,
+       _n(g('ems')), _n(g('generator')), _n(g('marketing')))
+
 
 NOT_HERE = ("Not here: MQTT or BLE facts (see [../mqtt/README.md](../mqtt/README.md), "
             "[../ble/README.md](../ble/README.md)), step-by-step flows "
@@ -63,11 +73,12 @@ def page_info(path, rows):
         m = re.search(r'## Purpose\n\n(.*?)\n', txt)
         purpose = m.group(1) if m else 'TODO'
     keys = sorted({r['upstream_key'] for r in rows if r.get('upstream_key')})
-    removed = all(r.get('removed_in') for r in rows)
-    pool_only = all(r.get('reference') == 'pool-only' for r in rows)
-    status = ('removed in 3.24.3, ' if removed else
-              'pool-only in 3.24.3, ' if pool_only else '') + (
-        'skeleton' if skel else 'hand-written')
+    removed = bool(rows) and all(r.get('removed_in') for r in rows)
+    pool_only = bool(rows) and all(r.get('reference') == 'pool-only' for r in rows)
+    # one of four values: removed / pool-only come from the inventory, the
+    # others from the page itself (owner = a purpose without TODO)
+    status = ('removed' if removed else 'pool-only' if pool_only else
+              'skeleton' if skel or purpose == 'TODO' else 'owner')
     return skel, purpose, ', '.join('`%s`' % k for k in keys) or '-', status
 
 
@@ -100,6 +111,7 @@ def build(endpoints, api):
     out = {}
     summary = []
     pages_on_disk = {}
+    tally = {'owner': 0, 'skeleton': 0, 'pool-only': 0, 'removed': 0}
     for s in sorted(svc):
         L = [HDR, '', '# %s' % s, '',
              'Service index for the URL prefix `/%s/`. Each endpoint page is the '
@@ -116,11 +128,12 @@ def build(endpoints, api):
                 skel, purpose, keys, status = page_info(disk, by[url])
             else:
                 skel, purpose, keys, status = page_info(disk, [])
-                status = 'hand-written, not in `data/endpoints.json`'
+                status = ('skeleton' if skel or purpose == 'TODO' else 'owner') + \
+                    ', not in `data/endpoints.json`'
                 if skel:
-                    status = 'skeleton, not in `data/endpoints.json`'
                     purpose = 'TODO'
             nskel += bool(skel and url in by)
+            tally[status.split(',')[0]] += 1
             L.append('| [`%s`](%s) | %s | %s | %s |' % (
                 url, os.path.relpath(p, 'api/' + s), purpose, keys, status))
         L += ['', NOT_HERE.replace('../', '../../'), '']
@@ -128,6 +141,12 @@ def build(endpoints, api):
         summary.append((s, sum(1 for u, _ in svc[s] if u in by), nskel))
         pages_on_disk[s] = len(svc[s])
     total = sum(n for _, n, _ in summary)
+    counts = {}
+    for u in by:
+        k = render_pages.endpoint_path(u).split('/')[1]
+        counts[k] = counts.get(k, 0) + 1
+    v2_removed = sum(1 for u, rs in by.items() if u.startswith('/v2/')
+                     and all(r.get('removed_in') for r in rs))
     gone = sum(1 for u, rs in by.items() if all(r.get('removed_in') for r in rs))
     pool = sum(1 for u, rs in by.items()
                if all(r.get('reference') == 'pool-only' for r in rs))
@@ -136,15 +155,19 @@ def build(endpoints, api):
          'in 3.24.3, %d only in the 3.24.3 object pool with no code reference, %d '
          'absent from 3.24.3 and only in 3.18.0). The pages column counts the pages '
          'on disk per service: one per URL plus hand-written pages that have no '
-         'inventory row (%d in total). Pages that are not hand-written are '
-         'skeletons rendered from `data/endpoints.json` by '
-         '`tools/render_pages.py`.' % (total, total - gone - pool, pool, gone,
-                                       sum(pages_on_disk.values()) - total), '',
+         'inventory row (%d in total). Skeleton pages are rendered from '
+         '`data/endpoints.json` by `tools/render_pages.py`. Page status over all %d pages on disk (a page '
+         'has exactly one status; `pool-only` and `removed` come from the '
+         'inventory and take precedence over `skeleton`): `owner` %d, `skeleton` %d, '
+         '`pool-only` %d, `removed` %d.' % (
+             total, total - gone - pool, pool, gone,
+             sum(pages_on_disk.values()) - total, sum(pages_on_disk.values()),
+             tally['owner'], tally['skeleton'], tally['pool-only'], tally['removed']), '',
          '| service | pages | index |', '|---|---|---|']
     for n, c, _ in summary:
         L.append('| `%s/` | %d | [%s/README.md](%s/README.md) |' % (
             n, pages_on_disk[n], n, n))
-    L += ['', AMBIGUOUS, NOT_HERE, '']
+    L += ['', ambiguous(counts, v2_removed), NOT_HERE, '']
     out[os.path.join(api, 'README.md')] = '\n'.join(L)
     return out, summary
 
@@ -163,6 +186,13 @@ def keep_tail(path, text):
     return text
 
 
+def foreign_prose(old, new):
+    """Non-table lines of an existing README that the generator does not emit."""
+    keep = {l.strip() for l in new.splitlines() if l.strip() and not l.startswith('|')}
+    return [l for l in old.splitlines()
+            if l.strip() and not l.startswith('|') and l.strip() not in keep]
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--endpoints', default='data/endpoints.json')
@@ -171,8 +201,23 @@ def main(argv=None):
     with open(a.endpoints, encoding='utf-8') as fh:
         data = json.load(fh)
     out, summary = build(data, a.api)
+    final, refused = {}, []
     for path, text in out.items():
-        text = keep_tail(path, text)
+        # api/README.md is generated end to end (its text may change with the
+        # tool); the guard protects only the service READMEs that people extend
+        if os.path.exists(path) and path != os.path.join(a.api, 'README.md'):
+            with open(path, encoding='utf-8') as fh:
+                old = fh.read()
+            if KEEP_MARKER not in old and foreign_prose(old, text):
+                refused.append(path)
+        final[path] = keep_tail(path, text)
+    if refused:
+        for path in refused:
+            sys.stderr.write('REFUSED: %s has hand-written prose and no "%s" marker; '
+                             'add the marker above the hand-written part or move the '
+                             'prose; nothing was written\n' % (path, KEEP_MARKER))
+        return 1
+    for path, text in final.items():
         with open(path, 'w', encoding='utf-8') as fh:
             fh.write(text)
     print('%d indexes, %d pages (%d skeletons)' % (
