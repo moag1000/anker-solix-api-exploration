@@ -19,14 +19,43 @@ Not here: endpoint payloads ([../api/README.md](../api/README.md)), BLE opcodes 
 | [a17b1.md](a17b1.md) | A17B1 JSON status messages and the app model with DataFlow and Bd | 100-101, 350-354 |
 | [a5101.md](a5101.md) | A5101 JSON status, BLE data code maps (corrected pairing), 002d, 0030 | 199-216, 316-317, 651 (189-198 are API models owned by `models/hes.md`) |
 
-Pages carry their own status header with the lowest tag on that page: `asm-traced` on envelope, a17c1, a17c1_status, a17c5, a17b1 and a5101; `string-only` on a17x8 (the 0040/0057 binding) and a17x7 (the `ad` alternate source). The three enum references (audit rows 103-160) are linked from the PN pages and will be owned by `reference/enums.md`.
+Pages carry their own status header with the lowest tag on that page. `asm-traced`: envelope, a17c1, a17c1_status, a17c5, a17b1, a5101, a172x, a1771, a1753, a1780, a1790, a2345, a91b2, a17c0. `string-only`: a17x8 (the 0040/0057 binding), a17x7 (the `ad` alternate source), a17c2 (field labels from debug strings), a1340 (device-level debug strings) and shelly (strings and a new tag read, no audit row). `upstream-confirmed`: upstream_commands (index of upstream constants). The three enum references (audit rows 103-160) are linked from the PN pages and will be owned by `reference/enums.md`.
+
+## Pages written (Task 3.6b)
+
+| page | covers | audit rows (docs/audit/BLE_COMMAND_MAP.md) |
+|---|---|---|
+| [a172x.md](a172x.md) | A172X (C300 family): 0405 status tags of the A1726 parser, the PPS single-value setters 0043 to 0079 | 440-458, 245-248, 250-260 (249 in Known unknowns) |
+| [a1771.md](a1771.md) | A1771 (F1200): 0405 status tags, sibling-map names | 295-311, 459-485 |
+| [a1753.md](a1753.md) | A1753 (C800): tags e5, f8, f9 on top of A1771; A1781 note | 312-314 |
+| [a1780.md](a1780.md) | A1780 (F2000): positional parser (`parseOtherData`, `parseSwitchData`, `parseCountdownData`, `parseDeviceInfo`) with the audit's corrected byte windows | 517-582 |
+| [a1790.md](a1790.md) | A1790 (F3800): 0405 status tags, SubBatteryInfo model, setters 0078, 005f, 0060, 0091 | 89-90, 486-516, 261-263 |
+| [a2345.md](a2345.md) | A2345 (250 W Prime Charger): status tags, OutputPortInfo (`parseChargePortInfo`), setters | 91-97, 324-328 (A2345 parts), 329-341 |
+| [a91b2.md](a91b2.md) | A91B2 (240 W Charging Station): status tags (new tag read), setters | 324-328 (A91B2 parts) |
+| [a17c0.md](a17c0.md) | A17C0 (Solarbank E1600): 0405 status tags, setters 0050, 005e, 0067, 0068, 0071 | 416-439, 243-244 |
+| [a17c2.md](a17c2.md) | A17C2 (Solarbank 2 AC): 0405 status tags, setters shared with A17C1 | 342-349, 217-235 (by link to a17c1.md) |
+| [a1340.md](a1340.md) | A1340 (portable power bank): per-port tags, device-level debug strings | 350-351, 650 |
+| [shelly.md](shelly.md) | Shelly Pro 3EM / Plug: status tags and the location of the old doc strings (new asm reads, no audit row) | none (row 649 is a NOT-FROM-ASM note) |
+| [upstream_commands.md](upstream_commands.md) | Index of every `mqttcmdmap.py` constant with its bindings and the PN pages | 583-636 |
+| [envelope.md](envelope.md#infrastructure) | New Infrastructure section: `i_mqtt_serve.dart`, `mqtt_types.dart`, `local.dart` (new asm reads) | none |
+
+Audit rows without an MQTT page: 189-198 are API response models and examples (not MQTT facts); their owners are the `models/` pages ([../models/scene_info_model.md](../models/scene_info_model.md) for 189-190, [../models/site_device_param_response.md](../models/site_device_param_response.md) for 191, [../models/hes.md](../models/hes.md) for 193-195 and 197-198, [../models/heat_pump_param.md](../models/heat_pump_param.md) for 196; row 192 is a JSON example with no asm value). Rows 89-97 (data structures) are owned by [a1790.md](a1790.md) (SubBatteryInfo, 89-90) and [a2345.md](a2345.md) (OutputPortInfo, 91-97).
 
 ## Source conflicts (unresolved)
 
 - Tag `fd`: upstream describes a millisecond timestamp string, the app builders write a CRC32 (audit rows 24, 219-221). See [envelope.md](envelope.md#tlv-frame) and [a17c1.md](a17c1.md#005e-setbackpower-settacticstime-setpeakvalley). Untested here.
 - A17C1 tag `e0`: the parser tests `== 7` (audit row 395), upstream lists 1, 6 and 3. See [a17c1_status.md](a17c1_status.md#payload-fields).
 - Opcode `005a`: the app has no builder (audit row 222) while [../devices/solarbank.md](../devices/solarbank.md) lists it as tested. See [a17c1.md](a17c1.md#opcodes-without-a-confirmed-app-builder-005a-0082-006a-0069).
+- A2345 and A91B2 message id: the old doc calls the parser "0405", upstream binds `"0a00"` and `"0303"` and has no `"0405"` for these products; the asm audit does not bind the parser to a message id. See [a2345.md](a2345.md#parsedeviceallinfo-status-tags-upstream-message-0a00) and [a91b2.md](a91b2.md#parsedeviceallinfo-status-tags-upstream-message-0a00).
+- A2345 port tags: upstream has six port blocks (`a4` to `a9`), the old doc listed `a4` to `a6` as port blocks and `a7` to `ab` as plain ints; the asm calls the port sub-parser six times. Same pages.
+- A17C2 field labels: the debug strings in the parser (for example `ab` total output power) conflict with the upstream names via the A17C5 map (`ab` `photovoltaic_power`). See [a17c2.md](a17c2.md#payload-fields).
+- A1771 names: upstream has no A1771 key; the sibling maps (A1761, A1780) disagree with the old doc labels at `a5`, `d1`, `d5` and at `a2`/`a3`. See [a1771.md](a1771.md#payload-fields).
+- A1780 positional windows: the old doc mapped two blocks to the tag `bd` and six names differ from upstream (`a5`, `a6`, `af`, `b0`, `c5`, `db`). See [a1780.md](a1780.md#known-unknowns).
+- Opcode `005a` for A17C2: upstream binds it (parallel-system max load), the app has no builder in the audited files (audit row 222). See [a17c2.md](a17c2.md#known-unknowns-1) and [upstream_commands.md](upstream_commands.md).
+- Upstream `CMD_SOC_LIMITS_V2` describes `fd` as a timestamp, the app writes a CRC32 (audit rows 599, 219); same finding as the `fd` item above.
+- Old doc Shelly strings: only `shellyPlugOutPutPower` and `shellyPlugSwitch` exist in the Shelly parser; `fromGrid`, `toGrid`, `fromGridSum`, `toGridSum` and `totalChargingPower` belong to other models (AE1R0, A17X7) or app-wide keys. See [shelly.md](shelly.md#old-doc-shelly-status-strings).
+- `charging/mqtt/local.dart` holds certificate and key material, not a local MQTT client. See [envelope.md](envelope.md#infrastructure).
 
-## Pending (Task 3.6b)
+## Not covered by 3.6a and 3.6b
 
-A172X family (C300/C300X and the other PPS products), A1771 (C1000), A1780 and A1790 (F2000, F3800), A17C0, A17C2, A2345 and A91B2 (Prime chargers), A1753, A1781, A1340, A17a3, Shelly and the `iot` decoder. Their audit rows are 295-349, 416-636 (see the section index in [../docs/audit/BLE_COMMAND_MAP.md](../docs/audit/BLE_COMMAND_MAP.md)). The MQTT infrastructure files new in 3.24.3 (`i_mqtt_serve.dart`, `mqtt_types.dart`, `local.dart`) are not covered by any page yet.
+Audit rows 318-323 and 653 (EverFrost cooler A17A0 to A17A5: command-key map, not TLV), row 315 (A5190/A5191 `encoding_type`, UNVERIFIABLE, recorded in [envelope.md](envelope.md#known-unknowns)), the EV charger constants of [upstream_commands.md](upstream_commands.md) (no EV charger PN page yet) and the `iot` decoder have no page. They were not part of the 3.6a or 3.6b scope; the 3.6a list of pending products is empty.
