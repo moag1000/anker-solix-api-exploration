@@ -46,10 +46,10 @@ MODEL_FIELD = {
     'nullable': (BOOL, NONE), 'since': (STR, NONE),
 }
 MODEL_REQUIRED = {
-    'class': STR, 'dart_file': STR, 'fields': 'rows:model_field',
+    'key': STR, 'class': STR, 'dart_file': STR, 'fields': 'rows:model_field',
     'from_json_addr': STR, 'removed_keys': LIST_STR, 'since': STR,
 }
-MODEL_OPTIONAL = {'key': STR, 'removed_in': STR}
+MODEL_OPTIONAL = {'removed_in': STR}
 
 PARAM_TYPE_REQUIRED = {
     'cmd': (INT, NONE), 'cmd_addr': (STR, NONE), 'cmd_by_function': DICT,
@@ -61,8 +61,8 @@ PARAM_TYPE_REQUIRED = {
     'set_function': LIST_STR, 'traced_from': LIST, 'unresolved': LIST,
 }
 
-# errors.json rows come from three sources; only code, source and tag are common.
-ERROR_REQUIRED = {'code': INT, 'source': STR, 'tag': STR}
+# errors.json rows come from three sources; only code, kind, source and tag are common.
+ERROR_REQUIRED = {'code': INT, 'kind': STR, 'source': STR, 'tag': STR}
 ERROR_OPTIONAL = {
     'addr': STR, 'branch': (STR, NONE), 'file': STR, 'form': STR, 'function': STR,
     'function_addr': STR, 'odd_raw': BOOL, 'raw': INT, 'strings': LIST_STR, 'width': STR,

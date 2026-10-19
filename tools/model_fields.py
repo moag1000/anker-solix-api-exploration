@@ -2,13 +2,20 @@
 
 Usage:
   python3 -I tools/model_fields.py <asm_root> --version 3.24.3 \
-      [--old-root <3.18.0 asm root>] [--out data/models.json]
+      [--old-root <3.18.0 asm root>] [--out data/models.json] [--include-noise]
 
 Each `Class.fromJson` is walked in order.  A JSON key is a non-empty string
 literal that is followed within a few instructions by an indirect call (the
 `map[key]` lookup).  The same key loaded twice in a row (null check, then
 re-read) counts once.  Dart types come from the cast `r8 = <Type>`, nested
 `X.fromJson()` calls and `_GrowableList` defaults; `unknown` when none is seen.
+
+Output rows carry `key` = `package::Class` (package = first directory of the Dart
+file; where two classes still share that key, the package part is extended to the
+shortest unique directory path, then to the file path without `.dart`), plus the
+short `class` name.  By default classes without fields and the `sentry` package
+(error-reporting SDK, not app data) are dropped; `--include-noise` keeps them.
+Keys are computed before the filter, so a key does not depend on the flag.
 """
 import argparse
 import os
@@ -195,6 +202,50 @@ def build_models(root, version, old_root=None, log=None):
     return {'rows': rows, 'old': old, 'new': new, 'match': mp}
 
 
+def package_of(dart_file):
+    """First directory of the Dart file path ('' for a file in the root)."""
+    return dart_file.split('/', 1)[0] if '/' in dart_file else ''
+
+
+def _labels(dart_file):
+    """Key prefixes from the short package to the full file path (no `.dart`)."""
+    parts = dart_file.split('/')
+    dirs, stem = parts[:-1], '/'.join(parts)
+    if stem.endswith('.dart'):
+        stem = stem[:-5]
+    out = ['/'.join(dirs[:d]) for d in range(1, len(dirs) + 1)] or [package_of(dart_file)]
+    out.append(stem)
+    return out
+
+
+def assign_keys(rows):
+    """Set `key` = `<package>::<class>` on every row; return the rows sorted by key."""
+    groups = {}
+    for r in rows:
+        groups.setdefault((package_of(r['dart_file']), r['class']), []).append(r)
+    for (pkg, cls), grp in groups.items():
+        if len(grp) == 1:
+            grp[0]['key'] = '%s::%s' % (pkg, cls)
+            continue
+        labels = [_labels(r['dart_file']) for r in grp]
+        for lvl in range(max(map(len, labels))):
+            pick = [l[min(lvl, len(l) - 1)] for l in labels]
+            if len(set(pick)) == len(pick):
+                break
+        for r, p in zip(grp, pick):
+            r['key'] = '%s::%s' % (p, cls)
+    return sorted(rows, key=lambda r: r['key'])
+
+
+def is_noise(r):
+    """A class without fields, or a class of the `sentry` package."""
+    return not r['fields'] or package_of(r['dart_file']) == 'sentry'
+
+
+def filter_noise(rows, include_noise):
+    return list(rows) if include_noise else [r for r in rows if not is_noise(r)]
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('asm_root')
@@ -202,13 +253,20 @@ def main(argv=None):
     ap.add_argument('--old-root', default=A.DEFAULT_OLD_ROOT)
     ap.add_argument('--snapshot', default=A.SNAPSHOT_3_24_3)
     ap.add_argument('--out', default='data/models.json')
+    ap.add_argument('--include-noise', action='store_true',
+                    help='keep field-less classes and the sentry package')
     a = ap.parse_args(argv)
     t0 = time.time()
     res = build_models(a.asm_root, a.version, a.old_root,
                        log=lambda s: print(s, file=sys.stderr))
     gen = 'tools/model_fields.py asm_root --version %s' % a.version
-    A.write_json(a.out, gen, a.version, a.snapshot, res['rows'])
-    print('%d rows -> %s (%.1fs)' % (len(res['rows']), a.out, time.time() - t0))
+    if a.include_noise:
+        gen += ' --include-noise'
+    keyed = assign_keys(res['rows'])
+    rows = filter_noise(keyed, a.include_noise)
+    A.write_json(a.out, gen, a.version, a.snapshot, rows)
+    print('%d rows (%d dropped as noise) -> %s (%.1fs)'
+          % (len(rows), len(keyed) - len(rows), a.out, time.time() - t0))
     return 0
 
 

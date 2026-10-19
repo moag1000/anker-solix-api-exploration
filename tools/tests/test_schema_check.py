@@ -40,7 +40,7 @@ MODEL_FIELD = {'dart_type': 'int?', 'json_key': 'k', 'key_addr': '0x3',
                'nullable': True, 'since': '3.24.3'}
 MODEL_ROW = {'key': 'a::C', 'class': 'C', 'dart_file': 'a/c.dart', 'fields': [MODEL_FIELD],
              'from_json_addr': '0x4', 'removed_keys': [], 'since': '3.24.3'}
-ERR_ROW = {'code': 10004, 'source': 'issue', 'tag': 'device-tested'}
+ERR_ROW = {'code': 10004, 'kind': 'api', 'source': 'issue', 'tag': 'device-tested'}
 
 
 class TestCheckDoc(unittest.TestCase):
@@ -104,6 +104,11 @@ class TestCheckDoc(unittest.TestCase):
         r = copy.deepcopy(MODEL_ROW)
         del r['fields'][0]['json_key']
         self.assertTrue(S.check_doc('models', doc([r])))
+
+    def test_model_key_is_required(self):
+        r = dict(MODEL_ROW)
+        del r['key']
+        self.assertTrue(any('missing field `key`' in x for x in S.check_doc('models', doc([r]))))
 
     def test_duplicate_model_key(self):
         v = S.check_doc('models', doc([MODEL_ROW, dict(MODEL_ROW)]))
