@@ -6,7 +6,7 @@ This directory holds one page per cloud endpoint, grouped by service (the first 
 
 ## Service index
 
-One directory per URL prefix: 450 distinct URLs (439 with a code reference in 3.24.3, 9 only in the 3.24.3 object pool with no code reference, 2 absent from 3.24.3 and only in 3.18.0). Counts include hand-written pages; all other pages are skeletons rendered from `data/endpoints.json` by `tools/render_pages.py`.
+One directory per URL prefix: 450 distinct URLs (439 with a code reference in 3.24.3, 9 only in the 3.24.3 object pool with no code reference, 2 absent from 3.24.3 and only in 3.18.0). The pages column counts the pages on disk per service: one per URL plus hand-written pages that have no inventory row (3 in total). Pages that are not hand-written are skeletons rendered from `data/endpoints.json` by `tools/render_pages.py`.
 
 | service | pages | index |
 |---|---|---|
@@ -28,11 +28,11 @@ One directory per URL prefix: 450 distinct URLs (439 with a code reference in 3.
 | `marketing/` | 1 | [marketing/README.md](marketing/README.md) |
 | `mini_power/` | 34 | [mini_power/README.md](mini_power/README.md) |
 | `openapi/` | 3 | [openapi/README.md](openapi/README.md) |
-| `passport/` | 26 | [passport/README.md](passport/README.md) |
+| `passport/` | 28 | [passport/README.md](passport/README.md) |
 | `power_service/` | 186 | [power_service/README.md](power_service/README.md) |
 | `privacy_service/` | 2 | [privacy_service/README.md](privacy_service/README.md) |
 | `site/` | 2 | [site/README.md](site/README.md) |
-| `smart_service/` | 13 | [smart_service/README.md](smart_service/README.md) |
+| `smart_service/` | 14 | [smart_service/README.md](smart_service/README.md) |
 | `v2/` | 4 | [v2/README.md](v2/README.md) |
 
 ## Ambiguous prefixes (resolved: all five are real services)

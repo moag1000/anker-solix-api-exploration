@@ -1,5 +1,7 @@
 # Changelog
 
+2026-10-19 — rework branch published; README/index version pass
+
 > **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/CHANGELOG_old_entries.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
 
 ## Errata 2026-10 (Smi decoding)

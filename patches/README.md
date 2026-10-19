@@ -1,5 +1,7 @@
 # Patches for Local Testing
 
+> **STALE (3.18.0; contains Smi misreads — 'value 2 = enabled' is really 1, fc indexes [1],[7],[9]); see [docs/audit/patches_README.md](../docs/audit/patches_README.md); archived in Task 4.9.**
+
 > **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/patches_README.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
 
 These patches apply APK-extracted tag names to thomluther's mqtt_monitor

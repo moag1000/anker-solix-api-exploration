@@ -1,9 +1,13 @@
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Page type: guidance (no API facts) · Owner page: this page
+
 # Anker Solix API Exploration
 
 > **⚠️ IMPORTANT DISCLAIMER**
 >
-> This reference was created through reverse engineering of the Anker App v3.18.0
-> APK using Blutter (Dart AOT decompiler). **The analysis was heavily AI-assisted.**
+> This reference was created through reverse engineering of the Anker App 3.24.3
+> APK (rework in progress on branch `rework/3.24.3`, 2026-10-19; the previous
+> 3.18.0 reference is tagged `v2026.04-app3.18.0`) using Blutter (Dart AOT decompiler).
+> **The analysis was heavily AI-assisted.**
 > This means the content may be:
 >
 > - **Inaccurate** — field names extracted from compiled binary code may be
@@ -32,141 +36,106 @@
 
 Pick the line that matches what you want to do. Each links to a persona section (who it is for, reading path) and to the first page you need. Details are in [docs/PERSONAS.md](docs/PERSONAS.md).
 
-- **Library maintainer** ("what exactly does the app send?"): [persona](docs/PERSONAS.md#1-library-maintainer), first page [endpoints/power_service_site.md](endpoints/power_service_site.md).
-- **Home Assistant integration developer** ("which setting, which flow, which ranges?"): [persona](docs/PERSONAS.md#2-home-assistant-integration-developer), first page [FLOWS.md](FLOWS.md).
-- **mqtt_monitor user** ("what is field a8 / cmd 0x7c?"): [persona](docs/PERSONAS.md#3-mqtt_monitor-user), first page [devices/solarbank.md](devices/solarbank.md) (MQTT sections); partial today, per-PN decoder pages are a target.
-- **BLE project developer** ("opcode, TLV, handshake?"): [persona](docs/PERSONAS.md#4-ble-project-developer), first page [BLE_COMMAND_MAP.md](BLE_COMMAND_MAP.md).
-- **Curious user / newcomer** ("what can be controlled, what is a site?"): [persona](docs/PERSONAS.md#5-curious-user--newcomer), start with [How to use this reference](#how-to-use-this-reference); glossary planned (`GLOSSARY.md`), none today.
+- **Library maintainer** ("what exactly does the app send?"): [persona](docs/PERSONAS.md#1-library-maintainer), first pages [api/README.md](api/README.md) (one page per endpoint), [api/param_types.md](api/param_types.md) and [api/sdk_senders.md](api/sdk_senders.md).
+- **Home Assistant integration developer** ("which setting, which flow, which ranges?"): [persona](docs/PERSONAS.md#2-home-assistant-integration-developer), first pages [flows/](flows/README.md) and [api/param_types.md](api/param_types.md).
+- **mqtt_monitor user** ("what is field a8 / cmd 0x7c?"): [persona](docs/PERSONAS.md#3-mqtt_monitor-user), first pages [mqtt/README.md](mqtt/README.md) (one decoder page per product number) and [mqtt/envelope.md](mqtt/envelope.md) (frame and envelope).
+- **BLE project developer** ("opcode, TLV, handshake?"): [persona](docs/PERSONAS.md#4-ble-project-developer), the [ble/](ble/README.md) pages are planned (Task 3.7/4.x, nothing there yet); the shared TLV frame and the per-product command tags are in [mqtt/envelope.md](mqtt/envelope.md) and [mqtt/README.md](mqtt/README.md). BLE is a local channel only; it is not a live fallback for the cloud.
+- **Curious user / newcomer** ("what can be controlled, what is a site?"): [persona](docs/PERSONAS.md#5-curious-user--newcomer), start with [How to use this reference](#how-to-use-this-reference) and [METHODOLOGY.md](METHODOLOGY.md); a glossary is planned (`GLOSSARY.md`), none today.
 
-These paths point at the current file layout and will move to the new layout during the rework; see [METHODOLOGY.md](METHODOLOGY.md).
+The layout and the owner of every kind of fact are described in [docs/STRUCTURE.md](docs/STRUCTURE.md); the old root pages are still present and are marked as superseded below.
 
-**Coverage**
-
-Endpoint pages: 450 of 450 distinct URLs (439 with a code reference in 3.24.3, 9 only in the 3.24.3 object pool with no code reference, 2 only in 3.18.0) — 9 hand-written, 441 skeletons  
-Generated from data/endpoints.json by tools/render_pages.py on 2026-10-19
+Coverage and statistics are generated from the data files, see [Statistics and coverage](#statistics-and-coverage).
 
 ---
 
 ## How this was built
 
-| Source | Method | What it provides | Confidence |
+| Source | Method | What it provides | Confidence (3.18.0-era judgement; the tags of [METHODOLOGY.md](METHODOLOGY.md) are authoritative) |
 |--------|--------|-----------------|------------|
 | `libapp.so` (78 MB ARM64 ELF) | [Blutter](https://github.com/worawit/blutter) AOT decompilation against Dart SDK 3.11.0 | Endpoint paths, function names, request params, response model fields, required/optional classification | Medium — string constants are reliable, param-to-endpoint attribution may have errors |
 | `libapp.so` strings | `strings` extraction + pattern matching | MQTT field names, model `toString()` patterns, debug log messages | High for field names, low for interpretation |
-| mqtt_monitor sessions | Live MQTT traffic capture on real devices (A17C1, A17X8) | Verified MQTT command fields, state change tracking | High — byte-for-byte verified |
+| mqtt_monitor sessions | Live MQTT traffic capture on real devices (A17C1, A17X8) | Verified MQTT command fields, state change tracking | Device-tested only where a page records client, version, PN/FW, date and tester (see [METHODOLOGY.md](METHODOLOGY.md)); not re-verified for 3.24.3 |
 | APK manifest + resources | Standard APK analysis | Device model codes, BLE UUIDs, app version | High |
-| Model `toJson()` methods | 460 class scan across `asm/charging/model/` | Exact request body nesting, field names per model | High — compiler-generated serialization |
-| Device-specific logic | `ui/page/device/*/` + helper classes scan | 95 additional endpoints not in central repository | Medium — device-specific, may not be available to all accounts |
+| Model `toJson()` methods | class scan of all model classes (count: see Statistics) | Exact request body nesting, field names per model | High — compiler-generated serialization |
+| Device-specific logic | `ui/page/device/*/` + helper classes scan | Additional endpoints not in the central repository (counted in Statistics) | Medium — device-specific, may not be available to all accounts |
 | Upstream cross-reference | thomluther/anker-solix-api code comparison | Nesting verification, missing fields, confirmed constants | High — upstream code is community-tested on real devices |
 
-**Dart SDK**: 3.11.0 (stable), snapshot hash `78da37fed6bf1489361a312568249f3f`
+**Dart SDK**: 3.11.0 (stable), snapshot: `78da37fed6bf1489361a312568249f3f`
 
 **APK**: Anker App v3.24.3 (versionCode 237), package `com.anker.charging`, XAPK sha256 `7d6d0deab4834515c41aa5e8bafff03f9735e883f15c4f8d5b7194e871ff6ba5`
 
-**History**: previously built on App v3.18.0 (build 160), Dart SDK 3.4.4, snapshot hash `d20a1be77c3d3c41b2a5accaee1ce549`.
+**History**: previously built on App v3.18.0 (build 160), Dart SDK 3.4.4, snapshot: `d20a1be77c3d3c41b2a5accaee1ce549`.
 
-> This repo is mid-rework: older sections may still carry 3.18.0 numbers until they are re-verified. See [METHODOLOGY.md](METHODOLOGY.md) for the rules and confidence tags used.
+> This repo is mid-rework (branch `rework/3.24.3`, 2026-10-19). Re-verified against App 3.24.3: [api/](api/README.md), the dedicated pages in [models/](models/README.md), [mqtt/](mqtt/README.md), [flows/](flows/README.md), [devices/a17c5.md](devices/a17c5.md), [devices/modbus.md](devices/modbus.md) and the audit tables in [docs/audit/](docs/audit/). Every root page and old section marked "3.18.0 reference, superseded — kept until Task 4.9" below still carries 3.18.0 content and numbers. See [METHODOLOGY.md](METHODOLOGY.md) for the rules and confidence tags used.
 
 ---
 
 ## How to use this reference
 
 ### For API endpoint development
-1. Find the endpoint in [endpoints/](endpoints/) by service prefix
+1. Find the endpoint page in [api/](api/README.md): `api/<service>/<endpoint>.md` (service = first URL segment)
 2. Check the function name — it tells you the purpose (e.g., `getSafetySocParams` = get safety SOC parameters)
-3. Check [REQUIRED_FIELDS.md](REQUIRED_FIELDS.md) for which params are required vs optional
-4. Check the response model in [models/](models/) for expected response fields
+3. The endpoint page owns the request parameters (the old [REQUIRED_FIELDS.md](REQUIRED_FIELDS.md) is a 3.18.0 reference, superseded)
+4. Check the response model in [models/README.md](models/README.md) for expected response fields
 
 ### For adding new device controls
-1. Check [VALIDATION_MODEL.md](VALIDATION_MODEL.md) for the GET→SET flow
+1. Check [flows/](flows/README.md) for the traced flows and [VALIDATION_MODEL.md](VALIDATION_MODEL.md) for the GET→SET pattern (3.18.0 reference, numbers under review; `reference/validation_model.md` is planned)
 2. The app always queries limits/options first (GET), then sets values (SET)
 3. Validation ranges come from the server, not from the app — you must query them too
 
 ### For mqtt_monitor decoding sessions
-1. Use the MQTT field name references to identify unknown hex fields
+1. Use the per-product decoder pages in [mqtt/README.md](mqtt/README.md) to identify unknown hex fields
 2. The Blutter-extracted field names tell you what to expect, but hex-to-field assignment requires live verification per [Discussion #222](https://github.com/thomluther/anker-solix-api/discussions/222)
 
 ---
 
-## Statistics
+## Statistics and coverage
 
-- **~243** unique API endpoints across **12** service prefixes
-  - 148 from `http_request_repository_impl.dart` (initial extraction)
-  - +95 from device-specific logic files (breadth scan)
-- **460** toJson() class implementations scanned (depth analysis)
-- **94** response models with field names
-- **180** endpoints with required/optional field classification
-- **33** device setting categories with complete GET→SET flows
-- **82** BLE/IoT SDK action names (65 actions + 14 prop + 3 query)
-- **234+** cross-referenced field types with examples
-- **60** unique product codes (44 IoT + 16 from message models)
-- **30+** enum types with exact API integer values
-- **71** real API response examples from thomluther's code
-- **13** supported countries for dynamic pricing
+<!-- readme_stats:begin -->
+This block was generated on 2026-10-19 by `tools/readme_stats.py` from `data/*.json` and the files on disk; do not edit by hand (run the tool again).
 
-### API Service Prefixes
+**Coverage**
 
-| Prefix | Endpoints | Primary Device |
-|--------|-----------|---------------|
-| `/power_service/v1/` | ~130 | All devices (core API) |
-| `/power_service/v2/` | 5 | AX170, A17EX (newer) |
-| `/charging_hes_svc/` | ~55 | A5101 HES/X1 |
-| `/charging_energy_service/` | ~12 | A17B1 System |
-| `/charging_hes_dynamic_price_svc/` | 6 | Dynamic pricing |
-| `/charging_disaster_prepared/` | 5 | A17B1/A5101 Backup & Storm Guard |
-| `/charging_pv_svc/` | 5 | A5140 Solar |
-| `/charging_common_svc/` | 3 | Location |
-| `/smart_service/v1/` | 3 | Anka AI Agent |
-| `/charging_imsg_svc/` | 2 | EV Charger faults |
-| `/mini_power/v1/` | 27 | A2345/A2687 Charger |
-| `/app/` | ~10 | Auth, News, AIOT |
+- Endpoint pages: 450 of 450 distinct URLs in `data/endpoints.json` have a page (439 with a code reference in 3.24.3, 9 only in the 3.24.3 object pool with no code reference, 2 only in 3.18.0), plus 3 hand-written pages with no inventory row; 453 endpoint pages in total.
+- Of these pages, 124 are hand-written and 329 are skeletons (`Confidence: string-only` with unfilled `<!-- TODO -->` purpose); the skeletons carry only what `data/endpoints.json` knows.
+
+**Statistics**
+
+- 24 API services (directories under [api/](api/README.md))
+- 1032 model classes in `data/models.json` (1016 with fields), 53 pages in [models/](models/README.md)
+- 24 distinct param_type values sent by 3.24.3 (`data/param_types.json`, owner page [api/param_types.md](api/param_types.md))
+- 20 MQTT pages in [mqtt/](mqtt/README.md), 3 flow pages in [flows/](flows/README.md)
+- Smi audit of the old root pages ([docs/audit/](docs/audit/)): 1460 audited claims in 15 tables, of which 182 are WRONG (the real value is in each table)
+<!-- readme_stats:end -->
+
+The per-service endpoint counts are in the [service index of api/README.md](api/README.md#service-index); the old hand-typed statistics and prefix table were 3.18.0 snapshots and are removed.
 
 ---
 
 ## param_type Values
 
-For `get_site_device_param` / `set_site_device_param`:
-
-The type numbers are already listed in `apitypes.py` of [thomluther/anker-solix-api](https://github.com/thomluther/anker-solix-api). What Blutter adds is the **function name → purpose** mapping.
-
-| type | Function (from Blutter) | Purpose | Status |
-|------|------------------------|---------|-----------------|
-| 1 | `getSiteGreenModeDeviceParam` | Green mode settings | Number known, **purpose new** |
-| 2 | `getSitePeakTimeDeviceParam` | Peak/valley time params | Number known, **purpose new** |
-| 3 | `getSiteEnablePeakDeviceParam` | Peak shaving enable | Number known, **purpose new** |
-| 4 | *(native layer)* | SB1 schedule | Known (schedule.py has example data) |
-| 5 | `getSiteLowerLimitDeviceParam` | Lower limit / min power | Number known, **purpose new** |
-| 6 | *(native layer)* | SB2/SB3 schedule | Known (schedule.py has example data) |
-| 7 | *(not in APK v3.18.0)* | Unknown | Number known, purpose unknown |
-| 9 | *(native layer)* | SB1 in SB2 system schedule | Known (schedule.py) |
-| 12 | *(native layer)* | SB3 TOU/dynamic price plan | Known (schedule.py) |
-| 13 | *(native layer)* | SB3 system config | Known (schedule.py) |
-| 16 | `getCombineBoxListData` | Combiner box / power dock | Known response, function name from Blutter |
-| 18 | `getSafetySocParams` | Safety SOC parameters | Known response, function name from Blutter |
-| 19 | `setSiteDevicePowerLimit` | Power limit (SET only) | 19 is `SOLARBANK_POWER_LIMIT` upstream; corrected 2026-10-19, see [api/param_types.md](api/param_types.md) |
-| 20 | `get/setStationCountryCode` | Station country code | Number known, **purpose new** |
-| 23 | *(not in APK v3.18.0)* | Switch config | Known (schedule.py, minimal) |
-| 26 | `getThreePvParam` | 3rd-party PV params | Known response, function name from Blutter |
+The `param_type` values of `get_site_device_param` / `set_site_device_param`, with the sending function, `cmd` and upstream name for every type that App 3.24.3 sends, are owned by [api/param_types.md](api/param_types.md); this README does not repeat them. The type numbers are also listed in `apitypes.py` of [thomluther/anker-solix-api](https://github.com/thomluther/anker-solix-api), which wins on naming.
 
 ---
 
-## Command Flows (new — step-by-step traces)
+## Command Flows
 
-- [FLOWS.md](FLOWS.md) — Complete traces from UI button to wire bytes for 5 key operations
+Now: the traced flows are owned by [flows/](flows/README.md): [flows/system_output_limit.md](flows/system_output_limit.md), [flows/encrypted_request.md](flows/encrypted_request.md) and [flows/modbus_setup.md](flows/modbus_setup.md).
+The old page below (3.18.0 reference, superseded — kept until Task 4.9): its slot count, tag and state numbers were Smi misreads; the corrected values are in the [Errata of the CHANGELOG](CHANGELOG.md#errata-2026-10-smi-decoding) and in [docs/audit/FLOWS.md](docs/audit/FLOWS.md).
 
-Covers: Solarbank schedule (dual API+BLE, CRC32, 14 slots), EV Charger start (encoding_type 2
-is below Flutter layer!), Smart Plug timer (states 0/4/6), Smart Plug schedule (isEffective INVERTED),
-Solarbank power limit (4 code paths).
+- [FLOWS.md](FLOWS.md) — step traces from UI button to wire bytes for the solarbank schedule, EV charger start, smart plug timer and schedule, and the solarbank power limit (numbers under review, do not copy them)
 
 ---
 
-## Business Rules (new — not available from mqtt_monitor)
+## Business Rules
+
+Now: planned owner `reference/business_rules.md` (not written yet); the Smi audit of this page is [docs/audit/BUSINESS_RULES.md](docs/audit/BUSINESS_RULES.md). The old page below (3.18.0 reference, superseded — kept until Task 4.9), numbers under review.
 
 - [BUSINESS_RULES.md](BUSINESS_RULES.md) — When SET commands are allowed, what values are valid, what guards exist
 
 Extracted from APK controller assembly. These are the conditions the Anker app checks
 before sending a command — device connectivity, charge priority blocking schedules,
-value-unchanged skip, SOC defaults, max 7 schedule slots, 4 different power limit paths.
+value-unchanged skip, SOC defaults, the schedule slot limit and several power limit paths.
 **This information is not obtainable from mqtt_monitor or API responses.**
 
 ---
@@ -177,14 +146,20 @@ Start here if you own a specific device:
 
 | Device | Page | Upstream Issue | Status |
 |--------|------|---------------|--------|
-| Solarbank 2/3 (A17C1/C5) | [devices/solarbank.md](devices/solarbank.md) | [70+ issues](https://github.com/thomluther/ha-anker-solix/issues?q=solarbank) | Core supported |
+| Solarbank 2 (A17C1) | [devices/solarbank.md](devices/solarbank.md) | [70+ issues](https://github.com/thomluther/ha-anker-solix/issues?q=solarbank) | Core supported |
 | Smart Plug (A17X8) | [devices/smart_plug.md](devices/smart_plug.md) | [#150](https://github.com/thomluther/ha-anker-solix/issues/150) | Switch in v3.5.0, timer open |
+| Solarbank 3 (A17C5) | [devices/a17c5.md](devices/a17c5.md) | | App 3.24.3 page |
+| Modbus (third-party control) | [devices/modbus.md](devices/modbus.md) | | App 3.24.3 page, feature not a PN |
 | EV Charger V1 (A5191) | [devices/ev_charger.md](devices/ev_charger.md) | [#322](https://github.com/thomluther/ha-anker-solix/issues/322) | Not yet supported |
 | X1 HES / E10 (A5101) | [devices/x1_hes_e10.md](devices/x1_hes_e10.md) | [#274](https://github.com/thomluther/anker-solix-api/issues/274) | Basic monitoring |
 
 ---
 
 ## Endpoints
+
+Now: every endpoint has its own page under [api/](api/README.md) (service index with page counts and purposes); the machine-readable inventory is [data/endpoints.json](data/endpoints.json).
+The old per-file counts and links below are 3.18.0 data and do not add up to the current inventory.
+The old content below (3.18.0 reference, superseded — kept until Task 4.9).
 
 | Service | File | Endpoints | Description |
 |---------|------|-----------|-------------|
@@ -207,7 +182,11 @@ Start here if you own a specific device:
 
 ---
 
-## BLE/MQTT Command Map (new)
+## BLE/MQTT Command Map
+
+Now: MQTT field maps and command tags are in [mqtt/README.md](mqtt/README.md) (per product number, plus [mqtt/envelope.md](mqtt/envelope.md) and [mqtt/upstream_commands.md](mqtt/upstream_commands.md)); BLE pages are planned in [ble/](ble/README.md). Line-by-line audit of the old page: [docs/audit/BLE_COMMAND_MAP.md](docs/audit/BLE_COMMAND_MAP.md).
+The claims below ("100% match rate", "20+ new commands") were 3.18.0-era statements and were not re-checked.
+The old content below (3.18.0 reference, superseded — kept until Task 4.9).
 
 - [BLE_COMMAND_MAP.md](BLE_COMMAND_MAP.md) — Cross-reference of APK command builders with upstream TLV tag assignments
 
@@ -225,6 +204,10 @@ A5190 (EV Charger), A5101 (X1 HES), EverFrost, Prime Charger. Includes 20+ NEW c
 
 ## Validation Model
 
+Now: planned owner `reference/validation_model.md` (not written yet); flows that use the ranges are in [flows/](flows/README.md); audit of the old page: [docs/audit/VALIDATION_MODEL.md](docs/audit/VALIDATION_MODEL.md).
+The category count below is a 3.18.0 number.
+The old content below (3.18.0 reference, superseded — kept until Task 4.9).
+
 - [VALIDATION_MODEL.md](VALIDATION_MODEL.md) — GET→SET flow for 33 setting categories across API, MQTT and BLE
 
 Covers: Power limits, home load, SOC reserve, usage modes, grid export, LED, temperature, cutoff, smart plug schedule/timer, EV charger, generator, heat pump, disaster preparedness, and more.
@@ -233,26 +216,46 @@ Key finding: **the app does not hardcode validation ranges.** It queries the ser
 
 ## Field Types and Examples
 
+Now: field lists live on the model pages ([models/README.md](models/README.md)) and in [data/models.json](data/models.json).
+The counts below are 3.18.0 numbers.
+The old content below (3.18.0 reference, superseded — kept until Task 4.9).
+
 - [FIELD_TYPES.md](FIELD_TYPES.md) — 234 fields with data types and example values, cross-referenced across Blutter (B), thomluther's API examples (U), and MQTT mappings (M)
 - [DART_PYTHON_MAPPING.md](DART_PYTHON_MAPPING.md) — 35 confirmed Dart camelCase → JSON snake_case field name pairs
 
 ## Endpoint → Fields Direct Mapping
+
+Now: param_type structures are owned by [api/param_types.md](api/param_types.md); request parameters and response models per endpoint are on the endpoint pages in [api/](api/README.md).
+The endpoint count below is a 3.18.0 number.
+The old content below (3.18.0 reference, superseded — kept until Task 4.9).
 
 - [PARAM_DATA_STRUCTURES.md](PARAM_DATA_STRUCTURES.md) — Nested JSON structures for param_data per param_type (cross-referenced with thomluther's Issue #423 device findings)
 - [ENDPOINT_FIELDS.md](ENDPOINT_FIELDS.md) — ~150 endpoints with request parameters and response model mapping (91 with identified response models), plus nesting corrections from 460 toJson() class analysis
 
 ## JSON Payloads and Examples
 
+Now: examples belong to the owning endpoint page in [api/](api/README.md); audits of the old pages: [docs/audit/JSON_EXAMPLES.md](docs/audit/JSON_EXAMPLES.md), [docs/audit/RESPONSE_EXAMPLES.md](docs/audit/RESPONSE_EXAMPLES.md).
+The example counts below are 3.18.0 numbers.
+The old content below (3.18.0 reference, superseded — kept until Task 4.9).
+
 - [JSON_EXAMPLES.md](JSON_EXAMPLES.md) — 33 upstream-sourced request payloads + 60 inferred + new parameter discoveries + enum constants + device-specific payload templates (EV charger, generator, SceneInfo feature flags)
 - [RESPONSE_EXAMPLES.md](RESPONSE_EXAMPLES.md) — 71 real API response examples from 48 endpoints (extracted from thomluther's documented code)
 
 ## Enums, Constants, and Product Codes
+
+Now: planned owner `reference/enums.md` (not written yet); audit of the old page: [docs/audit/ENUMS.md](docs/audit/ENUMS.md).
+The counts and code lists below are 3.18.0 content.
+The old content below (3.18.0 reference, superseded — kept until Task 4.9).
 
 - [ENUMS.md](ENUMS.md) — 30+ enum types with exact API integer values: EmsModeType (6 modes with API codes 1/4/5/8/9/10), 16-bit EnergyFlowType bitmask, AI mode codes, BLE status codes, MQTT command types, generator modes, PPS work status, price types, 60 product codes, 13 supported countries, TOU schedule templates
 
 ---
 
 ## Required vs Optional Fields
+
+Now: required/optional flags belong in the parameter table of each endpoint page in [api/](api/README.md).
+The numbers below are 3.18.0 counts.
+The old content below (3.18.0 reference, superseded — kept until Task 4.9).
 
 - [REQUIRED_FIELDS.md](REQUIRED_FIELDS.md) — Required/optional field classification for 180 endpoints
 
@@ -264,28 +267,36 @@ Derived from conditional branching patterns in decompiled Dart code: fields with
 
 ## Response Models
 
+Now: [models/README.md](models/README.md) is the index of all model pages (dedicated pages per class plus legacy group pages); the field lists are generated into [data/models.json](data/models.json).
+The group table below lists legacy pages only; several classes have since moved to dedicated pages, so its model counts were dropped.
+The old content below (3.18.0 reference, superseded — kept until Task 4.9).
+
 These are **Dart class names** from the decompiled APK, not Python classes from thomluther's API library.
 The field names come from `fromJson` / `toJson` methods and represent the JSON keys in API responses.
 
-| Category | File | Models | Description |
-|----------|------|--------|-------------|
-| Other | [models/other.md](models/other.md) | 28 | Banner, FAQ, messages, ranking, misc |
-| Home Energy System | [models/hes.md](models/hes.md) | 14 | A5101/X1 disaster prep, commands, grid config |
-| Account / Sharing | [models/account.md](models/account.md) | 10 | User, login, site members, validation |
-| Firmware / OTA | [models/firmware.md](models/firmware.md) | 9 | Update status, batch device, upgrade records |
-| Pricing / TOU | [models/pricing.md](models/pricing.md) | 7 | Dynamic price, TOU, currency |
-| Solarbank | [models/solarbank.md](models/solarbank.md) | 5 | Home load, site consumption strategy, schedules |
-| WiFi / Installation | [models/connectivity.md](models/connectivity.md) | 4 | WiFi info, installation inspection |
-| Charger | [models/charger.md](models/charger.md) | 4 | A2345/A2687 charge modes, protocols |
-| Device Management | [models/device.md](models/device.md) | 3 | Device list, auto-upgrade |
-| Green Energy | [models/energy.md](models/energy.md) | 3 | Scene info, green PPS site detail |
-| Products / Brands | [models/products.md](models/products.md) | 3 | Product categories, brands, Shelly platforms |
-| Power Limits | [models/power.md](models/power.md) | 2 | Station power limit, device power limit |
-| PPS | [models/pps.md](models/pps.md) | 2 | A5140 status, A1340 charging device |
+| Category | File | Description |
+|----------|------|-------------|
+| Other | [models/other.md](models/other.md) | Banner, FAQ, messages, ranking, misc |
+| Home Energy System | [models/hes.md](models/hes.md) | A5101/X1 disaster prep, commands, grid config |
+| Account / Sharing | [models/account.md](models/account.md) | User, login, site members, validation |
+| Firmware / OTA | [models/firmware.md](models/firmware.md) | Update status, batch device, upgrade records |
+| Pricing / TOU | [models/pricing.md](models/pricing.md) | Dynamic price, TOU, currency |
+| Solarbank | [models/solarbank.md](models/solarbank.md) | Home load, site consumption strategy, schedules |
+| WiFi / Installation | [models/connectivity.md](models/connectivity.md) | WiFi info, installation inspection |
+| Charger | [models/charger.md](models/charger.md) | A2345/A2687 charge modes, protocols |
+| Device Management | [models/device.md](models/device.md) | Device list, auto-upgrade |
+| Green Energy | [models/energy.md](models/energy.md) | Scene info, green PPS site detail |
+| Products / Brands | [models/products.md](models/products.md) | Product categories, brands, Shelly platforms |
+| Power Limits | [models/power.md](models/power.md) | Station power limit, device power limit |
+| PPS | [models/pps.md](models/pps.md) | A5140 status, A1340 charging device |
 
 ---
 
 ## Cross-Reference: Response Model → Endpoint → Setting
+
+Now: the model pages ([models/station_power_limit.md](models/station_power_limit.md), [models/get_site_device_param_response.md](models/get_site_device_param_response.md), others in [models/README.md](models/README.md)) link to the endpoints that carry them; endpoint pages are in [api/](api/README.md).
+The endpoint-group names below are the old file names.
+The old content below (3.18.0 reference, superseded — kept until Task 4.9).
 
 Key models that carry validation information:
 
@@ -306,6 +317,8 @@ Key models that carry validation information:
 ---
 
 ## What this exploration IS and IS NOT
+
+This section (3.18.0 reference, superseded — kept until Task 4.9): the counts and claims in it are 3.18.0-era and were not re-checked (current counts: [Statistics and coverage](#statistics-and-coverage)).
 
 **This is useful as:**
 - A **vocabulary / cheat sheet** for mqtt_monitor decoding sessions — knowing the field names that exist in the app helps identify unknown hex fields faster
@@ -330,12 +343,12 @@ Key models that carry validation information:
 - **Example responses are from thomluther's code** — [RESPONSE_EXAMPLES.md](RESPONSE_EXAMPLES.md) has 71 examples, but these are copies from thomluther's docstrings, not independently captured
 - **Field types** (int/string/bool/list) are not extractable — the TLV protocol carries type information in the data packets themselves, and the server responses use standard JSON typing
 - **Validation ranges** are dynamic (from server), not hardcoded in the app — each device/region may have different min/max/step values
-- **Error codes** are scattered throughout the code with no central registry found
+- **Error codes** are scattered throughout the code; a catalog is planned (`api/errors.md`, not written yet)
 - **Cooler devices** (A17A3-A5 EverFrost) have minimal logic in the Dart layer — most control appears to be BLE-only with limited decompilable structure
 - **BLE action names without payload formats** — knowing `action_set_backup_strategy` exists does not help without the binary payload structure, which requires hardware testing
 - **12 response models** yielded no field names due to generic deserialization patterns
 - **25 of 205 endpoints** are not covered in REQUIRED_FIELDS.md (passport auth + misc)
-- **param_type 7** is listed in apitypes.py but not found in APK v3.18.0
+- **param_type 7** is listed in apitypes.py but App 3.24.3 sends no such `param_type` literal (see [api/param_types.md](api/param_types.md))
 
 ---
 

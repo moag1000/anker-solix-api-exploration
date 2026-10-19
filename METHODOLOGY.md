@@ -16,7 +16,7 @@ When sources disagree, the higher-priority source wins for what the app sends, a
 
 ## Confidence tags
 
-Every page carries one of exactly these four tags in its status header, and individual claims may carry them inline.
+Every fact page carries one of exactly these four tags in its status header (guidance pages carry `Page type: guidance` instead), and individual claims may carry them inline.
 
 - `asm-traced`: the fact is backed by a cited asm site in the 3.24.3 Blutter output (`file.dart @0xADDR`), and the Smi rule below has been applied to any integer. Only 3.24.3 asm earns this tag; 3.18.0 asm never does.
 - `string-only`: the string exists in the 3.24.3 binary (`pp.txt` or `strings`), but no call site in the 3.24.3 asm has been traced; a mere cross-reference without a traced caller still counts as string-only. Strings seen only in 3.18.0 are not documented as current facts at all; they appear only in "changed since" notes.
