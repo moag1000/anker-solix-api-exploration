@@ -2,7 +2,7 @@
 
 # OTA monitor (re-attaching to a running firmware update)
 
-How the `ota_kit` package finds out that a device is already updating (opened the OTA page late, returned to the app, or restarted it) and follows the update without starting it: it asks the AK IoT kit whether an OTA is in progress, subscribes to the progress stream, and falls back to polling and to a firmware version check. The channels `akiot.device.is_ota_in_progress`, `akiot.device.monitor_ota` and `akiot.device.monitor_ota_progress` are new in 3.24.3 and are owned by [../reference/iot_kit_channels.md](../reference/iot_kit_channels.md); starting an update is a different call (`akiot.device.start_ota`, listed there). The old FLOWS.md has no OTA flow and no audit rows.
+How the `ota_kit` package finds out that a device is already updating (opened the OTA page late, returned to the app, or restarted it) and follows the update without starting it: it asks the AK IoT kit whether an OTA is in progress, subscribes to the progress stream, and starts polling only on stream timeout (step 7); a firmware version check decides the result when no update is running. The channels `akiot.device.is_ota_in_progress`, `akiot.device.monitor_ota` and `akiot.device.monitor_ota_progress` are new in 3.24.3 and are owned by [../reference/iot_kit_channels.md](../reference/iot_kit_channels.md); starting an update is a different call (`akiot.device.start_ota`, listed there). The old FLOWS.md has no OTA flow and no audit rows.
 
 ## Trigger (UI action)
 
@@ -44,7 +44,7 @@ How the `ota_kit` package finds out that a device is already updating (opened th
 - Monitor subscription timeout: the pool `Duration` `pp+0x1bca8` with `off_8` 0x23c34600 = 600,000,000 microseconds, 10 minutes, used when `getTimeout()` is null (`ota_remote_observer.dart @0x2ecb79c`); the observer converts the `Duration` to a number with a division by 1,000,000 (`@0x2ecb7b0`) before it calls `monitorOTAProgress`; the unit that the kit expects for `timeOut` was not read.
 - Result polling every 60 s: pool `Duration` `pp+0x1d8e0` with `off_8` 0x3938700 = 60,000,000 microseconds (`@0x2ecee94`). Two zero-progress polls end the observation (`cmp x1, #2` at `@0x2ecf034`; the Smi raw 4 in the log text at `@0x2ecf008` is 2).
 - Resume: waiting for the device to come online polls every 500 ms (pool `Duration` `off_8` 0x7a120) for at most 20 s (`off_8` 0x1312d00) (`ota_resume_coordinator.dart @0x2ed4a68`, `@0x2ed4aec`); if the connection is still missing it rechecks after 15 s (`off_8` 0xe4e1c0 = 15,000,000 microseconds, `@0x2ed488c`). All are pool object values, not register immediates.
-- A frame of 100 or more progress ends the progress phase of a frame (`cmp x0, #0x64` at `ota_remote_observer.dart @0x2ecbe30`, unboxed).
+- A progress frame with a value of 100 or more also makes the observer read `isAllTasksComplete` (`cmp x0, #0x64` at `ota_remote_observer.dart @0x2ecbe30`, unboxed 100).
 
 ## Failure paths
 

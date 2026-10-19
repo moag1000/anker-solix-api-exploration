@@ -8,21 +8,12 @@ How the app changes the work mode of an X1 HES (A5101 family) from the system po
 
 On the system policy page (`system_policy_view.dart`) the user taps one of the mode cards. Each card handler calls `SystemPolicyLogic::sendDeviceCommandOfMode` (`system_policy_logic.dart @0x249f5a0`) with a mode number, directly or through a small wrapper. The handler names come from the log texts in the handlers; the numbers are unboxed register values and therefore real:
 
-| mode card (log or function name) | mode sent | asm citation |
-|---|---|---|
-| `selfPowered` | 0 | `system_policy_view.dart @0x3ec9dc0` |
-| time-of-use (`SmartShiftMode`, `sendDeviceCommandOfTouAndMode`, text `timeOfUse`) | 1 | `system_policy_logic.dart @0x249f50c`, `@0x3ec99c4` |
-| `offGridPowerConsumption` | 2 | `system_policy_view.dart @0x3ec477c` |
-| `billSavingOptimization` | 11 | `system_policy_view.dart @0x3ec3fbc` |
-| time slot (`sendDeviceCommandOfTimeslot`, text `timeSlot`) | 16 | `system_policy_logic.dart @0x3ec7f40`, `@0x3ec7e28` |
-| AI EMS (`sendDeviceCommandOfAIEmsMode`) | 20 | `system_policy_logic.dart @0x3eca5e8` |
-
-The old page named 0x10 (16) as AI EMS and left 0x14 (20) open; the function names show 16 is the time-slot mode and 20 the AI EMS mode. The mode names are the app's UI names; which firmware mode each number selects is the device's business.
+The mode numbers (0, 1, 2, 11, 16 and 20), the handler each comes from and their call-site addresses are owned by [mqtt/a5101.md](../mqtt/a5101.md#work-mode-numbers-cloud-strategy-mode-and-bluetooth-shift-mode). The numbers are unboxed register values and therefore real.
 
 ## Preconditions
 
 - Each card handler logs and may stop before the send when the EMS strategy is disabled, when the station is off-grid, or when Bluetooth is not connected (log texts such as `SystemPolicyPage========selfPowered--->禁用ems策略`, `离网状态`, `蓝牙未连接`, `system_policy_view.dart @0x3ec9c2c`, `@0x3ec9cd0`, `@0x3ec9d0c`). The exact truth table of these guards was not decoded. The off-grid card also refuses a manual off-grid when the battery level is at or below 10 percent and shows `a5101BatteryPowerLow` (`system_policy_view.dart @0x3ec4578`).
-- Transport choice inside `sendDeviceCommandOfMode`: the cloud path is taken when the page's connection data is non-null (`system_policy_logic.dart @0x249f624`) and both its flags are true (`field_2b` at `@0x249f648`, `field_93` at `@0x249f654`; `tbnz` branches on false); otherwise the Bluetooth path. The Bluetooth branch is chosen by these flags, not by a failure of the cloud request: the app never sends the same command over both paths in one tap, and Bluetooth is not a fallback for a station that is on WiFi (community finding, see [ble/protocol.md](../ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule)).
+- Transport choice inside `sendDeviceCommandOfMode`: the cloud path is taken when the page's connection data is non-null (`system_policy_logic.dart @0x249f624`) and both its flags are true (`field_2b` at `@0x249f648`, `field_93` at `@0x249f654`; `tbnz` branches on false); otherwise the Bluetooth path. The Bluetooth branch is chosen by these flags, not by a failure of the cloud request: on the traced cloud path the same tap sends no Bluetooth write (the Bluetooth branch was not walked to its end), and Bluetooth is not a fallback for a station that is on WiFi (community finding, see [ble/protocol.md](../ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule)).
 
 ## Steps
 
@@ -57,7 +48,7 @@ The old page named 0x10 (16) as AI EMS and left 0x14 (20) open; the function nam
 
 Corrections of the old FLOWS.md (audit rows in brackets), with the old value:
 
-- Mode values: time-of-use 1, 16 and 20 are confirmed (row 59, OK). The old names "AI EMS" for 16 and "another AI variant" for 20 are replaced by time slot (16) and AI EMS (20), and the values 0, 2 and 11 exist as well.
+- Mode values: time-of-use 1, 16 and 20 are confirmed (row 59, OK); the old names for 16 and 20 and the extra values 0, 2 and 11 are on the owner page linked in Trigger.
 - The old "3 guard checks" (row 60, prose count) correspond to one non-null test and two flag tests in `sendDeviceCommandOfMode` (`@0x249f624`, `@0x249f648`, `@0x249f654`) plus the guards of the cards.
 - The old "debounce then sendDeviceCommand" is confirmed in structure, with the 10 s timer of step 5.
 
