@@ -62,9 +62,7 @@ with numbered types. See [PARAM_DATA_STRUCTURES.md](../PARAM_DATA_STRUCTURES.md)
 Note: `feed-in_power_limit` uses a **HYPHEN** (not underscore).
 
 ### param_type 19 — Power Limit (device-tested by thomluther)
-```json
-{"power_limit": {"limit": 3600, "limit_real": 3600}}
-```
+Corrected 2026-10-19 (App 3.24.3): cmd is 123 (not 246/17 as previously documented) and `param_data` carries `display_type`; see the owner page [`api/power_service/site/set_site_device_param.md`](../api/power_service/site/set_site_device_param.md).
 
 ## Usage Modes (from ENUMS)
 

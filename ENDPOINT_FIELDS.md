@@ -774,7 +774,7 @@
 - **setThreePvInstallSwitch**(`site_id?, param_type, cmd, param_data`)
 - **setSiteDevicePowerLimit**(`site_id?, param_type, cmd, param_data`)
   - ⚠️ `power_limit`, `limit`, `limit_real` are **inside** the JSON-encoded `param_data` string, not top-level fields
-  - Actual `param_data`: `"{\"power_limit\":{\"limit\":3600,\"limit_real\":3600}}"`
+  - Corrected 2026-10-19 (App 3.24.3): cmd is 123 (not 246/17 as previously documented) and `param_data` carries `display_type`; see the owner page [`api/power_service/site/set_site_device_param.md`](api/power_service/site/set_site_device_param.md).
 
 ## `shift_power_site_type`
 `/power_service/v1/site/shift_power_site_type`

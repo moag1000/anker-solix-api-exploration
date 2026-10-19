@@ -529,7 +529,7 @@ Example: tag 0xA2 = error code (int), tag 0xA4 = error message (Utf8 string).
    → Response: {legal_power_limit, power_limit_option: [{value, label}...], ac_input_power_unit}
 2. User selects from power_limit_option (clamped to legal_power_limit)
 3. SET /power_service/v1/site/set_site_device_param
-   → param_type=19, param_data={"power_limit":{"limit":<selected>,"limit_real":<selected>}}
+   → param_type=19: Corrected 2026-10-19 (App 3.24.3): cmd is 123 (not 246/17 as previously documented) and param_data carries display_type; see the owner page api/power_service/site/set_site_device_param.md
 ```
 
 ### Pattern: SOC Reserve Change

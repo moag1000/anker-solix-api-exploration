@@ -7,31 +7,11 @@
 > The API expects: `{"param_data": "{\"key\":{\"nested\":\"value\"}}"}` — a string
 > containing JSON, not a nested object directly.
 >
-> Device-tested example from upstream (param_type 19):
-> ```json
-> {"site_id": "<id>", "param_type": "19", "cmd": 17,
->  "param_data": "{\"power_limit\":{\"limit\":3600,\"limit_real\":3600}}"}
-> ```
+> param_type 19: Corrected 2026-10-19 (App 3.24.3): cmd is 123 (not 246/17 as previously documented) and `param_data` carries `display_type`; see the owner page [`api/power_service/site/set_site_device_param.md`](api/power_service/site/set_site_device_param.md).
 
 ## param_type 19 — Power Limit (SET only)
 
-Function: `setSiteDevicePowerLimit`
-
-Device-tested by thomluther ([Issue #423](https://github.com/thomluther/ha-anker-solix/issues/423#issuecomment-4135301109)):
-
-```json
-{
-  "site_id": "<siteid>",
-  "param_type": "19",
-  "cmd": 17,
-  "param_data": "{\"power_limit\":{\"limit\":3600,\"limit_real\":3600}}"
-}
-```
-
-Nesting from Blutter: `Map<String, Map<String, int>>`
-- Outer key: `power_limit`
-- Inner keys: `limit` (int), `limit_real` (int)
-- Values must match `get_power_limit` response options
+Corrected 2026-10-19 (App 3.24.3): cmd is 123 (not 246/17 as previously documented) and `param_data` carries `display_type`; see the owner page [`api/power_service/site/set_site_device_param.md`](api/power_service/site/set_site_device_param.md).
 
 ## param_type 18 — Safety SOC Parameters
 

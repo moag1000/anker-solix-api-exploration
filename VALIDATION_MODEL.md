@@ -44,16 +44,7 @@ Developers implementing controls must follow the same pattern:
 | `exceed_alarm` | Exceed alarm threshold |
 
 ### Set: `set_site_device_param` (param_type=19)
-**Function:** `setSiteDevicePowerLimit`
-**Params:** `site_id, param_type=19, cmd, param_data`
-
-### App Flow (from `station_power_limit_logic.dart`)
-```
-1. getSitePowerLimit()  →  StationPowerLimitModel
-2. UI slider: min=model.min, max=model.max, step=model.step
-3. Legal warning if value > model.legal_power_limit
-4. setSiteDevicePowerLimit()  ←  new limit value
-```
+Corrected 2026-10-19 (App 3.24.3): cmd is 123 (not 246/17 as previously documented) and `param_data` carries `display_type`; see the owner page [`api/power_service/site/set_site_device_param.md`](api/power_service/site/set_site_device_param.md).
 
 ---
 
