@@ -49,7 +49,7 @@ n/a
 
 ## Callers in app
 
-- `ak_soft_ems/ems_service_impl.dart`: `getSiteSchedule` @0x22d7594 (URL literal only, no `*Http*` call)
+- `ak_soft_ems/ems_service_impl.dart`: `getSiteSchedule` @0x22d7594 (URL literal only, no `*Http*` call; sender `HttpHelper::getDataFromService` (`ak_soft_ems/http/http_helper.dart @0x22ba2bc`) (HTTP helper wrapper), called from the same function; resolved from the URL literal at `ak_soft_ems/ems_service_impl.dart @0x22d76c4` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 - `charging/http/http_request_repository_impl.dart`: `getSiteSchedule` @0x23a6010 (encryptionRequestHttp; encrypted: true)
 - `micro_hes/src/a17e2/home/a17e2_home_controller.dart`: `_updateEmsModeData` @0x355e0b0 (encryptionRequestHttp; encrypted: true)
 

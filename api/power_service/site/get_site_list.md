@@ -54,7 +54,7 @@ n/a
 
 - `charging/http/http_request_repository_impl.dart`: `getUserSiteList` @0x28c2f6c (encryptionRequestHttp; encrypted: true)
 - `charging/ui/page/home/home_base_http_reposity.dart`: `querySiteList` @0x238e380 (encryptionRequestHttp; encrypted: true)
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getUserSiteList` @0x2aaea38 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getUserSiteList` @0x2aaea38 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2aaea8c` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 Called from:
 

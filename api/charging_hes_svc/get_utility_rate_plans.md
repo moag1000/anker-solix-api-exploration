@@ -44,7 +44,7 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `getHesUtilityRatePlans` @0x24a5d58 (URL literal only, no `*Http*` call; sender found through callers: `ElectricityPlaceConfirmPageLogic::_getUtilityRatePlan` (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abe94`) via `ElectricityPlaceConfirmPageLogic::_getUtilityRatePlan` (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abe94`); also `ElectricityUsageHelper::getCurEmsModeType`, `EmsAiModeConditionLogic::_getLargeUtilityRatePlan`, `GeneralPriceSettingLogic::getDevicePriceType`, `SmartModeLogic::_getUtilityRatePlan`, `SystemPolicyLogic::_getUtilityRatePlan`)
+- `base_service/api_url.dart`: `getHesUtilityRatePlans` @0x24a5d58 (URL literal only, no `*Http*` call; sender `ElectricityPlaceConfirmPageLogic::_getUtilityRatePlan` (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abe94`), reached through callers `ElectricityPlaceConfirmPageLogic::_getUtilityRatePlan` (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abe94`); other senders: `ElectricityUsageHelper::getCurEmsModeType`, `ElectricityUsageHelper::getManualSetTOUDetailWithUrl`, `EmsAiModeConditionLogic::_getLargeUtilityRatePlan`, `GeneralPriceSettingLogic::getDevicePriceType`, `SmartModeLogic::_getUtilityRatePlan`; resolved from the URL literal at `base_service/api_url.dart @0x24a5d70` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 ## Since/changed
 

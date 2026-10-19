@@ -53,7 +53,7 @@ n/a
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `getGreenPPSSiteDetail` @0x28f4c38 (encryptionRequestHttp; encrypted: true); `getStationDetail` @0x23f69d8 (encryptionRequestHttp; encrypted: true)
-- `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart`: `<anonymous closure> in RenameSiteController::loadName` @0x47add6c (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
+- `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart`: `<anonymous closure> in RenameSiteController::loadName` @0x47add6c (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart @0x47addd0` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 Called from:
 

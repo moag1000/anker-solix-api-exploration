@@ -52,11 +52,13 @@ n/a
 
 ## Callers in app
 
-- `ak_soft_ems/aiems/api/ai_ems_request.dart`: `getProfitInfo` @0x27e20b4 (URL literal only, no `*Http*` call)
+- `ak_soft_ems/aiems/api/ai_ems_request.dart`: `getProfitInfo` @0x27e20b4 (URL literal only, no `*Http*` call; sender `HttpHelper::getDataFromService` (`ak_soft_ems/http/http_helper.dart @0x22ba2bc`) (HTTP helper wrapper), called from the same function; resolved from the URL literal at `ak_soft_ems/aiems/api/ai_ems_request.dart @0x27e21ec` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 - `charging/http/http_request_repository_impl.dart`: `getAiEmsProfit` @0x2925858 (encryptionRequestHttp; encrypted: true)
 
 Called from:
 
+- `ak_soft_ems/aiems/aiems_strategy_controller.dart::_fetchRevenueData`
+- `ak_soft_ems/aiems/public_widget/ai_smart_mode_card_logic.dart::_fetchRevenue`
 - `charging/http/http_request_repository.dart::getAiEmsProfit`
 - `charging/ui/page/device/a17c1/cost_savings/cost_savings_logic.dart::getAiProfit`
 

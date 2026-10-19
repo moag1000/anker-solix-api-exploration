@@ -55,7 +55,12 @@ n/a
 
 ## Callers in app
 
-- `anka_agent/http/request.dart`: `data` @0x2dba16c (URL literal only, no `*Http*` call)
+- `anka_agent/http/request.dart`: `data` @0x2dba16c (URL literal only, no `*Http*` call; caller walk reaches a deduplicated mixin function absent from the dump (UNCONFIRMED))
+
+Called from:
+
+- `anka_agent/common/channel.dart::request`
+- `anka_agent/http/request.dart::data`
 
 ## Since/changed
 

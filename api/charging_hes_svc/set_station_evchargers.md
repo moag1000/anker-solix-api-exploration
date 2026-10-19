@@ -56,7 +56,7 @@ n/a
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `bindUnX1Charger` @0x226c334 (encryptionRequestHttp; encrypted: true)
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `setStationEvChargers` @0x3961580 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `setStationEvChargers` @0x3961580 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3961774` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 Called from:
 

@@ -46,7 +46,7 @@ n/a
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `getFaqs` @0x347fc70 (encryptionRequestHttp; encrypted: true)
-- `charging/util/manager/http_manager.dart`: `<anonymous closure> in HttpRequestManager::requestHttp` @0x2cf6370 (URL literal only, no `*Http*` call; sender found through callers: `HttpRequestManager::encryptionRequestHttp` (`charging/util/manager/http_manager.dart @0x2cf6040`) via `HttpRequestManager::encryptionRequestHttp` (`charging/util/manager/http_manager.dart @0x2cf6040`)); `requestHttp` @0x2cf6108 (URL literal only, no `*Http*` call; sender found through callers: `HttpRequestManager::encryptionRequestHttp` (`charging/util/manager/http_manager.dart @0x2cf6040`) via `HttpRequestManager::encryptionRequestHttp` (`charging/util/manager/http_manager.dart @0x2cf6040`))
+- `charging/util/manager/http_manager.dart`: `<anonymous closure> in HttpRequestManager::requestHttp` @0x2cf6370 (URL literal only, no `*Http*` call; a path check inside the generic HTTP manager (`isDemoBlockPath`), not a request: no sender); `requestHttp` @0x2cf6108 (URL literal only, no `*Http*` call; a path check inside the generic HTTP manager (`isDemoBlockPath`), not a request: no sender)
 
 Called from:
 

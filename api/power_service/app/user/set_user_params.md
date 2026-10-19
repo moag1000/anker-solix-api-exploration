@@ -55,7 +55,7 @@ n/a
 
 - `charging/http/user/about/about_http_request_repository_impl.dart`: `setPersonalizationOptionsApi` @0x4036308 (encryptionRequestHttp; encrypted: true)
 - `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_setUserParams` @0x39682d4 (_requestHttp; encrypted: default-true (requestHttp) — verify)
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `setUserParams` @0x405be14 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `setUserParams` @0x405be14 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x405be6c` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 Called from:
 

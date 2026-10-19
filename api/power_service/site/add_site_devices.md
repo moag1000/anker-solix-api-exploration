@@ -52,7 +52,7 @@ n/a
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `multiAddDeviceInfo` @0x26f6f78 (encryptionRequestHttp; encrypted: true)
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `addSiteDevice` @0x3964400 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `addSiteDevice` @0x3964400 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x39644a4` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 Called from:
 

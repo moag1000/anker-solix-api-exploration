@@ -60,7 +60,7 @@ n/a
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `getReportBleUpgrade` @0x3422678 (requestHttp; encrypted: default-true (requestHttp) — verify)
-- `ota_kit/src/services/ota_upgrade_record_reporter.dart`: `_reportSingle` @0x280a890 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
+- `ota_kit/src/services/ota_upgrade_record_reporter.dart`: `_reportSingle` @0x280a890 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `ota_kit/src/services/ota_upgrade_record_reporter.dart @0x280a8f4` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 Called from:
 

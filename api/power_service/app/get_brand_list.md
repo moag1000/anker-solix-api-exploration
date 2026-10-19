@@ -48,7 +48,7 @@ n/a
 
 ## Callers in app
 
-- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getEvBrandList` @0x2c6b5a4 (URL literal only, no `*Http*` call; sends in the same function (SDK `handle`))
+- `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getEvBrandList` @0x2c6b5a4 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6b608` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 Called from:
 

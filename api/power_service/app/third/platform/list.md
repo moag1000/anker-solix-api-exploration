@@ -48,7 +48,7 @@ n/a
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `getThirdPartyPlatformList` @0x2619228 (encryptionRequestHttp; encrypted: true)
-- `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart`: `getThirdPartyPlatformList` @0x24e60d8 (URL literal only, no `*Http*` call)
+- `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart`: `getThirdPartyPlatformList` @0x24e60d8 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart @0x24e610c` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 Called from:
 

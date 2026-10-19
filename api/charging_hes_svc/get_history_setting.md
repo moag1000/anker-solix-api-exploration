@@ -44,7 +44,7 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `getHistorySetting` @0x29a4950 (URL literal only, no `*Http*` call)
+- `base_service/api_url.dart`: `getHistorySetting` @0x29a4950 (URL literal only, no `*Http*` call; sender `HttpHelper::getDataFromService` (`electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bda38`) (HTTP helper wrapper), called from `GeneralPriceSettingLogic::queryLargeChargingDeviceHasSetMode` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a412c`); also through `TouAndTimeSlotSettingsDetailLogic::queryLargeChargingDeviceHasSetMode`, `TouAndTimeslotSettingsPolyLogic::queryLargeChargingDeviceHasSetMode`; resolved from the URL literal at `base_service/api_url.dart @0x29a4968` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 ## Since/changed
 

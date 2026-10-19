@@ -44,7 +44,7 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `getThirdJumpUrl` @0x29acc3c (URL literal only, no `*Http*` call)
+- `base_service/api_url.dart`: `getThirdJumpUrl` @0x29acc3c (URL literal only, no `*Http*` call; sender `HttpHelper::getDataFromService` (`electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bda38`) (HTTP helper wrapper), called from `ElectricityPlaceConfirmPageLogic::getDynamicPriceCompany` (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29ac204`); also through `_DynamicPriceHttpServer::getThirdJumpUrl`; resolved from the URL literal at `base_service/api_url.dart @0x29acc54` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 ## Since/changed
 

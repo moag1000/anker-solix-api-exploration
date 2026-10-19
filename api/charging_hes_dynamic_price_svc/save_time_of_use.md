@@ -44,7 +44,7 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `saveAutoTou` @0x2e82408 (URL literal only, no `*Http*` call; sender found through callers: `GeneralPriceSettingLogic::setTOU` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a68ac`) via `ElectricityPricePlanApiHelper::changeToTouPlan` (`electricity_price/components/electricity_price_common/electricity_price_plan_api_helper.dart @0x31a9fdc`) -> `GeneralPriceSettingLogic::setTOU` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a68ac`))
+- `base_service/api_url.dart`: `saveAutoTou` @0x2e82408 (URL literal only, no `*Http*` call; sender `HttpHelper::getDataFromService` (`electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bda38`) (HTTP helper wrapper), called from `ElectricityPriceModeApiHelper::changeToTouMode` (`electricity_price/components/electricity_price_common/electricity_price_model_api_helper.dart @0x2e821dc`); also through `ElectricityPricePlanApiHelper::changeToTouPlan`, `TOUAutoPricePkgResultLogic::saveAuto`; resolved from the URL literal at `base_service/api_url.dart @0x2e82420` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 ## Since/changed
 

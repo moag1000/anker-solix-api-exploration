@@ -44,7 +44,7 @@ n/a
 
 ## Callers in app
 
-- `base_service/api_url.dart`: `getPriceCompany` @0x27bde38 (URL literal only, no `*Http*` call; sender found through callers: `PowerUsageScenarioController::_requestDynamicPriceCompany` (`ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x37b1a70`) via `PowerUsageScenarioController::_requestDynamicPriceCompany` (`ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x37b1a70`); also `PowerUsageScenarioController::getDynamicPriceCompany`, `PowerUsageScenarioLogic::_requestDynamicPriceCompany`, `SystemPolicyLogic::_getDynamicPriceCompany`)
+- `base_service/api_url.dart`: `getPriceCompany` @0x27bde38 (URL literal only, no `*Http*` call; sender `HttpHelper::getDataFromService` (`electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bda38`) (HTTP helper wrapper), called from `ChargeDischargeSettingLogic::getDynamicPriceCompany` (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b6424`); also through `ChargeDischargeSettingLogic_C5::getDynamicPriceCompany`, `DynamicPriceDetailInfoViewState::getDynamicPriceCompany`, `ElectricityCompanySelectLogic::getDynamicPriceCompany`, `ElectricityPriceProviderLogic::getDynamicPriceCompany`, `ElectricityPriceServiceImpl::_supportAutoTou`; other senders: `PowerUsageScenarioController::_requestDynamicPriceCompany`, `PowerUsageScenarioController::getDynamicPriceCompany`, `PowerUsageScenarioLogic::_requestDynamicPriceCompany`, `SystemPolicyLogic::_getDynamicPriceCompany`; resolved from the URL literal at `base_service/api_url.dart @0x27bde50` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 ## Since/changed
 

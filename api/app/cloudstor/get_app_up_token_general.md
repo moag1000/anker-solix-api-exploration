@@ -56,14 +56,15 @@ n/a
 ## Callers in app
 
 - `anka_agent/services/bill_analysis_upload_service.dart`: `_getUploadToken` @0x2bf3c84 (encryptionRequestHttpByGHttpRequest; encrypted: true)
-- `charging/ui/page/device/a2345/a2345_media_ability/custom_crop_controller.dart`: `uploadCroppedImage` @0x2d90620 (URL literal only, no `*Http*` call)
-- `charging/ui/page/user/feedback/feedback_logic.dart`: `<anonymous closure> in FeedbackLogic::clickSubmit` @0x31208a4 (URL literal only, no `*Http*` call); `upLoadSingleFile` @0x31211e0 (URL literal only, no `*Http*` call)
+- `charging/ui/page/device/a2345/a2345_media_ability/custom_crop_controller.dart`: `uploadCroppedImage` @0x2d90620 (URL literal only, no `*Http*` call; sender `HttpRequestControllerImpl::getAppUpTokenGeneral` (`charging/http/http_request_repository_impl.dart @0x2d90ae4`), a callee called after the URL load in the same function; resolved from the URL literal at `charging/ui/page/device/a2345/a2345_media_ability/custom_crop_controller.dart @0x2d90880` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
+- `charging/ui/page/user/feedback/feedback_logic.dart`: `<anonymous closure> in FeedbackLogic::clickSubmit` @0x31208a4 (URL literal only, no `*Http*` call; no sender within 3 caller levels); `upLoadSingleFile` @0x31211e0 (URL literal only, no `*Http*` call; sender `HttpRequestControllerImpl::getAppUpTokenGeneral` (`charging/http/http_request_repository_impl.dart @0x2d90ae4`), a callee called after the URL load in the same function; resolved from the URL literal at `charging/ui/page/user/feedback/feedback_logic.dart @0x3121440` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 - `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart`: `_uploadBleFile` @0x31334c8 (encryptionRequestHttp; encrypted: true)
 - `charging/ui/page/user/upload_log/upload_log_logic.dart`: `requestUpToken` @0x46b06d0 (encryptionRequestHttp; encrypted: true)
-- `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/crop_logic.dart`: `_uploadCroppedImage` @0x3313658 (URL literal only, no `*Http*` call)
+- `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/crop_logic.dart`: `_uploadCroppedImage` @0x3313658 (URL literal only, no `*Http*` call; caller walk reaches a deduplicated mixin function absent from the dump (UNCONFIRMED))
 
 Called from:
 
+- `anka_agent/services/bill_analysis_upload_service.dart::uploadFile`
 - `charging/ui/page/device/a2345/a2345_media_ability/custom_crop_widget.dart::_cropImage`
 - `charging/ui/page/user/feedback/feedback_logic.dart::clickSubmit`
 - `charging/ui/page/user/feedback/feedback_logic.dart::upLoadSingleFile`
