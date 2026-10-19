@@ -12,7 +12,7 @@ Reads the history of the TOU (time-of-use) schedule settings of a large (HES) st
 
 ## Method+URL
 
-`POST /charging_hes_installer_svc/get_history_setting` (asm-traced). The URL comes from the static getter `Api.getHistorySetting` (`base_service/api_url.dart @0x29a4950`): installer string `pp+0x7c590` (`@0x29a495c`) when `isProApp` is true, otherwise `/charging_hes_svc/get_history_setting` (`pp+0x7c598`, `@0x29a4968`); see [the variant selector](README.md#variant-selector-installer-app-versus-consumer-app). Three senders, all named `queryLargeChargingDeviceHasSetMode` and using `HttpHelper.getDataFromService` (`Method.post`, `http_helper.dart @0x27bdb94`).
+`POST /charging_hes_installer_svc/get_history_setting` (asm-traced). The URL comes from the static getter `Api.getHistorySetting` (`base_service/api_url.dart @0x29a4950`): installer string `pp+0x7c590` (`@0x29a495c`) when `isProApp` is true, otherwise `/charging_hes_svc/get_history_setting` (`pp+0x7c598`, `@0x29a4968`); see [the variant selector](README.md#variant-selector-installer-app-versus-consumer-app). Three senders, all named `queryLargeChargingDeviceHasSetMode` and using `HttpHelper.getDataFromService` (`Method.post`, `electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bdb94`).
 
 ## Encrypted?
 

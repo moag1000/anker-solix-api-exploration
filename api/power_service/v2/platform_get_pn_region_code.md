@@ -54,12 +54,12 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Callers in app
 
-- `GridParamUtil.requestRegionCodes` (`base_service/view/grid/grid_param_util.dart @0x28f5f1c`), called from `choose_grid_view.dart` and `choose_grid_view_v2.dart` (`_fetchRegionCodes`), from `grid_setting_logic.dart` (`_getGridSetting`) and from both `grid_param_setting_controller.dart` copies (`onReady`): the grid pickers and the grid parameter setting pages.
+- `GridParamUtil.requestRegionCodes` (`base_service/view/grid/grid_param_util.dart @0x28f5f1c`), called from `choose_grid_view.dart` and `choose_grid_view_v2.dart` (`_fetchRegionCodes`), from `grid_setting_logic.dart` (`_getGridSetting`) and from both `grid_param_setting_controller.dart` copies (`device/src/station_setting/controller/common_grid_param/page/` and `settings/src/common/page/grid_param_setting/`; `onReady`): the grid pickers and the grid parameter setting pages.
 - `PowerPlantConfigController.requestRegionCodes` (closure `flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart @0x2b07c9c`): the power plant config card of the initial setup flow.
 
 ## Since/changed
 
-3.18.0: present (the URL string is in the 3.18.0 pool; its senders were in `power_plant_config_controller.dart`, `station_location_controller.dart` and `power_usage_scenario_controller.dart`). 3.24.3: present, now also through `GridParamUtil.requestRegionCodes`. since: ≤3.18.0.
+3.18.0: present (the URL string is in the 3.18.0 pool; its senders were in `power_plant_config_controller.dart`, `station_location_controller.dart` and `power_usage_scenario_controller.dart`, short names of the 3.18.0 tree, whose paths differ from 3.24.3). 3.24.3: present, now also through `GridParamUtil.requestRegionCodes`. since: ≤3.18.0.
 
 ## Known unknowns
 

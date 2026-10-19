@@ -12,7 +12,7 @@ Reads the price table of a site for one provider: the time-of-use price seasons 
 
 ## Method+URL
 
-`POST /charging_hes_installer_svc/get_price` (asm-traced). The URL comes from the static getter `Api.getPrice` (`base_service/api_url.dart @0x2554b74`): installer string `pp+0x81730` (`@0x2554b80`) when `isProApp` is true, otherwise `/charging_hes_dynamic_price_svc/get_price` (`pp+0x81738`, `@0x2554b8c`); see [the variant selector](README.md#variant-selector-installer-app-versus-consumer-app). Ten sender functions load the field (table under "Callers in app"); the `electricity_price` senders use `HttpHelper.getDataFromService` (`Method.post`, `http_helper.dart @0x27bdb94`), the others call `encryptionRequestHttp` with `Method.post` themselves.
+`POST /charging_hes_installer_svc/get_price` (asm-traced). The URL comes from the static getter `Api.getPrice` (`base_service/api_url.dart @0x2554b74`): installer string `pp+0x81730` (`@0x2554b80`) when `isProApp` is true, otherwise `/charging_hes_dynamic_price_svc/get_price` (`pp+0x81738`, `@0x2554b8c`); see [the variant selector](README.md#variant-selector-installer-app-versus-consumer-app). Ten sender functions load the field (table under "Callers in app"); the `electricity_price` senders use `HttpHelper.getDataFromService` (`Method.post`, `electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bdb94`), the others call `encryptionRequestHttp` with `Method.post` themselves.
 
 ## Encrypted?
 

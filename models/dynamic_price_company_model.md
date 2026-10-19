@@ -219,7 +219,7 @@ The `UserSelect` members mirror the provider parameter objects the app sends bac
 
 ## Produced by
 
-[`get_price_company`](../api/charging_hes_installer_svc/get_price_company.md): `DynamicPriceCompanyModel.fromJson` is called in the success closure of every sender listed on that page, for example `electricity_price_provider_logic.dart @0x29a79dc`, `electricty_company_select_logic.dart @0x29aacc8`, `dynamic_price_detail_info_view.dart @0x27d07b8`, `power_usage_scenario_controller.dart @0x2a2f16c` and `@0x37b1c8c`, `system_policy_logic.dart @0x28eb650`, `power_usage_scenario_logic.dart @0x28a1bec`. The consumer-app twin URL `/charging_hes_dynamic_price_svc/get_price_company` is sent by the same functions (see [the variant selector](../api/charging_hes_installer_svc/README.md#variant-selector-installer-app-versus-consumer-app)).
+[`get_price_company`](../api/charging_hes_installer_svc/get_price_company.md): `DynamicPriceCompanyModel.fromJson` is called in the success closure of every sender listed on that page, for example `electricity_price_provider_logic.dart @0x29a79dc`, `electricty_company_select_logic.dart @0x29aacc8`, `dynamic_price_detail_info_view.dart @0x27d07b8`, `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x2a2f16c` and `@0x37b1c8c`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart @0x28eb650`, `power_usage_scenario_logic.dart @0x28a1bec`. The consumer-app twin URL `/charging_hes_dynamic_price_svc/get_price_company` is sent by the same functions (see [the variant selector](../api/charging_hes_installer_svc/README.md#variant-selector-installer-app-versus-consumer-app)).
 
 ## Consumed by
 

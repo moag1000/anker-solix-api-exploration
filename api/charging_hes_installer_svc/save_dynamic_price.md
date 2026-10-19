@@ -12,7 +12,7 @@ Saves the dynamic-price (or time-slot) configuration of a site for one provider:
 
 ## Method+URL
 
-`POST /charging_hes_installer_svc/save_dynamic_price` (asm-traced). The URL comes from the static getter `Api.saveDynamicPrice` (`base_service/api_url.dart @0x2e82b34`): installer string `pp+0x8aa20` (`@0x2e82b40`) when `isProApp` is true, otherwise `/charging_hes_dynamic_price_svc/save_dynamic_price` (`@0x2e82b4c`); see [the variant selector](README.md#variant-selector-installer-app-versus-consumer-app). Twelve sender functions load the field (table under "Callers in app"); all use `Method.post` (pool entry `pp+0xa7e0`). The Tibber sender goes through `HttpHelper.getDataFromServiceV2` (`http_helper.dart @0x4393090`, `encryptionRequestHttp` `@0x4393190`, `showLoading: true`).
+`POST /charging_hes_installer_svc/save_dynamic_price` (asm-traced). The URL comes from the static getter `Api.saveDynamicPrice` (`base_service/api_url.dart @0x2e82b34`): installer string `pp+0x8aa20` (`@0x2e82b40`) when `isProApp` is true, otherwise `/charging_hes_dynamic_price_svc/save_dynamic_price` (`@0x2e82b4c`); see [the variant selector](README.md#variant-selector-installer-app-versus-consumer-app). Twelve sender functions load the field (table under "Callers in app"); all use `Method.post` (pool entry `pp+0xa7e0`). The Tibber sender goes through `HttpHelper.getDataFromServiceV2` (`electricity_price/components/electricity_price_common/http/http_helper.dart @0x4393090`, `encryptionRequestHttp` `@0x4393190`, `showLoading: true`).
 
 ## Encrypted?
 

@@ -25,7 +25,7 @@ The body is the map built by `SendDeviceCommandRequest.toParams` (`electricity_p
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `device_sn` | String | yes | `"<device sn or site id>"` | `send_device_command_request.dart @0x4884f10`; the value is the first request field (`@0x4884f20`); `LargeTouRepository.saveTouMode` fills it with the first non-null of two station fields (offsets 0xf then 0xb, `large_tou_repository.dart @0x4884d8c` to `@0x4884da8`), so it is either a device serial or a site id |
-| `cmd` | int | yes | see below | `@0x4884f2c`; the value is the unboxed request field (`BoxInt64Instr` `@0x4884f3c`); `saveTouMode` stores raw `0x7b` with a 64-bit store (`mov x0, #0x7b` `@0x4884e14`, `stur x0, [x1, #0xb]` `@0x4884e18`), unboxed, so the value is 123 and not halved (`tools/smi.py`: `123 → stur x → 123`) |
+| `cmd` | int | yes | see [../param_types.md](../param_types.md#device-command-cmd-device_command-family) | `send_device_command_request.dart @0x4884f2c`; the value is the unboxed request field (`BoxInt64Instr` `@0x4884f3c`) set by `saveTouMode`; decode and store width are owned by `param_types.md` |
 | `data` | map | yes | see below | `@0x4884f54`; the value is the request field at offset 0x13, set by `saveTouMode` (`@0x4884e1c`) |
 
 `data` as built by `LargeTouRepository.saveTouMode` (`large_tou_repository.dart @0x4884d38`), a map literal of two pairs (`r2 = 8`, `@0x4884dbc`):
@@ -35,11 +35,11 @@ The body is the map built by `SendDeviceCommandRequest.toParams` (`electricity_p
 | `peak_sessions` | list | yes | not decoded | `@0x4884dc4`; value from `toPeakSessions()` of the TOU plan (`@0x4884d7c`), or the plan's alternative field when the first is null |
 | `price_unit` | String | yes | `"EUR"` | `@0x4884dd8`; value is a field of the plan object (`@0x4884de8`) |
 
-Cmd note: the `cmd` of this request is the command code of the HES device-command endpoint, not a `param_type` command; [../param_types.md](../param_types.md) has no row for it. The value 123 equals the SET `cmd` that the same document records for the `set17C1SiteDeviceParam` path, but the two are separate request families. This page records the value because no other owner page exists for the device-command `cmd` space (flagged in the Task 3.5a report).
+The `cmd` of this request is the device-command code, not a `param_type` command; its decoded value, raw immediate, store width and address are owned by [../param_types.md](../param_types.md#device-command-cmd-device_command-family).
 
 ## `param_type`/`cmd`
 
-[../param_types.md](../param_types.md) does not cover this endpoint (see the cmd note under Request).
+See [../param_types.md](../param_types.md#device-command-cmd-device_command-family) (device-command section); the value is not repeated here.
 
 ## Response model (link)
 
@@ -47,14 +47,14 @@ n/a (asm-traced): no response model; see Response.
 
 ## Response
 
-The success handling is inside `HttpHelper.request` (`http_helper.dart @0x2c1447c`), which returns a `ServerResponse`; `LargeTouRepository.saveTouMode` returns it as `ServerResponse<void>` (`InitAsync` `@0x4884d6c`), so no response field is read.
+The success handling is inside `HttpHelper.request` (`electricity_price/components/electricity_price_common/http/http_helper.dart @0x2c1447c`), which returns a `ServerResponse`; `LargeTouRepository.saveTouMode` returns it as `ServerResponse<void>` (`InitAsync` `@0x4884d6c`), so no response field is read.
 
 ## Example request/response
 
 Request, synthesized
 
 ```json
-{ "device_sn": "<device sn or site id>", "cmd": 123, "data": { "peak_sessions": [], "price_unit": "EUR" } }
+{ "device_sn": "<device sn or site id>", "cmd": "<cmd, see param_types.md>", "data": { "peak_sessions": [], "price_unit": "EUR" } }
 ```
 
 Response: no captured response; no field is read.

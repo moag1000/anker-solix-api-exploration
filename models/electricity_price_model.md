@@ -150,7 +150,7 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 
 ## Produced by
 
-[`get_price`](../api/charging_hes_installer_svc/get_price.md): `ElectricityPriceModel.fromJson` is called in the success closure of every sender listed on that page: `dynamic_price_detail_info_view.dart @0x27d1dcc`, `dynameic_price_detail_info_view_c5.dart @0x27d04ac`, `tou_auto_price_pkg_result_logic.dart @0x2c48c7c`, `charge_discharge_setting_logic.dart @0x29b5488`, `charge_discharge_setting_logic_c5.dart @0x29b41e4`, `timeslot_preview_logic.dart @0x2c56230`, `timeslot_preview_poly_logic.dart @0x2c5283c`, `power_usage_scenario_controller.dart @0x2550a50`, `system_policy_logic.dart @0x28ec3b4`, `power_usage_scenario_logic.dart @0x28a2214`.
+[`get_price`](../api/charging_hes_installer_svc/get_price.md): `ElectricityPriceModel.fromJson` is called in the success closure of every sender listed on that page: `dynamic_price_detail_info_view.dart @0x27d1dcc`, `dynameic_price_detail_info_view_c5.dart @0x27d04ac`, `tou_auto_price_pkg_result_logic.dart @0x2c48c7c`, `charge_discharge_setting_logic.dart @0x29b5488`, `charge_discharge_setting_logic_c5.dart @0x29b41e4`, `timeslot_preview_logic.dart @0x2c56230`, `timeslot_preview_poly_logic.dart @0x2c5283c`, `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x2550a50`, `charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart @0x28ec3b4`, `power_usage_scenario_logic.dart @0x28a2214`.
 
 ## Consumed by
 

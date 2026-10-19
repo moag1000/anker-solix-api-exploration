@@ -12,7 +12,7 @@ Reads the list of dynamic-price and time-slot providers (companies) available fo
 
 ## Method+URL
 
-`POST /charging_hes_installer_svc/get_price_company` (asm-traced). The URL comes from the static getter `Api.getPriceCompany` (`base_service/api_url.dart @0x27bde38`): installer string `pp+0x675d0` (`@0x27bde44`) when `isProApp` is true, otherwise `/charging_hes_dynamic_price_svc/get_price_company` (`pp+0x675d8`, `@0x27bde50`); see [the variant selector](README.md#variant-selector-installer-app-versus-consumer-app). Fourteen sender functions load the field (table under "Callers in app"). The ones in the `electricity_price` package go through `HttpHelper.getDataFromService`, which calls `encryptionRequestHttp` with `Method.post` (pool entry `pp+0xa7e0`, `http_helper.dart @0x27bdb94`); the ones in `ak_soft_ems` and `charging` call `encryptionRequestHttp` themselves with `Method.post`.
+`POST /charging_hes_installer_svc/get_price_company` (asm-traced). The URL comes from the static getter `Api.getPriceCompany` (`base_service/api_url.dart @0x27bde38`): installer string `pp+0x675d0` (`@0x27bde44`) when `isProApp` is true, otherwise `/charging_hes_dynamic_price_svc/get_price_company` (`pp+0x675d8`, `@0x27bde50`); see [the variant selector](README.md#variant-selector-installer-app-versus-consumer-app). Fourteen sender functions load the field (table under "Callers in app"). The ones in the `electricity_price` package go through `HttpHelper.getDataFromService`, which calls `encryptionRequestHttp` with `Method.post` (pool entry `pp+0xa7e0`, `electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bdb94`); the ones in `ak_soft_ems` and `charging` call `encryptionRequestHttp` themselves with `Method.post`.
 
 ## Encrypted?
 

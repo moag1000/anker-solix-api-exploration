@@ -20,10 +20,10 @@ Column `since`: `3.24.3` means the key was first seen in 3.24.3 (the class does 
 
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
-| `peak_sessions` | `List` | no | 3.24.3 | `utility_rate_plans_response.dart @0x487920c` |
-| `price_unit` | `String` | yes | 3.24.3 | `utility_rate_plans_response.dart @0x4879320` |
+| `peak_sessions` | `List<Map<String, dynamic>>` | no | 3.24.3 | `utility_rate_plans_response.dart @0x487920c`; copied with `List.from` typed `<Map<String, dynamic>>` (`@0x48792ec`); an empty growable list when the value is not a list (`@0x4879300`) |
+| `price_unit` | `String` | no (default `"$"`) | 3.24.3 | `utility_rate_plans_response.dart @0x4879320`; `fromJson` replaces a missing or null value with the string `"$"` (`@0x487933c`) |
 
-The element type of `peak_sessions` is not resolved by the extractor. The same key appears as `peak_sessions` in the request of the TOU save call that the new flow sends through [edit_system_strategy](../api/charging_hes_installer_svc/edit_system_strategy.md) (`large_tou_repository.dart @0x4884dc4`), so the element layout is shared with that request; it is not traced here.
+The element maps of `peak_sessions` are kept as raw maps (their keys are not read in `fromJson`). The same key appears as `peak_sessions` in the request of the TOU save call that the new flow sends through [edit_system_strategy](../api/charging_hes_installer_svc/edit_system_strategy.md) (`large_tou_repository.dart @0x4884dc4`), so the element layout is probably shared; that is not traced here.
 
 ## Produced by
 
@@ -39,5 +39,5 @@ The whole class is new in 3.24.3 (`since` 3.24.3 on both keys). Other senders of
 
 ## Known unknowns
 
-- The element structure of `peak_sessions` is not traced.
-- `price_unit` is nullable; what the app does when it is missing is not traced.
+- The keys inside each `peak_sessions` map are not traced (the model keeps raw maps).
+- The `"$"` default means a missing unit renders as a dollar sign even for non-dollar sites; whether the server always sends the key is not known.

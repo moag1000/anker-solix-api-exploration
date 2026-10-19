@@ -20,11 +20,11 @@ Yes by wrapper (asm-traced): ``setUserParams`` calls `encryptionRequestHttp` (`c
 
 ## Request
 
-The body is the argument that `setUserParams` receives in register `r3` (stored at `@0x2886db4`, pushed for the call at `@0x2886e2c`); the other two arguments (`r2`, `r6`) become the callback closures. The function builds no keys itself. No call site of `HttpRequestControllerImpl::setUserParams` (or of an interface method that forwards to it) was found in the 3.24.3 asm, so the body is unknown.
+The body is the argument that `setUserParams` receives in register `r3` (stored at `@0x2886db4`, pushed for the call at `@0x2886e2c`); the other two arguments (`r2`, `r6`) become the callback closures. The function builds no keys itself. No direct call site of `HttpRequestControllerImpl::setUserParams` appears in the Blutter dump, but the dump omits mixin-deduplicated code, where the forwarder `AE100ApiExt.setUserParamsAsync` lives. UNCONFIRMED candidate (mixin dump incomplete): callers of that forwarder exist in `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart` (`@0x2886c44`, `@0x28874a8`, `@0x28876bc`) and pass a body of the shape `{site_id, user_params: [{param_type, param_value}]}`, with `param_type` raw `80002` (Smi, so 40001) and `param_value` the string `"2"`. That the forwarder reaches this wrapper and URL is not proven.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| (caller-supplied map) | map | yes | not known | `charging/http/http_request_repository_impl.dart @0x2886da0`; no caller found |
+| (caller-supplied map) | map | yes | candidate (unconfirmed): `{"site_id": ..., "user_params": [{"param_type": 40001, "param_value": "2"}]}` | `charging/http/http_request_repository_impl.dart @0x2886da0`; candidate shape from `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart @0x2886c44`, `@0x28874a8`, `@0x28876bc` via the unseen mixin forwarder |
 
 ## `param_type`/`cmd`
 
@@ -40,7 +40,7 @@ No response field is read (asm-traced). The two callbacks are shared closures th
 
 ## Example request/response
 
-No example: the request body is not known.
+No example: the body is only an unconfirmed candidate.
 
 ## Errors seen
 
@@ -48,7 +48,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Callers in app
 
-- `HttpRequestControllerImpl.setUserParams` (`charging/http/http_request_repository_impl.dart @0x2886da0`): no caller found in the asm (the inventory lists no caller either). It may be reached through an interface method that Blutter shows only in the object pool.
+- `HttpRequestControllerImpl.setUserParams` (`charging/http/http_request_repository_impl.dart @0x2886da0`): no direct caller in the dump (the inventory lists none). UNCONFIRMED candidate callers (through `AE100ApiExt.setUserParamsAsync`, mixin dump incomplete): `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart @0x2886c44`, `@0x28874a8`, `@0x28876bc`, the custom mode usage scenario page.
 
 ## Since/changed
 
@@ -56,9 +56,9 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The request body keys are unknown (no caller found).
+- The request body keys are only a candidate (see Request); the forwarder is not in the dump.
 - Which user-level site parameters the endpoint stores is not known.
-- Whether the app calls it at all in 3.24.3 is not established; the wrapper is present.
+- Whether the forwarder really calls this wrapper is not established (mixin code missing from the dump); the unit of `param_type` 40001 and the meaning of `param_value` "2" are not known.
 
 ## Device-tested by
 

@@ -94,7 +94,7 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 
 ## Produced by
 
-[`platform_get_user_region_param`](../api/power_service/v2/platform_get_user_region_param.md): `GridParamSettingInfo.fromJson` is called in the success closures of `GridParamSettingController.getGridSetting` (`device/.../grid_param_setting_controller.dart @0x2a4f934`, `settings/.../grid_param_setting_controller.dart @0x29e4e88`), `GridSettingLogic._getGridSetting` (`charging/.../grid_setting_logic.dart @0x28f5d80`) and the protect page (`grid_protect_setting_controller.dart @0x361706c`). The sibling write is [`platform_set_user_region_param`](../api/power_service/v2/platform_set_user_region_param.md).
+[`platform_get_user_region_param`](../api/power_service/v2/platform_get_user_region_param.md): `GridParamSettingInfo.fromJson` is called in the success closures of `GridParamSettingController.getGridSetting` (`device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x2a4f934`, `settings/src/common/page/grid_param_setting/grid_param_setting_controller.dart @0x29e4e88`), `GridSettingLogic._getGridSetting` (`charging/.../grid_setting_logic.dart @0x28f5d80`) and the protect page (`grid_protect_setting_controller.dart @0x361706c`). The sibling write is [`platform_set_user_region_param`](../api/power_service/v2/platform_set_user_region_param.md).
 
 ## Consumed by
 

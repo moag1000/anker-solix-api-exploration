@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Reports a device event to the cloud: the app forwards the payload of a device event message (the log calls it the "425 event") with the device serial, the product code and the report time.
+Reports a device event to the cloud (the app log calls it the "425 event"): the app sends the device serial, the product code, the field `pn_payload` of the event object and the report time.
 
 ## Upstream name
 
@@ -26,7 +26,7 @@ Map literal with four pairs, `<String, Object>` (`r2 = 16`, `@0x2412664`).
 |---|---|---|---|---|
 | `device_sn` | String | yes | `"<device sn>"` | `business_common/msg/device_fault_manager.dart @0x2412678`; value is the field at offset 0x6b of the device object (`@0x2412688`) |
 | `product_code` | String | yes | `"A17C5"` | `@0x2412694`; value from a getter (`@0x24126a8`); the example is a product code seen elsewhere in the app |
-| `pn_payload` | not decoded | yes | not decoded | `@0x24126e8`; value is the field at offset 0x13 of the event object (`@0x24126f8`), the event payload |
+| `pn_payload` | not decoded | yes | not decoded | `@0x24126e8`; value is the field at offset 0x13 of the event object (`@0x24126f8`); that it carries the event payload is inferred from the key name, not decoded |
 | `report_time` | int | yes | `1760000000` | `@0x2412728`; seconds since the epoch: current microseconds (`_getCurrentMicros`, `@0x2412734`) divided by 1000 twice with signed division (`sdiv`, `@0x241275c`, `@0x2412760`; the raw immediates `1000` at `@0x2412754` and `999` at `@0x2412748` are arithmetic operands, unboxed, real values); boxed at `@0x2412764` |
 
 ## `param_type`/`cmd`
@@ -65,6 +65,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
+- That `pn_payload` is the raw event payload is inferred from the name only.
 - What "425" is (an event or message number of the device protocol) and the payload layout of `pn_payload` are not decoded here.
 - Server behaviour is not known (what the cloud does with the event: alarms, support tickets).
 

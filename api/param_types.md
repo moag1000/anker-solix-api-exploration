@@ -6,6 +6,15 @@ Master table of the `param_type` values that the app sends to [`set_site_device_
 
 The table has one row for every `param_type` string literal that the 3.24.3 asm sends (1, 2, 3, 4, 5, 6, 13, 16, 18, 19, 20, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 37) and two rows for the upstream members `SOLARBANK_SCHEDULE_ENFORCED` (9) and `SOLARBANK_TARIFF_SCHEDULE` (12), which the app does not send. Names come from the upstream enum `SolixParmType` (`api/apitypes.py` lines 1004-1017, upstream-confirmed); a type without an upstream member is marked `(no upstream name)`. Values from the old documentation are deliberately not carried over, because several of its `cmd` numbers were raw Smi values (twice the real value; see [../METHODOLOGY.md](../METHODOLOGY.md#smi-rule-reading-numbers-from-blutter-output)).
 
+## Contents
+
+1. [How to read this table](#how-to-read-this-table)
+1. [Table](#table)
+1. [Device-command cmd (`device_command` family)](#device-command-cmd-device_command-family)
+1. [Decoded cmd per type](#decoded-cmd-per-type)
+1. [Changed since 3.18.0](#changed-since-3180)
+1. [Known unknowns](#known-unknowns)
+
 ## How to read this table
 
 - **Request body.** Every sender builds a map with `site_id`, `param_type` (a String, never a number), `cmd` (an int) and `param_data`. `param_data` is a String that contains JSON, not a nested object: the sender calls `jsonEncode` on a map or on a model object (`toJson`) and stores the resulting text. The 17C1 variants (`set17C1SiteDeviceParam`, `get17C1SiteDeviceParam`) add `device_sn` and, for GET, `parallel_type`. The endpoint-level view is on [set_site_device_param](power_service/site/set_site_device_param.md#request).
@@ -112,6 +121,16 @@ Source files named in the table (basename, then path under the 3.24.3 asm root):
 - `tou_and_timeslot_settings_detail_logic.dart`: `electricity_price/components/electricity_module/page/tou_and_timeslot_settings_detail_logic.dart`
 - `tou_and_timeslot_settings_poly_logic.dart`: `electricity_price/components/electricity_module/page/tou_and_timeslot_settings_poly_logic.dart`
 - `tou_http_service.dart`: `electricity_price/components/tou/impl_v2/service/tou_http_service.dart`
+
+## Device-command cmd (`device_command` family)
+
+A second `cmd` namespace exists next to the `param_type` table: the HES device-command endpoint `/charging_hes_svc/device_command` ([device_command](charging_hes_svc/device_command.md)) and its installer twin [`/charging_hes_installer_svc/edit_system_strategy`](charging_hes_installer_svc/edit_system_strategy.md) share one request shape `{device_sn, cmd, data}` built by `SendDeviceCommandRequest.toParams` (`electricity_price/components/tou/impl_v2/model/request_param/send_device_command_request.dart @0x4884ee0`). The `cmd` here is not a `param_type` command; this section owns its decoded values (single source, `asm-traced`).
+
+| sender | `cmd` (decoded; raw; store width; addr) | `data` |
+|---|---|---|
+| `LargeTouRepository.saveTouMode` (`electricity_price/components/tou/impl_v2/repository/large_tou_repository.dart @0x4884d38`), time-of-use save of a large HES station | **123**: raw `0x7b` (`mov x0, #0x7b`, `@0x4884e14`), 64-bit store into an unboxed int field (`stur x0, [x1, #0xb]`, `@0x4884e18`), so no Smi halving (`tools/smi.py`: `123 → stur x → 123`); read back with `BoxInt64Instr` (`send_device_command_request.dart @0x4884f3c`) | `peak_sessions` and `price_unit`, see the endpoint page |
+
+The numeric value equals the SET `cmd` that the table above records for the `set17C1SiteDeviceParam` path, but the two are separate request families. Which other `cmd` values the device-command endpoint accepts is not known; only this one sender was traced.
 
 ## Decoded cmd per type
 

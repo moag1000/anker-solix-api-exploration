@@ -8,7 +8,7 @@ Carries the power configuration of one device as returned by `get_devices_power_
 
 ## Dart class + file
 
-`DevicePowerConfigItem` (`fromJson @0x2af2148`) and `InputPowerInfo` (`fromJson @0x2af2394`), file `settings/src/common/model/device_power_config.dart` (package `settings`).
+`DevicePowerConfigItem` (`fromJson @0x2af2148`) and `InputPowerInfo` (`fromJson @0x2af2394`), file `settings/src/common/model/device_power_config.dart` (package `settings`); `OutputPowerInfo` (`fromJson @0x2af24e4`), file `settings/src/common/model/output_power_info.dart` (package `settings`).
 
 ## Fields
 
@@ -33,6 +33,19 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 |---|---|---|---|---|
 | `default_input_power` | `int?` | yes | 3.24.3 | `device_power_config.dart @0x2af23b4` |
 | `max_input_power` | `int?` | yes | 3.24.3 | `device_power_config.dart @0x2af243c` |
+
+### OutputPowerInfo
+
+`fromJson` `output_power_info.dart @0x2af24e4`. The three `unlock_*` keys have the same names as keys of `StationPowerLimitModel`; their semantics are owned by [station_power_limit.md](station_power_limit.md) and are not repeated here (whether the device-level and the station-level values mean the same is not verified).
+
+| JSON key | Dart type | nullable | since | source |
+|---|---|---|---|---|
+| `max_output_power` | `int?` | yes | 3.24.3 | `output_power_info.dart @0x2af2504` |
+| `legal_limit` | `int?` | yes | 3.24.3 | `output_power_info.dart @0x2af258c` |
+| `default_output_power` | `int?` | yes | 3.24.3 | `output_power_info.dart @0x2af2614` |
+| `unlock_default_power_type` | `int?` | yes | 3.24.3 | `output_power_info.dart @0x2af269c` |
+| `unlock_pop_content` | `String?` | yes | 3.24.3 | `output_power_info.dart @0x2af2724` |
+| `unlock_pop_image` | `String?` | yes | 3.24.3 | `output_power_info.dart @0x2af27ac` |
 
 ## Produced by
 

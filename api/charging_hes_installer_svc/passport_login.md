@@ -12,7 +12,7 @@ Verifies the e-mail and password of an installer account in the identity-authent
 
 ## Method+URL
 
-`POST /charging_hes_installer_svc/passport_login` (asm-traced): the URL is a literal at `charging/ui/page/account/login/installer_login_logic.dart @0x3192110` in `verifyInstallerAccountPwd` (`@0x3191e48`, a top-level function, `async`), method object `Method.post` (pool entry `pp+0xa7e0`, `@0x3192108`). Unlike most pages of this service there is no `isProApp` selector: the call is only reachable from the installer identity dialog (see Callers).
+`POST /charging_hes_installer_svc/passport_login` (asm-traced): the URL is a literal at `charging/ui/page/account/login/installer_login_logic.dart @0x3192110` in `verifyInstallerAccountPwd` (`@0x3191e48`, a top-level function, `async`), method object `Method.post` (pool entry `pp+0xa7e0`, `@0x3192108`). Unlike most pages of this service there is no `isProApp` selector, so the flag-based dormancy of the other URLs does not apply: the call is sent by the identity dialog, which consumer settings pages open without an `isProApp` test (see Callers); whether it is reached in `com.anker.charging` is not determined.
 
 ## Encrypted?
 
@@ -67,7 +67,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 ## Callers in app
 
 - `verifyInstallerAccountPwd` (`charging/ui/page/account/login/installer_login_logic.dart @0x3191e48`), called by `_IdentityAuthViewState.installerLogin` (`device/src/widgets/identity_auth_view.dart @0x3191d1c`, call `@0x3191e24`) and by the identical copy in `settings/src/common/component/identity_auth_view.dart` (`installerLogin @0x3192e6c`, call `@0x3192f74`). UI: the identity-authentication dialog (`IdentityAuthView`), which has an e-mail and a password field and shows a loading overlay (`showLoading`, `@0x3191d8c`) while the call runs. On success the dialog closes and returns the integer 1 (`GetNavigation.back<int>(result: 1)`, raw `2` at `settings/src/common/component/identity_auth_view.dart @0x3192e3c`, a tagged argument).
-- Which screens open `IdentityAuthView` was not traced.
+- `IdentityAuthView` is opened, without an `isProApp` test, from the consumer settings pages `settings/src/common/menu_controller/grid_param_menu_controller.dart @0x2cd5db8` and `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/advanced_setting_logic.dart @0x3fabd84` (both load an `Instance_IdentityAuthView`; no `isProApp` test near them).
 
 ## Since/changed
 
@@ -76,7 +76,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 ## Known unknowns
 
 - Server behaviour is not known: whether the answer sets a session, and what the installer server does with `support_anker_login`.
-- Which screens open the identity dialog is not traced.
+- Whether the dialog really sends this installer URL in the consumer build (the sender has no flag test) and what the server answers to a consumer account is not known.
 - The numeric error codes of this endpoint are not known.
 
 ## Device-tested by

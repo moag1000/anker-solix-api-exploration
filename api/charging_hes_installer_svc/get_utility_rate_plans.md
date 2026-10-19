@@ -37,7 +37,7 @@ n/a
 
 ## Response model (link)
 
-Only the new TOU flow uses a model: [`UtilityRatePlansResponse`](../../models/utility_rate_plans_response.md) (`peak_sessions`, `price_unit`), passed as the closure `UtilityRatePlansResponse.fromJson` to `HttpHelper.request` (`tou_http_service.dart @0x4879170`). The other senders read keys from the raw map (see Response).
+Only the new TOU flow uses a model: [`UtilityRatePlansResponse`](../../models/utility_rate_plans_response.md) (`peak_sessions` as a list of raw maps, `price_unit` a non-null string that defaults to `"$"`), passed as the closure `UtilityRatePlansResponse.fromJson` to `HttpHelper.request` (`tou_http_service.dart @0x4879170`). The other senders read keys from the raw map (see Response).
 
 ## Response
 

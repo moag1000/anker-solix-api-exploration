@@ -12,7 +12,7 @@ Switches a site to a time-of-use (TOU) price plan: the app sends the on/off swit
 
 ## Method+URL
 
-`POST /charging_hes_installer_svc/save_time_of_use` (asm-traced). The URL comes from the static getter `Api.saveAutoTou` (`base_service/api_url.dart @0x2e82408`; the Dart name is `saveAutoTou`): installer string `pp+0x8aca0` (`@0x2e82414`) when `isProApp` is true, otherwise `/charging_hes_dynamic_price_svc/save_time_of_use` (`pp+0x8aca8`, `@0x2e82420`); see [the variant selector](README.md#variant-selector-installer-app-versus-consumer-app). Three senders load the field and call `HttpHelper.getDataFromService` (`Method.post`, `http_helper.dart @0x27bdb94`).
+`POST /charging_hes_installer_svc/save_time_of_use` (asm-traced). The URL comes from the static getter `Api.saveAutoTou` (`base_service/api_url.dart @0x2e82408`; the Dart name is `saveAutoTou`): installer string `pp+0x8aca0` (`@0x2e82414`) when `isProApp` is true, otherwise `/charging_hes_dynamic_price_svc/save_time_of_use` (`pp+0x8aca8`, `@0x2e82420`); see [the variant selector](README.md#variant-selector-installer-app-versus-consumer-app). Three senders load the field and call `HttpHelper.getDataFromService` (`Method.post`, `electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bdb94`).
 
 ## Encrypted?
 
