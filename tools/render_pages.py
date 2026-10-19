@@ -85,15 +85,24 @@ def _enc_state(r):
     return 'false'
 
 
+def _cite(label, file):
+    """`Class::fn` at `file @0xADDR` (file first, so check_citations resolves it)."""
+    name, _, addr = label.partition(' @')
+    return '`%s` (`%s @%s`)' % (name, file, addr) if file else '`%s`' % label
+
+
 def _sender_note(r):
     """Result of the caller walk (`sender`, `sender_via`, `resolution`)."""
     if r.get('sender'):
         if not r.get('sender_via'):
-            return '; sends in the same function (SDK `handle`): `%s`' % r['sender']
-        note = '; sender found through callers: `%s` via %s' % (
-            r['sender'], ' -> '.join('`%s`' % v for v in r['sender_via']))
+            return '; sends in the same function (SDK `handle`)'
+        files = r.get('sender_via_files') or [None] * len(r['sender_via'])
+        note = '; sender found through callers: %s via %s' % (
+            _cite(r['sender'], r.get('sender_file')),
+            ' -> '.join(_cite(v, f) for v, f in zip(r['sender_via'], files)))
         if r.get('sender_also'):
-            note += '; also %s' % ', '.join('`%s`' % v for v in r['sender_also'])
+            note += '; also %s' % ', '.join(
+                '`%s`' % v.partition(' @')[0] for v in r['sender_also'])
         return note
     if r.get('resolution') == 'mixin-gap':
         return ('; caller walk enters a deduplicated mixin function absent from '

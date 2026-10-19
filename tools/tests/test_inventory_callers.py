@@ -91,6 +91,9 @@ class CallerResolution(unittest.TestCase):
         self.assertEqual(r['sender'], 'C3::run @0x2300')
         self.assertEqual(r['sender_via'], ['C1::run @0x2100', 'C2::run @0x2200',
                                            'C3::run @0x2300'])
+        self.assertEqual(r['sender_via_files'],
+                         ['ui/c1.dart', 'ui/c2.dart', 'ui/c3.dart'])
+        self.assertEqual(r['sender_file'], 'ui/c3.dart')
 
     def test_stops_at_three_levels(self):
         self.chain(4)
@@ -197,3 +200,22 @@ class RealAsm(unittest.TestCase):
     def _timezone_url(self):
         return [x['url'] for x in self.inv['rows']
                 if x['function'] == 'getDeviceTimezone'][0]
+
+
+class RenderNote(unittest.TestCase):
+    def test_note_cites_file_before_address(self):
+        import render_pages
+        note = render_pages._sender_note({
+            'sender': 'C2::run @0x2200', 'sender_file': 'ui/c2.dart',
+            'sender_via': ['C1::run @0x2100', 'C2::run @0x2200'],
+            'sender_via_files': ['ui/c1.dart', 'ui/c2.dart']})
+        self.assertIn('`ui/c1.dart @0x2100`', note)
+        self.assertIn('`ui/c2.dart @0x2200`', note)
+
+    def test_note_for_gap_and_unresolved(self):
+        import render_pages
+        self.assertIn('UNCONFIRMED',
+                      render_pages._sender_note({'resolution': 'mixin-gap'}))
+        self.assertIn('3 caller levels',
+                      render_pages._sender_note({'resolution': 'unresolved'}))
+        self.assertEqual(render_pages._sender_note({}), '')

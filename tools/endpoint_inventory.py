@@ -387,7 +387,7 @@ def scan_callers(root, owners, want_dedup=False):
     """One pass over the asm tree.
 
     Returns (table, dedup) where table maps an owner in `owners` to a list of
-    (caller_owner, caller_addr, caller_sends) for every function that calls it,
+    (caller_owner, caller_addr, caller_sends, rel) for every function that calls it,
     and dedup is the set of (class component, name) pairs called through
     `dart:mixin_deduplication` (only when want_dedup).  A caller that is a
     closure is attributed to its enclosing function; caller_sends is true when
@@ -437,7 +437,7 @@ def scan_callers(root, owners, want_dedup=False):
                 for owner in syms[sym]:
                     if owner == caller:
                         continue
-                    ent = (caller, fn.addr, sends)
+                    ent = (caller, fn.addr, sends, rel)
                     lst = table.setdefault(owner, [])
                     if ent not in lst:
                         lst.append(ent)
@@ -448,7 +448,9 @@ def resolve_senders(root, records, max_depth=MAX_DEPTH, log=None):
     """Resolve url_provider records to the function that sends.
 
     Returns {(dart_file, addr): result}; a result is
-    {'sender': label, 'sender_via': [labels, innermost first]} or
+    {'sender': label, 'sender_file': dart file of the sender,
+     'sender_via': [labels, innermost first], 'sender_via_files': [dart files,
+     parallel to sender_via]} or
     {'resolution': 'mixin-gap' | 'unresolved'}.  Records whose function itself
     calls an SDK sender resolve to themselves (sender_via []).
     """
@@ -462,7 +464,8 @@ def resolve_senders(root, records, max_depth=MAX_DEPTH, log=None):
         o = owner_of(r)
         if r.get('sdk_callees'):
             out[key] = {'sender': label(o or r['function'], r['addr']),
-                        'sender_via': []}
+                        'sender_file': r['dart_file'], 'sender_via': [],
+                        'sender_via_files': []}
         elif o is not None:
             walk[key] = o
     table, dedup, known = {}, set(), set()
@@ -476,7 +479,7 @@ def resolve_senders(root, records, max_depth=MAX_DEPTH, log=None):
         known |= need
         for o in need:
             table[o] = got.get(o, [])
-        need = {c for o in need for c, _, sends in table[o] if not sends}
+        need = {e[0] for o in need for e in table[o] if not e[2]}
         if log:
             log('callers level %d: %d functions, %.1fs'
                 % (depth + 1, len(known), time.time() - t0))
@@ -490,17 +493,20 @@ def resolve_senders(root, records, max_depth=MAX_DEPTH, log=None):
                 ents = table.get(node)
                 if ents is None:
                     continue
-                for c, addr, sends in ents:
-                    lab = chain + [label(c, addr)]
+                for c, addr, sends, rel in ents:
+                    lab = chain + [(label(c, addr), rel)]
                     if sends:
                         found.append(lab)
                     elif c not in seen:
                         seen.add(c)
                         nxt.append((c, lab))
             if found:
-                found.sort(key=lambda ch: (ch[-1], ch))
-                res = {'sender': found[0][-1], 'sender_via': found[0]}
-                also = sorted({f[-1] for f in found[1:]} - {found[0][-1]})[:5]
+                found.sort(key=lambda ch: (ch[-1][0], [x[0] for x in ch]))
+                best = found[0]
+                res = {'sender': best[-1][0], 'sender_file': best[-1][1],
+                       'sender_via': [x[0] for x in best],
+                       'sender_via_files': [x[1] for x in best]}
+                also = sorted({f[-1][0] for f in found[1:]} - {best[-1][0]})[:5]
                 if also:
                     res['sender_also'] = also
                 break
