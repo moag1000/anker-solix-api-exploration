@@ -22,6 +22,7 @@ Not here: the BLE side of the same frame (MTU split, handshake) is in `ble/proto
 1. [intToList encodings](#inttolist-encodings)
 1. [Direction detection](#direction-detection)
 1. [Connection details](#connection-details)
+1. [Infrastructure](#infrastructure)
 1. [Since 3.18.0](#since-3180)
 1. [Known unknowns](#known-unknowns)
 
@@ -189,6 +190,18 @@ The type byte is derived from the byte length of these lists, not from the funct
 
 The client-side debounce key `"pps_parse_common_" + deviceSn` is a string with no wire value (audit row 66, not carried).
 
+## Infrastructure
+
+Two of these three files are new in 3.24.3 (`i_mqtt_serve.dart` and `mqtt_types.dart` are absent from the 3.18.0 asm tree; `local.dart` exists in both versions). A `find` for `*mqtt*` file names gives 35 files in 3.24.3 against 33 in 3.18.0. The audit has no row for these files; the facts below are new asm reads (class headers, pool objects and the function table of each file) and carry no audit row. The other MQTT infrastructure files (`mqtt_server.dart`, `mqtt_command_transformer.dart`, `mqtt_serve.dart`, `mqtt_decompression_util.dart`) are the sources of the sections above.
+
+| file | role | source |
+|---|---|---|
+| `base_service/services/i_mqtt_serve.dart` | `abstract class IMqttServe` with no members: the interface that `MqttServe` (`charging/mqtt/business/mqtt_serve.dart`) declares with `implements IMqttServe`; other code obtains the service through the type argument `<IMqttServe>` | class header (`i_mqtt_serve.dart` line 8, class id 6341); `mqtt_serve.dart` class header line 9; type argument [pp+0xcd18] used in `boostrap_impl.dart` @0x49e01d0 and `sync_wifi_logic.dart` @0x34b7dbc |
+| `base_service/services/mqtt_types.dart` | `enum MqttTopicSubscriptionStatus` with the values `doesNotExist` (0), `pending` (1) and `active` (2); the type `Map<MqttTopicSubscriptionStatus, String>` appears in `MqttServe` and `SdkImpMqttManager` | class header (`mqtt_types.dart` line 8, class id 17160); pool objects [pp+0x11e68] (0), [pp+0x33d30] (1), [pp+0x33d40] (2); `_enumToString` @0x472fdac; map type [pp+0xcca0] in `sdk_imp_mqtt_manager.dart` |
+| `charging/mqtt/local.dart` | not a local-network MQTT client: an `abstract class Certificates` with the accessors `ci()` @0x2408a9c, `mp()` @0x2408c90 and `rootCA()` @0x24094e8, and the classes `CI` @0x2408adc, `MP` @0x2408cd0, `UsMp` @0x2408d6c and `EuMp` @0x2408f20 that each build a PEM private key and a PEM certificate from base64 literals (rootCA: one PEM certificate); the material is not reproduced in this repository | constructor and accessor addresses from the asm function table of `local.dart`; the literals are pool strings |
+
+The old controller pointer called `local.dart` "local MQTT"; the file contains certificate and key material only, and the 3.18.0 copy has the same five classes and the same length (687 lines). No reference to `mqtt/local.dart` or to the three accessors was found outside the file itself (grep over the 3.24.3 asm tree), so which of the four certificate sets the app uses for which region or broker is not known.
+
 ## Since 3.18.0
 
 The head immediates and the `cmdMap` immediates are the same raw values at the 3.18.0 sites (audit rows 27-30 and 32-40 list both addresses). The gzip check, `_getDataType` and the frame builders are cited for 3.24.3 only; no change was seen by the audit. New in 3.24.3 compared with the old doc's topic list: the `state_info` topic (the audit has no 3.18.0 address for it).
@@ -204,3 +217,4 @@ The head immediates and the `cmdMap` immediates are the same raw values at the 3
 - Whether a device accepts a millisecond timestamp under tag 0xFD (as upstream describes) is untested here.
 - The old doc's claim that sequence numbers are not used for correlation (it says correlation is topic plus serial) has no audit row; only the constants themselves are traced.
 - The product-key and serial getters of `getCommonTopicString` are bound to `<pn>` and `<sn>` by upstream only.
+- Which certificate set of `local.dart` (`CI`, `MP`, `UsMp`, `EuMp`, `rootCA`) is used for which broker or region: no caller was found (see Infrastructure).
