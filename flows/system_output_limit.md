@@ -21,7 +21,7 @@ On the station power limit page (station settings), the user taps the output pow
 |---|---|---|---|---|
 | 1 | user | Opens the station power limit page; `StationPowerLimitLogic::onInit` calls `_getStationPowerLimit`. | [get_power_limit](../api/power_service/site/get_power_limit.md) | `station_power_limit_logic.dart @0x34b0bdc` |
 | 2 | app | Sends `get_power_limit` (encrypted) for the site. | [get_power_limit](../api/power_service/site/get_power_limit.md) | `station_power_limit_logic.dart @0x28cac9c` |
-| 3 | cloud | Returns the station power limit object. | [StationPowerLimitModel](../models/station_power_limit.md) | `string-only` (cloud side, no asm site) |
+| 3 | app | Receives the response and parses it into `StationPowerLimitModel` in the success closure of `getSitePowerLimit`. | [StationPowerLimitModel](../models/station_power_limit.md) | `http_request_repository_impl.dart @0x23790e0`, `fromJson` at `station_power_limit_model.dart @0x2379150` |
 | 4 | app | Parses the model and keeps: `legal_limit` as the prompt threshold, `legal_power_limit` as the displayed current limit (`"<value>W"`), `power_limit_option` as the list `"<limit>W"`. | [StationPowerLimitModel](../models/station_power_limit.md#consumed-by) | `station_power_limit_logic.dart @0x28cacc4` |
 | 5 | user | Taps the output power entry (trigger above). | this page | `station_power_limit_view.dart @0x4354f6c` |
 | 6 | app | Opens `NewPowerSliderView` in a bottom sheet. Start value: the displayed current limit parsed as int, or 100 if that fails (raw 100 at `@0x435505c`, unboxed). Minimum: 100 W (raw 100, `mov x0, #0x64`, stored 64-bit `stur x0` at `@0x43550bc`, unboxed, so 100). Maximum: the last entry of the option list, parsed as int (`@0x4354fdc`, stored 64-bit at `@0x43550c4`; 0 if parsing fails, `@0x4355008`). Step: 10 W (raw 10, `mov x1, #0xa`, stored 64-bit `stur x1` at `@0x43550cc`, unboxed, so 10). | this page | `station_power_limit_logic.dart @0x43550b8`, `@0x43550c8` |
@@ -33,7 +33,7 @@ On the station power limit page (station settings), the user taps the output pow
 | 12a | user, app | Variant `imagePassword`: the user types the code and confirms; the app sends `verify_unlock_default_power_code` with `unlock_code` and `site_id`. If `verify_result` is `true` the sheet calls its success callback (closure `@0x4355aec`), which continues with step 13; otherwise the sheet shows the translated text `passwordError`. | [verify_unlock_default_power_code](../api/devicecontrol/verify_unlock_default_power_code.md) | `diy_legal_power_limit_sheet.dart @0x30bc02c` |
 | 12b | user, app | Variant `image`: the content widget receives the callback `@0x4355b94` (`diy_legal_power_limit_sheet.dart @0x30b940c`) and continues with step 13 when the user confirms. Variant `h5`: the confirm path is not traced. | this page | `diy_legal_power_limit_sheet.dart @0x30b93f0` |
 | 13 | app | `_setOutputPowerLimit(v)` sends `set_site_device_param` with param_type 19 (encrypted), `limit` = `limit_real` = `v`. | [set_site_device_param](../api/power_service/site/set_site_device_param.md#usage-param_type-19-system-output-power-limit), [param_types](../api/param_types.md) | `station_power_limit_logic.dart @0x435567c` |
-| 14 | cloud | Accepts or rejects the value. | [set_site_device_param](../api/power_service/site/set_site_device_param.md) | `string-only` (cloud side, no asm site) |
+| 14 | app | Receives the result of `set_site_device_param`; the success callback and the failure callback only write log lines (no state change, no retry). | [set_site_device_param](../api/power_service/site/set_site_device_param.md) | `station_power_limit_logic.dart @0x4355a70` (success), `@0x4355a1c` (failure log) |
 
 ## Side effects
 
@@ -58,6 +58,7 @@ All of these run right after the request is handed to the HTTP layer, without wa
 
 ## Known unknowns
 
+- Whether the server validates the value and rejects some of them (for example 790 W, which is not in `power_limit_option`); the app does not check, it only logs a failure.
 - Whether the server accepts every 10 W value between 100 W and the maximum, or only some of them, for a given device and firmware.
 - Whether the server enforces the legal limit itself, or relies on the app prompt (steps 9 to 12).
 - The confirm path of the `h5` prompt variant.
