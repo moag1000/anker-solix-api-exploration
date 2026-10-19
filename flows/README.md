@@ -10,6 +10,10 @@ Pages on disk:
 - [encrypted_request.md](encrypted_request.md) — encrypted request
 - [modbus_setup.md](modbus_setup.md) — Modbus setup (third-party control)
 
+## Audit row numbers
+
+Flow pages cite the verdict rows of [../docs/audit/FLOWS.md](../docs/audit/FLOWS.md) as "audit row N". N counts the data rows of that table from the top: row 1 is the `"cmd": 246` row for the param_type 6 schedule, row 71 the last summary row (file line N + 14). The 71 rows are 26 OK, 24 WRONG, 8 CHANGED-IN-3.24.3, 7 NOT-FROM-ASM and 6 UNVERIFIABLE.
+
 The old [../FLOWS.md](../FLOWS.md) is a 3.18.0 reference with known Smi errors (see the Errata in [../CHANGELOG.md](../CHANGELOG.md)); its remaining flows are not yet rebuilt here.
 
 Not here: payload, field or opcode definitions; those live with their owners, see [../docs/STRUCTURE.md](../docs/STRUCTURE.md).
