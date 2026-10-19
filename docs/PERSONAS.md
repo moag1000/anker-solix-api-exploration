@@ -39,7 +39,7 @@ The repository is being rebuilt on App 3.24.3, so each step has two columns. **T
 - **Who:** Watches live MQTT traffic of a device and needs to decode what it sees.
 - **First question:** "What is field a8, or command 0x7c?"
 - **First page needed:** the MQTT decoder page for the device's product number (PN).
-- **Status today: partial.** No existing page is a per-PN field decoder; those pages (`mqtt/<pn>.md`) are a target. The nearest answers are spread over three files, listed below.
+- **Status today: partial.** No existing page is a per-PN field decoder; those pages (`mqtt/<pn>.md`) are a target. The nearest answers are spread over four files, listed below.
 
 | Step | Today | Target |
 |---|---|---|
@@ -47,6 +47,7 @@ The repository is being rebuilt on App 3.24.3, so each step has two columns. **T
 | 2 | [BLE_COMMAND_MAP.md](../BLE_COMMAND_MAP.md) (MQTT sections: "A17B1 — Solarbank 2 System JSON Keys (MQTT status)", "A5101 — X1 HES MQTT Status Fields", device to command matrix) | `mqtt/<pn>.md` |
 | 3 | [devices/smart_plug.md](../devices/smart_plug.md) (MQTT section: "MQTT Commands", A17X8 timer and pause/resume) | `devices/<pn>.md` |
 | 4 | [VALIDATION_MODEL.md](../VALIDATION_MODEL.md) ("MQTT-Only Settings" for A17C0-C5; ranges per command) | `flows/<name>.md` |
+| 5 | [ENUMS.md](../ENUMS.md) (meaning of enum values seen in fields) | `reference/` |
 
 ## 4. BLE project developer
 
@@ -67,7 +68,7 @@ BLE is a local channel. It is not a live fallback for the cloud: the app disable
 
 - **Who:** Owns Anker Solix hardware or is evaluating it, with no API background.
 - **First question:** "What can be controlled at all, and what is a site or a station?"
-- **First page needed:** the glossary, then the use-case index in the README.
+- **First page needed:** today the README use-case index; target is the glossary (`GLOSSARY.md`), then that index.
 - **Glossary planned (target `GLOSSARY.md`); no equivalent today. Start with the README use-case index.**
 
 | Step | Today | Target |
