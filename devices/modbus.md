@@ -1,12 +1,12 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced (lowest tag among the API facts; the UI-text table is excluded by design) · Owner page: this page · Page type: feature (not a PN page)
 
 # Modbus (third-party control: Modbus TCP and RTU, Home Assistant, Homey)
 
-This is not a product page. It is the owner page of the Modbus feature across products: which products expose it, where the app configures it, which local transport carries the setting, and what the app does and does not know about the Modbus protocol itself. Endpoint payloads stay on their endpoint pages; the user sequence is on [../flows/modbus_setup.md](../flows/modbus_setup.md). The status header is `string-only` only because of the UI text table at the end; every other fact on this page is `asm-traced` or `upstream-confirmed` as marked.
+This is not a product page. It is the owner page of the Modbus feature across products: which products expose it, where the app configures it, which local transport carries the setting, and what the app does and does not know about the Modbus protocol itself. Endpoint payloads stay on their endpoint pages; the user sequence is on [../flows/modbus_setup.md](../flows/modbus_setup.md). Every API fact on this page is `asm-traced` or `upstream-confirmed` as marked; the UI-text table at the end holds translation strings, which are not API facts and are untagged by design. Product codes and enums are owned by `reference/enums.md` (not written yet).
 
 The app has two separate Modbus features that share nothing but the name:
 
-1. **Third-party control** (new in 3.24.3): a page with a Modbus TCP switch, a Modbus RTU switch, an RTU slave id, and guide cards for Home Assistant and Homey. It is stored in the cloud through [query_modbus_setting](../api/charging_hes_third_party_service_svc/query_modbus_setting.md) and [set_modbus_setting](../api/charging_hes_third_party_service_svc/set_modbus_setting.md), and over Bluetooth when the device has no Wi-Fi.
+1. **Third-party control** (new in 3.24.3): a page with a Modbus TCP switch, a Modbus RTU switch, an RTU slave id, and guide cards for Home Assistant and Homey. The app reads it with [query_modbus_setting](../api/charging_hes_third_party_service_svc/query_modbus_setting.md) and sends changes to the cloud with [set_modbus_setting](../api/charging_hes_third_party_service_svc/set_modbus_setting.md) (what the server does with them is not verified), and for RTU also over the path the app names Bluetooth when the device has no Wi-Fi.
 2. **EV charger Modbus TCP** (already present in 3.18.0): a switch and a read-only parameter list on the EV charger "Integrations" page, written to the charger as a device property, not through a cloud endpoint.
 
 ## Contents
@@ -28,7 +28,9 @@ The app has two separate Modbus features that share nothing but the name:
 
 ## PN, marketing name, generation/family
 
-Products for which the 3.24.3 app builds a Modbus entry point. Whether the entry is actually shown is decided at runtime by the support flags (see [Support flags](#support-flags)).
+Tag: asm-traced (marketing names upstream-confirmed where marked).
+
+Products for which the 3.24.3 app builds a Modbus entry point. Product codes are owned by `reference/enums.md` (not written yet). Whether the entry is actually shown is decided at runtime by the support flags (see [Support flags](#support-flags)).
 
 | product | marketing name | entry point in the app | source |
 |---|---|---|---|
@@ -48,6 +50,8 @@ No asm site ties Modbus to `A17C5` (Solarbank 3); [a17c5.md](a17c5.md) is theref
 
 ## Features matrix
 
+Tag: per cell; app-side cells asm-traced, MQTT cells upstream-confirmed.
+
 | feature | API (link) | MQTT (link) | BLE (link) | device-tested? |
 |---|---|---|---|---|
 | third-party control: read support flags, state, IP, port, RTU id, guide URLs | [query_modbus_setting](../api/charging_hes_third_party_service_svc/query_modbus_setting.md) | unknown | none (read only through the cloud) | no |
@@ -56,6 +60,8 @@ No asm site ties Modbus to `A17C5` (Solarbank 3); [a17c5.md](a17c5.md) is theref
 | EV charger Modbus TCP parameters (IP, port, current limit, phase, timeout, link error) | none | upstream: `0405` fields `d0` `ip_address`, `cf` `tcp_port`, `cc` `tcp_timeout_seconds` for `A5191` (upstream-confirmed, `api/mqttmap.py`) | read from the charger's device info, see [EV charger Modbus TCP](#ev-charger-modbus-tcp-device-properties) | no |
 
 ### Third-party control (cloud)
+
+Tag: asm-traced.
 
 The page is `HomeAssistantPage` (route `/homeAssistantPage`, pool `pp+0x4f698`) with `HomeAssistantLogic` (`home_assistant_logic.dart`). Its state comes entirely from the [query_modbus_setting](../api/charging_hes_third_party_service_svc/query_modbus_setting.md#response) response, which the caller passes in as route argument `data` (`home_assistant_logic.dart @0x35ead84`). Changes go to [set_modbus_setting](../api/charging_hes_third_party_service_svc/set_modbus_setting.md#request). The page shows (asm-traced):
 
@@ -67,9 +73,13 @@ Only one variant can be on: enabling TCP switches RTU off in the page and vice v
 
 ### Bluetooth path (IoT kit action)
 
+Tag: asm-traced (the transport inside the IoT kit is not traced; the app names this path Bluetooth).
+
 When the device's Wi-Fi is offline but the app has a local connection to it, the RTU setting (switch and RTU id) is written to the device first and then reported to the cloud with `isBluetooth: true`. Modbus TCP never takes this path: `checkConnectionEnvironment` requires device Wi-Fi for TCP and forces `isBluetooth` to `false` (`home_assistant_logic.dart @0x38dbf88` to `@0x38dbfb4`). This is a local configuration path for a device without Wi-Fi, not a cloud fallback: the cloud request still follows it.
 
 `HomeAssistantLogic::bluetoothSend` (`home_assistant_logic.dart @0x38dbd50`, log prefix `HaBluetoothResponeseData: `) does not build a BLE frame itself. It calls the IoT kit (`AKIoTKitManagerImpl::handle`, `@0x38dbf18`) with the method string `"akiot.device.invoke_action"` (`@0x38dbf08`) and this argument map (asm-traced; outer map 3 pairs, raw `r2 = 12` at `@0x38dbd90`; `param` map 2 pairs, raw `r2 = 8` at `@0x38dbde4`):
+
+Interim owner — moves to `ble/a5190.md` / `mqtt/a5191.md` when those pages exist (Task 3.7).
 
 | key | value | source |
 |---|---|---|
@@ -82,18 +92,11 @@ The result is compared with `AKResultType.success` (pool `pp+0xa5b0`, `home_assi
 
 ### EV charger Modbus TCP (device properties)
 
+Tag: asm-traced (upstream names: upstream-confirmed).
+
 The EV charger "Integrations" page (route `/integrationsSettingPage`, `integrations_setting_menu_controller.dart @0x2cdfb54`; logic `IntegrationsSettingLogic`, `integrations_setting_logic.dart`) reads its Modbus values from the charger's device info (`A5190DeviceInfo.fromJson`, `a5190_device_info.dart @0x45ac170`) and writes the switch as a device property. No cloud endpoint is involved (asm-traced).
 
-| app key | type | meaning in the app | source |
-|---|---|---|---|
-| `supportModbusTcp` | int? | `== 1` shows the Modbus TCP section (`cmp w1, #2` on the loaded tagged field, so 1) | parsed `a5190_device_info.dart @0x45ad9cc`; used `integrations_setting_logic.dart @0x35f523c` |
-| `modbusTcpSwitch` | int? | switch state | parsed `a5190_device_info.dart @0x45adecc` |
-| `tcpModbusIp` | String? | IP address; when empty the page shows `evModbusIpAddressTips` instead | parsed `a5190_device_info.dart @0x45ae174`; used `integrations_setting_logic.dart @0x3972a40` |
-| `tcpModbusPort` | int? | port, shown as is | parsed `a5190_device_info.dart @0x45ae0ec`; shown `integrations_setting_page.dart @0x397222c` |
-| `tcpModbusMaxCurrent` | int? | current limit in units of 0.1 A: the page divides by 10 (`sdiv` by raw 10, arithmetic, unboxed, `integrations_setting_logic.dart @0x3972970`) and appends `"A"` (`@0x39729a8`) | parsed `a5190_device_info.dart @0x45ae064` |
-| `tcpModbusPhaseLimit` | int? | 0 default phase, 1 fixed single phase, 2 fixed three phase (`cmp w0, #2` and `cmp w0, #4` on the boxed value, `integrations_setting_logic.dart @0x3972894`, `@0x39728b4`, so 1 and 2; any other value shows the default text) | parsed `a5190_device_info.dart @0x45adfdc` |
-| `tcpModbusTimeout` | int? | timeout, shown with the suffix `"S"` (seconds, string literal) | parsed `a5190_device_info.dart @0x45adf54`; shown `integrations_setting_page.dart @0x39724a8` |
-| `errorCodeArray` | list of ints (bytes) | Modbus link error detection, see below | parsed `a5190_device_info.dart @0x45ae5b0`; used `integrations_setting_logic.dart @0x35f4740` |
+The Modbus keys of the charger's device info (`supportModbusTcp`, `modbusTcpSwitch`, `tcpModbusIp`, `tcpModbusPort`, `tcpModbusMaxCurrent`, `tcpModbusPhaseLimit`, `tcpModbusTimeout`, `errorCodeArray`), with types, units and value meanings, are owned by [../models/a5190_device_info.md](../models/a5190_device_info.md#fields). The app defines no default and no range of its own for the IP address, port, timeout or current limit: it only displays what the charger reports (asm-traced, the only uses are the display sites listed on the model page).
 
 Switching: `IntegrationsSettingLogic::setModbusTcpStatus` (`integrations_setting_logic.dart @0x3972cfc`) turns the switch bool into 1 (on) or 0 (off) (`tst x0, #0x10` / `cset`, `@0x3972de8`) and calls `AKIotEVChargeCommand::setModbusTcpSwitch` (`ev_charge_command.dart @0x3972f40`), which writes the property group `"prop_write_evcharger"` (`@0x3972fa0`) with the single key `modbusTcpSwitch` (`@0x3972f74`; value tagged with `lsl` before the store, `@0x3972f84`, so the plain 1 or 0) through `AKIotBasicCommand::writeProperty` (`@0x3972fa8`). On a result other than `AKResultType.success` the page reloads its values and shows the toast key `failed` (`integrations_setting_logic.dart @0x3972ebc`).
 
@@ -101,17 +104,25 @@ Upstream names (upstream-confirmed, `api/mqttmap.py` and `api/mqttcmdmap.py`): f
 
 Link error detection (`analyzeModbusConnectError`, `integrations_setting_logic.dart @0x35f4740`, called from `onInit` at `@0x35f4600` and on every device-info update at `@0x35f52f4`): the app walks `errorCodeArray` byte by byte and counts trailing zero bits, adding 8 for each zero byte (`add x1, x3, #8`, arithmetic, `@0x35f48d8`, so 8) until it finds the first non-zero byte. If the lowest set bit is bit number 32 (`cmp x0, #0x20` on the unboxed count, `@0x35f498c`, so 32), it logs `Modbus connect error detected!` and, while the Modbus switch is on, shows the warning `evModbusConnectTips` (`@0x35f49f8`; text in [UI texts](#ui-texts)). Any other error bit, or an all-zero array, clears the warning. That is the only error class the app derives for Modbus.
 
+Two EV charger enums also have a Modbus entry (labels only; their wire values are not traced): `StartWayEnum` index 7 shows the string literal `"Modbus TCP"` as the start/stop method of a charging session (`cmp x0, #7` on the unboxed enum index, `start_way_enum.dart @0x39593e4`, so 7; label at `@0x39593ec`), and `ChargingPauseReason` index 6 shows the pause reason `evChargerPauseModbusTCP` (`cmp x2, #6` / `#5` on the unboxed index, `charging_pause_reason_enum.dart @0x3505fd0`, `@0x3505fd8`, so 6; key at `@0x3505ff8`). The enum values belong to `reference/enums.md` (not written yet).
+
 ### Support flags
 
+Tag: asm-traced.
+
 - **Third-party control**: `tcpSupport` and `rtuSupport` in the [query_modbus_setting](../api/charging_hes_third_party_service_svc/query_modbus_setting.md#response) response. The menu is shown only if one of them is `true`. They come from the cloud, not from a device attribute, `get_device_attrs`, the scene info, or a PN list (asm-traced, `communication_setting_menu_controller.dart @0x2cd5270`).
-- **EV charger**: `supportModbusTcp` in the charger's device info (`a5190_device_info.dart @0x45ad9cc`), from the device through the IoT kit.
+- **EV charger**: `supportModbusTcp` in the charger's device info ([../models/a5190_device_info.md](../models/a5190_device_info.md#fields)), from the device through the IoT kit.
 - **`isSupportModbus`**: only in the X1 (`A5101`) Bluetooth controller. `parseSupportFunction2` (`a5101_device_controller.dart @0x34cda1c`) names the entries of a 14-entry support list (name array allocated with raw `r2 = 28` at `@0x34cda7c`, a Smi length, so 14 slots; loop bound `cmp x2, #0xe` on the unboxed index, `@0x34cdb74`, so 14); `isSupportModbus` is entry 3 (fourth array slot, `@0x34cdab0`). An entry counts as supported when it equals 1 (`cmp w0, #2` on the boxed element, `@0x34cdba8`, so 1). Entry 3 falls through the index switch without a store (`@0x34cdbc0` to `@0x34cdc28`), so the flag is logged but not kept, and no X1 Modbus page exists in 3.24.3.
 
 ### Home Assistant and Homey entry points
 
+Tag: asm-traced.
+
 `modbustoha` and `modbustohomey` are translation keys, not URLs or deep links (asm-traced: both go through `Trans.tr`, `home_assistant_page.dart @0x38d8b3c` and `@0x38d8c3c`). They are the titles of two guide cards on the third-party control page, below the intro texts `modbusgettingstarted` (`@0x38d8890`) and `modbusquickguide` (`@0x38d8a68`). The links behind the cards come from the cloud: the Home Assistant card opens `helpH5Url` (`@0x38d8b4c`), the Homey card opens `homeyH5Url` (`@0x38d8c4c`), both fields of the [query_modbus_setting](../api/charging_hes_third_party_service_svc/query_modbus_setting.md#response) response. A tap calls `HomeAssistantLogic::openWebView` (`home_assistant_page.dart @0x38d945c`), which does nothing for an empty URL (`home_assistant_logic.dart @0x38d949c`) and otherwise opens the in-app web view route `/tutorialGuidePage` with `title` and `url` (`@0x38d9530`). The app contains no Home Assistant or Homey integration code of its own.
 
 ### Preconditions and the risk dialog
+
+Tag: asm-traced.
 
 `HomeAssistantLogic::checkConnectionEnvironment` (`home_assistant_logic.dart @0x38dbf30`) runs before every change (asm-traced):
 
@@ -129,15 +140,19 @@ Risk dialog (`riskControlToast`, `home_assistant_logic.dart @0x38dc778`): switch
 
 ### Register map
 
+Tag: asm-traced (negative result: searched, not found).
+
 The app does not speak Modbus. No Dart file in the 3.24.3 asm contains Modbus register numbers, function codes (`0x03`, `0x06`, `0x10`), holding or input register tables, or a Modbus frame builder; the pool has no such strings. The app only switches the device's Modbus server on or off and shows its address. For the EV charger, the dialog link "View Modbus Register Map" (`evModbusRegisterMapTips`, `integrations_setting_logic.dart @0x3973088`) opens the product's user manual URL (`SpServiceImpl::getUserManualLink` with the product code, route `/commonWebViewPlus`, closure `@0x39731a4`). For third-party control the register documentation, if any, is behind `helpH5Url` / `homeyH5Url`. The register map is therefore a Known unknown of this repository.
 
 ### Not part of this feature: ECU AP-mode protocol
 
-`charging/tcp/ecu_protocol.dart` (`setECUProtocolWithFunctionCode`, `@0x25f50a8`; `connectWifi`, `@0x3044970`) belongs to the local Wi-Fi provisioning protocol of the micro-inverter gateway (ECU), not to Modbus TCP. Its "function codes" are command codes of that protocol (AP password, close AP, scan Wi-Fi, connect router, network progress), and its replies arrive through `TcpSocketManager`, which hands received data to `ECUProtocol.parseTcpData` (`tcp_socket_manager.dart @0x4199ee0`). `TcpSocketManager::setTcpConfig` (`@0x33c2cb4`) holds the address string `"172.30.1.1"` and port 503 (raw `0x3ee` = 1006 at `@0x33c2cbc`, stored 32-bit with `stur w3` at `@0x33c2cc8`, Smi, so 503); no direct caller of `setTcpConfig` was found. The commands include closing the device's own access point, which is why this is called the AP-mode protocol here. Two of its replies mention Modbus only as an inverter property: "get inverter ID list and Modbus address" and "set inverter ID and Modbus address" (log strings at `ecu_protocol.dart @0x419b414` and `@0x419b4ec`), i.e. the bus address of each micro-inverter behind the ECU. This page does not document that protocol further.
+Tag: asm-traced.
+
+`charging/tcp/ecu_protocol.dart` (`setECUProtocolWithFunctionCode`, `@0x25f50a8`; `connectWifi`, `@0x3044970`) belongs to the local Wi-Fi provisioning protocol of the micro-inverter gateway (ECU), not to Modbus TCP. Its "function codes" are command codes of that protocol (AP password, close AP, scan Wi-Fi, connect router, network progress), and its replies arrive through `TcpSocketManager`, which hands received data to `ECUProtocol.parseTcpData` (`tcp_socket_manager.dart @0x4199ee0`). `TcpSocketManager::setTcpConfig` (`@0x33c2cb4`) holds the address string `"172.30.1.1"` and port 503 (raw `0x3ee` = 1006 at `@0x33c2cbc`, stored 32-bit with `stur w3` at `@0x33c2cc8`, Smi, so 503); no direct caller of `setTcpConfig` was found. The commands include closing the device's own access point, which is why this is called the AP-mode protocol here. Three log strings mention Modbus only as an inverter property: "get inverter ID list and Modbus address", "set inverter ID and Modbus address" and "whether setting inverter ID and Modbus address succeeded" (`ecu_protocol.dart @0x419b414`, `@0x419b4ec`, `@0x419b5a4`), i.e. the bus address of each micro-inverter behind the ECU. This page does not document that protocol further.
 
 ### UI texts
 
-English texts from the 3.24.3 translation table in `pp.txt` (string-only: the keys are asm-traced at the cited sites, the texts are not traced to a call site).
+Tag: untagged by design (UI translation strings, not API facts). English texts from the 3.24.3 translation table in `pp.txt`; the keys are asm-traced at the cited sites.
 
 | key | English text |
 |---|---|
@@ -159,6 +174,8 @@ English texts from the 3.24.3 translation table in `pp.txt` (string-only: the ke
 
 ## Known firmware notes
 
+Tag: untagged by design (no API fact).
+
 - none recorded
 
 ## Known unknowns
@@ -169,6 +186,7 @@ English texts from the 3.24.3 translation table in `pp.txt` (string-only: the ke
 - Whether `set_modbus_setting` reaches the device through the cloud (for example over MQTT) when the app took the cloud path, or whether the cloud only records the state.
 - The meaning of the int argument of the station menu rule (19, 20, 21, 25), and the marketing names of `AE111` and `AE113`.
 - Which other bits of the EV charger `errorCodeArray` exist; the app only names bit 32.
+- The wire values of the `StartWayEnum` and `ChargingPauseReason` Modbus entries.
 - Whether `A17C5` or other Solarbank 3 sites get the station menu (depends on the unverified station rule above).
 
 ## Device-tested by
