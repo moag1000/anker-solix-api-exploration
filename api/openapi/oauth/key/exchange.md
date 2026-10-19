@@ -22,9 +22,9 @@ No (asm-traced): the call passes `needEncryption: false` (and `needTerminal: tru
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `client_public_key` | String (Base64 text) | yes | `"<base64 text>"` | key at `EncryptionUtilImpl.dart @0x4016e88`; value is `Base64Codec.encode` output (`@0x4016e68`) derived from the client public key that `Encryption::getClientPublicKey` returns (`@0x4016e14`); how the value is produced is a scope note on [../../../encryption.md](../../../encryption.md#scope-note) |
+| `client_public_key` | String (Base64 text) | yes | `"<base64 text>"` | key at `EncryptionUtilImpl.dart @0x4016e88`; value is `Base64Codec.encode` output (`@0x4016e68`) of `Encryption::aesCbcEncrypt(key = getPresetKey(), data = <text returned by Encryption::getClientPublicKey>)` (`@0x4016e50`, `@0x4016e14`): the client public key travels encrypted under the app-embedded preset key, not in clear; construction on [../../../encryption.md](../../../encryption.md#key-exchange-endpoint) |
 
-Headers: the map from `EncryptionUtilImpl::commonHeaders` (`@0x4016ea4`); header names are listed in [../../../encryption.md](../../../encryption.md#request-headers-on-encrypted-calls). `exchangeKey` also reads `X-Key-Ident` from that map (`@0x4016ec8`, default empty string `@0x4016ee4`).
+Headers: the map from `EncryptionUtilImpl::commonHeaders` (`@0x4016ea4`), called with the `client_public_key` text so that `X-Signature` is the HMAC over `ts + "+" + once + "+" + client_public_key` keyed with the preset key; names and value derivations are in [../../../encryption.md](../../../encryption.md#request-headers-on-encrypted-calls) and [Request signing](../../../encryption.md#request-signing). `exchangeKey` also reads `X-Key-Ident` from that map (`@0x4016ec8`, default empty string `@0x4016ee4`).
 
 Skip rule: `exchangeKey` returns without a request when both a stored session key and a stored key identifier exist (`SpUtilImpl::getAeskey` `@0x4016dac`, `getIdentifyKey` `@0x4016db8`, `cbz` checks `@0x4016dcc` and `@0x4016dd4`); otherwise it removes both (`removeAesKey` `@0x4016de8`, `removeIdentifyKey` `@0x4016df4`) and starts over.
 
@@ -42,7 +42,7 @@ None: the success closure only checks for a `Map<String, dynamic>` (`EncryptionU
 |---|---|---|---|---|
 | `server_public_key` | String | yes | `"<base64 text>"` | key read in `parse` at `EncryptionUtilImpl.dart @0x40179c0`; upstream-confirmed (`session.py`, `data.server_public_key`) |
 
-`parse` turns the server key into the session key and its identifier and persists them (`SpUtilImpl::saveAesKey` `@0x4017a94`, `saveIdentifyKey` `@0x4017aa4`). The derivation is a scope note, not documented here.
+`parse` turns the server key into the session key and its identifier and persists them (`SpUtilImpl::saveAesKey` `@0x4017a94`, `saveIdentifyKey` `@0x4017aa4`). The steps are: `aesCbcDecrypt(data = server_public_key, key = getPresetKey())` (`@0x4017a2c`), UTF-8 decode (`@0x4017a50`), `getExchangedAesKey` (`@0x4017a64`, native ECDH and derivation), then the stored identifier is the `X-Key-Ident` value the request carried. Details and the open native parts: [../../../encryption.md](../../../encryption.md#key-exchange-endpoint). The response also carries a top-level `signature`, checked in Dart over `ts + "+" + once + "+" + server_public_key` ([../../../encryption.md](../../../encryption.md#request-signing)).
 
 ## Example request/response
 
@@ -73,6 +73,7 @@ Response, synthesized (shape only)
 
 ## Known unknowns
 
+- Text format of the client public key before encryption, curve and derivation of the session key (native `encryption` channel): see the known unknowns on [../../../encryption.md](../../../encryption.md#known-unknowns).
 - What the SDK (native) does with the negotiated key: the app only stores it; the encrypted requests of the SDK path are built natively and were not analysed.
 - Whether the native SDK performs its own key exchange: the Dart side has only this one caller.
 - Server behavior on a repeated exchange with the same client key.
