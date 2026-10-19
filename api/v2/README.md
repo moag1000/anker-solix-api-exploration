@@ -6,7 +6,7 @@ Service index for the URL prefix `/v2/`. Each endpoint page is the single owner 
 
 | endpoint | purpose | upstream key | status |
 |---|---|---|---|
-| [`/v2/anka/devmgr/sync`](anka/devmgr/sync.md) | TODO | - | removed in 3.24.3, skeleton |
+| [`/v2/anka/devmgr/sync`](anka/devmgr/sync.md) | TODO | - | removed |
 | [`/v2/anka/history/del_msg`](anka/history/del_msg.md) | TODO | - | skeleton |
 | [`/v2/anka/history/get_msg`](anka/history/get_msg.md) | TODO | - | skeleton |
 | [`/v2/anka/history/update_msg`](anka/history/update_msg.md) | TODO | - | skeleton |

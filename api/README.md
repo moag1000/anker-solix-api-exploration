@@ -6,7 +6,7 @@ This directory holds one page per cloud endpoint, grouped by service (the first 
 
 ## Service index
 
-One directory per URL prefix: 450 distinct URLs (439 with a code reference in 3.24.3, 9 only in the 3.24.3 object pool with no code reference, 2 absent from 3.24.3 and only in 3.18.0). The pages column counts the pages on disk per service: one per URL plus hand-written pages that have no inventory row (3 in total). Pages that are not hand-written are skeletons rendered from `data/endpoints.json` by `tools/render_pages.py`.
+One directory per URL prefix: 450 distinct URLs (439 with a code reference in 3.24.3, 9 only in the 3.24.3 object pool with no code reference, 2 absent from 3.24.3 and only in 3.18.0). The pages column counts the pages on disk per service: one per URL plus hand-written pages that have no inventory row (3 in total). Skeleton pages are rendered from `data/endpoints.json` by `tools/render_pages.py`. Page status over all 453 pages on disk (a page has exactly one status; `pool-only` and `removed` come from the inventory and take precedence over `skeleton`): `owner` 124, `skeleton` 318, `pool-only` 9, `removed` 2.
 
 | service | pages | index |
 |---|---|---|
@@ -37,16 +37,16 @@ One directory per URL prefix: 450 distinct URLs (439 with a code reference in 3.
 
 ## Ambiguous prefixes (resolved: all five are real services)
 
-Checked on 2026-10-19 against the 3.24.3 asm (`blutter_output/asm`, grep only). Five prefixes looked ambiguous in the object-pool strings:
+Checked on 2026-10-19 against the 3.24.3 asm (`blutter_output/asm`, grep only). Five prefixes looked ambiguous in the object-pool strings. The endpoint counts below are generated from `data/endpoints.json`; for the per-service pages see the service index above.
 
-| prefix | URL literals (`"/<prefix>/...`) | Dart package paths | verdict |
-|---|---|---|---|
-| `smart_service` | 13 | none | real service: 13 endpoints, sent through `encryptionRequestHttp`/`encryptionRequestHttpByGHttpRequest` in `anka_agent/http/` |
-| `device_svc` | 3 | none | real service: 3 endpoints, sent via `encryptionRequestHttp` |
-| `privacy_service` | 2 | none | real service: 2 endpoints (data export), sent via `encryptionRequestHttp` |
-| `energy` | 4 | 6 (`.../src/energy/model/...`) | real service: 4 endpoints (`/energy/v1/...`). The package paths are unrelated Dart directories and are not endpoints |
-| `site` | 2 | 12 (`.../family/site/...`) | real service: 2 endpoints (`/site/v1/...`). The package paths are unrelated Dart directories and are not endpoints |
+| prefix | Dart package paths of the same name | verdict |
+|---|---|---|
+| `smart_service` | none | real service: 13 endpoints, sent through `encryptionRequestHttp`/`encryptionRequestHttpByGHttpRequest` in `anka_agent/http/` |
+| `device_svc` | none | real service: 3 endpoints, sent via `encryptionRequestHttp` |
+| `privacy_service` | none | real service: 2 endpoints (data export), sent via `encryptionRequestHttp` |
+| `energy` | yes (`.../src/energy/model/...`) | real service: 4 endpoints (`/energy/v1/...`). The package paths are unrelated Dart directories and are not endpoints |
+| `site` | yes (`.../family/site/...`) | real service: 2 endpoints (`/site/v1/...`). The package paths are unrelated Dart directories and are not endpoints |
 
-Result: none of the five is only a Dart package path; every one has URL literals with a leading `/` that a `*Http*` sender uses, so all five are inventoried and have their own directory above. Related oddities, not errors: `v2/` holds four `/v2/anka/...` URLs (the version segment comes first, so the URL prefix rule makes `v2` the service directory; the four rows are URL literals with no traced sender, one of them removed in 3.24.3), and `ems/`, `generator/` and `marketing/` hold one endpoint each.
+Result: none of the five is only a Dart package path; every one has URL literals with a leading `/` that a `*Http*` sender uses, so all five are inventoried and have their own directory above. Related oddities, not errors: `v2/` holds 4 URLs of the form `/v2/anka/...` (the version segment comes first, so the URL prefix rule makes `v2` the service directory; 1 removed in 3.24.3), and `ems/` (1 endpoint), `generator/` (3 endpoints) and `marketing/` (1 endpoint) are small services.
 
 Not here: MQTT or BLE facts (see [../mqtt/README.md](../mqtt/README.md), [../ble/README.md](../ble/README.md)), step-by-step flows ([../flows/README.md](../flows/README.md)); ownership rules are in [../docs/STRUCTURE.md](../docs/STRUCTURE.md).

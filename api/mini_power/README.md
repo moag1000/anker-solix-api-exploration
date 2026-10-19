@@ -14,13 +14,13 @@ Service index for the URL prefix `/mini_power/`. Each endpoint page is the singl
 | [`/mini_power/v1/app/egg/get_easter_egg_trigger_list`](app/egg/get_easter_egg_trigger_list.md) | TODO | `charger_get_triggers` | skeleton |
 | [`/mini_power/v1/app/egg/report_easter_egg_trigger_status`](app/egg/report_easter_egg_trigger_status.md) | TODO | - | skeleton |
 | [`/mini_power/v1/app/power/get_day_power_data`](app/power/get_day_power_data.md) | TODO | `charger_get_statistics` | skeleton |
-| [`/mini_power/v1/app/reminder/del_reminder`](app/reminder/del_reminder.md) | Deletes one custom reminder of a Prime-class charger by id. | - | hand-written |
-| [`/mini_power/v1/app/reminder/get_reminder_list`](app/reminder/get_reminder_list.md) | Lists the custom reminders of a Prime-class charger (small charging platform), or fetches one reminder by id; the reminder manager, the editor's schedule-conflict check and the reminder image generator call it. | - | hand-written |
-| [`/mini_power/v1/app/reminder/set_reminder`](app/reminder/set_reminder.md) | Creates or changes one custom reminder of a Prime-class charger (title, image, schedule, status); the reminder editor saves with it and the manager toggles a reminder's status with it. | - | hand-written |
+| [`/mini_power/v1/app/reminder/del_reminder`](app/reminder/del_reminder.md) | Deletes one custom reminder of a Prime-class charger by id. | - | owner |
+| [`/mini_power/v1/app/reminder/get_reminder_list`](app/reminder/get_reminder_list.md) | Lists the custom reminders of a Prime-class charger (small charging platform), or fetches one reminder by id; the reminder manager, the editor's schedule-conflict check and the reminder image generator call it. | - | owner |
+| [`/mini_power/v1/app/reminder/set_reminder`](app/reminder/set_reminder.md) | Creates or changes one custom reminder of a Prime-class charger (title, image, schedule, status); the reminder editor saves with it and the manager toggles a reminder's status with it. | - | owner |
 | [`/mini_power/v1/app/setting/get_charging_device_identity_new_status`](app/setting/get_charging_device_identity_new_status.md) | TODO | - | skeleton |
 | [`/mini_power/v1/app/setting/get_charging_device_identity_status_default_true`](app/setting/get_charging_device_identity_status_default_true.md) | TODO | - | skeleton |
 | [`/mini_power/v1/app/setting/get_device_setting`](app/setting/get_device_setting.md) | TODO | `charger_get_device_setting` | skeleton |
-| [`/mini_power/v1/app/setting/get_port_protocol_status`](app/setting/get_port_protocol_status.md) | TODO | - | pool-only in 3.24.3, skeleton |
+| [`/mini_power/v1/app/setting/get_port_protocol_status`](app/setting/get_port_protocol_status.md) | TODO | - | pool-only |
 | [`/mini_power/v1/app/setting/get_port_remarks`](app/setting/get_port_remarks.md) | TODO | - | skeleton |
 | [`/mini_power/v1/app/setting/get_power_range_support_protocols`](app/setting/get_power_range_support_protocols.md) | TODO | - | skeleton |
 | [`/mini_power/v1/app/setting/get_protocol_status`](app/setting/get_protocol_status.md) | TODO | - | skeleton |
@@ -30,14 +30,14 @@ Service index for the URL prefix `/mini_power/`. Each endpoint page is the singl
 | [`/mini_power/v1/app/setting/set_charging_mode_status`](app/setting/set_charging_mode_status.md) | TODO | - | skeleton |
 | [`/mini_power/v1/app/setting/set_compatibility_status`](app/setting/set_compatibility_status.md) | TODO | - | skeleton |
 | [`/mini_power/v1/app/setting/set_mode_sub_status`](app/setting/set_mode_sub_status.md) | TODO | - | skeleton |
-| [`/mini_power/v1/app/setting/set_port_protocol_status`](app/setting/set_port_protocol_status.md) | TODO | - | pool-only in 3.24.3, skeleton |
+| [`/mini_power/v1/app/setting/set_port_protocol_status`](app/setting/set_port_protocol_status.md) | TODO | - | pool-only |
 | [`/mini_power/v1/app/setting/set_port_remark`](app/setting/set_port_remark.md) | TODO | - | skeleton |
 | [`/mini_power/v1/app/setting/set_protocol_status`](app/setting/set_protocol_status.md) | TODO | - | skeleton |
 | [`/mini_power/v1/app/style/add_manual_clock_screensavers`](app/style/add_manual_clock_screensavers.md) | TODO | - | skeleton |
 | [`/mini_power/v1/app/style/delete_manual_clock_screensavers`](app/style/delete_manual_clock_screensavers.md) | TODO | - | skeleton |
 | [`/mini_power/v1/app/style/get_clock_screensavers`](app/style/get_clock_screensavers.md) | TODO | `charger_get_screensavers` | skeleton |
 | [`/mini_power/v1/app/style/get_manual_clock_screensavers`](app/style/get_manual_clock_screensavers.md) | TODO | - | skeleton |
-| [`/mini_power/v1/app/style/get_screensaver_img_url`](app/style/get_screensaver_img_url.md) | TODO | - | pool-only in 3.24.3, skeleton |
+| [`/mini_power/v1/app/style/get_screensaver_img_url`](app/style/get_screensaver_img_url.md) | TODO | - | pool-only |
 | [`/mini_power/v1/app/style/get_url`](app/style/get_url.md) | TODO | - | skeleton |
 | [`/mini_power/v1/app/style/set_manual_clock_screensaver_name`](app/style/set_manual_clock_screensaver_name.md) | TODO | - | skeleton |
 

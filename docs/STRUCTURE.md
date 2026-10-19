@@ -78,8 +78,8 @@ If a fact is needed on a non-owner page, link to the owner. When an owner page i
 
 - No page is longer than 600 lines.
 - Every page longer than 150 lines has a table of contents.
-- Oversized files are split along ownership lines. `BLE_COMMAND_MAP.md` (2402 lines) splits into `ble/protocol.md`, one `ble/<pn>.md` per product number, and `mqtt/envelope.md`; the per-PN split is listed in the migration map below.
-- Rule: every H2 and H3 heading of `BLE_COMMAND_MAP.md` must fall into one of the line ranges below (the ranges are contiguous, 1-2402, so nothing is unassigned). Product-number sections are mapped per PN; the table lists all of them, including `a172x`, `a176x`, `a178x` and the Shelly section (`mqtt/shelly.md`).
+- Oversized files are split along ownership lines. `BLE_COMMAND_MAP.md` splits into `ble/protocol.md`, one `ble/<pn>.md` per product number, and `mqtt/envelope.md`; the per-PN split is listed in the migration map below.
+- Rule: every H2 and H3 heading of `BLE_COMMAND_MAP.md` must fall into one of the line ranges below (the ranges are contiguous from the first to the last line, so nothing is unassigned). Product-number sections are mapped per PN; the table lists all of them, including `a172x`, `a176x`, `a178x` and the Shelly section (`mqtt/shelly.md`).
 
 | BLE_COMMAND_MAP.md lines | Target | Sections |
 |---|---|---|
@@ -143,7 +143,7 @@ If a fact is needed on a non-owner page, link to the owner. When an owner page i
 
 ## Migration map
 
-One row per tracked Markdown file outside `docs/` (52 rows: 15 root docs, 5 `devices/`, 18 `endpoints/`, 13 `models/`, `patches/README.md`). The Status column is derived from the files on disk by `tools/readme_stats.py` (run it, do not edit the column by hand). Legend: `done` = every owner target in the row exists; `partial` = some exist; `pending` = none exists; `kept` = the file stays its own owner. A target with `<...>` or a bare directory only proves that something exists, so such a row is at most `partial`, except wildcards under `api/` (every inventory URL has a page there, see the generated coverage in the [README](../README.md#statistics-and-coverage)). An in-place rebuild (the target is the old file itself) counts as not yet done. `done` means an owner page exists; it does not mean the old page is bannered or deleted (that is Task 4.9).
+One row per tracked Markdown file outside `docs/` (root docs, `devices/`, `endpoints/`, the legacy group pages of `models/`, `patches/README.md`). The Status column is derived from the files on disk by `tools/readme_stats.py` (run it, do not edit the column by hand). Legend: `done` = every owner target in the row exists (`done (skeleton pages)` when every such page still has a TODO purpose, so the owner exists but carries no content yet); `partial` = some exist; `pending` = none exists; `kept` = the file stays its own owner. A target with `<...>` or a bare directory only proves that something exists, so such a row is at most `partial`, except wildcards under `api/` (every inventory URL has a page there, see the generated coverage in the [README](../README.md#statistics-and-coverage)). An in-place rebuild (the target is the old file itself) counts as not yet done. `done` means an owner page exists; it does not mean the old page is bannered or deleted (that is Task 4.9).
 
 | Old path | New owner location(s) | What moves there | Status |
 |---|---|---|---|
@@ -168,11 +168,11 @@ One row per tracked Markdown file outside `docs/` (52 rows: 15 root docs, 5 `dev
 | `devices/solarbank.md` | `devices/a17c0.md`, `devices/a17c1.md`, `devices/a17c2.md`, `devices/a17c3.md`, `devices/a17c5.md`; `mqtt/<pn>.md`; `mqtt/a17b1.md` | Per-PN device pages with links; MQTT command sections to `mqtt/<pn>.md`. The page mentions A17B1 only in the section "MQTT Abbreviated Fields (A17B1 system context)", which goes to `mqtt/a17b1.md`; `devices/a17b1.md` is owned by `devices/home_power_panel.md`, not by this page | partial |
 | `devices/x1_hes_e10.md` | `devices/a5101.md`; `mqtt/a5101.md`; `ble/a5101.md`; `api/charging_hes_svc/` | Device summary and status; MQTT and API facts to owners | partial |
 | `endpoints/app.md` | `api/app/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | done |
-| `endpoints/charging_common_svc.md` | `api/charging_common_svc/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | done |
-| `endpoints/charging_disaster_prepared.md` | `api/charging_disaster_prepared/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | done |
-| `endpoints/charging_energy_service.md` | `api/charging_energy_service/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | done |
+| `endpoints/charging_common_svc.md` | `api/charging_common_svc/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | done (skeleton pages) |
+| `endpoints/charging_disaster_prepared.md` | `api/charging_disaster_prepared/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | done (skeleton pages) |
+| `endpoints/charging_energy_service.md` | `api/charging_energy_service/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | done (skeleton pages) |
 | `endpoints/charging_hes_svc.md` | `api/charging_hes_svc/<endpoint>.md` (plus `charging_hes_installer_svc/`, `charging_hes_third_party_service_svc/`, `charging_hes_dynamic_price_svc/` where the URL prefix differs) | One page per endpoint, payload/params/response, confidence tag per fact | partial |
-| `endpoints/charging_pv_svc.md` | `api/charging_pv_svc/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | done |
+| `endpoints/charging_pv_svc.md` | `api/charging_pv_svc/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | done (skeleton pages) |
 | `endpoints/device_specific.md` | `api/<service>/<endpoint>.md` by URL prefix (EV charger, generator, HES, dynamic price, disaster, location, AI agent sections) | One page per endpoint, payload/params/response, confidence tag per fact | done |
 | `endpoints/mini_power.md` | `api/mini_power/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | done |
 | `endpoints/other.md` | `api/openapi/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | done |
@@ -204,5 +204,5 @@ One row per tracked Markdown file outside `docs/` (52 rows: 15 root docs, 5 `dev
 
 - Dedicated model pages (one per class, listed in [models/README.md](../models/README.md)) are owned directly from `data/models.json` and have no row in the migration map; the map rows for the legacy `models/<group>.md` pages say which classes moved out of them.
 - PERSONAS.md was aligned with this layout on 2026-10-19 and points each persona at the owner pages that exist on this branch.
-- The brief counted 14 root docs; the repository has 15 because `METHODOLOGY.md` was added earlier. It is listed as kept.
+- `METHODOLOGY.md` was added to the root docs after the first migration plan; it is listed as kept.
 - `ble/handshake.md` has no row as a source file: its source is the 3.24.3 asm (Task 3.7), apart from the encryption paragraph of `BLE_COMMAND_MAP.md` (lines 148-153).
