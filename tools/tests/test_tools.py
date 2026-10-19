@@ -648,6 +648,10 @@ class ReadmeStatsTests(unittest.TestCase):
         self.assertEqual(st['urls'], len(urls))
         self.assertEqual(st['skeleton'] + st['hand_written'], st['url_pages'] + st['orphan_pages'])
         self.assertEqual(st['url_pages'], len(urls))
+        with open(os.path.join(REPO, 'data', 'endpoints.json')) as fh:
+            new = {r['url'] for r in json.load(fh)['rows'] if r.get('since') == '3.24.3'}
+        self.assertEqual(st['new_in_3243'], len(new))
+        self.assertIn('first seen in 3.24.3: %d' % len(new), readme_stats.render(st))
         self.assertEqual(st['audit_wrong'] <= st['audit_rows'], True)
         self.assertEqual(st['mqtt_pages'],
                          len([f for f in os.listdir(os.path.join(REPO, 'mqtt'))

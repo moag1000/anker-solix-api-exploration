@@ -59,7 +59,7 @@ Every page named below is an owner page re-verified against App 3.24.3. The supe
 - **First question:** "Which opcode, which TLV layout, and how does the handshake work?"
 - **First page needed:** the BLE page for the device's PN, after the protocol and handshake pages.
 
-BLE is a local channel. It is not a live fallback for the cloud: the app disables BLE while WiFi is active, so do not plan a design around switching between the two.
+BLE is a local channel. That it is not a live fallback for the cloud is a community finding (the BLE projects report that BLE is unavailable while the device is on WiFi; see [ble/protocol.md](../ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule)), so do not plan a design around switching between the two.
 
 The shared TLV frame and the per-product command tags are owned by the MQTT pages, because the same frame carries them; the BLE pages link them instead of copying.
 

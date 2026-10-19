@@ -87,7 +87,9 @@ def compute(repo):
     ptypes = {r['param_type'] for r in _load(repo, 'param_types.json')['rows']
               if str(r['param_type']).isdigit()}
     arows, awrong = _audit(repo)
+    new = sum(1 for rs in by.values() if any(r.get('since') == '3.24.3' for r in rs))
     return {
+        'new_in_3243': new,
         'urls': len(by), 'code_ref': len(by) - gone - pool, 'pool_only': pool,
         'removed': gone, 'services': len(services), 'pages': len(pages),
         'url_pages': len(by), 'orphan_pages': len(pages) - len(by),
@@ -115,6 +117,8 @@ def render(s):
         '3.24.3, %(pool_only)d only in the 3.24.3 object pool with no code '
         'reference, %(removed)d only in 3.18.0), plus %(orphan_pages)d hand-written '
         'pages with no inventory row; %(pages)d endpoint pages in total.' % s,
+        '- Endpoints first seen in 3.24.3: %(new_in_3243)d (URLs with `since` = 3.24.3 in '
+        '`data/endpoints.json`); only in 3.18.0: %(removed)d.' % s,
         '- Of these pages, %(hand_written)d are hand-written and %(skeleton)d are '
         'skeletons (`Confidence: string-only` with unfilled `<!-- TODO -->` '
         'purpose); the skeletons carry only what `data/endpoints.json` knows.' % s,

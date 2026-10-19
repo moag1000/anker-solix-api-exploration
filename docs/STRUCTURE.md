@@ -29,9 +29,9 @@ api/sdk_senders.md        direct SDK senders (path C): command map, AkNetwork, S
 mqtt/<pn>.md              decoder per product (owner of MQTT field facts), mqtt/envelope.md
 ble/<pn>.md, ble/protocol.md, ble/handshake.md
 flows/<name>.md           step traces, link to owners
-devices/<pn>.md           product page: links to api/mqtt/ble owners + device-tested status
+devices/<pn>.md           product page: links to api/mqtt/ble owners + device-tested status (planned except devices/a17c5.md)
 models/<class>.md or models/<group>.md   response/request models (owner of field lists)
-reference/enums.md, reference/business_rules.md, reference/validation_model.md, reference/command_matrix.md
+reference/enums.md, reference/business_rules.md, reference/validation_model.md, reference/command_matrix.md (planned)
 data/endpoints.json, data/models.json, data/param_types.json, data/errors.json   machine-readable, generated
 tools/                    scripts
 docs/                     personas, structure, issues, audit tables, plans

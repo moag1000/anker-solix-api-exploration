@@ -43,7 +43,7 @@ Each role has a persona section (who it is for, the full reading path) in [docs/
 - **Library maintainer** ("what exactly does the app send?"): [api/README.md](api/README.md) (service index, one page per endpoint), [api/param_types.md](api/param_types.md), [api/sdk_senders.md](api/sdk_senders.md). Persona: [library maintainer](docs/PERSONAS.md#1-library-maintainer).
 - **Home Assistant integration developer** ("which setting, which flow, which ranges?"): [flows/README.md](flows/README.md), [docs/SAFE_USAGE.md](docs/SAFE_USAGE.md), [reference/validation_model.md](reference/validation_model.md). Persona: [HA integration developer](docs/PERSONAS.md#2-home-assistant-integration-developer).
 - **Device tester / mqtt_monitor user** ("what is this field, and what can I verify on my device?"): [mqtt/README.md](mqtt/README.md) (one decoder page per product number), [docs/DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md) (pick a test for your hardware), [CONTRIBUTING.md](CONTRIBUTING.md) (how to report a result). Persona: [mqtt_monitor user](docs/PERSONAS.md#3-mqtt_monitor-user).
-- **BLE project developer** ("opcode, TLV, handshake?"): [ble/protocol.md](ble/protocol.md), [ble/handshake.md](ble/handshake.md), [ble/README.md](ble/README.md). BLE is a local channel only and is not a live fallback for the cloud. Persona: [BLE developer](docs/PERSONAS.md#4-ble-project-developer).
+- **BLE project developer** ("opcode, TLV, handshake?"): [ble/protocol.md](ble/protocol.md), [ble/handshake.md](ble/handshake.md), [ble/README.md](ble/README.md). BLE is a local channel only; that it is not a live fallback for the cloud is a community finding (see [ble/protocol.md](ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule)). Persona: [BLE developer](docs/PERSONAS.md#4-ble-project-developer).
 - **Newcomer** ("what can be controlled, what is a site?"): [GLOSSARY.md](GLOSSARY.md), [METHODOLOGY.md](METHODOLOGY.md), [flows/README.md](flows/README.md). Persona: [newcomer](docs/PERSONAS.md#5-curious-user--newcomer).
 
 ## 3. Use-case index
@@ -54,7 +54,7 @@ Each role has a persona section (who it is for, the full reading path) in [docs/
 | understand what a `param_type` value does | [api/param_types.md](api/param_types.md) |
 | change a Solarbank schedule or reserve | [flows/solarbank2_schedule.md](flows/solarbank2_schedule.md), [flows/solarbank_soc_reserve_change.md](flows/solarbank_soc_reserve_change.md) |
 | control a smart plug (timer, schedule, relay) | [flows/smart_plug_countdown_timer.md](flows/smart_plug_countdown_timer.md), [flows/smart_plug_schedule.md](flows/smart_plug_schedule.md), [flows/smart_plug_relay_toggle.md](flows/smart_plug_relay_toggle.md) |
-| start a charging session on an EV charger | [flows/ev_charger_start_charging.md](flows/ev_charger_start_charging.md), [devices/ev_charger.md](devices/ev_charger.md) |
+| start a charging session on an EV charger | [flows/ev_charger_start_charging.md](flows/ev_charger_start_charging.md), [models/ev_charger_device_models.md](models/ev_charger_device_models.md) |
 | find the endpoint for a URL I saw | [api/README.md](api/README.md#service-index), machine-readable [data/endpoints.json](data/endpoints.json) |
 | look up a response model's fields | [models/README.md](models/README.md), machine-readable [data/models.json](data/models.json) |
 | log in, build headers, handle tokens | [api/auth.md](api/auth.md) |
@@ -69,14 +69,10 @@ Each role has a persona section (who it is for, the full reading path) in [docs/
 | check client-side validation ranges before sending | [reference/validation_model.md](reference/validation_model.md) |
 | look up enum values and product codes | [reference/enums.md](reference/enums.md) |
 | learn the app's polling, retry and error behaviour | [reference/business_rules.md](reference/business_rules.md), recommendations in [docs/SAFE_USAGE.md](docs/SAFE_USAGE.md) |
-| poll the cloud without getting an account flagged | [docs/SAFE_USAGE.md](docs/SAFE_USAGE.md) |
+| poll the cloud no harder than the app does | [docs/SAFE_USAGE.md](docs/SAFE_USAGE.md) |
 | know which native libraries, hosts and channels the app has | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) |
 | test something on my own device | [docs/DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md), then [CONTRIBUTING.md](CONTRIBUTING.md) |
 | look up a term | [GLOSSARY.md](GLOSSARY.md) |
-
-### For mqtt_monitor decoding sessions
-
-Start at [mqtt/README.md](mqtt/README.md) and [mqtt/envelope.md](mqtt/envelope.md); the full path is [persona 3](docs/PERSONAS.md#3-mqtt_monitor-user).
 
 ## 4. Version matrix
 
@@ -95,7 +91,7 @@ Build identifiers:
 - 3.24.3, Dart snapshot `78da37fed6bf1489361a312568249f3f`
 - 3.24.3, XAPK sha256 `7d6d0deab4834515c41aa5e8bafff03f9735e883f15c4f8d5b7194e871ff6ba5`
 
-What changed in 3.24.3 (new and removed services, native libraries, SDKs and hosts) is in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#changed-since-3180). Endpoints present in only one of the two versions are marked on their pages and counted in the coverage block below. The corrections that the 3.24.3 audit made to earlier 3.18.0 statements (wrong command values, slot counts, state codes) are the Errata in [CHANGELOG.md](CHANGELOG.md#errata-2026-10-smi-decoding); the per-claim audit tables are in [docs/audit/](docs/audit/).
+What changed in 3.24.3 (native libraries, Dart packages, manifest, hosts and removed SDKs) is in [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md#changed-since-3180). The endpoints new in 3.24.3 and those only in 3.18.0 are counted in the [coverage block](#5-coverage-and-confidence-tags) and marked per URL in `data/endpoints.json` (field `since`) and on their pages. The corrections that the 3.24.3 audit made to earlier 3.18.0 statements (wrong command values, slot counts, state codes) are the Errata in [CHANGELOG.md](CHANGELOG.md#errata-2026-10-smi-decoding); the per-claim audit tables are in [docs/audit/](docs/audit/).
 
 ## 5. Coverage and confidence tags
 
@@ -107,6 +103,7 @@ This block is the data snapshot 2026-10-19, generated by `tools/readme_stats.py`
 **Coverage**
 
 - Endpoint pages: 450 of 450 distinct URLs in `data/endpoints.json` have a page (439 with a code reference in 3.24.3, 9 only in the 3.24.3 object pool with no code reference, 2 only in 3.18.0), plus 3 hand-written pages with no inventory row; 453 endpoint pages in total.
+- Endpoints first seen in 3.24.3: 70 (URLs with `since` = 3.24.3 in `data/endpoints.json`); only in 3.18.0: 2.
 - Of these pages, 124 are hand-written and 329 are skeletons (`Confidence: string-only` with unfilled `<!-- TODO -->` purpose); the skeletons carry only what `data/endpoints.json` knows.
 
 **Statistics**
@@ -137,7 +134,7 @@ A page header reads `> Verified against: App 3.24.3 · Date · Confidence: <tag>
 | [mqtt/](mqtt/README.md) | one MQTT decoder page per product number, the shared [envelope](mqtt/envelope.md) |
 | [ble/](ble/README.md) | BLE [protocol](ble/protocol.md), [handshake](ble/handshake.md) and one page per product number |
 | [flows/](flows/README.md) | step traces of user-visible actions; links only, no payload copies |
-| [devices/](devices/README.md) | product pages with device-tested status, plus [Modbus](devices/modbus.md) |
+| [devices/](devices/README.md) | product pages (two on 3.24.3, [a17c5](devices/a17c5.md) and [Modbus](devices/modbus.md); the rest are 3.18.0 legacy pages) |
 | [models/](models/README.md) | response and request model pages that own the field lists |
 | [reference/](reference/README.md) | enums, business rules, validation model, IoT-Kit channels |
 | [data/](data/README.md) | machine-readable exports (generated, never hand-edited) |
@@ -152,30 +149,30 @@ A page header reads `> Verified against: App 3.24.3 · Date · Confidence: <tag>
 
 ## 8. Contributing, safe usage, glossary
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the device-tested record template, how to report a contradiction, and the checks a change must pass (issue templates: `device-tested`, `correction`).
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the device-tested record template, how to report a contradiction, and the checks a change must pass (issue templates: "Device-tested result" and "Correction").
 
-- Device owners: pick a test from [docs/DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md) and report the result as described in CONTRIBUTING.
+- Device owners: pick a test from [docs/DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md) and report the result as described in CONTRIBUTING. The mqtt_monitor field-mapping method is [Discussion #222](https://github.com/thomluther/anker-solix-api/discussions/222) of the upstream library.
 - Before polling the cloud with any library: [docs/SAFE_USAGE.md](docs/SAFE_USAGE.md).
-- Terms: [GLOSSARY.md](GLOSSARY.md). The measurement method is [Discussion #222](https://github.com/thomluther/anker-solix-api/discussions/222) of the upstream library.
+- Terms: [GLOSSARY.md](GLOSSARY.md).
 
 ## 9. 3.18.0 reference, superseded
 
-These root files still carry 3.18.0 content and are kept only until their deletion in Task 4.9. Each starts with a banner naming its owner pages on 3.24.3; do not use them as a source. The old `endpoints/` pages and the legacy group pages in [models/](models/README.md) and [devices/](devices/README.md) are covered by the migration map in [docs/STRUCTURE.md](docs/STRUCTURE.md#migration-map).
+These root files still carry 3.18.0 content and are kept only until their deletion after the rework. Each starts with a banner naming its owner pages on 3.24.3; do not use them as a source. The old `endpoints/` pages and the legacy group pages in [models/](models/README.md) and [devices/](devices/README.md) are covered by the migration map in [docs/STRUCTURE.md](docs/STRUCTURE.md#migration-map).
 
 | Superseded file | Owner on 3.24.3 |
 |---|---|
 | [BLE_COMMAND_MAP.md](BLE_COMMAND_MAP.md) | [ble/](ble/README.md), [mqtt/](mqtt/README.md) |
 | [BUSINESS_RULES.md](BUSINESS_RULES.md) | [reference/business_rules.md](reference/business_rules.md) |
-| [DART_PYTHON_MAPPING.md](DART_PYTHON_MAPPING.md) | [data/models.json](data/models.json), [models/](models/README.md) |
+| [DART_PYTHON_MAPPING.md](DART_PYTHON_MAPPING.md) | [data/models.json](data/models.json), [models/](models/README.md) (some content not yet moved, see the migration map) |
 | [ENDPOINT_FIELDS.md](ENDPOINT_FIELDS.md) | [api/](api/README.md) |
 | [ENUMS.md](ENUMS.md) | [reference/enums.md](reference/enums.md) |
-| [FIELD_TYPES.md](FIELD_TYPES.md) | [models/](models/README.md), [data/models.json](data/models.json) |
-| [FLOWS.md](FLOWS.md) | [flows/](flows/README.md) |
+| [FIELD_TYPES.md](FIELD_TYPES.md) | [models/](models/README.md), [data/models.json](data/models.json) (some content not yet moved, see the migration map) |
+| [FLOWS.md](FLOWS.md) | [flows/](flows/README.md) (some content not yet moved, see the migration map) |
 | [JSON_EXAMPLES.md](JSON_EXAMPLES.md) | [api/](api/README.md) |
 | [PARAM_DATA_STRUCTURES.md](PARAM_DATA_STRUCTURES.md) | [api/param_types.md](api/param_types.md) |
 | [REQUIRED_FIELDS.md](REQUIRED_FIELDS.md) | [api/](api/README.md) |
 | [RESPONSE_EXAMPLES.md](RESPONSE_EXAMPLES.md) | [api/](api/README.md) |
-| [VALIDATION_MODEL.md](VALIDATION_MODEL.md) | [reference/validation_model.md](reference/validation_model.md) |
+| [VALIDATION_MODEL.md](VALIDATION_MODEL.md) | [reference/validation_model.md](reference/validation_model.md) (some content not yet moved, see the migration map) |
 
 ---
 
