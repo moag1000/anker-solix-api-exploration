@@ -2,6 +2,6 @@
 
 # BLE
 
-This directory holds the BLE wire protocol (`protocol.md`), the handshake (`handshake.md`) and one page per product number (`<pn>.md`) owning that product's opcodes and TLV tags. BLE is disabled while the device is on WiFi, so nothing here describes a live cloud fallback.
+This directory holds the BLE wire protocol (`protocol.md`), the handshake (`handshake.md`) and one page per product number (`<pn>.md`) owning that product's opcodes and TLV tags. For the WiFi/BLE exclusion see the owner page `ble/protocol.md`.
 
 Not here: MQTT field maps ([../mqtt/README.md](../mqtt/README.md)), cloud endpoints ([../api/README.md](../api/README.md)); owner map in [../docs/STRUCTURE.md](../docs/STRUCTURE.md).

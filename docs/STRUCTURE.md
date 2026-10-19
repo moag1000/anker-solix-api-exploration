@@ -30,7 +30,7 @@ ble/<pn>.md, ble/protocol.md, ble/handshake.md
 flows/<name>.md           step traces, link to owners
 devices/<pn>.md           product page: links to api/mqtt/ble owners + device-tested status
 models/<class>.md or models/<group>.md   response/request models (owner of field lists)
-reference/enums.md, reference/business_rules.md, reference/validation_model.md
+reference/enums.md, reference/business_rules.md, reference/validation_model.md, reference/command_matrix.md
 data/endpoints.json, data/models.json, data/param_types.json, data/errors.json   machine-readable, generated
 tools/                    scripts
 docs/                     personas, structure, issues, audit tables, plans
@@ -48,12 +48,14 @@ Payload facts live in `api/<service>/<endpoint>.md`; `devices/` and `flows/` lin
 | param_type and cmd values | `api/param_types.md` |
 | Error codes | `api/errors.md` |
 | Auth headers and login | `api/auth.md` |
+| Payload encryption and encryption headers | `api/encryption.md` |
 | MQTT field maps | `mqtt/<pn>.md` |
 | MQTT envelope | `mqtt/envelope.md` |
 | BLE opcodes and TLV | `ble/<pn>.md` (handshake: `ble/handshake.md`; frame format: `ble/protocol.md`) |
 | Model fields | `models/` |
 | Enums and product codes | `reference/enums.md` |
 | Business rules | `reference/business_rules.md` |
+| Device to command matrix | `reference/command_matrix.md` |
 | Validation (GET to SET) | `reference/validation_model.md` |
 | Flows | `flows/<name>.md` (links only, no payload copies) |
 | Devices | `devices/<pn>.md` (links and device-tested status only) |
@@ -74,6 +76,66 @@ If a fact is needed on a non-owner page, link to the owner. When an owner page i
 - No page is longer than 600 lines.
 - Every page longer than 150 lines has a table of contents.
 - Oversized files are split along ownership lines. `BLE_COMMAND_MAP.md` (2402 lines) splits into `ble/protocol.md`, one `ble/<pn>.md` per product number, and `mqtt/envelope.md`; the per-PN split is listed in the migration map below.
+- Rule: every H2 and H3 heading of `BLE_COMMAND_MAP.md` must fall into one of the line ranges below (the ranges are contiguous, 1-2402, so nothing is unassigned). Product-number sections are mapped per PN; the table lists all of them, including `a172x`, `a176x`, `a178x` and the Shelly section (`mqtt/shelly.md`).
+
+| BLE_COMMAND_MAP.md lines | Target | Sections |
+|---|---|---|
+| 1-17 | `METHODOLOGY.md` | Intro and confidence legend; superseded by the tags in METHODOLOGY.md, dropped |
+| 18-81 | `ble/protocol.md` | Wire Protocol Reference, TLV frame, direction, data type codes, byte order, checksum, timestamp |
+| 82-140 | `mqtt/envelope.md` | MQTT JSON Envelope, decompression flow, JSON structure, command types, payload variants |
+| 141-147 | `ble/protocol.md` | BLE Specifics, MTU fragmentation |
+| 148-153 | `ble/handshake.md` | BLE Encryption |
+| 154-168 | `mqtt/envelope.md` | MQTT Topic Structure |
+| 169-250 | `ble/protocol.md` | TLV parsing details, value encoding, scaling factors, signed values, sub-field extraction |
+| 251-289 | `mqtt/envelope.md` | MQTT connection details (QoS, correlation, debounce, decryption flow), Event Types |
+| 290-318 | `ble/a17x8.md`, `mqtt/a17x8.md` | Data Structures intro, CountDownInfo, TimingInfo |
+| 319-331 | `ble/a17c1.md`, `mqtt/a17c1.md` | DischargeTimeModel |
+| 332-354 | `ble/a1790.md`, `mqtt/a1790.md` | SubBatteryInfo |
+| 355-369 | `ble/a2345.md`, `mqtt/a2345.md` | OutputPortInfo |
+| 370-380 | `ble/protocol.md` | Firmware Version Format |
+| 381-408 | `mqtt/a17b1.md` | DataFlow, Bd |
+| 409-414 | `api/errors.md` | Error Codes (first section) |
+| 415-520 | `reference/enums.md` | Enum Value Tables (EmsModeType, EvChargerDeviceStatus, StartWayEnum, gestures, GeneratorMode, ScreenBrightType, LoadBalancingErrorType, BatterySubPackageConnectionStatus, AddDeviceType, EvStationType) |
+| 521-578 | `reference/validation_model.md` | GET to SET Communication Patterns |
+| 579-614 | `reference/validation_model.md` | Value Ranges and Constraints |
+| 615-620 | `api/errors.md` | Error Codes (second section) |
+| 621-691 | `reference/command_matrix.md` | Device to Command Matrix (Solarbank, PPS, Smart Devices, Minimal-Command devices) |
+| 692-800 | `models/energy.md`, `models/solarbank.md`, `models/power.md`, `models/hes.md` | API Response Model Structures: SceneInfo and FeatureSwitch to energy; SiteConsumptionStrategyModel and HomeLoadData/HomeRange to solarbank; StationPowerLimitModel to power; A5101DeviceCommandModel and electricity_strategy/off_grid_switching/heat_pump_setting/advanced_setting to hes |
+| 801-819 | `models/hes.md` | advanced_setting, screen_setting, utility_rate_plan |
+| 820-869 | `ble/a5101.md`, `mqtt/a5101.md` | A5101 BLE Data Codes (GET vs SET), HES / X1 JSON Protocol, SET Commands header |
+| 870-896 | `ble/a17c1.md`, `ble/a17c2.md`, `ble/a17c3.md`, `ble/a17c5.md` | A17C1/C2/C3/C5 SET commands |
+| 897-910 | `ble/a17x8.md` | A17X8 Smart Plug SET commands |
+| 911-922 | `ble/a17c0.md` | A17C0 Solarbank Gen 1 SET commands |
+| 923-946 | `ble/a172x.md`, `ble/a176x.md`, `ble/a178x.md` | A172X / A176X / A178X Portable Power Stations (split by PN) |
+| 947-958 | `ble/a1790.md` | A1790 F3800 SET commands |
+| 959-995 | `ble/a17x7.md`, `mqtt/a17x7.md` | A17X7 / A17X7US Smart Meter 0405 status tags, parseDeviceAllInfo, parseWorkInfo (A17X7US recorded as a variant on the a17x7 pages) |
+| 996-1029 | `ble/a1771.md`, `ble/a1753.md`, `ble/a1781.md` | A1771 / A1753 / A1781 status tags, parseDeviceAllInfo, A1753 extra tags |
+| 1030-1038 | `ble/a5190.md`, `ble/a5191.md` | A5190 / A5191 EV Charger V1 |
+| 1039-1057 | `ble/a5101.md` | A5101 X1 HES |
+| 1058-1078 | `ble/a17a0.md`, `ble/a17a3.md`, `ble/a17a4.md`, `ble/a17a5.md` | EverFrost Cooler (unmapped) |
+| 1079-1141 | `ble/a2345.md`, `ble/a91b2.md`, `mqtt/a2345.md` | A2345 / A91B2 Prime Charger, 0405 tags, parseChargePortInfo, port debug fields |
+| 1142-1162 | `ble/a17c2.md`, `mqtt/a17c2.md` | A17C2 AC / Hybrid Inverter status |
+| 1163-1193 | `ble/a1340.md`, `mqtt/a1340.md` | A1340 Portable Power Bank, per-port and device-level fields |
+| 1194-1207 | `mqtt/shelly.md` | Shelly (3rd party) status fields |
+| 1208-1224 | `ble/a17d0.md`, `ble/a5140.md`, `ble/a17c1.md` | Cross-Device Discoveries: A17D0 generator adapter, A5140 = A1780 protocol, A17C1 model checks |
+| 1225-1229 | `reference/enums.md` | Timer Duration Enum (A17C5) |
+| 1230-1329 | `mqtt/a17b1.md` | STATUS Message Fields header, A17B1 system JSON keys (core power, state, energy flow, settings, version, battery array, generator extension) |
+| 1330-1383 | `mqtt/a5101.md` | A5101 X1 HES MQTT status fields |
+| 1384-1405 | `mqtt/a17x8.md` | A17X8 0405 status tags |
+| 1406-1500 | `mqtt/a17c1.md` | A17C1 0405 status tags including NEW tags |
+| 1501-1538 | `mqtt/a17c0.md` | A17C0 0405 status tags |
+| 1539-1575 | `mqtt/a172x.md`, `ble/a172x.md` | A172X C300/C300X 0405 status tags |
+| 1576-1616 | `mqtt/a1771.md` | A1771 0405 status tags |
+| 1617-1661 | `mqtt/a1790.md` | A1790 0405 status tags |
+| 1662-1692 | `mqtt/a17a0.md` | EverFrost upload commands; GAP FILL header |
+| 1693-1796 | `ble/a1780.md`, `mqtt/a1780.md`, `ble/a5140.md` | Task 1: A1780 positional parser (parseOtherData, parseSwitchData, parseCountdownData, parseDeviceInfo) |
+| 1797-1949 | `ble/<pn>.md` of each PPS PN in the command matrix | Task 2 Groups 1 and 2: PPS AC/DC controls, display/light/port controls |
+| 1950-2107 | `ble/a17c1.md`, `ble/a17c5.md` | Task 2 Group 3: Solarbank extras |
+| 2108-2132 | `ble/a17x8.md` | Task 2 Group 4: Smartplug controls |
+| 2133-2296 | `ble/a5190.md`, `ble/a5191.md` | Task 2 Group 5: EV Charger controls |
+| 2297-2308 | `ble/protocol.md` | Task 2 Group 6: common controls |
+| 2309-2402 | `ble/a17c5.md`, `mqtt/a17c5.md` | Task 3: A17C5 vs A17C1 tag differences, extra commands, SB3-exclusive features |
+
 - Old files are not deleted until Phase 4 (Task 4.7). Until then each gets a top banner "superseded by ..." once its content has moved.
 
 ## Migration map
@@ -82,7 +144,7 @@ One row per tracked Markdown file outside `docs/` (52 rows: 15 root docs, 5 `dev
 
 | Old path | New owner location(s) | What moves there | Status |
 |---|---|---|---|
-| `BLE_COMMAND_MAP.md` | `ble/protocol.md`; `ble/a17b1.md`, `ble/a17c0.md`, `ble/a17c1.md`, `ble/a17c2.md`, `ble/a17c3.md`, `ble/a17c5.md`, `ble/a17x7.md`, `ble/a17x8.md`, `ble/a1790.md`, `ble/a1771.md`, `ble/a1753.md`, `ble/a1781.md`, `ble/a1780.md`, `ble/a5140.md`, `ble/a5101.md`, `ble/a5190.md`, `ble/a5191.md`, `ble/a17a0.md`, `ble/a17a3.md`, `ble/a17a4.md`, `ble/a17a5.md`, `ble/a2345.md`, `ble/a91b2.md`, `ble/a1340.md`, `ble/a17d0.md`; `mqtt/envelope.md`; `mqtt/<pn>.md` (same PN set, MQTT status sections); `reference/enums.md`; `reference/validation_model.md`; `models/` (response model sections) | TLV frame, data types, checksum, BLE MTU/encryption go to `ble/protocol.md`; per-PN tag tables to `ble/<pn>.md`; MQTT JSON envelope, topics, QoS, decompression to `mqtt/envelope.md`; MQTT status key sections (A17B1, A5101, 0405 tags) to `mqtt/<pn>.md`; enum value tables to `reference/enums.md`; GET to SET patterns and value ranges to `reference/validation_model.md`; response model structures (SceneInfo etc.) to `models/` | pending |
+| `BLE_COMMAND_MAP.md` | `ble/protocol.md`, `ble/handshake.md` (encryption paragraph), `ble/a172x.md`, `ble/a176x.md`, `ble/a178x.md`, `ble/a17b1.md`, `ble/a17c0.md`, `ble/a17c1.md`, `ble/a17c2.md`, `ble/a17c3.md`, `ble/a17c5.md`, `ble/a17x7.md`, `ble/a17x8.md`, `ble/a1790.md`, `ble/a1771.md`, `ble/a1753.md`, `ble/a1781.md`, `ble/a1780.md`, `ble/a5140.md`, `ble/a5101.md`, `ble/a5190.md`, `ble/a5191.md`, `ble/a17a0.md`, `ble/a17a3.md`, `ble/a17a4.md`, `ble/a17a5.md`, `ble/a2345.md`, `ble/a91b2.md`, `ble/a1340.md`, `ble/a17d0.md`; `mqtt/envelope.md`, `mqtt/shelly.md`, `mqtt/<pn>.md` for the same PNs (A17X7US is a variant on the a17x7 pages); `api/errors.md`; `reference/enums.md`, `reference/validation_model.md`, `reference/command_matrix.md`; `models/` | Complete line-range assignment in the split table under "Page-length and split rules"; every section is assigned | pending |
 | `BUSINESS_RULES.md` | `reference/business_rules.md` | Whole page, re-verified; rules citing an endpoint link to its `api/` owner | pending |
 | `CHANGELOG.md` | `CHANGELOG.md` (kept) | Per-rework entry plus Errata section | pending |
 | `DART_PYTHON_MAPPING.md` | `data/models.json` (generated), `models/` field tables, `GLOSSARY.md` | Dart to JSON to Python name mapping; upstream-name column becomes part of model pages | pending |
@@ -98,9 +160,9 @@ One row per tracked Markdown file outside `docs/` (52 rows: 15 root docs, 5 `dev
 | `RESPONSE_EXAMPLES.md` | `api/<service>/<endpoint>.md` | Response examples move to the owning endpoint page | pending |
 | `VALIDATION_MODEL.md` | `reference/validation_model.md`; `flows/<name>.md` (ranges used by a flow link back) | GET to SET validation model; per-command ranges stay on the owner page, flows link | pending |
 | `devices/ev_charger.md` | `devices/a5190.md`, `devices/a5191.md`; `mqtt/a5190.md`; `ble/a5190.md`; `api/charging_*` | Device summary and device-tested status stay in `devices/`; MQTT/BLE facts move to owners | pending |
-| `devices/home_power_panel.md` | `devices/<pn>.md` (PN to be resolved from the page); `api/charging_disaster_prepared/` and `api/charging_hes_svc/` links | Device summary and status; endpoint facts move to `api/` | pending |
+| `devices/home_power_panel.md` | `devices/a17b1.md`; `mqtt/a17b1.md`; `ble/a17b1.md` (the `sendA17B1Command()` part); `api/charging_disaster_prepared/` services it names | The page is the A17B1 Home Power Panel (Product Code A17B1). Device summary and status to `devices/a17b1.md`; MQTT facts to `mqtt/a17b1.md`; BLE command to `ble/a17b1.md`; endpoint facts to `api/` | pending |
 | `devices/smart_plug.md` | `devices/a17x8.md`; `mqtt/a17x8.md`; `ble/a17x8.md` | Device summary and device-tested status; timer/schedule field maps to `mqtt/a17x8.md` | pending |
-| `devices/solarbank.md` | `devices/a17c0.md`, `devices/a17c1.md`, `devices/a17c2.md`, `devices/a17c3.md`, `devices/a17c5.md`, `devices/a17b1.md`; `mqtt/<pn>.md` | Per-PN device pages with links; MQTT command and abbreviated-field sections to `mqtt/<pn>.md` | pending |
+| `devices/solarbank.md` | `devices/a17c0.md`, `devices/a17c1.md`, `devices/a17c2.md`, `devices/a17c3.md`, `devices/a17c5.md`; `mqtt/<pn>.md`; `mqtt/a17b1.md` | Per-PN device pages with links; MQTT command sections to `mqtt/<pn>.md`. The page mentions A17B1 only in the section "MQTT Abbreviated Fields (A17B1 system context)", which goes to `mqtt/a17b1.md`; `devices/a17b1.md` is owned by `devices/home_power_panel.md`, not by this page | pending |
 | `devices/x1_hes_e10.md` | `devices/a5101.md`; `mqtt/a5101.md`; `ble/a5101.md`; `api/charging_hes_svc/` | Device summary and status; MQTT and API facts to owners | pending |
 | `endpoints/app.md` | `api/app/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | pending |
 | `endpoints/charging_common_svc.md` | `api/charging_common_svc/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | pending |
@@ -120,24 +182,23 @@ One row per tracked Markdown file outside `docs/` (52 rows: 15 root docs, 5 `dev
 | `endpoints/power_service_other.md` | `api/power_service/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | pending |
 | `endpoints/power_service_share.md` | `api/power_service/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | pending |
 | `endpoints/power_service_site.md` | `api/power_service/<endpoint>.md` | One page per endpoint, payload/params/response, confidence tag per fact | pending |
-| `models/account.md` | `models/account.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
-| `models/charger.md` | `models/charger.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
-| `models/connectivity.md` | `models/connectivity.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
-| `models/device.md` | `models/device.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
-| `models/energy.md` | `models/energy.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
-| `models/firmware.md` | `models/firmware.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
-| `models/hes.md` | `models/hes.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
-| `models/other.md` | `models/other.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
-| `models/power.md` | `models/power.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
-| `models/pps.md` | `models/pps.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
-| `models/pricing.md` | `models/pricing.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
-| `models/products.md` | `models/products.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
-| `models/solarbank.md` | `models/solarbank.md` (rebuilt in place) and `data/models.json` (generated) | Field lists per model class; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/account.md` | `models/account.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: IotUserModel, SearchUserManualsModel, SiteInviteMemberModel, SubscribeEmailModel, UrlWhiteListModel, UserManualsModel, UserModel, UserParamModel, UserSiteListModel, ValidateAccountModel; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/charger.md` | `models/charger.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: A2345CustomModeList, A2687ProtocolAgreementModel, EasterEggTiggerRecordModel, PowerRangeProtocolsResponse; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/connectivity.md` | `models/connectivity.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: InstallationModel, SiteWifiInfoModel, UserSiteDevicePPSModel, WifiInfoModel; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/device.md` | `models/device.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: DeviceInfosModel, DeviceListModel, DeviceModel; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/energy.md` | `models/energy.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: GreenPPSSiteDetailModel, LargeChargerAiEmsProfit, SceneInfo; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/firmware.md` | `models/firmware.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: BatchDeviceModel, CheckUpgradeRecordModel, DeviceAutoUpGradDisposition, FirmwareUpdateModel, OTAUpdateStatus, OtaUpdateModel, SaveCompatibleSolarModel, ThirdOtaInfoModel, UpgradeRecordModel; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/hes.md` | `models/hes.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: A5101DeviceCommandModel, Nested: ElectricityStrategy, Nested: OffGridSwitching, Nested: HeatPumpModel, Nested: AdvancedSetting, A5101DeviceListModel, A5101EvChargerListModel, A5101EventsSetModel, A5101InstallAddressModel, A5101InstallInformationModel, A5101StationGridConfigModel, AutoDisasterDetailModel, AutoDisasterPrepareStatusModel, AutoDisasterQuitPrepareModel, CheckFunctionModel, DisasterPrepareDetailsModel, HesProductsInfoModel, VppInfoModel; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/other.md` | `models/other.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: A17B1AddableSiteModel, A17B1SiteRules, AiEmsProfitModel, AiModeStatusModel, AppUpdateModel, BannerModel, CanCreateSiteModel, CheckSolarForceUpdateModel, CombineBoxEntity, CreateSiteResponseModel, CustomerServicePhoneInfos, DayPowerModel, DeviceAttributes, ErrorInfosModel, FaqModel, GdprLinkResponseModel, HomeLoadChat, MsgDisturbHttpModel, MsgHttpModel, PeakTimeModel, Post2024Model, RankEntity, RegionHostModel, Result, SiteScheduleModel, StationModel, SupportLocation, ThirdPartyPlatformInfoModel; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/power.md` | `models/power.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: DevicePowerLimit, StationPowerLimitModel; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/pps.md` | `models/pps.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: A1340ChargingDeviceData, A5140DeviceStatus; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/pricing.md` | `models/pricing.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: CurrencyElecModel, CurrencyInfo, DynamicPriceCountryAreaModel, DynamicPriceDetailModel, SitePriceModel, TouBenifitsModel, TouDeviceAttrsModel; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/products.md` | `models/products.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: BrandModel, ConfirmModel, ProductCategoriesModel; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
+| `models/solarbank.md` | `models/solarbank.md` (rebuilt in place) and `data/models.json` (generated) | Field lists for: A17C1DeviceHomeLoadData, GetSiteDeviceParamResponse, SiteConsumptionStrategyModel, SiteDeviceParamData, SiteHomeLoadModel; fields confirmed against 3.24.3 `toJson`/`fromJson` | pending |
 | `patches/README.md` | `tools/` (patch notes), `devices/<pn>.md` (device-tested status) | Patch usage notes; the patch file itself is tooling, not documentation | pending |
 
 ## Notes on consistency with PERSONAS.md
 
-- The brief counted 14 root docs; the repository has 15 because `METHODOLOGY.md` was added in an earlier task. It is listed as kept.
-- PERSONAS.md maps `VALIDATION_MODEL.md` to `flows/<name>.md`. The layout above (and the brief) puts the validation model on `reference/validation_model.md`; flow pages link to the ranges there. PERSONAS.md should be aligned in a later task.
-- PERSONAS.md maps the MQTT parts of `devices/smart_plug.md` to `devices/<pn>.md`; here MQTT field facts belong to `mqtt/<pn>.md` and the device page only links.
-- PERSONAS.md names `reference/` without a file; the owner files are `reference/enums.md`, `reference/business_rules.md` and `reference/validation_model.md`.
+- PERSONAS.md was aligned with this layout on 2026-10-19.
+- The brief counted 14 root docs; the repository has 15 because `METHODOLOGY.md` was added earlier. It is listed as kept.
+- `ble/handshake.md` has no row as a source file: its source is the 3.24.3 asm (Task 3.7), apart from the encryption paragraph of `BLE_COMMAND_MAP.md` (lines 148-153).

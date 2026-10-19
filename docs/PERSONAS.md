@@ -30,7 +30,7 @@ The repository is being rebuilt on App 3.24.3, so each step has two columns. **T
 |---|---|---|
 | 1 | [FLOWS.md](../FLOWS.md) | `flows/<name>.md` |
 | 2 | [PARAM_DATA_STRUCTURES.md](../PARAM_DATA_STRUCTURES.md) | `api/param_types.md` |
-| 3 | [VALIDATION_MODEL.md](../VALIDATION_MODEL.md) | `flows/<name>.md` (ranges live on the flow page) |
+| 3 | [VALIDATION_MODEL.md](../VALIDATION_MODEL.md) | `reference/validation_model.md` |
 | 4 | [REQUIRED_FIELDS.md](../REQUIRED_FIELDS.md) | `api/<service>/<endpoint>.md` |
 | 5 | [devices/solarbank.md](../devices/solarbank.md) (example device) | `devices/<pn>.md` |
 
@@ -45,8 +45,8 @@ The repository is being rebuilt on App 3.24.3, so each step has two columns. **T
 |---|---|---|
 | 1 | [devices/solarbank.md](../devices/solarbank.md) (MQTT sections: "MQTT Commands", "MQTT Abbreviated Fields"; A17C1 `0050`/`0067`/`005a`/`005e` a2..a4 fields) | `mqtt/<pn>.md` |
 | 2 | [BLE_COMMAND_MAP.md](../BLE_COMMAND_MAP.md) (MQTT sections: "A17B1 — Solarbank 2 System JSON Keys (MQTT status)", "A5101 — X1 HES MQTT Status Fields", device to command matrix) | `mqtt/<pn>.md` |
-| 3 | [devices/smart_plug.md](../devices/smart_plug.md) (MQTT section: "MQTT Commands", A17X8 timer and pause/resume) | `devices/<pn>.md` |
-| 4 | [VALIDATION_MODEL.md](../VALIDATION_MODEL.md) ("MQTT-Only Settings" for A17C0-C5; ranges per command) | `flows/<name>.md` |
+| 3 | [devices/smart_plug.md](../devices/smart_plug.md) (MQTT section: "MQTT Commands", A17X8 timer and pause/resume) | `mqtt/<pn>.md` |
+| 4 | [VALIDATION_MODEL.md](../VALIDATION_MODEL.md) ("MQTT-Only Settings" for A17C0-C5; ranges per command) | `reference/validation_model.md` |
 | 5 | [ENUMS.md](../ENUMS.md) (meaning of enum values seen in fields) | `reference/` |
 
 ## 4. BLE project developer
