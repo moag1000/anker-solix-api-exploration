@@ -56,7 +56,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Since/changed
 
-3.18.0: present (pool `pp+0xafe50`); the sender function has the same sequence of string, integer and type literals in 3.18.0 (compared with a throwaway script, not committed). 3.24.3: present (pool `pp+0xdd090`). since: ≤3.18.0.
+3.18.0: present (pool `pp+0xafe50`); the sender function has no literal difference between 3.18.0 and 3.24.3 (`tools/cmp_since.py`: ordered string, integer and type literals compared; branch logic not compared). 3.24.3: present (pool `pp+0xdd090`). since: ≤3.18.0.
 
 ## Known unknowns
 

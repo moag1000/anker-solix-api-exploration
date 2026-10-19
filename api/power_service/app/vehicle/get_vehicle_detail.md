@@ -61,7 +61,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Since/changed
 
-3.18.0: present (URL string in the 3.18.0 object pool, `pp+0xbde80`); the sender function has the same sequence of string, integer and type literals in 3.18.0 (compared with a throwaway script, not committed). Not new in 3.24.3: the Task 3.1b inventory change (slashless URL literals) made the URL visible, nothing changed in the app. 3.24.3: present, unchanged. since: ≤3.18.0.
+3.18.0: present (URL string in the 3.18.0 object pool, `pp+0xbde80`); the sender function has no literal difference between 3.18.0 and 3.24.3 (`tools/cmp_since.py`: ordered string, integer and type literals compared; branch logic not compared). Not new in 3.24.3: the Task 3.1b inventory change (slashless URL literals) made the URL visible. 3.24.3: present. since: ≤3.18.0.
 
 ## Known unknowns
 

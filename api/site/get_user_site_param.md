@@ -2,6 +2,8 @@
 
 # get_user_site_param
 
+> Note: the only caller candidate is an address-adjacency guess (UNCONFIRMED, mixin region omitted from the dump); see "Callers in app".
+
 ## Purpose
 
 Reads the account's site-level user parameters (`/site/v1/get_user_site_param`); the generic `getUserParams` function of the HTTP repository sends it. The only caller candidate is the AE100 custom-mode usage scenario page, through a mixin function that the dump omits (UNCONFIRMED).

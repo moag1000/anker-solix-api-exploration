@@ -57,7 +57,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Since/changed
 
-3.18.0: present (URL string in the 3.18.0 object pool, `pp+0x81dc0`); the sender is not compared function by function. Not new in 3.24.3: the Task 3.1b inventory change (slashless URL literals) made the URL visible, nothing changed in the app. 3.24.3: present, unchanged. since: ≤3.18.0.
+3.18.0: present (URL string in the 3.18.0 object pool, `pp+0x81dc0`); the sender is not compared function by function. Not new in 3.24.3: the Task 3.1b inventory change (slashless URL literals) made the URL visible. 3.24.3: present. since: ≤3.18.0.
 
 ## Known unknowns
 

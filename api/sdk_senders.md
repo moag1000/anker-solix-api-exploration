@@ -6,13 +6,27 @@ This page owns what the endpoint pages of the EV charger, group-device, installe
 
 ## Contents
 
-1. [The common envelope](#the-common-envelope)
-2. [AKIotEVChargeCommand (EV charger command map)](#akiotevchargecommand-ev-charger-command-map)
-3. [AkNetwork.requestHttp](#aknetworkrequesthttp)
-4. [ScheduleNetwork._requestHttp](#schedulenetwork_requesthttp)
-5. [Response typing and the model registry](#response-typing-and-the-model-registry)
-6. [Reading the inventory rows](#reading-the-inventory-rows)
-7. [Known unknowns](#known-unknowns)
+1. [Path C sender list](#path-c-sender-list)
+2. [The common envelope](#the-common-envelope)
+3. [AKIotEVChargeCommand (EV charger command map)](#akiotevchargecommand-ev-charger-command-map)
+4. [AkNetwork.requestHttp](#aknetworkrequesthttp)
+5. [ScheduleNetwork._requestHttp](#schedulenetwork_requesthttp)
+6. [Response typing and the model registry](#response-typing-and-the-model-registry)
+7. [Reading the inventory rows](#reading-the-inventory-rows)
+8. [Known unknowns](#known-unknowns)
+
+## Path C sender list
+
+This page owns the list of senders that reach the SDK without a `*Http*` wrapper (path C of [encryption.md](encryption.md#which-calls-are-encrypted)); [encryption.md](encryption.md) keeps the three-path rule and the counts. Tag: asm-traced.
+
+| sender | file `@0xADDR` of the function | `handle` call | section |
+|---|---|---|---|
+| `AkNetwork.requestHttp` | `base_service/util/ak_util/src/ak_network.dart @0x21c3444` | `@0x21c3544` (`AKIoTKitManagerImpl.handle`) | [below](#aknetworkrequesthttp) |
+| `StationApiClient.request` | `station_home/src/http/station_api_client.dart @0x2a4435c` | `@0x2a444c0` (`AkIotKitFlutter.handle`) | not covered further here |
+| `ScheduleNetwork._requestHttp` | `ev_charger/src/ev_charger/page/home/schedule_charge/network/ schedule_network.dart @0x284f6d0` | `@0x284f790` | [below](#schedulenetwork_requesthttp) |
+| `AKIotEVChargeCommand` static functions | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart` (38 cloud sends, one per function) | in the function that holds the URL literal | [below](#akiotevchargecommand-ev-charger-command-map) |
+| `AKIotAX170Command` static functions and their closures | `ats_ax170/src/sdk/command/ax170_command.dart` | in the function or closure that holds the URL literal | same envelope |
+| direct `handle` calls in UI logic | for example `TextInfoDialogLogic._setElectricianInfo`, `getElectricianInfo` (`base_service/view/text_info_dialog/text_info_dialog_logic.dart`) | next to the URL literal | same envelope |
 
 ## The common envelope
 
@@ -44,7 +58,7 @@ The UI callers of a function are the Dart call sites of `AKIotEVChargeCommand::<
 
 ## ScheduleNetwork._requestHttp
 
-`ScheduleNetwork._requestHttp` (`ev_charger/src/ev_charger/page/home/schedule_charge/network/ schedule_network.dart @0x284f6dc`; the file name has a leading space, `%20` in the asm path) builds the same envelope: `path` from its second argument (`@0x284f738`), `"POST"` (`@0x284f74c`), `param` from its first argument (`@0x284f764`), and calls `handle` with `"akiot.cloud_api"` (`@0x284f780`, call `@0x284f790`). It returns the raw `IoTAKResult`; the callers parse it themselves. Caller of record here: `ScheduleNetwork.getVehicleList` ([get_vehicle_list](power_service/app/vehicle/get_vehicle_list.md)).
+`ScheduleNetwork._requestHttp` (`ev_charger/src/ev_charger/page/home/schedule_charge/network/ schedule_network.dart @0x284f6d0`; the file name has a leading space, `%20` in the asm path) builds the same envelope: `path` from its second argument (`@0x284f738`), `"POST"` (`@0x284f74c`), `param` from its first argument (`@0x284f764`), and calls `handle` with `"akiot.cloud_api"` (`@0x284f780`, call `@0x284f790`). It returns the raw `IoTAKResult`; the callers parse it themselves. Caller of record here: `ScheduleNetwork.getVehicleList` ([get_vehicle_list](power_service/app/vehicle/get_vehicle_list.md)).
 
 ## Response typing and the model registry
 

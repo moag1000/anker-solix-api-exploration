@@ -521,6 +521,83 @@ class ServiceIndexOrphanTests(unittest.TestCase):
             # orphans are listed but not counted as inventory URLs
             self.assertEqual(summary, [('passport', 0, 0)])
 
+class SyntheticToolTests(unittest.TestCase):
+    """Tests on tiny synthetic trees; no Blutter output needed."""
+
+    ASM = (
+        'class A {\n'
+        '  static _ f(/* No info */) {\n'
+        '    // ** addr: 0x100, size: 0x10\n'
+        '    // 0x104: r16 = "path"\n'
+        '    // 0x108: r16 = %s\n'
+        '    // 0x10c: r0 = f()\n'
+        '  }\n'
+        '  static _ g(/* No info */) {\n'
+        '    // 0x200: r2 = 4\n'
+        '  }\n'
+        '}\n')
+
+    def _tree(self, td, name, lit):
+        d = os.path.join(td, name)
+        os.makedirs(d)
+        with open(os.path.join(d, 'x.dart'), 'w') as fh:
+            fh.write(self.ASM % lit)
+        return d
+
+    def test_cmp_since_same_diff_and_branch_blind(self):
+        import tempfile
+        import cmp_since
+        with tempfile.TemporaryDirectory() as td:
+            old = self._tree(td, 'old', '"a"')
+            same = self._tree(td, 'same', '"a"')
+            diff = self._tree(td, 'diff', '"b"')
+            r = cmp_since.compare(old + '/x.dart', same + '/x.dart')
+            self.assertEqual(r['f'][0], 'same')
+            self.assertEqual(r['g'][0], 'same')
+            r = cmp_since.compare(old + '/x.dart', diff + '/x.dart', ['f', 'g', 'h'])
+            self.assertEqual(r['f'][0], 'DIFF')
+            self.assertEqual(r['f'][1], ['"path"', '"a"'])
+            self.assertEqual(r['g'][0], 'same')
+            self.assertEqual(r['h'][0], 'unknown')
+            with self.assertRaises(FileNotFoundError):
+                cmp_since.compare(old + '/nope.dart', same + '/x.dart')
+
+    def test_keep_tail_preserved_once_and_absent_marker_unchanged(self):
+        import tempfile
+        import service_index
+        with tempfile.TemporaryDirectory() as td:
+            path = os.path.join(td, 'README.md')
+            tail = service_index.KEEP_MARKER + '\n\n## Hand-written\n\ntext\n'
+            with open(path, 'w') as fh:
+                fh.write('old generated\n\n' + tail)
+            once = service_index.keep_tail(path, 'new generated\n')
+            self.assertEqual(once, 'new generated\n\n' + tail)
+            with open(path, 'w') as fh:
+                fh.write(once)
+            twice = service_index.keep_tail(path, 'new generated\n')
+            self.assertEqual(twice.count(service_index.KEEP_MARKER), 1)
+            self.assertEqual(twice, once)
+            with open(path, 'w') as fh:
+                fh.write('no marker here\n')
+            self.assertEqual(service_index.keep_tail(path, 'gen\n'), 'gen\n')
+            self.assertEqual(service_index.keep_tail(os.path.join(td, 'none.md'), 'gen\n'), 'gen\n')
+
+    def test_check_citations_address_and_key(self):
+        import tempfile
+        import check_citations
+        with tempfile.TemporaryDirectory() as td:
+            root = self._tree(td, 'asm', '"k"')
+            page = os.path.join(td, 'p.md')
+            with open(page, 'w') as fh:
+                fh.write('Sender `x.dart @0x100` and `@0x999`.\n\n'
+                         '| field | type | req | ex | source |\n|---|---|---|---|---|\n'
+                         '| `k` | s | y | e | `x.dart @0x108` |\n'
+                         '| `zz` | s | y | e | `x.dart @0x108` |\n')
+            m, b, rows = check_citations.check_page(check_citations.Tree(root), page)
+            self.assertEqual([x[2] for x in m], ['0x999'])
+            self.assertEqual(rows, 2)
+            self.assertEqual([x[2] for x in b], ['zz'])
+
 
 if __name__ == '__main__':
     unittest.main()

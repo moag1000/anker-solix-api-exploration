@@ -44,6 +44,15 @@ python3 -I tools/smi.py <asm_file> <0xADDR> [--dump]                       # che
 - `encrypted` follows the callee name (`*encryptionRequestHttp*`). Plain `requestHttp` callees default to `needEncryption = true`; rows carry `encryption_note` for those.
 - `nullable: null` means the extractor could not tell. `param_type: "variable"` means the key is stored from a register (see `unresolved` in `param_types.json`).
 
+Page checks:
+
+```bash
+python3 -I tools/cmp_since.py <old_asm> <new_asm> <relpath.dart> [function ...]   # literal sequences per function, 3.18.0 vs 3.24.3 (branch logic is NOT compared)
+python3 -I tools/check_citations.py <asm_root> <page.md> ...                      # every @0xADDR exists; table-row JSON keys match the decoded instruction
+```
+
+`check_citations.py` MISSING lines can be false positives when the file name comes later in the sentence; read each one.
+
 ## 4. Tests
 
 ```bash
