@@ -39,7 +39,7 @@ The repository is being rebuilt on App 3.24.3, so each step has two columns. **T
 - **Who:** Watches live MQTT traffic of a device and needs to decode what it sees.
 - **First question:** "What is field a8, or command 0x7c?"
 - **First page needed:** the MQTT decoder page for the device's product number (PN).
-- **Status today: partial.** No existing page is a per-PN field decoder; those pages (`mqtt/<pn>.md`) are a target. The nearest answers are spread over four files, listed below.
+- **Status today: partial.** No existing page is a per-PN field decoder; those pages (`mqtt/<pn>.md`) are a target. The nearest answers are spread over the files in the table below.
 
 | Step | Today | Target |
 |---|---|---|
