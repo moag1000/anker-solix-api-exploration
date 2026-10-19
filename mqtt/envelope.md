@@ -127,7 +127,7 @@ Built by `ZXCommandTransformer._getNormalCommand` (`charging/communication/trans
 | 5 | `00` | the app writes the zero register; the receive variant `01` was not found in the app | audit row 6; @0x22743b8; upstream-confirmed (`api/mqtttypes.py` line 42, `03 00/01 0f` for send and receive) |
 | 6 | `0F` in captures | loaded from transformer field `field_23`, value unresolved | audit row 6; @0x22743f8; upstream-confirmed (`api/mqtttypes.py` line 82) |
 | 7-8 | opcode as written in the Dart hex string, for example `00 7A` for `"007a"` | pool lists such as `[0, 0x7a]` are the same two bytes in order | audit row 165 (pool list `[0, 0x5e]`), audit row 167; byte order on the wire: upstream-confirmed (`api/mqtttypes.py` line 43, `04 05` for status `0405`) |
-| last | XOR of all preceding bytes, start value 0 | checksum, included in the length | audit row 14; ZXCmdUtil.getCheckSum @0x2272e9c, _getNormalCommand @0x22744a4 (start value @0x2272e2c) |
+| last | XOR of all preceding bytes, start value 0 | checksum, included in the length | audit row 14 (address corrected 2026-10-19, see ble/protocol.md): ZXCmdUtil.getCheckSum `ak_cmd_util.dart` @0x2272e9c (start value @0x2272e2c); send side ZXCommandTransformer._getCheckSum `zx_command_transformer.dart` @0x22745f0 (eor @0x227463c, called @0x2274518). The audit's @0x22744a4 is the `eor` that folds the 0x40 encrypted flag into opcode byte 0, not the checksum |
 
 An optional increment byte after the opcode appears on some upstream-observed messages (`api/mqtttypes.py` line 44); the app side was not audited.
 
@@ -144,7 +144,7 @@ Generic single-value builder: `_getSettingCommand` (same file), used by every se
 | data | value bytes, little endian | `intToList*` | audit row 21 @0x2272ec8 |
 | timestamp trailer | tag `FE`, 4 bytes little endian seconds (`intToList4` of `getCurrentTimestamp`) | classic format | audit row 13 @0x2273bc0, @0x2273c90 (key raw 508 = 0xFE); audit row 23 |
 | CRC trailer | tag `FD`, 4 bytes: CRC32 of the payload | newer format (A17C1 builders), NOT a millisecond timestamp | audit row 24 @0x281aa44..0x281aa94 (setBackPower), @0x288b224..0x288b238 (setTacticsTime); key raw 506 = 0xFD; audit row 219 |
-| checksum | XOR byte | see Binary layer | audit row 14 @0x22744a4 |
+| checksum | XOR byte | see Binary layer | audit row 14; `_getCheckSum` @0x22745f0 (address corrected, see Binary layer) |
 
 With a one-byte length the type byte sits at field offset 2, with a two-byte length at offset 3 (audit row 12). Disagreement with upstream, recorded rather than resolved: upstream describes tag `fd` as a timestamp in milliseconds sent as a string (`api/mqttcmdmap.py` lines 163-169, TIMESTAMP_FD) and `fe` as a 4-byte value (lines 172-178). The app builders write a CRC32 under 0xFD. Both statements stand side by side; whether a device accepts either form under tag 0xFD is untested in this repo.
 

@@ -8,6 +8,8 @@
 
 One line per WRONG verdict of the Phase 2 Smi sweeps (full tables in `docs/audit/`). Doc line numbers refer to the file BEFORE the banner was added (commit 68bc345); in the current file add 2.
 
+- Audit row 14 / mqtt/envelope.md — XOR checksum cited at `@0x22744a4` → that instruction folds the 0x40 encrypted flag; the checksum is `ZXCommandTransformer._getCheckSum` @0x22745f0 (plus `ZXCmdUtil.getCheckSum` @0x2272e9c). The XOR-checksum fact itself stands. (Task 3.7 review, 2026-10-19)
+- Audit row 316 / mqtt/a5101.md — opcode `002d` attributed to `sendAutoDisasterDataCmd` → `002d` is loaded inside `getBluetoothOTAStatus` (@0x42e8bc0); `sendAutoDisasterDataCmd` @0x3ebdad8 loads `0115` @0x3ebdc8c. (Task 3.7 review, 2026-10-19)
 - FLOWS.md:29 — `"cmd": 246` (param_type 6 schedule) → cmd 123 (charging/http/http_request_repository_impl.dart set17C1SiteDeviceParam @0x238cca8 (3.24.3))
 - FLOWS.md:35-36 — "`cmd` = 246 (0xF6) for cloud, NOT 17 ... thomluther uses 17, APK uses 246" → APK sends 123 (0x7B); 17 = setSiteDeviceParam path (charging/http/http_request_repository_impl.dart set17C1SiteDeviceParam @0x238cca8 (3.24.3))
 - FLOWS.md:40 — "up to 30 TLV tags (a2-bb)" → 29 data tags a2-be (+ CRC tag 0xFD) (charging/ble/device/A17C1/a17c1_device_controller.dart setTacticsTime @0x288ac88 (AllocateArray), keys @0x288ac90..0x288ae50 (3.24.3))
