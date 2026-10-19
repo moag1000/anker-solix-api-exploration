@@ -174,6 +174,14 @@ class TestMain(unittest.TestCase):
         self.assertEqual(sorted(os.listdir(tmp)), before)
         self.assertEqual(os.listdir(os.path.join(tmp, 'data')), [])
 
+    def test_check_with_schema_violation(self):
+        tmp = TestRepo()._repo(errors=doc([dict(ERR_ROW, code='x')]),
+                               param_types=[])
+        rc, text = self._run(['--repo', tmp, '--check'])
+        self.assertEqual(rc, 1)
+        self.assertIn('errors rows[0]', text)
+        self.assertEqual(self._run(['--repo', tmp])[0], 0)
+
     def test_without_check_reports_but_exits_zero(self):
         tmp = tempfile.mkdtemp()
         os.makedirs(os.path.join(tmp, 'data'))

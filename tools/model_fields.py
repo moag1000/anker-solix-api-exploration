@@ -13,8 +13,9 @@ re-read) counts once.  Dart types come from the cast `r8 = <Type>`, nested
 Output rows carry `key` = `package::Class` (package = first directory of the Dart
 file; where two classes still share that key, the package part is extended to the
 shortest unique directory path, then to the file path without `.dart`), plus the
-short `class` name.  By default classes without fields and the `sentry` package
-(error-reporting SDK, not app data) are dropped; `--include-noise` keeps them.
+short `class` name.  By default the `sentry` package (error-reporting SDK, not app
+data) is dropped; `--include-noise` keeps it.  Classes without fields stay: an empty
+`fromJson` may be an extractor limit, and consumers need to see the class exists.
 Keys are computed before the filter, so a key does not depend on the flag.
 """
 import argparse
@@ -238,8 +239,8 @@ def assign_keys(rows):
 
 
 def is_noise(r):
-    """A class without fields, or a class of the `sentry` package."""
-    return not r['fields'] or package_of(r['dart_file']) == 'sentry'
+    """A class of the `sentry` package (field-less app classes are not noise)."""
+    return package_of(r['dart_file']) == 'sentry'
 
 
 def filter_noise(rows, include_noise):
@@ -254,7 +255,7 @@ def main(argv=None):
     ap.add_argument('--snapshot', default=A.SNAPSHOT_3_24_3)
     ap.add_argument('--out', default='data/models.json')
     ap.add_argument('--include-noise', action='store_true',
-                    help='keep field-less classes and the sentry package')
+                    help='keep the sentry package')
     a = ap.parse_args(argv)
     t0 = time.time()
     res = build_models(a.asm_root, a.version, a.old_root,

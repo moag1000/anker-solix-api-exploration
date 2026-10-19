@@ -62,8 +62,8 @@ class TestKeys(unittest.TestCase):
 
 
 class TestNoise(unittest.TestCase):
-    def test_fieldless_is_noise(self):
-        self.assertTrue(M.is_noise(row('A', 'p/a.dart', fields=[])))
+    def test_fieldless_app_class_is_not_noise(self):
+        self.assertFalse(M.is_noise(row('A', 'p/a.dart', fields=[])))
 
     def test_sentry_is_noise_even_with_fields(self):
         self.assertTrue(M.is_noise(row('SentryGeo', 'sentry/src/protocol/sentry_geo.dart')))
@@ -77,7 +77,7 @@ class TestNoise(unittest.TestCase):
     def test_filter_default_and_include(self):
         rows = [row('A', 'p/a.dart'), row('B', 'p/b.dart', fields=[]),
                 row('C', 'sentry/c.dart')]
-        self.assertEqual([r['class'] for r in M.filter_noise(rows, False)], ['A'])
+        self.assertEqual([r['class'] for r in M.filter_noise(rows, False)], ['A', 'B'])
         self.assertEqual(len(M.filter_noise(rows, True)), 3)
 
 
@@ -92,9 +92,9 @@ class TestMain(unittest.TestCase):
         with open(out, encoding='utf-8') as fh:
             return json.load(fh)['rows']
 
-    def test_default_drops_noise(self):
+    def test_default_drops_sentry_only(self):
         rows = self._run([])
-        self.assertEqual([r['key'] for r in rows], ['p::A', 'q::A'])
+        self.assertEqual([r['key'] for r in rows], ['p::A', 'p::E', 'q::A'])
 
     def test_include_noise_keeps_all_with_keys(self):
         rows = self._run(['--include-noise'])

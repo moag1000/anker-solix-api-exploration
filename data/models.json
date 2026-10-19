@@ -1250,6 +1250,15 @@
       "since": "≤3.18.0"
     },
     {
+      "class": "DynamicPriceParamData",
+      "dart_file": "ak_soft_contract/src/energy/model/dynamic_price_param_data.dart",
+      "fields": [],
+      "from_json_addr": "0x2a281c0",
+      "key": "ak_soft_contract::DynamicPriceParamData",
+      "removed_keys": [],
+      "since": "3.24.3"
+    },
+    {
       "class": "ElectricityPriceModel",
       "dart_file": "ak_soft_contract/src/energy/model/electricity_price_model.dart",
       "fields": [
@@ -17130,6 +17139,15 @@
       "since": "≤3.18.0"
     },
     {
+      "class": "PeakValleyParamData",
+      "dart_file": "base_service/bean/peak_valley_param_data.dart",
+      "fields": [],
+      "from_json_addr": "0x23a21a4",
+      "key": "base_service::PeakValleyParamData",
+      "removed_keys": [],
+      "since": "≤3.18.0"
+    },
+    {
       "class": "PeakValleySeasonModel",
       "dart_file": "base_service/bean/peak_valley_season.dart",
       "fields": [
@@ -31431,6 +31449,15 @@
       "since": "≤3.18.0"
     },
     {
+      "class": "DynamicPriceParamData",
+      "dart_file": "charging/feature/utilitiy_rate_plan/dynamic_price/model/dynamic_price_model.dart",
+      "fields": [],
+      "from_json_addr": "0x23a1a70",
+      "key": "charging::DynamicPriceParamData",
+      "removed_keys": [],
+      "since": "≤3.18.0"
+    },
+    {
       "class": "EasterEggTiggerRecordModel",
       "dart_file": "charging/model/a91b2/easter_egg_tigger_record_model.dart",
       "fields": [
@@ -32314,6 +32341,15 @@
       ],
       "from_json_addr": "0x23ab120",
       "key": "charging::FixedPriceV2",
+      "removed_keys": [],
+      "since": "≤3.18.0"
+    },
+    {
+      "class": "FixedRateV2ParamData",
+      "dart_file": "charging/feature/utilitiy_rate_plan/fixed_rate/model/fixedRateV2Model.dart",
+      "fields": [],
+      "from_json_addr": "0x23aae94",
+      "key": "charging::FixedRateV2ParamData",
       "removed_keys": [],
       "since": "≤3.18.0"
     },
@@ -46708,6 +46744,15 @@
       ],
       "from_json_addr": "0x2ad23f0",
       "key": "flutter_charging_beginning::SelfCheckConfigItem",
+      "removed_keys": [],
+      "since": "3.24.3"
+    },
+    {
+      "class": "SelfCheckConfigModel",
+      "dart_file": "flutter_charging_beginning/beginning/state_cards/self_check/self_check_config_model.dart",
+      "fields": [],
+      "from_json_addr": "0x2ad1404",
+      "key": "flutter_charging_beginning::SelfCheckConfigModel",
       "removed_keys": [],
       "since": "3.24.3"
     },
