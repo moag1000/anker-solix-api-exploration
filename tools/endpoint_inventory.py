@@ -6,7 +6,8 @@ Usage:
 
 One row per (function, URL literal).  `role` is `sender` when the function
 itself calls an `*Http*` helper and `url_provider` when it only holds the URL
-(api_url.dart style); callers then lead to the senders.  Parameters are read
+(api_url.dart style); `resolve_senders` then follows the callers up to 3 levels
+and records `sender`/`sender_via` (or `resolution`: mixin-gap | unresolved).  Parameters are read
 heuristically from map literals (string literals stored at even array slots),
 so every row is `string-only` evidence until a human traces it.
 """
@@ -33,6 +34,8 @@ OFF_RES = (re.compile(r'\[x\d+, #0x([0-9a-f]+)\]'),
            re.compile(r'add\s+x25, x\d+, #0x([0-9a-f]+)'))
 SENDER_CALLEE_RE = re.compile(
     r'RequestHttp|requestHttp|postJML|HttpHelper::request$|StationApiClient::request$')
+SDK_SEND_RE = re.compile(r'AKIoTKitManagerImpl::handle$|AkIotKitFlutter::handle$')
+MAX_DEPTH = 3
 SEG_SNAKE_RE = re.compile(r'^/[a-z0-9_]+(/[a-z0-9_.]+)+$')
 SEG_ANY_RE = re.compile(r'^/[A-Za-z0-9_\-]+(/[A-Za-z0-9_\-.]+)+$')
 
@@ -259,6 +262,7 @@ def scan_root(root, log=None):
                 continue
             callees = sorted({c for _, _, c in fn.callees()})
             http = [c for c in callees if SENDER_CALLEE_RE.search(c)]
+            sdk = [c for c in callees if SDK_SEND_RE.search(c)]
             need_arg = any('"needEncryption"' in r for i in fn.instrs for r in i.raw)
             fname = fn.name
             if fname == '<anonymous closure>':
@@ -272,7 +276,7 @@ def scan_root(root, log=None):
                 records.append({
                     'url': url, 'url_addr': uaddr, 'role': role,
                     'class': fn.cls, 'function': fname, 'addr': fn.addr,
-                    'dart_file': rel, 'http_callees': http,
+                    'dart_file': rel, 'http_callees': http, 'sdk_callees': sdk,
                     'need_arg': need_arg, '_req': None,
                 })
             # request walk once per function (cheap, only for URL functions)
@@ -318,7 +322,8 @@ def scan_call_sites(root, syms, window=0, log=None):
     for p, rel in A.iter_dart_files(root):
         with open(p, encoding='utf-8', errors='replace') as fh:
             text = fh.read()
-        called = set(A.ALL_CALLEE_RE.findall(text)) & set(syms)
+        called = (set(A.ALL_CALLEE_RE.findall(text))
+                  | {'%s::%s' % m for m in FIELD_LOAD_RE.findall(text)}) & set(syms)
         if not called:
             continue
         parents = A.closure_parents(text)
@@ -353,6 +358,162 @@ def find_callers(root, records, log=None):
             for k, v in sites.items()}
 
 
+DEDUP_LIB = 'dart:mixin_deduplication'
+# a static late field holding a URL (api_url.dart `Api.getPrice`) is read, not called
+FIELD_LOAD_RE = re.compile(r'\] Field <([^>.\s]+)\.([^>\s]+)>')
+
+
+def owner_of(rec):
+    """'Class::function' that holds a record; closures belong to their enclosing
+    function, a closure without a known parent has no owner (None)."""
+    fname = rec['function']
+    if fname.startswith('<anonymous closure> in '):
+        return fname[len('<anonymous closure> in '):]
+    if fname.startswith('<'):
+        return None
+    return '%s::%s' % (rec['class'], fname) if rec['class'] != '::' else '::' + fname
+
+
+def _pair(owner):
+    cls, fname = owner.split('::', 1)
+    return (cls or '::', fname)
+
+
+def label(owner, addr):
+    return '%s @%s' % (owner, addr)
+
+
+def scan_callers(root, owners, want_dedup=False):
+    """One pass over the asm tree.
+
+    Returns (table, dedup) where table maps an owner in `owners` to a list of
+    (caller_owner, caller_addr, caller_sends) for every function that calls it,
+    and dedup is the set of (class component, name) pairs called through
+    `dart:mixin_deduplication` (only when want_dedup).  A caller that is a
+    closure is attributed to its enclosing function; caller_sends is true when
+    that very function (or closure) calls an `*Http*` or SDK sender.
+    """
+    syms = symbol_variants(_pair(o) for o in owners)
+    table = {}
+    dedup = set()
+    dedup_re = re.compile(r'\[%s\] (\S+?)::(\S+)' % re.escape(DEDUP_LIB))
+    for p, rel in A.iter_dart_files(root):
+        with open(p, encoding='utf-8', errors='replace') as fh:
+            text = fh.read()
+        if want_dedup:
+            for m in dedup_re.finditer(text):
+                for comp in m.group(1).split('&'):
+                    dedup.add((comp, m.group(2)))
+        called = (set(A.ALL_CALLEE_RE.findall(text))
+                  | {'%s::%s' % m for m in FIELD_LOAD_RE.findall(text)}) & set(syms)
+        if not called:
+            continue
+        parents = A.closure_parents(text)
+        for fn in A.iter_functions(p, rel):
+            hit = []
+            sends = False
+            for ins in fn.instrs:
+                for r in ins.raw:
+                    m = A.CALLEE_RE.search(r)
+                    if m:
+                        if SENDER_CALLEE_RE.search(m.group(2)) or \
+                                SDK_SEND_RE.search(m.group(2)):
+                            sends = True
+                        if m.group(2) in called:
+                            hit.append(m.group(2))
+                        continue
+                    m = FIELD_LOAD_RE.search(r)
+                    if m and '%s::%s' % m.groups() in called:
+                        hit.append('%s::%s' % m.groups())
+            if not hit:
+                continue
+            cls, cname = fn.cls, fn.name
+            if cname == '<anonymous closure>':
+                par = parents.get(fn.addr)
+                caller = par if par else '%s::<anonymous closure>' % cls
+            else:
+                caller = '%s::%s' % (cls, cname) if cls != '::' else '::' + cname
+            for sym in set(hit):
+                for owner in syms[sym]:
+                    if owner == caller:
+                        continue
+                    ent = (caller, fn.addr, sends)
+                    lst = table.setdefault(owner, [])
+                    if ent not in lst:
+                        lst.append(ent)
+    return table, dedup
+
+
+def resolve_senders(root, records, max_depth=MAX_DEPTH, log=None):
+    """Resolve url_provider records to the function that sends.
+
+    Returns {(dart_file, addr): result}; a result is
+    {'sender': label, 'sender_via': [labels, innermost first]} or
+    {'resolution': 'mixin-gap' | 'unresolved'}.  Records whose function itself
+    calls an SDK sender resolve to themselves (sender_via []).
+    """
+    t0 = time.time()
+    todo = {}
+    for r in records:
+        if r['role'] == 'url_provider':
+            todo.setdefault((r['dart_file'], r['addr']), r)
+    out, walk = {}, {}
+    for key, r in todo.items():
+        o = owner_of(r)
+        if r.get('sdk_callees'):
+            out[key] = {'sender': label(o or r['function'], r['addr']),
+                        'sender_via': []}
+        elif o is not None:
+            walk[key] = o
+    table, dedup, known = {}, set(), set()
+    need = set(walk.values())
+    for depth in range(max_depth):
+        need -= known
+        if not need:
+            break
+        got, d = scan_callers(root, need, want_dedup=(depth == 0))
+        dedup |= d
+        known |= need
+        for o in need:
+            table[o] = got.get(o, [])
+        need = {c for o in need for c, _, sends in table[o] if not sends}
+        if log:
+            log('callers level %d: %d functions, %.1fs'
+                % (depth + 1, len(known), time.time() - t0))
+    for key, start in walk.items():
+        frontier = [(start, [])]
+        seen = {start}
+        res = None
+        for _ in range(max_depth):
+            found, nxt = [], []
+            for node, chain in frontier:
+                ents = table.get(node)
+                if ents is None:
+                    continue
+                for c, addr, sends in ents:
+                    lab = chain + [label(c, addr)]
+                    if sends:
+                        found.append(lab)
+                    elif c not in seen:
+                        seen.add(c)
+                        nxt.append((c, lab))
+            if found:
+                found.sort(key=lambda ch: (ch[-1], ch))
+                res = {'sender': found[0][-1], 'sender_via': found[0]}
+                also = sorted({f[-1] for f in found[1:]} - {found[0][-1]})[:5]
+                if also:
+                    res['sender_also'] = also
+                break
+            frontier = nxt
+        if res is None:
+            gap = any(_pair(n) in dedup for n in seen)
+            res = {'resolution': 'mixin-gap' if gap else 'unresolved'}
+        out[key] = res
+    if log:
+        log('resolve senders: %d functions in %.1fs' % (len(out), time.time() - t0))
+    return out
+
+
 def encryption_note(rec):
     cs = rec['http_callees']
     if not cs or any('encryptionRequestHttp' in c for c in cs):
@@ -384,6 +545,7 @@ def in_pool(pool, url):
 def build_inventory(root, version, old_root=None, upstream=None, log=None):
     records, callee_stats = scan_root(root, log)
     callers = find_callers(root, records, log)
+    resolved = resolve_senders(root, records, log=log)
     old_urls = set()
     old_records = []
     if old_root:
@@ -422,6 +584,9 @@ def build_inventory(root, version, old_root=None, upstream=None, log=None):
             'since': ('≤3.18.0' if r['url'] in old_urls else version)
             if old_root else None,
         }
+        res = resolved.get((r['dart_file'], r['addr']))
+        if res:
+            row.update(res)
         rows.append(row)
     if old_root:
         for r in old_records:

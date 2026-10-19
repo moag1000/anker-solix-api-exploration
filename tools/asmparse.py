@@ -7,7 +7,7 @@ instruction (`//     0xADDR: mnemonic operands ; comment`).
 import os
 import re
 
-CLASS_RE = re.compile(r'^class ([^\s<{]+)')
+CLASS_RE = re.compile(r'^(?:abstract )?class ([^\s<{]+)')
 ADDR_LINE_RE = re.compile(r'^\s+// \*\* addr: (0x[0-9a-f]+)')
 DECODED_RE = re.compile(r'^    // (0x[0-9a-f]+): (.*?)\s*$')
 RAW_RE = re.compile(r'^    //     (0x[0-9a-f]+): (.*?)\s*$')
@@ -99,7 +99,8 @@ def iter_functions(path, rel=None):
     prev = ''
     with open(path, encoding='utf-8', errors='replace') as fh:
         for line in fh:
-            if line[0] == 'c' and line.startswith('class '):
+            if line[0] in 'ca' and (line.startswith('class ')
+                                    or line.startswith('abstract class ')):
                 m = CLASS_RE.match(line)
                 cls = m.group(1) if m else None
                 continue

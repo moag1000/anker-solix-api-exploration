@@ -85,6 +85,24 @@ def _enc_state(r):
     return 'false'
 
 
+def _sender_note(r):
+    """Result of the caller walk (`sender`, `sender_via`, `resolution`)."""
+    if r.get('sender'):
+        if not r.get('sender_via'):
+            return '; sends in the same function (SDK `handle`): `%s`' % r['sender']
+        note = '; sender found through callers: `%s` via %s' % (
+            r['sender'], ' -> '.join('`%s`' % v for v in r['sender_via']))
+        if r.get('sender_also'):
+            note += '; also %s' % ', '.join('`%s`' % v for v in r['sender_also'])
+        return note
+    if r.get('resolution') == 'mixin-gap':
+        return ('; caller walk enters a deduplicated mixin function absent from '
+                'the dump (UNCONFIRMED)')
+    if r.get('resolution') == 'unresolved':
+        return '; no sender within 3 caller levels'
+    return ''
+
+
 def _is_removed(rows):
     return all(r.get('removed_in') for r in rows)
 
@@ -179,8 +197,8 @@ def render_endpoint(rows, date=None, version='3.24.3'):
                     ', '.join(c.split('::')[-1] for c in r['http_callees']),
                     _enc_state(r), pt))
             else:
-                parts.append('`%s` @%s (URL literal only, no `*Http*` call)'
-                             % (r['function'], r['addr']))
+                parts.append('`%s` @%s (URL literal only, no `*Http*` call%s)'
+                             % (r['function'], r['addr'], _sender_note(r)))
         L.append('- `%s`: %s' % (f, '; '.join(parts)))
     ui = sorted({c for r in rows for c in r['callers']})
     if ui:
