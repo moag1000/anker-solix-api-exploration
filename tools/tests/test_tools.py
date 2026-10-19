@@ -273,13 +273,20 @@ class OutputGuardTests(unittest.TestCase):
 
     def test_cli_refuses(self):
         import render_pages
-        cwd = os.getcwd()
-        os.chdir(REPO)
+
+        def boom(*a, **k):
+            raise AssertionError('must not render')
+
+        saved = (render_pages.render_all, render_pages._write)
+        render_pages.render_all = render_pages._write = boom
         try:
-            self.assertEqual(render_pages.main(['--out', '.']), 2)
-            self.assertEqual(render_pages.main(['--out', 'api']), 2)
+            self.assertEqual(render_pages.main(['--out', REPO]), 2)
+            self.assertEqual(
+                render_pages.main(['--out', os.path.join(REPO, 'api')]), 2)
+            self.assertEqual(
+                render_pages.main(['--out', os.path.join(REPO, 'models')]), 2)
         finally:
-            os.chdir(cwd)
+            render_pages.render_all, render_pages._write = saved
 
 
 if __name__ == '__main__':
