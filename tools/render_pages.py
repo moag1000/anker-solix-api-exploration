@@ -91,21 +91,41 @@ def _cite(label, file):
     return '`%s` (`%s @%s`)' % (name, file, addr) if file else '`%s`' % label
 
 
+CAVEAT = ('(string-only: the sender was found by following callers; it may '
+          'send other URLs too — see tools/README.md)')
+
+
 def _sender_note(r):
-    """Result of the caller walk (`sender`, `sender_via`, `resolution`)."""
+    """Result of the caller walk (`sender*` fields, `resolution`)."""
     if r.get('sender'):
-        if not r.get('sender_via'):
-            return '; sends in the same function (SDK `handle`)'
-        files = r.get('sender_via_files') or [None] * len(r['sender_via'])
-        note = '; sender found through callers: %s via %s' % (
-            _cite(r['sender'], r.get('sender_file')),
-            ' -> '.join(_cite(v, f) for v, f in zip(r['sender_via'], files)))
+        via = r.get('sender_via') or []
+        files = r.get('sender_via_files') or [None] * len(via)
+        kind = r.get('sender_kind', 'self')
+        send = _cite(r['sender'], r.get('sender_file'))
+        chain = ' -> '.join(_cite(v, f) for v, f in zip(via, files))
+        if kind == 'self' and not via:
+            note = '; sends in the same function (`%s`)' % r.get('sender_wrapper', '?')
+        elif kind == 'self':
+            note = '; sender %s, reached through callers %s' % (send, chain)
+        elif kind == 'wrapper':
+            note = '; sender %s (HTTP helper wrapper), called from %s' % (
+                send, chain or 'the same function')
+        else:
+            note = '; sender %s, a callee called after the URL load%s' % (
+                send, ' in ' + chain if chain else ' in the same function')
+        if r.get('sender_via_also'):
+            note += '; also through %s' % ', '.join(
+                '`%s`' % v[-1].partition(' @')[0] for v in r['sender_via_also'])
         if r.get('sender_also'):
-            note += '; also %s' % ', '.join(
+            note += '; other senders: %s' % ', '.join(
                 '`%s`' % v.partition(' @')[0] for v in r['sender_also'])
-        return note
+        return '%s; resolved from the URL literal at `%s @%s` %s' % (
+            note, r['dart_file'], r['url_addr'], CAVEAT)
+    if r.get('resolution') == 'generic-path-check':
+        return ('; a path check inside the generic HTTP manager '
+                '(`isDemoBlockPath`), not a request: no sender')
     if r.get('resolution') == 'mixin-gap':
-        return ('; caller walk enters a deduplicated mixin function absent from '
+        return ('; caller walk reaches a deduplicated mixin function absent from '
                 'the dump (UNCONFIRMED)')
     if r.get('resolution') == 'unresolved':
         return '; no sender within 3 caller levels'

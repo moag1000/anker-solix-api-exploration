@@ -135,6 +135,87 @@ class CallerResolution(unittest.TestCase):
         r = self.inv_row()
         self.assertEqual(r['sender'], 'Ui::go @0x2000')
 
+    def test_send_before_the_url_load_is_not_the_sender(self):
+        write_class(self.root, 'api/p.dart', 'Prov', [
+            fn_text('getUrl', '0x1000', [('lit', URL)])])
+        write_class(self.root, 'ui/c1.dart', 'C1', [fn_text('run', '0x2100', [
+            ('call', 'HttpRequestControllerImpl::requestHttp'),
+            ('call', 'Prov::getUrl')])])
+        self.assertEqual(self.inv_row()['resolution'], 'unresolved')
+
+    def test_callee_after_url_load_sends(self):
+        write_class(self.root, 'api/p.dart', 'Prov', [
+            fn_text('getUrl', '0x1000', [('lit', URL)])])
+        write_class(self.root, 'ui/c1.dart', 'C1', [fn_text('run', '0x2100', [
+            ('call', 'Prov::getUrl'), ('call', 'Svc::post')])])
+        write_class(self.root, 'ui/svc.dart', 'Svc', [fn_text('post', '0x2200', [
+            ('call', 'HttpRequestControllerImpl::encryptionRequestHttp')])])
+        r = self.inv_row()
+        self.assertEqual(r['sender'], 'Svc::post @0x2200')
+        self.assertEqual(r['sender_kind'], 'callee')
+        self.assertEqual(r['sender_via'], ['C1::run @0x2100'])
+        self.assertEqual(r['sender_wrapper'],
+                         'HttpRequestControllerImpl::encryptionRequestHttp')
+
+    def test_callee_with_another_url_literal_is_not_taken(self):
+        write_class(self.root, 'api/p.dart', 'Prov', [
+            fn_text('getUrl', '0x1000', [('lit', URL)])])
+        write_class(self.root, 'ui/c1.dart', 'C1', [fn_text('run', '0x2100', [
+            ('call', 'Prov::getUrl'), ('call', 'Svc::post')])])
+        write_class(self.root, 'ui/svc.dart', 'Svc', [fn_text('post', '0x2200', [
+            ('lit', '/power_service/v1/app/other/endpoint'),
+            ('call', 'HttpRequestControllerImpl::encryptionRequestHttp')])])
+        self.assertEqual(self.inv_row()['resolution'], 'unresolved')
+
+    def test_http_helper_wrapper_is_the_sender(self):
+        write_class(self.root, 'fix/http/http_helper.dart', 'HttpHelper', [
+            fn_text('getData', '0x3000', [
+                ('call', 'HttpRequestControllerImpl::encryptionRequestHttp')])])
+        write_class(self.root, 'api/p.dart', 'Prov', [
+            fn_text('getUrl', '0x1000', [('lit', URL)])])
+        write_class(self.root, 'ui/c1.dart', 'C1', [fn_text('run', '0x2100', [
+            ('call', 'Prov::getUrl'),
+            ('call', 'HttpHelper::getData', 'package:fix/http/http_helper.dart')])])
+        r = self.inv_row()
+        self.assertEqual(r['sender'], 'HttpHelper::getData @0x3000')
+        self.assertEqual(r['sender_kind'], 'wrapper')
+        self.assertEqual(r['sender_wrapper'], 'HttpHelper::getData')
+        self.assertEqual(r['sender_via'], ['C1::run @0x2100'])
+
+    def test_literal_in_generic_http_manager_is_a_path_check(self):
+        write_class(self.root, 'fix/util/http_manager.dart', 'HttpRequestManager', [
+            fn_text('requestHttp', '0x1000', [
+                ('lit', URL)])])
+        r = self.inv_row('requestHttp')
+        self.assertEqual(r['resolution'], 'generic-path-check')
+        self.assertNotIn('sender', r)
+
+    def test_mixin_gap_real_excerpt(self):
+        # call site copied from custom_mode_usage_scenario_logic.dart
+        # @0x2886c44 (3.24.3); the mixin method has no body in the dump
+        write_class(self.root, 'api/p.dart', 'AE100ApiExt', [
+            fn_text('setUserParamsAsync', '0x1000', [('lit', URL)])], abstract=True)
+        p = os.path.join(self.root, 'ui/c.dart')
+        os.makedirs(os.path.dirname(p))
+        with open(p, 'w') as fh:
+            fh.write(
+                'class Ui extends Object {\n\n  _ go(/* No info */) {\n'
+                '    // ** addr: 0x2000, size: 0x40\n'
+                '    // 0x2886c44: r0 = setUserParamsAsync()\n'
+                '    //     0x2886c44: bl              #0x2886c64  ; '
+                '[dart:mixin_deduplication] _MixinApplication707&BaseBleController'
+                '&CommonLocation&AE100ApiExt::setUserParamsAsync\n  }\n}\n')
+        self.assertEqual(self.inv_row('setUserParamsAsync')['resolution'],
+                         'mixin-gap')
+
+    def test_mixin_gap_without_deduplication_library(self):
+        write_class(self.root, 'api/p.dart', 'FooMixin', [
+            fn_text('getUrl', '0x1000', [('lit', URL)])], abstract=True)
+        write_class(self.root, 'ui/c.dart', 'Ui', [fn_text('go', '0x2000', [
+            ('call', '_MixinApplication9&Base&FooMixin::getUrl',
+             'package:fix/ui/c.dart')])])
+        self.assertEqual(self.inv_row()['resolution'], 'mixin-gap')
+
     def test_abstract_class_name_is_kept(self):
         write_class(self.root, 'api/p.dart', 'Cmd', [fn_text('getUrl', '0x1000', [
             ('lit', URL)])], abstract=True)
@@ -181,41 +262,95 @@ class RealAsm(unittest.TestCase):
         self.assertEqual(r['sender_via'], [])
         self.assertIn('@0x35e1f50', r['sender'])
 
-    def test_two_level_chain(self):
+    def test_save_time_of_use_sender_is_the_http_helper(self):
         rows = [r for r in self.inv['rows']
-                if r['url'] == '/power_service/v1/site/set_site_device_param'
-                and r['function'] == 'getSetElectricityUsagePolicyUrl']
+                if r['url'] == '/charging_hes_dynamic_price_svc/save_time_of_use'
+                and r['role'] == 'url_provider']
         self.assertEqual(len(rows), 1)
-        self.assertEqual(rows[0]['sender_via'], [
-            'ElectricityUsageHelper::setManualSetTOUDetail @0x31b8da8',
-            'TOUEditPreviewLogic::savePlan @0x31de7dc'])
-        self.assertEqual(rows[0]['sender'], rows[0]['sender_via'][-1])
+        r = rows[0]
+        self.assertEqual(r['sender'], 'HttpHelper::getDataFromService @0x27bda38')
+        self.assertEqual(r['sender_kind'], 'wrapper')
+        chains = [r['sender_via']] + r.get('sender_via_also', [])
+        flat = [x for c in chains for x in c]
+        self.assertIn('ElectricityPricePlanApiHelper::changeToTouPlan @0x31a9fdc',
+                      flat)
+        self.assertFalse([x for x in flat if '@0x41a68ac' in x], flat)
+
+    def test_tou_detail_sender_is_set_site_tou_detail(self):
+        for url in ('/power_service/v1/site/set_site_device_param',
+                    '/power_service/v1/app/device/set_device_home_load'):
+            rows = [r for r in self.inv['rows'] if r['url'] == url
+                    and r['function'] == 'getSetElectricityUsagePolicyUrl']
+            self.assertEqual(len(rows), 1)
+            r = rows[0]
+            self.assertEqual(r['sender'],
+                             'ElectricityUsageHelper::setSiteTOUDetail @0x31b90a0')
+            self.assertEqual(r['sender_kind'], 'callee')
+            self.assertEqual(r['sender_via'],
+                             ['ElectricityUsageHelper::setManualSetTOUDetail @0x31b8da8'])
+            self.assertNotIn('@0x31de7dc', ' '.join(r['sender_via']))
+
+    def test_faqs_literal_is_a_path_check(self):
+        rows = [r for r in self.inv['rows'] if r['url'] == '/app/help/faqs'
+                and r['role'] == 'url_provider']
+        self.assertEqual(len(rows), 2)
+        for r in rows:
+            self.assertEqual(r['resolution'], 'generic-path-check')
+            self.assertNotIn('sender', r)
+
+    def test_formerly_unresolved_same_function_senders_resolve(self):
+        want = {'0x22d7594', '0x22ba090', '0x24a40fc', '0x27e20b4', '0x29b0b28',
+                '0x29b0c8c', '0x2d90620', '0x31211e0', '0x3313658'}
+        got = {}
+        for r in self.inv['rows']:
+            if r['role'] == 'url_provider' and r['addr'] in want:
+                got.setdefault(r['addr'], []).append(r)
+        self.assertEqual(set(got), want)
+        for addr, rs in got.items():
+            for r in rs:
+                if addr == '0x3313658':
+                    # the upload runs in SmallChargingHttpMixin.uploadStream, a
+                    # deduplicated mixin method whose body is not in the dump
+                    self.assertEqual(r['resolution'], 'mixin-gap')
+                else:
+                    self.assertIn('sender', r, (addr, r['url']))
 
     def test_unresolved_stays_a_provider(self):
-        r = self.row(self._timezone_url(), 'getDeviceTimezone')
-        self.assertEqual(r['role'], 'url_provider')
-        self.assertEqual(r['resolution'], 'unresolved')
-        self.assertNotIn('sender', r)
-
-    def _timezone_url(self):
-        return [x['url'] for x in self.inv['rows']
-                if x['function'] == 'getDeviceTimezone'][0]
+        rows = [r for r in self.inv['rows'] if r['function'] == 'isAlexaAuthUrl']
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]['role'], 'url_provider')
+        self.assertEqual(rows[0]['resolution'], 'unresolved')
+        self.assertNotIn('sender', rows[0])
 
 
 class RenderNote(unittest.TestCase):
-    def test_note_cites_file_before_address(self):
+    ROW = {'dart_file': 'api/p.dart', 'url_addr': '0x1004'}
+
+    def note(self, **kw):
         import render_pages
-        note = render_pages._sender_note({
-            'sender': 'C2::run @0x2200', 'sender_file': 'ui/c2.dart',
-            'sender_via': ['C1::run @0x2100', 'C2::run @0x2200'],
-            'sender_via_files': ['ui/c1.dart', 'ui/c2.dart']})
+        return render_pages._sender_note(dict(self.ROW, **kw))
+
+    def test_note_cites_file_before_address(self):
+        note = self.note(
+            sender='C2::run @0x2200', sender_file='ui/c2.dart', sender_kind='self',
+            sender_via=['C1::run @0x2100', 'C2::run @0x2200'],
+            sender_via_files=['ui/c1.dart', 'ui/c2.dart'])
         self.assertIn('`ui/c1.dart @0x2100`', note)
         self.assertIn('`ui/c2.dart @0x2200`', note)
 
-    def test_note_for_gap_and_unresolved(self):
+    def test_note_names_the_literal_and_carries_the_caveat(self):
         import render_pages
-        self.assertIn('UNCONFIRMED',
-                      render_pages._sender_note({'resolution': 'mixin-gap'}))
-        self.assertIn('3 caller levels',
-                      render_pages._sender_note({'resolution': 'unresolved'}))
-        self.assertEqual(render_pages._sender_note({}), '')
+        for kind, via in (('self', []), ('wrapper', ['C1::run @0x2100']),
+                          ('callee', ['C1::run @0x2100'])):
+            note = self.note(sender='S::go @0x3000', sender_file='x/s.dart',
+                             sender_kind=kind, sender_wrapper='W::w',
+                             sender_via=via, sender_via_files=['ui/c1.dart'] * len(via))
+            self.assertIn('`api/p.dart @0x1004`', note)
+            self.assertIn(render_pages.CAVEAT, note)
+        self.assertIn('it may send other URLs too', render_pages.CAVEAT)
+
+    def test_note_for_gap_unresolved_and_path_check(self):
+        self.assertIn('UNCONFIRMED', self.note(resolution='mixin-gap'))
+        self.assertIn('3 caller levels', self.note(resolution='unresolved'))
+        self.assertIn('path check', self.note(resolution='generic-path-check'))
+        self.assertEqual(self.note(), '')
