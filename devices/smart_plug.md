@@ -84,6 +84,6 @@ Per thomluther (Issue #150, latest comments):
 
 ## Known unknowns
 
-None recorded beyond the row-level notes above.
+None recorded beyond the row-level notes above. Open test requests for this product are listed in [docs/DEVICE_TEST_BACKLOG.md](../docs/DEVICE_TEST_BACKLOG.md) (pick a row).
 
 Open requests to device owners are listed under "What's still needed" above.

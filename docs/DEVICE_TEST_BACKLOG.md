@@ -234,7 +234,7 @@ BLE rows need the device off WiFi: BLE is unavailable while the device is on WiF
 
 | # | prio | page / section | PN | what to send | what to look for | status | who could test |
 |---|---|---|---|---|---|---|---|
-| 106 | P2 | [devices/ev_charger.md § Known unknowns](../devices/ev_charger.md#known-unknowns): field-to-tag mapping | A5190, A5191 | Change one setting at a time in the app with mqtt_monitor running (as the owner page requests). | Which TLV tag changes per setting. | open |  |
+| 106 | P2 | [devices/ev_charger.md § What's needed from device owners](../devices/ev_charger.md#whats-needed-from-device-owners): field-to-tag mapping | A5190, A5191 | Change one setting at a time in the app with mqtt_monitor running (as the owner page requests). | Which TLV tag changes per setting. | open |  |
 | 107 | P2 | [flows/ev_charger_start_charging.md § Known unknowns](../flows/ev_charger_start_charging.md#known-unknowns): start charging transport and bytes | A5190, A5191 | Start charging from the app and capture BLE and MQTT. | Transport used for the property write and the bytes sent. | open |  |
 | 108 | P3 | [api/power_service/rfid/delete_device_card.md § Known unknowns](../api/power_service/rfid/delete_device_card.md#known-unknowns): RFID card removal | A5190, A5191 | Delete a card in the app and then present it to the charger. | Whether the card is also removed on the charger. | open |  |
 
