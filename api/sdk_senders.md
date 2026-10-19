@@ -24,7 +24,7 @@ This page owns the list of senders that reach the SDK without a `*Http*` wrapper
 | `AkNetwork.requestHttp` | `base_service/util/ak_util/src/ak_network.dart @0x21c3444` | `@0x21c3544` (`AKIoTKitManagerImpl.handle`) | [below](#aknetworkrequesthttp) |
 | `StationApiClient.request` | `station_home/src/http/station_api_client.dart @0x2a4435c` | `@0x2a444c0` (`AkIotKitFlutter.handle`) | not covered further here |
 | `ScheduleNetwork._requestHttp` | `ev_charger/src/ev_charger/page/home/schedule_charge/network/ schedule_network.dart @0x284f6d0` | `@0x284f790` | [below](#schedulenetwork_requesthttp) |
-| `AKIotEVChargeCommand` static functions | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart` (38 cloud sends, one per function) | in the function that holds the URL literal | [below](#akiotevchargecommand-ev-charger-command-map) |
+| `AKIotEVChargeCommand` static functions | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart` (38 sends, one per function) | in the function that holds the URL literal | [below](#akiotevchargecommand-ev-charger-command-map) |
 | `AKIotAX170Command` static functions and their closures | `ats_ax170/src/sdk/command/ax170_command.dart` | in the function or closure that holds the URL literal | same envelope |
 | direct `handle` calls in UI logic | for example `TextInfoDialogLogic._setElectricianInfo`, `getElectricianInfo` (`base_service/view/text_info_dialog/text_info_dialog_logic.dart`) | next to the URL literal | same envelope |
 

@@ -35,6 +35,8 @@ Blutter prints register immediates RAW, e.g. `r16 = 246` for `mov x16, #0xf6`. D
 
 Look at the instructions right after the immediate.
 
+Tag: untagged by design (the table defines how to read immediates; it states no app fact).
+
 | Evidence after `mov xN, #imm` | Meaning | Real value |
 |---|---|---|
 | `stur wN, [xM, #off]` / `str wN, ...` (32-bit store into object field or array slot) | tagged Smi | **imm / 2** |
@@ -50,7 +52,7 @@ An odd raw immediate in a tagged slot is impossible. If you see a raw odd value 
 
 ### Verified examples (3.18.0 and 3.24.3 asm)
 
-- `setSiteDeviceParam`: `mov x16, #0x22 (34)` + `stur w16` gives cmd = **17** (matches thomluther's community-tested cmd=17).
+- `setSiteDeviceParam`: `mov x16, #0x22 (34)` + `stur w16` gives cmd = **17** (matches thomluther's community-tested cmd=17). <!-- lint: owner-cmd example -->
 - `setSiteDevicePowerLimit`: `mov x16, #0xf6 (246)` + `stur w16` gives cmd = **123** (the old docs wrongly say 246).
 - MQTT head in the old docs `cmd_status: 4, sign_code: 2, msg_seq: 2` versus upstream community-tested `cmd_status: 2, sign_code: 1, msg_seq: 1`: all of the old docs values were raw Smi (2x).
 - `auto_disaster.dart`: `"disaster_type"` then `r17 = 4` + `stur w17` gives disaster_type = **2** (old docs say 4). `is_ble` raw 4 gives **2**.
@@ -62,4 +64,4 @@ EVERY number in the exploration docs that came from a Blutter immediate (cmd cod
 
 ## Known server tolerances
 
-This section is intentionally empty for now. It will record cases where the server accepts values different from what the app sends (for example cmd 17 versus 123 for the power-limit call; to be recorded), each with the tag that earned it.
+This section is intentionally empty for now. It will record cases where the server accepts values different from what the app sends (for example the two `cmd` values of the power-limit call, listed on [api/param_types.md](api/param_types.md); to be recorded), each with the tag that earned it.

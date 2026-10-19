@@ -140,7 +140,7 @@ The decoded `cmd` of every type, with raw value, store width and address, is in 
 
 Produced with the same tool on both asm trees: `python3 -I tools/param_types.py <asm_root> --version <v> --out <file>` (3.24.3 is `data/param_types.json`; the 3.18.0 run was written to a scratch file). Number of sender functions per type (set / get, as in the `set_function` and `get_site_device_param` lists of the JSON):
 
-| param_type | 3.18.0 (set / get) | 3.24.3 (set / get) |
+| param_type | 3.18.0 count (set / get) | 3.24.3 count (set / get) |
 |---|---|---|
 | 1, 2, 3, 4, 5, 23 | 5/1, 4/1, 3/1, 3/1, 3/1, 1/1 | same |
 | 6 | 17 / 14 | 18 / 16 |
