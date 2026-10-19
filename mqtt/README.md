@@ -19,7 +19,7 @@ Not here: endpoint payloads ([../api/README.md](../api/README.md)), BLE opcodes 
 | [a17b1.md](a17b1.md) | A17B1 JSON status messages and the app model with DataFlow and Bd | 100-101, 350-354 |
 | [a5101.md](a5101.md) | A5101 JSON status, BLE data code maps (corrected pairing), 002d, 0030 | 199-216, 316-317, 651 (189-198 are API models owned by `models/hes.md`) |
 
-Pages carry their own status header with the lowest tag on that page. `asm-traced`: envelope, a17c1, a17c1_status, a17c5, a17b1, a5101, a172x, a1771, a1753, a1780, a1790, a2345, a91b2, a17c0. `string-only`: a17x8 (the 0040/0057 binding), a17x7 (the `ad` alternate source), a17c2 (field labels from debug strings), a1340 (device-level debug strings) and shelly (strings and a new tag read, no audit row). `upstream-confirmed`: upstream_commands (index of upstream constants). The three enum references (audit rows 103-160) are linked from the PN pages and will be owned by `reference/enums.md`.
+Pages carry their own status header with the lowest tag on that page. `asm-traced`: envelope, a17c1, a17c1_status, a17c5, a17b1, a5101, a172x, a1771, a1753, a1780, a1790, a2345, a91b2, a17c0, iot. `string-only`: a17x8 (the 0040/0057 binding), a17x7 (the `ad` alternate source), a17c2 (field labels from debug strings), a1340 (device-level debug strings) and shelly (strings and a new tag read, no audit row). `upstream-confirmed`: upstream_commands (index of upstream constants). The three enum references (audit rows 103-160) are linked from the PN pages and will be owned by `reference/enums.md`.
 
 ## Pages written (Task 3.6b)
 
@@ -41,6 +41,12 @@ Pages carry their own status header with the lowest tag on that page. `asm-trace
 
 Audit rows without an MQTT page: 189-198 are API response models and examples (not MQTT facts); their owners are the `models/` pages ([../models/scene_info_model.md](../models/scene_info_model.md) for 189-190, [../models/site_device_param_response.md](../models/site_device_param_response.md) for 191, [../models/hes.md](../models/hes.md) for 193-195 and 197-198, [../models/heat_pump_param.md](../models/heat_pump_param.md) for 196; row 192 is a JSON example with no asm value). Rows 89-97 (data structures) are owned by [a1790.md](a1790.md) (SubBatteryInfo, 89-90) and [a2345.md](a2345.md) (OutputPortInfo, 91-97).
 
+## Pages written (Task 3.6c)
+
+| page | covers | audit rows (docs/audit/BLE_COMMAND_MAP.md) |
+|---|---|---|
+| [iot.md](iot.md) | The generic decoder (`IotDeviceController` in `iot_anker_controller.dart`, 3.18.0 list entry `iot`) and the shared pipeline: MQTT receive path and topic gate, PN routing in `createByProductCode` (52 literals, fallback to the iot controller), `parseResponse` frame checks, the `chargingOpcodeMap` and `commonOpcodeMap` opcode tables, `_parsePayloadData` dispatch, `parseCommonData` tag map, the fallback controller's three branches | 14, 15, 25, 48-52 (no audit row names the iot decoder; the rest is new asm reads) |
+
 ## Source conflicts (unresolved)
 
 - Tag `fd`: upstream describes a millisecond timestamp string, the app builders write a CRC32 (audit rows 24, 219-221). See [envelope.md](envelope.md#tlv-frame) and [a17c1.md](a17c1.md#005e-setbackpower-settacticstime-setpeakvalley). Untested here.
@@ -59,4 +65,4 @@ Audit rows without an MQTT page: 189-198 are API response models and examples (n
 
 ## Not covered by 3.6a and 3.6b
 
-Audit rows 318-323 and 653 (EverFrost cooler A17A0 to A17A5: command-key map, not TLV), row 315 (A5190/A5191 `encoding_type`, UNVERIFIABLE, recorded in [envelope.md](envelope.md#known-unknowns)), the EV charger constants of [upstream_commands.md](upstream_commands.md) (no EV charger PN page yet) and the `iot` decoder have no page. They were not part of the 3.6a or 3.6b scope; the 3.6a list of pending products is empty.
+Audit rows 318-323 and 653 (EverFrost cooler A17A0 to A17A5: command-key map, not TLV), row 315 (A5190/A5191 `encoding_type`, UNVERIFIABLE, recorded in [envelope.md](envelope.md#known-unknowns)) and the EV charger constants of [upstream_commands.md](upstream_commands.md) (no EV charger PN page yet) have no page. They were not part of the 3.6a or 3.6b scope; the 3.6a list of pending products is empty. The `iot` decoder is now [iot.md](iot.md); its product-routing table also lists the products that have a controller but no PN page (A1770, A1780P, A5140 family, A5150, A17Y0, EverFrost A17A0 to A17A5).
