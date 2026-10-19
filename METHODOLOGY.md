@@ -12,22 +12,22 @@ Evidence comes from three sources, in this order of priority:
 2. **Blutter asm of App 3.18.0** is used for diffs only, to say what changed since the previous version. It never confirms a fact about 3.24.3 on its own. Facts that exist only in 3.18.0 are history, not current behavior.
 3. **Upstream code and live device tests** are used for confirmation. The code of [thomluther/anker-solix-api](https://github.com/thomluther/anker-solix-api) (community-tested on real devices) can earn `upstream-confirmed`. A request that someone actually sent to a real device, with the recorded response, can earn `device-tested`.
 
-When sources disagree, the higher-priority source wins for what the app sends, and the disagreement is documented rather than silently resolved. Upstream names (`apitypes.py` keys, `mqttmap` names) win over ours; a name of ours is marked `(no upstream name)`.
+When sources disagree, the higher-priority source wins for what the app sends, and the disagreement is documented rather than silently resolved. When a device test contradicts the asm reading, the device result is recorded as `device-tested` and the asm reading stays as a note: the device is the final authority for what the server accepts, and asm is the authority for what the app sends. Upstream names (`apitypes.py` keys, `mqttmap` names) win over ours; a name of ours is marked `(no upstream name)`.
 
 ## Confidence tags
 
 Every page carries one of exactly these four tags in its status header, and individual claims may carry them inline.
 
-- `asm-traced`: the fact is backed by a cited asm site in the 3.24.3 Blutter output (`file.dart @0xADDR`), and the Smi rule below has been applied to any integer.
-- `string-only`: the string exists in the binary (for example in `pp.txt` or `libapp.so`), but there is no traced caller and no asm site, so we do not know where or whether it is used.
+- `asm-traced`: the fact is backed by a cited asm site in the 3.24.3 Blutter output (`file.dart @0xADDR`), and the Smi rule below has been applied to any integer. Only 3.24.3 asm earns this tag; 3.18.0 asm never does.
+- `string-only`: the string exists in the 3.24.3 binary (`pp.txt` or `strings`), but no call site in the 3.24.3 asm has been traced; a mere cross-reference without a traced caller still counts as string-only. Strings seen only in 3.18.0 are not documented as current facts at all; they appear only in "changed since" notes.
 - `upstream-confirmed`: the fact matches code in thomluther/anker-solix-api that the community runs against real accounts and devices; name the upstream file and symbol.
-- `device-tested`: someone sent the request to a real device and recorded the response; the record must name who, which device, and the date.
+- `device-tested`: a real device accepted or rejected the exact payload; any client counts (official app capture, upstream library, raw request), and the record must name client and version, device PN and firmware, date, and who tested.
 
-A fact can earn more than one tag over time; the page header states the strongest tag that fully covers the page, and a mixed page tags the weaker claims inline.
+The tags are ranked `device-tested` > `upstream-confirmed` > `asm-traced` > `string-only`. A fact can earn more than one tag over time, and the status-header tag of a page is the LOWEST tag among the facts on that page, i.e. the tag that covers every fact; stronger claims on a mixed page may carry their own tag inline.
 
 ## Smi rule: reading numbers from Blutter output
 
-This section is the audit rule from `v3.24.3/audit/SMI_RULE.md`, which must be read before auditing any number.
+This rule originated in an internal audit note on 2026-10-19; this page is the authoritative copy, and it must be read before auditing any number.
 
 Blutter prints register immediates RAW, e.g. `r16 = 246` for `mov x16, #0xf6`. Dart on arm64 stores small integers as **Smi = value << 1** (tagged). So a raw immediate that ends up in a *tagged* slot represents value/2.
 
@@ -62,4 +62,4 @@ EVERY number in the exploration docs that came from a Blutter immediate (cmd cod
 
 ## Known server tolerances
 
-This section is intentionally empty for now. It will record cases where the server accepts values different from what the app sends (for example cmd 17 versus 123 for the power-limit call; the result is still pending), each with the tag that earned it.
+This section is intentionally empty for now. It will record cases where the server accepts values different from what the app sends (for example cmd 17 versus 123 for the power-limit call; to be recorded), each with the tag that earned it.
