@@ -1,5 +1,7 @@
 # Business Rules — A17C1 Solarbank 2 Pro
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/BUSINESS_RULES.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > Extracted from APK UI controller and device controller assembly.
 > These rules determine WHEN a SET command is allowed and WHAT values are valid.
 > **This information is NOT available from mqtt_monitor or API documentation.**

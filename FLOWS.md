@@ -1,5 +1,7 @@
 # Command Flows — Step-by-Step Traces
 
+> **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/FLOWS.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
 > Complete traces from UI button press to wire bytes.
 > Each flow shows: what the user does → what the app validates →
 > what bytes are sent → what response is expected.
