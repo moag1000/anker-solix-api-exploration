@@ -17,7 +17,7 @@ Not here: endpoint payloads ([../api/README.md](../api/README.md)), BLE opcodes 
 | [a17x8.md](a17x8.md) | A17X8 0405, CountDownInfo, TimingInfo, 007a, 007c, 007e, 007f, 007d, 0079, 007b | 1, 55, 67-77, 79-83, 167, 187, 229-230, 236-242, 355-368 |
 | [a17x7.md](a17x7.md) | A17X7 0405 and parseWorkInfo, A17X7US variant note | 58, 264-294 |
 | [a17b1.md](a17b1.md) | A17B1 JSON status messages and the app model with DataFlow and Bd | 100-101, 350-354 |
-| [a5101.md](a5101.md) | A5101 JSON status, BLE data code maps (corrected pairing), 002d, 0030 | 199-216, 316-317, 651 (189-198 are API models owned by `models/hes.md`) |
+| [a5101.md](a5101.md) | A5101 JSON status, BLE data code maps (corrected pairing), 002d (getBluetoothOTAStatus), 0115, 0030, work mode numbers | 199-216, 316-317, 651 (189-198 are API models owned by `models/hes.md`) |
 
 Pages carry their own status header with the lowest tag on that page. `asm-traced`: envelope, a17c1, a17c1_status, a17c5, a17b1, a5101, a172x, a1771, a1753, a1780, a1790, a2345, a91b2, a17c0, iot. `string-only`: a17x8 (the 0040/0057 binding), a17x7 (the `ad` alternate source), a17c2 (field labels from debug strings), a1340 (device-level debug strings) and shelly (strings and a new tag read, no audit row). `upstream-confirmed`: upstream_commands (index of upstream constants). The three enum references (audit rows 103-160) are linked from the PN pages and will be owned by `reference/enums.md`.
 
