@@ -32,7 +32,7 @@
 
 | Source | Method | What it provides | Confidence |
 |--------|--------|-----------------|------------|
-| `libapp.so` (58MB ARM64 ELF) | [Blutter](https://github.com/worawit/blutter) AOT decompilation against Dart SDK 3.4.4 | Endpoint paths, function names, request params, response model fields, required/optional classification | Medium — string constants are reliable, param-to-endpoint attribution may have errors |
+| `libapp.so` (78 MB ARM64 ELF) | [Blutter](https://github.com/worawit/blutter) AOT decompilation against Dart SDK 3.11.0 | Endpoint paths, function names, request params, response model fields, required/optional classification | Medium — string constants are reliable, param-to-endpoint attribution may have errors |
 | `libapp.so` strings | `strings` extraction + pattern matching | MQTT field names, model `toString()` patterns, debug log messages | High for field names, low for interpretation |
 | mqtt_monitor sessions | Live MQTT traffic capture on real devices (A17C1, A17X8) | Verified MQTT command fields, state change tracking | High — byte-for-byte verified |
 | APK manifest + resources | Standard APK analysis | Device model codes, BLE UUIDs, app version | High |
@@ -40,9 +40,13 @@
 | Device-specific logic | `ui/page/device/*/` + helper classes scan | 95 additional endpoints not in central repository | Medium — device-specific, may not be available to all accounts |
 | Upstream cross-reference | thomluther/anker-solix-api code comparison | Nesting verification, missing fields, confirmed constants | High — upstream code is community-tested on real devices |
 
-**Dart SDK**: 3.4.4 (stable), snapshot hash `d20a1be77c3d3c41b2a5accaee1ce549`
+**Dart SDK**: 3.11.0 (stable), snapshot hash `78da37fed6bf1489361a312568249f3f`
 
-**APK**: Anker App v3.18.0 (build 160), package `com.anker.charging`, from APKPure
+**APK**: Anker App v3.24.3 (versionCode 237), package `com.anker.charging`, XAPK sha256 `7d6d0deab4834515c41aa5e8bafff03f9735e883f15c4f8d5b7194e871ff6ba5`
+
+**History**: previously built on App v3.18.0 (build 160), Dart SDK 3.4.4, snapshot hash `d20a1be77c3d3c41b2a5accaee1ce549`.
+
+> This repo is mid-rework: older sections may still carry 3.18.0 numbers until they are re-verified. See [METHODOLOGY.md](METHODOLOGY.md) for the rules and confidence tags used.
 
 ---
 
