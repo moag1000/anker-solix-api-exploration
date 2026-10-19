@@ -16,6 +16,10 @@ Row sources (field `source`):
             good as the localization key or log text next to it)
   issue     a code reported in a GitHub issue, tag device-tested
 
+Every row has `kind`: `api` (an error code) or `message-type-excluded` (an asm compare
+of 10000..10007 in an onMessageDispatch function or MQTT closure listed in MSG_SITES:
+a device message type that shares numbers with API codes; kept as data, not catalogued).
+
 Smi rule for the asm rows (METHODOLOGY.md): a 32-bit compare (`cmp wN, #imm` or
 `r17 = imm; cmp wN, w17`) works on a tagged int, so value = raw / 2; a 64-bit
 compare (`cmp xN, #imm` or `cmp xN, x17`) works on an unboxed int, value = raw.
@@ -48,9 +52,11 @@ ISSUE_ROWS = [
     {'code': 10004, 'source': 'issue', 'tag': 'device-tested',
      'name': 'ItemNotFoundError',
      'endpoint': '/power_service/v1/site/set_site_device_param',
-     'context': 'param_type 19, 790 W (not in power_limit_option) on an A17C5 sent '
-                'without display_type; 800 W worked (thomluther, reported in '
-                'thomluther/anker-solix-api#339 and discussed in issue 1)',
+     'kind': 'api',
+     'context': 'A17C5, 790 W (not in power_limit_option) sent with the upstream '
+                'library payload and no display_type, rejected with 10004 '
+                '(thomluther); the Device-tested table of the endpoint page owns '
+                'the record and the later tests',
      'url': 'https://github.com/moag1000/anker-solix-api-exploration/issues/1'
             '#issuecomment-6263845744',
      'reported_by': 'thomluther', 'reported': '2026-10-18'},
@@ -159,6 +165,39 @@ SITES = [
     ('unity/src/main/weather/weather_manager.dart', '0x451e5c0', 'syncLocationToCloud', 20000),
 ]
 
+# onMessageDispatch functions and two MQTT-model closures that compare 10000..10007:
+# device message types, not API error codes.  Recorded as kind "message-type-excluded"
+# so that the exclusion is data (file, function address, label, smallest, largest).
+_SET = 'charging/ui/page/device/a5101/setting/'
+MSG_SITES = [
+    (_SET + 'advanced_config/advanced_config_logic.dart', '0x277c6cc', 'onMessageDispatch'),
+    (_SET + 'cls_setting/cls_setting_logic.dart', '0x27c6d34', 'onMessageDispatch'),
+    (_SET + 'device_manager/ev_charger/ev_charger_manager_logic.dart', '0x27854c8',
+     'onMessageDispatch'),
+    (_SET + 'device_manager/heat_pump/controller.dart', '0x2785830', 'onMessageDispatch'),
+    (_SET + 'device_manager/heat_pump/timer_setting/timer_setting_logic.dart', '0x2785a20',
+     'onMessageDispatch'),
+    (_SET + 'device_manager/oil_engine/manage_devices_logic.dart', '0x2786af0',
+     'onMessageDispatch'),
+    (_SET + 'grid_sensitivity/a5101_grid_sensitivity_logic.dart', '0x27c9204',
+     'onMessageDispatch'),
+    (_SET + 'homeSetting/save_tou_plan_logic.dart', '0x27ce290', 'onMessageDispatch'),
+    (_SET + 'remote_switch/remote_switch_logic.dart', '0x27ce5e0', 'onMessageDispatch'),
+    (_SET + 'screen_timeout/screen_timeout_logic.dart', '0x2786dd4', 'onMessageDispatch'),
+    (_SET + 'systemPolicy/system_policy_logic.dart', '0x278aa5c', 'onMessageDispatch'),
+    (_SET + 'utility_rate_plan/rate_plan_structure/nem_rate/nem_plan_edit/'
+     'nem_plan_edit_logic.dart', '0x278e894', 'onMessageDispatch'),
+    (_SET + 'utility_rate_plan/rate_plan_structure/nem_rate/nem_rate_plan/'
+     'nem_rate_plan_logic.dart', '0x278ffbc', 'onMessageDispatch'),
+    ('charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart', '0x27ac7b8',
+     'onMessageDispatch'),
+    ('charging/ui/page/family/family_main_page_logic.dart', '0x23e1df0',
+     'closure (MQTT device state model)'),
+    ('charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart', '0x23ae448',
+     'closure (MQTT)'),
+]
+MSG_RANGE = (10000, 10007)
+
 CMP_IMM = re.compile(r'^cmp\s+([wx])\d+,\s+#(0x[0-9a-f]+|\d+)$')
 CMP_REG = re.compile(r'^cmp\s+([wx])\d+,\s+([wx])17$')
 R17 = re.compile(r'^r17 = (\d+)$')
@@ -185,7 +224,7 @@ def _compare(instrs, i):
     return None
 
 
-def scan_function(fn, min_value, label=None):
+def scan_function(fn, min_value, label=None, max_value=None):
     """Return the code compares of one function as row dicts (no source fields)."""
     ins = fn.instrs
     hits = [(i, _compare(ins, i)) for i in range(len(ins))]
@@ -193,7 +232,7 @@ def scan_function(fn, min_value, label=None):
     rows = []
     for k, (i, (form, width, raw)) in enumerate(hits):
         value = smi_value(width, raw)
-        if value < min_value:
+        if value < min_value or (max_value is not None and value > max_value):
             continue
         # the compare instruction itself carries the address; for `r17 = N` the
         # citation is the load of the constant, which is the first of the pair
@@ -217,8 +256,8 @@ def scan_function(fn, min_value, label=None):
     return rows
 
 
-def scan_sites(asm_root, sites=None):
-    """Read the listed handler functions of the asm tree; return asm rows."""
+def scan_sites(asm_root, sites=None, kind='api', max_value=None):
+    """Read the listed functions of the asm tree; return asm rows of this kind."""
     sites = SITES if sites is None else sites
     by_file = {}
     for rel, addr, label, minv in sites:
@@ -233,8 +272,9 @@ def scan_sites(asm_root, sites=None):
         for fn in A.iter_functions(path, rel):
             if fn.addr in want:
                 label, minv = want.pop(fn.addr)
-                for r in scan_function(fn, minv, label):
-                    r.update({'source': 'asm', 'tag': 'asm-traced', 'file': rel})
+                for r in scan_function(fn, minv, label, max_value):
+                    r.update({'source': 'asm', 'tag': 'asm-traced', 'file': rel,
+                              'kind': kind})
                     rows.append(r)
         missing += ['%s %s' % (rel, a) for a in want]
     return rows, missing
@@ -262,14 +302,19 @@ def parse_upstream(path):
             'code': code, 'source': 'upstream', 'tag': 'upstream-confirmed',
             'name': cls, 'base': info.get('base'), 'message': info.get('doc', ''),
             'line': line, 'class_line': info.get('line'),
-            'file': 'api/errors.py'})
+            'file': 'api/errors.py', 'kind': 'api'})
     return rows
 
 
-def build(asm_root, upstream_path, sites=None):
+def build(asm_root, upstream_path, sites=None, msg_sites=None):
     rows = parse_upstream(upstream_path)
     asm_rows, missing = scan_sites(asm_root, sites)
-    rows += asm_rows + [dict(r) for r in ISSUE_ROWS]
+    msg = MSG_SITES if msg_sites is None else msg_sites
+    msg_rows, miss2 = scan_sites(
+        asm_root, [(f, a, lb, MSG_RANGE[0]) for f, a, lb in msg], 'message-type-excluded',
+        MSG_RANGE[1])
+    missing += miss2
+    rows += asm_rows + msg_rows + [dict(r) for r in ISSUE_ROWS]
     rows.sort(key=lambda r: (r['code'], r['source'], r.get('file', ''),
                              r.get('addr', ''), r.get('line', 0)))
     return rows, missing
@@ -289,7 +334,7 @@ def page_gaps(repo, rows):
     with open(page, encoding='utf-8') as fh:
         text = fh.read()
     have = {int(m.group(1)) for m in re.finditer(r'^\|\s*(\d+)\s*\|', text, re.M)}
-    return sorted({r['code'] for r in rows} - have)
+    return sorted({r['code'] for r in rows if r['kind'] == 'api'} - have)
 
 
 def write_guarded(repo, text):
@@ -319,8 +364,10 @@ def main(argv=None):
     gaps = page_gaps(a.repo, rows)
     counts = {}
     for r in rows:
-        counts[r['source']] = counts.get(r['source'], 0) + 1
-    print(json.dumps({'codes': len({r['code'] for r in rows}), 'rows': counts},
+        k = r['source'] if r['kind'] == 'api' else r['kind']
+        counts[k] = counts.get(k, 0) + 1
+    print(json.dumps({'codes': len({r['code'] for r in rows if r['kind'] == 'api'}),
+                      'rows': counts},
                      sort_keys=True))
     if gaps:
         print('codes without a table row in %s: %s' % (PAGE_REL, gaps))

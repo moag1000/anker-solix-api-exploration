@@ -1,6 +1,8 @@
 """Tests for tools/error_codes.py.
 
-Run from the repo root:  python3 -I -m unittest discover -s tools/tests -t .
+Run from the repo root (both forms verified):
+  python3 -I -m unittest discover -s tools/tests -t . -p 'test_error_codes.py'
+  python3 -m unittest tools.tests.test_error_codes      (no -I: -I drops the cwd from sys.path)
 Synthetic inputs cover the Smi rule, the compare shapes, the upstream parser, the
 output guard and --check; two checks read the real 3.24.3 asm and skip when the
 root is missing.
@@ -69,8 +71,8 @@ FAKE_ASM = '''class Handler {
   }
   _ other(/* No info */) {
     // ** addr: 0x2000, size: 0x20
-    // 0x2000: r17 = 99999
-    //     0x2000: mov             x17, #0x1869f
+    // 0x2000: r17 = 10004
+    //     0x2000: mov             x17, #0x2714
     // 0x2004: cmp             x0, x17
     // 0x2008: b.ne            #0x2020
   }
@@ -100,6 +102,7 @@ def make_upstream(tmp):
 
 
 FAKE_SITES = [(FAKE_FILE, '0x1000', 'handle', 1000)]
+FAKE_MSG = [(FAKE_FILE, '0x2000', 'onMessageDispatch')]
 
 
 class SmiRuleTest(unittest.TestCase):
@@ -136,8 +139,9 @@ class ScanTest(unittest.TestCase):
         self.assertEqual([r['code'] for r in self.rows(minv=26000)], [26108])
         with tempfile.TemporaryDirectory() as tmp:
             rows, missing = E.scan_sites(make_asm(tmp), FAKE_SITES)
-            # `other` (0x2000) is not listed, so its 99999 never shows up
-            self.assertNotIn(99999, [r['code'] for r in rows])
+            # `other` (0x2000) is not an api site, so its 10004 never shows up here
+            self.assertNotIn(10004, [r['code'] for r in rows])
+            self.assertTrue(all(r['kind'] == 'api' for r in rows))
             self.assertEqual(missing, [])
             self.assertTrue(all(r['source'] == 'asm' and r['tag'] == 'asm-traced'
                                 for r in rows))
@@ -166,14 +170,14 @@ class BuildAndCliTest(unittest.TestCase):
         out, err = io.StringIO(), io.StringIO()
         repo = os.path.join(tmp, 'repo')
         os.makedirs(repo, exist_ok=True)
-        old = E.SITES
-        E.SITES = FAKE_SITES
+        old, old_msg = E.SITES, E.MSG_SITES
+        E.SITES, E.MSG_SITES = FAKE_SITES, FAKE_MSG
         try:
             with redirect_stdout(out), redirect_stderr(err):
                 rc = E.main(['--repo', repo, '--asm', os.path.join(tmp, 'asm'),
                              '--upstream', os.path.join(tmp, 'errors.py')] + list(extra))
         finally:
-            E.SITES = old
+            E.SITES, E.MSG_SITES = old, old_msg
         return rc, out.getvalue(), repo
 
     def setup_tmp(self, tmp):
@@ -184,12 +188,27 @@ class BuildAndCliTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             self.setup_tmp(tmp)
             rows, missing = E.build(os.path.join(tmp, 'asm'),
-                                    os.path.join(tmp, 'errors.py'), FAKE_SITES)
+                                    os.path.join(tmp, 'errors.py'), FAKE_SITES, FAKE_MSG)
         self.assertEqual(missing, [])
         self.assertEqual([r['code'] for r in rows], sorted(r['code'] for r in rows))
         issue = [r for r in rows if r['source'] == 'issue']
         self.assertEqual([(r['code'], r['tag']) for r in issue], [(10004, 'device-tested')])
         self.assertIn('issues/1', issue[0]['url'])
+        self.assertNotIn('800', issue[0]['context'])
+
+    def test_kind_field_and_message_type_rows(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.setup_tmp(tmp)
+            rows, _ = E.build(os.path.join(tmp, 'asm'), os.path.join(tmp, 'errors.py'),
+                              FAKE_SITES, FAKE_MSG)
+        self.assertTrue(all(r['kind'] in ('api', 'message-type-excluded') for r in rows))
+        msg = [r for r in rows if r['kind'] == 'message-type-excluded']
+        self.assertEqual([(r['code'], r['addr'], r['function']) for r in msg],
+                         [(10004, '0x2000', 'onMessageDispatch')])
+        # the 10004 of upstream and the issue stay api rows
+        self.assertEqual(sorted(r['source'] for r in rows
+                                if r['kind'] == 'api' and r['code'] == 10004),
+                         ['issue', 'upstream'])
 
     def test_write_is_idempotent_and_guarded(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -243,11 +262,25 @@ class BuildAndCliTest(unittest.TestCase):
                     '| %d | a |\n' % c for c in codes))
             self.assertEqual(self.run_main(tmp, '--check')[0], 0)
 
+    def test_message_type_codes_need_no_page_row(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.setup_tmp(tmp)
+            rows, _ = E.build(os.path.join(tmp, 'asm'), os.path.join(tmp, 'errors.py'),
+                              FAKE_SITES, [(FAKE_FILE, '0x2000', 'd')])
+            rows = [dict(r) for r in rows]
+            rows.append({'code': 10001, 'kind': 'message-type-excluded', 'source': 'asm'})
+            repo = os.path.join(tmp, 'repo')
+            os.makedirs(os.path.join(repo, 'api'))
+            with open(os.path.join(repo, 'api', 'errors.md'), 'w', encoding='utf-8') as fh:
+                fh.write(''.join('| %d | a |\n' % c for c in sorted(
+                    {r['code'] for r in rows if r['kind'] == 'api'})))
+            self.assertEqual(E.page_gaps(repo, rows), [])
+
     def test_unknown_site_aborts_without_writing(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.setup_tmp(tmp)
-            old = E.SITES
-            E.SITES = [(FAKE_FILE, '0x9999', 'x', 1000)]
+            old, old_msg = E.SITES, E.MSG_SITES
+            E.SITES, E.MSG_SITES = [(FAKE_FILE, '0x9999', 'x', 1000)], []
             try:
                 repo = os.path.join(tmp, 'repo')
                 os.makedirs(repo)
@@ -255,7 +288,7 @@ class BuildAndCliTest(unittest.TestCase):
                     rc = E.main(['--repo', repo, '--asm', os.path.join(tmp, 'asm'),
                                  '--upstream', os.path.join(tmp, 'errors.py')])
             finally:
-                E.SITES = old
+                E.SITES, E.MSG_SITES = old, old_msg
             self.assertEqual(rc, 2)
             self.assertFalse(os.path.exists(os.path.join(repo, 'data')))
 
@@ -285,6 +318,18 @@ class RealDataTest(unittest.TestCase):
         # LoginLogic::handleLoginFail: cmp x0, x17 with r17 = 26108, raw is real
         r = self.find('asm', 26108, addr='0x3bd22b8')
         self.assertEqual([(x['width'], x['raw']) for x in r], [('x', 26108)])
+
+    def test_message_types_recorded_not_catalogued(self):
+        msg = [r for r in self.rows if r['kind'] == 'message-type-excluded']
+        self.assertEqual({r['code'] for r in msg},
+                         {10000, 10001, 10003, 10004, 10005, 10006, 10007})
+        r = [x for x in msg if x['code'] == 10004]
+        self.assertEqual([(x['file'].split('/')[-1], x['addr']) for x in r],
+                         [('auto_disaster_tips_logic.dart', '0x27acc3c')])
+        self.assertTrue(all(x['function'] != 'handleLoginFail' for x in msg))
+        # the api rows never include these functions
+        self.assertFalse([x for x in self.rows if x['kind'] == 'api'
+                          and x.get('function') == 'onMessageDispatch'])
 
     def test_upstream_and_issue_rows(self):
         self.assertEqual(self.find('upstream', 10004)[0]['name'], 'ItemNotFoundError')
