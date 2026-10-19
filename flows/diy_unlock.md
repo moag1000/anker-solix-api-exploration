@@ -27,7 +27,7 @@ The sheet opens when the user confirms a power value that is above the legal lim
 | 3 | app | Variant `image`: shows the image and the text; confirm calls the callback of the sheet. Variant `h5`: shows a web page (`InAppWebView`) loaded from `https://anker-webview-us-qa.anker.com/over-power.html?country=` plus the region, a consent toggle and a confirm button. | this page | `diy_legal_power_limit_sheet.dart @0x43583b0` (URL), `@0x4358f94` (toggle), `@0x30b9f6c` (confirm button) |
 | 4 | user | Variant `imagePassword`: types the unlock code and confirms. The handler returns without a request when the code is empty. | [verify_unlock_default_power_code](../api/devicecontrol/device/verify_unlock_default_power_code.md) | `diy_legal_power_limit_sheet.dart @0x30bbef4` |
 | 5 | app | Sends `verify_unlock_default_power_code` with `unlock_code` and exactly one of `device_sn` (when a serial slot is set) or `site_id`. | [verify_unlock_default_power_code](../api/devicecontrol/device/verify_unlock_default_power_code.md#request) | `diy_legal_power_limit_sheet.dart @0x30bc02c` |
-| 6 | cloud | Answers with `verify_result`. | [verify_unlock_default_power_code](../api/devicecontrol/device/verify_unlock_default_power_code.md#response) | `string-only` |
+| 6 | cloud | Answers with `verify_result`. | [verify_unlock_default_power_code](../api/devicecontrol/device/verify_unlock_default_power_code.md#response) untagged by design (no app-side fact) |
 | 7 | app | `verify_result` true: calls the sheet's success callback. `verify_result` false or missing: shows `passwordError`. Transport or server error: logs `verifyUnlockDefaultPowerCode fail` and shows `netWorkError`. | [verify_unlock_default_power_code](../api/devicecontrol/device/verify_unlock_default_power_code.md#errors-seen) | `diy_legal_power_limit_sheet.dart @0x30bc0ac` (callback), `@0x30bc490` (`passwordError`), `@0x30bc328`, `@0x30bc374` (error) |
 | 8 | app | What the callbacks do depends on the entry point: station page, both callbacks close the sheet and set the system output limit ([system_output_limit.md](system_output_limit.md#steps)); A17C1 picker, both callbacks call `setPowerLimit` with the chosen index; grid-connected settings, both callbacks are one shared empty closure (`pp+0xa5760`, `pp+0xa5768`), so the sheet only reports its closing result to `_checkLegalLimitForDevice`, which compares it with `true`. | [solarbank_power_limit_change.md](solarbank_power_limit_change.md) | `station_power_limit_logic.dart @0x4355aec`, `@0x4355b94`; `a17c1setting_logic.dart @0x3d93024`, `@0x3d93108`; `grid_connected_settings_controller.dart @0x2af0114`, `@0x2af0130`, `@0x2aeffec` |
 
@@ -43,7 +43,7 @@ No delay or polling in the sheet code read here. A load error of the web view on
 ## Failure paths
 
 - Empty code: no request (step 4). Wrong code: `passwordError`, the sheet stays open.
-- Network or server error: `netWorkError`; no limit is changed by the sheet. Error codes: `api/errors.md`.
+- Network or server error: `netWorkError`; no limit is changed by the sheet. Error codes: [errors](../api/errors.md).
 - Web view load error (H5): logged only; whether the confirm button stays usable is not read.
 
 ## Since/changed

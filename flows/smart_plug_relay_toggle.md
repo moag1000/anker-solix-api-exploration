@@ -24,7 +24,7 @@ On the plug home page the user taps the main switch; the view calls `A17X8homeLo
 | 4 | app | Calls `A17X8DeviceController::setRelaySwitchCmd` with the opposite of the current switch value (`eor x2, x0, #0x10` flips the boolean). The controller builds tag `a2` as one byte (0 off, 1 on) for opcode `007a`. | [mqtt/a17x8.md](../mqtt/a17x8.md#007a-setrelayswitchcmd) | `a17x8home_logic.dart @0x3dd7110`, call at `@0x3dd7118`; `a17x8_device_controller.dart @0x307390c` (key `a2`), opcode `@0x3073938` |
 | 5 | app | The plug controller sends over exactly one transport per call: `bleBusinessConnected` over BLE, `wifiConnected` wrapped for MQTT, any other status sends nothing. | [ble/protocol.md](../ble/protocol.md#stacks-and-send-routing) | `a17x8_device_controller.dart @0x2419080` (BLE), `@0x24191bc` (WiFi) |
 | 6 | app | Optimistic update: writes the new value into the device field at offset 1171 and into the page's switch value without waiting for the device. If the new value is off, calls `_clearFromGridCurve`, which cancels the energy graph timer and clears two lists (the `tbz` at `@0x3dd71a4` skips the call when the value is true). | this page | `a17x8home_logic.dart @0x3dd714c`, `@0x3dd7184`, `@0x3dd71a4`, call at `@0x3dd71ac`; `_clearFromGridCurve` `@0x2764224` to `@0x276424c` |
-| 7 | device | Answers with the response opcode `setRelaySwitchRes`. | [mqtt/a17x8.md](../mqtt/a17x8.md#007a-setrelayswitchcmd) | `string-only` |
+| 7 | device | Answers with the response opcode `setRelaySwitchRes`. | [mqtt/a17x8.md](../mqtt/a17x8.md#007a-setrelayswitchcmd) | `a17x8_device_controller.dart @0x3b62b4c` |
 | 8 | app | `_handleResponse` of the plug controller matches `setRelaySwitchRes` (pool object `pp+0x10b70`), logs the success text and calls `onSwitchCommandConfirmed`, which lowers the pending counter by one, clamped to the range 0 to 999 (the raw argument 1998 is a tagged Smi), and sets the update-allowed flag back to true when the counter reaches 0. | this page | `a17x8_device_controller.dart @0x3b62b4c`, `@0x3b62b84`, `@0x3b62ba8`; `a17x8_anker_device.dart @0x3b64380`, `@0x3b643a0`, `@0x3b64424` |
 | 9 | device | Reports the relay state in the periodic status `0405`. `parseDeviceAllInfo` applies the switch tag to the device only while the update-allowed flag is true, so a status that arrives while commands are pending does not overwrite the optimistic value. | [mqtt/a17x8.md](../mqtt/a17x8.md#0405-status-message-param_info) | `a17x8_device_commands.dart @0x3b655c8` (flag read) |
 
@@ -41,7 +41,7 @@ No delay or debounce timer in `changeSwitch`, `onSwitchCommandSent` or the sette
 ## Failure paths
 
 - Plug not connected over BLE or WiFi: the command is dropped by the gate in step 5 (`a17x8_device_controller.dart @0x2419080`, `@0x24191bc`); the optimistic value of step 6 has already been written and the counter stays raised until a response arrives, so the update-allowed flag stays false. How the page recovers from this is not read.
-- No response: the counter is not lowered; no timeout is visible in these functions. Error codes: `api/errors.md`.
+- No response: the counter is not lowered; no timeout is visible in these functions. Error codes: [errors](../api/errors.md).
 
 ## Since/changed
 

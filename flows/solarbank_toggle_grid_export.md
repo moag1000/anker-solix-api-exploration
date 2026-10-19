@@ -42,7 +42,7 @@ How the app turns the grid feed-in ("0 W" switch) of a Solarbank 2 (A17C1 family
 
 - Off-grid, device not connected or settings disabled: no dialog (Preconditions).
 - Grid feed-in cloud failure: `set_device_attrs` is sent with only the `showLoading` option (`http_request_repository_impl.dart @0x3d90bdc`); a failure callback was not seen, and the device command of step 5 is sent regardless.
-- Device not reachable over BLE or WiFi: the opcode is dropped by the gate (`a17c1_device_controller.dart @0x226e238`). Error codes: `api/errors.md`.
+- Device not reachable over BLE or WiFi: the opcode is dropped by the gate (`a17c1_device_controller.dart @0x226e238`). Error codes: [errors](../api/errors.md).
 
 ## Since/changed
 

@@ -11,7 +11,7 @@ How the app starts or stops the manual backup power (manual disaster preparednes
 
 ## Preconditions
 
-- Same transport test as on the other system policy commands: the cloud path is taken when the page's connection data is non-null and both its flags are true (`field_2b`, `field_93`); otherwise the Bluetooth path. Manual: `system_policy_logic.dart @0x3ebc0cc`, `@0x3ebc0d4`, `@0x3ebc0e0`. Automatic: `@0x3ebd358`, `@0x3ebd360`, `@0x3ebd36c`.
+- Same transport test as on the other system policy commands: the cloud path is taken when the page's connection data is non-null and both its flags are true (`field_2b`, `field_93`); otherwise the Bluetooth path. The Bluetooth branch is chosen by these flags, not by a failure of the cloud request: the app never sends the same command over both paths in one tap, and Bluetooth is not a fallback for a station that is on WiFi (community finding, see [ble/protocol.md](../ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule)). Manual: `system_policy_logic.dart @0x3ebc0cc`, `@0x3ebc0d4`, `@0x3ebc0e0`. Automatic: `@0x3ebd358`, `@0x3ebd360`, `@0x3ebd36c`.
 - The manual parameter map carries the keys `disaster_preparedness_enable`, `disaster_preparedness_start`, `disaster_preparedness_end` and `disaster_preparedness_soc` (`system_policy_logic.dart @0x3ebc168`, `@0x3ebc1c4`, `@0x3ebc1fc`, `@0x3ebc234`). The SOC reserve is user-set; no default is hard-coded in these functions.
 
 ## Steps

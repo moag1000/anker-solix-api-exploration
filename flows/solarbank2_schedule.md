@@ -29,7 +29,7 @@ Variant, not the main flow: deleting an entry on the energy plan page runs `Ener
 | 6 | app | Calls `sendDeviceTacticsTime`, which sets the mode state again and calls `A17C1AnkerDevice::setTacticsTime` with the plan model. | this page | `energy_deploy_logic.dart @0x2b4afac` (call), `@0x2b4b118` (call of `setTacticsTime`) |
 | 7 | app | `A17C1DeviceController::setTacticsTime` builds the tag map (29 data tags `a2` to `be`, then the CRC32 under tag `fd`) and sends opcode `005e` through `sendCommandWithParam`. The `mtu` argument is the Smi raw 400, real 200, and is only tested for non-zero. | [mqtt/a17c1.md](../mqtt/a17c1.md#005e-setbackpower-settacticstime-setpeakvalley) | `a17c1_device_controller.dart @0x288ac88` (array length), `@0x288b238` (CRC key), `@0x288b274` (`mtu` 200); audit rows 3, 4, 5, 6, 7, 9 |
 | 8 | app | The transport is chosen by the connection status of the device. Status `bleBusinessConnected`: the frame is built for BLE (`isMoreLength` form) and written. Status `wifiConnected`: the same builder is called with `isBle` and wrapped by the MQTT transformer. Any other status: nothing is sent. | [ble/protocol.md](../ble/protocol.md#stacks-and-send-routing), [reference/enums.md](../reference/enums.md#deviceconnectionstatus) | `a17c1_device_controller.dart @0x226e22c` (BLE test), `@0x226e4e4` (WiFi test), `@0x226e238` and `@0x226e4f0` (fall through to return) |
-| 9 | device | Receives the command. The reply handling is not part of this flow. | [mqtt/a17c1.md](../mqtt/a17c1.md#005e-setbackpower-settacticstime-setpeakvalley) | `string-only` |
+| 9 | device | Receives the command. The reply handling is not part of this flow. | [mqtt/a17c1.md](../mqtt/a17c1.md#005e-setbackpower-settacticstime-setpeakvalley) untagged by design (no app-side fact) |
 
 Dual-path claim of the old page ("BLE and API both sent"): the cloud save (steps 4 and 5) is always sent; the device command (steps 6 to 8) uses exactly one transport per call, chosen at `a17c1_device_controller.dart @0x226e22c` and `@0x226e4e4`. The call from `deleteHomeLoadData` is stricter: it sends the device command only when the status is `bleBusinessConnected` (`energy_plan_logic.dart @0x3dacda4` to `@0x3dacdb0`; the compared pool object is `pp+0xca68`, member `bleBusinessConnected`). BLE is not a live fallback for a device that is on WiFi, see [ble/protocol.md](../ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule).
 
@@ -46,7 +46,7 @@ No `Future.delayed` or timer is in `sendHomeLoadData`, `saveHomeLoadData` or `se
 
 - No network: toast, nothing sent (Preconditions).
 - No repeat day: toast `a17c1RepeatPeriodEmpty`, nothing sent.
-- Cloud errors: the `fail` callback of step 4 is a closure allocated at `energy_deploy_logic.dart @0x2b4ad8c`; its body is not read. Error codes: `api/errors.md`.
+- Cloud errors: the `fail` callback of step 4 is a closure allocated at `energy_deploy_logic.dart @0x2b4ad8c`; its body is not read. Error codes: [errors](../api/errors.md).
 - Device not connected over BLE or WiFi: the command of step 7 is dropped without a message at this level (`a17c1_device_controller.dart @0x226e238`).
 
 ## Since/changed

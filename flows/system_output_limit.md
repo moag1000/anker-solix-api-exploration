@@ -2,7 +2,7 @@
 
 # System output limit
 
-How the app sets the system output power limit of a station in 10 W steps (param_type 19). This page links to the owners of every payload; it copies none. The `display_type` key that 3.24.3 adds to the request is described on the endpoint page.
+How the app sets the system output power limit of a station in 10 W steps (param_type 19). This page links to the owners of every payload; it copies none. The `display_type` key that 3.24.3 adds to the request is described on the endpoint page. The DIY prompt sheet of steps 9 to 12, with its two other entry points, is traced in [diy_unlock.md](diy_unlock.md); the A17C1 settings variant of an output limit is in [solarbank_power_limit_change.md](solarbank_power_limit_change.md).
 
 ## Trigger (UI action)
 

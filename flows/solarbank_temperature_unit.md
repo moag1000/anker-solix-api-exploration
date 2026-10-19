@@ -22,7 +22,7 @@ On the A17C1 settings page the user taps the temperature unit entry: `A17C1Setti
 | 3 | app | `setTempUnit` calls `A17C1AnkerDevice::setTempUnit` with the index; the controller builds the payload as the one-byte list of the index (`intToList`) for opcode `0050`. | [mqtt/a17c1.md](../mqtt/a17c1.md#0050-settempunit) | `a17c1setting_logic.dart @0x3d98e98`; `a17c1_device_controller.dart @0x3d98ff0` (`intToList`), `@0x3d98ffc` (opcode), `@0x3d99008` (send) |
 | 4 | app | The controller sends over one transport per call: `bleBusinessConnected` over BLE, `wifiConnected` wrapped for MQTT, any other status sends nothing. | [ble/protocol.md](../ble/protocol.md#stacks-and-send-routing) | `a17c1_device_controller.dart @0x226e22c`, `@0x226e4e4` |
 | 5 | app | Right after the call the page sets a page flag (`field_7f` slot at offset 307) to false, and 3 s later a closure sets it back to true. | this page | `a17c1setting_logic.dart @0x3d98ea8`, `@0x3d98ebc` (false), `@0x3d98ed0` (`Future.delayed`), `@0x3d99054`, `@0x3d99068` (true) |
-| 6 | device | Applies the unit and reports it in its next status message; the old page named tag `a9` of `0405` for this. | [mqtt/a17c1_status.md](../mqtt/a17c1_status.md) | `string-only` |
+| 6 | device | Applies the unit and reports it in its next status message; the old page named tag `a9` of `0405` for this. | [mqtt/a17c1_status.md](../mqtt/a17c1_status.md) untagged by design (no app-side fact) |
 
 ## Side effects
 
@@ -35,7 +35,7 @@ On the A17C1 settings page the user taps the temperature unit entry: `A17C1Setti
 
 ## Failure paths
 
-- Device not reachable over BLE or WiFi: the command is dropped by the gate (`a17c1_device_controller.dart @0x226e238`); the page does not show an error in `setTempUnit`. Error codes: `api/errors.md`.
+- Device not reachable over BLE or WiFi: the command is dropped by the gate (`a17c1_device_controller.dart @0x226e238`); the page does not show an error in `setTempUnit`. Error codes: [errors](../api/errors.md).
 - No answer handling: `setTempUnit` does not await the send (`a17c1setting_logic.dart @0x3d98e98` is followed directly by the flag write).
 
 ## Since/changed

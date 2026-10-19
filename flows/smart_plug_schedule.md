@@ -25,7 +25,7 @@ On the timing settings page (`a17x8timing_setting_view.dart`) the user sets the 
 | 4 | app | `_setTimingCmd` shows the loading overlay and calls `A17X8DeviceController::setTimingCmd`. | this page | `a17x8timing_setting_logic.dart @0x3de4064`, call at `@0x3de40d8` |
 | 5 | app | `setTimingCmd` builds the tags `a2` (action), `a3` (slot id), `a4` (enabled), `a5` (time, 2 bytes), `a6` (switch), `a7` (weekday list) for opcode `007c`. Weekdays are sequential day numbers, not a bit mask, and `a4` is 1 for an enabled slot (device test, not inverted). | [mqtt/a17x8.md](../mqtt/a17x8.md#007c-settimingcmd) | `a17x8_device_controller.dart @0x3de1b54`, `@0x3de1c0c`, `@0x3de1d34`, `@0x3de1d58`, `@0x3de1dd0`, `@0x3de1e8c`, opcode `@0x3de1eb8` |
 | 6 | app | The plug controller sends over one transport per call: `bleBusinessConnected` over BLE, `wifiConnected` over MQTT, otherwise nothing. | [ble/protocol.md](../ble/protocol.md#stacks-and-send-routing) | `a17x8_device_controller.dart @0x2419080` (BLE), `@0x24191bc` (WiFi) |
-| 7 | device | Answers with the response opcode `setTimingRes`. | [mqtt/a17x8.md](../mqtt/a17x8.md#007c-settimingcmd) | `string-only` |
+| 7 | device | Answers with the response opcode `setTimingRes`. | [mqtt/a17x8.md](../mqtt/a17x8.md#007c-settimingcmd) | `a17x8timing_setting_logic.dart @0x2767d60` |
 | 8 | app | `_dealWithResponse` accepts `setTimingRes` (pool object `pp+0x10b90`), dismisses the loading overlay and branches on the stored action type: delete (0) removes the slot from the page list, fires message 1352 and closes the page; create (1) appends the slot, sorts the list and fires message 1354 with `isEdit` and `data`; modify (2) fires message 1354 as well. | this page | `a17x8timing_setting_logic.dart @0x2767d60` (opcode compare), `@0x2767da0` (branch), `@0x2767df8` (`removeWhere`), `@0x2767e2c` (1352), `@0x2767f40` (`sortTimingList`), `@0x276801c` and `@0x2768288` (1354) |
 | 9 | device | Reports the stored slots and the relay state when the app queries them (`007d`, `TimingInfo`). The timing readback also updates the relay switch state: the parser logs "get timing, update relay switch state". | [mqtt/a17x8.md](../mqtt/a17x8.md#007d-gettimingcmd-and-timinginfo) | `a17x8_device_commands.dart @0x3b636c4` (`parseTimingInfo`), `@0x3b64094` (log text) |
 
@@ -43,7 +43,7 @@ No delay, timer or retry in `saveData`, `deleteTiming` or `_setTimingCmd`. The l
 
 - Plug not reachable or same time clash: toast or dialog, nothing sent.
 - Error or non-zero result codes in the response: `_dealWithResponse` shows no error text in the branches read here (no `Trans.tr` call between `a17x8timing_setting_logic.dart @0x2767d60` and `@0x2768378`); whether the response code is tested at all was not decoded.
-- No answer: the overlay is not dismissed by this logic; no timeout is set here. Error codes: `api/errors.md`.
+- No answer: the overlay is not dismissed by this logic; no timeout is set here. Error codes: [errors](../api/errors.md).
 
 ## Since/changed
 

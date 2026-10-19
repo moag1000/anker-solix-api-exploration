@@ -21,7 +21,7 @@ On the EV charger home page (`a5190_home_page.dart`) four buttons call `A5190Hom
 | 2 | app | `onTapControl` runs the gate of Preconditions, records the start time (`DateTime`) and calls `AKIotEVChargeCommand::setControlType` with the control value. | this page | `a5190_home_logic.dart @0x3943e2c`, call at `@0x3943e94` |
 | 3 | app | `setControlType` builds the parameter map with the single key `controlType` (the control value as an unboxed int, `BoxInt64Instr`) and calls `AKIotBasicCommand::writeProperty` with the property name `action_control_charging`. | [iot_kit_channels](../reference/iot_kit_channels.md) | `ev_charge_command.dart @0x394478c` (key), `@0x39447cc` (property name), `@0x39447d4` (call) |
 | 4 | app | `writeProperty` calls `AKIoTKitManagerImpl.writeProperty`, which sends the identifier `akiot.device.write_property` with `handle`. | [iot_kit_channels](../reference/iot_kit_channels.md) | `basic_command.dart @0x228feb0`; `ak_iot_kit_manager_impl.dart @0x228ff28` (identifier), `@0x228ff48` (`handle`) |
-| 5 | SDK | The native kit sends the property write. Whether it goes over MQTT or BLE is decided inside the kit, not in Dart. | [iot_kit_channels](../reference/iot_kit_channels.md#transport-one-method-channel-three-event-channels) | `string-only` |
+| 5 | SDK | The native kit sends the property write. Whether it goes over MQTT or BLE is decided inside the kit, not in Dart. | [iot_kit_channels](../reference/iot_kit_channels.md#transport-one-method-channel-three-event-channels) untagged by design (no app-side fact) |
 | 6 | app | Awaits the result, takes the end time and measures the elapsed time in milliseconds for telemetry (`difference`, then `d0 = 1000`); `_actionEventTrack` reports it. | this page | `a5190_home_logic.dart @0x3943ea0`, `@0x3943ed8`, `@0x3943ee0`, `@0x39440c0` |
 | 7 | app | Result type `success` (`cmp` with the pool object `pp+0xa5b0` at `@0x3943f10`): waits 20 s and then clears a page flag (closure `@0x3944914`); if the control value is boost it shows the boost success toast (`BoostTipsToastUtil::showSuccessToast`). | this page | `a5190_home_logic.dart @0x3943f2c` (`Future.delayed`), `@0x3943f60` (boost compare), `@0x3943f70` (toast) |
 | 8 | app | Any other result: `parseControllerCommandResult` maps the code to a toast. | this page | `a5190_home_logic.dart @0x3943f98`, toasts at `@0x3943fdc`, `@0x3944000` (start failed), `@0x3944040` (stop failed), `@0x394405c` (generic) |
@@ -48,7 +48,7 @@ Control values (the wire value is the field `off_14` of the enum object, not `of
 ## Failure paths
 
 - BLE gate: the connect sheet is shown instead of sending (Preconditions).
-- Result not `success`: toast from step 8; the key `evChargeStartFailedHint` for the start values and `evChargeStopFailedHint` for stop. Error codes: `api/errors.md`.
+- Result not `success`: toast from step 8; the key `evChargeStartFailedHint` for the start values and `evChargeStopFailedHint` for stop. Error codes: [errors](../api/errors.md).
 - No retry in Dart.
 
 ## Since/changed

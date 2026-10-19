@@ -50,7 +50,7 @@ The home page listener is the closure `a17c1home_logic.dart @0x33d0e0c` (paramet
 ## Failure paths
 
 - Cloud failure: `setDevicePowerOptionsReq` passes `fail` and `success` closures (`http_request_repository_impl.dart @0x2276a40`, `@0x2276a54`); the failure text `set setDevicePowerOptionsReq failed, code:` exists for the PV variant (`http_request_repository_impl.dart @0x3d97a2c`). The device command is sent regardless.
-- Device not reachable over BLE or WiFi: the command is dropped by the gate (`a17c1_device_controller.dart @0x226e238`). Error codes: `api/errors.md`.
+- Device not reachable over BLE or WiFi: the command is dropped by the gate (`a17c1_device_controller.dart @0x226e238`). Error codes: [errors](../api/errors.md).
 - Home page listener: offline (flag 0x4e7 false) skips the send (`a17c1home_logic.dart @0x33d0f0c`).
 
 ## Since/changed

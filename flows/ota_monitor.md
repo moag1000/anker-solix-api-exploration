@@ -1,0 +1,65 @@
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Owner page: this page
+
+# OTA monitor (re-attaching to a running firmware update)
+
+How the `ota_kit` package finds out that a device is already updating (opened the OTA page late, returned to the app, or restarted it) and follows the update without starting it: it asks the AK IoT kit whether an OTA is in progress, subscribes to the progress stream, and falls back to polling and to a firmware version check. The channels `akiot.device.is_ota_in_progress`, `akiot.device.monitor_ota` and `akiot.device.monitor_ota_progress` are new in 3.24.3 and are owned by [../reference/iot_kit_channels.md](../reference/iot_kit_channels.md); starting an update is a different call (`akiot.device.start_ota`, listed there). The old FLOWS.md has no OTA flow and no audit rows.
+
+## Trigger (UI action)
+
+- Single device: opening the single-device OTA page runs `SingleDeviceOtaController.onInit`, which calls `OTARemoteObserver.checkAndEnterOnPageEntry` (`single_device_ota_controller.dart @0x3631ef0`, function `ota_remote_observer.dart @0x3632e50`).
+- Single device, return to the app: `onOTAResumeCheck` calls `OTAResumeCoordinator.handleResumeCheck` (`single_device_ota_controller.dart @0x4716b84`, function `ota_resume_coordinator.dart @0x2ecad7c`).
+- Batch: `BatchDeviceOtaController._resumeColdStartOTA` and `_doResumeDecision` call `BatchOTAStrategy.reattachToRunningOTA` (`batch_device_ota_controller.dart @0x362e3b8`, `@0x4715dac`; function `batch_ota_strategy.dart @0x362e414`).
+
+## Preconditions
+
+- A non-empty device serial: `isDeviceOTAInProgress` returns false without an SDK call for an empty serial (`ota_remote_status_service.dart @0x2ecf1b8`, warning text at `@0x2ecf1d8`); `checkOTAInProgress` filters empty serials out of its list and skips the call when none is left (`@0x2ecf4b8`, `@0x2ecf54c`).
+- The page has a state the observer may use: the observer mode flag must be set before a progress frame is accepted (see step 5).
+- Stale flags: a device flag `isOTA` that is true while the local task is already in a terminal state is treated as a leftover of the restart window and not as a running update (`ota_device_truth.dart @0x2ed4250`; terminal states `completed`, `failed`, `cancelled`, `ota_device_truth.dart @0x2ed42ec`, `@0x2ed42fc`, `@0x2ed4314`). A device whose firmware already equals the target is treated as done and the observer is not entered (`@0x2ed4130`).
+
+## Steps
+
+| # | actor | action | owner page link | asm citation |
+|---|---|---|---|---|
+| 1 | app | Page entry: `checkAndEnterOnPageEntry` asks `isDeviceReallyInOta`, then, if the answer is true, `isOTAAlreadyCompletedByFirmware`; when the firmware is already the target it skips the observer, otherwise it enters observer mode. | this page | `ota_remote_observer.dart @0x3632ef4`, `@0x3632f68`, `@0x3632fb0` |
+| 2 | app | `isDeviceOTAInProgress` calls `checkOTAInProgress`, which sends `akiot.device.is_ota_in_progress` with the parameter `snList` (`handle`). If the call fails or returns nothing it falls back to the device attribute `isOTA` read from the device proxy. | [iot_kit_channels](../reference/iot_kit_channels.md) | `ota_remote_status_service.dart @0x2ecf238`, `@0x2ecf5ac`, `@0x2ecf5d8` (identifier), `@0x2ecf5e8` (call), `@0x2ecf2e4` (attribute fallback), `@0x2ecf624` (failure log) |
+| 3 | SDK | Answers with the in-progress state per serial (`isOtaInProgress`). How the kit learns it is not visible in Dart. | [iot_kit_channels](../reference/iot_kit_channels.md) | untagged by design (no app-side fact) |
+| 4 | app | `enter` sets the phase `download` and the status `upgrade`, recreates the Wi-Fi progress tracker and calls `_startObserving`. `_startObserving` subscribes with `OTASdkService.monitorOTAProgress(deviceSn, timeOut)` (identifier `akiot.device.monitor_ota_progress`, `handleWithProgress`) and listens with `onDone` and `onError`. The timeout is the capability's `getTimeout()` or, when that is null, 10 minutes. | [iot_kit_channels](../reference/iot_kit_channels.md) | `ota_remote_observer.dart @0x2ecc714`, `@0x2ecc72c`, `@0x2ecc754`, `@0x2ecc75c`; `@0x2ecb790`, `@0x2ecb79c`, `@0x2ecb7e0`, `@0x2ecb838`; `ota_sdk_service.dart @0x2ecb97c`, `@0x2ecb98c` |
+| 5 | SDK | Pushes progress frames. In `_handleStreamResult` a frame is discarded when observer mode is not set ("local start_ota stream is the only progress source"). Otherwise the app reads `data.progress` or `data.deviceProgress`, resets the stall counter, fires an `OTAProgressEvent` and, at 100 or more, also reads `isAllTasksComplete`. | this page | `ota_remote_observer.dart @0x2ecbb28` (discard), `@0x2ecbd40`, `@0x2ecbd74` (keys), `@0x2ecbe1c` (counter reset), `@0x2ecbe30` (100), `@0x2ecbe48` (`isAllTasksComplete`), `@0x2ecbeb0` (event) |
+| 6 | app | A terminal frame with the result type `success` is passed to `OTAModuleResultExtractor.extract` and `fireSuccessWithRestart`; any other terminal frame fires an `OTACompleteEvent` with the `reason` (default `upgrade failed`) and runs `cleanup`. | this page | `ota_remote_observer.dart @0x2ecbf00`, `@0x2ecbf18`, `@0x2ecbfd0`, `@0x2ecc0e0`, `@0x2ecc108`, `@0x2ecc11c`, `@0x2ecc154` |
+| 7 | app | Stream timeout: `checkResultOnTimeout` asks `isDeviceOTAInProgress` again. Still updating: starts result polling (`_startResultPolling`, periodic timer). Not updating: reads the firmware version (`queryFirmwareInfo`) and calls `exit` with success or failure. | this page | `ota_remote_observer.dart @0x2ece610`, `@0x2ece640`, `@0x2ece694`, `@0x2ece6cc`, `@0x2ece6dc` |
+| 8 | app | Result polling every 60 s: `_pollResult` asks `isDeviceOTAInProgress`. In progress and zero progress: raises the stall counter, logs "isOTA=true but zero progress (n/2)", and at the second stall runs `cleanup` and `_settleFailure` with the text "upgrade timed out, check network and device state" and the reason `observer stall: device in OTA mode without progress`. Not in progress: cancels the timer, reads the firmware version and calls `exit`. | this page | `ota_remote_observer.dart @0x2ecee9c` (`Timer.periodic`), `@0x2ecef90`, `@0x2ecefd8`, `@0x2ecf034`, `@0x2ecf040`, `@0x2ecf058`, `@0x2ecf080`, `@0x2ecf0cc`, `@0x2ecf104`, `@0x2ecf114` |
+| 9 | app | `exit(success)`: a terminal status already set is not overwritten; success sets `AnkerOTAStatus.success`, failure sets `AnkerOTAStatus.failure` with the text "upgrade failed". | this page | `ota_remote_observer.dart @0x2ece7d8`, `@0x2ece8c4`, `@0x2ece948`, `@0x2ece964` |
+| 10 | app | Return to the app: `handleResumeCheck` logs the background duration. If a local task is active (state not `completed`, `failed` or `cancelled`) it re-attaches to it: the `start_ota` stream stays valid, so only the watchdog is re-armed and no monitor subscription is resumed. Otherwise `_doDeviceStateCheck` asks the remote state ("MQTT-reliable"), re-enters observer mode when the update is still running (`resubscribe`) and otherwise decides by the firmware version. | this page | `ota_resume_coordinator.dart @0x2ecadf4`, `@0x2ecae88`, `@0x2ecae98`, `@0x2ecaeb0`, `@0x2ecaedc`, `@0x2ed46fc`; `@0x2ecb054`, `@0x2ecb168`, `@0x2ecb194`, `@0x2ecb1b4` |
+| 11 | app | `resubscribe` restarts the monitor subscription only in observer mode; otherwise it refuses and logs the reason. | this page | `ota_remote_observer.dart @0x2ecb674`, `@0x2ecb684`, `@0x2ecb6a0` |
+| 12 | app | Batch re-attach: `reattachToRunningOTA(snList)` logs the device count, registers a new completer for each device and starts `akiot.device.monitor_ota` with `snList` and `timeOut` (`handleWithProgress`, `onDone`, `onError`). | [iot_kit_channels](../reference/iot_kit_channels.md) | `batch_ota_strategy.dart @0x362e474`, `@0x362e650`, `@0x362e70c`, `@0x362e720`, `@0x362e74c`, `@0x362e808`, `@0x362e840` |
+
+## Side effects
+
+- Event bus messages `OTAProgressEvent` and `OTACompleteEvent` update the OTA pages (`ota_remote_observer.dart @0x2ecbed8`, `@0x2ecc14c`).
+- Entering observer mode recreates the Wi-Fi progress tracker and sets the status to `upgrade`; leaving it through `exit` or `cleanup` sets a terminal status.
+- Reconnection on resume: `_ensureConnectionForResume` waits for the device to come online, then rechecks once after a delay (see Timing).
+
+## Timing (delays/polling)
+
+- Monitor subscription timeout: the pool `Duration` `pp+0x1bca8` with `off_8` 0x23c34600 = 600,000,000 microseconds, 10 minutes, used when `getTimeout()` is null (`ota_remote_observer.dart @0x2ecb79c`); the observer converts the `Duration` to a number with a division by 1,000,000 (`@0x2ecb7b0`) before it calls `monitorOTAProgress`; the unit that the kit expects for `timeOut` was not read.
+- Result polling every 60 s: pool `Duration` `pp+0x1d8e0` with `off_8` 0x3938700 = 60,000,000 microseconds (`@0x2ecee94`). Two zero-progress polls end the observation (`cmp x1, #2` at `@0x2ecf034`; the Smi raw 4 in the log text at `@0x2ecf008` is 2).
+- Resume: waiting for the device to come online polls every 500 ms (pool `Duration` `off_8` 0x7a120) for at most 20 s (`off_8` 0x1312d00) (`ota_resume_coordinator.dart @0x2ed4a68`, `@0x2ed4aec`); if the connection is still missing it rechecks after 15 s (`off_8` 0xe4e1c0 = 15,000,000 microseconds, `@0x2ed488c`). All are pool object values, not register immediates.
+- A frame of 100 or more progress ends the progress phase of a frame (`cmp x0, #0x64` at `ota_remote_observer.dart @0x2ecbe30`, unboxed).
+
+## Failure paths
+
+- `is_ota_in_progress` fails: the log text `查询失败` and the fallback to the device attribute `isOTA` (`ota_remote_status_service.dart @0x2ecf624`, `@0x2ecf2e4`); an exception logs `查询异常` (`@0x2ecfe28`).
+- Observer stall: after two polls without progress the update is settled as failed (step 8).
+- Monitor subscription error: `onError` of the listener; the text `启动远程进度订阅失败` is logged when the subscription cannot start (`ota_remote_observer.dart @0x2ecb884`).
+- A terminal frame that is not `success` fires `OTACompleteEvent` with the reason. Error codes: [errors](../api/errors.md).
+
+## Since/changed
+
+All three channels, the observer, the device-truth rules and the resume coordinator are new in 3.24.3 (the three identifiers are marked new in [../reference/iot_kit_channels.md](../reference/iot_kit_channels.md#changed-since-3180)). The old FLOWS.md did not cover firmware updates.
+
+## Known unknowns
+
+- Which transport the kit uses for `is_ota_in_progress` and the progress stream: the resume coordinator labels its remote check "MQTT-reliable" (log text `ota_resume_coordinator.dart @0x2ecb054`), but the kit's choice is not visible in Dart. The app has a notion of a BLE OTA (`akiot.device.send_ble_ota_progress`, the parallel OTA page of the A1780P), but nothing here shows BLE as a live fallback while the device is on WiFi (see [../ble/protocol.md](../ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule)).
+- The unit of the `timeOut` argument and the value the batch strategy passes.
+- The meaning of the event payloads (`OTAProgressEvent`, `OTACompleteEvent`) and of the weighted progress of several devices.
+- The ota-record upload (`ota_upgrade_record_reporter.dart`) and the sub-package channel `akiot.device.get_sub_version_list`, which belong to the update itself.

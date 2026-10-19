@@ -41,7 +41,7 @@ The command wait is the controller default of 5 s ([ble/protocol.md](../ble/prot
 ## Failure paths
 
 - Device not reachable: nothing is sent (Preconditions).
-- No answer within the wait: the controller's timeout path is not part of this flow; the page has already flipped its displayed state. Error codes: `api/errors.md`.
+- No answer within the wait: the controller's timeout path is not part of this flow; the page has already flipped its displayed state. Error codes: [errors](../api/errors.md).
 
 ## Since/changed
 

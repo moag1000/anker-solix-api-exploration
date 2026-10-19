@@ -24,7 +24,7 @@ On the countdown page (`a17x8countdown_view.dart`) the user taps the start, paus
 | 5 | app | `_setCountdownCmd` passes the state and the times to `A17X8DeviceController::setCountdownCmd`, which builds the tags `a2` (type), `a3` (total time, 3 bytes), `a4` (switch state), `a5` (remaining time, 3 bytes) for opcode `007e`. | [mqtt/a17x8.md](../mqtt/a17x8.md#007e-setcountdowncmd) | `a17x8countdown_logic.dart @0x3dcfb7c`; `a17x8_device_controller.dart @0x3dcfde4`, `@0x3dcfe20`, `@0x3dcfe54`, `@0x3dcfe90`, opcode `@0x3dcfee0` |
 | 6 | app | `sendCommandWithParam` of the plug controller chooses the transport per call: status `bleBusinessConnected` sends over BLE, status `wifiConnected` wraps the frame for MQTT, any other status sends nothing. | [ble/protocol.md](../ble/protocol.md#stacks-and-send-routing) | `a17x8_device_controller.dart @0x2419080` (BLE), `@0x24191bc` (WiFi) |
 | 7 | app | Running state (compare `cmp w0, #6`, running is 3): starts the local one-second tick (`startCountdown`); otherwise cancels the tick. Then fires the UI message 1351 on the event bus. | this page | `a17x8countdown_logic.dart @0x3dd04bc`, `@0x3dd04c8`, `@0x3dd04e4`, `@0x3dd0524` |
-| 8 | device | Answers with the response opcode `setCountdownRes`. | [mqtt/a17x8.md](../mqtt/a17x8.md#007e-setcountdowncmd) | `string-only` |
+| 8 | device | Answers with the response opcode `setCountdownRes`. | [mqtt/a17x8.md](../mqtt/a17x8.md#007e-setcountdowncmd) | `a17x8countdown_logic.dart @0x275e3d8` |
 | 9 | app | `_dealWithResponse` accepts `setCountdownRes` (pool object `pp+0x10bd0`) when the page's `type` is 0: dismisses the loading overlay, replaces the cached timer info with a new zeroed `CountDownInfo`, fires message 1350 and closes the page. For other types nothing is done here. | this page | `a17x8countdown_logic.dart @0x275e3d8` (opcode compare), `@0x275e3ec` (type test), `@0x275e428` and `@0x275e440` (new info object, cache write), `@0x275e490` (message), `@0x275e4b4` (back) |
 | 10 | device | Reports the timer in the periodic status `0405` (tag `ad`). The app parses it in `parseCountDownInfo`, stores it at device offset 1167 and fires message 1356. | [mqtt/a17x8.md](../mqtt/a17x8.md#countdowninfo-tag-ad-of-0405-and-message-087f) | `a17x8_device_commands.dart @0x3b6343c` (parser), `@0x3b63640` (store), `@0x3b63690` (message) |
 
@@ -44,7 +44,7 @@ The page runs a periodic tick of 1 s while the timer is running: `Timer.periodic
 
 - Device not reachable: toast, nothing sent (Preconditions).
 - No answer: not handled in this logic class; the loading overlay of delete is dismissed only by the response of step 9.
-- Error codes: `api/errors.md`.
+- Error codes: [errors](../api/errors.md).
 
 ## Since/changed
 

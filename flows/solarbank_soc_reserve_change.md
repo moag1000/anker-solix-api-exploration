@@ -27,7 +27,7 @@ On the A17C1 settings page the user taps the safety SoC entry: `A17C1SettingLogi
 | 2N | app | New: the SoC page returns a `SocLimitModel`; the callback builds a `NewSocParamModel` (`charge_upper_limit`, `discharge_lower_limit`, `backup_reserve`, `backup_reserve_switch`) and calls `requestNewSetSoc`. | [soc_setting_param](../models/soc_setting_param.md) | `a17c1setting_logic.dart @0x3d956c4`, call at `@0x3d95738` |
 | 3N | app | New: `requestNewSetSoc` sends `set_power_cutoff` with `cutoff_data_id`, `device_sn`, `charge_upper_limit`, `discharge_lower_limit`, `backup_reserve`, `backup_reserve_switch` and `cmd_type`; `cmd_type` is the Smi raw 2 stored with `stur w`, so 1. | [set_power_cutoff](../api/power_service/app/compatible/set_power_cutoff.md) | `a17c1setting_logic.dart @0x3d957c0` to `@0x3d95974` (keys), `@0x3d95980` (`cmd_type`), `@0x3d959d4` (URL), `@0x3d959f8` (call) |
 | 4N | app | New success callback: calls `setSoc` with the named arguments `backupReserve`, `backupReserveEnable`, `chargeUpperLimit`, `dischargeLowerLimit`. | [mqtt/a17c1.md](../mqtt/a17c1.md#0067-setsoc) | `a17c1setting_logic.dart @0x3d95b3c` (argument list), `@0x3d95b44` (call) |
-| 5 | cloud | Stores the new cutoff; the answer is not parsed by the success callbacks beyond triggering them. | [set_power_cutoff](../api/power_service/app/compatible/set_power_cutoff.md) | `string-only` |
+| 5 | cloud | Stores the new cutoff; the answer is not parsed by the success callbacks beyond triggering them. | [set_power_cutoff](../api/power_service/app/compatible/set_power_cutoff.md) untagged by design (no app-side fact) |
 | 6 | app | `setSoc` builds opcode `0067`: the three-value call writes tags `a2`, `a3`, `a4`; the four-value call writes `a2`, `a5`, `a6`, `a7`. | [mqtt/a17c1.md](../mqtt/a17c1.md#0067-setsoc) | `a17c1_device_controller.dart @0x3d95494`, `@0x3d954d0`, `@0x3d95510` (three tags), `@0x3d95304`, `@0x3d95368`, `@0x3d953b4`, `@0x3d95414` (four tags), opcode `@0x3d95578` |
 | 7 | app | Same transport gate as every A17C1 command: `bleBusinessConnected` over BLE, `wifiConnected` wrapped for MQTT, any other status sends nothing. | [ble/protocol.md](../ble/protocol.md#stacks-and-send-routing) | `a17c1_device_controller.dart @0x226e22c`, `@0x226e4e4` |
 
@@ -47,7 +47,7 @@ No delay or timer in `requestToSetSoc`, `requestNewSetSoc` or their callbacks. T
 
 - Cloud failure on the legacy route: `requestToSetSoc` passes only a `success` callback (`a17c1setting_logic.dart @0x3d94e40`), so nothing happens on failure at this level and no device command is sent.
 - Cloud failure on the new route: `requestNewSetSoc` passes `fail` and `success` (`@0x3d959f0`); the closure result of `@0x3d955f4` is a `Future<bool>` for the SoC page. The bodies were not read.
-- Device not reachable over BLE or WiFi: the `0067` command is dropped by the gate (`a17c1_device_controller.dart @0x226e238`); the cloud value is already changed. Error codes: `api/errors.md`.
+- Device not reachable over BLE or WiFi: the `0067` command is dropped by the gate (`a17c1_device_controller.dart @0x226e238`); the cloud value is already changed. Error codes: [errors](../api/errors.md).
 
 ## Since/changed
 
