@@ -10,6 +10,7 @@ Not here: which endpoint returns a model (see [../api/README.md](../api/README.m
 
 - [a5190_device_info.md](a5190_device_info.md): `A5190DeviceInfo`, the EV charger device state (Modbus TCP keys only).
 - [combine_box_entity.md](combine_box_entity.md): `CombineBoxEntity`, combiner box serial and image (`param_type` 16).
+- [device_power_config.md](device_power_config.md): `DevicePowerConfigItem`, the answer of `get_devices_power_config`.
 - [dynamic_price_company_model.md](dynamic_price_company_model.md): `DynamicPriceCompanyModel` and its provider classes, the answer of `get_price_company` (installer service).
 - [dynamic_price_server_model.md](dynamic_price_server_model.md): `ThirdJumpModel`, `SaveDynamicPriceResponse` and `FlatpeakSetting`, the Tibber/Flatpeak setup answers.
 - [electricity_price_model.md](electricity_price_model.md): `ElectricityPriceModel`, `TouPrice` and `DynamicPrice`, the answer of `get_price` (installer service).
@@ -28,6 +29,7 @@ Not here: which endpoint returns a model (see [../api/README.md](../api/README.m
 - [peak_time_model.md](peak_time_model.md): `PeakTimeModel` and `Data`, the peak-time plan (`param_type` 2).
 - [s1_s2_charger_session_chart_model.md](s1_s2_charger_session_chart_model.md): `S1S2ChargerSessionChartModel`, the S1/S2 charge-session chart (`v2/device/energy_analysis`).
 - [scene_info_model.md](scene_info_model.md): `SceneInfoModel`, the IoT kit scene document (`platform_get_site_scene`).
+- [self_check_record_model.md](self_check_record_model.md): `SelfCheckRecordModel`, the answer of `get_self_check_record`.
 - [site_device_param_response.md](site_device_param_response.md): `SiteDeviceParamResponse`, the TOU response of the electricity-price module (`param_type` 6).
 - [site_sn_relation_list.md](site_sn_relation_list.md): `SiteSnRelationList`, the answer of `get_hardware_relation`.
 - [soc_setting_param.md](soc_setting_param.md): `SocSettingParam`, SOC limits (`param_type` 27).
