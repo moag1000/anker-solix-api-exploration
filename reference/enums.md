@@ -29,76 +29,76 @@ Tag: asm-traced.
 | code | name | GATT group | BLE map | BLE page | MQTT page | function |
 |---|---|---|---|---|---|---|
 | A120J | 160W Prime Charger | ZX | no | none | none | product_model.dart @0x45a6524 |
-| A1340 | Prime Power Bank | power bank (2215) | yes | `a1340.md` | [a1340.md](../mqtt/a1340.md) | product_model.dart @0x22c4698 |
-| A1722 | SOLIX C300 | ZX | yes | `a172x.md` | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3e48 |
-| A1723 | SOLIX C300X | ZX | yes | `a172x.md` | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3dd8 |
-| A1725 | SOLIX C200(X) | ZX | yes | `a172x.md` | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3d68 |
-| A1726 | SOLIX C300 DC | ZX | yes | `a172x.md` | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3cf8 |
-| A1727 | SOLIX C200 DC | ZX | yes | `a172x.md` | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3c88 |
-| A1728 | SOLIX C300X DC | ZX | yes | `a172x.md` | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3c18 |
-| A1729 | SOLIX C200X DC | ZX | yes | `a172x.md` | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3ba8 |
-| A1753 | SOLIX C800 | ZX | yes | `a1753.md` | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c45b8 |
-| A1754 | SOLIX C800 Plus | ZX | yes | `a1753.md` | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c4548 |
-| A1755 | SOLIX C800X | ZX | yes | `a1753.md` | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c44d8 |
-| A1761 | SOLIX C1000(X) | ZX | yes | `a1753.md` | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c4468 |
-| A1762 | Portable Power Station 1000 | ZX | yes | `a1753.md` | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c43f8 |
+| A1340 | Prime Power Bank | power bank (2215) | yes | [a1340.md](../ble/a1340.md) | [a1340.md](../mqtt/a1340.md) | product_model.dart @0x22c4698 |
+| A1722 | SOLIX C300 | ZX | yes | [a172x.md](../ble/a172x.md) | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3e48 |
+| A1723 | SOLIX C300X | ZX | yes | [a172x.md](../ble/a172x.md) | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3dd8 |
+| A1725 | SOLIX C200(X) | ZX | yes | [a172x.md](../ble/a172x.md) | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3d68 |
+| A1726 | SOLIX C300 DC | ZX | yes | [a172x.md](../ble/a172x.md) | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3cf8 |
+| A1727 | SOLIX C200 DC | ZX | yes | [a172x.md](../ble/a172x.md) | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3c88 |
+| A1728 | SOLIX C300X DC | ZX | yes | [a172x.md](../ble/a172x.md) | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3c18 |
+| A1729 | SOLIX C200X DC | ZX | yes | [a172x.md](../ble/a172x.md) | [a172x.md](../mqtt/a172x.md) | product_model.dart @0x22c3ba8 |
+| A1753 | SOLIX C800 | ZX | yes | [a1753.md](../ble/a1753.md) | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c45b8 |
+| A1754 | SOLIX C800 Plus | ZX | yes | [a1753.md](../ble/a1753.md) | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c4548 |
+| A1755 | SOLIX C800X | ZX | yes | [a1753.md](../ble/a1753.md) | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c44d8 |
+| A1761 | SOLIX C1000(X) | ZX | yes | [a1753.md](../ble/a1753.md) | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c4468 |
+| A1762 | Portable Power Station 1000 | ZX | yes | [a1753.md](../ble/a1753.md) | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c43f8 |
 | A1763 | SOLIX C1000 Gen 2 | ZX | no | none | none | product_model.dart @0x22c32c0 |
-| A1770 | F1200 (Bluetooth) | legacy F5DA | yes | `a1770.md` | none | product_model.dart @0x22c49b0 |
-| A1771 | F1200 (Bluetooth and WLAN) | F1200 (2540) | yes | `a1771.md` | [a1771.md](../mqtt/a1771.md) | product_model.dart @0x22c4628 |
-| A1772 | SOLIX F1500 | ZX | yes | `a1772.md` | none | product_model.dart @0x22c4158 |
-| A1780 | 767 PowerHouse (SOLIX F2000) | legacy F5DA | yes | `a1780.md` | [a1780.md](../mqtt/a1780.md) | product_model.dart @0x22c4a20 |
-| A1780P | 767 Power House (SOLIX F2000) with WLAN | ZX | yes | `a1780p.md` | none | product_model.dart @0x22c41c8 |
-| A1781 | SOLIX F2600 | ZX | yes | `a1781.md` | none | product_model.dart @0x22c4238 |
+| A1770 | F1200 (Bluetooth) | legacy F5DA | yes | [a1770.md](../ble/a1770.md) | none | product_model.dart @0x22c49b0 |
+| A1771 | F1200 (Bluetooth and WLAN) | F1200 (2540) | yes | [a1771.md](../ble/a1771.md) | [a1771.md](../mqtt/a1771.md) | product_model.dart @0x22c4628 |
+| A1772 | SOLIX F1500 | ZX | yes | [a1772.md](../ble/a1772.md) | none | product_model.dart @0x22c4158 |
+| A1780 | 767 PowerHouse (SOLIX F2000) | legacy F5DA | yes | [a1780.md](../ble/a1780.md) | [a1780.md](../mqtt/a1780.md) | product_model.dart @0x22c4a20 |
+| A1780P | 767 Power House (SOLIX F2000) with WLAN | ZX | yes | [a1780p.md](../ble/a1780p.md) | none | product_model.dart @0x22c41c8 |
+| A1781 | SOLIX F2600 | ZX | yes | [a1781.md](../ble/a1781.md) | none | product_model.dart @0x22c4238 |
 | A1782 | SOLIX F3000 | ZX | no | none | none | product_model.dart @0x22c2ff8 |
 | A1783 | SOLIX C2000 Gen 2 | ZX | no | none | none | product_model.dart @0x22c2f88 |
-| A1790 | SOLIX F3800 | ZX | yes | `a1790.md` | [a1790.md](../mqtt/a1790.md) | product_model.dart @0x22c4078 |
-| A1790P | SOLIX F3800 Plus | ZX | yes | `a1790.md` | [a1790.md](../mqtt/a1790.md) | product_model.dart @0x22c4008 |
-| A17A0 | Powered Cooler 30 | legacy F5DA | yes | `a17a0.md` | none | product_model.dart @0x22c4940 |
-| A17A1 | Powered Cooler 40 | legacy F5DA | yes | `a17a0.md` | none | product_model.dart @0x22c48d0 |
-| A17A2 | Powered Cooler 50 | legacy F5DA | yes | `a17a0.md` | none | product_model.dart @0x22c4860 |
-| A17A3 | SOLIX Everfrost 2 26L | ZX | yes | `a17a3.md` | none | product_model.dart @0x22c47f0 |
-| A17A4 | SOLIX Everfrost 2 40L | ZX | yes | `a17a3.md` | none | product_model.dart @0x22c4778 |
-| A17A5 | SOLIX Everfrost 2 58L | ZX | yes | `a17a3.md` | none | product_model.dart @0x22c4708 |
-| A17B1 | SOLIX Home Power Panel | ZX | yes | `a17b1.md` | [a17b1.md](../mqtt/a17b1.md) | product_model.dart @0x22c40e8 |
-| A17C0 | Solarbank E1600 | ZX | yes | `a17c0.md` | [a17c0.md](../mqtt/a17c0.md) | product_model.dart @0x22c4388 |
-| A17C1 | Solarbank 2 E1600 Pro | ZX | yes | `a17c1.md` | [a17c1.md](../mqtt/a17c1.md) | product_model.dart @0x22c3b38 |
-| A17C2 | Solarbank 2 E1600 AC | ZX | yes | `a17c2.md` | [a17c2.md](../mqtt/a17c2.md) | product_model.dart @0x22c3908 |
-| A17C3 | Solarbank 2 E1600 Plus | ZX | yes | `a17c3.md` | none | product_model.dart @0x22c3978 |
-| A17C5 | Solarbank 3 E2700 Pro | ZX | yes | `a17c5.md` | [a17c5.md](../mqtt/a17c5.md) | product_model.dart @0x22c3898 |
-| A17E1 | Anker SOLIX E10 | ZX | yes | `a17e2.md` | none | product_model.dart @0x22c36e0 |
-| A17E2 | Solarbank Prime AC | ZX | yes | `a17e2.md` | none | product_model.dart @0x22c3670 |
-| A17X7 | Smart Meter | ZX | yes | `a17x7.md` | [a17x7.md](../mqtt/a17x7.md) | product_model.dart @0x22c3ac8 |
-| A17X7US | Smart Meter | ZX | yes | `a17x7.md` | [a17x7.md](../mqtt/a17x7.md) | product_model.dart @0x22c39e8 |
-| A17X8 | Smart Plug | ZX | yes | `a17x8.md` | [a17x8.md](../mqtt/a17x8.md) | product_model.dart @0x22c3a58 |
-| A17Y0 | E1600 0W Output Switch | ZX | yes | `a17y0.md` | none | product_model.dart @0x22c3f98 |
-| A2345 | 250W Prime Charger | ZX | yes | `a2345.md` | [a2345.md](../mqtt/a2345.md) | product_model.dart @0x22c3eb8 |
+| A1790 | SOLIX F3800 | ZX | yes | [a1790.md](../ble/a1790.md) | [a1790.md](../mqtt/a1790.md) | product_model.dart @0x22c4078 |
+| A1790P | SOLIX F3800 Plus | ZX | yes | [a1790.md](../ble/a1790.md) | [a1790.md](../mqtt/a1790.md) | product_model.dart @0x22c4008 |
+| A17A0 | Powered Cooler 30 | legacy F5DA | yes | [a17a0.md](../ble/a17a0.md) | none | product_model.dart @0x22c4940 |
+| A17A1 | Powered Cooler 40 | legacy F5DA | yes | [a17a0.md](../ble/a17a0.md) | none | product_model.dart @0x22c48d0 |
+| A17A2 | Powered Cooler 50 | legacy F5DA | yes | [a17a0.md](../ble/a17a0.md) | none | product_model.dart @0x22c4860 |
+| A17A3 | SOLIX Everfrost 2 26L | ZX | yes | [a17a3.md](../ble/a17a3.md) | none | product_model.dart @0x22c47f0 |
+| A17A4 | SOLIX Everfrost 2 40L | ZX | yes | [a17a3.md](../ble/a17a3.md) | none | product_model.dart @0x22c4778 |
+| A17A5 | SOLIX Everfrost 2 58L | ZX | yes | [a17a3.md](../ble/a17a3.md) | none | product_model.dart @0x22c4708 |
+| A17B1 | SOLIX Home Power Panel | ZX | yes | [a17b1.md](../ble/a17b1.md) | [a17b1.md](../mqtt/a17b1.md) | product_model.dart @0x22c40e8 |
+| A17C0 | Solarbank E1600 | ZX | yes | [a17c0.md](../ble/a17c0.md) | [a17c0.md](../mqtt/a17c0.md) | product_model.dart @0x22c4388 |
+| A17C1 | Solarbank 2 E1600 Pro | ZX | yes | [a17c1.md](../ble/a17c1.md) | [a17c1.md](../mqtt/a17c1.md) | product_model.dart @0x22c3b38 |
+| A17C2 | Solarbank 2 E1600 AC | ZX | yes | [a17c2.md](../ble/a17c2.md) | [a17c2.md](../mqtt/a17c2.md) | product_model.dart @0x22c3908 |
+| A17C3 | Solarbank 2 E1600 Plus | ZX | yes | [a17c3.md](../ble/a17c3.md) | none | product_model.dart @0x22c3978 |
+| A17C5 | Solarbank 3 E2700 Pro | ZX | yes | [a17c5.md](../ble/a17c5.md) | [a17c5.md](../mqtt/a17c5.md) | product_model.dart @0x22c3898 |
+| A17E1 | Anker SOLIX E10 | ZX | yes | [a17e2.md](../ble/a17e2.md) | none | product_model.dart @0x22c36e0 |
+| A17E2 | Solarbank Prime AC | ZX | yes | [a17e2.md](../ble/a17e2.md) | none | product_model.dart @0x22c3670 |
+| A17X7 | Smart Meter | ZX | yes | [a17x7.md](../ble/a17x7.md) | [a17x7.md](../mqtt/a17x7.md) | product_model.dart @0x22c3ac8 |
+| A17X7US | Smart Meter | ZX | yes | [a17x7.md](../ble/a17x7.md) | [a17x7.md](../mqtt/a17x7.md) | product_model.dart @0x22c39e8 |
+| A17X8 | Smart Plug | ZX | yes | [a17x8.md](../ble/a17x8.md) | [a17x8.md](../mqtt/a17x8.md) | product_model.dart @0x22c3a58 |
+| A17Y0 | E1600 0W Output Switch | ZX | yes | [a17y0.md](../ble/a17y0.md) | none | product_model.dart @0x22c3f98 |
+| A2345 | 250W Prime Charger | ZX | yes | [a2345.md](../ble/a2345.md) | [a2345.md](../mqtt/a2345.md) | product_model.dart @0x22c3eb8 |
 | A25X7 | Anker Wireless Charger | ZX | no | none | none | product_model.dart @0x22c3068 |
 | A2687 | 160W Prime Charger | ZX | no | none | none | product_model.dart @0x353f200 |
-| A5101 | Power Module | HES module | yes | `a5101.md` | [a5101.md](../mqtt/a5101.md) | product_model.dart @0x22c42a8 |
-| A5102 | Power Module | HES module | no | `a5101.md` | [a5101.md](../mqtt/a5101.md) | product_model.dart @0x22c31a0 |
-| A5103 | Power Module | HES module | no | `a5101.md` | [a5101.md](../mqtt/a5101.md) | product_model.dart @0x22c3130 |
-| A5140 | MI60 Microinverter | name string | no | `a5140.md` | none | product_model.dart @0x22c3380 |
-| A5141 | MI80 Microinverter | name string | no | `a5140.md` | none | product_model.dart @0x22c3330 |
-| A5143 | MI80 Microinverter(BLE) | A5143 (effe) | yes | `a5140.md` | none | product_model.dart @0x22c4318 |
-| A5150 | A5150 Module | placeholder FF09 | no | `a5150.md` | none | product_model.dart @0x22600d8 |
+| A5101 | Power Module | HES module | yes | [a5101.md](../ble/a5101.md) | [a5101.md](../mqtt/a5101.md) | product_model.dart @0x22c42a8 |
+| A5102 | Power Module | HES module | no | [a5101.md](../ble/a5101.md) | [a5101.md](../mqtt/a5101.md) | product_model.dart @0x22c31a0 |
+| A5103 | Power Module | HES module | no | [a5101.md](../ble/a5101.md) | [a5101.md](../mqtt/a5101.md) | product_model.dart @0x22c3130 |
+| A5140 | MI60 Microinverter | name string | no | [a5140.md](../ble/a5140.md) | none | product_model.dart @0x22c3380 |
+| A5141 | MI80 Microinverter | name string | no | [a5140.md](../ble/a5140.md) | none | product_model.dart @0x22c3330 |
+| A5143 | MI80 Microinverter(BLE) | A5143 (effe) | yes | [a5140.md](../ble/a5140.md) | none | product_model.dart @0x22c4318 |
+| A5150 | A5150 Module | placeholder FF09 | no | [a5150.md](../ble/a5150.md) | none | product_model.dart @0x22600d8 |
 | A5190 | Ev Charger | ZX | yes | none | none | product_model.dart @0x22c3828 |
 | A5191 | Ev Charger | ZX | yes | none | none | product_model.dart @0x22c37b8 |
 | A5220 | Battery Module | placeholder FF09 | no | none | none | product_model.dart @0x22c3210 |
 | A5341 | Backup Controller | placeholder FF09 | no | none | none | product_model.dart @0x22c3268 |
 | A5450 | A5450 Module | placeholder FF09 | no | none | none | product_model.dart @0x22c30d8 |
 | A7320 | A7320 | ZX | yes | none | none | product_model.dart @0x22c3750 |
-| A91B2 | 240W Charging Station | ZX | yes | `a91b2.md` | [a91b2.md](../mqtt/a91b2.md) | product_model.dart @0x22c3f28 |
-| AE103 | Solarbank AE103 | ZX | yes | `a17e2.md` | none | product_model.dart @0x22c3520 |
-| AE111 | Solarbank E7000H Premium | ZX | yes | `a17e2.md` | none | product_model.dart @0x22c3600 |
-| AE113 | Solarbank AE113 | ZX | yes | `a17e2.md` | none | product_model.dart @0x22c3590 |
-| AE1R0 | P1 Energy Tracker | ZX | yes | `ae1x0.md` | none | product_model.dart @0x22c33d0 |
-| AE1X0 | AE1X0 Meter | ZX | yes | `ae1x0.md` | none | product_model.dart @0x22c3440 |
+| A91B2 | 240W Charging Station | ZX | yes | [a91b2.md](../ble/a91b2.md) | [a91b2.md](../mqtt/a91b2.md) | product_model.dart @0x22c3f28 |
+| AE103 | Solarbank AE103 | ZX | yes | [a17e2.md](../ble/a17e2.md) | none | product_model.dart @0x22c3520 |
+| AE111 | Solarbank E7000H Premium | ZX | yes | [a17e2.md](../ble/a17e2.md) | none | product_model.dart @0x22c3600 |
+| AE113 | Solarbank AE113 | ZX | yes | [a17e2.md](../ble/a17e2.md) | none | product_model.dart @0x22c3590 |
+| AE1R0 | P1 Energy Tracker | ZX | yes | [ae1x0.md](../ble/ae1x0.md) | none | product_model.dart @0x22c33d0 |
+| AE1X0 | AE1X0 Meter | ZX | yes | [ae1x0.md](../ble/ae1x0.md) | none | product_model.dart @0x22c3440 |
 | AX170 | Power Dock | ZX | yes | none | none | product_model.dart @0x22c34b0 |
-| SHEM3 | Shelly3EM | ZX | no | `shelly.md` | [shelly.md](../mqtt/shelly.md) | product_model.dart @0x22c2f18 |
-| SHEMP3 | Shelly3EM Pro | ZX | no | `shelly.md` | [shelly.md](../mqtt/shelly.md) | product_model.dart @0x22c2ea8 |
-| SHPPS | Shelly Plus Plug S | ZX | no | `shelly.md` | [shelly.md](../mqtt/shelly.md) | product_model.dart @0x22c2e38 |
+| SHEM3 | Shelly3EM | ZX | no | [shelly.md](../ble/shelly.md) | [shelly.md](../mqtt/shelly.md) | product_model.dart @0x22c2f18 |
+| SHEMP3 | Shelly3EM Pro | ZX | no | [shelly.md](../ble/shelly.md) | [shelly.md](../mqtt/shelly.md) | product_model.dart @0x22c2ea8 |
+| SHPPS | Shelly Plus Plug S | ZX | no | [shelly.md](../ble/shelly.md) | [shelly.md](../mqtt/shelly.md) | product_model.dart @0x22c2e38 |
 
-Reading the table. Products sharing a GATT group and a BLE page share a device class; the class hierarchy is on the `ble/<pn>.md` pages. A5102 and A5103 are on the `../ble/a5101.md` page because they carry the same profile as A5101 and have no class of their own. Models marked `BLE map` no are not scanned by name: the 15 not in the map besides A2687 and A120J are A5140, A5141, A1763, A5341, A5220, A5102, A5103, A5150, A5450, A25X7, A1782, A1783 and the three Shelly models. The rows A5140 and A5141 carry the product name instead of UUIDs, and A5150, A5220, A5341 and A5450 carry the short string `0000FF09` in service, write and notify, so they have no usable GATT profile in the table.
+Reading the table. Products sharing a GATT group and a BLE page share a device class; the class hierarchy is on the `ble/<pn>.md` pages. A5102 and A5103 are on the [../ble/a5101.md](../ble/a5101.md) page because they carry the same profile as A5101 and have no class of their own. Models marked `BLE map` no are not scanned by name: the 15 not in the map besides A2687 and A120J are A5140, A5141, A1763, A5341, A5220, A5102, A5103, A5150, A5450, A25X7, A1782, A1783 and the three Shelly models. The rows A5140 and A5141 carry the product name instead of UUIDs, and A5150, A5220, A5341 and A5450 carry the short string `0000FF09` in service, write and notify, so they have no usable GATT profile in the table.
 
 ### Code lists
 

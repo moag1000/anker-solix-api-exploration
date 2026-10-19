@@ -295,6 +295,6 @@ Tag: untagged by design (no API fact).
 - Whether fragmentation is used by products other than the A17C1 family: only `A17C1DeviceController.sendCommandWithParam` calls `splitPackageCmd`; the other controllers were not checked for their own copy of the logic.
 - The curve and key derivation of the native ECDH are not visible in Dart (see [handshake.md](handshake.md#known-unknowns)).
 - Firmware behaviour for simultaneous BLE and WiFi (`dualModePns`, the A1780P parallel OTA). No device test is recorded in this repository.
-- Whether the A5101 family uses the same binary layer: its commands go through the three opcode classes in `charging/ble/device/A5101/opcode/` (`ble/a5101.md`).
+- Whether the A5101 family uses the same binary layer: its commands go through the three opcode classes in `charging/ble/device/A5101/opcode/` ([a5101.md](a5101.md)).
 
 BLE is unavailable while the device is on WiFi; see `ble/protocol.md`.
