@@ -4,6 +4,85 @@
 
 > **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/CHANGELOG_old_entries.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
 
+## 2026-10 — App 3.24.3 rework (branch rework/3.24.3)
+
+The reference was rebuilt from the Anker app 3.24.3 (the 3.18.0 state is tagged `v2026.04-app3.18.0`). The app was decompiled again, every integer read from the decompiled code was re-read under the Smi rule ([METHODOLOGY.md](METHODOLOGY.md#confidence-tags)), and the content now lives in single-owner pages: a fact has one owner page and every other page links to it ([docs/STRUCTURE.md](docs/STRUCTURE.md)). This entry has no facts of its own; every corrected fact below links the page that owns it. The per-claim corrections of the old pages are the [Errata 2026-10 (Smi decoding)](#errata-2026-10-smi-decoding) section below and the tables in [docs/audit/](docs/audit/). The 3.18.0 entries further down are unchanged.
+
+### Added
+
+The counts are quoted from the generated block in [README.md](README.md#5-coverage-and-confidence-tags) (snapshot 2026-10-19, produced by `tools/readme_stats.py`; if the README block and this quote differ, the block wins):
+
+- Endpoint pages: 450 of 450 distinct URLs in `data/endpoints.json` have a page (439 with a code reference in 3.24.3, 9 only in the 3.24.3 object pool with no code reference, 2 only in 3.18.0), plus 3 hand-written pages with no inventory row; 453 endpoint pages in total.
+- Endpoints first seen in 3.24.3: 70; only in 3.18.0: 2.
+- Of these pages, 124 are hand-written and 329 are skeletons (`Confidence: string-only` with unfilled purpose); the skeletons carry only what `data/endpoints.json` knows.
+- 24 API services under [api/](api/README.md), 1017 model classes in `data/models.json` (1012 with fields), 53 pages in [models/](models/README.md), 24 distinct param_type values ([api/param_types.md](api/param_types.md)), 21 MQTT pages in [mqtt/](mqtt/README.md), 20 flow pages in [flows/](flows/README.md).
+- Smi audit of the old root pages ([docs/audit/](docs/audit/)): 1460 audited claims in 15 tables, of which 182 are WRONG.
+
+Pages by directory (the owner of each kind of fact is defined in [docs/STRUCTURE.md](docs/STRUCTURE.md)):
+
+- [api/](api/README.md): one page per endpoint plus [auth](api/auth.md), [encryption](api/encryption.md) (signing, key exchange and payload encryption construction), [errors](api/errors.md), [param_types](api/param_types.md) and [sdk_senders](api/sdk_senders.md).
+- [mqtt/](mqtt/README.md): the shared [envelope](mqtt/envelope.md), the [IoT-Kit decoder](mqtt/iot.md), [upstream_commands](mqtt/upstream_commands.md) and one decoder page per product number.
+- [ble/](ble/README.md): [protocol](ble/protocol.md), [handshake](ble/handshake.md) and one page per product number.
+- [flows/](flows/README.md): step traces of user-visible actions, links only.
+- [models/](models/README.md), [reference/](reference/README.md) (enums, business rules, validation model, [IoT-Kit channels](reference/iot_kit_channels.md)).
+- [docs/](docs/STRUCTURE.md): [STRUCTURE.md](docs/STRUCTURE.md), [PERSONAS.md](docs/PERSONAS.md), [ARCHITECTURE.md](docs/ARCHITECTURE.md), [SAFE_USAGE.md](docs/SAFE_USAGE.md), [DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md), the audit tables and page templates.
+- [CONTRIBUTING.md](CONTRIBUTING.md) with the device-tested record template and the issue templates.
+
+Machine-readable exports, generated and never hand-edited: `data/endpoints.json`, `data/models.json`, `data/param_types.json`, `data/errors.json`; schema and stability promise in [data/README.md](data/README.md).
+
+Tools in [tools/](tools/README.md), usage in its README:
+
+- `asmparse.py`: shared parser for the Blutter asm tree.
+- `smi.py`: applies the Smi rule to raw immediates.
+- `endpoint_inventory.py`, `cmp_since.py`, `diff_versions.py`: build `data/endpoints.json` and the 3.18.0 versus 3.24.3 diff.
+- `model_fields.py`, `param_types.py`, `error_codes.py`: build the other three exports.
+- `service_index.py`, `render_pages.py`: generate the API service indexes and the endpoint and model page skeletons.
+- `schema_check.py`: checks the exports against their schema.
+- `check_citations.py`: re-checks cited asm addresses.
+- `lint_docs.py`: repository linter and link checker (status header, sections, uncited integers, tag overclaims, links, secrets).
+- `readme_stats.py`: generates the coverage block in the README and the status column of the migration map.
+
+### Changed
+
+Corrected facts (old statement to the 3.24.3 reading; the value is on the owner page):
+
+- Schedule and power-limit `cmd`: the app sends 123 for the 17C1 and power-limit wrappers while the generic path sends 17; the old "246" and "cmd 17 constant" statements were wrong. Owner: [api/param_types.md](api/param_types.md#decoded-cmd-per-type), endpoint record [set_site_device_param](api/power_service/site/set_site_device_param.md).
+- MQTT head values (`msg_seq`, `cmd_status`, `sign_code`, the command types such as `normalCommand`) were raw Smi immediates, twice too large in the old docs. Owner: [mqtt/envelope.md](mqtt/envelope.md#head-fields) and [Command types](mqtt/envelope.md#command-types).
+- Disaster preparedness `backupMode`: auto and manual were inverted in the old table, and the clear value was wrong. Owner: [reference/enums.md](reference/enums.md#energy-mode-and-price-enums) (`PreparednessModeType`), flow [a5101_storm_guard.md](flows/a5101_storm_guard.md); the BLE data-code pairs are in [mqtt/a5101.md](mqtt/a5101.md).
+- `disaster_type` of the manual disaster request and the `is_ble` flag: the old values were doubled. The corrected values are in the audit table [docs/audit/charging_disaster_prepared.md](docs/audit/charging_disaster_prepared.md); the endpoint pages under [api/charging_disaster_prepared/](api/README.md) are skeletons for these fields.
+- A5101 opcode `002d` belongs to `getBluetoothOTAStatus`, not to `sendAutoDisasterDataCmd` (`0115`). Owner: [mqtt/a5101.md](mqtt/a5101.md); also in the Errata below.
+- XOR checksum address in the MQTT envelope: the old address folds the encrypted flag, the checksum is `ZXCommandTransformer._getCheckSum`. Owner: [mqtt/envelope.md](mqtt/envelope.md#binary-layer); also in the Errata below.
+- Transport per call: the old "dual path" claim (BLE and MQTT at once) is overturned; the device controller sends over one transport per call, chosen by the connection status. Owner: [ble/protocol.md](ble/protocol.md#stacks-and-send-routing) and [connection routing](ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule).
+- BLE session key: the ECDH step is a native platform plugin, not Dart; the Dart side uses AES-GCM with a 12-byte nonce. Owner: [ble/handshake.md](ble/handshake.md#key-derivation) and [ble/protocol.md](ble/protocol.md#payload-encryption).
+- `charging/mqtt/local.dart` is a certificate and key store, not a local MQTT client. Owner: [mqtt/envelope.md](mqtt/envelope.md#infrastructure).
+- `RefreshManager` has no timer or interval; it only runs registered reload closures. Owner: [reference/business_rules.md](reference/business_rules.md#the-short-version), summary in [docs/SAFE_USAGE.md](docs/SAFE_USAGE.md).
+- `akiot.*` IoT-Kit identifiers: 22 new in 3.24.3. Owner: [reference/iot_kit_channels.md](reference/iot_kit_channels.md).
+- Unresolved disagreements between the app and the old docs or upstream (tag `fd` CRC32 versus timestamp, opcode `005a`, port saving modes, and more) are not decided here: [mqtt/README.md](mqtt/README.md#source-conflicts-unresolved).
+- Everything else the Smi sweeps found (slot counts, state codes, TLV tag letters, MTU, indices) is in the [Errata](#errata-2026-10-smi-decoding) below, one line per WRONG verdict.
+
+### Removed / superseded
+
+- The 12 superseded root pages of 3.18.0 content ([README section 9](README.md#9-3180-reference-superseded)), the legacy `endpoints/`, `devices/` and `models/` group pages, and `patches/` are scheduled for deletion in the cleanup commit; see the migration map in [docs/STRUCTURE.md](docs/STRUCTURE.md#migration-map).
+- Until then each of them carries a banner that names its owner pages. Their wrong numbers are not fixed in place; use the Errata and [docs/audit/](docs/audit/).
+
+<!-- cleanup result: filled by the controller after Task 4.9 -->
+
+### Issue #1 (power limit, display_type)
+
+The device-tested result for the Solarbank 3 output power limit is recorded on the owner page [api/power_service/site/set_site_device_param.md](api/power_service/site/set_site_device_param.md#device-tested-by): with `display_type` 1 a free value outside `power_limit_option` was accepted, with `display_type` 0 only the option-list values worked, and the API did not appear to enforce the legal limit. Reported by thomluther in [issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1). The flow is [flows/system_output_limit.md](flows/system_output_limit.md). What is still untested for it is in [docs/DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md).
+
+### Known gaps
+
+- Test backlog for device owners: [docs/DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md).
+- API skeleton pages: 329 of 453 endpoint pages carry only what `data/endpoints.json` knows (README block, quoted above); the per-service count is the `todo-purpose` warning of `tools/lint_docs.py`.
+- Products without a decoder page, and the audit rows without a page (EverFrost cooler A17A0 to A17A5, `encoding_type` of A5190 and A5191, EV charger constants): [mqtt/README.md](mqtt/README.md#not-covered-by-36a-and-36b).
+- Native code is not in the Dart dump (IoT-Kit SDK internals, the native key handling): see the Known unknowns sections of [reference/iot_kit_channels.md](reference/iot_kit_channels.md#known-unknowns) and [api/encryption.md](api/encryption.md).
+
+### Credits
+
+- thomluther: device tests (the issue #1 result above, [anker-solix-api#339](https://github.com/thomluther/anker-solix-api/issues/339)) and the upstream library [anker-solix-api](https://github.com/thomluther/anker-solix-api).
+- Naming follows the upstream library (`apitypes.py` keys, `mqttmap` names); a name of ours is marked `(no upstream name)`.
+
 ## Errata 2026-10 (Smi decoding)
 
 One line per WRONG verdict of the Phase 2 Smi sweeps (full tables in `docs/audit/`). Doc line numbers refer to the file BEFORE the banner was added (commit 68bc345); in the current file add 2.
