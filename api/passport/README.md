@@ -9,13 +9,14 @@ Service index for the URL prefix `/passport/`. Each endpoint page is the single 
 | [`/passport/change_password`](change_password.md) | TODO | - | skeleton |
 | [`/passport/discount_desc`](discount_desc.md) | TODO | - | skeleton |
 | [`/passport/estimate_domain`](estimate_domain.md) | TODO | - | skeleton |
+| [`/passport/external_login`](external_login.md) | A login URL the app knows by name but never sends in 3.24.3: the string is only compared against the URL of a failed request to decide whether the login screen must be started again after a forced logout. | - | hand-written, not in `data/endpoints.json` |
 | [`/passport/forget_password`](forget_password.md) | TODO | - | skeleton |
 | [`/passport/freeze_account`](freeze_account.md) | TODO | - | skeleton |
 | [`/passport/get_profile`](get_profile.md) | TODO | - | skeleton |
 | [`/passport/get_subscriptions`](get_subscriptions.md) | TODO | - | skeleton |
 | [`/passport/get_user_param`](get_user_param.md) | TODO | - | skeleton |
-| [`/passport/login`](login.md) | TODO | - | skeleton |
-| [`/passport/logout`](logout.md) | TODO | - | skeleton |
+| [`/passport/login`](login.md) | Logs a user in with e-mail and password: the app sends the e-mail, the encrypted password and its client public key, and the response carries the session token (`auth_token`) with the user profile. | - | hand-written |
+| [`/passport/logout`](logout.md) | Tells the server that the session of the current user ends; the app sends an empty body and then clears its stored encryption information and all local user data. | - | hand-written |
 | [`/passport/phone_bind_account`](phone_bind_account.md) | TODO | - | skeleton |
 | [`/passport/phone_code_list`](phone_code_list.md) | TODO | - | skeleton |
 | [`/passport/phone_reset_password`](phone_reset_password.md) | TODO | - | skeleton |
@@ -27,10 +28,13 @@ Service index for the URL prefix `/passport/`. Each endpoint page is the single 
 | [`/passport/set_account_password`](set_account_password.md) | TODO | - | skeleton |
 | [`/passport/set_subscriptions`](set_subscriptions.md) | TODO | - | skeleton |
 | [`/passport/subscription_configs`](subscription_configs.md) | TODO | - | skeleton |
-| [`/passport/third_party_login`](third_party_login.md) | TODO | - | skeleton |
+| [`/passport/terminal_id`](terminal_id.md) | Asks the server for a terminal id (the app's anonymous client identity before login); the app stores it and sends it later as the `Openudid` header, as `X-Terminal-ID`, and to the IoT SDK as `terminalId`. | - | hand-written, not in `data/endpoints.json` |
+| [`/passport/third_party_login`](third_party_login.md) | Logs a user in with an access token from a third-party identity provider (the only provider the app sends is Amazon) instead of e-mail and password; the response is the same session data as for [login](login.md). | - | hand-written |
 | [`/passport/update_profile`](update_profile.md) | TODO | - | skeleton |
 | [`/passport/update_user_param`](update_user_param.md) | TODO | - | skeleton |
 | [`/passport/validate_email`](validate_email.md) | TODO | - | skeleton |
 | [`/passport/validate_pass`](validate_pass.md) | TODO | - | skeleton |
+
+The two rows marked "not in `data/endpoints.json`" are URLs the inventory does not list (they are built by string interpolation or only compared as strings, not sent by a traced `*Http*` call); `tools/service_index.py` does not know them and would drop these two rows when it is run again, so they are added by hand.
 
 Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
