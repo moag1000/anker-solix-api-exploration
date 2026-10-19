@@ -51,7 +51,7 @@ Tag: asm-traced.
 | `loadBalancingMainBreakerCurrent` | 10 to 500 A in 1 A steps (upstream `CMD_MAIN_BREAKER_LIMIT`, `mqttmap.py` line 5905 comment; audit row 67) | upstream-confirmed |
 | `greenEnergyPriorityChargingMode` | 0 solar plus grid, 1 solar only (upstream `set_solar_evcharge_mode`, `mqttcmdmap.py` line 1274 comment; audit row 66) | upstream-confirmed |
 
-### Candidate TLV tags (unverified)
+### Candidate table (old page's guesses, not traced)
 
 Tag: untagged by design (candidate mapping, not a fact). Group `0100` entries are the ones upstream lists as fields `a3` to `b7` (`mqttmap.py` lines 5855 to 5866); the others are the old page's guesses.
 

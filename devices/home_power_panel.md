@@ -76,7 +76,7 @@ Tag: asm-traced. All sites are in `ak_soft_ems/manual_power_backup/manual_power_
 
 - `type`: 1 or 2, computed from a bit test (raw 4 or 2 stored with `stur w`; @0x25ecd1c to @0x25ecd28; audit row 102). Upstream sends `type` 2 for the power-panel site (`apitypes.py` comment on `get_site_device_disaster`, upstream-confirmed).
 - `manual_disaster_switch`: the JSON boolean `true`, not the integer 1 (`r16 = true`, @0x25ecd50; audit row 189 of the X1 section, see [x1_hes_e10.md](x1_hes_e10.md)).
-- `manual_disaster_detail.disaster_type`: 2 (raw 4 stored with `stur w` into the map slot, @0x25ecd80; audit rows 100 and 106). The old page said 4.
+- `manual_disaster_detail.disaster_type`: 2 (raw 4 stored with `stur w` into the map slot, @0x25ecd80; audit rows 100 and 106).
 - `start_time` and `end_time` are Unix seconds (audit row 101 NOT-FROM-ASM: the old numbers 1712160000 and 1712246400 were an example, not constants).
 - The quit request in 3.24.3 hardcodes its own `disaster_type` (2 in `showSevereWeatherModeDialog`, 1 in `showManualBackupModeDialog`); see the [charging_disaster_prepared audit](../docs/audit/charging_disaster_prepared.md).
 
@@ -129,9 +129,9 @@ Methods: `_update_dev()` (device data consolidation, A17B1 to A1790 capacity map
 
 | item | old page (3.18.0 reading) | 3.24.3 |
 |---|---|---|
-| manual `disaster_type` in the request | 4 | 2 (`manual_power_backup_logic.dart` @0x25ecd80) |
+| manual `disaster_type` in the request | 4 | 2 (`manual_power_backup_logic.dart` @0x25ecd80; the old page said 4) |
 | `DisasterPrepareDetail.disaster_type` | "4 = manual" | 2 (same site @0x25ecd80) |
-| BLE opcodes "0x233 response, 0x45a dismiss" | listed as BLE opcodes | not BLE opcodes: 563 is a `MessageEvent` code fired in `a17b1_device_controller.dart` @0x3b4a000 and in `back_power_logic.dart` @0x26e3214, 1114 is a request-timeout compare in `request_timeout_util.dart` @0x33d6238; both are unboxed 64-bit values, so the numbers are right but the role is not; the labels "response" and "dismiss" are not visible in asm |
+| BLE opcodes "0x233 response, 0x45a dismiss" | listed as BLE opcodes | not BLE opcodes, both are unboxed 64-bit ints so the numbers are right: 563 (0x233) is fired as a `MessageEvent` in `a17b1_device_controller.dart` @0x3b4a000 and compared (`cmp x0,#0x233`) in `back_power_logic.dart` @0x26e31d4, where the branch leads to `_dealWithBleResponse`; 1114 (0x45a) is fired in `request_timeout_util.dart` @0x33d6238 and compared (`cmp x0,#0x45a`) in `back_power_logic.dart` @0x26e3214, where the branch calls `GetExtension.dismiss` |
 | `EmsModeType` `Index` column 0..5 | indices of six members | indices moved: 3.24.3 added `normalMode` (`power_usage_scenario_controller.dart` @0x37aec0c), `customMode`, `timeSlot` and `smartMode`, see [enums](../reference/enums.md#energy-mode-and-price-enums); use the API value |
 | `"scp"` pool offset | `[pp+0x757f8]` | `[pp+0x979b0]` (string unchanged) |
 | `DisasterStatus` size | 0x1c | 0xc for the IoT-kit class, 0x1c for the station-mixin class |
