@@ -52,7 +52,7 @@ One line per term. Each line says what the word means in this repository and lin
 - **MQTT envelope**: the JSON layer around the binary frame of a device message, with its head fields and topics. Owner: [mqtt/envelope.md](mqtt/envelope.md); generic decode pipeline: [mqtt/iot.md](mqtt/iot.md).
 - **TLV frame**: the type-length-value binary frame used on MQTT and BLE. Owners: [mqtt/envelope.md](mqtt/envelope.md), [ble/protocol.md](ble/protocol.md).
 - **BLE**: the local Bluetooth channel to a device; a local channel only; per the community WiFi-exclusion finding ([ble/protocol.md](ble/protocol.md)) it is not a live fallback for the cloud. Owner: [ble/protocol.md](ble/protocol.md).
-- **mqtt_monitor**: the upstream tool that shows live MQTT traffic of a device and is the means of device-testing field maps (upstream name; see the project at [thomluther/anker-solix-api](https://github.com/thomluther/anker-solix-api)). In this repository: [README.md](README.md#for-mqtt_monitor-decoding-sessions), [docs/PERSONAS.md](docs/PERSONAS.md#3-mqtt_monitor-user), decoder pages in [mqtt/README.md](mqtt/README.md).
+- **mqtt_monitor**: the upstream tool that shows live MQTT traffic of a device and is the means of device-testing field maps (upstream name; see the project at [thomluther/anker-solix-api](https://github.com/thomluther/anker-solix-api)). In this repository: [README.md](docs/PERSONAS.md#3-mqtt_monitor-user), [docs/PERSONAS.md](docs/PERSONAS.md#3-mqtt_monitor-user), decoder pages in [mqtt/README.md](mqtt/README.md).
 
 ## Evidence vocabulary
 
