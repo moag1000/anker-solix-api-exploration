@@ -80,14 +80,6 @@ def _store_slot(ins, off_hex):
     return (off - 0xf) // 4
 
 
-def _store_width(ins, reg):
-    for r in ins.raw:
-        m = smi.STORE_RE.match(r)
-        if m and int(m.group(3)) == reg:
-            return m.group(2)
-    return None
-
-
 def extract_request(fn):
     """Walk one function and return the heuristic request description."""
     stack, popped = [], []
@@ -156,11 +148,11 @@ def extract_request(fn):
                         fr.vals[key] = {'type': 'str', 'value': val[1],
                                         'addr': ins.addr}
                     elif val[0] == 'i':
-                        w = _store_width(ins, int(src[1:]))
-                        v = val[1] // 2 if w == 'w' else val[1]
-                        fr.vals[key] = {'type': 'int', 'value': v,
-                                        'raw': val[1], 'width': w,
-                                        'addr': val[2]}
+                        # single Smi implementation: smi.decode_following
+                        d = smi.decode_following(int(src[1:]), val[1], ins.raw)
+                        fr.vals[key] = {'type': 'int', 'value': d['value'],
+                                        'raw': val[1], 'width': d['width'],
+                                        'odd': d['odd'], 'addr': val[2]}
                     else:
                         fr.vals[key] = {'type': val[1]}
             continue
@@ -185,7 +177,7 @@ def extract_request(fn):
 
 def summarize(roots):
     out = {'params': [], 'envelope': [], 'param_data_is_json': False,
-           'param_type': None, 'cmd': None, 'cmd_raw': None, 'cmd_addr': None}
+           'param_type': None, 'param_type_source': None, 'cmd': None, 'cmd_note': None, 'cmd_raw': None, 'cmd_addr': None}
     json_child = None
     env_root = None
     for r in roots:
@@ -207,9 +199,17 @@ def summarize(roots):
         v = r.vals.get('param_type')
         if v is not None and out['param_type'] is None:
             out['param_type'] = v['value'] if v['type'] == 'str' else 'variable'
+            out['param_type_source'] = 'literal' if v['type'] == 'str' else 'variable'
         v = r.vals.get('cmd')
-        if v is not None and out['cmd'] is None and v['type'] == 'int':
-            out['cmd'], out['cmd_raw'], out['cmd_addr'] = v['value'], v['raw'], v['addr']
+        if v is not None and out['cmd_raw'] is None and v['type'] == 'int':
+            out['cmd_raw'], out['cmd_addr'] = v['raw'], v['addr']
+            if v['value'] is None:
+                out['cmd_note'] = 'store width not found'
+            elif v['odd']:
+                out['cmd'] = v['value']
+                out['cmd_note'] = 'odd raw value in a tagged slot, re-check'
+            else:
+                out['cmd'] = v['value']
     return out
 
 
@@ -382,6 +382,8 @@ def build_inventory(root, version, old_root=None, upstream=None, log=None):
             'param_data_is_json': req.get('param_data_is_json', False),
             'param_type': req.get('param_type'),
             'cmd': req.get('cmd'), 'cmd_raw': req.get('cmd_raw'),
+            'cmd_note': req.get('cmd_note'),
+            'param_type_source': req.get('param_type_source'),
             'cmd_addr': req.get('cmd_addr'),
             'encrypted': any('encryptionRequestHttp' in c for c in r['http_callees']),
             'encryption_note': encryption_note(r),
@@ -408,6 +410,8 @@ def build_inventory(root, version, old_root=None, upstream=None, log=None):
                 'param_data_is_json': req.get('param_data_is_json', False),
                 'param_type': req.get('param_type'),
                 'cmd': req.get('cmd'), 'cmd_raw': req.get('cmd_raw'),
+            'cmd_note': req.get('cmd_note'),
+            'param_type_source': req.get('param_type_source'),
                 'cmd_addr': req.get('cmd_addr'),
                 'encrypted': any('encryptionRequestHttp' in c
                                  for c in r['http_callees']),

@@ -16,6 +16,14 @@
       "dart_files": [
         "charging/http/http_request_repository_impl.dart"
       ],
+      "function_sources": {
+        "addSitePPS (via setSiteDeviceParam)": "traced",
+        "cmdGreenPowerData (via setSiteDeviceParam)": "traced",
+        "getData (via setSiteDeviceParam)": "traced",
+        "getSiteGreenModeDeviceParam": "literal",
+        "setLoopMode (via setSiteDeviceParam)": "traced",
+        "updateCurrentStationWidget (via setSiteDeviceParam)": "traced"
+      },
       "get_function": [
         "getSiteGreenModeDeviceParam"
       ],
@@ -23,6 +31,7 @@
       "keys": [],
       "name": null,
       "param_type": "1",
+      "param_type_source": "literal",
       "set_function": [
         "getData (via setSiteDeviceParam)",
         "setLoopMode (via setSiteDeviceParam)",
@@ -96,6 +105,13 @@
       "dart_files": [
         "charging/http/http_request_repository_impl.dart"
       ],
+      "function_sources": {
+        "cmdGreenPowerData (via setSiteDeviceParam)": "traced",
+        "dataAnalysis (via setSiteDeviceParam)": "traced",
+        "deletePeakPlan (via setSiteDeviceParam)": "traced",
+        "getSitePeakTimeDeviceParam": "literal",
+        "savePeakPlanNew (via setSiteDeviceParam)": "traced"
+      },
       "get_function": [
         "getSitePeakTimeDeviceParam"
       ],
@@ -103,6 +119,7 @@
       "keys": [],
       "name": null,
       "param_type": "2",
+      "param_type_source": "literal",
       "set_function": [
         "dataAnalysis (via setSiteDeviceParam)",
         "cmdGreenPowerData (via setSiteDeviceParam)",
@@ -167,6 +184,12 @@
       "dart_files": [
         "charging/http/http_request_repository_impl.dart"
       ],
+      "function_sources": {
+        "cmdGreenPowerData (via setSiteDeviceParam)": "traced",
+        "getData (via setSiteDeviceParam)": "traced",
+        "getSiteEnablePeakDeviceParam": "literal",
+        "setEnablePeakValue (via setSiteDeviceParam)": "traced"
+      },
       "get_function": [
         "getSiteEnablePeakDeviceParam"
       ],
@@ -174,6 +197,7 @@
       "keys": [],
       "name": null,
       "param_type": "3",
+      "param_type_source": "literal",
       "set_function": [
         "getData (via setSiteDeviceParam)",
         "setEnablePeakValue (via setSiteDeviceParam)",
@@ -230,6 +254,12 @@
       "dart_files": [
         "charging/http/http_request_repository_impl.dart"
       ],
+      "function_sources": {
+        "getSiteDeviceParamData (via getSiteDeviceParam)": "traced",
+        "setHomeLoadValue (via setSiteDeviceParam)": "traced",
+        "setSiteHomeLoadDevicePower (via setSiteDeviceParam)": "traced",
+        "siteSetHomeLoadDataParam (via setSiteDeviceParam)": "traced"
+      },
       "get_function": [
         "getSiteDeviceParamData (via getSiteDeviceParam)"
       ],
@@ -237,6 +267,7 @@
       "keys": [],
       "name": "SOLARBANK_SCHEDULE",
       "param_type": "4",
+      "param_type_source": "traced",
       "set_function": [
         "setHomeLoadValue (via setSiteDeviceParam)",
         "setSiteHomeLoadDevicePower (via setSiteDeviceParam)",
@@ -293,6 +324,12 @@
       "dart_files": [
         "charging/http/http_request_repository_impl.dart"
       ],
+      "function_sources": {
+        "cmdGreenPowerData (via setSiteDeviceParam)": "traced",
+        "getData (via setSiteDeviceParam)": "traced",
+        "getSiteLowerLimitDeviceParam": "literal",
+        "setRechargeValue (via setSiteDeviceParam)": "traced"
+      },
       "get_function": [
         "getSiteLowerLimitDeviceParam"
       ],
@@ -300,6 +337,7 @@
       "keys": [],
       "name": null,
       "param_type": "5",
+      "param_type_source": "literal",
       "set_function": [
         "getData (via setSiteDeviceParam)",
         "setRechargeValue (via setSiteDeviceParam)",
@@ -391,6 +429,42 @@
         "electricity_price/components/electricity_module/page/tou_and_timeslot_settings_poly_logic.dart",
         "electricity_price/components/tou/impl_v2/service/tou_http_service.dart"
       ],
+      "function_sources": {
+        "_checkPlatformHasSetTOUData": "literal",
+        "_createSiteSuccess (via set17C1SiteDeviceParam)": "traced",
+        "_dealWithBleResponse (via set17C1SiteDeviceParam)": "traced",
+        "_getSiteConfig (via get17C1SiteDeviceParam)": "traced",
+        "_getSiteConfig (via set17C1SiteDeviceParam)": "traced",
+        "_getSystemPolicySetting (via get17C1SiteDeviceParam)": "traced",
+        "_refreshScheduleModeStatus (via getSiteDeviceParam)": "traced",
+        "_setCxPlatformSmartMode": "literal",
+        "continueStudy (via set17C1SiteDeviceParam)": "traced",
+        "createSiteDirectly (via set17C1SiteDeviceParam)": "traced",
+        "deleteHomeLoadData (via set17C1SiteDeviceParam)": "traced",
+        "emetySiteSitePramar (via get17C1SiteDeviceParam)": "traced",
+        "emetySiteSitePramar (via set17C1SiteDeviceParam)": "traced",
+        "getHomeLoadSiteParam (via get17C1SiteDeviceParam)": "traced",
+        "getSiteDeviceParam": "literal",
+        "getSiteHomeLoad (via get17C1SiteDeviceParam)": "traced",
+        "getSiteTOUParams (via get17C1SiteDeviceParam)": "traced",
+        "join (via set17C1SiteDeviceParam)": "traced",
+        "mainDeviceJoin (via get17C1SiteDeviceParam)": "traced",
+        "multiAddDevices (via get17C1SiteDeviceParam)": "traced",
+        "multiAddDevices (via set17C1SiteDeviceParam)": "traced",
+        "next (via get17C1SiteDeviceParam)": "traced",
+        "next (via set17C1SiteDeviceParam)": "traced",
+        "queryMediumChargingDeviceHasSetMode": "literal",
+        "saveHomeLoadData (via set17C1SiteDeviceParam)": "traced",
+        "selectScene (via setDynamicPrice)": "traced",
+        "setBatteryReserve (via get17C1SiteDeviceParam)": "traced",
+        "setBatteryReserve (via set17C1SiteDeviceParam)": "traced",
+        "setDynamicPrice (via setDynamicPrice)": "traced",
+        "setHomeLoadSiteParam (via set17C1SiteDeviceParam)": "traced",
+        "setMode (via get17C1SiteDeviceParam)": "traced",
+        "setMode (via set17C1SiteDeviceParam)": "traced",
+        "setSelfUseMode (via get17C1SiteDeviceParam)": "traced",
+        "setSelfUseMode (via set17C1SiteDeviceParam)": "traced"
+      },
       "get_function": [
         "_checkPlatformHasSetTOUData",
         "_getSiteConfig (via get17C1SiteDeviceParam)",
@@ -413,6 +487,7 @@
       "keys": [],
       "name": "SOLARBANK_2_SCHEDULE",
       "param_type": "6",
+      "param_type_source": "literal",
       "set_function": [
         "_setCxPlatformSmartMode",
         "_getSiteConfig (via set17C1SiteDeviceParam)",
@@ -725,6 +800,13 @@
         "ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart",
         "charging/http/http_request_repository_impl.dart"
       ],
+      "function_sources": {
+        "get17C1SiteDeviceParam (via get17C1SiteDeviceParam)": "traced",
+        "getSiteDataAuth (via get17C1SiteDeviceParam)": "traced",
+        "setSiteDataAuth": "literal",
+        "setSiteDataAuth (via set17C1SiteDeviceParam)": "traced",
+        "stopAiModeStudy (via set17C1SiteDeviceParam)": "traced"
+      },
       "get_function": [
         "get17C1SiteDeviceParam (via get17C1SiteDeviceParam)",
         "getSiteDataAuth (via get17C1SiteDeviceParam)"
@@ -733,6 +815,7 @@
       "keys": [],
       "name": "SOLARBANK_AUTHORIZATIONS",
       "param_type": "13",
+      "param_type_source": "literal",
       "set_function": [
         "setSiteDataAuth",
         "setSiteDataAuth (via set17C1SiteDeviceParam)",
@@ -787,6 +870,10 @@
       "dart_files": [
         "charging/http/http_request_repository_impl.dart"
       ],
+      "function_sources": {
+        "getCombineBoxListData": "literal",
+        "setCombineBoxDevice (via setDynamicPrice)": "traced"
+      },
       "get_function": [
         "getCombineBoxListData"
       ],
@@ -794,6 +881,7 @@
       "keys": [],
       "name": "SOLARBANK_POWERDOCK",
       "param_type": "16",
+      "param_type_source": "literal",
       "set_function": [
         "setCombineBoxDevice (via setDynamicPrice)"
       ],
@@ -820,6 +908,12 @@
         "charging/http/http_request_repository_impl.dart",
         "charging/ui/page/device/main/sitation_energy_system/station_home_settings/feed_network_limit_new/feed_network_limit_new_logic.dart"
       ],
+      "function_sources": {
+        "getFeedGridParam": "literal",
+        "getSafetySocParams": "literal",
+        "setSafetySocParams": "literal",
+        "updateByCloud": "literal"
+      },
       "get_function": [
         "getSafetySocParams",
         "getFeedGridParam"
@@ -828,6 +922,7 @@
       "keys": [],
       "name": "SOLARBANK_STATION",
       "param_type": "18",
+      "param_type_source": "literal",
       "set_function": [
         "setSafetySocParams",
         "updateByCloud"
@@ -845,6 +940,9 @@
       "dart_files": [
         "charging/http/http_request_repository_impl.dart"
       ],
+      "function_sources": {
+        "setSiteDevicePowerLimit": "literal"
+      },
       "get_function": [],
       "get_model": null,
       "keys": [
@@ -854,6 +952,7 @@
       ],
       "name": "SOLARBANK_POWER_LIMIT",
       "param_type": "19",
+      "param_type_source": "literal",
       "set_function": [
         "setSiteDevicePowerLimit"
       ],
@@ -871,6 +970,10 @@
         "charging/http/http_request_repository_impl.dart",
         "device/src/setting/controller/location/sub_page/list/sub_location_list_controller.dart"
       ],
+      "function_sources": {
+        "getStationCountryCode": "literal",
+        "setStationCountryCode": "literal"
+      },
       "get_function": [
         "getStationCountryCode"
       ],
@@ -880,6 +983,7 @@
       ],
       "name": null,
       "param_type": "20",
+      "param_type_source": "literal",
       "set_function": [
         "setStationCountryCode"
       ],
@@ -896,6 +1000,10 @@
       "dart_files": [
         "charging/http/http_request_repository_impl.dart"
       ],
+      "function_sources": {
+        "getInitSwitchStatus (via getSiteDeviceParam)": "traced",
+        "processSwitchChange (via setSiteDeviceParam)": "traced"
+      },
       "get_function": [
         "getInitSwitchStatus (via getSiteDeviceParam)"
       ],
@@ -903,6 +1011,7 @@
       "keys": [],
       "name": null,
       "param_type": "23",
+      "param_type_source": "traced",
       "set_function": [
         "processSwitchChange (via setSiteDeviceParam)"
       ],
@@ -932,6 +1041,10 @@
       "dart_files": [
         "settings/src/common/page/heat_pump/heat_pump_setting_controller.dart"
       ],
+      "function_sources": {
+        "getHeatPumpParam": "literal",
+        "setHeatPump": "literal"
+      },
       "get_function": [
         "getHeatPumpParam"
       ],
@@ -944,6 +1057,7 @@
       ],
       "name": null,
       "param_type": "24",
+      "param_type_source": "literal",
       "set_function": [
         "setHeatPump"
       ],
@@ -958,6 +1072,10 @@
       "dart_files": [
         "settings/src/common/page/ev_charger/ev_charger_setting_controller.dart"
       ],
+      "function_sources": {
+        "getSettingInfo": "literal",
+        "updateSettingInfo": "literal"
+      },
       "get_function": [
         "getSettingInfo"
       ],
@@ -967,6 +1085,7 @@
       ],
       "name": null,
       "param_type": "25",
+      "param_type_source": "literal",
       "set_function": [
         "updateSettingInfo"
       ],
@@ -984,6 +1103,10 @@
       "dart_files": [
         "charging/http/http_request_repository_impl.dart"
       ],
+      "function_sources": {
+        "getThreePvParam": "literal",
+        "setThreePvInstallSwitch": "literal"
+      },
       "get_function": [
         "getThreePvParam"
       ],
@@ -991,6 +1114,7 @@
       "keys": [],
       "name": "SOLARBANK_3RD_PARTY_PV",
       "param_type": "26",
+      "param_type_source": "literal",
       "set_function": [
         "setThreePvInstallSwitch"
       ],
@@ -1007,6 +1131,11 @@
         "settings/src/common/station_page/station_peak_shaving/station_peak_shaving_controller.dart",
         "soc/soc_setting/station_soc_data_source.dart"
       ],
+      "function_sources": {
+        "_saveSocSetting": "literal",
+        "getSocSetting": "literal",
+        "query": "literal"
+      },
       "get_function": [
         "getSocSetting",
         "query"
@@ -1015,6 +1144,7 @@
       "keys": [],
       "name": null,
       "param_type": "27",
+      "param_type_source": "literal",
       "set_function": [
         "_saveSocSetting"
       ],
@@ -1031,6 +1161,13 @@
         "micro_hes/src/a17e2/station/home/a17e2_station_logic.dart",
         "settings/src/common/page/feed_grid/feed_grid_controller.dart"
       ],
+      "function_sources": {
+        "_getFeedGridConfig": "literal",
+        "fetchESeriesFeedGridParams": "literal",
+        "getFeedGridParam": "literal",
+        "updateByCloud": "literal",
+        "updateFeeder0w": "literal"
+      },
       "get_function": [
         "fetchESeriesFeedGridParams",
         "_getFeedGridConfig",
@@ -1040,6 +1177,7 @@
       "keys": [],
       "name": null,
       "param_type": "28",
+      "param_type_source": "literal",
       "set_function": [
         "updateFeeder0w",
         "updateByCloud"
@@ -1059,6 +1197,14 @@
         "micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart",
         "micro_hes/src/sdk/A17E2/a17e2_pv_default_handler.dart"
       ],
+      "function_sources": {
+        "_fetchThirdPvConnectType": "literal",
+        "_getThirdPvFromCloud": "literal",
+        "_updateThirdPvByCloud": "literal",
+        "getThirdPv": "literal",
+        "handle": "literal",
+        "updateThirdPvByCloud": "literal"
+      },
       "get_function": [
         "_getThirdPvFromCloud",
         "getThirdPv",
@@ -1071,6 +1217,7 @@
       ],
       "name": null,
       "param_type": "29",
+      "param_type_source": "literal",
       "set_function": [
         "_updateThirdPvByCloud",
         "updateThirdPvByCloud",
@@ -1087,6 +1234,10 @@
       "dart_files": [
         "settings/src/common/station_page/station_peak_shaving/station_peak_shaving_controller.dart"
       ],
+      "function_sources": {
+        "getPeakShavingSetting": "literal",
+        "updatePeakShavingSetting": "literal"
+      },
       "get_function": [
         "getPeakShavingSetting"
       ],
@@ -1094,6 +1245,7 @@
       "keys": [],
       "name": null,
       "param_type": "30",
+      "param_type_source": "literal",
       "set_function": [
         "updatePeakShavingSetting"
       ],
@@ -1108,6 +1260,10 @@
       "dart_files": [
         "settings/src/common/page/hardware_feed_grid/hardware_feed_grid_controller.dart"
       ],
+      "function_sources": {
+        "getFeedGridParam": "literal",
+        "updateByCloud": "literal"
+      },
       "get_function": [
         "getFeedGridParam"
       ],
@@ -1115,6 +1271,7 @@
       "keys": [],
       "name": null,
       "param_type": "31",
+      "param_type_source": "literal",
       "set_function": [
         "updateByCloud"
       ],
@@ -1132,6 +1289,12 @@
         "ak_soft_ems/ems_list/power_usage_scenario_controller.dart",
         "settings/src/sdk/util/grid_connect_util.dart"
       ],
+      "function_sources": {
+        "_fetchPowerLimits": "literal",
+        "fetchSiteGridPowerList": "literal",
+        "getGroupedOutputPowerSum": "literal",
+        "setGridPowerAsync": "literal"
+      },
       "get_function": [
         "_fetchPowerLimits",
         "getGroupedOutputPowerSum",
@@ -1141,6 +1304,7 @@
       "keys": [],
       "name": null,
       "param_type": "32",
+      "param_type_source": "literal",
       "set_function": [
         "setGridPowerAsync"
       ],
@@ -1157,6 +1321,12 @@
         "flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart",
         "settings/src/common/menu_controller/monitoring_device_menu_controller.dart"
       ],
+      "function_sources": {
+        "_getMeterTypeAsync": "literal",
+        "_loadCurrentMeterType": "literal",
+        "updateExternalMeter": "literal",
+        "updateMeterType": "literal"
+      },
       "get_function": [
         "_getMeterTypeAsync",
         "_loadCurrentMeterType"
@@ -1167,6 +1337,7 @@
       ],
       "name": null,
       "param_type": "34",
+      "param_type_source": "literal",
       "set_function": [
         "updateMeterType",
         "updateExternalMeter"
@@ -1183,6 +1354,11 @@
         "flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart",
         "settings/src/common/menu_controller/gateway_current_limit_menu_controller.dart"
       ],
+      "function_sources": {
+        "_loadCurrentLimit": "literal",
+        "getGatewayCurrentLimit": "literal",
+        "updateGatewayCurrentLimit": "literal"
+      },
       "get_function": [
         "getGatewayCurrentLimit",
         "_loadCurrentLimit"
@@ -1193,6 +1369,7 @@
       ],
       "name": null,
       "param_type": "35",
+      "param_type_source": "literal",
       "set_function": [
         "updateGatewayCurrentLimit"
       ],
@@ -1207,6 +1384,10 @@
       "dart_files": [
         "settings/src/common/page/station_advanced_setting/station_advanced_setting_controller.dart"
       ],
+      "function_sources": {
+        "_getGridOverloadAutoReduceSetting": "literal",
+        "_setGridOverloadAutoReduceSetting": "literal"
+      },
       "get_function": [
         "_getGridOverloadAutoReduceSetting"
       ],
@@ -1214,6 +1395,7 @@
       "keys": [],
       "name": null,
       "param_type": "37",
+      "param_type_source": "literal",
       "set_function": [
         "_setGridOverloadAutoReduceSetting"
       ],
@@ -1233,6 +1415,13 @@
       "dart_files": [
         "charging/http/http_request_repository_impl.dart"
       ],
+      "function_sources": {
+        "get17C1SiteDeviceParam": "variable",
+        "getSiteDeviceParam": "variable",
+        "set17C1SiteDeviceParam": "variable",
+        "setDynamicPrice": "variable",
+        "setSiteDeviceParam": "variable"
+      },
       "get_function": [
         "get17C1SiteDeviceParam",
         "getSiteDeviceParam"
@@ -1241,6 +1430,7 @@
       "keys": [],
       "name": null,
       "param_type": "variable",
+      "param_type_source": "variable",
       "set_function": [
         "set17C1SiteDeviceParam",
         "setSiteDeviceParam",

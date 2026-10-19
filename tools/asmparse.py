@@ -68,6 +68,7 @@ def iter_functions(path, rel=None):
     cls = None
     fn = None
     ins = None
+    prev = ''
     with open(path, encoding='utf-8', errors='replace') as fh:
         for line in fh:
             if line[0] == 'c' and line.startswith('class '):
@@ -78,6 +79,13 @@ def iter_functions(path, rel=None):
                 if is_header(line):
                     fn = Func(cls, line, rel)
                     ins = None
+                elif ADDR_LINE_RE.match(line) and prev.startswith('  ') \
+                        and '(' in prev:
+                    # fallback anchor: `// ** addr:` follows every header
+                    fn = Func(cls, prev, rel)
+                    fn.addr = ADDR_LINE_RE.match(line).group(1)
+                    ins = None
+                prev = line
                 continue
             if line.startswith('  }'):
                 yield fn
@@ -128,10 +136,15 @@ def closure_parents(text):
 
 
 SNAPSHOT_3_24_3 = '78da37fed6bf1489361a312568249f3f'
-DEFAULT_OLD_ROOT = ('/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-                    'blutter_output/asm')
-DEFAULT_UPSTREAM = ('/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-                    'anker-solix-api/api/apitypes.py')
+DEFAULT_NEW_ROOT = os.environ.get(
+    'ANKER_ASM_NEW', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
+    'v3.24.3/blutter_output/asm')
+DEFAULT_OLD_ROOT = os.environ.get(
+    'ANKER_ASM_OLD', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
+    'blutter_output/asm')
+DEFAULT_UPSTREAM = os.environ.get(
+    'ANKER_UPSTREAM', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
+    'anker-solix-api/api/apitypes.py')
 ALL_CALLEE_RE = re.compile(r'\bbl\s+#0x[0-9a-f]+\s+; \[[^\]]*\] (\S+)')
 
 

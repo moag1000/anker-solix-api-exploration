@@ -93,10 +93,12 @@ def build_param_types(root, version, upstream=None, log=None):
             'param_type': pt, 'name': names.get(pt), 'set_function': [],
             'get_function': [], 'cmd': None, 'cmd_raw': None, 'cmd_addr': None,
             'cmd_by_function': {}, 'keys': [], 'get_model': None,
-            'dart_files': [], 'traced_from': [], 'unresolved': []})
+            'dart_files': [], 'traced_from': [], 'unresolved': [],
+            'function_sources': {}, 'param_type_source': None})
 
-    def add(pt, r, label):
+    def add(pt, r, label, source):
         g = group(pt)
+        g['function_sources'][label] = source
         kind = 'set_function' if r['url'] == SET_URL else 'get_function'
         if label not in g[kind]:
             g[kind].append(label)
@@ -119,12 +121,13 @@ def build_param_types(root, version, upstream=None, log=None):
         if pt is None:
             continue
         if pt != 'variable':
-            add(pt, r, r['function'])
+            add(pt, r, r['function'], 'literal')
             continue
         sym = _sym(r)
-        add('variable', r, r['function'])
+        add('variable', r, r['function'], 'variable')
         for val, addr, chain in found.get(sym, []):
-            add(val, r, '%s (via %s)' % (chain[-1].split('::', 1)[1], r['function']))
+            add(val, r, '%s (via %s)' % (chain[-1].split('::', 1)[1], r['function']),
+                'traced')
             groups[val]['traced_from'].append(
                 {'wrapper': r['function'], 'chain': chain, 'value_addr': addr})
         for chain in lost.get(sym, []):
@@ -133,6 +136,9 @@ def build_param_types(root, version, upstream=None, log=None):
                  'chain': chain})
     rows = []
     for pt, g in groups.items():
+        srcs = set(g['function_sources'].values())
+        g['param_type_source'] = ('variable' if pt == 'variable' else
+                                  'literal' if 'literal' in srcs else 'traced')
         if len(g['unresolved']) > 0:
             seen = []
             for u in g['unresolved']:

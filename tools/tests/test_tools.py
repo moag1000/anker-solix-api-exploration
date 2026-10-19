@@ -10,12 +10,16 @@ import unittest
 TOOLS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, TOOLS)
 
-ROOT_NEW = ('/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-            'v3.24.3/blutter_output/asm')
-ROOT_OLD = ('/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-            'blutter_output/asm')
-UPSTREAM = ('/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
-            'anker-solix-api/api/apitypes.py')
+ROOT_NEW = os.environ.get(
+    'ANKER_ASM_NEW', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
+    'v3.24.3/blutter_output/asm')
+ROOT_OLD = os.environ.get(
+    'ANKER_ASM_OLD', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
+    'blutter_output/asm')
+UPSTREAM = os.environ.get(
+    'ANKER_UPSTREAM', '/Users/michaelbanda/Nextcloud/www/untitled1/ankerAPK/'
+    'anker-solix-api/api/apitypes.py')
+REPO = os.path.dirname(TOOLS)
 
 HTTP_FILE = os.path.join(ROOT_NEW, 'charging/http/http_request_repository_impl.dart')
 LOGIC_FILE = os.path.join(
@@ -134,6 +138,16 @@ class ParamTypeTests(unittest.TestCase):
             self.assertIn(p, got)
         r19 = [r for r in res['rows'] if r['param_type'] == '19'][0]
         self.assertEqual(r19['cmd'], 123)
+        self.assertEqual(r19['param_type_source'], 'literal')
+        self.assertIn('traced', {r['param_type_source'] for r in res['rows']})
+        for r in res['rows']:
+            if r['param_type_source'] == 'traced':
+                self.assertTrue(r['traced_from'])
+            self.assertTrue(set(r['function_sources'].values())
+                            <= {'literal', 'traced', 'variable'})
+        self.assertEqual(
+            [r for r in res['rows'] if r['param_type'] == 'variable'][0]
+            ['param_type_source'], 'variable')
         self.assertIn('setSiteDevicePowerLimit', r19['set_function'])
 
 
@@ -173,9 +187,10 @@ class RenderTests(unittest.TestCase):
         inv = inventory_new()
         page = render_pages.render_endpoint(
             [r for r in inv['rows'] if r['url'] ==
-             '/power_service/v1/site/set_site_device_param'])
+             '/power_service/v1/site/set_site_device_param'],
+            date='2026-10-19')
         self.assertTrue(page.startswith(
-            '> Verified against: App 3.24.3 · Date: '))
+            '> Verified against: App 3.24.3 · Date: 2026-10-19'))
         self.assertIn('Confidence: string-only', page.splitlines()[0])
         self.assertIn('# set_site_device_param', page)
         self.assertIn('power_limit.limit_real', page)
@@ -184,6 +199,87 @@ class RenderTests(unittest.TestCase):
         self.assertEqual(render_pages.endpoint_path(
             '/power_service/v1/site/set_site_device_param'),
             'api/power_service/site/set_site_device_param.md')
+
+    def test_variable_param_type_labelled_unverified(self):
+        import render_pages
+        rows = [r for r in inventory_new()['rows']
+                if r['param_type_source'] == 'variable'
+                and r['url'] == '/power_service/v1/site/set_site_device_param']
+        self.assertTrue(rows)
+        page = render_pages.render_endpoint(rows[:1], date='2026-10-19')
+        self.assertIn('traced by heuristic', page)
+        self.assertIn('verify', page)
+
+
+SYNTH = """// lib: , url: package:x/y.dart
+
+class A extends Object {
+
+  _ send(/* No info */) {
+    // ** addr: 0x100, size: 0x10
+    // 0x101: r2 = 8
+    //     0x101: mov             x2, #8
+    // 0x102: r0 = AllocateArray()
+    //     0x102: bl              #0x1  ; AllocateArrayStub
+    // 0x103: r16 = "cmd"
+    //     0x103: ldr             x16, [PP, #1]  ; [pp+1] "cmd"
+    // 0x104: StoreField: r0->field_f = r16
+    //     0x104: stur            w16, [x0, #0xf]
+    // 0x105: r16 = 246
+    //     0x105: mov             x16, #0xf6
+    // 0x106: StoreField: r0->field_13 = r16
+    //     0x106: %s
+    // 0x107: r0 = Map._fromLiteral()
+    //     0x107: bl              #0x2  ; [dart:core] Map::Map._fromLiteral
+  }
+}
+"""
+
+
+class SynthTests(unittest.TestCase):
+    def _req(self, store):
+        import tempfile
+        import asmparse
+        import endpoint_inventory
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, 'y.dart')
+            with open(p, 'w') as fh:
+                fh.write(SYNTH % store)
+            fn = next(asmparse.iter_functions(p, 'y.dart'))
+            return endpoint_inventory.extract_request(fn)
+
+    def test_known_width_goes_through_smi(self):
+        r = self._req('stur            w16, [x0, #0x13]')
+        self.assertEqual((r['cmd'], r['cmd_raw']), (123, 246))
+        self.assertIsNone(r['cmd_note'])
+
+    def test_unknown_width_gives_null_cmd(self):
+        r = self._req('str             x1, [x0, #0x13]')
+        self.assertIsNone(r['cmd'])
+        self.assertEqual(r['cmd_raw'], 246)
+        self.assertEqual(r['cmd_note'], 'store width not found')
+
+
+class OutputGuardTests(unittest.TestCase):
+    def test_guard(self):
+        import render_pages
+        for bad in ('.', 'api', 'models', 'tools/outside', '..',
+                    'tools/out/../..'):
+            self.assertFalse(render_pages.out_allowed(
+                os.path.join(REPO, bad), REPO), bad)
+        for good in ('tools/out/x', 'tools/out'):
+            self.assertTrue(render_pages.out_allowed(
+                os.path.join(REPO, good), REPO), good)
+
+    def test_cli_refuses(self):
+        import render_pages
+        cwd = os.getcwd()
+        os.chdir(REPO)
+        try:
+            self.assertEqual(render_pages.main(['--out', '.']), 2)
+            self.assertEqual(render_pages.main(['--out', 'api']), 2)
+        finally:
+            os.chdir(cwd)
 
 
 if __name__ == '__main__':

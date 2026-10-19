@@ -104,6 +104,10 @@ def render_endpoint(rows, date=None, version='3.24.3'):
     L += ['## `param_type`/`cmd`', '']
     if any(r['param_type'] or r['cmd'] is not None for r in rows):
         L.append('see `api/param_types.md`')
+        if any(r.get('param_type_source') == 'variable' for r in rows):
+            L.append('')
+            L.append('param_type is a variable at this sender (traced by heuristic '
+                     '\u2014 verify against the callers in `data/param_types.json`).')
     else:
         L.append('n/a')
     L += ['', '## Response model (link)', '', TODO, '', '## Response', '', TODO, '',
@@ -164,6 +168,17 @@ def render_model(row, date=None, version='3.24.3'):
     return '\n'.join(L)
 
 
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def out_allowed(out, repo):
+    """True only if `out` resolves to <repo>/tools/out or below (component-wise)."""
+    from pathlib import Path
+    root = Path(repo).resolve() / 'tools' / 'out'
+    target = Path(out).resolve()
+    return target == root or root in target.parents
+
+
 def _load(path):
     with open(path, encoding='utf-8') as fh:
         return json.load(fh)
@@ -216,9 +231,9 @@ def main(argv=None):
     ap.add_argument('--out', default='tools/out/pages')
     ap.add_argument('--date')
     a = ap.parse_args(argv)
-    if os.path.abspath(a.out).startswith(
-            (os.path.abspath('api'), os.path.abspath('models'))):
-        print('refusing to write into api/ or models/', file=sys.stderr)
+    if not out_allowed(a.out, REPO):
+        print('refusing --out %s: output must be inside %s'
+              % (a.out, os.path.join(REPO, 'tools', 'out')), file=sys.stderr)
         return 2
     n_ep, n_md = render_all(_load(a.endpoints), _load(a.models), a.out, a.date)
     print('%d endpoint pages, %d model pages -> %s' % (n_ep, n_md, a.out))
