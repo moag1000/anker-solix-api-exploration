@@ -1,2 +1,5 @@
 # Easter egg assets extracted from APK — local only, no spoilers
 easter_eggs/
+
+# SDD scratch (plan workspaces)
+.superpowers/
