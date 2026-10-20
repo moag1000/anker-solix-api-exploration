@@ -22,6 +22,8 @@ Not applicable (string-only): the string is matched against an incoming link, no
 
 No request: the string is only matched against a URL. The query parameters of the incoming link that the app reads afterwards are `client_id`, `redirect_uri`, `response_type`, `scope` and `state` (`charging/ui/page/account/login/alexa_link_logic.dart @0x3bce4d0`..`@0x3bce5f4`); they are documented under `app_to_app_access`.
 
+App-link declaration (traced 2026-10-20, `v3.24.3/base_apk/AndroidManifest.xml`, a binary XML read with a small chunk parser): the activity `com.anker.charging.MainActivity` declares two intent filters with `autoVerify` true, action `android.intent.action.VIEW`, categories `DEFAULT` and `BROWSABLE`, scheme `https`, path prefix `/openapi/oauth/authorize` and the hosts `charging-smart-qa.anker.com` (first filter) and `charging-smart.anker.com` (second filter). So the Alexa app opens an https app link on an Anker host, not a custom scheme. (A separate filter with the scheme `amzn` and host `com.anker.charging` belongs to the Login-with-Amazon workflow activity; it is another flow.)
+
 ## `param_type`/`cmd`
 
 n/a
@@ -52,7 +54,6 @@ none traced: not a request. Code meanings are owned by `api/errors.md`.
 
 ## Known unknowns
 
-- Whether the Alexa app opens a path with this exact prefix on a host of the Anker domain (an app link) or a custom scheme: only the matched strings are visible, not the manifest or associated-domain declarations.
 - What the marker `alexaapp_to_ankerpower` stands for (a query value or a scheme part): the string is matched, its position in the link is not visible. — reclassified: server (2026-10-20: the marker belongs to the link of the Alexa app, outside the Anker app)
 - Why the Anker app tests for `/openapi/oauth/authorize` at all, since the app never requests it: the string is the path of the OAuth authorize endpoint that the Alexa app opens; the server-side endpoint is not part of the app's own request set.
 

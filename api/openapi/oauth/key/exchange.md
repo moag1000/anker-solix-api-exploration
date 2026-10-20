@@ -75,7 +75,7 @@ The code catalog is [errors.md](../../../errors.md). The failure closure of `exc
 
 - Text format of the client public key before encryption, curve and derivation of the session key (native `encryption` channel): see the known unknowns on [../../../encryption.md](../../../encryption.md#known-unknowns). — reclassified: device test row 152 (2026-10-20: the native `encryption` channel; see api/encryption.md)
 - What the SDK (native) does with the negotiated key: the app only stores it; the encrypted requests of the SDK path are built natively and were not analysed. — reclassified: device test row 153 (2026-10-20: native SDK behaviour, no Dart asm)
-- Whether the native SDK performs its own key exchange: the Dart side has only this one caller.
+- Whether the native SDK performs its own key exchange: the Dart side has only this one caller. — reclassified: device test row 153 (2026-10-20: native SDK behaviour, no Dart asm; the Dart side has this one caller)
 - Server behavior on a repeated exchange with the same client key.
 
 ## Device-tested by

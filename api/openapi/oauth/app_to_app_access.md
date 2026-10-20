@@ -30,6 +30,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 All five values are Strings: the body map literal has type arguments `<String, String>` (`charging/http/http_request_repository_impl.dart @0x3bcea34`). The sender also builds a sanitised copy of the same map for its log line (`sanitize` `@0x3bce7dc`, `@0x3bce888`); only the log copy is masked. The key `Openudid` is in a separate `<String, String>` map (`@0x3bcea68`) with the value of `getTerminalId` (`@0x3bce920`), passed as the `header` named argument (`@0x3bcead4`), so it is a request header, not a body field.
 
+Log masking (traced 2026-10-20, app side, log copy only): `AlexaConstants::sanitize` (`charging/constants/alexa_constants.dart @0x3bcde54`) returns `<empty>` for a null or empty string (`@0x3bcde84`); otherwise, with n the length, k = min(n ~/ 3, 4) (`sdiv` by 3 `@0x3bcdea8`, compare with 4 `@0x3bcdeac`) and m = min(n - 2k, 10) (compare with 10 `@0x3bcdec0`), it returns the first three characters (`substring(0, 3)` `@0x3bcdef0`), then m asterisks (`"*" * m` `@0x3bcdf34`), then the last k characters (`substring` from `n - k` `@0x3bcdf20`), joined by `_interpolate` (`@0x3bcdf68`). A string shorter than three characters would make the `substring(0, 3)` call raise a range error (Dart semantics, not exercised).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -79,7 +81,6 @@ Called from:
 
 - What the Alexa side does with `code` and the lifetime of the code: not visible in the app. — reclassified: server (2026-10-20: the Alexa side and the lifetime of the code are outside the app)
 - The values of `client_id`, `redirect_uri`, `response_type`, `scope` and `state`: `AlexaLinkLogic::getAlexaLinkCode` takes them from `parseAuthParams` (`charging/ui/page/account/login/alexa_link_logic.dart @0x3bce414`), the query of the opening link (see `/openapi/oauth/authorize`); the concrete values belong to the Alexa skill and are not documented here. — reclassified: server (2026-10-20: the values arrive in the link of the Alexa app, which the Anker app only parses)
-- How `sanitize` masks values (it is used for logging only).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
