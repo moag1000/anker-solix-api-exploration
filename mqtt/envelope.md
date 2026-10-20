@@ -209,11 +209,11 @@ The earlier text on this page said no reference to the certificate classes exist
 |---|---|---|---|
 | 0 | `Certificates.ci` | `aiot-mqtt-us-ci.anker.com` (one host, no region split) | @0x2408754..@0x2408794 |
 | 1 | `Certificates.beta` | US `aiot-mqtt-us-beta.anker.com`, EU `aiot-mqtt-eu-beta.anker.com` | @0x240879c..@0x2408818 |
-| 2 | `Certificates.mp` (one member of the `MP` holder per region: the US branch @0x2408830 loads its `field_b` @0x2408858, the EU branch @0x240888c loads `field_7` @0x24088b0; `UsMp` and `EuMp` are the two member classes of `local.dart`) | US `aiot-mqtt-us.anker.com`, EU `aiot-mqtt-eu.anker.com` | @0x2408830..@0x24088e4 |
-| 3 | `Certificates.qa` | US `aiot-mqtt-us-qa.anker.com`, EU `aiot-mqtt-eu-qa.anker.com` | @0x2408904..@0x2408984 |
-| above 3 | `Certificates.qa` | US `aiot-mqtt-us-qa2.anker.com`, EU `aiot-mqtt-eu-qa2.anker.com` | @0x240899c..@0x2408a1c |
+| 2 | `Certificates.mp` (one member of the `MP` holder per region: the US branch @0x2408830 loads its `field_b` @0x2408850, the EU branch @0x240888c loads `field_7` @0x24088ac; `UsMp` and `EuMp` are the two member classes of `local.dart`) | US `aiot-mqtt-us.anker.com`, EU `aiot-mqtt-eu.anker.com` | @0x2408830..@0x24088e4 |
+| 3 | `Certificates.qa` | US `aiot-mqtt-us-qa.anker.com`, EU `aiot-mqtt-eu-qa.anker.com`; replaced by the stored `envMqttBroker` when `switchedEnv` is true | @0x2408904..@0x2408984 |
+| above 3 | `Certificates.qa` | US `aiot-mqtt-us-qa2.anker.com`, EU `aiot-mqtt-eu-qa2.anker.com`; replaced by the stored `envMqttBroker` when `switchedEnv` is true | @0x240899c..@0x2408a1c |
 
-For any other region value the host is the empty string. After the switch the function loads `Certificates.rootCA` (@0x2408a48) for all environments. Which `serverEnv` value a production install holds (the page `server_env_list_page.dart` lets a user switch it, `getEnvSwitched` @0x24086f8) was not traced; the host names are app-side literals and say nothing about what the servers do.
+For any other region value (the `ServerRegion` objects are `us`, `eu` and `cn`) the host is the empty string. `switchedEnv` override (app side, a QA-only path): for `serverEnv` 3 and above, `_getDemoSiteConfig` calls `getEnvSwitched` (key `switchedEnv`, @0x24086f8) and only when it is false takes the region host of the table (`tbnz w0,#4` @0x2408938 and @0x24089d0); when it is true the host is the string preference `envMqttBroker` read at @0x2408710 and used at @0x240893c and @0x24089d4, and the certificate set stays `qa`. After the switch the function loads `Certificates.rootCA` (@0x2408a48) for all environments. Which `serverEnv` value a production install holds (the page `server_env_list_page.dart` lets a user switch it, `getEnvSwitched` @0x24086f8) was not traced; the host names are app-side literals and say nothing about what the servers do.
 
 ## Since 3.18.0
 
