@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_charging_device
 
 ## Purpose
 
-<!-- TODO -->
+Reads the A1340 charging devices: `A1340chargeDeviceLogic::getA1340ChargeDeviceListForOther` and `A1340homeLogic::_getA1340ChargeDeviceListForOther` call `getChargingDeviceRequest`.
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/power_service/v1/site/get_charging_device`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x286b044`
+`POST /power_service/v1/site/get_charging_device` (asm-traced): URL string at `http_request_repository_impl.dart @0x286b044`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x286b03c`, in `HttpRequestControllerImpl::getChargingDeviceRequest` (`http_request_repository_impl.dart @0x286afb8`).
 
 ## Encrypted?
 
@@ -20,7 +20,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-No request keys found by the extractor. <!-- TODO -->
+The body is an empty map literal (`ldr x16, [THR, #0xa8]` empty array `@0x286affc`, `Map._fromLiteral` `@0x286b004`); the builder contains no `[]=` call, so no key is added. The map goes to `encryptionRequestHttp` (`@0x286b064`).
 
 ## `param_type`/`cmd`
 
@@ -28,19 +28,25 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+`charging::A1340ChargingDeviceData` (`data/models.json` key; fields on [`models/pps.md`](../../../models/pps.md#a1340chargingdevicedata)), parsed in the success closure `http_request_repository_impl.dart @0x286b080` by `A1340ChargingDeviceData.fromJson`.
 
 ## Response
 
-<!-- TODO -->
+Top-level keys of the model (from `data/models.json`): `device_list` (List, nullable) and `guide_txt` (String, nullable).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized
+
+```json
+{}
+```
+
+Response keys: see Response; no capture.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+None traced: the builder passes the `postJML` failure template (`@0x226824c`) to the callers' failure callbacks, which were not read. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -54,11 +60,12 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. The endpoint is in none of the added, removed or changed-params lists of `tools/out/diff_3.18.0_3.24.3.md`, so there is no string-level parameter delta. The model `A1340ChargingDeviceData` is `≤3.18.0` in `data/models.json`.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- The element class of `device_list` (the model keeps it as an untyped `List`).
+- Failure handling in the two callers was not read.
 
 ## Device-tested by
 
