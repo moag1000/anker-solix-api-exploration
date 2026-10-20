@@ -70,8 +70,8 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The meaning of `self_check_status` 1, 2, 3, of the two special failure codes and of `capability` is not decoded; the numbers above are what the app computes.
-- The unit of `start_time` and `end_time` (the fields hold integers; seconds or milliseconds) is not known.
+- The meaning of `self_check_status` 1, 2, 3, of the two special failure codes and of `capability` is not decoded; the numbers above are what the app computes. — reclassified: device test row 157 (2026-10-20: the status numbers describe device self-check results)
+- The unit of `start_time` and `end_time` (the fields hold integers; seconds or milliseconds) is not known. — reclassified: device test row 157 (2026-10-20: the number is produced by the app from a clock value; compare with a captured report)
 - Server behaviour is not known.
 
 ## Device-tested by

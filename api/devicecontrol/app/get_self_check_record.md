@@ -64,7 +64,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The value domains of `self_check_status` and the time format of `start_time` and `end_time` are not decoded (the report call [self_check_report](self_check_report.md) sends integers for the times).
+- The value domains of `self_check_status` and the time format of `start_time` and `end_time` are not decoded (the report call [self_check_report](self_check_report.md) sends integers for the times). — reclassified: device test row 157 (2026-10-20: status values and time format come from the stored report of the device self check)
 - Server behaviour is not known.
 
 ## Device-tested by

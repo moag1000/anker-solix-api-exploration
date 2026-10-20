@@ -71,7 +71,7 @@ Called from:
 
 ## Known unknowns
 
-- Type of `device_sn`: a parameter stored into a `<String, dynamic>` literal.
+- Type of `device_sn`: a parameter stored into a `<String, dynamic>` literal. — attempted 2026-10-20 (two-hop not readable: `_handleDeviceRemoval` (`balcony/src/ae100/settings/ae100_remove_device_controller.dart @0x471b384`), `_handleDeviceRemoval` (`base_service/view/general_setting/remove_device_controller.dart @0x2815ebc`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - What `member_type` 1 means (owner versus sharer): the value is a constant; the server table is not visible.
 - Whether the result `Map` carries an error that the caller should handle: the sender drops it.
 - Server behaviour is not known from the app: this page states what the app builds and parses.

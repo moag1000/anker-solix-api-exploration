@@ -66,7 +66,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 ## Known unknowns
 
 - That `pn_payload` is the raw event payload is inferred from the name only.
-- What "425" is (an event or message number of the device protocol) and the payload layout of `pn_payload` are not decoded here.
+- What "425" is (an event or message number of the device protocol) and the payload layout of `pn_payload` are not decoded here. — reclassified: device test row 157 (2026-10-20: event numbers of the device protocol are decided by the device, not by the app code)
 - Server behaviour is not known (what the cloud does with the event: alarms, support tickets).
 
 ## Device-tested by

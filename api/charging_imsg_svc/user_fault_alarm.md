@@ -66,7 +66,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 ## Known unknowns
 
 - The server-side effect (a stored alarm, a push message or both) is not known; the keys use camelCase (`subSn`, `bitArray`, `typeId`, `localTime`) unlike most other bodies.
-- What a bit in `bitArray` means (fault code table) is not decoded here.
+- What a bit in `bitArray` means (fault code table) is not decoded here. — reclassified: device test row 157 (2026-10-20: the fault-code table is device behaviour)
 - No response was captured.
 
 ## Device-tested by

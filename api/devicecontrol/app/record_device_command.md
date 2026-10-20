@@ -67,7 +67,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The values of `command_type` and the meaning of `id` and `status` are not decoded; the three callers pass different values.
+- The values of `command_type` and the meaning of `id` and `status` are not decoded; the three callers pass different values. — reclassified: server (2026-10-20: command types and status ids are decided by the server record)
 - Whether other device families record commands through this endpoint is not known (only the AX170 sender exists in 3.24.3).
 - Server behaviour is not known.
 

@@ -66,7 +66,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The units of `next_maintenance_time` and `maintenance_time` and the values of `status` are not decoded.
+- The units of `next_maintenance_time` and `maintenance_time` and the values of `status` are not decoded. — reclassified: server (2026-10-20: units and status values of a cloud plan are server conventions (the app writes the numbers))
 - Whether the cloud plan is also written to the generator (the app first calls `updateThirdOilSetting`, a device-side update) or only mirrored is not traced beyond that call order.
 
 ## Device-tested by

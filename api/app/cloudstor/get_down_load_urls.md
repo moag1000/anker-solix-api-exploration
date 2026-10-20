@@ -66,7 +66,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- The type of `urls` (a list of storage keys or a string): a parameter of the sender, the caller's value was not typed.
+- The type of `urls` (a list of storage keys or a string): a parameter of the sender, the caller's value was not typed. — attempted 2026-10-20 (two-hop not readable: `_resolveFileKeysToDownloadUrls` (`anka_agent/pages/home/controller/ai_chat_controller.dart @0x2bf2364`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - What the callback receives from the response and how the agent uses the URLs: only the log line and the `List` test were read.
 - The unit of `expire` (the sender logs it with the text ` expire=`, `@0x2bf2494`): seconds are an assumption from the value 604800.
 - Server behaviour is not known from the app: this page states what the app builds and parses.

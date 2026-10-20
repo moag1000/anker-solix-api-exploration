@@ -75,7 +75,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The value types of `config`, `output` and `input` in the answer and the meaning of `install_method` and `package_num` values are not decoded.
+- The value types of `config`, `output` and `input` in the answer and the meaning of `install_method` and `package_num` values are not decoded. — reclassified: server (2026-10-20: value types and install-method numbers are server data)
 - Server behaviour is not known.
 
 ## Device-tested by

@@ -34,6 +34,8 @@ n/a
 
 (asm-traced) Top-level key of `charging::AIOTPopupModel` (`data/models.json`): `popups` (List?).
 
+Element class (app side, traced 2026-10-20, `charging/model/aiot_cloud/aiot_popup_model.dart`, `fromJson` casts): `AIOTPopupModel.popups` is a `List?` of `AIOTPopup`, which casts `popup_id`, `popup_type`, `start_time` and `end_time` to `int?` and `url`, `event_trace_exposure_key`, `event_trace_click_key`, `popup_name`, `box_name`, `background`, `gif_url`, `setting`, `content`, `icon_url`, `device_type` and `popup_use` to `String?`.
+
 ## Example request/response
 
 Request: no body fields are built (see Request). Response: not synthesized; no capture exists for this endpoint.
@@ -58,7 +60,6 @@ Call sites (grep of the asm, traced 2026-10-20): `getAIOTPopupListApi` is called
 
 ## Known unknowns
 
-- The element class of `popups` (typed `List?`).
 - What `aiotPlatformRequestHttp` (`charging/http/aiot/aiot_http_request_repository_impl.dart @0x260ddb8`) adds to the request (host, signing): the wrapper was not read here.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

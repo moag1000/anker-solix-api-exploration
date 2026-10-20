@@ -72,7 +72,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `popup_name` and `popup_type`: parameters stored into a `<String, Object?>` literal.
+- Types of `popup_name` and `popup_type`: parameters stored into a `<String, Object?>` literal. — traced 2026-10-20: the popup model `AIOTPopup` (see [get_popups.md](get_popups.md#response)) casts `popup_name` to `String?` and `popup_type` to `int?`, the same key names the record sends; whether the closure of `DeviceMainLogic` that calls the sender forwards these fields was not followed
 - Whether the wrapper reads the response: `aiotPlatformRequestHttp` was not read.
 - Which popup event the call stands for (shown, closed, clicked): the key `popup_type` is not decoded. — attempted 2026-10-20 (two-hop not readable: the caller is a closure `(dynamic, int, String?, int?)` of `DeviceMainLogic` that forwards its own arguments (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2618360`))
 - Server behaviour is not known from the app: this page states what the app builds and parses.

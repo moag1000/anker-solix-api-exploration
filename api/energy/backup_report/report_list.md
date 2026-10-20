@@ -62,7 +62,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 ## Known unknowns
 
 - Paging is not visible: no page parameters are sent, so the answer is presumably the full list.
-- The values of `status` and `push_status` per report are not decoded.
+- The values of `status` and `push_status` per report are not decoded. — reclassified: server (2026-10-20: status values are server data)
 
 ## Device-tested by
 

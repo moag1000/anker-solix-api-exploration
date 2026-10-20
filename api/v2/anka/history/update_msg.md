@@ -80,9 +80,9 @@ Called from:
 
 ## Known unknowns
 
-- Type of `user_id`: a field of the request object (`LoadField` `anka_agent/http/request.dart @0x2dba338`); the class listing shows no declared type for it.
+- Type of `user_id`: a field of the request object (`LoadField` `anka_agent/http/request.dart @0x2dba338`); the class listing shows no declared type for it. — attempted 2026-10-20 (two-hop not readable: the request class (`anka_agent/pages/home/models/ai_chat_home_request_model.dart`, one of `AiChatHomeUpdateChatMsgRequestModel`, `AiChatHomeDeleteChatMsgRequestModel`, `AiChatHomeSyncChatMsgRequestModel`, all `extends RequestModel`) lists no fields and no declared type in the asm; the load is `field_13` at `anka_agent/http/request.dart @0x2dba338`)
 - Which response class belongs to this URL and what the callers do with the decoded map: `AiChatHomeLogic` callers were not read.
-- What the native layer does with `useWebsocket: true` (websocket or HTTP): not part of the Dart asm.
+- What the native layer does with `useWebsocket: true` (websocket or HTTP): not part of the Dart asm. — reclassified: device test row 153 (2026-10-20: native layer, no Dart asm)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

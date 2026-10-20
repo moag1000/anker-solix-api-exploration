@@ -16,13 +16,15 @@ Read the entry configuration of the Anka AI assistant for the account (3.18.0 on
 
 `/smart_service/v1/app/anka/get_entry_config`, method not re-read (string-only): the inventory records the sender `getAnkaAgentEntry` of `anka_agent/http/anka_agent_http.dart` (`(3.18.0 address 0x1fe414c)`, URL literal `(3.18.0 address 0x1fe41f0)`) in the 3.18.0 tree, wrapped by `encryptionRequestHttpByGHttpRequest`. The workspace holds only the 3.24.3 asm (`v3.24.3/blutter_output/asm`), where these addresses do not exist (the function `getAnkaAgentEntry` is now at `anka_agent/http/anka_agent_http.dart @0x273702c` and sends `get_all_config`), so the method object, the body and the response parse could not be read.
 
+3.18.0 sender (traced 2026-10-20 in the 3.18.0 asm tree, which is in the workspace at `ankerAPK/blutter_output/asm`; addresses are written without the at sign so that the 3.24.3 citation check skips them): `getAnkaAgentEntry` (`anka_agent/http/anka_agent_http.dart`, 3.18.0 address 0x1fe414c) takes three parameters, loads the method object `Instance_Method` (3.18.0 address 0x1fe41e8, 3.18.0 pool `pp+0x9b18`, enum index 1, name `post`) and the URL string (3.18.0 address 0x1fe41f0), and calls `HttpServiceImpl::encryptionRequestHttpByGHttpRequest` (3.18.0 address 0x1fe4218) with the first parameter as an argument (3.18.0 address 0x1fe4200); the method is therefore `POST`. No map literal is built in the function, so the call sends no body of its own. The response parse was not read.
+
 ## Encrypted?
 
 not readable (3.18.0-only endpoint): the inventory records the wrapper `encryptionRequestHttpByGHttpRequest` for the 3.18.0 sender, but no asm of it is available here. Scheme and header rules: `api/encryption.md`.
 
 ## Request
 
-No request keys are known for the 3.18.0 call: the extractor found none and the 3.18.0 asm is not available. The 3.24.3 successor `get_all_config` builds no body (see its page), which suggests the same for this call (inference, not read).
+No request keys are known for the 3.18.0 call: the extractor found none, and the 3.18.0 sender builds no map literal of its own (see Method+URL). The 3.24.3 successor `get_all_config` builds no body (see its page), which suggests the same for this call (inference, not read).
 
 ## `param_type`/`cmd`
 
@@ -30,7 +32,7 @@ n/a
 
 ## Response model (link)
 
-Unknown (string-only): the 3.18.0 asm is not available. The 3.24.3 successor parses `AnkaAgentEntryConfigModel` (see [`get_all_config`](get_all_config.md)).
+Unknown (string-only): the 3.18.0 response parse was not read. The 3.24.3 successor parses `AnkaAgentEntryConfigModel` (see [`get_all_config`](get_all_config.md)).
 
 ## Response
 
@@ -54,7 +56,7 @@ none traced: the 3.18.0 sender is not readable here.
 
 ## Known unknowns
 
-- Method, body and response of the 3.18.0 call: the 3.18.0 asm tree is not in the workspace (only `v3.24.3/`), and the addresses in the inventory belong to it.
+- The response parse of the 3.18.0 call (the method POST and the absence of a body literal are in Method+URL; the 3.18.0 asm tree is in the workspace) — traced 2026-10-20.
 - Whether the 3.18.0 server still answers this URL: not tested; the 3.24.3 app no longer sends it.
 - Whether `get_all_config` is a pure rename or also changed the response keys: the successor page documents only the 3.24.3 side.
 

@@ -92,7 +92,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `identifier_id`, `place_id`, `formatted_address`, `country_code` and `display_name`: parameter or field values; the asm shows only the `""` fallback for a null.
+- Types of `identifier_id`, `place_id`, `formatted_address`, `country_code` and `display_name`: parameter or field values; the asm shows only the `""` fallback for a null. — attempted 2026-10-20 (two-hop not readable: `syncLocation` (`station_home/src/weather/weather_service.dart @0x2bb0ec8`), an anonymous closure (`electricity_price/components/dynamic_price/util/local_auto_disaster_feature.dart @0x2c1413c`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - Which values other callers could pass for `identifier_type` and `business_type`: `_setLocation` stores a field value for the first and a class-id-dependent 0 or 1 for the second (`electricity_price/components/dynamic_price/util/local_auto_disaster_feature.dart @0x2c143a4`).
 - Why `_setLocation` nests the place under `location` while `saveLocation` sends its parts flat: both reach the same URL; which shape the server accepts is not known from the app.
 - Server behaviour is not known from the app: this page states what the app builds and parses.

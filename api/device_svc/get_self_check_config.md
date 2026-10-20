@@ -80,7 +80,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 ## Known unknowns
 
 - How the answer reaches the item list (which key, or whether `data` is the list itself) is not decoded; see the model page.
-- What `errorBits` encodes (a bit index or a bit mask) is not shown by the sender.
+- What `errorBits` encodes (a bit index or a bit mask) is not shown by the sender. — reclassified: device test row 157 (2026-10-20: bit meaning is device behaviour (self-check error bits))
 
 ## Device-tested by
 

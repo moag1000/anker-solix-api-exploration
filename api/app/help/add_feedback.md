@@ -91,7 +91,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_name`, `product_number`, `device_sn`, `user_name`, `user_email`, `message_content`, `type`, `device_mac`, `subject`, `order_number`: parameters stored into a `<String, Object>` literal.
+- Types of `device_name`, `product_number`, `device_sn`, `user_name`, `user_email`, `message_content`, `type`, `device_mac`, `subject`, `order_number`: parameters stored into a `<String, Object>` literal. — attempted 2026-10-20 (two-hop not readable: `submit` (`charging/ui/page/user/feedback/feedback_logic.dart @0x311f708`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - Which values `type` takes (the feedback category) and what `purchase_channel` encodes: the callers' arguments were not decoded. — attempted 2026-10-20 (two-hop not readable: the one caller `FeedbackLogic::submit` passes slots of its frame, `charging/ui/page/user/feedback/feedback_logic.dart @0x311f6f4`..`@0x311f708`, and eleven stack arguments)
 - The response body (the shared closure forwards it unparsed; the caller's reading was not traced).
 - Server behaviour is not known from the app: this page states what the app builds and parses.

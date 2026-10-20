@@ -108,7 +108,7 @@ Called from:
 
 - What the native Anka agent kit does with the map and which network requests it makes: the Dart side only passes the data (`sendDataToNative`, `@0x35c9af8`).
 - Whether `/app/ai/anka` is a route in the agent's own protocol or an HTTP path the native kit calls: the string is only a map value here. — reclassified: device test row 153 (2026-10-20: the native agent kit is outside the Dart asm)
-- Types of the keys that come from services (`userId`, `userToken`, `touristId`, `iotPublicKey`, `openUdid`, `modelType`, `appVersion`, `osVersion`, `osType`, `phoneModel`, `presetKey`, `language`, `country`, `timezone`, `isLogined`): the values are returned by calls whose result types the asm does not show.
+- Types of the keys that come from services (`userId`, `userToken`, `touristId`, `iotPublicKey`, `openUdid`, `modelType`, `appVersion`, `osVersion`, `osType`, `phoneModel`, `presetKey`, `language`, `country`, `timezone`, `isLogined`): the values are returned by calls whose result types the asm does not show. — attempted 2026-10-20 (two-hop not readable: `initAnkaAgentKit` (`anka_agent/pages/home/controller/ai_chat_controller.dart @0x35c9a40`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - The constants are `appName` (`"anker_power"`), `path` and `deviceSn` (the empty string, `@0x35caa78`).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

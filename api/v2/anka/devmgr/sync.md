@@ -74,7 +74,7 @@ none traced: no 3.24.3 sender. Code meanings are owned by `api/errors.md`.
 
 - Whether the server still serves this URL: the 3.24.3 app has no code for it.
 - Types of the three keys: fields of the removed request class; the class was not located.
-- What the request meant: the key names suggest a per-message device-manager sync; not shown by the asm.
+- What the request meant: the key names suggest a per-message device-manager sync; not shown by the asm. — reclassified: server (2026-10-20: the removed request has no 3.24.3 code; its meaning is not an app-side fact)
 - Server behaviour is not known from the app: this page states what the app built in 3.18.0.
 
 ## Device-tested by
