@@ -26,6 +26,8 @@ Body is a one-pair map in each sender (`site_id`, from the controller's site id 
 |---|---|---|---|---|
 | `site_id` | String | yes | `<site id>` | `ax170_station_controller.dart @0x2359568`; `basic_station_logic.dart @0x23608f0`; `base_station_logic.dart @0x2348b6c` |
 
+When it is sent (traced 2026-10-20, app side): each of the three controllers calls its own `_shareSiteReport` from its `requestSceneInfo`, after the `siteId`-null guard and only when the integer field at offset 0x2b of an observable value equals Smi 2 (`cmp w1, #4` on a tagged value): `ax170_station_controller.dart @0x234e9bc`..`@0x234e9cc` (`requestSceneInfo` starts at line 2855 of the dump), `basic_station_logic.dart @0x235c79c`..`@0x235c7ac`, `base_station_logic.dart @0x233c748`..`@0x233c758`. The three classes are separate controllers of three station pages, so there is no "first": the page that is open sends it. What the field at 0x2b holds was not named.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -63,7 +65,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 ## Known unknowns
 
 - The server-side effect of the call is not known; the name and the fact that it is sent when the scene info loads suggest it registers the site for report sharing.
-- Which of the three station types send it first on a given system is not traced.
+- Which value the guarded field at offset 0x2b holds (the call is sent only when it equals Smi 2; see Request) was not named — traced 2026-10-20
 
 ## Device-tested by
 
