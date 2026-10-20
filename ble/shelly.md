@@ -47,7 +47,7 @@ Notes on this product:
 
 - `ShellyDevice` mixes in `ZXBleFeature` and `PpsDeviceFeature`; `ShellyProDevice` and `ShellyPlugDevice` extend it. The factory builds `ShellyDevice` for `SHEM3`, `ShellyProDevice` for `SHEMP3` and `ShellyPlugDevice` for `SHPPS` (`device_factory_impl.dart @0x240f2d0`, `@0x240f32c`, `@0x240f388`). The ProductModels use the ZX GATT triple, and `shelly_device.dart` holds the full-form scan UUID as a literal (`@0x36c0284`, see [protocol.md](protocol.md#gatt-profile-per-product)).
 - The device class implements the same handshake methods as the Solix classes (`startConnect`, `capabilitiesNegotiation`, `setCapability`, `getPublicKey`, `getAESKey`, `bindUserId`, `getDeviceBasicInfo`), so a Shelly device is negotiated with the ZX handshake. `DeviceConstant.shouldSkipWifiConfig` lists `SHEM3`, `SHEMP3` and `SHPPS`; none of the three is in the product-scan map `ankerProductForBleMap` ([../reference/enums.md](../reference/enums.md#code-lists)).
-- Negotiation, app side: `ShellyDevice` and its two subclasses (class ids 8459 to 8461) has `ZXBleFeature` in its `extends` line and `SHEM3`, `SHEMP3` and `SHPPS` is not a registered SDK product code, so `BleHandler` picks `BleHandlerImpl1`, whose `_authDevice` starts the Dart `ZXBleConfer`. Which of the three conferers then runs depends on the capability response, not on the product ([handshake.md](handshake.md#which-implementation-runs-for-a-product)).
+- Negotiation, app side: `ShellyDevice` and its two subclasses (class ids 8459 to 8461) have `ZXBleFeature` in their `extends` lines and `SHEM3`, `SHEMP3` and `SHPPS` are not registered SDK product codes, so `BleHandler` picks `BleHandlerImpl1`, whose `_authDevice` starts the Dart `ZXBleConfer`. Which of the three conferers then runs depends on the capability response, not on the product ([handshake.md](handshake.md#which-implementation-runs-for-a-product)).
 
 ## Commands
 
@@ -152,7 +152,7 @@ A completed handshake is needed for encrypted commands: the frame builder encryp
 
 #### TLV tags
 
-Owned by the linked MQTT page: [../mqtt/shelly.md](../mqtt/shelly.md). Opcodes marked `no` in the table have no tag table there. Their payload shapes, read from the controller methods (shape definitions: [protocol.md](protocol.md#controller-send-wrappers)): `getOTAInfo` (`002e` or `0063`) and `sendSubPackageData` (`002f` or `0064`) take the opcode pair from `isMTU` and send the caller's map; `getOTAState` (`0030`) sends tag 0xA2 with a user-model string; `setDeviceUpdateEnergy` (`0057`, `shelly_device_controller.dart @0x4081c38`) builds the same map but passes it as a positional argument (call descriptor `[0, 0x4, 0, 0x4, null]`). The response of a request is not handled in these methods (they return Null after the send).
+Owned by the linked MQTT page: [../mqtt/shelly.md](../mqtt/shelly.md). Opcodes marked `no` in the table have no tag table there. Their payload shapes, read from the controller methods (shape definitions: [protocol.md](protocol.md#controller-send-wrappers)): `getOTAInfo` and `sendSubPackageData` (shape OTA info and OTA data); `getOTAState` (shape OTA state); `setDeviceUpdateEnergy` (`0057`, `shelly_device_controller.dart @0x4081c38`) builds the same map but passes it as a positional argument (call descriptor `[0, 0x4, 0, 0x4, null]`). Response handling: none in these methods, see the end of [Controller send wrappers](protocol.md#controller-send-wrappers).
 
 #### Example
 
