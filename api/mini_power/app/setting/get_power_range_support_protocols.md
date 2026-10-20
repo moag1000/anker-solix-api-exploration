@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_power_range_support_protocols
 
 ## Purpose
 
-<!-- TODO -->
+Reads the protocols that the charger ports support per power range, for the charging-mode pages (callers `getRangeProtocols` in the A2345 and A2687 home logic) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,8 +12,11 @@
 
 ## Method+URL
 
-`/mini_power/v1/app/setting/get_power_range_support_protocols`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x3472f74`
-(literal also at 1 more site(s) in `data/endpoints.json`)
+`POST /mini_power/v1/app/setting/get_power_range_support_protocols` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x3472f74`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x3472f6c`, in `HttpRequestControllerImpl::getPowerSupportProtocols` (`charging/http/http_request_repository_impl.dart @0x3472ea8`), sent through `encryptionRequestHttp` (`@0x3472f9c`).
+
+Same URL and method object in the other sender(s) read:
+
+- `POST /mini_power/v1/app/setting/get_power_range_support_protocols` (asm-traced): URL string at `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart @0x2afcfe4`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x2afcfdc`, in `CustomChargeCloudApi::getPowerSupportProtocols` (`small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart @0x2afcf10`), sent through `encryptionRequestHttp` (`@0x2afd00c`).
 
 ## Encrypted?
 
@@ -21,12 +24,12 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+(asm-traced) Both senders store two keys unconditionally in a map literal with type arguments `<String, String>` (`charging/http/http_request_repository_impl.dart @0x3472f28`; second sender `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart @0x2afcfac`), so both values are Strings. `HttpRequestControllerImpl::getPowerSupportProtocols` is `charging/http/http_request_repository_impl.dart @0x3472ea8`, `CustomChargeCloudApi::getPowerSupportProtocols` is `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart @0x2afcf10`.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_model` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3472ea8` |
-| `device_sn` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3472ea8` |
-
-Rows are the union over 2 senders; `source` is the first sender that sets the key.
+| `device_model` | string | yes | `"<device_model>"` | `charging/http/http_request_repository_impl.dart @0x3472f00` (map literal `<String, String>` `charging/http/http_request_repository_impl.dart @0x3472f28`) |
+| `device_sn` | string | yes | `"<device_sn>"` | `charging/http/http_request_repository_impl.dart @0x3472f14` (same literal) |
 
 ## `param_type`/`cmd`
 
@@ -34,19 +37,29 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+- [`PowerRangeProtocolsResponse`](../../../../models/charger.md#powerrangeprotocolsresponse), parsed by `PowerRangeProtocolsResponse.fromJson` at `charging/http/http_request_repository_impl.dart @0x3472ff0` (success closure `@0x3472fb8`; the closure hands the model's first field, `r0->field_13` `@0x3472ff8`, to the callback, `ClosureCall` `@0x347300c`).
+- `small_charging_platform::PowerRangeProtocolsResponse` (`data/models.json`), parsed by `PowerRangeProtocolsResponse.fromJson` at `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart @0x2afd06c` (success closure `@0x2afd02c`; callback `ClosureCall` `@0x2afd080`). Used by the `CustomChargeCloudApi` sender.
 
 ## Response
 
-<!-- TODO -->
+Top-level key per model (`data/models.json`): `port_list` in both `charging::PowerRangeProtocolsResponse` and `small_charging_platform::PowerRangeProtocolsResponse` (field type not extracted).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "device_model": "<device_model>",
+  "device_sn": "<device_sn>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page (the failure closure `charging/http/http_request_repository_impl.dart @0x226824c` forwards code and message to a stored callback without reading them). Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -60,11 +73,14 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. `tools/out/diff_3.18.0_3.24.3.md` lists the parameter `device_sn` as added in 3.24.3 (string-level diff); both senders read here store `device_sn`. `data/models.json` lists the `small_charging_platform` model as since 3.24.3; that sender was not compared with 3.18.0.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- The element shape of `port_list`: the field type is `unknown` in `data/models.json` and the model classes were not read for this page.
+- What the server returns when `device_model` and `device_sn` disagree.
+- Whether 3.18.0 clients sent `device_model` alone (the diff shows only that `device_sn` is new as a literal).
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 
