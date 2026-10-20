@@ -20,11 +20,11 @@ encrypted: `true` (app side). Scheme and header rules: `api/encryption.md`; per-
 
 ## Request
 
-The caller builds a `<String, dynamic>` literal (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a41e8`), which does not type the value, with the single key `station_id` (`@0x29a41cc`); the value is `field_7b` of the logic (`@0x29a41dc`, stored `@0x29a41e4`), a field whose declaration was not read. The map goes to `getDataFromService` (`@0x29a4250`).
+The caller builds a `<String, dynamic>` literal (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a41e8`), which does not type the value, with the single key `station_id` (`@0x29a41cc`); the value is `field_7b` of the logic (load `@0x29a41dc`, stored `@0x29a41e4`). `GeneralPriceSettingLogic::onInit` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x34f1210`) fills that field from the key `site_id` of its arguments with a cast to `String?` (`r8 = String?` `@0x34f13c8`, cast `@0x34f13d4`, store `@0x34f13e0`), so the value is a String. The map goes to `getDataFromService` (`@0x29a4250`).
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `station_id` | ? | yes | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a41cc` |
+| `station_id` | string | yes | `"<station_id>"` | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a41cc` |
 
 ## `param_type`/`cmd`
 
@@ -64,7 +64,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- The type of `station_id`: `field_7b` of the logic was not resolved to a declaration.
+- The URL link stays string-only: the sender loads the late static `getHistorySetting` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a419c`; offset 0xb08, declared `static late String getHistorySetting` in `base_service/api_url.dart`); its initializer was not found, so that it holds the result of `Api::getHistorySetting` rests on the shared name and offset.
 - The values of `last_select_mode` that select manual or automatic time-of-use (compared with tagged immediates `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a46e0`..`@0x29a4744`): not decoded.
 - Which of the two URLs is used at run time: it depends on the static flag `0xad8`, whose setter was not read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.

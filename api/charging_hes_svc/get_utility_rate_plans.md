@@ -20,11 +20,11 @@ encrypted: `true` (app side) for the sender read. Scheme and header rules: `api/
 
 ## Request
 
-`_getUtilityRatePlan` stores 3 keys in a `<String, Object>` literal (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abf68`), which does not type the values. `not_include_nem` and `accuracy` are constants: the tagged immediates `r16 = 2` (`@0x29abf4c`, Smi 1) and `r16 = 10` (`@0x29abf60`, Smi 5). `station_id` is `field_7b` of the logic (`@0x29abf34`), a field whose declaration was not read.
+`_getUtilityRatePlan` stores 3 keys in a `<String, Object>` literal (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abf68`), which does not type the values. `not_include_nem` and `accuracy` are constants: the tagged immediates `r16 = 2` (`@0x29abf4c`, Smi 1) and `r16 = 10` (`@0x29abf60`, Smi 5). `station_id` is `field_7b` of the logic (`@0x29abf34`); `ElectricityPlaceConfirmPageLogic::onInit` (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x34f41d4`) stores that field with a cast to `String` (`r8 = String` `@0x34f4434`, cast `@0x34f4440`, store `@0x34f444c`), so the value is a String.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `station_id` | ? | yes | ? | `electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abf24` |
+| `station_id` | string | yes | `"<station_id>"` | `electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abf24` |
 | `not_include_nem` | int (Smi, w) | yes | `1` | `electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abf40` |
 | `accuracy` | int (Smi, w) | yes | `5` | `electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abf54` |
 
@@ -68,7 +68,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- The type of `station_id`: `field_7b` of the logic was not resolved to a declaration.
+- The URL link stays string-only: the sender loads the late static `getHesUtilityRatePlans` (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abef4`; offset 0xb04, declared `static late String getHesUtilityRatePlans` in `base_service/api_url.dart`); its initializer was not found.
 - The request keys and the response handling of the five other senders.
 - Which URL is used at run time: it depends on the static flag `0xad8`, whose setter was not read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
