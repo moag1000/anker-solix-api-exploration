@@ -74,6 +74,6 @@ The UI callers of a function are the Dart call sites of `AKIotEVChargeCommand::<
 
 ## Known unknowns
 
-- Which request headers and which body encryption the native SDK applies to a `"akiot.cloud_api"` call is not known from Dart.
+- Which request headers and which body encryption the native SDK applies to a `"akiot.cloud_api"` call is not known from Dart. — reclassified: device test row 153 (2026-10-20: native SDK behaviour, no Dart asm)
 - The body of the closure that converts the SDK result into the typed model (`ak_iot_kit_manager_impl.dart @0x21c3d24`) was not read; the registry link is inferred.
 - The SDK may accept a leading-slash and a no-slash `path` alike (`add_vehicle` is the only literal with a slash); this was not tested.

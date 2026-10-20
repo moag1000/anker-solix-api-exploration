@@ -77,7 +77,7 @@ Called from:
 
 ## Known unknowns
 
-- What the Alexa side does with `code` and the lifetime of the code: not visible in the app.
+- What the Alexa side does with `code` and the lifetime of the code: not visible in the app. — reclassified: server (2026-10-20: the Alexa side and the code lifetime are outside the app)
 - The values of `client_id`, `redirect_uri`, `response_type`, `scope` and `state`: `AlexaLinkLogic::getAlexaLinkCode` takes them from `parseAuthParams` (`charging/ui/page/account/login/alexa_link_logic.dart @0x3bce414`), the query of the opening link (see `/openapi/oauth/authorize`); the concrete values belong to the Alexa skill and are not documented here.
 - How `sanitize` masks values (it is used for logging only).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
