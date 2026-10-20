@@ -84,8 +84,8 @@ Called from:
 ## Known unknowns
 
 - Type of `site_name` and of `app_ability` (parameters; the six callers were not followed). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: `app_ability` is a named argument of three callers (`charging/ui/page/device/a17c1/open_process/open_process_logic.dart @0x28d2b28`, `charging/ui/page/device/connect/create_join_device_to_system/create_system/create_system_logic.dart @0x2924090`, `charging/ui/page/green_energy/site/site_logic.dart @0x27b1fa4`) and its value is read from fields; `site_name` is a positional argument whose source differs per caller (`r2 = Null` in `a1782_electricity_scene_logic.dart @0x28d3824`, `electricity_scene_logic.dart @0x3d079c8`); no declared types are shown)
-- What `exist_site_id` carries the key name suggests the id of an existing site; not read.
- — reclassified: server
+- What `exist_site_id` carries the key name suggests the id of an existing site; not read. — reclassified: server
+
 ## Device-tested by
 
 none

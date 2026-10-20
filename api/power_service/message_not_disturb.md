@@ -48,6 +48,8 @@ Sender `setMessageDisturb` (`http_request_repository_impl.dart @0x402c798`): an 
 | `disturb_scenes` | object | optional | | key `@0x402c910`, `[]=` `@0x402c918`; added only when the parameter at `fp-0x28` is non-null (`cmp w0, NULL` `@0x402c8bc`) |
 | `disturb_scenes.guardian_log` | bool | yes | `true` | key `@0x402c8d4`, value store `@0x402c8e4`; the inner map is typed `<String, bool>` (`@0x402c8e8`) |
 
+3.18.0 form of `setMessageDisturb` (read in the 3.18.0 tree `blutter_output/asm`, not covered by the citation checker; addresses without `@`): the function at 0x3130300 built a 3-pair map literal (`AllocateArray r2 = 12` at 0x3130354, type arguments `<String, Object>` at 0x31303c4) with `start_time` (0x3130360, `BoxInt64Instr` 0x3130370), `end_time` (0x3130388, `BoxInt64Instr` 0x3130398) and `disturb_switch` (0x31303b0), so the time window was sent in a map literal there; `disturb_scenes` is not part of that body.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -98,8 +100,7 @@ Called from:
 
 ## Known unknowns
 
-- Type of `disturb_switch` (a parameter of `setMessageDisturb`; the four UI callers were not followed). Header stays string-only.
-- Whether 3.18.0 sent the time window in a map literal (the diff suggests literal keys there): not read, 3.18.0 asm was not opened for this page.
+- Type of `disturb_switch` (a parameter of `setMessageDisturb`; the four UI callers were not followed). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the four callers (`charging/ui/page/message/settingDetail/message_setting_detail_logic.dart @0x402fff4`, `@0x403062c`, `@0x4030bc0`; `charging/ui/page/message/settingDetail/guardian_diary_message_setting_logic.dart @0x402c6cc`) pass `disturb_switch` as a field of an Rx `.value` (`field_f`, `message_setting_detail_logic.dart @0x402ffa4`) with no default or declared type. Header stays string-only)
 - Which sender the server expects for which scene: the two key sets never appear together in one request.
 - The response body: not read by the app. — reclassified: server
 

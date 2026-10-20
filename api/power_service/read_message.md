@@ -75,7 +75,7 @@ Called from:
 
 - Types and meaning of `all` and `sns` (parameters; the four UI callers were not followed). Header stays string-only.
 - Whether `id` is the message id returned by [get_message](get_message.md): the value is parsed from a string field of the passed object.
-- Failure handling in the callers was not read.
+- Failure handling in the callers was not read. — traced 2026-10-20: the call sites pass no `fail` closure among their named arguments: `MessageSystemLogic.readAllMsg` (`charging/ui/page/message/system/message_system_logic.dart @0x3bb564c`): no named argument; `MessageSystemLogic.pushToDetail` (`charging/ui/page/message/system/message_system_logic.dart @0x3bb7ff0`): named arguments `model`; `MessageSystemLogic.pushToDetail` (`charging/ui/page/message/system/message_system_logic.dart @0x3bb8180`): named arguments `model`; `MessageSystemLogic.pushToDetail` (`charging/ui/page/message/system/message_system_logic.dart @0x3bb8270`): named arguments `model`; `MessageMainLogic.markAllMessageIsReaded` (`charging/ui/page/message/Main/message_main_logic.dart @0x401b28c`): named arguments `snList`; `MessageMainLogic.pushToDetailPage` (`charging/ui/page/message/Main/message_main_logic.dart @0x401e24c`): named arguments `model`. Failure then falls to the callee's default or to the awaiting code, neither of which was read
 
 ## Device-tested by
 

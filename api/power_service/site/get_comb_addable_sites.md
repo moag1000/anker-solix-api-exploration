@@ -26,6 +26,8 @@ The body is a 1-pair map literal typed `<String, List<DeviceJoinSiteModel>?>` (t
 |---|---|---|---|---|
 | `devices` | list | yes | | key `@0x28bb1b8`, value store `@0x28bb1c8` (parameter at `fp-0x10`; the map type says a list of `DeviceJoinSiteModel` objects, possibly null) |
 
+Elements of `devices` (asm-traced): `DeviceJoinSiteModel::toJson` (`charging/ui/page/device/a17c1/open_process/open_process_state.dart @0x28bb364`) writes two keys unconditionally, `device_sn` (`@0x28bb390`) and `device_model` (`@0x28bb3ac`), from two fields of the object (`field_7`, `field_b`); the class has no `fromJson` in the asm, so the field types are not declared anywhere the app shows. The list holds `DeviceJoinSiteModel` objects (map type argument above), so each element carries these two keys if the HTTP layer serialises the objects with `toJson`; that step is outside the Dart code read.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -68,9 +70,8 @@ Called from:
 
 ## Known unknowns
 
-- The keys of a `DeviceJoinSiteModel` element (its `toJson` was not followed).
-- The element structure of `site_list`.
- — reclassified: server (elements of an untyped list; the content is server data)
+- The element structure of `site_list`. — reclassified: server (elements of an untyped list; the content is server data)
+
 ## Device-tested by
 
 none

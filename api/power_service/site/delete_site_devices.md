@@ -38,7 +38,7 @@ None for most callers: the success callbacks of `remove_station_devices_logic.da
 
 ## Response
 
-Keys read by the callers: `del_device_infos` (list of maps with `device_sn`), `update_user_power_limit` (read by `manage_devices_logic.dart @0x3fbd7f8`; value type not resolved).
+Keys read by the callers: `del_device_infos` (list of maps with `device_sn`), `update_user_power_limit` (read by `manage_devices_logic.dart @0x3fbd7f8`): the callback checks the key for null (`cmp w0, NULL` `@0x3fbd840`) and compares the value with the boolean `true` through an equality call (`r16 = true` `@0x3fbd8ac`, `tbnz w0, #4` `@0x3fbd8c4`), so the app treats it as a bool flag and continues only when it is `true`.
 
 ## Example request/response
 
@@ -74,8 +74,7 @@ Called from:
 ## Known unknowns
 
 - Type of `site_id` in all callers and the full key set of the `manage_devices_logic.dart` variant (it also sends `hardware_info`, and logs `isOnlyDeleteC0` and `selectedDeleteDeviceSNList` strings in the same function). Header stays string-only.
-- What `update_user_power_limit` carries (read in the manage-devices callback only).
-- Whether `device_sn` elements are always Strings: the lists are built dynamically.
+- Whether `device_sn` elements are always Strings: the lists are built dynamically. — traced 2026-10-20: two callers build the list with the type argument `<String>` (`AddDevicesLogic.deleteGroup`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices/add_devices_logic.dart @0x3fa09e4`, and `SiteLogic._deleteGroupDevices`, `charging/ui/page/green_energy/site/site_logic.dart @0x3fa167c`); the other three callers (`charging/ui/page/device/a17c0/remove_station_devices/remove_station_devices_logic.dart @0x3450ae4`, `charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart @0x30c5da0`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/manage_devices/manage_devices_logic.dart @0x3fbcd34`) were not checked for element types
 
 ## Device-tested by
 

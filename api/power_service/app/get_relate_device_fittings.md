@@ -36,7 +36,7 @@ n/a
 
 ## Response
 
-(asm-traced) The success closure (`charging/http/http_request_repository_impl.dart @0x33f7778`) reads the key `data` (string literal `@0x33f77c4`) and calls `DeviceModel.fromJson` on it (`@0x33f78cc`).
+(asm-traced) The success closure (`charging/http/http_request_repository_impl.dart @0x33f7778`) reads the key `data` (string literal `@0x33f77c4`), type-checks the value as `List?` (`r8 = List?` `@0x33f7800`), uses an empty growable list when it is null (`_GrowableList` `@0x33f7828`) and calls `DeviceModel.fromJson` for each element (iteration calls `@0x33f7840`, `@0x33f7878`, `@0x33f78a4`; allocation `@0x33f78bc`, call `@0x33f78cc`). So `data` is a list of device objects, not a single object.
 
 (asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
 
@@ -73,7 +73,6 @@ Called from:
 
 ## Known unknowns
 
-- Whether the `data` entry is a single object or a list: the closure calls `DeviceModel.fromJson` once on the value it reads (`@0x33f78cc`); the caller's use was not decoded.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

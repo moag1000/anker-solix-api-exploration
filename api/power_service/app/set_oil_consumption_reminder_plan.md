@@ -80,8 +80,8 @@ None traced. The failure callback of the home logic (`a7320_home_logic.dart @0x2
 - Response handling of the defaults builder: its two callbacks are unresolved placeholder pool entries (see Response model), so whether that sender reads the body is not known. Header stays string-only for this reason. — traced 2026-10-20: `pp.txt` lines 397212 and 397213 confirm that `pp+0x168bd8` and `pp+0x168be0` carry only the shared placeholder label; the next two pool entries, `pp+0x168be8` and `pp+0x168bf0`, are the forwarding closures `http_request_repository_impl.dart @0x2268374` and `@0x226824c` (labelled `postJML`), which suggests but does not establish that the two callbacks are those forwarding closures; nothing in the asm text decides it
 - What the defaults builder's month 1 / week 0 mean to the server (a monthly interval is implied by the key names only): not derivable from the app.
 - The accepted ranges of `interval_period_month` and `interval_period_week`: the app only passes its own parameters through. — reclassified: server
-- The response body: not read by the app, so its keys are unknown.
- — reclassified: server
+- The response body: not read by the app, so its keys are unknown. — reclassified: server
+
 ## Device-tested by
 
 none

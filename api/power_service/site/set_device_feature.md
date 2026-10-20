@@ -67,7 +67,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 ## Known unknowns
 
 - The server-side meaning of `rel_bizs` values beyond `greenpro` and `elb` is not known.
-- The smart-plug use named by upstream (and by the 3.18.0 sender `setRemainPluginStatus`) uses a different body; that sender is not documented here (not in the 3.24.3 scope).
+- The smart-plug use named by upstream (and by the 3.18.0 sender `setRemainPluginStatus`) uses a different body; that sender is not documented here (not in the 3.24.3 scope). — traced 2026-10-20: in the 3.18.0 tree the sender `setRemainPluginStatus` (`charging/http/http_request_repository_impl.dart`, function 0x309770c, URL 0x3097764) contains no map literal for the body (its one `AllocateArray`, 0x30977d8, is a log string), so the body comes from its caller; the caller was not followed
 - Whether the call needs the site owner is not known.
 
 ## Device-tested by

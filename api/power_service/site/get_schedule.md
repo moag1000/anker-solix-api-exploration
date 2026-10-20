@@ -80,7 +80,7 @@ Called from:
 
 - Which of the two `SiteScheduleModel` shapes the server returns: the repository sender parses the `charging` class, the EMS service parses the `base_service` class; both read the same URL.
 - What the `status` values 1, 2 and 3 mean to the A17E2 home controller: only the compares are read. — reclassified: server (the value meanings are defined by the server)
-- Failure handling of the repository sender's callers was not read.
+- Failure handling of the repository sender's callers was not read. — traced 2026-10-20: the call sites pass no `fail` closure among their named arguments: `AiEmsRequest.requestSiteSchedule` (`ak_soft_ems/aiems/api/ai_ems_request.dart @0x27e1e34`): no named argument; `ModeTipLogic.getSchedule` (`micro_hes/src/common_business/basic_station/module/mode_tip/mode_tip_logic.dart @0x22d7578`): no named argument; `CostSavingsLogic.getSchedule` (`charging/ui/page/device/a17c1/cost_savings/cost_savings_logic.dart @0x2928534`): no named argument; `StationEnergySystemLogic.getSchedule` (`charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart @0x23a5f94`): descriptor not located. Failure then falls to the callee's default or to the awaiting code, neither of which was read
 
 ## Device-tested by
 

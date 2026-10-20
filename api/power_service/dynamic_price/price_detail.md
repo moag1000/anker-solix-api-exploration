@@ -72,7 +72,7 @@ Called from:
 ## Known unknowns
 
 - Format of `date` and the set of `company`/`area` values: the builder passes the parameters through; the value set is server side (see [support_option](support_option.md) for the lists the app can fetch).
-- Failure handling in the callers of `getDynamicPriceDetail` was not read.
+- Failure handling in the callers of `getDynamicPriceDetail` was not read. — traced 2026-10-20: the call sites pass no `fail` closure among their named arguments: `ElectricityPricePadPreviewLogic.getDynamicPriceFroServer` (`electricity_price/components/tou_pct/page/electricity_price_pad_preview/electricity_price_pad_preview_logic.dart @0x29c24e4`): no named argument; `ElectricityPricePatSettingLogic.getDynamicPriceFroServer` (`electricity_price/components/tou_pct/page/electricity_price_pad_setting/electricity_price_pad_setting_logic.dart @0x29c60f8`): no named argument; `DynamicPriceDetailLogic.requestDynamicPriceDetail` (`charging/feature/utilitiy_rate_plan/dynamic_price/detail/dynamic_price_detail_logic.dart @0x26e3c40`): no named argument. Failure then falls to the callee's default or to the awaiting code, neither of which was read
 
 ## Device-tested by
 

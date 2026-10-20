@@ -37,7 +37,7 @@ n/a
 
 ## Response
 
-The model has the single top-level key `data` (`List<ChatData>`).
+The model has the single top-level key `data` (`List<ChatData>`). `ChatData` (`charging/ui/page/device/main/sitation_energy_mian/energy_home/state/state.dart`, `ChatData.fromJson` `@0x28cd450`, `data/models.json`, `charging::ChatData`) has the keys `time` (String, nullable) and `load` (declared `unknown`).
 
 ## Example request/response
 
@@ -51,7 +51,7 @@ Response keys: see Response; no capture.
 
 ## Errors seen
 
-None traced: the builder passes the `postJML` failure template (`@0x226824c`); the callers' failure callbacks were not read. Error codes are catalogued in `api/errors.md`.
+None traced: the builder passes the `postJML` failure template (`charging/http/http_request_repository_impl.dart @0x226824c`); the callers' failure callbacks were not read. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -70,9 +70,8 @@ Called from:
 
 ## Known unknowns
 
-- The keys of `ChatData` (the list element class of `data`) were not read for this page.
 - Whether the server uses `device_sn` when it is non-empty: the app always sends the empty string.
-- Failure handling in the callers was not read.
+- Failure handling in the callers was not read. — traced 2026-10-20: the call sites pass no `fail` closure among their named arguments: `EnergyPlanLogic.getSiteHomeLoadChatDate` (`charging/ui/page/device/a17c1/energy_plan/energy_plan_logic.dart @0x28ccd58`): no named argument; `EnergyPlanLogic.getCacheHomeCrossData` (`charging/ui/page/device/a17c1/energy_plan/energy_plan_logic.dart @0x28d1094`): no named argument; `EnergyHomeLogic.getSiteHomeLoadChatDate` (`charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart @0x34de924`): named arguments `showLoading`; `MergeSystemEnergyPlanLogic.getSiteHomeLoadChatDate` (`charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy/merge_system_energy_plan_logic.dart @0x28f9b38`): no named argument; `MergeSystemEnergyPlanLogic.getCacheHomeCrossData` (`charging/ui/page/device/main/sitation_energy_system/station_home_settings/merge_system_energy/merge_system_energy_plan_logic.dart @0x28fd610`): no named argument. Failure then falls to the callee's default or to the awaiting code, neither of which was read
 
 ## Device-tested by
 

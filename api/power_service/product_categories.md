@@ -69,7 +69,6 @@ Called from:
 
 ## Known unknowns
 
-- The model lists `products` as an untyped `List`; the element class `ProductInfoModel` is read from the mapping closure named in Response.
 - Which categories the server returns per account or country: not derivable from the app.
 
 ## Device-tested by

@@ -34,6 +34,8 @@ n/a
 
 Top-level keys of the model (from `data/models.json`): `end_time` (int), `start_time` (int), `disturb_switch` (bool), `disturb_scenes` (`DisturbScenesHttpModel`: `stop_charging`, `start_charging`, `paused_charging`, `paused_car_charging`, `restore_charging`, `smart_charging`, `boost_charging`, `guardian_log`, all bool).
 
+Writers of these keys (from [message_not_disturb](message_not_disturb.md#request)): the sender `setMessageDisturb` sends `start_time`, `end_time`, `disturb_switch` and, when its scenes parameter is not null, `disturb_scenes.guardian_log`; the sender `setEvChargerPushMessage` sends `disturb_scenes` with seven of the bool keys (`start_charging`, `stop_charging`, `paused_charging`, `paused_car_charging`, `restore_charging`, `smart_charging`, `boost_charging`). Together the two senders cover every key of this response.
+
 ## Example request/response
 
 Request, synthesized
@@ -67,7 +69,6 @@ Called from:
 ## Known unknowns
 
 - Which of the response keys the server fills for a given account type: the model marks all nullable.
-- How the written counterpart ([message_not_disturb](message_not_disturb.md)) maps onto these keys: its two senders send different key sets.
 
 ## Device-tested by
 

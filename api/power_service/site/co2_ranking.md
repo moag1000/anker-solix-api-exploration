@@ -24,7 +24,7 @@ The body is a 1-pair map literal typed `<String, dynamic>` built in `queryRankin
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | ? | yes | | key `@0x23a8e4c`, value store `@0x23a8e5c` (parameter at `fp-0x10`); the caller passes `field_7` of an Rx value after a null check (`station_energy_system_logic.dart @0x23a8d38`..`@0x23a8d44`), no default |
+| `site_id` | ? | yes | | key `charging/http/http_request_repository_impl.dart @0x23a8e4c`, value store `@0x23a8e5c` (parameter at `fp-0x10`); the caller passes `field_7` of an Rx value after a null check (`station_energy_system_logic.dart @0x23a8d38`..`@0x23a8d44`), no default |
 
 ## `param_type`/`cmd`
 
@@ -36,7 +36,7 @@ n/a
 
 ## Response
 
-Top-level keys of the model (from `data/models.json`): `tree` (String), `show` (bool), `ranking` (String), `co2` (String), `level` (`Level`), `content` (String).
+Top-level keys of the model (from `data/models.json`): `tree` (String), `show` (bool), `ranking` (String), `co2` (String), `level` (`Level`), `content` (String). `Level` (`charging/ui/page/device/main/sitation_energy_system/rank/RankEntity.dart`, `Level.fromJson` `@0x23a92e0`, `data/models.json`, `charging::Level`) has the keys `tree` (num, nullable) and `bubble` (num, nullable).
 
 ## Example request/response
 
@@ -68,7 +68,6 @@ Called from:
 ## Known unknowns
 
 - Type of `site_id`: the value is `field_7` of an Rx object with no default (`@0x23a8d38`); the object class was not followed. Header stays string-only.
-- The structure of `Level` in `RankEntity`.
 
 ## Device-tested by
 

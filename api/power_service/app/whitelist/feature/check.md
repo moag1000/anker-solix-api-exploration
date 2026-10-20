@@ -27,9 +27,11 @@ Both senders build a body with one key `check_list`: a list of maps typed `<Map<
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `check_list` | list | yes | `[{"feature_code": "AIEMS", "product_code": "<product_code>"}]` | repository sender `getWhiteListStatusRes` (`http_request_repository_impl.dart @0x26ffad4`): key `@0x26ffb30`, value store `@0x26ffbc8`, one-element growable list (`AllocateGrowableArray` `@0x26ffba8`), outer type arguments `@0x26ffbec`; `PowerUsageScenarioController::checkFeatureVisibility` (`power_usage_scenario_controller.dart @0x3565f9c`): key `@0x35660a8`, a list of one map with `"AIEMS"` and a second map with `"STORM-GUARD"` added when a flag is set (`tbnz` `@0x3566174`) |
+| `check_list` | list | yes | `[{"feature_code": "AIEMS", "product_code": "<product_code>"}]` | key `http_request_repository_impl.dart @0x26ffb30` in the repository sender `getWhiteListStatusRes` (function `@0x26ffad4`): value store `@0x26ffbc8`, one-element growable list (`AllocateGrowableArray` `@0x26ffba8`), outer type arguments `@0x26ffbec`; `PowerUsageScenarioController::checkFeatureVisibility` (`power_usage_scenario_controller.dart @0x3565f9c`): key `@0x35660a8`, a list of one map with `"AIEMS"` and a second map with `"STORM-GUARD"` added when a flag is set (`tbnz` `@0x3566174`) |
 | `check_list[].feature_code` | string | yes | `"AIEMS"` | repository sender: key `@0x26ffb48`, store `@0x26ffb58` (parameter at `fp-0x18`), map type `<String, String>` `@0x26ffb70`; EMS sender: literals `"AIEMS"` (`@0x35660d0`) and `"STORM-GUARD"` (`@0x3566194`) |
 | `check_list[].product_code` | string | yes | `"<product_code>"` | repository sender: key `@0x26ffb5c`, store `@0x26ffb68` (parameter at `fp-0x20`); EMS sender: key `@0x35660dc`, store `@0x35660f4` / `@0x35661b8` from `productCode()` (`@0x35660ec`, `@0x35661b0`) |
+
+Feature codes the app sends (asm-traced): the repository sender `getWhiteListStatusRes` (`charging/http/http_request_repository_impl.dart @0x26ffad4`) takes the code from its callers, which pass String literals: `"XTEST"` with the empty product code `""` (`UserMainLogic._getWhileList`, `charging/ui/page/user/main/user_main_page_logic.dart @0x26ffa9c`, `@0x26ffaa4`), `"AIEMS"` (`PowerUsageScenarioLogic.getWhiteListStatus`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart @0x28a3854`) and `"evcharger_linkage"` (`charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart @0x292b8b0`); the EMS sender sends `"AIEMS"` and `"STORM-GUARD"`. So the codes in the app are `AIEMS`, `STORM-GUARD`, `evcharger_linkage` and `XTEST`; the string `APP_DEVICE_EMS_MODEL_SETUP` occurs only in a callback string.
 
 ## `param_type`/`cmd`
 
@@ -41,7 +43,7 @@ None: no model class is parsed. The repository sender's success closure `http_re
 
 ## Response
 
-Keys read by the app: `check_list` (list), and per element `feature_code` (String) and `enabled` (cast to bool by the callers).
+Keys read by the app: `check_list` (list), and per element `feature_code` (String) and `enabled` (type-checked as `bool` by the callers: a value of another JSON type would fail that check; `charging/ui/page/user/main/user_main_page_logic.dart @0x26ffe4c`).
 
 ## Example request/response
 
@@ -80,9 +82,7 @@ Called from:
 
 ## Known unknowns
 
-- The full set of `feature_code` values the app asks for: the EMS sender uses `AIEMS` and `STORM-GUARD`; the repository sender takes the code from its caller (`APP_DEVICE_EMS_MODEL_SETUP` appears in a callback string, `power_usage_scenario_logic.dart @0x28a3944`).
 - What the server returns for a feature it does not know: the callers read only `enabled`.
-- Whether `enabled` is a JSON bool or a number: the callers cast it with `bool()`.
 
 ## Device-tested by
 

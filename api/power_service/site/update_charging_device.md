@@ -73,6 +73,7 @@ Called from:
 ## Known unknowns
 
 - Whether the HTTP layer serialises the passed `A1340ChargingDeviceModel` object with its `toJson` (the caller passes the object; `charging/ui/page/device/a1340/a1340add_device/a1340add_device_logic.dart @0x3bf4948`) — attempted 2026-10-20 (two-hop not readable: the serialisation happens after `encryptionRequestHttp` in the SDK handler, outside the asm tree. Header stays string-only)
+
 ## Device-tested by
 
 none

@@ -24,8 +24,8 @@ The builder `joinSite` (`http_request_repository_impl.dart @0x26075c0`) forwards
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | string | yes | `"<site_id>"` | `shareSiteJoin`: key `@0x4028b90`, store `@0x4028bd0`, empty-string default `r2 = ""` `@0x4028bcc`; `shareSiteRefuse`: key `@0x4029380`, store `@0x40293c0`, default `@0x40293bc`; the two device-main closures read a context field instead (`device_main_logic.dart @0x2607494`, `@0x2607720`, no default) |
-| `status` | int (Smi, w) | yes | `2` or `3` | `mov x16, #4` + `stur w16`, tagged, so 2: `shareSiteJoin` `@0x4028be0`, device-main closure `@0x2607738`; `mov x16, #6`, so 3: `shareSiteRefuse` `@0x40293d0`, device-main closure `@0x26074ac` |
+| `site_id` | string | yes | `"<site_id>"` | `shareSiteJoin`: key `charging/ui/page/message/messageSystemDetail/message_system_detail_logic.dart @0x4028b90`, store `@0x4028bd0`, empty-string default `r2 = ""` `@0x4028bcc`; `shareSiteRefuse`: key `@0x4029380`, store `@0x40293c0`, default `@0x40293bc`; the two device-main closures read a context field instead (`device_main_logic.dart @0x2607494`, `@0x2607720`, no default) |
+| `status` | int (Smi, w) | yes | `2` or `3` | key `charging/ui/page/message/messageSystemDetail/message_system_detail_logic.dart @0x4028bd4`; `mov x16, #4` + `stur w16`, tagged, so 2: `shareSiteJoin` `@0x4028be0`, device-main closure `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2607738`; `mov x16, #6`, so 3: `shareSiteRefuse` `charging/ui/page/message/messageSystemDetail/message_system_detail_logic.dart @0x40293d0`, device-main closure `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26074ac` |
 
 ## `param_type`/`cmd`
 
@@ -70,8 +70,8 @@ Called from:
 
 ## Known unknowns
 
-- Response handling of the device-main call site `@0x2607450`: its second callback is an unresolved placeholder pool entry. Header stays string-only for this reason.
-- Type of `site_id` in the two device-main closures: it is read from a closure context field with no default (`@0x2607494`, `@0x2607720`).
+- Response handling of the device-main call site `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2607450`: its second callback is an unresolved placeholder pool entry. Header stays string-only for this reason. — traced 2026-10-20: `pp.txt` carries only the shared placeholder label `Function: [dart:ui] _NativeScene::_NativeScene._ (0x49c1cac)` for that pool entry, so the callback code cannot be identified from the asm text
+- Type of `site_id` in the two device-main closures: it is read from a closure context field with no default (`@0x2607494`, `@0x2607720`). — attempted 2026-10-20 (two-hop not readable: the two other callers of the page (`MessageSystemDetailLogic.shareSiteJoin`, `shareSiteRefuse`, `charging/ui/page/message/system/detail/message_system_detail_logic.dart @0x4028bcc`, `@0x40293bc`) type `site_id` through the `""` default, but the device-main closures read it from a closure context field (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2607494`, `@0x2607720`) with no default or declared type)
 - What status 2 and 3 mean to the server: derived only from the caller names `shareSiteJoin` and `shareSiteRefuse`.
 
 ## Device-tested by

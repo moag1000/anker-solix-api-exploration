@@ -32,7 +32,7 @@ n/a
 
 ## Response
 
-Top-level keys of the model (from `data/models.json`): `device_list` (List, nullable) and `guide_txt` (String, nullable).
+Top-level keys of the model (from `data/models.json`): `device_list` (List, nullable) and `guide_txt` (String, nullable). The elements of `device_list` are `A1340ChargingDeviceModel` objects: `A1340ChargingDeviceData.fromJson` (`charging/model/a1340_device_info/a1340_charging_device_model.dart @0x286b0f0`) maps the list with the type argument `<A1340ChargingDeviceModel>` (`@0x286b1a4`) and a closure that calls `A1340ChargingDeviceModel.fromJson` (`@0x286b5e4`); the element keys are listed on [add_charging_device](add_charging_device.md#request) and in `data/models.json`.
 
 ## Example request/response
 
@@ -46,7 +46,7 @@ Response keys: see Response; no capture.
 
 ## Errors seen
 
-None traced: the builder passes the `postJML` failure template (`@0x226824c`) to the callers' failure callbacks, which were not read. Error codes are catalogued in `api/errors.md`.
+None traced: the builder passes the `postJML` failure template (`charging/http/http_request_repository_impl.dart @0x226824c`) to the callers' failure callbacks, which were not read. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -64,8 +64,7 @@ Called from:
 
 ## Known unknowns
 
-- The element class of `device_list` (the model keeps it as an untyped `List`).
-- Failure handling in the two callers was not read.
+- Failure handling in the two callers was not read. — traced 2026-10-20: the call sites pass no `fail` closure among their named arguments: `A1340homeLogic._getA1340ChargeDeviceListForOther` (`charging/ui/page/device/a1340/a1340home/a1340home_logic.dart @0x286af48`): descriptor not located; `A1340chargeDeviceLogic.getA1340ChargeDeviceListForOther` (`charging/ui/page/device/a1340/a1340charge_device/a1340charge_device_logic.dart @0x33da388`): named arguments `ankerDevice`. Failure then falls to the callee's default or to the awaiting code, neither of which was read
 
 ## Device-tested by
 

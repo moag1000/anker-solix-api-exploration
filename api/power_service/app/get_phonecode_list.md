@@ -28,15 +28,17 @@ n/a
 
 ## Response model (link)
 
-no model file in `data/models.json`: the success closure (`charging/http/http_request_repository_impl.dart @0x2917db8`) reads the key `phone_code_list` (string literal `@0x2917dec`) and builds a `SharePhoneCodeModel` per entry (`@0x2917fb0`) from the entry keys `country_code` (`@0x2917f50`) and `phone_code` (`@0x2917fc8`); the literals `isSelected` (`@0x2918050`) and `i18nCountry` (`@0x29180b8`) also occur in the closure.
+no model file in `data/models.json`: the success closure (`charging/http/http_request_repository_impl.dart @0x2917db8`) reads the key `phone_code_list` (string literal `@0x2917dec`) and builds a `SharePhoneCodeModel` per entry (`@0x2917fb0`) from the entry keys `country_code` (`@0x2917f50`) and `phone_code` (`@0x2917fc8`); the keys `isSelected` (`@0x2918050`) and `i18nCountry` (`@0x29180b8`) are read from the same entry and stored in the same model (`StoreField` `@0x2918098`..`@0x2918120`), each through the same dynamic index call and a nullable type check.
 
 ## Response
 
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `phone_code_list` | list of objects | optional | `[...]` | `charging/http/http_request_repository_impl.dart @0x2917dec` |
-| `phone_code_list[].country_code` | ? | optional | `?` | `charging/http/http_request_repository_impl.dart @0x2917f50` |
-| `phone_code_list[].phone_code` | ? | optional | `?` | `charging/http/http_request_repository_impl.dart @0x2917fc8` |
+| `phone_code_list[].country_code` | string (type-checked `String?`) | optional | | `charging/http/http_request_repository_impl.dart @0x2917f50` (check `r8 = String?` `@0x2917fa0`) |
+| `phone_code_list[].phone_code` | string (type-checked `String?`) | optional | | `charging/http/http_request_repository_impl.dart @0x2917fc8` (check `r8 = String?` `@0x2918018`) |
+| `phone_code_list[].isSelected` | bool (type-checked `bool?`) | optional | | `charging/http/http_request_repository_impl.dart @0x2918050` (check `r8 = bool?` `@0x2918098`) |
+| `phone_code_list[].i18nCountry` | string (type-checked `String?`) | optional | | `charging/http/http_request_repository_impl.dart @0x29180b8` (check `r8 = String?` `@0x2918108`) |
 
 ## Example request/response
 
@@ -53,8 +55,10 @@ Response, synthesized (keys read by the success closure; values are placeholders
   "data": {
     "phone_code_list": [
       {
-        "country_code": "<?>",
-        "phone_code": "<?>"
+        "country_code": "<string>",
+        "phone_code": "<string>",
+        "isSelected": "<bool>",
+        "i18nCountry": "<string>"
       }
     ]
   }
@@ -80,7 +84,6 @@ Called from:
 
 ## Known unknowns
 
-- Types of `country_code` and `phone_code` (the closure moves them into `SharePhoneCodeModel` without a cast visible in the lines read) and what `isSelected` and `i18nCountry` do there (they look like app-side fields of the model, not response keys).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

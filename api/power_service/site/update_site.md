@@ -30,10 +30,10 @@ All map-literal senders type their maps `<String, String>` (or `<String, String?
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | string | yes | `"<site_id>"` | `StationNameViewModel::requestRenameStation` (`station_name_view_model.dart @0x2cb53ec`): key `@0x2cb54d8`, store `@0x2cb5518`, null default `""`, map type `@0x2cb5534`; `StationNameController::requestRenameStation` (`station_name_controller.dart @0x2cd3010`): key `@0x2cd305c`, store `@0x2cd30a4`, null default `""`, map type `@0x2cd30b8`; caller-built bodies for `updateSiteNameInfoRequest`: `a17b1/system_info/system_info_logic.dart` key `@0x3d4582c` (null default `""` `@0x3d4580c`), `station_home_settings/system_info/system_info_logic.dart` key `@0x3ecbe2c`, `station_home_info_logic.dart` key `@0x30c74bc`, `home_center_logic.dart` key `@0x405ea04` (typed `<String, String?>`) |
-| `site_name` | string | yes | `"<site_name>"` | `StationNameViewModel`: key `@0x2cb551c`, store `@0x2cb5530`; `StationNameController`: key `@0x2cd30a8`, store `@0x2cd30b4`; `a17b1` caller key `@0x3d45840`, store `@0x3d45850`; `station_home_info_logic.dart` key `@0x30c7514` (trimmed text, `trim()` `@0x30c7544` area), `home_center_logic.dart` key `@0x405ea68` |
+| `site_id` | string | yes | `"<site_id>"` | key `station_name_view_model.dart @0x2cb54d8` in `StationNameViewModel::requestRenameStation` (function `@0x2cb53ec`): store `@0x2cb5518`, null default `""`, map type `@0x2cb5534`; `StationNameController::requestRenameStation` (`station_name_controller.dart @0x2cd3010`): key `@0x2cd305c`, store `@0x2cd30a4`, null default `""`, map type `@0x2cd30b8`; caller-built bodies for `updateSiteNameInfoRequest`: `a17b1/system_info/system_info_logic.dart` key `@0x3d4582c` (null default `""` `@0x3d4580c`), `station_home_settings/system_info/system_info_logic.dart` key `@0x3ecbe2c`, `station_home_info_logic.dart` key `@0x30c74bc`, `home_center_logic.dart` key `@0x405ea04` (typed `<String, String?>`) |
+| `site_name` | string | yes | `"<site_name>"` | `StationNameViewModel`: key `device/src/station_setting/controller/common_station_name/station_name_view_model.dart @0x2cb551c`, store `@0x2cb5530`; `StationNameController`: key `station_name_controller.dart @0x2cd30a8`, store `@0x2cd30b4`; `a17b1` caller key `a17b1/system_info/system_info_logic.dart @0x3d45840`, store `@0x3d45850`; `station_home_info_logic.dart` key `@0x30c7514` (trimmed text, `trim()` `@0x30c7544` area), `home_center_logic.dart` key `@0x405ea68` |
 
-The SDK sender `RenameSiteController::save` passes `param` from a closure-context field (`@0x47a6728`); its keys and types were not read.
+The SDK sender `RenameSiteController::save` passes `param` from a closure-context field (`flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart @0x47a6728`); its keys and types were not read.
 
 ## `param_type`/`cmd`
 
@@ -83,11 +83,13 @@ Called from:
 
 3.18.0: present. 3.24.3: present. since: ≤3.18.0. `tools/out/diff_3.18.0_3.24.3.md` (changed params) lists `method`, `param` and `path` as added and `combination_type` as removed. `path`, `method` and `param` are the key names of the IoT-kit sender's command map (`rename_device_controller.dart @0x47a66ec`..`@0x47a6718`). The map-literal senders read here carry `site_id` and `site_name`; the string `combination_type` occurs in 3.24.3 only in `station_command.dart`, `init_flow_command.dart` and `add_device_model.dart` (grep of the asm tree), not in a rename sender.
 
+3.18.0 body with `combination_type` (read in the 3.18.0 tree `blutter_output/asm`, addresses without `@` because the checker reads only the 3.24.3 tree): `RenameDeviceController::save` (`flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart`, address 0x3730ca4) built a 3-pair `<String, Object>` literal with `site_id` (0x3730cb0), `site_name` (0x3730cc4) and `combination_type` (0x3730cd8, value computed through two null tests and `BoxInt64Instr` 0x3730cfc / 0x3730d30) and posted it to this URL (0x3730dbc). No sender in the 3.24.3 tree writes `combination_type` for this URL.
+
 ## Known unknowns
 
 - The keys of the SDK sender (`RenameSiteController::save`): its `param` map is built outside the closure.
 - Whether the callers of `updateSiteNameInfoRequest` read the answer: its callbacks are forwarded to the callers' closures, which were not read (header stays string-only).
-- Why `combination_type` was dropped: the 3.18.0 body was not opened for this page.
+- Why `combination_type` was dropped: the 3.18.0 body was not opened for this page. — reclassified: server (the sender is traced above; why the key was dropped is not recorded in the app)
 
 ## Device-tested by
 

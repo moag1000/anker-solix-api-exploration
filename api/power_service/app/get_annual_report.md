@@ -66,6 +66,7 @@ Called from:
 ## Known unknowns
 
 - Which account data the annual report covers and when the server has one: server behaviour, not visible in the app.
+
 ## Device-tested by
 
 none

@@ -65,6 +65,7 @@ Called from:
 
 - The element structure of `env_data`. — reclassified: server (elements of an untyped list; the content is server data)
 - Whether production servers answer this URL: the function and page names (`getAllQaEnvConfig`, `EnvListPageLogic`) point at a QA environment list; the app sends it only from the environment picker page.
+
 ## Device-tested by
 
 none

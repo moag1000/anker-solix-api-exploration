@@ -90,6 +90,7 @@ Called from:
 - Types of `device_sn`, `version`, `local_time` and `device_model`.
 - How the builder uses the logged-in user id and token it reads before the call (`isLogin` `charging/http/http_request_repository_impl.dart @0x263ee70`, `getUserId` `@0x263ee80`; two map reads `@0x263ee98`, `@0x263eec4` that fail with a null-cast error when absent).
 - The success closure of the call (not decoded) and what the server does with the event.
+
 ## Device-tested by
 
 none

@@ -20,7 +20,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-(asm-traced) No request fields: the only body candidate is an empty `<String, dynamic>` literal (`THR::empty_array`, type arguments `@0x2989e2c`, `Map._fromLiteral` `@0x2989e38`); a length test on it (`LoadInt32Instr` `@0x2989e5c`, `cbnz x2` `@0x2989e70`) replaces an empty map by `Null` (`@0x2989e74`), so no keys are sent.
+(asm-traced) No request fields: the only body candidate is an empty `<String, dynamic>` literal (`THR::empty_array`, type arguments `@0x2989e2c`, `Map._fromLiteral` `@0x2989e38`); a length test on it (`LoadInt32Instr` `@0x2989e5c`, `cbnz x2` `@0x2989e70`) replaces an empty map by `Null` (`@0x2989e74`), so no keys are sent. That the length test is an emptiness check follows from the arithmetic on the compact-hash layout loads (`field_13`, `List_4[0]`, `@0x2989e58`..`@0x2989e6c`); no symbol names it.
 
 ## `param_type`/`cmd`
 
@@ -60,7 +60,6 @@ Called from:
 
 ## Known unknowns
 
-- The length test is read from the compact-hash layout loads (`field_13`, `List_4[0]` `@0x2989e58..0x2989e6c`); that it is an `isEmpty` check is derived from the arithmetic, not from a symbol.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

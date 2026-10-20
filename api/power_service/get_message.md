@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_message
 
@@ -25,10 +25,12 @@ The body is a 5-pair map literal typed `<String, dynamic>` built in `getMessage`
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `last_time` | int (unboxed, x) | yes | | key `@0x297c3ac`, `BoxInt64Instr` `@0x297c3bc`, store `@0x297c3d4` |
-| `device_sns` | ? | yes | | key `@0x297c3f8`, value store `@0x297c40c` (parameter at `fp-0x18`) |
+| `device_sns` | list (`<String>` growable list at the callers) | yes | | key `@0x297c3f8`, value store `@0x297c40c` (parameter at `fp-0x18`) |
 | `limit` | int (Smi, w) | yes | `10` | key `@0x297c430`, `mov x16, #20` `@0x297c43c` + `stur w16` `@0x297c440`, tagged, so 10 |
-| `message_type` | ? | yes | | key `@0x297c444`, value store `@0x297c458` (stack parameter `fp+0x20`) |
+| `message_type` | string | yes | | key `@0x297c444`, value store `@0x297c458` (stack parameter `fp+0x20`) |
 | `last_msg_id` | int (unboxed, x) | yes | | key `@0x297c47c`, `BoxInt64Instr` `@0x297c48c`, store `@0x297c4a4` |
+
+Typing (two-hop, asm-traced): the builder `getMessage` takes `device_sns` and `message_type` as untyped parameters (`SetupParameters(dynamic _ ...)`). The callers build `device_sns` as a growable list with type argument `<String>` (`r1 = <String>`, `_GrowableList` length 0 in `MessageSystemLogic.requestCloudMessage`, `charging/ui/page/message/system/message_system_logic.dart @0x338eeec`, `@0x338eef0`; the same in `MessageMainLogic.requestCloudMessage`, `charging/ui/page/message/Main/message_main_logic.dart @0x297f2dc`, `@0x297f2e0`), so it is a list of strings. `message_type` is a String literal at two callers: `"system"` (`message_system_logic.dart @0x338ef34`) and `"others"` (`MessageMainLogic.requestOtherCloudMessage`, `message_main_logic.dart @0x297c28c`); the third caller passes it from a stack slot loaded earlier.
 
 ## `param_type`/`cmd`
 
@@ -44,10 +46,10 @@ Top-level keys of the model (from `data/models.json`): `data` (element type not 
 
 ## Example request/response
 
-Request, synthesized (types of `device_sns` and `message_type` unresolved)
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders)
 
 ```json
-{"last_time": "<last_time>", "device_sns": "<device_sns>", "limit": 10, "message_type": "<message_type>", "last_msg_id": "<last_msg_id>"}
+{"last_time": "<last_time>", "device_sns": ["<device_sn>"], "limit": 10, "message_type": "system", "last_msg_id": "<last_msg_id>"}
 ```
 
 ## Errors seen
@@ -71,10 +73,9 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sns` and `message_type`: both are parameters of `getMessage`; the three UI callers were not followed. Header stays string-only.
 - What `message_type` values the callers use and how `last_time`/`last_msg_id` page the list: cursor semantics are server side.
-- The structure of `data` items in `MsgHttpModel` (the model keeps them untyped).
- — reclassified: server (items of an untyped list; the content is server data)
+- The structure of `data` items in `MsgHttpModel` (the model keeps them untyped). — reclassified: server (items of an untyped list; the content is server data)
+
 ## Device-tested by
 
 none

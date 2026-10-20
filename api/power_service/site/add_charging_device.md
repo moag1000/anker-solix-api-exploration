@@ -73,8 +73,8 @@ Called from:
 ## Known unknowns
 
 - Whether the HTTP layer serialises the passed `A1340ChargingDeviceModel` object with its `toJson` (the caller passes the object, not the map; `charging/ui/page/device/a1340/a1340add_device/a1340add_device_logic.dart @0x3bf4204`) — attempted 2026-10-20 (two-hop not readable: the serialisation happens after `encryptionRequestHttp` in the SDK handler, outside the asm tree. Header stays string-only)
-- Whether the answer (`A1340ChargingDeviceData`) is the full device list after the add or only the new device: the app only logs it.
- — reclassified: server
+- Whether the answer (`A1340ChargingDeviceData`) is the full device list after the add or only the new device: the app only logs it. — reclassified: server
+
 ## Device-tested by
 
 none

@@ -65,6 +65,7 @@ Called from:
 
 - Response model not fully read: it is named only by the type argument `<EvBrandListModel>` of the handler call; the SDK parser that builds it is not in the asm tree read, so this page stays string-only. — reclassified: server (the parser is in the native SDK handler, outside the asm tree)
 - How the SDK handler turns the body into `EvBrandListModel`: the handler is not in the asm tree read; only the type argument is read here. — reclassified: server (the parser is in the native SDK handler, outside the asm tree)
+
 ## Device-tested by
 
 none

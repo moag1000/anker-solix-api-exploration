@@ -20,7 +20,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-(asm-traced) No request fields: the `data` argument of `encryptionRequestHttp` is `NULL` (`stp x0, NULL, [SP, #0x18]` at `charging/http/user/profile/profile_http_request_repository_impl.dart @0x2987710`; the stack slot after the URL slot holds NULL, no map is built in the builder).
+(asm-traced) No request fields: the `data` argument of `encryptionRequestHttp` is `NULL` (`stp x0, NULL, [SP, #0x18]` at `charging/http/user/profile/profile_http_request_repository_impl.dart @0x2987710`; the stack slot after the URL slot holds NULL, no map is built in the builder). The slot assignment is read, not guessed, from the signature of `encryptionRequestHttp` (`charging/http/http_request_repository_impl.dart @0x226451c`: positionals method, url, data, fail, success) together with the call descriptor `r4 = const [0x1, 0x8, 0x8, 0x6, isLogResponse, 0x6, showLoading, 0x7, null]`; no symbol names the slots.
 
 ## `param_type`/`cmd`
 
@@ -60,7 +60,6 @@ Called from:
 
 ## Known unknowns
 
-- Which stack slot of the call carries the body: the call descriptor `r4 = const [0x1, 0x8, 0x8, 0x6, isLogResponse, 0x6, showLoading, 0x7, null]` and the `NULL` pair store were read together with the signature of `encryptionRequestHttp` (`charging/http/http_request_repository_impl.dart @0x226451c`: positionals method, url, data, fail, success); the slot assignment is derived from that, not from a symbol.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

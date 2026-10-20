@@ -26,7 +26,7 @@ Body (`param`) is a map of one pair, `user_vehicle_info`, whose value is the sen
 |---|---|---|---|---|
 | `user_vehicle_info` | list of map | yes | `[ { "vehicle_name": "MyCar", "brand": "Audi", "model": "eTron", "productive_year": 2024 } ]` | `ev_charge_command.dart @0x3983ea0`; the caller `VehicleEditLogic.saveOnTap` builds it by mapping an observable list through a closure and `toList` (`vehicle_edit_logic.dart @0x3983a9c` to `@0x3983ac8`, `addEv` call `@0x3983ae0`) |
 
-The element keys are most probably the nine keys of `VehicleModel.toJson` (`vehicle_name`, `brand`, `model`, `productive_year`, `battery_capacity`, `ac_max_charging_power`, `energy_consumption_per_100km`, `enode_vehicle_id`, `vehicle_id`; [model page](../../../../models/ev_charger_vehicle_models.md#vehiclemodel)); the closure body was not read (UNCONFIRMED). Upstream sends four of them.
+The element map is `VehicleModel.toJson` (asm-traced): the mapping closure of the caller (`ev_charger/src/ev_charger/page/vehicle/vehicle_edit_logic.dart @0x3983f70`, signature `Map<String, dynamic> <anonymous closure>(dynamic, VehicleModel)`) only calls `VehicleModel::toJson` (`@0x3983f88`). It writes the nine keys `vehicle_name`, `brand`, `model`, `productive_year`, `battery_capacity`, `ac_max_charging_power`, `energy_consumption_per_100km`, `enode_vehicle_id` and `vehicle_id` ([model page](../../../../models/ev_charger_vehicle_models.md#vehiclemodel)); `VehicleModel::toJson` (`ev_charger/src/ev_charger/model/vehicle_model.dart @0x2ab4d6c`) writes nine keys into a map literal (`AllocateArray r2 = 36` `@0x2ab4d90`) and then calls `Map.removeWhere` (`@0x2ab4e9c`) with the shared closure `charging/ak_iot_kit/business/a25x7/model/a25x7_device_info.dart @0x244b198`, which returns true when its value argument is null (`cmp w1, NULL` `@0x244b19c`, `csel` `@0x244b1a8`): keys whose value is null are removed, so unset fields are left out of the body (app side). Upstream sends four of them.
 
 ## `param_type`/`cmd`
 
@@ -62,7 +62,6 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The element map of `user_vehicle_info` is built by a closure whose body was not read; the key set is inferred from `VehicleModel.toJson` and from upstream.
 - Which keys the server requires is not known.
 
 ## Device-tested by

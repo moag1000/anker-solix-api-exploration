@@ -88,6 +88,7 @@ Called from:
 
 - The element structures of `site_list` and `joined_site_id` (the model keeps them untyped). — reclassified: server (elements of untyped lists; the content is server data)
 - Why `getAddableSiteList` may omit `device_sn`: the app sends the model-only body when the serial is null; the server reaction is not derivable.
+
 ## Device-tested by
 
 none

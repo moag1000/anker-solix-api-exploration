@@ -75,8 +75,8 @@ Called from:
 
 - What the status values 1 and 2 stand for on the server: the callers use them for the "inviting" and "already invited" tabs (function names only).
 - Whether the response carries keys other than `invited_list` that the app ignores.
-- The meaning of `member_type` values: not decoded here.
- — reclassified: server (the value meanings are defined by the server)
+- The meaning of `member_type` values: not decoded here. — reclassified: server (the value meanings are defined by the server)
+
 ## Device-tested by
 
 none
