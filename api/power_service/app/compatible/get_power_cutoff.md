@@ -39,7 +39,7 @@ n/a
 
 ## Response model (link)
 
-`charging::SocModel` (`data/models.json` key; no models page) as a list under the key `power_cutoff_data`: all five success closures read the string literal `"power_cutoff_data"` and map the entries with the type argument `<SocModel>` (literal/type-argument addresses: `@0x27508b4`/`@0x27509b8` in `a17c0setting_logic.dart`, `@0x2865418`/`@0x2865528` and `@0x26348b4`/`@0x26349b8` in `a17c1home_logic.dart`, `@0x34542e8`/`@0x34543ec` in `a17c1setting_logic.dart`, `@0x244454c`/`@0x2444650` in `device_main_logic.dart`). `A17C1SettingLogic::requestSoc` also constructs a `NewSocParamModel` (`charging::NewSocParamModel`) inside the same closure (`@0x3454244`).
+`charging::SocModel` (`data/models.json` key; no models page) as a list under the key `power_cutoff_data`: all five success closures read the string literal `"power_cutoff_data"` and map the entries with the type argument `<SocModel>` (the list `map` closure is the shared closure `@0x24446e4` in `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`, which calls `SocModel.fromJson` at `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x244470c`; literal/type-argument addresses: `@0x27508b4`/`@0x27509b8` in `a17c0setting_logic.dart`, `@0x2865418`/`@0x2865528` and `@0x26348b4`/`@0x26349b8` in `a17c1home_logic.dart`, `@0x34542e8`/`@0x34543ec` in `a17c1setting_logic.dart`, `@0x244454c`/`@0x2444650` in `device_main_logic.dart`). `A17C1SettingLogic::requestSoc` also constructs a `NewSocParamModel` (`charging::NewSocParamModel`) inside the same closure (`@0x3454244`).
 
 ## Response
 

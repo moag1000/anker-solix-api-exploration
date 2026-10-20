@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # get_brand_list
 
@@ -62,6 +62,7 @@ Called from:
 
 ## Known unknowns
 
+- Response model not fully read: it is named only by the type argument `<EvBrandListModel>` of the handler call; the SDK parser that builds it is not in the asm tree read, so this page stays string-only.
 - How the SDK handler turns the body into `EvBrandListModel`: the handler is not in the asm tree read; only the type argument is read here.
 - Encryption: the call is made by the command map directly to the SDK handler (path C, `api/encryption.md`); the "Encrypted?" line above is the inventory default.
 

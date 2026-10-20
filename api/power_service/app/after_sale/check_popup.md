@@ -38,7 +38,7 @@ no model class (asm-traced): the success closure (`charging/http/http_request_re
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `check_data` | string holding a JSON list (decoded with `jsonDecode`, cast to `List?`) | optional | `"[...]"` | `charging/http/http_request_repository_impl.dart @0x28c1568` |
+| `check_data` | string holding a JSON list (decoded with `jsonDecode`, cast to `List?`) | yes (non-null `String` cast, `@0x28c15b4`) | `"[...]"` | `charging/http/http_request_repository_impl.dart @0x28c1568` |
 
 ## Example request/response
 

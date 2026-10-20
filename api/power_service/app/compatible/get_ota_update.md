@@ -76,7 +76,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sn`, `insert_sn` and `install_mode`: the literal is `<String, dynamic>`; the `cbz x2` guard suggests an unboxed integer parameter, but the value store `@0x33fbc3c..` was not read.
+- Types of `device_sn`, `insert_sn` and `install_mode`: the literal is `<String, dynamic>`; the `cbz x2` guard suggests an unboxed integer parameter, but the value store `@0x33fbc38..` was not read.
 - Which `install_mode` values the callers pass.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

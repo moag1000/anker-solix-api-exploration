@@ -25,7 +25,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `device_sn` | ? | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad84e0` |
-| `page` | ? | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad84f4` |
+| `page` | int (unboxed, x) | yes | `?` | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad84f4` (value boxed by `BoxInt64Instr` `@0x2ad8504`) |
 | `page_size` | int (Smi, w) | yes | `10` | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad851c` |
 
 ## `param_type`/`cmd`
@@ -70,7 +70,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Types of `device_sn` and `page` (parameters; `<String, Object>` only says non-null).
+- Type of `device_sn` (parameter; `<String, Object>` only says non-null); this is why the page stays string-only.
 - Whether the server counts pages from 0 or 1 (the app passes `page` from its own state).
 - No `data/endpoints.json` caller is recorded for this builder; the call site above was found by searching the A7320 logic files.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
