@@ -70,7 +70,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 - What `_startTimer` (`charging/ui/page/family/family_main_http_reposity.dart @0x479c634`) does with the URL: it is called with the same URL literal before the request and was not read.
 - The named argument `isAIotErrorCode` (`charging/ui/page/family/family_main_http_reposity.dart @0x479c6c0`) changes how the HTTP layer reads error codes; the layer was not read for it.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

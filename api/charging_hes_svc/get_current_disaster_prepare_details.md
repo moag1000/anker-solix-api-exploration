@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_current_disaster_prepare_details
 
@@ -26,9 +26,11 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `station_id` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3ebe6b8` |
-| `unix` | int (unboxed, x) | yes | a unix time | `charging/http/http_request_repository_impl.dart @0x3ebe6fc` |
-| `auto_disaster_enable` | ? | optional | ? | `charging/http/http_request_repository_impl.dart @0x3ebe72c` |
+| `station_id` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3ebe6b8` |
+| `unix` | int (unboxed, x) | yes |  | `charging/http/http_request_repository_impl.dart @0x3ebe6fc` |
+| `auto_disaster_enable` | bool | optional |  | `charging/http/http_request_repository_impl.dart @0x3ebe72c` |
+
+Callers (app side, traced 2026-10-20): `SystemPolicyLogic::deviceToAutoDisasterStatus` (`charging/ui/page/device/a5101/setting/systemPolicy/system_policy_logic.dart @0x3ebd418`) passes `stationId()` (`@0x3ebd3f8`, the getter `AutoDisasterTipsLogic::stationId` `@0x23cd140`), a seconds value it computes inline from `_getCurrentMicros` (`@0x3ebd3c0`, two `sdiv` by 1000 `@0x3ebd3e8`, `@0x3ebd3ec`) and the named argument `autoDisasterEnable` (`@0x3ebd410`) from its own parameter; the function that calls `deviceToAutoDisasterStatus` (`@0x3ebd380`, with the same value also passed to `netToSetAutoDisasterStatus` `@0x3ebd374`) type-checks that value as `bool` (`r8 = bool` `@0x3ebd30c`, class-id test `@0x3ebd304`) and stores it with `value=` (`@0x3ebd324`); so `auto_disaster_enable` is a bool. `AutoDisasterTipsLogic::_quitAutoDisasterPrepareFromDevice` (`charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart @0x4369e08`) passes `stationId()` and `unix()` and no named argument, so the key is omitted there (the null guard of the sender). `station_id` is the return value of `AutoDisasterTipsLogic::stationId` (`charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart @0x23cd140`), which returns `field_7` of the value of `field_7f` of `Get.find<StationMainPageLogic>()` (`@0x23cd188`..`@0x23cd198`) or the empty string when null (`@0x23cd1a8`); `field_7` of that station model is the `String?` documented on [device_command.md](device_command.md#request), so the key is a string (two-hop, declared type read). `unix` is the getter `AutoDisasterTipsLogic::unix` (`@0x27ada3c`): `_getCurrentMicros` (`@0x27ada50`) divided twice by 1000 (`sdiv` `@0x27ada78`, `@0x27ada7c`, unboxed), the current time of the app clock in seconds.
 
 ## `param_type`/`cmd`
 
@@ -76,9 +78,8 @@ Called from:
 
 ## Known unknowns
 
-- The types of `station_id` and `auto_disaster_enable`: both are parameters stored without conversion into a `<String, Object>` map.
 - What the server returns when `auto_disaster_enable` is absent: the app omits the key for a null parameter.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -72,16 +72,17 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 - `charging/ui/page/device/a5101/charts/chart_http_repository.dart`: `getChartStatistics` @0x23e5710 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
+Call sites (traced 2026-10-20): no `bl` to the sender `ChartHttpRepository::getChartStatistics` (`charging/ui/page/device/a5101/charts/chart_http_repository.dart @0x23e5710`) exists in the asm, and the name `getChartStatistics` is not called anywhere under `charging/ui/page/device/a5101/charts/`; the same-named senders of the benefits page (`charging/ui/page/device/a5101/benifits/a5101_benifits_http_repository.dart @0x2c111c4`, caller `A5101BenifitsController::changeChartData`, `charging/ui/page/device/a5101/benifits/a5101_benifits_logic.dart @0x2c111a8`), of the station chart mixin and of the A1782 and A17E2 pages are other functions.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- The types of all seven keys: the values are not converted in the builder.
-- The named arguments `cacheKey`, `debounceMills`, `loopSeconds` and `showDefaultError` (argument list `charging/ui/page/device/a5101/charts/chart_http_repository.dart @0x23e5a48`) change how the HTTP layer repeats and caches the call; the layer was not read for them.
-- No caller of `getChartStatistics` is recorded in `data/endpoints.json`.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- The types of all seven keys: the values are not converted in the builder. — attempted 2026-10-20 (two-hop not readable: no call site of the sender `@0x23e5710` exists in the asm, so no caller passes the values)
+- The named arguments `cacheKey`, `debounceMills`, `loopSeconds` and `showDefaultError` (argument list `charging/ui/page/device/a5101/charts/chart_http_repository.dart @0x23e5a48`) change how the HTTP layer repeats and caches the call; the layer was not read for them. — traced 2026-10-20: the arguments are consumed by `HttpRequestMixin` code that Blutter does not emit (`charging/http/http_request_mixin.dart` holds only `Debouncer::run` `@0x230f7f0`: it cancels the stored `Timer` and starts a new one, `@0x230f81c`, `@0x230f850`), so what `cacheKey`, `loopSeconds` and `showDefaultError` do is not in the asm
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

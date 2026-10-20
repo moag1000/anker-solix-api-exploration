@@ -14,6 +14,8 @@ Reads the utility rate plans of a site (`ElectricityPlaceConfirmPageLogic::_getU
 
 `Api::getHesUtilityRatePlans` (`base_service/api_url.dart @0x24a5d58`) returns `/charging_hes_installer_svc/get_utility_rate_plans` (`@0x24a5d64`) when the static flag `0xad8` is true and `/charging_hes_svc/get_utility_rate_plans` (`@0x24a5d70`) otherwise. The one sender read, `ElectricityPlaceConfirmPageLogic::_getUtilityRatePlan` (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abe94`), loads the late static field `getHesUtilityRatePlans` (`@0x29abf08`), uses the method object `Method.post` (pool entry `pp+0xa7e0`, `@0x29abfac`) and sends through `encryptionRequestHttp` (`@0x29abfe0`). That the late static field holds the result of `Api::getHesUtilityRatePlans` was not read, and the five other senders were not read.
 
+Run-time choice of the URL (app side, traced 2026-10-20): the flag `0xad8` (`Api::isProApp`, `base_service/api_url.dart @0x22b317c`) is stored once in `Api.init` (`base_service/api_url.dart @0x49ce9dc`) from a package-name test against `"anker.pros"`; the full rule is on [get_history_setting.md](get_history_setting.md#methodurl) and in [charging_hes_installer_svc/README.md](../charging_hes_installer_svc/README.md#variant-selector-installer-app-versus-consumer-app).
+
 ## Encrypted?
 
 encrypted: `true` (app side) for the sender read. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app". `ElectricityPlaceConfirmPageLogic::_getUtilityRatePlan` calls `encryptionRequestHttp` (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abfe0`).
@@ -68,9 +70,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- The URL link stays string-only: the sender loads the late static `getHesUtilityRatePlans` (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abef4`; offset 0xb04, declared `static late String getHesUtilityRatePlans` in `base_service/api_url.dart`); its initializer was not found.
+- The URL link stays string-only: the sender loads the late static `getHesUtilityRatePlans` (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29abef4`; offset 0xb04, declared `static late String getHesUtilityRatePlans` in `base_service/api_url.dart`); its initializer was not found. — traced 2026-10-20: same finding as [get_history_setting.md](get_history_setting.md#known-unknowns): the late static `getHesUtilityRatePlans` (offset 0xb04) has no explicit store in `base_service/api_url.dart` (the only static store is the flag `@0x49ce9dc`) and the only function of that name is `Api::getHesUtilityRatePlans` (`@0x24a5d58`); the link is the Dart late-static mechanism, not visible in the asm
 - The request keys and the response handling of the five other senders.
-- Which URL is used at run time: it depends on the static flag `0xad8`, whose setter was not read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

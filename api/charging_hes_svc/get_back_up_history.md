@@ -40,6 +40,8 @@ n/a
 
 (asm-traced) Top-level keys of the model (`data/models.json`, `charging::BackupHistoryModel`): `events` (int?), `total` (int?), `backUpHistory` (unknown).
 
+Order in the app (traced 2026-10-20): `BackupHistoryLogic::sortList` (`charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x2791734`) sorts the parsed list with a comparator over two `BackUpHistory` objects (`@0x2791794`) that compares `field_7` of each (`backUpDate`, an `int?` with null counted as 0, `@0x27917bc`, `@0x27917e8`) through `compareTo` of the second against the first (`@0x2791834`), so the entries are shown with the largest `backUpDate` first; the `field_7`-to-key mapping is from `toJson` and `fromJson` of `micro_hes/src/common_business/backup_history/model/backup_history_model.dart` (`@0x2ad4570`, cast `int?` `@0x2ad4814`, store `@0x2ad482c`).
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -72,8 +74,7 @@ Called from:
 
 ## Known unknowns
 
-- How the entries are sorted and shown: `sortList` is called on the parsed list (`charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x28ef88c`) but the sort key was not read.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

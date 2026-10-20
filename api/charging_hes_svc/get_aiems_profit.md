@@ -28,6 +28,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 |---|---|---|---|---|
 | `siteId` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x23e3b08` |
 
+Value source of `siteId` (app side, traced 2026-10-20): the only listed caller `SmartModeCardLogic::getAiModeStatus` (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_card_logic.dart @0x23e397c`) passes its own parameter, which it also stores in `field_8f` (`@0x23e392c`); `getAiModeStatus` has five callers outside this page (`charging/ui/page/family/family_main_page_logic.dart @0x23e366c`, `charging/ui/page/device/a17c5/ai_mode_success/ai_mode_success_logic.dart @0x28d5d08`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart @0x262c920`, `@0x262e390`, `@0x262ef48`), each passing a value read from an `Rx` or a model field. The getter `SmartModeCardLogic::siteId` (`@0x23e39e0`, declared `String`) returns `field_7` of the value of the `Rx` at offset 451 of `getA5101StationController()` (`@0x23e3a0c`..`@0x23e3a30`), the empty string when null; this is the same offset and field that `FamilyMainPageLogic::_changeDevice` passes as `stationId` to `A5101MqttLogic` (`charging/ui/page/family/family_main_page_logic.dart @0x479d0f4`..`@0x479d110`), so the camel-case `siteId` key carries the same kind of value as `stationId`/`station_id` on the sibling endpoints of the service as far as the app code shows; the server side is not known.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -71,8 +73,7 @@ Called from:
 
 ## Known unknowns
 
-- The type of `siteId`: the parameter is stored without conversion (`charging/http/http_request_repository_impl.dart @0x23e3b18`) into a `<String, dynamic>` map.
-- How `siteId` differs from `station_id` of the other endpoints of the service: the app uses the camel-case key here.
+- The type of `siteId`: the parameter is stored without conversion (`charging/http/http_request_repository_impl.dart @0x23e3b18`) into a `<String, dynamic>` map. — attempted 2026-10-20 (two-hop not readable: the five callers of `getAiModeStatus` pass values read from `Rx` or model fields, `family_main_page_logic.dart @0x23e366c`, `ai_mode_success_logic.dart @0x28d5d08`, `a17c1home_logic.dart @0x262c920`, `@0x262e390`, `@0x262ef48`; the declared `String` of the `siteId` getter is not the value that reaches the sender)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

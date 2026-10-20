@@ -26,11 +26,13 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `station_id` | ? | yes | ? | `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x279156c` |
+| `station_id` | string | yes |  | `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x279156c` |
 | `sn` | ? | yes | empty string when the source is null (`charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x27915c0`) | `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x2791580` |
 | `syncBackUpHistory` | list | yes | a list of maps with `start` and `end` | `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x27915d4`; `@0x2791374` |
-| `syncBackUpHistory[].start` | ? | yes | ? | `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x2791434` |
-| `syncBackUpHistory[].end` | ? | yes | ? | `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x279144c` |
+| `syncBackUpHistory[].start` | int | yes |  | `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x2791434` |
+| `syncBackUpHistory[].end` | int | yes |  | `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x279144c` |
+
+Value sources (app side, traced 2026-10-20): `station_id` is `field_7` of the value of `field_7f` of `Get.find<StationMainPageLogic>()` (`charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x279152c`..`@0x279153c`), the empty string when null (`@0x279154c`), the same chain as `AutoDisasterTipsLogic::stationId` (`charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart @0x23cd140`), so a string. `sn` is `field_6b` of the object at `field_7f` of the state `field_83` (`@0x2791590`..`@0x27915b0`), the empty string when null; the declared type of `field_6b` was not found. The loop iterates `field_f` of that state (`@0x2791340`), which `BackupHistoryState` creates as `<BackUpHistory>[].obs` (`charging/ui/page/device/a5102/setting/backup_history/backup_history_state.dart @0x412b5f8`, store `@0x412b600`), so the elements are `BackUpHistory` objects: `start` is their `field_7` (`@0x2791440`, `backUpDate`) and `end` their `field_f` (`@0x2791454`, `endDate`); `backUpDate` is an `int?` (`micro_hes/src/common_business/backup_history/model/backup_history_model.dart @0x2ad4814`, store `@0x2ad482c`), so `start` is an integer; the unit (seconds or milliseconds) is not visible in the asm.
 
 ## `param_type`/`cmd`
 
@@ -78,9 +80,8 @@ Called from:
 
 ## Known unknowns
 
-- The types of `station_id`, `sn`, `start` and `end`: all are stored as received into `<String, Object>` or `<String, dynamic>` maps.
-- The format of `start` and `end` (time stamps or text): the fields of the source object (`field_7`, `field_f`, `charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x2791434`, `@0x279144c`) were not resolved.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- The type of `sn`: `field_6b` of the object at `field_7f` of the history state, replaced by the empty string when null (`charging/ui/page/device/a5102/setting/backup_history/backup_history_logic.dart @0x27915b0`..`@0x27915c0`); the declaring class of `field_6b` was not found — traced 2026-10-20 (`station_id`, `start`, `end` typed on this page, see Request).
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

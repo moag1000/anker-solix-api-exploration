@@ -40,6 +40,8 @@ n/a
 
 (asm-traced) Top-level keys of the model (`data/models.json`, `charging::SystemSelfCheckResultModel`): `completionTime` (String?), `selfCheckStatus` (int?), `selfCheckSource` (String?), `selfCheckOperater` (int?), `selfCheckFaults` (unknown).
 
+Timers (app side, traced 2026-10-20, `charging/ui/page/device/a5101/setting/system_self_check/system_testing/system_testing_logic.dart`): the file has no periodic timer. `_startSuccessTimerAfterSuccess` (`@0x27c9bbc`) starts one one-shot `Timer` (`@0x27c9c30`) with a constant `Duration` whose pool value is 0xb532b80 microseconds (`@0x27c9c28`; `pp+0x1073e0`), that is 190 seconds, and the log text of its callback reads `3分10秒成功定时器完成` (3 min 10 s, `@0x27c9c94`); the callback dismisses the dialog (`GetExtension.dismiss` `@0x27c9cc4`), calls `_getSystemTestData` again (`@0x27c9cd8`) and resets the timer variables (`@0x27c9ce8`). The start time is taken with `_getCurrentMicros` (`@0x27c9b68`); on app resume `_handleAppResumed` measures the elapsed time with `DateTime::difference` (`@0x419dc20`) and `_restartSuccessTimerWithRemainingTime` starts a new one-shot `Timer` with a `Duration` built by a multiplication (`@0x419de00`..`@0x419de38`). The request is otherwise repeated on the events that call `_getSystemTestData` (`onMessageDispatch`, `onReady`, the resume and timer paths listed under Callers in app), not on a fixed interval.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -74,8 +76,7 @@ Called from:
 
 ## Known unknowns
 
-- The polling interval and the success-timer rules: only the sender was read.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

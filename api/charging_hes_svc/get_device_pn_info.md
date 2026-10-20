@@ -67,15 +67,16 @@ Called from:
 
 - `charging/boostrap_impl.dart::DIInit`
 
+Call sites (traced 2026-10-20): `getDevicePnInfo` is called from `DeviceImgController::deviceImgMap` (`charging/ui/page/device/a5101/setting/sn_number/device_img_controller.dart @0x27891c8`), an `async` function returning `Map<String, DeviceImgInfo>` (`InitAsync` `@0x27891b0`).
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- The type of `sns`: the parameter may be a list or a joined text; the call site was not decoded.
-- No UI caller of `getDevicePnInfo` is recorded in `data/endpoints.json`.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- The type of `sns`: the parameter may be a list or a joined text; the call site was not decoded. — attempted 2026-10-20 (two-hop not readable: the only caller `DeviceImgController::deviceImgMap` (`charging/ui/page/device/a5101/setting/sn_number/device_img_controller.dart @0x27891c8`) forwards its own two parameters, `SetupParameters` `@0x2789194`)
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

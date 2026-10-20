@@ -40,6 +40,8 @@ n/a
 
 (asm-traced) Top-level keys of the model (`data/models.json`, `charging::ItalyGuideImageModel`): `tips` (unknown).
 
+Use of the answer (app side, traced 2026-10-20): the success closure takes the first element of `tips` when the list is set (`first` `charging/ui/page/family/family_main_http_reposity.dart @0x479d348`) and reads the field at offset 0x17 of it (`@0x479d34c`), which is `passwordImgUrl` in the `toJson` of `Tips` (`charging/model/a5101/italy_guide_image_model.dart`, load `@0x479d744` before the key string `@0x479d75c`), the empty string when null (`@0x479d360`); it logs the text `意大利自检的蓝牙引导图片 image:` with the value (`@0x479d374`..`@0x479d394`) and stores the string at offset 519 of `getA5101StationController()` (`@0x479d3ac`..`@0x479d3bc`). The only caller is `FamilyMainPageLogic::_changeDevice` (`charging/ui/page/family/family_main_page_logic.dart @0x479d20c`), which passes `field_d3` of its device object (`@0x479d200`) as `pn`.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -66,9 +68,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Which product numbers have a guide image: `pn` is a parameter (`charging/ui/page/family/family_main_http_reposity.dart @0x479d26c`) and no UI caller is recorded in `data/endpoints.json`.
-- The success closure takes the first element of a list (`first` `charging/ui/page/family/family_main_http_reposity.dart @0x479d348`) and later reads `A5101StationLogic` (`@0x479d39c`); what it does with the image was not read.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- Which product numbers have a guide image: decided by the answer of the cloud; the app sends `field_d3` of the device it switches to (see Response) and takes the first `tips` element without matching its `productCode` — traced 2026-10-20 (`charging/ui/page/family/family_main_http_reposity.dart @0x479d348`).
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

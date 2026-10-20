@@ -32,6 +32,8 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 | `p_secret` | string | yes | `"<p_secret>"` | `charging/ui/page/device/a5101/setting/italy_selfcheck/italy_selfcheck_request.dart @0x3ea1b68` |
 | `salt` | string | yes | `"<salt>"` | `charging/ui/page/device/a5101/setting/italy_selfcheck/italy_selfcheck_request.dart @0x3ea1b7c` |
 
+Value flow of the builder (app side, traced 2026-10-20, `charging/ui/page/device/a5101/setting/italy_selfcheck/italy_selfcheck_request.dart`): `salt` is the current time formatted with the pattern `yyyyMMdd HH:mm:ss` (`DateFormat` `@0x3ea1a50`, `format` `@0x3ea1a94`, stored `@0x3ea1b8c`). `p_secret` is built from a four-element string interpolation (`AllocateArray` of 4 elements `@0x3ea1ac8`, `_interpolate` `@0x3ea1af4`) of `getUserId()` (`@0x3ea1ab8`), `station_id` (`@0x3ea1ad8`), the second argument of the builder (`@0x3ea1ae4`) and `salt` (`@0x3ea1aec`); the string goes through `md5Str` (`@0x3ea1afc`), the UTF-8 encoder (`convert` `@0x3ea1b0c`) and Base64 (`encode` `@0x3ea1b18`), and the result is stored under `p_secret` (`@0x3ea1b78`). `pn` and `sn` are read from the object at offset 0x1cb of `getA5101StationController()` (`@0x3ea19d8`..`@0x3ea19dc`): `sn` is its `field_6b` and `pn` its `field_d3` (`@0x3ea19f4`, `@0x3ea1a1c`), each replaced by the empty string when null (`@0x3ea1a04`, `@0x3ea1a30`). The only caller is `StepPasswordLogic::checkPassword` (`charging/ui/page/device/a5101/setting/italy_selfcheck/step_view/step_password_logic.dart @0x3ea1648`), which passes the value of a field chain of its controller (`field_53` -> `field_27` -> `field_7`, `@0x3ea1628`..`@0x3ea1638`) as second argument; the field names are not in the asm. Which value the second argument holds (the page is the password step of the Italy self-check) is therefore by class name only.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -74,10 +76,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- How `p_secret` and `salt` are derived: the builder calls `getUserId` (`charging/ui/page/device/a5101/setting/italy_selfcheck/italy_selfcheck_request.dart @0x3ea1ab8`), interpolates a string (`@0x3ea1af4`), runs `convert` (`@0x3ea1b0c`) and `encode` (`@0x3ea1b18`) and formats a `DateFormat` pattern `yyyyMMdd HH:mm:ss` (`@0x3ea1a50`) before the map is built; the data flow into the two keys and the classes behind `convert` and `encode` were not followed.
-- `sn` is stored from a local that defaults to the empty string (`charging/ui/page/device/a5101/setting/italy_selfcheck/italy_selfcheck_request.dart @0x3ea1a04`, `@0x3ea1a30`); which serial the caller supplies was not decoded.
-- No caller of `checkDeviceBluetoothPassword` is recorded in `data/endpoints.json`.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

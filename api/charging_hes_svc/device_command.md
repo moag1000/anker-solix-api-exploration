@@ -53,14 +53,16 @@ Two senders. In the generic sender `station_id` is `field_7` of the `StationMain
 | `utility_rate_plan.peak_sessions[].type` | int (Smi, w) | yes | `1` | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278de54` |
 | `utility_rate_plan.peak_sessions[].peak_valley_prices` | list | yes | one element | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278de64`; `@0x278dfd0` |
 | `utility_rate_plan.peak_sessions[].peak_valley_prices[].id` | int (Smi, w) | yes | `0` | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278de80` |
-| `utility_rate_plan.peak_sessions[].peak_valley_prices[].buy` | ? | yes | result of a `parse` call | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278de90`; `@0x278deb4` |
-| `utility_rate_plan.peak_sessions[].peak_valley_prices[].sell` | ? | yes | result of a `parse` call | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278dee4`; `@0x278df00` |
+| `utility_rate_plan.peak_sessions[].peak_valley_prices[].buy` | number (`num`) | yes |  | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278de90`; `@0x278deb4` |
+| `utility_rate_plan.peak_sessions[].peak_valley_prices[].sell` | number (`num`) | yes |  | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278dee4`; `@0x278df00` |
 | `utility_rate_plan.peak_sessions[].peak_valley_prices[].energy_unit` | string | yes | `"/kWh"` | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278df30`; `@0x278df3c` |
 | `utility_rate_plan.peak_sessions[].peak_valley_prices[].start_time_period` | string | yes | `"00:00"` | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278df48`; `@0x278df54` |
 | `utility_rate_plan.peak_sessions[].peak_valley_prices[].end_time_period` | string | yes | `"00:00"` | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278df60`; `@0x278df6c` |
 | `utility_rate_plan.peak_sessions[].peak_valley_prices[].peak_type` | int (Smi, w) | yes | `1` | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278df78` |
 | `utility_rate_plan.peak_sessions[].peak_valley_prices[].day_type` | int (Smi, w) | yes | `2` | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278df8c` |
 | `electricity_strategy.mode` | int | optional | ? | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278e10c` |
+
+`buy` and `sell` in `savePlanPrice` (traced 2026-10-20): both values are the result of `num.parse` (`dart:core` `num::parse`, `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278deb4`, `@0x278df00`) applied to a text field, so each is a `num` (an int or a double, decided by the parsed text) before it is stored into the map.
 
 ## `param_type`/`cmd`
 
@@ -155,11 +157,9 @@ Called from:
 
 ## Known unknowns
 
-- The types of the 13 parameter-valued keys of the generic sender: the map is `<String, dynamic>`; the typed shapes are in `models/hes.md#a5101devicecommandmodel` (Full SET request), which this page does not re-state.
-- Which keys a given caller sets: the generic sender stores every key and the callers pass `null` for the ones they do not change; this was not decoded per caller.
-- The types of `buy` and `sell` in `savePlanPrice`: they are results of `parse` calls (`charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278deb4`, `@0x278df00`) on text fields.
+- The types of the 13 parameter-valued keys of the generic sender and the keys each of the 35 callers sets: not followed per caller — traced 2026-10-20: the map is `<String, dynamic>` (`charging/http/http_request_repository_impl.dart @0x24a0b4c`..`@0x24a0df4`), the callers build the typed shapes of `models/hes.md#a5101devicecommandmodel` themselves and pass `null` for keys they leave alone.
 - `ack_peak_valley` is always sent as null by this sender (`charging/http/http_request_repository_impl.dart @0x24a0cec`); whether the server needs the key was not tested.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

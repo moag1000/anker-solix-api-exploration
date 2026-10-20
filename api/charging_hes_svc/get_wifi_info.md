@@ -65,15 +65,17 @@ none traced: no numeric error code is compared in the sender or the closures rea
 - `charging/ui/page/device/a5101/setting/homeSetting/home_setting_http_reposity.dart`: `getWifiInfo` @0x25f6064 (requestHttp; encrypted: default-true (requestHttp) — verify)
 - `charging/ui/page/family/family_main_http_reposity.dart`: `getWifiInfo` @0x25f69e4 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
+Call sites (traced 2026-10-20): `FamilyMainPageLogic::refreshWifiInfo` (`charging/ui/page/family/family_main_page_logic.dart @0x25f6cd0`) and a closure in `HomeSettingLogic` (`charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart @0x25f6048`); both pass `sn` from a slot of their own frame (`@0x25f6cc4`, `@0x25f603c`).
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- `cacheKey` is passed by name (`charging/ui/page/device/a5101/setting/homeSetting/home_setting_http_reposity.dart @0x25f61a8`, `charging/ui/page/family/family_main_http_reposity.dart @0x25f6b28`); the cache key value and the cache lifetime were not read.
-- The value of `sn`: both senders pass a parameter (`charging/ui/page/device/a5101/setting/homeSetting/home_setting_http_reposity.dart @0x25f6128`, `charging/ui/page/family/family_main_http_reposity.dart @0x25f6aa8`).
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- `cacheKey` is passed by name (`charging/ui/page/device/a5101/setting/homeSetting/home_setting_http_reposity.dart @0x25f61a8`, `charging/ui/page/family/family_main_http_reposity.dart @0x25f6b28`); the cache key value and the cache lifetime were not read. — traced 2026-10-20: the argument is consumed by `HttpRequestMixin` code that Blutter does not emit (`charging/http/http_request_mixin.dart` holds only `Debouncer::run`), so the cache key value and lifetime are not in the asm
+- The value of `sn` at the two call sites: both callers pass a slot of their own frame (`charging/ui/page/family/family_main_page_logic.dart @0x25f6cc4`, `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart @0x25f603c`); the chain behind the slots was not followed — traced 2026-10-20.
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

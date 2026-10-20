@@ -29,6 +29,8 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 | `stationId` | string | yes | `"<stationId>"` | `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart @0x479e26c` |
 | `version` | string | yes | `"<version>"` | `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart @0x479e288` |
 
+Value flow (app side, traced 2026-10-20, `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart`): `stationId` is `field_97` of `A5101MqttLogic` (`@0x479e27c`), set by `A5101MqttLogic::updateDeviceStationId` (`@0x479dca4`), which `FamilyMainPageLogic::_changeDevice` calls (`charging/ui/page/family/family_main_page_logic.dart @0x479d134`) with `field_7` of the value of an `Rx` field of the family page logic (offset 451, `@0x479d0f4`..`@0x479d110`), the empty string when null. `version` is `field_b` of `field_9b` of the logic (`@0x479e294`, `@0x479e2ac`); `field_9b` holds the `A5101OtaCheckUpdateModel` stored after `fromJson` of the answer of [check_update](check_update.md) (`@0x479df8c`, store `@0x479df98`), and `field_b` of that class is the key `rom_version_name` (`toJson` of `charging/model/a5101/a5101_ota_check_update_model.dart`), so `version` is the `rom_version_name` of the last update check, the empty string when no check has run or the key is null (`@0x479e2c0`). The class of the `Rx` value behind `field_7` is not named in the asm.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -72,9 +74,8 @@ Called from:
 
 ## Known unknowns
 
-- `version` is stored as the empty string when the source value is null (`charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart @0x479e2c0`); which version string the caller normally passes was not decoded.
 - What the server does with the cancel report: the app ignores the answer.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

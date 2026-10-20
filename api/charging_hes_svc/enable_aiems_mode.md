@@ -40,6 +40,8 @@ not parsed by the app (asm-traced): the success closure (`charging/ui/page/devic
 
 No response key is read by the app (see Response model).
 
+Failure path (app side, traced 2026-10-20): the failure closure (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eaefe4`, signature `(dynamic, int, String)`) does not read the code or the message: it logs the fixed text `SmartModeLogic: Smart Mode fails to start` through `exeError` (`@0x3eaeff8`..`@0x3eaf008`) and returns.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -72,7 +74,6 @@ Called from:
 ## Known unknowns
 
 - What the server answers or changes besides the mode flag: the app ignores the body.
-- Whether the failure closure (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eaefe4`) distinguishes error codes: it logs a fixed text and was not read further.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

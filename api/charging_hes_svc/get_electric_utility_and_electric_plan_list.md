@@ -32,6 +32,8 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 | `country` | string | yes | `"US"` | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_rate_logic.dart @0x2973d78` |
 | `state_code` | string | yes | `"CA"` | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_rate_logic.dart @0x2973d90` |
 
+Skip rule and constants (app side, traced 2026-10-20, `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_rate_logic.dart`): `NemRateLogic::getNemRatePlan` loads `field_7` of `field_53` of the logic (`@0x2973d24`..`@0x2973d30`) and, when it is not null (`cmp w2, NULL` `@0x2973d34`), calls `parseUtilityPlanData` (`@0x2973d3c`) and returns without sending the request; the field has no name in the asm. The only sender stores the constants `"US"` for `country` (`@0x2973d78`) and `"CA"` for `state_code` (`@0x2973d90`), so this sender never sends another country or state code.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -76,9 +78,7 @@ Called from:
 
 ## Known unknowns
 
-- Which field makes `getNemRatePlan` skip the request (`charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_rate_logic.dart @0x2973d34`): the `LoadField` chain was not resolved to a name.
-- Whether other countries or state codes than the constants `US` and `CA` are ever sent: the two values are stored as constants (`charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_rate_logic.dart @0x2973d84`, `@0x2973d9c`).
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

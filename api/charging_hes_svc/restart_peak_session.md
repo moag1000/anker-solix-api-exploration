@@ -29,6 +29,8 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 | `station_id` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x278fcc4` |
 | `far_field_model` | int (Smi, w) | yes | a number from the caller | `charging/http/http_request_repository_impl.dart @0x278fcd8` |
 
+Values of `far_field_model` (app side, traced 2026-10-20): `FixedRateLogic::deleteData` passes the unboxed constant 1 (`r3 = 1`, `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x3ecff7c`, call `@0x3ecff80`) and `NemPlanEditLogic::cleanNemPeakRate` the constant 2 (`r3 = 2`, `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_plan_edit/nem_plan_edit_logic.dart @0x278fbf8`, call `@0x278fbfc`); the argument is unboxed, so these are the real values. `NemPlanEditLogic::deleteOldData` (`charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_plan_edit/nem_plan_edit_logic.dart @0x3ed51fc`) and `NemRatePlanLogic::deleteOldData` (`charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/nem_rate/nem_rate_plan/nem_rate_plan_logic.dart @0x3ed6488`) pass a slot of their own frame (`@0x3ed51f0`, `@0x3ed647c`); what 1 and 2 select is not named in the asm.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -76,9 +78,9 @@ Called from:
 
 ## Known unknowns
 
-- The type of `station_id`: the parameter is stored without conversion into a `<String, Object?>` map.
-- What the callers do with the raw response: only the sender was read.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- The type of `station_id`: the parameter is stored without conversion into a `<String, Object?>` map. — attempted 2026-10-20 (two-hop not readable: the four callers pass slots of their own frames, `fixed_rate_logic.dart @0x3ecff74`, `nem_plan_edit_logic.dart @0x278fbf0`, `@0x3ed51f4`, `nem_rate_plan_logic.dart @0x3ed6480`)
+- What the callers do with the raw response: only the sender was read. — traced 2026-10-20: each caller passes a success closure and a failure closure (`AllocateClosure` before the call, e.g. `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x3ecff68`); the closure bodies were not read
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

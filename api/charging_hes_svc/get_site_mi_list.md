@@ -60,15 +60,16 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 - `charging/ui/page/family/family_main_http_reposity.dart`: `getEcuCardList` @0x43374ec (requestHttp; encrypted: default-true (requestHttp) — verify)
 
+Call sites (grep of the whole asm tree, traced 2026-10-20): the name `getEcuCardList` occurs only at its definition (`charging/ui/page/family/family_main_http_reposity.dart`, function header and its own closure `@0x43375ec`); no `r0 = getEcuCardList()` call site exists in 3.24.3, so the app does not call this sender.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- What `loopSeconds` (argument list `charging/ui/page/family/family_main_http_reposity.dart @0x43375d8`) does in the HTTP layer: it was not read for it.
-- No caller of `getEcuCardList` is recorded in `data/endpoints.json`.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- What `loopSeconds` (argument list `charging/ui/page/family/family_main_http_reposity.dart @0x43375d8`) does in the HTTP layer: it was not read for it. — traced 2026-10-20: the argument is consumed by the `HttpRequestMixin` code of `FamilyMainHttpReposity`, and Blutter emits no body for `HttpRequestMixin` (class `abstract class HttpRequestMixin extends BaseGetController` is empty in `charging/http/http_request_mixin.dart`; only `Debouncer::run` `@0x230f7f0` is emitted), so the effect of the named argument is not in the asm
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

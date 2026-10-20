@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_auto_disaster_prepare_detail
 
@@ -26,9 +26,11 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `station_id` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x436955c` |
-| `unix` | int (unboxed, x) | yes | a unix time | `charging/http/http_request_repository_impl.dart @0x4369570` |
-| `near_field` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x4369598` |
+| `station_id` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x436955c` |
+| `unix` | int (unboxed, x) | yes |  | `charging/http/http_request_repository_impl.dart @0x4369570` |
+| `near_field` | bool | yes |  | `charging/http/http_request_repository_impl.dart @0x4369598` |
+
+Callers (app side, traced 2026-10-20): the only caller `AutoDisasterTipsLogic::clickAutoDisasterTips` (`charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart @0x4367f54`) passes `stationId()` (`@0x4367ee4`), `unix()` (`@0x4367ef0`) and, as `near_field`, the boolean negation (`eor x, x, #0x10` `@0x4367f44`) of a bool field (`field_93` of the object at `field_83`, read only when its `field_2b` flag is true, else `false`, `@0x4367f30`..`@0x4367f40`), so `near_field` is a bool. `station_id` is the return value of `AutoDisasterTipsLogic::stationId` (`charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart @0x23cd140`), which returns `field_7` of the value of `field_7f` of `Get.find<StationMainPageLogic>()` (`@0x23cd188`..`@0x23cd198`) or the empty string when null (`@0x23cd1a8`); `field_7` of that station model is the `String?` documented on [device_command.md](device_command.md#request), so the key is a string (two-hop, declared type read). `unix` is the getter `AutoDisasterTipsLogic::unix` (`@0x27ada3c`): `_getCurrentMicros` (`@0x27ada50`) divided twice by 1000 (`sdiv` `@0x27ada78`, `@0x27ada7c`, unboxed), the current time of the app clock in seconds.
 
 ## `param_type`/`cmd`
 
@@ -41,6 +43,8 @@ n/a
 ## Response
 
 (asm-traced) Top-level keys of the model (`data/models.json`, `charging::AutoDisasterDetailModel`): `uuid` (String?), `event` (String?), `start` (int?), `end` (int?).
+
+`AutoDisasterDetailModel.isErrorData` (`charging/model/a5101/auto_disaster_detail_model.dart @0x43697a0`) is true when the tagged field `field_f` (`start`) is 0 (`cbnz` `@0x43697a8`) or `field_13` (`end`) is 0 (`cbz` `@0x43697bc`); the success closure calls it right after `fromJson` (`charging/http/http_request_repository_impl.dart @0x4369748`).
 
 ## Example request/response
 
@@ -75,10 +79,7 @@ Called from:
 
 ## Known unknowns
 
-- The types of `station_id` and `near_field`: both are parameters stored without conversion.
-- What `unix` stands for (time of the event or the request): the caller was not decoded.
-- What `isErrorData` (`charging/http/http_request_repository_impl.dart @0x4369748`) tests on the parsed model.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

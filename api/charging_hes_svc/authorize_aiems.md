@@ -40,6 +40,8 @@ not parsed by the app (asm-traced): the success closure (`charging/ui/page/devic
 
 No response key is read by the app (see Response model).
 
+Success flag (app side, traced 2026-10-20): the success closure sets `value = true` on `field_7` of `SmartModeLogic.field_53` (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eb2804`..`@0x3eb2820`). `field_53` is a `SmartModeState` (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_state.dart`), whose constructor creates `field_7` and `field_b` as `false.obs` (`@0x4129478`..`@0x41294b4`); the getter `SmartModeState::isEnableButtonEnabled` returns `field_7.value && field_b.value` (`@0x3eaede8`..`@0x3eaee24`), and the smart-mode view reads it (`smart_mode_view.dart @0x3eaed78`) for a button-enabled closure. So the flag is the authorization half of the condition that enables the button in the smart-mode view; what `field_b` stands for is not named in the asm.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -71,7 +73,6 @@ Called from:
 
 ## Known unknowns
 
-- What the `true` flag set in the success closure controls on the smart-mode page: the field is reached by two `LoadField` steps (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eb2804`, `@0x3eb280c`) that were not resolved to a name.
 - What the server does with the authorization or whether it answers with a body (the app ignores the answer).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

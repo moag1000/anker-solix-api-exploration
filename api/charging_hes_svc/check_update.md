@@ -35,6 +35,8 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 |---|---|---|---|---|
 | `stationId` | string | yes | `"<stationId>"` | `charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart @0x479deb0`; `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart @0x28dd750`; `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart @0x28dcf74`; `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart @0x28daa08`; `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart @0x292d564` |
 
+Value source of `stationId` (app side, traced 2026-10-20): in `A5101MqttLogic` it is `field_97` (`charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart @0x479deb0`), set by `updateDeviceStationId` (`@0x479dca4`) from `FamilyMainPageLogic::_changeDevice` (`charging/ui/page/family/family_main_page_logic.dart @0x479d134`), which passes `field_7` of the value of an `Rx` field (offset 451, `@0x479d0f4`..`@0x479d110`) of the family page logic or the empty string; the class behind that `Rx` is not named in the asm, so the format of the string is not visible. The other four senders were not followed.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -90,9 +92,9 @@ Called from:
 
 ## Known unknowns
 
-- The `stationId` value of each sender comes from the logic class field (`field_97` or `StationMainPageLogic`); its format was not decoded.
-- Which of the five senders the app uses first on a fresh settings visit: only the call sites were read.
-- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call.
+- The `stationId` of the senders other than `A5101MqttLogic` (the firmware-update and home-setting logic classes): the source chain was not followed — traced 2026-10-20, see Request for the `A5101MqttLogic` chain.
+- Which of the five senders the app uses first on a fresh settings visit: only the call sites were read. — reclassified: device test row 151 (traced 2026-10-20: the five senders sit in separate page logic classes, `a5101_mqtt_logic.dart`, `a5101_firmware_update_logic.dart` (three) and `home_setting_logic.dart`, so the order is the order of user navigation, not fixed in the asm)
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

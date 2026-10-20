@@ -71,7 +71,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 ## Known unknowns
 
 - The keys of the detail map: the consumer of the callback is not recorded in `data/endpoints.json`, so no key read was found.
-- Which `device_type` values exist: the parameter is passed through (`charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4cc8`).
+- Which `device_type` values exist: the parameter is passed through (`charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4cc8`). — attempted 2026-10-20 (two-hop not readable: the two callers pass slots of their own frames, `charging/ui/page/device/a5101/device_home_page/device_home_logic.dart @0x33c4c3c` and `charging/ui/page/device/main/station_device_home/station_set_time/station_set_time_page.dart @0x4000c78`)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
