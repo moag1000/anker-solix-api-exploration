@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # get_app_up_token_general
 
 ## Purpose
 
-<!-- TODO -->
+Obtains an upload token for a file the logged-in user uploads (app log, BLE log, feedback attachment, cropped image, bill-analysis file); senders: `UploadLogLogic::requestUpToken`, `DeviceLogsLogic::_uploadBleFile`, `BillAnalysisUploadService::_getUploadToken` and, for the crop and feedback screens, `HttpRequestControllerImpl::getAppUpTokenGeneral` (asm-traced, caller chain in `data/endpoints.json`). The login-state variant is `get_app_up_token_without_login`.
 
 ## Upstream name
 
@@ -12,8 +12,12 @@
 
 ## Method+URL
 
-`/app/cloudstor/get_app_up_token_general`, method: not extracted by the inventory <!-- TODO -->; string-only: `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3f58`
-(literal also at 6 more site(s) in `data/endpoints.json`)
+`POST /app/cloudstor/get_app_up_token_general` (asm-traced), same URL and method object `Method.post` (pool entry `pp+0xa7e0`) in these senders:
+
+- `BillAnalysisUploadService::_getUploadToken` (`anka_agent/services/bill_analysis_upload_service.dart @0x2bf3c84`): URL `@0x2bf3f58`, method object `@0x2bf3f50`, sent through `encryptionRequestHttpByGHttpRequest` (`@0x2bf3f88`).
+- `DeviceLogsLogic::_uploadBleFile` (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x31334c8`): URL `@0x313367c`, method object `@0x3133674`, sent through `encryptionRequestHttp` (`@0x31336a0`).
+- `UploadLogLogic::requestUpToken` (`charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b06d0`): URL `@0x46b0ad8`, method object `@0x46b0ad0`, sent through `encryptionRequestHttp` (`@0x46b0afc`).
+- `HttpRequestControllerImpl::getAppUpTokenGeneral` (`charging/http/http_request_repository_impl.dart @0x2d90ae4`): the URL is a parameter chosen by the callers (`custom_crop_controller.dart @0x2d90880`, `feedback_logic.dart @0x312097c`, `@0x3121440`, `crop_logic.dart @0x33138c0`); method object `@0x2d90c5c`, sent through `encryptionRequestHttp` (`@0x2d90c90`).
 
 ## Encrypted?
 
@@ -21,17 +25,19 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+Union over the senders. The body map has type arguments `<String, Object>` in two senders (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133630`, `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3ed0`) and `<String, dynamic>` in `getAppUpTokenGeneral` (`charging/http/http_request_repository_impl.dart @0x2d90c1c`); neither is evidence of a value type.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `user_id` | ? | ? | ? | `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3c84` |
-| `file_name` | ? | ? | ? | `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3c84` |
-| `content_type` | ? | ? | ? | `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3c84` |
-| `file_size` | ? | ? | ? | `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3c84` |
-| `disable_ssl` | ? | ? | ? | `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3c84` |
-| `type` | ? | ? | ? | `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3c84` |
-| `File not exists: ` | ? | ? | ? | `charging/ui/page/device/a2345/a2345_media_ability/custom_crop_controller.dart @0x2d90620` |
+| `file_name` | ? | yes | `"app_log_upload.log"` (constant in `UploadLogLogic::requestUpToken`; a parameter or field elsewhere) | `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3e34` (value store `@0x2bf3e44`) |
+| `content_type` | string | yes | `"binary/octet-stream"` (constant in three senders) | `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3e48` (constant `@0x2bf3e5c`) |
+| `file_size` | int (unboxed, x) | yes | ? | `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3e60` (value boxed by `BoxInt64Instr` `@0x2bf3e70`; the same boxing in `charging/http/http_request_repository_impl.dart @0x2d90bb8`; the BLE and app-log senders were not decoded for it) |
+| `disable_ssl` | bool | yes | `false` | `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3eac` (constant `@0x2bf3eb8`) |
+| `type` | int (Smi, w) | yes | `50` in the bill-analysis sender (raw 100 `@0x2bf3ec8`), `7` in the BLE-log and app-log senders (raw 14, `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133608`, `charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b0a60`) | `anka_agent/services/bill_analysis_upload_service.dart @0x2bf3ec0` (value store `@0x2bf3ecc`); in `getAppUpTokenGeneral` the value is a parameter tagged by `lsl` (`charging/http/http_request_repository_impl.dart @0x2d90c14`) |
 
-Rows are the union over 4 senders; `source` is the first sender that sets the key.
+The bill-analysis sender also sends a header `user_id` (a `<String, String>` map `@0x2bf3dac` built only when the stored user id is not empty, `cbz` `@0x2bf3d88`); it is a header, not a body field.
+
+In the feedback screen the `type` argument next to the URL is the raw 6 (logged-in branch, `charging/ui/page/user/feedback/feedback_logic.dart @0x312097c`..`@0x3120984`) or 7 (other branch, `@0x3120994`); because `getAppUpTokenGeneral` tags its `type` from an unboxed int, I read these as 6 and 7 (my reading, the register was not followed to the call).
 
 ## `param_type`/`cmd`
 
@@ -39,19 +45,31 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+`charging::GetUpToken` (`data/models.json`, no page under `models/`), parsed by `GetUpToken.fromJson` at `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133768` (closure `@0x3133710`) and at `charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b5ae0` (closure `@0x46b5aa8`). `getAppUpTokenGeneral` forwards the response value to its caller unparsed (`charging/http/http_request_repository_impl.dart @0x2268374`, `ClosureCall` `@0x22683a8`); the bill-analysis sender returns a `Map<String, dynamic>?` (`anka_agent/services/bill_analysis_upload_service.dart @0x2bf3cac`) and its parse was not read.
 
 ## Response
 
-<!-- TODO -->
+Top-level keys of `GetUpToken` (`data/models.json`, `charging::GetUpToken`): `uptoken` (String?), `key_prefix` (String?). The two keys are the upload credential and the object key prefix by name only (string-only for the meaning).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by `BillAnalysisUploadService::_getUploadToken`; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "file_name": "<file_name>",
+  "content_type": "binary/octet-stream",
+  "file_size": "<int>",
+  "disable_ssl": false,
+  "type": 50
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -75,11 +93,15 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. Parameter delta in `tools/out/diff_3.18.0_3.24.3.md`: added `user_id` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Type of `file_name` in the senders that pass a parameter or field, and of `file_size` in the BLE-log and app-log senders (`file_size` is `LoadField`/`LoadInt32Instr`-derived there, not decoded).
+- Which `type` values mean which upload kind (7 for logs, 50 for bill analysis, 6 and 7 from the feedback screen): the server's table is not visible.
+- The response parse of the bill-analysis sender (`Map<String, dynamic>?` returned from `anka_agent/services/bill_analysis_upload_service.dart`) and of the crop and feedback callers (`getAppUpTokenGeneral` forwards the value).
+- What the credential is used for (the upload target, expiry): not read here.
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 
