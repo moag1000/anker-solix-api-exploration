@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # get_strategy_last_record
 
 ## Purpose
 
-<!-- TODO -->
+Reads the last strategy record of a range-extender system (`RangeExtenderNetwork::getStrategyLastRecord`, `oe_a7320`); no UI caller is recorded in `data/endpoints.json`, so the purpose is inferred from the function name (string-only).
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/power_service/v1/app/get_strategy_last_record`, method: not extracted by the inventory <!-- TODO -->; string-only: `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x360a744`
+`POST /power_service/v1/app/get_strategy_last_record` (asm-traced): the builder `RangeExtenderNetwork::getStrategyLastRecord` (`oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x360a6ac`) loads the path string at `@0x360a744` and calls `AkNetwork::requestHttp` (`@0x360a754`); that function builds the SDK command map with the literal `"POST"` (`base_service/util/ak_util/src/ak_network.dart @0x21c34fc`) and hands it to the handler `akiot.cloud_api` (`handle`, `@0x21c3544`). There is no `Method` object on this path.
 
 ## Encrypted?
 
@@ -20,10 +20,12 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 
 ## Request
 
+(asm-traced) The body is one map literal passed as the named argument `params` (`r4 = const [0, 0x2, 0x1, 0x1, params, 0x1, null]` at `@0x360a74c`); its type arguments are `<String, dynamic>` (`@0x360a734`), so the literal gives no value type. Values come from parameters or object fields of the builder; the asm carries no static type.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `extender_system_id` | ? | ? | ? | `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x360a6ac` |
-| `strategy_type` | ? | ? | ? | `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x360a6ac` |
+| `extender_system_id` | ? | yes | ? | `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x360a6f4` |
+| `strategy_type` | ? | yes | ? | `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x360a708` |
 
 ## `param_type`/`cmd`
 
@@ -31,19 +33,30 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+- `oe_a7320::RangeExtenderStrategyRecordModel`, parsed by `RangeExtenderStrategyRecordModel.fromJson` at `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x360a788`
 
 ## Response
 
-<!-- TODO -->
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
+
+- `RangeExtenderStrategyRecordModel` top-level keys (`data/models.json`, `oe_a7320::RangeExtenderStrategyRecordModel`): `extender_system_id` (String?), `strategy_type` (int?), `execution_time` (int?), `execution_result` (bool), `description` (int?).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "extender_system_id": "<?>",
+  "strategy_type": "<?>"
+}
+```
+
+Response: not synthesized (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -51,11 +64,13 @@ n/a
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Type of `extender_system_id`, `strategy_type`: parameter or object field read by the builder; the map literal is `<String, dynamic>` and the asm carries no static type.
+- Encryption: the call goes through `AkNetwork::requestHttp` and the SDK handler directly (path C in `api/encryption.md`); the "Encrypted?" line above is the inventory default.
+- No UI caller is recorded for this builder in `data/endpoints.json`, so the purpose is inferred from the function name.
 
 ## Device-tested by
 
