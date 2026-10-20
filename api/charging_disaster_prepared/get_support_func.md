@@ -39,6 +39,8 @@ n/a
 
 (asm-traced for the model) Top-level keys of `SupportFunc` (`data/models.json`, `unity::SupportFunc`): `support_auto_disaster` (bool), `support_country_code` (int). The closure maps the parsed object to a list of strings through `ListBase::map` (`unity/src/main/weather/weather_manager.dart @0x451db24`) before it stores the result; the element type and the source field were not followed.
 
+`support_country_code` (traced 2026-10-20, app side): `SupportFunc.fromJson` (`unity/src/main/weather/weather_manager.dart @0x451dc8c`) reads `support_auto_disaster` as `bool` (`@0x451dce0`) and `support_country_code` as a list: it reads the list length as an int (`r8 = int` `@0x451dd88`, the source of the extractor's `int`), allocates `List<SupportCountryCode>` (`@0x451dda8`) and parses each element with `SupportCountryCode.fromJSON` (`@0x451de34`; elements carry `code` and `google_code`, key `@0x451df20`, `@0x451dfa0`). The `<String>` map in the success closure (`@0x451db10`, `@0x451db24`) only builds the text for a log line (` Successfully fetched supported country codes: `, `@0x451dad4`).
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by `fetchSupportCountryCodes`; `<...>` are placeholders, not captured values)
@@ -71,7 +73,6 @@ Called from:
 ## Known unknowns
 
 - Type of `identifier_id`: a value loaded from a manager field whose declared type is not visible. — attempted 2026-10-20 (two-hop not readable: the sender is `WeatherManager::fetchSupportCountryCodes` (`unity/src/main/weather/weather_manager.dart @0x451d8cc`), which reads a manager field with no declaration in the asm)
-- Why `support_country_code` is typed int in the class while the closure builds a list of strings from the parsed object (`unity/src/main/weather/weather_manager.dart @0x451db10`, type argument `<String>`): the conversion was not followed.
 - What `type` 2 selects: the app stores this constant only. — reclassified: server (2026-10-20: the app stores the constant 2 (decoded on this page); what the number selects is not derivable from the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
