@@ -20,7 +20,7 @@ A second place loads the static field: `electricity_price/components/dynamic_pri
 
 ## Encrypted?
 
-encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: `true` (asm-traced: the sender read reaches `encryptionRequestHttp`, `electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bdbc8`). Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
 ## Request
 

@@ -32,7 +32,7 @@ n/a
 
 ## Response model (link)
 
-`charging::A17b1SystemInfoModel` (no `models/` page), parsed by `A17b1SystemInfoModel.fromJson` at `charging/ui/page/station/A17b1/a17b1_station_logic.dart @0x2437ea8` in the success closure `@0x2437e44` that `A17b1StationLogic::getSystemInfo` (`charging/ui/page/station/A17b1/a17b1_station_logic.dart @0x2437c00`) creates (`@0x2437c94`) and passes with the call `getSystemRunningInfo` (`@0x2437cac`).
+`charging::A17b1SystemInfoModel` (no `models/` page), parsed by `A17b1SystemInfoModel.fromJson` at `charging/ui/page/station/A17b1/a17b1_station_logic.dart @0x2437ea8` in the closure `@0x2437e44` that `A17b1StationLogic::getSystemInfo` (`charging/ui/page/station/A17b1/a17b1_station_logic.dart @0x2437c00`) creates (`@0x2437c94`) and passes with the call `getSystemRunningInfo` (`@0x2437cac`). Inside `getSystemRunningInfo` the callback handed to `requestHttp` is the forwarding wrapper `everAll` (`charging/ui/page/station/mixin/station_chart_http_reposity.dart @0x2437de4`, pool closure `get/get_rx/src/rx_workers/rx_workers.dart ::everAll`), which calls the closure `@0x2437e44`.
 
 ## Response
 

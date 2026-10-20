@@ -20,7 +20,7 @@ The installer variant is documented under `charging_hes_installer_svc`.
 
 ## Encrypted?
 
-encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: `true` (asm-traced: the sender read reaches `encryptionRequestHttp`, `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e47a8`). Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
 ## Request
 
