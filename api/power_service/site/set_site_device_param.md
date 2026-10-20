@@ -37,12 +37,12 @@ Wrapper: `HttpRequestControllerImpl::setSiteDevicePowerLimit` (`http_request_rep
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `display_type` | int | yes | `1` | `http_request_repository_impl.dart @0x43557b0` (key), value raw `2` at `@0x43557bc`, stored 32-bit (`stur w16`, `@0x43557c0`), Smi, so the value is 1. It is a constant, not a parameter. |
+| `display_type` | int | yes | `1` | `http_request_repository_impl.dart @0x43557b0` (key), value raw `2` at `@0x43557bc`, stored 32-bit (`stur w16`, `@0x43557c0`), Smi, so the value is 1. It is a constant, not a parameter. It is written at this one site only; the app has no read site and no enum for it (asm-traced, absence). |
 | `power_limit` | object | yes | `{"limit": 790, "limit_real": 790}` | `http_request_repository_impl.dart @0x43557c4` (inner map, 4 slots (raw `r2 = 8`), `@0x43557d4`) |
 | `power_limit.limit` | int | yes | `790` | `http_request_repository_impl.dart @0x43557e0` (key), value from parameter r3, boxed at `@0x43557f0` |
 | `power_limit.limit_real` | int | yes | `790` | `http_request_repository_impl.dart @0x4355808` (key), value from parameter r5, boxed at `@0x4355818` |
 
-In the app's only caller both `limit` and `limit_real` receive the same value, the slider value in watts: `_setOutputPowerLimit` passes the same register as r3 and r5 (`station_power_limit_logic.dart @0x435566c` and `@0x4355670`). The slider range and step are part of the flow, see [../../../flows/system_output_limit.md](../../../flows/system_output_limit.md).
+In the app's only caller both `limit` and `limit_real` receive the same value, the slider value in watts, with no rounding or clamp in between: `_setOutputPowerLimit` passes the same register as r3 and r5 (`station_power_limit_logic.dart @0x435566c` and `@0x4355670`). Which sites can reach the page that sends this request is decided by the app gate in [get_power_limit](get_power_limit.md#who-gets-the-output-limit-page-app-gate). The slider range and step are part of the flow, see [../../../flows/system_output_limit.md](../../../flows/system_output_limit.md).
 
 Other param_types sent to this endpoint are not described here; each one has a row in [../../param_types.md](../../param_types.md).
 
@@ -92,12 +92,13 @@ None recorded for the app payload above. For a different payload (upstream libra
 
 ## Since/changed
 
-3.18.0: `setSiteDevicePowerLimit` (3.18.0 `http_request_repository_impl.dart @0x327fdc0`) sent the same four top-level keys with `param_type` `"19"` and the same `cmd` (3.18.0 value on [../../param_types.md](../../param_types.md)); its `param_data` held only `power_limit` (`limit`, `limit_real`), typed `Map<String, Map<String, int>>`, with no `display_type`. 3.18.0 never sent a `display_type` key, so the app never sent `display_type: 0` in either version. 3.24.3: `display_type` (constant 1) is new in `param_data` (`@0x43557b0`); `cmd` is unchanged (see [../../param_types.md](../../param_types.md)); the request is still sent encrypted.
+3.18.0: `setSiteDevicePowerLimit` (3.18.0 `http_request_repository_impl.dart @0x327fdc0`) sent the same four top-level keys with `param_type` `"19"` and the same `cmd` (3.18.0 value on [../../param_types.md](../../param_types.md)); its `param_data` held only `power_limit` (`limit`, `limit_real`), typed `Map<String, Map<String, int>>`, with no `display_type`. 3.18.0 never sent a `display_type` key; 3.24.3 writes it at one site only (see Request). 3.24.3: `display_type` (constant 1) is new in `param_data` (`@0x43557b0`); `cmd` is unchanged (see [../../param_types.md](../../param_types.md)); the request is still sent encrypted.
 
 ## Known unknowns
 
 - Server-side meaning of `display_type` beyond the behaviour recorded under [Device-tested by](#device-tested-by): why the server draws that line, and what other values do, is not known.
 - Behaviour of `display_type` 0 or an absent key with non-option values: not reported as tested.
+- Whether the server rejects type 19 on an SB2 site (site types 5, 10, 11) and with which error code: the report below gives no wire detail (backlog rows 119 and 121 in [../../../docs/DEVICE_TEST_BACKLOG.md](../../../docs/DEVICE_TEST_BACKLOG.md)).
 **Warning:** `legal_limit` is the regulatory feed-in limit of the site's region; the server not enforcing it is not permission — exceeding it may be unlawful or void the installation's certification, and this reference does not endorse it.
 
 - Whether the server checks `legal_limit` at all. One test (A17C5) saw it apparently ignored; other devices and firmware are untested.
@@ -107,7 +108,7 @@ None recorded for the app payload above. For a different payload (upstream libra
 
 ## Device-tested by
 
-Rows dated 2026-10-19 come from [anker-solix-api-exploration issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) (comment of 2026-10-19T11:49Z; client: anker-solix-api raw requests, client version not recorded); earlier rows used the upstream library payload. The 3.24.3 app always sends `display_type: 1` (asm-traced, see Request).
+Rows dated 2026-10-19 come from [anker-solix-api-exploration issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) (comments of 2026-10-19T11:49Z and, for the last row, 2026-10-19T23:20Z; client: anker-solix-api raw requests, client version not recorded); earlier rows used the upstream library payload. The 3.24.3 app always sends `display_type: 1` (asm-traced, see Request).
 
 | who | device | request | value | result | date | source |
 |---|---|---|---|---|---|---|
@@ -115,3 +116,4 @@ Rows dated 2026-10-19 come from [anker-solix-api-exploration issue #1](https://g
 | thomluther | A17C5 | same as above (no `display_type`) | 790 W (not in `power_limit_option`) | rejected, `10004` ItemNotFoundError | 2026-10-18 | [anker-solix-api#339](https://github.com/thomluther/anker-solix-api/issues/339) |
 | thomluther | A17C5 (firmware not recorded) | raw request, `param_data` with `display_type` 1 | free 10 W value (not in `power_limit_option`) | accepted; the API appeared not to enforce `legal_limit` ("seems to be ignored", thomluther) | 2026-10-19 | [issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) |
 | thomluther | A17C5 (firmware not recorded) | raw request, `param_data` with `display_type` 0 | option-list values (`power_limit_option`) | accepted ("works ... only for the dedicated options", thomluther) | 2026-10-19 | [issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) |
+| thomluther | A17C0 (SB1) and the SB2 family (PNs, firmware not recorded) | not recorded; the report says SB2 supports neither `param_type` 18 nor 19 and its limit goes via MQTT plus an attribute call, and SB1 cannot set an output limit | not recorded | no output limit via this request (as reported; wire detail and error code not recorded) | 2026-10-19 | [issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1) |

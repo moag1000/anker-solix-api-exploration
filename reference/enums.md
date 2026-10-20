@@ -275,6 +275,21 @@ Tag: asm-traced. Audit references: `StationDeviceType` ENUMS audit doc lines 9 t
 
 `FirmwareCountry` (new on this page): `us` 0, `jp` 1, `eu` 2, `uk` 3, `au` 4, `ar` 5, `sa` 6, `ca` 7, `cn` 8, `tw` 9, `za` 10 and `gs` 11, as indices of pool objects (for example `FirmwareCountry.jp` `[pp+0xb338]`, used `anker_device.dart @0x22f61b8`). The old root page listed supported countries as strings (see [String lists](#string-lists)); this enum is the firmware-country classification, not the same list.
 
+### power_site_type (upstream SolixSiteType)
+
+The app reads `power_site_type` from the site scene info (`SceneInfo` field_53, key `power_site_type`) and declares no enum for it. The names come from upstream `SolixSiteType` in `api/apitypes.py` lines 1219 to 1246 (`t_<value>`, upstream-confirmed; names verbatim). The two values the app compares in the output-limit gate are asm-traced.
+
+| value | upstream name | main device (upstream comment) | tag | app compare (width) |
+|---|---|---|---|---|
+| 2 | `t_2` | A17C0 SB1 | upstream-confirmed | not compared in the gate |
+| 5 | `t_5` | A17C1 SB2 Pro | upstream-confirmed | not compared in the gate |
+| 10 | `t_10` | A17C3 SB2 Plus | upstream-confirmed | not compared in the gate |
+| 11 | `t_11` | A17C2 SB2 AC | upstream-confirmed | not compared in the gate |
+| 12 | `t_12` | A17C5 SB3 Pro, including the power dock option | asm-traced (compare), upstream-confirmed (name) | `cmp w1, #0x18`, 32-bit Smi, so 12: `station_home_settings_logic.dart @0x28b2e28` |
+| 18 | `t_18` | AE100 Power Dock for SB2+ (A17C1, A17C3, A17C5, ...) | asm-traced (compare), upstream-confirmed (name) | `cmp w1, #0x24`, 32-bit Smi, so 18: `station_home_settings_logic.dart @0x28b2aa0` |
+
+Use of the two compared values: [get_power_limit, Who gets the output-limit page](../api/power_service/site/get_power_limit.md#who-gets-the-output-limit-page-app-gate). The values 12 and 18 equal the `EvStationType` members `a17c5` and `ae100` above (a separate enum of the load-balancing code; the gate does not read it).
+
 ## Energy, mode and price enums
 
 Tag: asm-traced.

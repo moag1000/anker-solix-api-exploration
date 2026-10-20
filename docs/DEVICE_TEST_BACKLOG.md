@@ -29,6 +29,7 @@ BLE rows need the device off WiFi: BLE is unavailable while the device is on WiF
 1. [A5140 / A5150](#a5140--a5150)
 1. [Any MQTT device (envelope)](#any-mqtt-device-envelope)
 1. [Any BLE device (handshake)](#any-ble-device-handshake)
+1. [Output-limit app gate (SB2 behind an AE100 dock, A17C0)](#output-limit-app-gate-sb2-behind-an-ae100-dock-a17c0)
 
 ## How to read the table
 
@@ -63,7 +64,8 @@ BLE rows need the device off WiFi: BLE is unavailable while the device is on WiF
 | [A5140 / A5150](#a5140--a5150) | 1 | 0 | 1 | 0 |
 | [Any MQTT device (envelope)](#any-mqtt-device-envelope) | 3 | 0 | 2 | 1 |
 | [Any BLE device (handshake)](#any-ble-device-handshake) | 5 | 0 | 4 | 1 |
-| total | 118 | 24 | 76 | 18 |
+| [Output-limit app gate (SB2 behind an AE100 dock, A17C0)](#output-limit-app-gate-sb2-behind-an-ae100-dock-a17c0) | 3 | 1 | 2 | 0 |
+| total | 121 | 25 | 78 | 18 |
 
 ## A17C5 (Solarbank 3)
 
@@ -77,7 +79,7 @@ BLE rows need the device off WiFi: BLE is unavailable while the device is on WiF
 | 6 | P1 | [api/power_service/site/set_site_device_param.md § Known unknowns](../api/power_service/site/set_site_device_param.md#known-unknowns): type 19: is legal_limit enforced | A17C5 | Read get_power_limit first, then send a type-19 value above legal_limit with the flag the app sends. | Accepted or rejected; whether get_power_limit shows the new value afterwards. | open |  |
 | 7 | P1 | [api/power_service/site/set_site_device_param.md § Known unknowns](../api/power_service/site/set_site_device_param.md#known-unknowns): type 19: which cmd value the server accepts | A17C5 | Send the same type-19 request twice, once with the cmd the app sends and once with the upstream library value, both listed on param_types.md. | Which of the two is accepted; the error code of the other. | open |  |
 | 8 | P1 | [api/power_service/site/set_site_device_param.md § Known unknowns](../api/power_service/site/set_site_device_param.md#known-unknowns): type 19: encrypted versus plain request | A17C5 | Send the same type-19 SET through the encrypted path and as a plain request (api/encryption.md). | Whether the plain request is accepted. | open |  |
-| 9 | P1 | [api/power_service/site/get_power_limit.md § Known unknowns](../api/power_service/site/get_power_limit.md#known-unknowns): get_power_limit with and without app_ability | A17C5 | Send get_power_limit twice, with and without the app_ability key, and with plain and encrypted transport. | Differences in the response, in particular unlock_default_power_type, unlock_pop_content, unlock_pop_image and legal_limit. | open |  |
+| 9 | P1 | [api/power_service/site/get_power_limit.md § Known unknowns](../api/power_service/site/get_power_limit.md#known-unknowns): get_power_limit with and without app_ability | A17C5 | Send get_power_limit twice, with and without the app_ability key, and with plain and encrypted transport. | Differences in the response, in particular unlock_default_power_type, unlock_pop_content, unlock_pop_image and legal_limit. (response fields are not an indicator, thomluther SB1 2026-10-19) | open |  |
 | 10 | P1 | [models/station_power_limit.md § Known unknowns](../models/station_power_limit.md#known-unknowns): legal_power_limit versus legal_limit; unlock_default_power_type values | A17C5 | Read get_power_limit on each owned device and save the raw answer. | Values of legal_power_limit, legal_limit, unlock_default_power_type, parallel_type; the unit and meaning of ac_input_power. | open |  |
 | 11 | P1 | [flows/diy_unlock.md § Known unknowns](../flows/diy_unlock.md#known-unknowns): DIY unlock: successful and failed verification | A17C5 | On a device whose get_power_limit asks for an unlock code, send verify_unlock_default_power_code once with a wrong code and once with a valid one (owner page for the body). | verify_result and its wrapping; then whether a later type-19 value above legal_limit behaves differently. | open |  |
 | 12 | P1 | [api/devicecontrol/device/verify_unlock_default_power_code.md § Known unknowns](../api/devicecontrol/device/verify_unlock_default_power_code.md#known-unknowns): where the unlock code comes from | A17C5 | Check the device label, the unlock_pop_image of get_power_limit and the manual for the code, without sending anything. | Where the code is printed or issued. | open |  |
@@ -267,3 +269,13 @@ BLE rows need the device off WiFi: BLE is unavailable while the device is on WiF
 | 116 | P2 | [ble/handshake.md § Known unknowns](../ble/handshake.md#known-unknowns): messages before the key exchange | any | Capture the first BLE messages. | Whether they are encrypted with the built-in key. | open |  |
 | 117 | P2 | [ble/protocol.md § Known unknowns](../ble/protocol.md#known-unknowns): simultaneous BLE and WiFi (dual-mode PNs) | any | On an A1780P (parallel OTA) check BLE while WiFi is connected. | Firmware behaviour; no cloud fallback claim. | open |  |
 | 118 | P3 | [ble/handshake.md § Known unknowns](../ble/handshake.md#known-unknowns): opcodes 0004, 0031, 0032 and fragmentation | any | Capture handshakes of several PNs and send a command longer than one packet to a PN other than A17C1. | Whether any class uses 0004, 0031, 0032; whether other PNs fragment. | open |  |
+
+## Output-limit app gate (SB2 behind an AE100 dock, A17C0)
+
+The app-side gate is on [get_power_limit](../api/power_service/site/get_power_limit.md#who-gets-the-output-limit-page-app-gate); these rows test what the server does behind it.
+
+| # | prio | page / section | PN | what to send | what to look for | status | who could test |
+|---|---|---|---|---|---|---|---|
+| 119 | P1 | [api/power_service/site/get_power_limit.md § Who gets the output-limit page](../api/power_service/site/get_power_limit.md#who-gets-the-output-limit-page-app-gate): SB2 behind an AE100 dock (site type 18) | A17C1, A17C3 | On a site whose `power_site_type` is 18 with an A17C1 or A17C3, open the station power limit page in the app and send the type-19 request (owner: set_site_device_param.md) raw. | Whether the server accepts type 19 for an SB2 behind the dock, and the error code if not. | open |  |
+| 120 | P2 | [api/power_service/site/get_power_limit.md § Known unknowns](../api/power_service/site/get_power_limit.md#known-unknowns): A17C0 in the site-level page | A17C0 | On a site that holds an A17C0, read `get_power_limit` and open the station power limit page (deeplink or entry row). | Whether the A17C0 is listed in `device_info`, and what the page shows for it. | open |  |
+| 121 | P2 | [api/power_service/site/set_site_device_param.md § Known unknowns](../api/power_service/site/set_site_device_param.md#known-unknowns): type 19 on an SB2 site | A17C1, A17C3, A17C2 | Send the type-19 request raw on an SB2 site (site type 5, 10 or 11). | Whether it is rejected and with which API error code (thomluther reported that SB2 supports neither type 18 nor 19; no code recorded). | open |  |

@@ -2,6 +2,8 @@
 
 2026-10-20 — rework merged (branch rework/3.24.3, tag v2026.10-app3.24.3); README/index version pass
 
+2026-10-20 — addendum: output-limit app gate (power_site_type 12/18), display_type origin, A17C1 picker decision tree, A17C0 negative; from issue #1 follow-up
+
 > **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/CHANGELOG_old_entries.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
 
 ## 2026-10 — App 3.24.3 rework (merged 2026-10-20, branch rework/3.24.3, tag v2026.10-app3.24.3)
@@ -70,6 +72,16 @@ Corrected facts (old statement to the 3.24.3 reading; the value is on the owner 
 ### Issue #1 (power limit, display_type)
 
 The device-tested result for the Solarbank 3 output power limit is recorded on the owner page [api/power_service/site/set_site_device_param.md](api/power_service/site/set_site_device_param.md#device-tested-by): with `display_type` 1 a free value outside `power_limit_option` was accepted, with `display_type` 0 only the option-list values worked, and the API did not appear to enforce the legal limit. Reported by thomluther in [issue #1](https://github.com/moag1000/anker-solix-api-exploration/issues/1). The flow is [flows/system_output_limit.md](flows/system_output_limit.md). What is still untested for it is in [docs/DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md).
+
+### Addendum 2026-10-20 (issue #1 follow-up)
+
+App-side facts (asm-traced) and one device report (thomluther, 2026-10-19T23:20Z, firmware not recorded):
+
+- Output-limit app gate: the type-19 slider page is reachable from the Station Home Settings row only for `power_site_type` 18 (AE100 dock), or 12 with an A17C5 in the site and `legal_power_limit > 0` or `has_combiner_box`; SB2 site types never show it. Owner: [get_power_limit](api/power_service/site/get_power_limit.md#who-gets-the-output-limit-page-app-gate); `power_site_type` names (upstream `SolixSiteType`): [reference/enums.md](reference/enums.md#power_site_type-upstream-solixsitetype).
+- `display_type` is written at one site and never read; the old wording "the app never sends `display_type: 0`" is replaced. Owner: [set_site_device_param](api/power_service/site/set_site_device_param.md#usage-param_type-19-system-output-power-limit).
+- A17C1 output picker decision tree (reminder, Italy certification dialog, DIY sheet, upper-limit dialog, direct send) replaces the Known unknown; the old "mode state is 0" wording for the first branch is corrected to the legal power limit state. Owner: [solarbank_power_limit_change](flows/solarbank_power_limit_change.md#output-picker-decision-tree).
+- A17C0 has no output-limit control, and the `get_power_limit` response fields are not a support indicator (device-tested, SB1). Owner: [devices/solarbank.md](devices/solarbank.md).
+- New backlog rows 119 to 121 in [docs/DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md).
 
 ### Known gaps
 
