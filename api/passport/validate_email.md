@@ -42,6 +42,8 @@ n/a
 
 (asm-traced for the first two senders) Top-level keys of `ValidateAccountModel` (`data/models.json`, `charging::ValidateAccountModel`): `result` (bool), `enc_text` (String?), `status` (String?), `pass_empty` (bool). The first sender completes a `Future<ValidateAccountModel?>` with the model (`complete` `@0x3bc871c`); the second passes it to the stored callback (`ClosureCall` `@0x2915898`).
 
+Values of `enc_text` (app side, traced 2026-10-20, `charging/model/validate_account_model.dart`): `ValidateAccountModel.fromJson` passes the key to `EncType.fromValue` (call `@0x29159b0`), which runs `firstWhere` over the two enum instances (`@0x2915cec`; the list `[raw, sha256]`, pool `pp+0xc1aa8`) with the shared predicate closure `base_service/enum/charging_pn.dart @0x22caf60` (it compares the `value` string of the instance with the argument by `==`, `@0x22caf88`..`@0x22caf9c`) and the fallback closure `@0x2915d04`, which returns the instance `raw` (`pp+0xc19d8`). The value strings of the instances are `"raw"` (`raw`) and `"sha2"` (`sha256`) (`pp+0xc19d8`, `pp+0xc19e0`), so the app understands `enc_text` = `"raw"` or `"sha2"` and treats any other text as `raw`; what `processPassword` does for each is on [login.md](login.md#request). The value format of `status` was not read.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -84,7 +86,7 @@ Called from:
 ## Known unknowns
 
 - The parse of the third sender (`installer_login_logic.dart @0x31921c0`): the `success` callback comes from the caller and was not read; the Future type argument `ValidateAccountModel?` (`@0x31921e0`) suggests the same model.
-- What `enc_text` and `status` carry (value formats): only the model key names and types were read.
+- What `status` carries (a `String?` in the model): only the `enc_text` chain was followed on 2026-10-20 (its values are in Response), the readers of `status` were not looked up.
 - Error codes: none compared in the callers read (`login_logic.dart`, `forget_pwd_logic.dart`, and others).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

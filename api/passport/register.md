@@ -22,12 +22,16 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `email` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3be2438` (value store `@0x3be2448`) |
-| `password` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3be244c` (value store `@0x3be245c`) |
-| `is_subscribe` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3be2460` (value store `@0x3be2470`) |
+| `email` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3be2438` (value store `@0x3be2448`) |
+| `password` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3be244c` (value store `@0x3be245c`) |
+| `is_subscribe` | bool | yes |  | `charging/http/http_request_repository_impl.dart @0x3be2460` (value store `@0x3be2470`) |
 | `country_code` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3be2474` (value store `@0x3be2484`) |
 
-The body map literal has type arguments `<String, Object>` (`@0x3be2488`), which is not evidence of a value type, so the scalar types stay `?`.
+The body map literal has type arguments `<String, Object>` (`@0x3be2488`), which is not evidence of a value type; the types come from the caller (see below).
+
+Password processing (app side, traced 2026-10-20): `RegisterLogic::register` passes the password through `StringExtensions.processPassword` with the constant `EncType` `pp+0xc19e0` (`sha256`, `charging/ui/page/account/register/register_logic.dart @0x3be22e8`, call `@0x3be22f0`) before it calls the sender, so the app sends the SHA-256 hex text of the UTF-8 password, not the clear text; the branches of `processPassword` are described on [login.md](login.md#request).
+
+Types (app side, traced 2026-10-20, `charging/ui/page/account/register/register_logic.dart`): `RegisterLogic::register` reads `email` from `field_6f` (`@0x3be22b4`..`@0x3be22c4`) through the chain `field_27` then `field_7`; the logic creates `field_6f` and `field_73` as `TextEditingController` objects (`@0x40fa124`, `@0x40fa160`), and on such a controller that chain is `value.text`, a `String` (`flutter/src/widgets/editable_text.dart`, getter `selection` `@0x2573d7c`), so `email` is a string. `password` is the result of `processPassword` on `field_73` with `sha256` (`@0x3be22e8`), the hex text of a digest, a string. `is_subscribe` is `value` of `field_57` (`@0x3be2300`, `value()` `@0x3be2308`), which the logic creates with `BoolExtension.obs` (`false.obs`, `@0x40fa02c`, store `@0x40fa034`), an observable bool, so it is a bool. `country_code` is `field_5b` of the logic (`@0x3be2318`), initialised with `""` (`@0x40f9ff8`) and set from a `field_7` of another object with `""` as the fallback (`@0x3be2298`, `@0x3be2f28`); its declared type is not in the asm, so it stays `?`.
 
 ## `param_type`/`cmd`
 
@@ -75,8 +79,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `email`, `password`, `is_subscribe`, `country_code`: parameters of the sender stored into a `<String, Object>` literal; the caller's values were not typed.
-- Whether the password is sent in clear or processed first (the forgot-password caller applies `StringExtensions.processPassword`; the `register` caller was not checked for it).
+- The type of `country_code`: `field_5b` of `RegisterLogic`, initialised with `""` and set from a `field_7` of another object with an empty-string fallback (`charging/ui/page/account/register/register_logic.dart @0x40f9ff8`, `@0x3be2298`, `@0x3be2f28`); no declared type was read for it — attempted 2026-10-20 (two-hop not readable: the object behind `field_7` is not named).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

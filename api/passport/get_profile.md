@@ -34,6 +34,8 @@ n/a
 
 (asm-traced) Top-level keys of `UserModel` (`data/models.json`, `charging::UserModel`): `email` (String?), `phone_number` (String?), `nick_name` (String?), `phone` (String?), `avatar` (String?), `country` (String?), `promo_email` (bool?), `access_token` (String?), `id` (int?). The closure copies five of the fields into the stored user model (`StoreField` `@0x34e6ef4`..`@0x34e6f84`) and then calls `updateIotUserInfo` (`@0x34e6fb0`).
 
+Copy into the stored user (app side, traced 2026-10-20, `charging/http/http_request_repository_impl.dart`): the success closure copies the model fields at the first to fifth offsets, `field_7` (`email`, `@0x34e6f34`), `field_b` (`phone_number`, `@0x34e6f58`), `field_f` (`nick_name`, `@0x34e6eec`), `field_13` (`phone`, `@0x34e6f10`) and the fifth field (`avatar`, load `@0x34e6f7c`) into the user model returned by `getUserModel` (stores `@0x34e6ef4`, `@0x34e6f18`, `@0x34e6f3c`, `@0x34e6f60`, `@0x34e6f84`) and then calls `updateIotUserInfo` (`@0x34e6fb0`); the destination fields have no names in the asm. `country`, `promo_email`, `access_token` and `id` are not copied there. The field-to-key order is the field order of `UserModel` (`charging/model/user_model.dart`).
+
 ## Example request/response
 
 Request: no body fields are built (see Request). Response: not synthesized; no capture exists for this endpoint.
@@ -57,7 +59,6 @@ Called from:
 
 ## Known unknowns
 
-- Which five of the nine `UserModel` fields the closure copies and into which fields: only the field offsets were read (`charging/http/http_request_repository_impl.dart @0x34e6eec`..`@0x34e6f84`), not their names.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

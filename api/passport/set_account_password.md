@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # set_account_password
 
@@ -22,11 +22,13 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `password` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x4055580` (value store `@0x4055590`) |
+| `password` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x4055580` (value store `@0x4055590`) |
 | `verify_kind` | string | yes | `"export_account"` | `charging/http/http_request_repository_impl.dart @0x4055594` (value store `@0x40555a8`) |
 | `client_secret_info` | object | yes | `{"public_key": "<public_key>"}` | `charging/http/http_request_repository_impl.dart @0x40555ac` (value store `@0x40555ec`) |
 
-The body map literal has type arguments `<String, Object>` (`@0x4055610`), which is not evidence of a value type, so `password` stays `?`. `verify_kind` is the constant string `"export_account"` (`@0x40555a0`). `client_secret_info` is a nested map literal `<String, String>` (`@0x40555d8`) with the key `public_key` (`@0x40555c4`), value from a parameter.
+The body map literal has type arguments `<String, Object>` (`@0x4055610`), which is not evidence of a value type; `password` is typed through the caller (below). `verify_kind` is the constant string `"export_account"` (`@0x40555a0`). `client_secret_info` is a nested map literal `<String, String>` (`@0x40555d8`) with the key `public_key` (`@0x40555c4`), value from a parameter.
+
+Value of `password` (app side, traced 2026-10-20): the only caller `changePassword` (`charging/ui/page/user/routerInfo/account_set_password/account_set_password_logic.dart`) passes the text through `StringExtensions.processPassword` with the constant `EncType` `sha256` (`@0x4055474`, call `@0x405547c`), hands the result to `Encryption::loginPasswordECDH` (`@0x405548c`) and awaits it (`@0x4055498`), and passes the awaited value to the sender (`userSetPasswordApi`, `@0x40554c0`). `loginPasswordECDH` is declared `Future<String>` (`encryption/encryption_method_channel.dart @0x2faf24c`, `InitAsync() -> Future<String>`, empty-string fallback `@0x2faf2b4`), so `password` is a string; the steps are described on [login.md](login.md#request) and [../auth.md](../auth.md#password-encryption-at-login).
 
 ## `param_type`/`cmd`
 
@@ -73,8 +75,7 @@ Called from:
 
 ## Known unknowns
 
-- The type of `password`: a parameter of the sender stored into a `<String, Object>` literal; the caller's value and any processing before the call were not read.
-- Why the same `verify_kind` value `"export_account"` is used here and in `validate_pass`: not visible in the app.
+- Why the same `verify_kind` value `"export_account"` is used here and in `validate_pass`: not visible in the app. — reclassified: server (traced 2026-10-20: the app sends the constant `"export_account"` from both senders, `charging/http/http_request_repository_impl.dart @0x40555a0`; why the server uses one purpose name for the two requests is not visible in the app)
 - The failure closure and error codes of the caller were not decoded: none compared in the caller function.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

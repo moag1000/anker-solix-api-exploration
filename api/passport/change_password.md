@@ -27,6 +27,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 Both values are Strings: the sender stores them in a map literal with type arguments `<String, String>` (`@0x4041f0c`). Which argument of the sender is the old and which the new password was not traced into the UI: `@0x4041ef4` stores the `fp-0x18` argument under `password`, `@0x4041f08` the `fp-0x10` argument under `original_password`.
 
+Which UI value reaches which key (app side, traced 2026-10-20): `UserChangePasswordLogic::changePassword` (`charging/ui/page/user/changePassword/user_change_password_logic.dart`) first runs `StringExtensions.processPassword` on the text of the field behind the label `currentPwd` (`field_53`; `charging/ui/page/user/changePassword/user_change_password_view.dart @0x4040a04`) with a variable `EncType` taken from its parameter (`@0x4041d94`, call `@0x4041da0`), then on the text of the field behind the label `retypeNewPwd` (`field_5b`, `user_change_password_view.dart @0x4040d98`) with the constant `EncType` `sha256` (`@0x4041dd4`, call `@0x4041ddc`), and passes the two results to `changePwdRequest` in that order (`@0x4041e0c`, `@0x4041e10`, call `@0x4041e1c`). The sender stores its first parameter (`fp-0x10`) under `original_password` (`charging/http/http_request_repository_impl.dart @0x4041f08`) and its second (`fp-0x18`) under `password` (`@0x4041ef4`), so `original_password` is the processed current password and `password` is the SHA-256 hex text of the retyped new password; the field behind the label `newPwd` (`field_57`, `@0x4040ba4`) is not passed. `processPassword` is described on [login.md](login.md#request).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -71,9 +73,8 @@ Called from:
 
 ## Known unknowns
 
-- Which UI value reaches `password` and which reaches `original_password`: the sender stores its two arguments in that order (`charging/http/http_request_repository_impl.dart @0x4041ef4`, `@0x4041f08`); the mapping in `changePassword` was not decoded, the key names suggest new and old.
 - Password policy and the error codes for a wrong `original_password`: the failure closure (`charging/http/http_request_repository_impl.dart @0x4041f9c`) logs code and message and forwards both; no code is compared in it or read in the caller.
-- Whether other sessions or tokens are invalidated after a change: not visible in the app.
+- Whether other sessions or tokens are invalidated after a change: not visible in the app. — reclassified: server (2026-10-20: session handling on the server is not visible in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

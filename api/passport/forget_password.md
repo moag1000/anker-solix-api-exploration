@@ -70,7 +70,7 @@ Called from:
 ## Known unknowns
 
 - What the server answers on success: the app never reads the body (see Response model).
-- Whether the reset link expires and how long: not visible in the app.
+- Whether the reset link expires and how long: not visible in the app. — reclassified: server (2026-10-20: link lifetime is a server property)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -38,6 +38,8 @@ n/a
 
 (asm-traced) Top-level key of `UserParamModel` (`data/models.json`, `charging::UserParamModel`): `user_params` (type not read, an element class `UserParams` appears in the callers as `<UserParams>`, `charging/ui/page/account/splash/splash_logic.dart @0x293f020`). The callers pick elements with `firstWhereOrNull` (`charging/ui/page/account/splash/splash_logic.dart @0x293f038`) and compare a field with the string `"1"` (`@0x293f058`).
 
+Compared field (traced 2026-10-20): `UserParams` has two fields, `param_value` at the first slot (`field_7`) and `param_type` at the second (`field_b`) (`toJson` of `charging/model/user_param_model.dart`: load before each key string), so the `field_7` that the callers compare with `"1"` is `param_value`.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; no captured values)
@@ -71,7 +73,6 @@ Called from:
 ## Known unknowns
 
 - What the two `param_types` values 20000 and 20001 select on the server, and which element is the app analytics switch and which the device analytics switch: the callers pick entries with closures (`@0x293f5d4`, `@0x293f3c0`) that were not decoded.
-- The element fields of `UserParams` (the name of the field compared with `"1"`): only the field offset (`field_7`) was read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # phone_reset_password
 
@@ -22,12 +22,16 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `phone_number` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3bc8a2c` (value store `@0x3bc8a3c`) |
-| `verify_code` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3bc8a40` (value store `@0x3bc8a50`) |
-| `password` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3bc8a54` (value store `@0x3bc8a64`) |
+| `phone_number` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3bc8a2c` (value store `@0x3bc8a3c`) |
+| `verify_code` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3bc8a40` (value store `@0x3bc8a50`) |
+| `password` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3bc8a54` (value store `@0x3bc8a64`) |
 | `client_secret_info` | object | yes | `{"public_key": "<public_key>"}` | `charging/http/http_request_repository_impl.dart @0x3bc8a68` (value store `@0x3bc8aa8`) |
 
-The map literal has type arguments `<String, Object>` (`charging/http/http_request_repository_impl.dart @0x3bc8acc`), which is not evidence of a value type, so the scalar types stay `?`. `client_secret_info` is a nested map literal `<String, String>` (`charging/http/http_request_repository_impl.dart @0x3bc8a94`) with the key `public_key` (`@0x3bc8a80`), value from a parameter (the caller `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart` loads `getClientPublicKey`, `@0x3bc8880`).
+The map literal has type arguments `<String, Object>` (`charging/http/http_request_repository_impl.dart @0x3bc8acc`), which is not evidence of a value type; the scalar types come from the caller (see below). `client_secret_info` is a nested map literal `<String, String>` (`charging/http/http_request_repository_impl.dart @0x3bc8a94`) with the key `public_key` (`@0x3bc8a80`), value from a parameter (the caller `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart` loads `getClientPublicKey`, `@0x3bc8880`).
+
+Password processing (app side, traced 2026-10-20): `ForgetPwdLogic::startResetPwd` passes the constant `EncType` `pp+0xc19e0` (`sha256`, `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart @0x3bc88e0`, call `@0x3bc88e8`), so `processPassword` returns the SHA-256 hex text of the UTF-8 password; the branches are described on [login.md](login.md#request).
+
+Types (app side, traced 2026-10-20, `charging/ui/page/account/forget_pwd/forget_pwd_logic.dart`): `ForgetPwdLogic::startResetPwd` reads `phone_number` and `verify_code` from two text controllers (`field_5b` `@0x3bc88ac`..`@0x3bc88bc` and `field_5f` `@0x3bc88f8`..`@0x3bc8908`; the logic creates the fields `field_5b`, `field_5f` and `field_63` as `TextEditingController` objects, `@0x40f90c8`, `@0x40f9104`, `@0x40f9140`) through the chain `field_27` then `field_7`, which on a `TextEditingController` is `value.text` (`flutter/src/widgets/editable_text.dart`, getter `selection` `@0x2573d7c` reads the same `field_27` as the `TextEditingValue`), a `String`; the third value is the result of `processPassword` on `field_63` (see above), the hex text of a SHA-256 digest, a string. So the three scalar keys are strings.
 
 ## `param_type`/`cmd`
 
@@ -75,8 +79,6 @@ Called from:
 
 ## Known unknowns
 
-- Types of `phone_number`, `verify_code` and `password`: parameters of the sender stored into a `<String, Object>` literal; the caller reads text fields (`@0x3bc88bc`..`@0x3bc8908`) whose element type was not read.
-- What `processPassword` with the `EncType` instance does to the password (hashing or encryption scheme): not read here.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
