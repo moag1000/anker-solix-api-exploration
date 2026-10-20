@@ -29,6 +29,8 @@ Map literal with one string pair. Both senders skip the call when the site id is
 
 The `isProApp` test in `_checkVppFunction` of the EMS controller is `LoadStaticField(0xad8)` at `@0x2a27478` followed by `tbnz` at `@0x2a27480`.
 
+Names of the two fields (traced 2026-10-20, app side): the init code of `PowerUsageScenarioController` (`ak_soft_ems/ems_list/power_usage_scenario_controller.dart`) fills the field at offset 0x7b from the key `siteId` (key literal `@0x35643e8`, `String` cast, store `@0x3564440`) and the field at offset 0x7f from the key `systemCode` (key literal `@0x35644a4`, `String` cast, store `@0x35644fc`); so `station_id` is the `siteId` argument and `system_code` the `systemCode` argument of the page (route arguments), both Strings.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -77,7 +79,6 @@ No error code specific to this endpoint was traced. The failure closure of each 
 ## Known unknowns
 
 - Server behaviour and the exact semantics of `ems_disable` are not known (the name suggests that the EMS function of the system is disabled).
-- The name behind the object fields at offsets 0x7b and 0x7f is not in the asm; they are named here only from the log text and the `station_id` / `system_code` keys.
 - Whether the installer server accepts `station_id` (sent by the A17E2 sender regardless of `isProApp`) is not known.
 
 ## Device-tested by

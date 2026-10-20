@@ -90,8 +90,8 @@ UI: the firmware upgrade card of the initial-setup (`flutter_charging_beginning`
 ## Known unknowns
 
 - Server behaviour of the installer service (compared with the consumer answer) is not known.
-- The name and type of the `initialSetupController` field behind `system_id` are not in the asm.
-- The element layout of `update_infos` is not traced in 3.24.3; the upstream example is for the consumer twin.
+- The name and type of the `initialSetupController` field behind `system_id` are not in the asm. — attempted 2026-10-20 (two-hop not readable: the request reads `field_5b` of `FirmwareUpgradeController` (`flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d318`, key `system_id` `@0x2b0d324`) after a late-initialisation check (`object_sentinel` `@0x2b0d30c`); no store of that field is in this file)
+- The element layout of `update_infos` is not traced in 3.24.3; the upstream example is for the consumer twin. — traced 2026-10-20: the consumer parse of the same shape is on [the consumer page](../../../../app/ota/batch/check_update.md#response): `update_infos` is a list of `UpdateInfo` (`base_service/bean/model/firmware_update/batch_device_model.dart @0x229ea78`); whether the installer closure uses the same parse (`firmware_upgrade_controller.dart @0x2b0ac98`, `@0x2b0f2e0` call `BatchDeviceModel.fromJson`) matches the consumer path, the installer answer itself is server data
 
 ## Device-tested by
 

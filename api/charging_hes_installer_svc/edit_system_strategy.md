@@ -37,6 +37,8 @@ The body is the map built by `SendDeviceCommandRequest.toParams` (`electricity_p
 
 The `cmd` of this request is the device-command code, not a `param_type` command; its decoded value, raw immediate, store width and address are owned by [../param_types.md](../param_types.md#device-command-cmd-device_command-family).
 
+Element layout of `peak_sessions` (traced 2026-10-20, app side): `LargeTouMapper::toPeakSessions` (`electricity_price/components/tou/impl_v2/mapper/large_tou_mapper.dart @0x4884f94`) maps every `TouSeason` with the closure `@0x4885040` to a map with the keys `start_month` (`@0x488506c`), `end_month` (`@0x48850c0` region, key `@0x4885098`), `weekday` (`@0x48850c0`, a list built by `_segmentsToList` `@0x48850d4`) and, when the weekend differs from the weekdays (`isSameAsWeekday` `@0x4885118`), `weekend` (`@0x4885154`, list by `_segmentsToList` `@0x4885138`). Each segment is a map with the keys `start_time` (`@0x4885238`), `end_time` (`@0x488526c`), `type` (`@0x4885298`) and `price` (`@0x48852d4`) (`_segmentsToList` `@0x4885238` region, element type `TouTimePeriod`).
+
 ## `param_type`/`cmd`
 
 See [../param_types.md](../param_types.md#device-command-cmd-device_command-family) (device-command section); the value is not repeated here.
@@ -74,7 +76,6 @@ No error code specific to this endpoint was traced. The failure closure of each 
 ## Known unknowns
 
 - Which other `cmd` values the installer endpoint accepts is not known; only one sender is traced.
-- The element layout of `peak_sessions` is not traced.
 - Server behaviour and the consumer twin (`device_command`, which has other senders) are not compared.
 
 ## Device-tested by

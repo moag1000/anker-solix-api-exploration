@@ -93,7 +93,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- Value types and contents of the provider parameter objects (`userNordpoolParam`, `userOctopusParam`, `userFlatpeakParam`, `dynamicPriceParam`, `providerParams` members) are not decoded; the key sets of the provider objects are on [the company model page](../../models/dynamic_price_company_model.md).
+- Value types and contents of the provider parameter objects (`userNordpoolParam`, `userOctopusParam`, `userFlatpeakParam`, `dynamicPriceParam`, `providerParams` members) are not decoded; the key sets of the provider objects are on [the company model page](../../models/dynamic_price_company_model.md). — attempted 2026-10-20 (the key sets are on the company model page; the value types come from fields of the page logic that are not declared in the dump, two-hop not readable)
 - Server behaviour is not known (what `setMode: false` does, which provider names exist besides Tibber and Flatpeak).
 - Whether the installer variant accepts the consumer-style bodies is not tested.
 

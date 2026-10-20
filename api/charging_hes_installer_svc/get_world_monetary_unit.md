@@ -70,7 +70,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The element layout of `priceUnits` (probably `name` and `symbol` as in `CurrencyList`) is not traced.
+- The element layout of `priceUnits` (probably `name` and `symbol` as in `CurrencyList`) is not traced. — traced 2026-10-20: the sender passes the raw list to its caller (see Response); the consumer-side parse that exists in the same code base builds `PriceUnits` objects with the keys `priceUnit`, `isDefault` and `name` (`charging/model/a5101/a5101_hes_setting_model.dart`, see [the consumer page](../charging_hes_svc/get_world_monetary_unit.md#response)); how the callers of this installer sender parse the elements was not read
 - Whether empty `countryCodes` and `areaCodes` mean "all" is not known.
 - Server behaviour and the difference between the installer and the consumer answer are not known.
 

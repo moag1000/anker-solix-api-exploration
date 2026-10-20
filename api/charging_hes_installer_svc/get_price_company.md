@@ -32,6 +32,8 @@ Every sender builds a small map literal. The common shape is `pn` plus either `s
 
 `device_sn` is read (not set) from the page arguments in `dynamic_price_detail_info_view.dart @0x27cf244` and the C5 variant; the same function sets a key `site_id` (`@0x27cf340`, C5 `@0x27cf6e4`) before `siteId`, and which map receives it, and whether it reaches the request body, was not resolved. `electricityPriceUseTypeInterface` (`@0x27cf0f0`) is a page argument read, not a request key.
 
+Sources of the other values (traced 2026-10-20, app side): in `ElectricityPriceProviderLogic` (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart`) `pn` is `field_13` of the `PN` enum member held in `field_7b` (`@0x29a77fc`, `@0x29a7804`; texts on [the consumer page](../charging_hes_dynamic_price_svc/get_price_company.md#request)), `sn` is `field_73` (load `@0x29a7854`) and `siteId` is `field_77`, the String fields that the logic fills with `String` casts (`@0x34f3654`, `@0x34f35b8`). The remaining senders load their values from fields of their own logic classes in the same way; those fields were not named one by one.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -82,7 +84,6 @@ Field-load addresses are given after each function as the second address; where 
 ## Known unknowns
 
 - Server behaviour and the meaning of `type` and `isSetDynamicPrice` are not known.
-- The sources of the `pn` and `sn`/`siteId` values are named only for the three literal cases; the object fields behind the others are not named in the asm.
 - Whether the installer server answers the consumer-style keys (`pn`, `siteId`) the same way is not tested; this body has no `isProApp` branch.
 
 ## Device-tested by

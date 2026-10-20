@@ -72,7 +72,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- Value types of the five response keys are not decoded.
+- Value types of the five response keys are not decoded. — traced 2026-10-20: `is_manual_tou_configured` is tested with the class id of `bool` (`cmp x0, #0x3f`, `tou_and_timeslot_settings_detail_logic.dart @0x29b05a0`); the other keys feed a compare ladder that maps integers to `LargeChargingPriceMode` instances (untagged compares with 1, 0xb, 0, 2, 0x10, 0x33 `@0x29b07b0`..`@0x29b085c`, tagged compare with 0x68, i.e. Smi 52, `@0x29b0870`, and `cmp x0, #0x33` `@0x29b08b0`), so the mode keys are integers; which key feeds which compare was not followed
 - Server behaviour and the semantics of `tou_last_set_type` and `last_select_mode` are not known.
 
 ## Device-tested by

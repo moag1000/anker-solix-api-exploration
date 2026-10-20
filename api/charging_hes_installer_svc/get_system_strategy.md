@@ -77,8 +77,8 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The full response layout is not traced; only `electricity_strategy.isAuthorizeAIEms` is read.
-- The meaning of `accuracy` and the type of `isAuthorizeAIEms` on the wire (int versus bool) are not verified; the app compares with the integer 1 after a default of 0.
+- The full response layout is not traced; only `electricity_strategy.isAuthorizeAIEms` is read. — reclassified: server (2026-10-20: the app reads only `electricity_strategy.isAuthorizeAIEms`, see Response; any other key of the answer is not read by the code, so its layout is not visible from the app)
+- The meaning of `accuracy` and the type of `isAuthorizeAIEms` on the wire (int versus bool) are not verified; the app compares with the integer 1 after a default of 0. — reclassified: server (2026-10-20: the wire type is decided by the server; the app side treats the value as an integer: default 0 and a compare with Smi 1, see Response)
 - Server behaviour is not known.
 
 ## Device-tested by
