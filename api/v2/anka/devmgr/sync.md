@@ -32,6 +32,8 @@ No request keys in 3.24.3. In the 3.18.0 asm the default branch builds a `body` 
 
 The envelope keys (`url`, `method`, `country`, `cloudVersion`, `useWebsocket`, `isAIotEnv`, `body`, `jsonBody`) are the same as in 3.24.3 (see [get_msg](../history/get_msg.md)).
 
+Types and sources (traced 2026-10-20, 3.18.0 tree, so this page stays `string-only`): the request class is `AiChatDeviceControlDevmgrSyncRequestModel` (`anka_agent/pages/home/models/ai_chat_device_control_request_model.dart`, class id 11141, extends `RequestModel`). `AiChatController::syncCloudAuthorizeDeviceDataRequest` (`anka_agent/pages/home/controller/ai_chat_controller.dart @0x24cf26c`) builds it: `messageId` (field at 0x13) is the result of `generateTimestampId` (`@0x24cf264`; `anka_agent/utils/uuid_util.dart`, declared `String`), `userId` (field 0x17) is a `String?` cast of a value read under the key `userID` with `""` for null (`@0x24cf1fc`..`@0x24cf258`), and `manufacturerName` (field 0x1b) is stored as the constant empty list `const []` (`@0x24cf288`, `@0x24cf28c`), so it is sent as `[]`, not as a string.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -73,7 +75,6 @@ none traced: no 3.24.3 sender. Code meanings are owned by `api/errors.md`.
 ## Known unknowns
 
 - Whether the server still serves this URL: the 3.24.3 app has no code for it.
-- Types of the three keys: fields of the removed request class; the class was not located.
 - What the request meant: the key names suggest a per-message device-manager sync; not shown by the asm. — reclassified: server (2026-10-20: the request class is not in the 3.24.3 asm, so its meaning is not derivable from the app)
 - Server behaviour is not known from the app: this page states what the app built in 3.18.0.
 

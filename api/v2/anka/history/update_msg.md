@@ -43,6 +43,8 @@ not parsed here: `Channel.request` (`anka_agent/common/channel.dart @0x2db9df4`)
 
 No response key is read at this layer (see Response model). The response classes are `AiChatHomeUpdateChatMsgResponseModel`, `AiChatHomeDeleteChatMsgResponseModel` and `AiChatHomeSyncChatMsgResponseModel` (`data/models.json`, package `anka_agent`); which one the callers apply to this URL was not read.
 
+Response class of this URL (traced 2026-10-20, app side): `anka_agent/http/request.dart` picks the URL from the class id of the request (`update_msg` for 6939 `@0x2dba1b8`, `del_msg` for 6940 `@0x2dba1d0`, otherwise `get_msg` `@0x2dba1e8`); this URL belongs to `AiChatHomeUpdateChatMsgRequestModel` (class id 6939). The caller `AiChatController::updateCloudChatData` (`anka_agent/pages/home/controller/ai_chat_controller.dart`) builds it at `@0x37fafa4`, passes a response closure `@0x37fafd4 (closure 0x37fb018)`, and that closure parses the decoded map with `AiChatHomeUpdateChatMsgResponseModel.fromJson` (`@0x37fb148`). The other two response classes belong to the other two URLs.
+
 ## Example request/response
 
 Request, synthesized (the `body` map as built by `RequestModel.data`; `<...>` are placeholders, not captured values)
@@ -81,7 +83,7 @@ Called from:
 ## Known unknowns
 
 - Type of `user_id`: a field of the request object (`LoadField` `anka_agent/http/request.dart @0x2dba338`); the class listing shows no declared type for it. — attempted 2026-10-20 (two-hop not readable: the request class (`anka_agent/pages/home/models/ai_chat_home_request_model.dart`, one of `AiChatHomeUpdateChatMsgRequestModel`, `AiChatHomeDeleteChatMsgRequestModel`, `AiChatHomeSyncChatMsgRequestModel`, all `extends RequestModel`) lists no fields and no declared type in the asm; the load is `field_13` at `anka_agent/http/request.dart @0x2dba338`)
-- Which response class belongs to this URL and what the callers do with the decoded map: `AiChatHomeLogic` callers were not read.
+- What the caller does with the parsed response model beyond the `fromJson` call (the model-to-URL pairing is in Response) was not followed — traced 2026-10-20
 - What the native layer does with `useWebsocket: true` (websocket or HTTP): not part of the Dart asm. — reclassified: device test row 153 (2026-10-20: native layer, no Dart asm)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
