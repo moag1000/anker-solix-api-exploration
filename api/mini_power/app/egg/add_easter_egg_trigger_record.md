@@ -76,6 +76,7 @@ Called from:
 - Type of `device_sn`: a parameter stored into a `<String, Object>` literal; the callers' argument type was not read.
 - Which `egg_type` values exist and what unit `trigger_time` uses (seconds or milliseconds): the values come from the BLE parser's arguments (`parseUploadEasterEggTrigger`), which were not decoded for this.
 - Whether the server deduplicates repeated records.
+- One-hop caller tracing (controller ruling): `A2345DeviceCommands::parseUploadEasterEggTrigger` (`charging/ble/device/A2345/a2345_device_commands.dart @0x3b2d3c8`) reads `device_sn` as `field_f` of its first argument (`@0x3b2d518`) and `field_6b` of that (`@0x3b2d520`); the argument is an untyped parameter of the BLE parser (`SetupParameters` `@0x3b2d3d4`), so its class and the declared type of that field were not established, and the A91B2 parser was not traced.
 - Header stays `string-only` because the type of `device_sn` is missing.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

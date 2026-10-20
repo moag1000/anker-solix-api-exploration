@@ -76,6 +76,7 @@ Called from:
 
 - Types of all four values: parameters stored into a `<String, Object>` literal; the caller's argument types were not read.
 - The valid values of `mode`, `protocol_key` and `status`: the caller `setModeSubStatus` was not decoded for them.
+- One-hop caller tracing (controller ruling): the only caller `A2687ChargeModeLogic::setModeSubStatus` (`charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_charge_mode_logic.dart @0x38aa2a0`) passes `field_3f?.field_6b ?? ""` (`@0x38aa344`) as `device_sn`, but `mode`, `protocol_key` and `status` are its own untyped parameters (context stores `@0x38aa2e8`..`@0x38aa300`), so those three need a second hop and stay `?`.
 - Header stays `string-only` because the types are missing.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

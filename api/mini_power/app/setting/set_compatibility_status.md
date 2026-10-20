@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # set_compatibility_status
 
@@ -20,12 +20,12 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-(asm-traced for the stores, `?` where the value is not typed) `HttpRequestControllerImpl::saveCompatibilityStatusSetting` (`charging/http/http_request_repository_impl.dart @0x3e55e80`) stores both keys unconditionally in a map literal with type arguments `<String, dynamic>` (`@0x3e55f04`), which types neither value; both come from parameters.
+(asm-traced) `HttpRequestControllerImpl::saveCompatibilityStatusSetting` (`charging/http/http_request_repository_impl.dart @0x3e55e80`) stores both keys unconditionally in a map literal with type arguments `<String, dynamic>` (`@0x3e55f04`), which types nothing by itself. The second value is an unboxed int parameter that the builder tags as a Smi (`lsl` `@0x3e55efc`). `device_sn` is typed from the caller: The only caller, `A2345LaboratoryLogic::setCompatibilityStatusWithDevice` (`charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart @0x3e55c10`), loads the device object from `field_7f` (`@0x3e55c94`), reads its value (`@0x3e55ce8`) and passes `field_6b` (`@0x3e55cec`) as `device_sn`, without a null branch; it passes the second value as an unboxed int built from a bool parameter (`tst x1, #0x10` `@0x3e55d04`) and calls the sender at `@0x3e55d50`. `field_7f` is created in the constructor `A2345LaboratoryLogic` (`charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart @0x4121cac`) as `<A2345AnkerDevice>` observable (`A2345AnkerDevice()` `@0x4121cd0`, type argument `@0x4121d10`, `RxT.obs` `@0x4121d24`, stored `@0x4121d2c`); `A2345AnkerDevice` extends a mixin application that includes `AnkerDevice` (`charging/ble/device/A2345/a2345_anker_device.dart`, class line 8), and `field_6b` of `AnkerDevice` is the getter declared `String dyn:get:deviceSn(AnkerDevice)` (`base_service/device/anker_device.dart @0x22053d4`, loads `field_6b` `@0x22053d8`).
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3e55ed8` (parameter, not typed by the builder) |
-| `compatibility_status` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3e55eec` (parameter, not typed by the builder) |
+| `device_sn` | string | yes | `"<device_sn>"` | `charging/http/http_request_repository_impl.dart @0x3e55ed8` (caller load `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart @0x3e55cec` (see below)) |
+| `compatibility_status` | int (Smi, w) | yes | ? | `charging/http/http_request_repository_impl.dart @0x3e55eec` (unboxed int parameter tagged by `lsl x2, x1, #1` `charging/http/http_request_repository_impl.dart @0x3e55efc` and stored with `stur w2` `@0x3e55f00`) |
 
 ## `param_type`/`cmd`
 
@@ -45,8 +45,8 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
 
 ```json
 {
-  "device_sn": "<?>",
-  "compatibility_status": "<?>"
+  "device_sn": "<device_sn>",
+  "compatibility_status": "<int>"
 }
 ```
 
@@ -71,9 +71,8 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sn` and `compatibility_status`: parameters stored into a `<String, dynamic>` literal; the caller's argument types were not read. The read side `get_device_setting` casts the same-named key to `int` (`charging/http/http_request_repository_impl.dart @0x28a7e74`), which does not prove the write-side type.
-- Value domain of the switch.
-- Header stays `string-only` because both types are missing.
+- The value domain of the switch: the caller sends 1 when its bool parameter is true and 0 otherwise (`tst` in `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart @0x3e55d04`); the read side `get_device_setting` casts the same-named key to `int` (`charging/http/http_request_repository_impl.dart @0x28a7e74`).
+- What the switch controls on the device (names only).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

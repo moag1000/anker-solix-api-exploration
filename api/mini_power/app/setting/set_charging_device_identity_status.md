@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # set_charging_device_identity_status
 
@@ -20,12 +20,12 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-(asm-traced for the stores, `?` where the value is not typed) `HttpRequestControllerImpl::setA2687ChargingDeviceModelIdentityStatus` (`charging/http/http_request_repository_impl.dart @0x38c75f0`) stores unconditionally in a map literal with type arguments `<String, Object>` (`@0x38c7674`), which types neither value; both come from parameters.
+(asm-traced) `HttpRequestControllerImpl::setA2687ChargingDeviceModelIdentityStatus` (`charging/http/http_request_repository_impl.dart @0x38c75f0`) stores both keys unconditionally in a map literal with type arguments `<String, Object>` (`@0x38c7674`), which types nothing by itself. The second value is an unboxed int parameter that the builder tags as a Smi (`lsl` `@0x38c766c`). `device_sn` is typed from the caller: The only caller, `A2687LabFunctionLogic::setIdentityStatus` (`charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_lab_function_logic.dart @0x38c7478`), loads `field_3f` (`@0x38c7540`), null-checks it (`cmp w1, NULL` `@0x38c7548`), reads its `field_6b` (`@0x38c7558`) and replaces a null result by the empty string (`r4 = ""` `@0x38c7568`), so a String reaches the sender (call `@0x38c75d0`). `field_3f` is stored in `onInit` (`charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_lab_function_logic.dart @0x35e9250`) from the navigation arguments cast to `IotAnkerDevice?` (`r8 = IotAnkerDevice?` `@0x35e9308`, stored `@0x35e9324`). `IotAnkerDevice` extends a mixin application over `IotDeviceAdapter` (`charging/ble/device/iot_anker_device.dart`, class line 8), `IotDeviceAdapter` extends one over `AnkerDevice` (`base_service/device/iot_device_adapter.dart`, class line 8), and `field_6b` of `AnkerDevice` is the getter declared `String dyn:get:deviceSn(AnkerDevice)` (`base_service/device/anker_device.dart @0x22053d4`, loads `field_6b` `@0x22053d8`). The caller builds the int from a bool parameter (`tst x1, #0x10` `@0x38c7584`, `cset`, `lsl`).
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38c7648` (parameter, not typed by the builder) |
-| `charging_device_identity_status` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38c765c` (parameter, not typed by the builder) |
+| `device_sn` | string | yes | `"<device_sn>"` | `charging/http/http_request_repository_impl.dart @0x38c7648` (caller load `charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_lab_function_logic.dart @0x38c7558` (see below)) |
+| `charging_device_identity_status` | int (Smi, w) | yes | ? | `charging/http/http_request_repository_impl.dart @0x38c765c` (unboxed int parameter tagged by `lsl x2, x1, #1` `charging/http/http_request_repository_impl.dart @0x38c766c` and stored with `stur w2` `@0x38c7670`) |
 
 ## `param_type`/`cmd`
 
@@ -45,8 +45,8 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
 
 ```json
 {
-  "device_sn": "<?>",
-  "charging_device_identity_status": "<?>"
+  "device_sn": "<device_sn>",
+  "charging_device_identity_status": "<int>"
 }
 ```
 
@@ -70,9 +70,8 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sn` and `charging_device_identity_status`: parameters stored into a `<String, Object>` literal; the caller's argument types were not read. The read side `get_device_setting` casts the same-named key to `int` (`charging/http/http_request_repository_impl.dart @0x28a7eec`), which does not prove the write-side type.
-- Which status values are valid.
-- Header stays `string-only` because both types are missing.
+- The value domain of the status: the caller sends 1 when its bool parameter is true and 0 otherwise; the read side `get_device_setting` casts the same-named key to `int` (`charging/http/http_request_repository_impl.dart @0x28a7eec`).
+- What the status controls on the device (names only).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
