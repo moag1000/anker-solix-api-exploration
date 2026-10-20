@@ -20,7 +20,7 @@ Direct SDK call, path C (asm-traced): the command function calls `AKIoTKitManage
 
 ## Request
 
-Body (`param`) is a `<String, dynamic>` map of three pairs (`r2 = 12`, `@0x3f9b310`). The element map of the list is `SubDeviceModel.toJson` (`ev_charger/src/ev_charger/model/group_device_model.dart @0x27e74c8`; the mapping closure at `@0x27e748c` calls it): `sub_sn` (`@0x27e74e8`), `sub_pn` (`@0x27e7504`), `rel_bizs` (`@0x27e751c`).
+Body (`param`) is a `<String, dynamic>` map of three pairs (`r2 = 12`, `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3f9b310`). The element map of the list is `SubDeviceModel.toJson` (`ev_charger/src/ev_charger/model/group_device_model.dart @0x27e74c8`; the mapping closure at `@0x27e748c` calls it): `sub_sn` (`@0x27e74e8`), `sub_pn` (`@0x27e7504`), `rel_bizs` (`@0x27e751c`).
 
 | field | type | required | example | source |
 |---|---|---|---|---|

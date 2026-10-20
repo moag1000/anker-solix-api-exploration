@@ -28,7 +28,7 @@ n/a
 
 ## Response model (link)
 
-`BranchIconModel` ([../../../../models/branch_icon_models.md](../../../../models/branch_icon_models.md#branchiconmodel)) with its element class `BranchIconInfo`; `handle` itself has no type argument (`stp x16, NULL`, `@0x27d5fe8`), and the caller maps the data with `BranchIconModel.fromJson` (closure `ats_ax170/src/ats_ax170/branch_circuit/pages/custom_branch/custom_branch_controller.dart @0x27d6014`, call `@0x27d604c`).
+`BranchIconModel` ([../../../../models/branch_icon_models.md](../../../../models/branch_icon_models.md#branchiconmodel)) with its element class `BranchIconInfo`; `handle` itself has no type argument (`stp x16, NULL`, `ats_ax170/src/sdk/command/ax170_command.dart @0x27d5fe8`), and the caller maps the data with `BranchIconModel.fromJson` (closure `ats_ax170/src/ats_ax170/branch_circuit/pages/custom_branch/custom_branch_controller.dart @0x27d6014`, call `@0x27d604c`).
 
 ## Response
 

@@ -25,7 +25,7 @@ The request body is a JSON object with four keys (the map literal is allocated w
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `site_id` | String | yes | `"<site_id>"` | `http_request_repository_impl.dart @0x435588c` (value is the caller's site id, parameter r6) |
-| `param_type` | String | yes | `"19"` | `http_request_repository_impl.dart @0x43558ac` (string literal, not a Smi) |
+| `param_type` | String | yes | `"19"` | `charging/http/http_request_repository_impl.dart @0x43558a0` (key literal; value `"19"` stored at `@0x43558ac`, string literal, not a Smi) |
 | `cmd` | int | yes | value per param_type, see [../../param_types.md](../../param_types.md) | `http_request_repository_impl.dart @0x43558b8` |
 | `param_data` | String (JSON-encoded object) | yes | see the usage subsection below | `http_request_repository_impl.dart @0x43558cc`, encoded by `jsonEncode` at `@0x43558e0` |
 
@@ -92,7 +92,7 @@ None recorded for the app payload above. For a different payload (upstream libra
 
 ## Since/changed
 
-3.18.0: `setSiteDevicePowerLimit` (3.18.0 `http_request_repository_impl.dart @0x327fdc0`) sent the same four top-level keys with `param_type` `"19"` and the same `cmd` (3.18.0 value on [../../param_types.md](../../param_types.md)); its `param_data` held only `power_limit` (`limit`, `limit_real`), typed `Map<String, Map<String, int>>`, with no `display_type`. 3.18.0 never sent a `display_type` key; 3.24.3 writes it at one site only (see Request). 3.24.3: `display_type` (constant 1) is new in `param_data` (`@0x43557b0`); `cmd` is unchanged (see [../../param_types.md](../../param_types.md)); the request is still sent encrypted.
+3.18.0: `setSiteDevicePowerLimit` (3.18.0 `http_request_repository_impl.dart 0x327fdc0`) sent the same four top-level keys with `param_type` `"19"` and the same `cmd` (3.18.0 value on [../../param_types.md](../../param_types.md)); its `param_data` held only `power_limit` (`limit`, `limit_real`), typed `Map<String, Map<String, int>>`, with no `display_type`. 3.18.0 never sent a `display_type` key; 3.24.3 writes it at one site only (see Request). 3.24.3: `display_type` (constant 1) is new in `param_data` (`@0x43557b0`); `cmd` is unchanged (see [../../param_types.md](../../param_types.md)); the request is still sent encrypted.
 
 ## Known unknowns
 

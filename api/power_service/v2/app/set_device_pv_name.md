@@ -25,8 +25,8 @@ Map literal with three string pairs, `<String, String>` (`r2 = 12`, `@0x2f3ac90`
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `device_sn` | String | yes | `"<device sn>"` | `ats_ax170/src/ats_ax170/page/station/system_ax170_flow_chart_controller.dart @0x2f3ac9c`; value is the first field of the argument object (`@0x2f3acac`), empty string if null (`@0x2f3acbc`) |
-| `pv_key` | String | yes | `"pv1_name"` | `@0x2f3acc4`; value is the second field of the argument object (`@0x2f3acd0`), empty string if null (`@0x2f3ace0`); the example is a guess from the attribute names `pv1_name` to `pv4_name` of the `Attributes` class in `s1_s2_http.dart` |
-| `pv_name` | String | yes | `"Garage roof"` | `@0x2f3acec`; the `trim()` of the text of the edit field (`@0x2f3ad18`) |
+| `pv_key` | String | yes | `"pv1_name"` | `ats_ax170/src/ats_ax170/page/station/system_ax170_flow_chart_controller.dart @0x2f3acc4`; value is the second field of the argument object (`@0x2f3acd0`), empty string if null (`@0x2f3ace0`); the example is a guess from the attribute names `pv1_name` to `pv4_name` of the `Attributes` class in `s1_s2_http.dart` |
+| `pv_name` | String | yes | `"Garage roof"` | `ats_ax170/src/ats_ax170/page/station/system_ax170_flow_chart_controller.dart @0x2f3acec`; the `trim()` of the text of the edit field (`@0x2f3ad18`) |
 
 ## `param_type`/`cmd`
 

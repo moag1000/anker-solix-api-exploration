@@ -89,7 +89,7 @@ None recorded. Error codes are catalogued in `api/errors.md`.
 
 ## Since/changed
 
-3.18.0: the model parsed 9 keys (3.18.0 `station_power_limit_model.dart @0x1a56c9c`). 3.24.3: 13 keys; `ac_input_power`, `unlock_default_power_type`, `unlock_pop_content` and `unlock_pop_image` are new. Details on [the model page](../../../models/station_power_limit.md#changed-since-3180).
+3.18.0: the model parsed 9 keys (3.18.0 `station_power_limit_model.dart 0x1a56c9c`). 3.24.3: 13 keys; `ac_input_power`, `unlock_default_power_type`, `unlock_pop_content` and `unlock_pop_image` are new. Details on [the model page](../../../models/station_power_limit.md#changed-since-3180).
 
 ## Who gets the output-limit page (app gate)
 
