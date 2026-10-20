@@ -10,7 +10,7 @@
 
 ## 2026-10 — Depth pass (r2) on the 3.24.3 reference (branch followup/3.24.3-depth, tag v2026.10-app3.24.3-r2 — tag set at merge)
 
-The depth pass deepens the 3.24.3 reference without changing its structure (branch from `main` at `7aecc9e`, 97 commits at the start of the release step by `git rev-list --count 7aecc9e..HEAD`; `git diff --stat 5b6ad42..HEAD` = 580 files, +19234 / −5598). It did three things: it read the request side of the endpoint pages from the instructions instead of from names (most skeleton pages became `asm-traced`), it worked through the Known-unknowns bullets that the asm can answer, and it added the tools that make both repeatable. As before, an owner page holds each fact and this entry only links it. The tag `v2026.10-app3.24.3-r2` is set at merge; the generated block in [README.md](README.md#5-coverage-and-confidence-tags) wins over any count quoted here.
+The depth pass deepens the 3.24.3 reference without changing its structure (branch from `main` at `7aecc9e`, 100 commits at the start of the release step by `git rev-list --count 7aecc9e..HEAD`; `git diff --stat 5b6ad42..HEAD` = 580 files, +19234 / −5598). It did three things: it read the request side of the endpoint pages from the instructions instead of from names (most skeleton pages became `asm-traced`), it worked through the Known-unknowns bullets that the asm can answer, and it added the tools that make both repeatable. As before, an owner page holds each fact and this entry only links it. The tag `v2026.10-app3.24.3-r2` is set at merge; the generated block in [README.md](README.md#5-coverage-and-confidence-tags) wins over any count quoted here.
 
 ### Added
 
