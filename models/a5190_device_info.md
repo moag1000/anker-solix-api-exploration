@@ -52,14 +52,14 @@ Tag: asm-traced for key and type; no consumer was traced for these keys, so thei
 | `mcuVersion` | `String?` | `a5190_device_info.dart @0x45aca70` |
 | `moduleVersion` | `String?` | `a5190_device_info.dart @0x45acaf4` |
 | `initSettings` | `int?` | `a5190_device_info.dart @0x45acb78` |
-| `rfidCardMaxNum` | `int` | `a5190_device_info.dart @0x45acbfc` |
+| `rfidCardMaxNum` | `int` (a missing or null value becomes 10: raw immediate 0x14 in a tagged slot, Smi, `@0x45acc18`) | `a5190_device_info.dart @0x45acbfc` |
 | `maxDelayStartTime` | `int?` | `a5190_device_info.dart @0x45acc8c` |
 | `meterConnMode` | `int` | `a5190_device_info.dart @0x45acd2c` |
 | `loadBalancingErrorCode` | `int` | `a5190_device_info.dart @0x45acdbc` |
 | `greenEnergyPriorityErrorCode` | `int` | `a5190_device_info.dart @0x45ace4c` |
 | `boostMode` | `int?` | `a5190_device_info.dart @0x45acedc` |
 | `schedChargeSwitch` | `bool` (read as `value == true`) | `a5190_device_info.dart @0x45acf7c` |
-| `everyDaySwitch` | `bool` | `a5190_device_info.dart @0x45acfd0` |
+| `everyDaySwitch` | `bool` (a missing or null value becomes `false`, `@0x45acfec`) | `a5190_device_info.dart @0x45acfd0` |
 | `plugAndChargeSwitch` | `bool` (read as `value == true`) | `a5190_device_info.dart @0x45ad054` |
 | `rfidCardSwitch` | `bool` (read as `value == true`) | `a5190_device_info.dart @0x45ad0a8` |
 | `aTouchSwitch` | `bool` (read as `value == true`) | `a5190_device_info.dart @0x45ad0fc` |

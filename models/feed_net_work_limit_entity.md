@@ -29,7 +29,7 @@ Not an endpoint response. `FeedNetworkLimitLogic.getFeedLimitStatus` (`@0x28f8a4
 
 The old feed-limit page itself (`FeedNetworkLimitLogic`, `feed_network_limit_logic.dart`); `showOpenLimitDialog` (`@0x3fb43e8`, allocations `@0x3fb4528`, `@0x3fb4588`) and a dialog closure (`@0x3fb47b0`) create modified copies. The new feed-limit page uses a different class, see [feed_grid_setting_param.md](feed_grid_setting_param.md).
 
-Storage and reachability (traced 2026-10-20): `saveFeedNetLimitSwitchStatus` writes the JSON string with `SharedPreferences.setString` under the key `feedLimitSwitchStatus_<first argument>` (`charging/util/save/sp_util_impl.dart @0x28f9390`, key parts `@0x28f93f4`, `@0x28f9400`, `setString` `@0x28f9424`), and `getFeedNetLimitSwitchStatus` (`@0x34b07bc`, key `@0x34b081c`) reads it back from `FeedNetworkLimitLogic.onInit`. The old page's route `/feedNetworkLimitPage` is registered in `charging/routers/routes_reg.dart @0x294e694` (page instance `@0x2950394`); no other file in the dump contains that route string or the page class (grep: 1 file), while the new page `/feedNetworkLimitNewPage` is pushed at `station_home_settings_logic.dart @0x3fef4b0`. So no navigation to the old page was found in Dart; whether another route mechanism reaches it is not shown.
+Storage and reachability (traced 2026-10-20): `saveFeedNetLimitSwitchStatus` writes the JSON string with `SharedPreferences.setString` under the key `feedLimitSwitchStatus_<first argument>` (`charging/util/save/sp_util_impl.dart @0x28f9390`, key parts `@0x28f93f4`, `@0x28f9400`, `setString` `@0x28f9424`), and `getFeedNetLimitSwitchStatus` (`@0x34b07bc`, key `@0x34b081c`) reads it back from `FeedNetworkLimitLogic.onInit`. The old page's route `/feedNetworkLimitPage` is registered in `charging/routers/routes_reg.dart @0x294e694` (page instance `@0x2950394`); no other file in the dump contains that route string or the page class (grep: 1 file), while the new page `/feedNetworkLimitNewPage` is pushed at `station_home_settings_logic.dart @0x3fef4b0`. So no navigation to the old page was found in Dart.
 
 ## Changed since 3.18.0
 
@@ -38,4 +38,4 @@ Added key: `feedTimes` (the list of feed-in time windows). The other three keys 
 ## Known unknowns
 
 
-None open after the trace of 2026-10-20.
+- Whether another route mechanism than a Dart `push` of the route string reaches the old feed-limit page — traced 2026-10-20: the route string and the page class occur in one file only (`routes_reg.dart`), no other caller was found; a mechanism outside the Dart code (for example a deep link handled natively) is not shown by the asm.

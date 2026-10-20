@@ -183,7 +183,7 @@ Tag: untagged by design (no API fact).
 - The fixed TCP port of the third-party control devices; the app only displays `tcpPort` from the cloud.
 - How the IoT kit encodes `action_ha_communication_setting` and `prop_write_evcharger` on Bluetooth or MQTT (opcode, TLV or field ids) runs in the native plugin, and the identity of the EV charger MQTT field `b7` (`modbus_switch`, upstream) with the app key `modbusTcpSwitch` is a device observation — reclassified: native plugin, not in Dart asm, [device test rows 59 and 60](../docs/DEVICE_TEST_BACKLOG.md#modbus-a17e2-ae103-ev-charger-and-a17e2--ae1x0-ble).
 - Whether `set_modbus_setting` reaches the device through the cloud (for example over MQTT) when the app took the cloud path, or whether the cloud only records the state.
-- The marketing names of `AE111` and `AE113`: the app knows them only by product code and by the `AnkPowerSiteType` members `ae111` and `ae113` ([enums](../reference/enums.md#ankpowersitetype-app-enum)); no marketing name string is bound to them in the asm checked here.
+- The marketing names of `AE111` and `AE113`: the app knows them only by product code and by the `AnkPowerSiteType` members `ae111` and `ae113` ([enums](../reference/enums.md#ankpowersitetype-app-enum)); no marketing name string is bound to them in the asm checked here — traced 2026-10-20: the lookup of the `AnkPowerSiteType` members and the `product_model.dart` entries was repeated for these two codes and gave no name string; the names stay open.
 - Which other bits of the EV charger `errorCodeArray` exist; the app only names bit 32.
 
 ## Device-tested by
