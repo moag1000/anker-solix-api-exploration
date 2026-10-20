@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # list_user_devices
 
 ## Purpose
 
-<!-- TODO -->
+Lists the devices of a user that can be added to a site, filtered by device model: the device-selection logics of the A1782, A17B1 and A17C0 pages, `AddDevicesLogic` (`getUserDeviceList`, `deleteGroup`) and the station home logics call `getUserPPSDevice`.
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/power_service/v1/site/list_user_devices`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x23f43a4`
+`POST /power_service/v1/site/list_user_devices` (asm-traced): URL string at `http_request_repository_impl.dart @0x23f43a4`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x23f439c`, in `HttpRequestControllerImpl::getUserPPSDevice` (`http_request_repository_impl.dart @0x23f42a4`).
 
 ## Encrypted?
 
@@ -20,9 +20,11 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+The body is a 1-pair map literal typed `<String, List<String>>` (type arguments `@0x23f4354`) built in `getUserPPSDevice` (`http_request_repository_impl.dart @0x23f42a4`).
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_models` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x23f42a4` |
+| `device_models` | list | yes | `["<device_model>"]` | key `@0x23f4300`, value store `@0x23f4330`; a null parameter (`cmp w1, NULL` `@0x23f4310`) is replaced by an empty `<String>` growable list (`_GrowableList` `@0x23f4320`); the map type says the elements are Strings |
 
 ## `param_type`/`cmd`
 
@@ -30,19 +32,25 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+`charging::UserSiteDevicePPSModel` (`data/models.json` key; fields on [`models/connectivity.md`](../../../models/connectivity.md#usersitedeviceppsmodel)), parsed in the builder's success closure `http_request_repository_impl.dart @0x23f43e8` by `UserSiteDevicePPSModel.fromJson`.
 
 ## Response
 
-<!-- TODO -->
+Top-level keys of the model (from `data/models.json`): `pps_list`, `solarbank_list`, `solarbank_pps_list`, `solar_list`, `powerpanel_list`, `smartplug_list`, `combiner_box_list`, `charging_pile_list` (Lists), `hardware_list` and `grid_list` (`List<SiteDeviceModel>`).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by `getUserPPSDevice`)
+
+```json
+{"device_models": ["<device_model>"]}
+```
+
+Response keys: see Response; no capture.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+None traced: the builder passes the `postJML` failure template (`@0x226824c`) to the callers' failure callbacks, which were not read. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -61,11 +69,13 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. The endpoint is in none of the added, removed or changed-params lists of `tools/out/diff_3.18.0_3.24.3.md`, so there is no string-level parameter delta. The model `UserSiteDevicePPSModel` is `≤3.18.0` in `data/models.json`.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Which device models each caller sends: the list is a parameter; the nine callers were not followed.
+- Whether an empty `device_models` list (the null fallback) returns all devices: server behaviour, not derivable from the app.
+- Failure handling in the callers was not read.
 
 ## Device-tested by
 

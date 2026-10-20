@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # update_site
 
 ## Purpose
 
-<!-- TODO -->
+Renames a site: the rename pages call `updateSiteNameInfoRequest` (`A17B1SystemInfoLogic::renameDevice`, `A5101SystemInfoLogic::renameDevice`, `SystemInfoLogic::resetSiteName`, `StationHomeInfoLogic::renameSiteName`, `HomeCenterLogic::renameSiteName`), `StationNameViewModel::requestRenameStation` and `StationNameController::requestRenameStation`; the beginning flow sends the same URL through the IoT kit (`RenameSiteController::save`).
 
 ## Upstream name
 
@@ -12,8 +12,13 @@
 
 ## Method+URL
 
-`/power_service/v1/site/update_site`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x30c76c0`
-(literal also at 3 more site(s) in `data/endpoints.json`)
+`POST /power_service/v1/site/update_site` (asm-traced) in every sender listed here; each sender loads the URL string and the method object (pool entry `pp+0xa7e0`, `Method.post`) in one call setup:
+
+- `HttpRequestControllerImpl::updateSiteNameInfoRequest` (`http_request_repository_impl.dart @0x30c7640`): URL string `@0x30c76c0`, method object `Method.post` (`pp+0xa7e0`) `@0x30c76b8`.
+- `StationNameViewModel::requestRenameStation` (`station_name_view_model.dart @0x2cb53ec`): URL string `@0x2cb55a8`, method object `Method.post` (`pp+0xa7e0`) `@0x2cb55a0`.
+- `StationNameController::requestRenameStation` (`station_name_controller.dart @0x2cd3010`): URL string `@0x2cd312c`, method object `Method.post` (`pp+0xa7e0`) `@0x2cd3124`.
+
+The fourth sender `RenameSiteController::<anonymous closure> in save` (`rename_device_controller.dart @0x47a6694`) goes through `akIoTKitManager.handle` with the command map `{path: "/power_service/v1/site/update_site" (`@0x47a66f4`), method: "POST" (string literal `@0x47a670c`), param: ...}`; the method here is a string literal, not a `Method` pool object.
 
 ## Encrypted?
 
@@ -21,15 +26,14 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+All map-literal senders type their maps `<String, String>` (or `<String, String?>`), so the values are Strings.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | ? | ? | ? | `device/src/station_setting/controller/common_station_name/station_name_view_model.dart @0x2cb53ec` |
-| `site_name` | ? | ? | ? | `device/src/station_setting/controller/common_station_name/station_name_view_model.dart @0x2cb53ec` |
-| `path` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart @0x47a6694` |
-| `method` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart @0x47a6694` |
-| `param` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart @0x47a6694` |
+| `site_id` | string | yes | `"<site_id>"` | `StationNameViewModel::requestRenameStation` (`station_name_view_model.dart @0x2cb53ec`): key `@0x2cb54d8`, store `@0x2cb5518`, null default `""`, map type `@0x2cb5534`; `StationNameController::requestRenameStation` (`station_name_controller.dart @0x2cd3010`): key `@0x2cd305c`, store `@0x2cd30a4`, null default `""`, map type `@0x2cd30b8`; caller-built bodies for `updateSiteNameInfoRequest`: `a17b1/system_info/system_info_logic.dart` key `@0x3d4582c` (null default `""` `@0x3d4580c`), `station_home_settings/system_info/system_info_logic.dart` key `@0x3ecbe2c`, `station_home_info_logic.dart` key `@0x30c74bc`, `home_center_logic.dart` key `@0x405ea04` (typed `<String, String?>`) |
+| `site_name` | string | yes | `"<site_name>"` | `StationNameViewModel`: key `@0x2cb551c`, store `@0x2cb5530`; `StationNameController`: key `@0x2cd30a8`, store `@0x2cd30b4`; `a17b1` caller key `@0x3d45840`, store `@0x3d45850`; `station_home_info_logic.dart` key `@0x30c7514` (trimmed text, `trim()` `@0x30c7544` area), `home_center_logic.dart` key `@0x405ea68` |
 
-Rows are the union over 3 senders; `source` is the first sender that sets the key.
+The SDK sender `RenameSiteController::save` passes `param` from a closure-context field (`@0x47a6728`); its keys and types were not read.
 
 ## `param_type`/`cmd`
 
@@ -37,19 +41,25 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+None for the map-literal senders: `StationNameViewModel`'s success callback `station_name_view_model.dart @0x2cb5a20` and `StationNameController`'s `station_name_controller.dart @0x2cd3210` load no argument and call no `fromJson` (they update an Rx value and refresh the site list). Not read for `updateSiteNameInfoRequest` (its builder passes forwarding templates) and for the SDK sender.
 
 ## Response
 
-<!-- TODO -->
+No response key is read in the resolved callbacks.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body of the typed senders)
+
+```json
+{"site_id": "<site_id>", "site_name": "<site_name>"}
+```
+
+Response: none parsed in the resolved callbacks.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+Both rename failure callbacks (`station_name_view_model.dart @0x2cb57c8` and `station_name_controller.dart @0x2cd3174`) compare the code with a 32-bit compare, raw 44200, so 22100 (`@0x2cb57f4`, `@0x2cd3190`) and show the text key `stationTips`. Meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -71,11 +81,13 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. `tools/out/diff_3.18.0_3.24.3.md` (changed params) lists `method`, `param` and `path` as added and `combination_type` as removed. `path`, `method` and `param` are the key names of the IoT-kit sender's command map (`rename_device_controller.dart @0x47a66ec`..`@0x47a6718`). The map-literal senders read here carry `site_id` and `site_name`; the string `combination_type` occurs in 3.24.3 only in `station_command.dart`, `init_flow_command.dart` and `add_device_model.dart` (grep of the asm tree), not in a rename sender.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- The keys of the SDK sender (`RenameSiteController::save`): its `param` map is built outside the closure.
+- Whether the callers of `updateSiteNameInfoRequest` read the answer: its callbacks are forwarded to the callers' closures, which were not read (header stays string-only).
+- Why `combination_type` was dropped: the 3.18.0 body was not opened for this page.
 
 ## Device-tested by
 
