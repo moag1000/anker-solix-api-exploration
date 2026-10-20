@@ -18,6 +18,7 @@ Every number below follows the Smi rule of [../METHODOLOGY.md](../METHODOLOGY.md
 1. [Timeouts and limits](#timeouts-and-limits)
 1. [Connection routing and the WiFi exclusion rule](#connection-routing-and-the-wifi-exclusion-rule)
 1. [ZX opcode names](#zx-opcode-names)
+1. [Controller send wrappers](#controller-send-wrappers)
 1. [Since 3.18.0](#since-3180)
 1. [Known unknowns](#known-unknowns)
 
@@ -28,6 +29,12 @@ Tag: asm-traced.
 The app has more than one BLE I/O path. `ReactiveBleManager` constructs `SdkBleScannerImpl`, `SdkBleDeviceConnectorImpl` and `SdkBleOperationImpl` (`charging/ble/reactive_ble_manager.dart @0x2217500`, `@0x2217538`, `@0x2217570`), so scanning, connecting and reading/writing characteristics are delegated to the AK IoT kit (`charging/ble/sdk_handler/*`, platform-channel methods such as `akiot.ble.write_characteristic`). The same class also keeps a `Uuid.parse` based `_setNotifyCharacteristic` / `_setWriteCharacteristic` pair (`@0x2217b58`) and a `_setMtu` (`@0x22179b4`). `SimpleBleConnector.connect` (`base_service/util/simple_ble_connector.dart @0x4317cec`) asks `_isLegacyDevice` (`@0x43184fc`) and then runs either `_connectLegacyDevice` (`@0x4318008`: `startScanWithConnect` with a timeout) or `_connectNewDevice` (`@0x4317f20`: `checkPermissionAndReconnect`); a second `connect` while one is running returns false with the log `Already connecting, skipped` (`@0x4317d28`).
 
 Which of two transports carries a command is decided per call by the device controller. `A17C1DeviceController.sendCommandWithParam` (`charging/ble/device/A17C1/a17c1_device_controller.dart @0x226df0c`) reads the device connection status. When it equals `DeviceConnectionStatus.bleBusinessConnected` (`@0x226e22c`) the command is built by the ZX transformer (`formatCommand` with the named arguments `functionType`, `isEncrypted`, `isMoreLength`, `isNormalCommand`, `useSecureInteraction`, `valueMap`, `@0x226e288`; `functionType` is the Smi raw 30, real 15, `@0x226e26c`, BUSINESS_RULES doc line 207) and written to the BLE characteristic. When it equals `wifiConnected` (`@0x226e4e4`) the same builder is called with `isBle` instead and the result is wrapped by the MQTT transformer (`MqttCommandType.normalCommand`, `@0x226e574`), see [../mqtt/envelope.md](../mqtt/envelope.md#payload-variants). So the two transports share one command builder and differ in the wrapper and in the connection status that selects them.
+
+Which stack carries the traffic. The two are not alternatives for a product. `ReactiveBleManager.sendCommand` (`reactive_ble_manager.dart @0x226fe38`) writes only when the connection state equals one `DeviceConnectionState` instance (by the log text the connected state; otherwise it logs `please connect first, current state is` and returns, `@0x226fe90` to `@0x226fefc`), and then calls `write` on `_operation` (the `SdkBleOperationImpl`, call `@0x226ff78`) with `_writeCharacteristic` (`field_23`). That characteristic is built by `_setWriteCharacteristic` (`@0x2218f40`): two `Uuid.parse` calls (`@0x2218f94`, `@0x2218ff4`) on strings read from `_bleDevice` through dispatch-table getters, wrapped in a `QualifiedCharacteristic` (`@0x221905c`). `_setWriteCharacteristic`, `_setNotifyCharacteristic` (`@0x2217b58`) and `_setMtu` (`@0x22179b4`) are called together by the connector-state listener (`@0x2217934`, `@0x2217944`, `@0x2217958`) when the state equals that instance (`@0x2217920`). So for every product the kit's operation object does the write and the `Uuid.parse` setters supply its characteristic; what differs per product is the UUID triple of [GATT profile per product](#gatt-profile-per-product), not the stack.
+
+What makes `_isLegacyDevice` true. `SimpleBleConnector._isLegacyDevice` (`base_service/util/simple_ble_connector.dart @0x43184fc`) returns true when the connector's field at offset 0xb (a nullable string that `_connectLegacyDevice` passes on at `@0x4318178`) is neither null nor empty (`cbnz` on the length, `@0x4318510`); it tests the connector, not a product. `SimpleBleConnector.connect` (`@0x4317cec`) has one caller in the whole asm, `oe_a7320/src/oe_a7320/page/range_system_create/unbind_dialog/re_system_unbind_controller.dart @0x4317b74` (the A7320 unbind flow), and the legacy handler it drives (`LegacyBleHandlerImpl`, kept in a static field set at `charging/boostrap_impl.dart @0x49e0038`) is read only by `SimpleBleConnector` (`@0x4318058`, `@0x43180f0`, `@0x4318168`). No product page of this directory reaches that path; their connect goes through `BleHandler.startScanWithConnect` ([handshake.md](handshake.md#which-implementation-runs-for-a-product)).
+
+The A5101 family uses the same frame builder as the other products: `A5101DeviceController` holds a `ZXCommandTransformer` and calls `formatCommand` (`zx_command_transformer.dart @0x2275b34`) and `generateCommand` (`@0x2273450`) at 16 sites each (the first pair at `a5101_device_controller.dart @0x23b4e58` and `@0x23b4e68`). The three opcode classes under `charging/ble/device/A5101/opcode/` are not read by that builder; their consumers are listed on [a5101.md](a5101.md#opcode-families-zx_opcode_0x01-0x0f-0x12).
 
 ## GATT profile per product
 
@@ -94,6 +101,8 @@ A caller selects fragmented sending by passing a non-zero `mtu` argument to `sen
 Because the length field of a fragment is the chunk plus the 9-byte header, the index byte and the checksum, every fragment is exactly the size argument long (chunk + 11); with the default of 200 a fragment is a single 200-byte write. The count lives in one nibble, so at most 15 fragments can be indexed (arithmetic on the nibble width; the code does not test for it).
 
 The receive side is `ZXCommandTransformer.validateCommand` (`zx_command_transformer.dart @0x4789138`), which calls `AssembleCmdUtil.saveOnePackage` (call at `@0x478932c`; the function is in `assemble_command_util.dart @0x4789810`): it keys the partial command by the hex string of bytes 7 and 8 (`sublist(7, 9)` @0x4789848..0x4789858), removes the index byte from the front (`removeAt(0)` @0x4789a0c) and reads the count from its low nibble and the index from its high nibble (`and w4,w0,#0xf` @0x4789a24; `asr x0,x1,#4`, `and w1,w0,#0xf` @0x4789a2c..0x4789a34), and `getTotalCmd` (`@0x4789b8c`) sorts the parts and concatenates them. The audit row 47 wording "MTU - 10" is corrected to MTU - 11 for the chunk (row 47 itself says so); row 45 (`sub #0xa`) is the first of the two subtractions.
+
+No other controller fragments commands. `AssembleCmdUtil.splitPackageCmd` has one call in the whole asm (`a17c1_device_controller.dart @0x226e3fc`) and the named parameter `int mtu` with default 0 exists only in `A17C1DeviceController.sendCommandWithParam` (`@0x226df18`); the A17C2, A17C3 and A17C5 device classes extend `A17C1AnkerDevice`, so they share that controller path. A hand-written copy of the splitter in another controller would need a `Future.delayed` loop over `sublist` slices in its send path; the `sublist` calls under `charging/ble/device/` are in parsers (`parse*` and `_parsePayloadData` of `A5101/a5101_device_controller.dart`, `_updateSubBatteryList` of `A1790/a1790_device_commands.dart`, `_getCycleTextByCycleTags` of `A17X8/a17x8_device_feature.dart`) and once in `A5101DeviceController.sendAutoDisasterData` (`@0x3ebd6bc`, `sublist` at `@0x3ebd7d8`), which contains no `Future.delayed`.
 
 ## Payload encryption
 
@@ -274,6 +283,28 @@ Reading a row: the last column is the address of the map entry in `pps_device_co
 
 The command payloads for these opcodes are owned by the `mqtt/<pn>.md` pages ([../mqtt/README.md](../mqtt/README.md)), indexed per upstream constant on [../mqtt/upstream_commands.md](../mqtt/upstream_commands.md).
 
+## Controller send wrappers
+
+Tag: asm-traced.
+
+Most controller methods that the product pages list in their send sets are thin wrappers of a few shapes; the shapes are described once here and the pages name which of their methods follow which shape. Numbers: raw immediates of the asm are stated as read; a tag key stored into an array slot is a Smi, so raw 324 is the key 162 (0xA2) and raw 326 is 163 (0xA3); the arguments of `CmdUtil.intToList*` are unboxed 64-bit integers, so `r1 = 1` is the value 1. The byte helpers are `CmdUtil.intToList` (`charging/util/cmd_util.dart @0x2275f44`: one byte, `value and 0xff`, array of one element), `intToList2` (`@0x2272ec8`: two bytes, low byte first) and `intToList4` (`@0x2273e68`: four bytes, low byte first). `sendCommandWithParam(opcode, payload, ...)` takes the opcode as a constant two-byte list and the payload as a byte list (three positional arguments in the call descriptor `[0, 0x3, 0, 0x3, null]`); the TLV form is the named argument `valueMap`, a `Map<int, List<int>>`.
+
+| shape | methods | opcode | payload | evidence |
+|---|---|---|---|---|
+| OTA info | `getOTAInfo(valueMap, {isMTU})` | `002e` when `isMTU` is false (the default), `0063` when true | named `valueMap` is the caller's map, `isMoreLength` equals `isMTU`, `needTimeout` is false | `A1753/a1753_device_controller.dart @0x4562dbc`: `tbnz w4,#4` `@0x4562e24` (jumps on FALSE) to the `002e` load `@0x4562e34`, `0063` load `@0x4562e28`, call `@0x4562e88` |
+| OTA data | `sendSubPackageData(valueMap, {isMTU})` | `002f` when false, `0064` when true | same as OTA info | same file `@0x4613e38`: `tbnz` `@0x4613ea0`, loads `@0x4613eb0` and `@0x4613ea4`, call `@0x4613f04` |
+| OTA state | `getOTAState()` | `0030` | `valueMap {0xA2: codeUnits(<string field_53 of the object returned by SpUtilImpl.getUserModel, "" when null>)}`, `needTimeout` false | same file `@0x242a010`: key raw 324 `@0x242a09c`, call `@0x242a0f0` |
+| update energy | `setDeviceUpdateEnergy()` | `0057` | `valueMap {0xA2: [1], 0xA3: intToList4(300)}` (four bytes `2c 01 00 00`), sent only when `_getCurrentStatus()` equals one `DeviceConnectionStatus` constant, after which the method stores 0 into `field_6f` of the object at controller `field_67` | `A1771/a1771_device_controller.dart @0x4081780`: `intToList(1)` `@0x40817a4`, `intToList4(300)` `@0x40817b0`, raw 324 `@0x40817c4`, raw 326 `@0x40817d4`, status test `@0x4081810` |
+| one-byte setter | `<name>(arg)` | the method's opcode | `[arg and 0xff]` | `A1771/a1771_device_controller.dart @0x3149688` (`setMomenryPortSwitch`, `intToList` `@0x31496ac`) |
+| multi-byte setter | `<name>(arg)` | the method's opcode | `intToList2(arg)` or `intToList4(arg)` | `A172X/172X/a172x_device_controller.dart @0x263688c` (`setAcCountDownTime`, `intToList4` `@0x26368a4`) |
+| no payload | `<name>()` | the method's opcode | empty list | `A1781/a1781_device_controller.dart` `setReset` site `@0x464afdc` |
+| constant one | `cleanAllPower()` | `0070` | `[1]` (`intToList(1)`), `needTimeout` false | `A17X7/a17x7_device_controller.dart @0x4091bc4` |
+| status request | `getAllDeviceInfo()` and variants | `0040` (`getAllBmsSubBatteryInfo` `0061` and `getA17B2DeviceInfo` `0074` on A1790) | empty list; the frame is built by `ZXCommandTransformer.formatCommand` with `functionType` raw 30 (Smi 15) and the named arguments `isBle`, `isEncrypted`, `isNormalCommand` and `useSecureInteraction` (in the A17X7 listing `isBle` and `isEncrypted` take the result of one `_getCurrentStatus()` comparison, `isNormalCommand` is false, `useSecureInteraction` is device `field_3f`), and sent with `sendCommand`; on the cloud branch it is wrapped again by the MQTT transformer | `A17X7/a17x7_device_controller.dart @0x40f4fc8`: `formatCommand` `@0x40f5098`, `generateCommand` `@0x40f50a8`, BLE send `@0x40f50e0`, MQTT wrap `@0x40f5130`, `@0x40f5154` |
+| boolean setter | `setSuperCharge(bool)` | `005e` | `[1]` when true, `[0]` when false | `A1771/a1771_device_controller.dart @0x3c53c4c`: `tbnz w2,#4` `@0x3c53c6c`, send `@0x3c53cf8` |
+| two-value setter | `setMajorPkg(a, b)` | `0048` | `[a, b]`, each 64-bit integer boxed as given | `A1771/a1771_device_controller.dart @0x264df24`: `BoxInt64` `@0x264df50`, `@0x264df88` |
+
+The wrappers return Null right after the send call (for example `a1753_device_controller.dart @0x242a0f4`); none is `async` and none reads a response, so the response of a request is handled by the controller's notification path and not in the method that sent it. The branch conditions of the status requests differ by controller (A1771, A1781 and A1790 test `isBleAvailable` first, `@0x40f4770` in A1771; A172X, A17C0 and A17X7 test `_getCurrentStatus`).
+
 ## Since 3.18.0
 
 Tag: asm-traced (3.24.3 side).
@@ -289,12 +320,10 @@ Tag: asm-traced (3.24.3 side).
 
 Tag: untagged by design (no API fact).
 
-- Which of the stacks (SDK handler or the `Uuid.parse` characteristic setters of `ReactiveBleManager`) carries the traffic for each product, and what makes `_isLegacyDevice` true.
-- The meaning of the third header byte written from transformer `field_23` (byte 6 of the frame, `0F` in captures, audit row 6) and of the device string at offset 0x87 that selects "wifi" or "ble" in `updateStatus` (who sets it).
+- The meaning of the third header byte written from transformer `field_23` (byte 6 of the frame, `0F` in captures, audit row 6) and of the device collection at offset 0x87 that `updateStatus` tests for "wifi" or "ble" (who fills it: [handshake.md](handshake.md#known-unknowns)).
 - The consumer of the Smi 240 that `ReactiveBleManager._setMtu` returns.
-- Whether fragmentation is used by products other than the A17C1 family: only `A17C1DeviceController.sendCommandWithParam` calls `splitPackageCmd`; the other controllers were not checked for their own copy of the logic.
+- Whether the OTA senders chunk by the negotiated MTU: `getOTAInfo` and `sendSubPackageData` of the controllers take a `bool isMTU` (default false); the base declarations are type-check stubs that return Null (`charging/ble/device/device_controller.dart @0x2217e38`), and the product implementations were not followed for that flag. — traced 2026-10-20: the command path has no second splitter (see [Fragmentation](#fragmentation)); the OTA methods are `sendOTAData`, `sendSubPackageData` and `getOTAInfo` in the controller pages (for example `A1753/a1753_device_controller.dart @0x4613ea4`).
 - The curve and key derivation of the native ECDH are not visible in Dart (see [handshake.md](handshake.md#known-unknowns)).
 - Firmware behaviour for simultaneous BLE and WiFi (`dualModePns`, the A1780P parallel OTA). No device test is recorded in this repository.
-- Whether the A5101 family uses the same binary layer: its commands go through the three opcode classes in `charging/ble/device/A5101/opcode/` ([a5101.md](a5101.md)).
 
 BLE is unavailable while the device is on WiFi; see `ble/protocol.md` (community finding, see protocol.md; not asm-traced).
