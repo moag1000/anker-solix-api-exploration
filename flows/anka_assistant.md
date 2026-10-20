@@ -1,0 +1,108 @@
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
+
+# Anka AI assistant
+
+How the app shows the Anka assistant entry button, opens the chat page, hands a question to the chat engine and stores the assistant settings. The fourteen `smart_service` endpoints are owned by their pages under [../api/smart_service/app/anka/](../api/smart_service/README.md); the response classes are owned by [../models/anka_agent_models.md](../models/anka_agent_models.md). This page links to them and copies none of their payloads. None of the Anka endpoints has an upstream name in `api/apitypes.py` of the upstream library (upstream lists only `get_entry_config`, `get_menu_config` and `set_entry_switch` as bare URLs, without a key).
+
+Scope: app side only. What the assistant answers, how the backend builds the greeting or the question lists, and what the chat engine does with a question are server or native-engine behaviour and are not facts of this page.
+
+## Trigger (UI action)
+
+Four entry points, each one sub-flow below:
+
+- The floating Anka ball on the home and device tabs: `AnkaAgentEntryLogic` (`anka_agent/pages/entry/anka_agent_entry_logic.dart`). A tap runs `handleTap` (`@0x2e09188`), which ends in `pushToAnkaAgentPage` (call at `@0x2e0942c`, function `@0x2e09454`) and `realPushToAnkaAgentPage` (`@0x2e095a8`); that pushes the route `/aiChatHomePage` (string `@0x2e097e4`, `GetRouterNavigation.pushName` at `@0x2e097fc`). The analytics names written before the push distinguish the home tab (`AN_App_anka_homepage_entry_click`, `@0x2e093f0`) from the device tab (`AN_App_anka_devicepage_entry_click`, `@0x2e093fc`).
+- The Anka button on the AI EMS screens: `AnkaEntryButton` (`ak_soft_ems/aiems/public_widget/anka_entry_button.dart`) pushes the same route (string `@0x2ec2ef0`, `pushName` at `@0x2ec2f04`) with the arguments of `AnkaSourceType::params` (`@0x2ec2ee4`).
+- A deep link or push message: the handler `AiChatHomePageHandler` (`charging/impl/url_launcher/handlers/ai_chat_home_page_handler.dart`) pushes `/aiChatHomePage` unless that page is already the top route (string `@0x45e52c0`, route string `@0x45e53a4`).
+- The assistant settings: the user-page switch page `AnkaAgentSettingLogic` (`charging/ui/page/user/ankaAgent/anka_agent_setting_logic.dart`) and the chat-side settings page `AiChatFlowSettingLogic` (`anka_agent/pages/setting/ai_chat_flow_setting_logic.dart`).
+
+## Preconditions
+
+- Logged-in account: when `SpServiceImpl.isLogin` is false, `fetchEntryConfig` sets two reactive fields of the service (one to `false`, one to `null`) and returns without a request (`anka_agent_entry_config_service.dart @0x27368dc` for the check, `@0x27368f4` and `@0x2736908` for the two stores). What the two fields are called is not in the asm.
+- The entry is visible only after `get_all_config` was answered; the ball logic re-fetches whenever it becomes visible after a tab switch (sub-flow A).
+- Every `smart_service` call of the package `anka_agent` goes through the wrapper `HttpServiceImpl.encryptionRequestHttpByGHttpRequest`; the entry button on the AI EMS screens uses `HttpServiceImpl.encryptionRequestHttp`. Both default to the encrypted path, see [../api/encryption.md](../api/encryption.md#which-calls-are-encrypted) (asm-traced for the default, whether the SDK path is taken is decided at run time).
+- The chat itself does not run in Dart: the controller hands the identity data and every question to a native module over the channel `SCFlutterEventChannelHandler.sendDataToNative` (sub-flows B and C). The native module is not in the Dart asm.
+
+## Steps
+
+Every row is tagged by its citation: `file.dart @0xADDR` is asm-traced, rows of actor cloud carry `untagged by design (no app-side fact)`.
+
+### A. Entry button and support check
+
+| # | actor | action | owner page link | asm citation |
+|---|---|---|---|---|
+| A1 | app | `AnkaAgentEntryLogic.onInit` registers the message listener, the native data listener, `BubbleEntryCoordinator.init`, the visibility listener and the route listener. | this page | `anka_agent_entry_logic.dart @0x3580188`, `@0x3580190`, `@0x358024c`, `@0x3580254`, `@0x358025c` |
+| A2 | app | `_refreshIsSupportShowState` runs when the ball becomes visible after a tab switch; it tracks `AN_App_anka_homepage_entry_show` or `AN_App_anka_devicepage_entry_show`, calls `fetchEntryConfig` ("Ball became visible after tab switch, fetching all config"), starts the proactive polling and calls `BubbleEntryCoordinator.checkExposed`. | this page | `anka_agent_entry_logic.dart @0x3587998`, `@0x3587a30`, `@0x3587a84`, `@0x3587ad8`, `@0x3587af4` |
+| A3 | app | `AnkaAgentEntryConfigService.fetchEntryConfig` skips the call while another one is in flight, else sends `get_all_config` (no body) and, on success, completes its future with the parsed model and logs it as JSON. | [get_all_config](../api/smart_service/app/anka/get_all_config.md) | `anka_agent_entry_config_service.dart @0x273692c` (in-flight skip), `@0x2736a30` (call), `@0x2738164` (success log), `@0x27383c0` (complete) |
+| A4 | cloud | Answers with the entry configuration (`show`, switches, bubble, setting images). How the server decides `show` is not known. | [AnkaAgentEntryConfigModel](../models/anka_agent_models.md#ankaagententryconfigmodel) | untagged by design (no app-side fact) |
+| A5 | app | The same service re-fetches when the network state changes (`_initNetworkListener` listens to `ConnectivityAdapter.onConnectivityChanged`, then calls `fetchEntryConfig`). | [get_all_config](../api/smart_service/app/anka/get_all_config.md#callers-in-app) | `anka_agent_entry_config_service.dart @0x2739f28` (listener), `@0x273a034` (fetch call) |
+| A6 | app | While the ball is visible a periodic timer calls `fetchEntryConfig` again (log "Proactive polling started (interval: 5min)"). The period is the pool `Duration` `pp+0x1f438` with `off_8` = 0x11e1a300 = 300,000,000 microseconds = 300 s (a pool object value, not a register immediate, so the Smi rule does not apply). `_stopProactivePolling` ends it when the ball is hidden. | [get_all_config](../api/smart_service/app/anka/get_all_config.md#callers-in-app) | `anka_agent_entry_logic.dart @0x2e0b0a4` (function), `@0x2e0b130` (`Duration`), `@0x2e0b138` (`Timer.periodic`), `@0x2e0b1c4` (fetch call) |
+| A7 | app | On the AI EMS screens the button decides support per site: `AnkaEntryButton.checkAnkaSupport` sends `get_entry_show` with `site_id` and `source`; the state class calls it from `_checkSupport`. | [get_entry_show](../api/smart_service/app/anka/get_entry_show.md) | `anka_entry_button.dart @0x2bf0c5c` (caller), `@0x2bf0cc0` (sender) |
+| A8 | user | Taps the ball. `handleTap` expands the ball if it was collapsed, asks `BubbleEntryCoordinator.hasBubble` and, if a bubble is showing, `BubbleEntryCoordinator.onTap`; tracks the click and calls `pushToAnkaAgentPage`. | this page | `anka_agent_entry_logic.dart @0x2e091d0` (`expandFromSide`), `@0x2e092b8`, `@0x2e092c4`, `@0x2e0942c` |
+| A9 | app | `realPushToAnkaAgentPage` tracks `AN_App_anka_chatflowpage_show`, adds the bubble data (`BubbleMeta.toJson`) to the arguments under the key `anka_agent_entry_msgs` and pushes `/aiChatHomePage`. | this page | `anka_agent_entry_logic.dart @0x2e09724`, `@0x2e09740`, `@0x2e097b0`, `@0x2e097fc` |
+| A10 | app | The bubble state is reported to the cloud with `set_bubble_status` (`BubbleStatusService.report`, retried by `_retrySingle`). The call sites are in `BubbleEntryCoordinator` and `BubbleChatHelper`; the `status` values and the conditions are on the endpoint page, not decoded here. | [set_bubble_status](../api/smart_service/app/anka/set_bubble_status.md) | `bubble_entry_coordinator.dart @0x2e0afa0`, `@0x3580e14`; `bubble_chat_helper.dart @0x35c9388`, `@0x35cc8e8`; sender `bubble_status_service.dart @0x2e0b3b8` |
+| A11 | user, app | Closing the bubble: `handleBubbleClose` calls `BubbleEntryCoordinator.onClose`, restarts the auto-collapse timer and resets the proactive polling. | this page | `anka_agent_entry_logic.dart @0x2e0aed0`, `@0x2e0aedc`, `@0x2e0b034` |
+
+### B. Opening the chat page
+
+| # | actor | action | owner page link | asm citation |
+|---|---|---|---|---|
+| B1 | app | `AiChatController.onInit` starts the push listener, the native event callback (`AiChatManager.registerEventCallback` through `startReceiveDataListener`) and `initAnkaAgentKit`. | this page | `ai_chat_controller.dart @0x35c31ac`, `@0x35c3320`, `@0x35c3418` |
+| B2 | app | `initAnkaAgentKit` initialises the event listeners and the native channel (`AnkaAgentService.initializeEventListeners`, `Bridge.initNativeChannel`) and builds the init data for the native module (`getHomePageInitData`): a map with the keys `userId`, `userToken`, `touristId`, `iotPublicKey`, `openUdid`, `modelType`, `appVersion`, `osVersion`, `osType`, `phoneModel`, `presetKey`, `language` and `country`, plus the `domain` (`getDomain`), `exchangeKeyDomain` and the fixed values `path` = `/app/ai/anka` and `appName` = `anker_power`. The map goes to the native side with `sendDataToNative`. These are credentials: they are handed over, not sent by Dart. | this page | `ai_chat_controller.dart @0x35c9a34`, `@0x35c9a38`, `@0x35c9a40` (init data builder `@0x35c9f48`, key strings from `@0x35ca6ac` to `@0x35ca9f8`), `@0x35c9af8` (`sendDataToNative`) |
+| B3 | app | Reads the source of the page from the route arguments (`AiChatSourcePage.fromValue`), then `_fetchAiEmsRecommendQuestions` sends `get_question_bank` (`source` = `"aiems"`); the condition that gates this call is not read. | [get_question_bank](../api/smart_service/app/anka/get_question_bank.md) | `ai_chat_controller.dart @0x35c364c`, `@0x35c368c`, sender `@0x35c60dc`; page-side call `ai_chat_home_page.dart @0x37ff6b0` |
+| B4 | app | Sends `get_menu_config` (no body) and then `evaluateFeatureIntro`. `_resumeFromPageNavigation` sends `get_menu_config` again when the user comes back to the page. | [get_menu_config](../api/smart_service/app/anka/get_menu_config.md) | `ai_chat_controller.dart @0x35c36d4`, `@0x35c36dc`, `@0x35ccd14` |
+| B5 | app | `_syncCloudHistoryUpdate` runs from `onInit` and sends `welcome`; the closure `loadHistory` calls `_fetchWelcomeGreeting`, which builds the current local time with the zone offset and sends `welcome` (`current_time`, and `source`, `bubble_id`, `bubble_type` when set). On a failure it logs "use random greeting" and picks a local greeting instead; for an answer it checks `WelcomeGreetingModel.isPersonalized`. | [welcome](../api/smart_service/app/anka/welcome.md) | `ai_chat_controller.dart @0x35c35e4` (call from `onInit`), `@0x35c6e0c` (sender call in `_syncCloudHistoryUpdate`), `@0x35c867c` (`loadHistory` closure call), `@0x35c8de8` (sender call), `@0x35c8ed4` (failure log), `@0x35c8f58` (`isPersonalized`) |
+| B6 | app | Suggested questions: `refreshWelcomeCta` sends `welcome_cta` (`current_time`, `welcome_type`, `site_count`); `refreshReminderCta` sends `proactive_cta` (`scene_type` only when not empty). Both are called from `_fetchCtaForSpecialMessages` and from the answer-item widget; the shown list is cut with `take`. | [welcome_cta](../api/smart_service/app/anka/welcome_cta.md), [proactive_cta](../api/smart_service/app/anka/proactive_cta.md) | `ai_chat_controller.dart @0x2e54058`, `@0x2e5432c` (callers), `@0x2e55c18`, `@0x2e54454` (senders); `ai_chat_content_user_answer_item.dart @0x2e62c74`, `@0x2e62c94` |
+| B7 | cloud | Answers greeting, menu and question lists. What decides the content is server behaviour and not known. | [WelcomeGreetingModel](../models/anka_agent_models.md#welcomegreetingmodel) | untagged by design (no app-side fact) |
+
+### C. Sending a question
+
+| # | actor | action | owner page link | asm citation |
+|---|---|---|---|---|
+| C1 | user | Types or dictates text, or taps a suggested question; every route ends in `AiChatController.sendText`. | this page | callers `ai_chat_home_page.dart @0x37f7d68`, `@0x37f7e20`, `@0x37ff730`; `ai_chat_content_widget.dart @0x2efb35c`; function `ai_chat_controller.dart @0x2d71d24` |
+| C2 | app | `sendText` trims the text (empty text is dropped with the log "Text is empty, skipping send"), builds the custom data (`_buildQueryCustomData`), adds the user bubble to the list and the language and sound choice (`getLocalSelectedLanguageAndSound`: `languageCode`, `soundId`). | this page | `ai_chat_controller.dart @0x2d71e58`, `@0x2d72188`, `@0x2d72270`, `@0x2d72870` |
+| C3 | app | Hands the question to the native chat engine: `sendDataToNative("aiChatSendAskTextData")` with the argument map keys `text` and `customData`, waiting for the result (`needResult`). A `Future.timeout` of the pool `Duration` `pp+0x29af0`, `off_8` = 0x1c9c380 = 30,000,000 microseconds = 30 s, guards the wait (a pool object value, not a register immediate). No `smart_service` call is made for the question itself. | this page | `ai_chat_controller.dart @0x2d728bc`, `@0x2d728cc`, `@0x2d72900`, `@0x2d72910`, `@0x2d7292c` (`Duration`), `@0x2d72944` (`timeout`) |
+| C4 | app | Starts a message timeout timer (`_startMessageTimeoutTimer`) with the pool `Duration` `pp+0x1f438` = 300 s (see A6 for the value). When it fires, `_handleMessageTimeout` checks the time since the last answer and, if the output is still growing, extends the timeout by 60 seconds (log text); otherwise it reports a failure. | this page | `ai_chat_controller.dart @0x2d79e20` (function), `@0x2d79ef4` (`Duration`), `@0x2d79f68`, `@0x2d7a1dc` (extension log) |
+| C5 | device | The native engine answers through events (`aiChatReceiveResultOnStart`, `aiChatReceiveResultOnServiceConnected`, `aiChatReceiveResultOnRecommendQuestion` and others) that `AiChatManager` dispatches to the controller. Transport, server and answer content are not visible in the Dart code. | this page | `ai_chat_manager.dart @0x3581a1c`, `@0x3581444`, `@0x3581584` (event names); the engine side is untagged by design (no app-side fact) |
+
+### D. Assistant settings
+
+| # | actor | action | owner page link | asm citation |
+|---|---|---|---|---|
+| D1 | user, app | User-page Anka setting: `_loadSettings` reads the stored switch (`anka_ai_switch_enabled`), then sends `get_all_config` and stores the result back. | [get_all_config](../api/smart_service/app/anka/get_all_config.md) | `anka_agent_setting_logic.dart @0x3650808`, `@0x36508e4`, `@0x3650a2c` |
+| D2 | user, app | Flipping the entry switch: `toggleAnkaAI` sends `set_entry_switch` (`setting_switch`); success stores `anka_ai_switch_enabled`, updates the ball visibility and shows the toast `ankaEntryHasOpen` or `ankaEntryHasClose`; failure shows `settingFailedPleaseTryAgain`. | [set_entry_switch](../api/smart_service/app/anka/set_entry_switch.md) | `anka_agent_setting_logic.dart @0x403efec`, `@0x403f160` (failure), `@0x403f1e0`, `@0x403f218`, `@0x403f22c`, `@0x403f248` |
+| D3 | app | Chat-side settings page: `onInit` seeds the memory, power-outage and backup-power switches and calls `loadSettings`, which sends `setting` (no body) through `_loadSettingFromApi`; a failure shows the toast `anka_agent_network_error`. | [setting](../api/smart_service/app/anka/setting.md) | `ai_chat_flow_setting_logic.dart @0x364e0f4`, `@0x364e0fc`, `@0x364e104`, `@0x364e10c`, `@0x364e250`, `@0x364eac0` |
+| D4 | user, app | Memory switch: `toggleMemory` sends `set_memory_switch` (`enabled`); a failure shows `anka_agent_network_error`. | [set_memory_switch](../api/smart_service/app/anka/set_memory_switch.md) | `ai_chat_flow_setting_page.dart @0x2f247a0` (caller), `ai_chat_flow_setting_logic.dart @0x2f248f4` (sender), `@0x2f24de8` (failure toast) |
+| D5 | user, app | Delete all memory: the page confirms, then `deleteAllMemory` sends `delete_all_memory` (no body); the result is logged and completes the future, nothing else is read. | [delete_all_memory](../api/smart_service/app/anka/delete_all_memory.md) | `ai_chat_flow_setting_page.dart @0x2f23b1c` (caller), `ai_chat_flow_setting_logic.dart @0x2f23cd8` (sender), `@0x2f24170` (success log) |
+| D6 | user, app | Push switches: the edit dialog of the chat page calls `AnkaAgentEntryConfigService.setPushSwitchForScene`, which sends `set_push_switch` with `switch_name` `proactive_message` (`setProactivePushSwitch`) or `power_outage` (`setPowerOutagePushSwitch`). | [set_push_switch](../api/smart_service/app/anka/set_push_switch.md) | `ai_chat_content_edit_dialog.dart @0x37fe630`, `@0x37fee20` (callers), `anka_agent_entry_config_service.dart @0x37fe9b0`, `@0x37fec48` (senders) |
+| D7 | app | Feature intro: `FeatureIntroOrchestrator.evaluate` decides whether an intro node is shown (`evaluateFeatureIntro`, step B4); its confirm paths send `set_memory_switch` (`_setMemorySwitchRemote`) and `set_push_switch` with `switch_name` `bill_analysis` (`_setBillAnalysisSwitchRemote`). | [set_memory_switch](../api/smart_service/app/anka/set_memory_switch.md), [set_push_switch](../api/smart_service/app/anka/set_push_switch.md) | `feature_intro_orchestrator.dart @0x35c4920`, `@0x35c513c`; evaluate call `ai_chat_controller.dart @0x35c3750` |
+
+## Side effects
+
+- Entry visibility is cached in the app storage key `anka_ai_switch_enabled` (written at `anka_agent_setting_logic.dart @0x3650a2c` and `@0x403f1e0`) and pushed to the entry service with `AnkaAgentEntryConfigService.updateVisibility` (`anka_agent_entry_config_service.dart` function `@0x3650984`; calls in `anka_agent_setting_logic.dart @0x3650948`, `@0x3650a54`, `@0x403f218`). The service is a singleton (`_instance`, constructor call `anka_agent_entry_config_service.dart @0x2739d00`).
+- Analytics events are written at the click and show sites (names in sub-flow A); none of them is a request to `smart_service`.
+- The init data of step B2 contains the account token; it leaves Dart only through the native channel, never as an HTTP body of the Anka calls.
+- The chat history is stored in a local database by the controller (`AiChatDataBase`, `anka_agent/bean/aichat_data_base.dart`) and synced with a cloud copy (`_syncCloudHistoryUpdate`, `loadCloudChatData`); the cloud history URLs are built in `anka_agent/http/request.dart` and are not documented, see the note at the end of [../api/smart_service/README.md](../api/smart_service/README.md#anka-ai-assistant-bodies-at-a-glance).
+
+## Timing (delays/polling)
+
+- Entry configuration polling: every 300 s while the ball is visible (step A6, pool `Duration` `pp+0x1f438`, 300,000,000 microseconds).
+- Message timeout: 300 s (step C4, same pool object), extended by 60 s per check while the output grows (log text of `_handleMessageTimeout`, `ai_chat_controller.dart @0x2d7a218`).
+- Native hand-over timeout: 30 s (step C3, pool `Duration` `pp+0x29af0`).
+- No timer re-reads the settings; they are read when their page opens (D1, D3).
+
+## Failure paths
+
+- `get_all_config` fails: logged as `fetchEntryConfig failed: code=<code>, msg=<msg>` and the future completes with an error (`anka_agent_entry_config_service.dart @0x2738078`, `@0x27380c4`); the ball keeps its earlier state. Error codes: [../api/errors.md](../api/errors.md).
+- `welcome` fails: the page shows a random local greeting instead (`ai_chat_controller.dart @0x35c8e94`, `@0x35c8ebc`).
+- Question or menu list calls fail: logged only (`@0x35c6340` for the question bank, `@0x2e56360` for the welcome chips, `@0x2e54c74` for the reminder chips).
+- A settings call fails: the toast keys named in sub-flow D; the page does not retry.
+- The native hand-over times out or the engine reports a network problem: the manager knows the events `aiChatNetworkUnavailable` (`ai_chat_manager.dart @0x35815ac`) and `aiChatLocationPermissionDenied` (`@0x35815d4`), and the controller has `_showNetworkErrorAndHidePanel` and `dealConnectError`; which event reaches which handler was not decoded.
+
+## Known unknowns
+
+- What the chat engine sends to which server, over which transport (the controller only passes `aiChatSendAskTextData` to the native module; `request.dart` carries a `useWebsocket` flag whose use was not traced), and what the answer events contain.
+- The conditions that gate `get_question_bank` (step B3) and `evaluateFeatureIntro` (step B4), and the meaning of the `status` values of `set_bubble_status` (step A10).
+- How the entry model (`show`, switches, bubble) drives the ball's states beyond the polling shown here; `_transitTo` and the bubble coordinator were not decoded.
+- Which account state decides `show` and `get_entry_show` on the server side; the app only forwards the answer.
+- Whether the 300 s pool `Duration` of the proactive polling and of the message timeout is the same constant by design or by pool sharing (both sites load `pp+0x1f438`).
+- No device or live-account test of any Anka call is recorded in this repository.
