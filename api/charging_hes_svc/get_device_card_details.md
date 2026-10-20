@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_device_card_details
 
 ## Purpose
 
-<!-- TODO -->
+Reads the detail card of one device of a station through `DevcieHomeHttpRepository::getDeviceDetails` (string-only: no caller chain in `data/endpoints.json`, inferred from the builder name).
 
 ## Upstream name
 
@@ -12,19 +12,23 @@
 
 ## Method+URL
 
-`/charging_hes_svc/get_device_card_details`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4d3c`
+`POST /charging_hes_svc/get_device_card_details` (asm-traced): URL string at `charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4d3c`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x33c4d34`, in `DevcieHomeHttpRepository::getDeviceDetails` (`charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4c58`), sent through `encryptionRequestHttp` (`@0x33c4d60`).
 
 ## Encrypted?
 
 encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
+- `encryptionRequestHttp` forwards `needEncryption` with its default true to `requestHttp` (`api/encryption.md`): `DevcieHomeHttpRepository::getDeviceDetails` (`charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart`, call `@0x33c4d60`).
+
 ## Request
+
+(asm-traced) Each sender stores its keys in one map literal with type arguments `<String, String>` read at the cited address, so every value is a String: `DevcieHomeHttpRepository::getDeviceDetails` (`charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4cf0`, 3 keys). No key is behind a null guard.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `station_id` | ? | ? | ? | `charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4c58` |
-| `device_type` | ? | ? | ? | `charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4c58` |
-| `device_Sn` | ? | ? | ? | `charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4c58` |
+| `station_id` | string | yes | `"<station_id>"` | `charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4cb4` |
+| `device_type` | string | yes | `"<device_type>"` | `charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4cc8` |
+| `device_Sn` | string | yes | `"<device_Sn>"` | `charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4cdc` |
 
 ## `param_type`/`cmd`
 
@@ -32,19 +36,29 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+no model class: the success closure (`charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c558c`, argument typed `Map<String, dynamic>`) wraps the whole map in a `CacheData` object (`@0x33c55bc`, `StoreField` `@0x33c55c8`) and passes it to the stored callback (`ClosureCall` `@0x33c55d8`); the builder also declares the result type `Map<String, dynamic>` (`@0x33c4d28`).
 
 ## Response
 
-<!-- TODO -->
+No key of the response is read in the sender: the map is handed on unchanged.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "station_id": "<station_id>",
+  "device_type": "<device_type>",
+  "device_Sn": "<device_Sn>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -52,11 +66,13 @@ n/a
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- The keys of the detail map: the consumer of the callback is not recorded in `data/endpoints.json`, so no key read was found.
+- Which `device_type` values exist: the parameter is passed through (`charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4cc8`).
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 
