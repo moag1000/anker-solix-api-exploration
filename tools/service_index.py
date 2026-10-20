@@ -72,6 +72,9 @@ def page_info(path, rows):
     if not skel:
         m = re.search(r'## Purpose\n\n(.*?)\n', txt)
         purpose = m.group(1) if m else 'TODO'
+        # links inside a Purpose line are relative to the page, not to the
+        # index: keep the link text only (also strips '|' hazards).
+        purpose = re.sub(r'\[([^\]]*)\]\([^)]*\)', r'\1', purpose).replace('|', '\\|')
     keys = sorted({r['upstream_key'] for r in rows if r.get('upstream_key')})
     removed = bool(rows) and all(r.get('removed_in') for r in rows)
     pool_only = bool(rows) and all(r.get('reference') == 'pool-only' for r in rows)

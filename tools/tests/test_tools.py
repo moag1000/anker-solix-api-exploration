@@ -325,6 +325,15 @@ class RenderTests(unittest.TestCase):
         self.assertIn('| `power_limit.limit` |', page)
         self.assertNotIn('| `site_id` |', page)
 
+    def test_service_index_purpose_links_are_flattened(self):
+        import re, importlib
+        si = importlib.import_module('tools.service_index')
+        src = open(si.__file__).read()
+        m = re.search(r"purpose = re\.sub\((.*)\n", src)
+        self.assertIsNotNone(m, 'purpose link flattening missing')
+        flat = re.sub(r'\[([^\]]*)\]\([^)]*\)', r'\1', 'see [param_types.md](../../param_types.md) and [x](y.md)')
+        self.assertEqual(flat, 'see param_types.md and x')
+
     def test_service_index_idempotent(self):
         import service_index, tempfile, shutil
         inv = inventory_new()
