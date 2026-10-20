@@ -22,8 +22,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `banner_id` | int | yes | ? | `charging/http/http_request_repository_impl.dart @0x46998bc` (value store `@0x46998cc`) |
-| `handle_type` | int (Smi, w) | yes | ? | `charging/http/http_request_repository_impl.dart @0x46998d0` (value store `@0x46998e4`) |
+| `banner_id` | int | yes | | `charging/http/http_request_repository_impl.dart @0x46998bc` (value store `@0x46998cc`) |
+| `handle_type` | int (Smi, w) | yes | | `charging/http/http_request_repository_impl.dart @0x46998d0` (value store `@0x46998e4`) |
 
 Both values are ints: the map literal has type arguments `<String, int?>` (`@0x46998e8`); `handle_type` is the tagged result of an unboxed int (`lsl` `@0x46998e0`), stored with a 32-bit store. `banner_id` is typed `int` from the `<String, int?>` literal only; its store width is not claimed (a parameter could be boxed or null).
 

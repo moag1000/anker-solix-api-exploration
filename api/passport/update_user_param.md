@@ -23,7 +23,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `user_params` | list | yes | one element (list length raw 2, `@0x293f984`, so 1) | `charging/http/http_request_repository_impl.dart @0x293f8e4` (store `@0x293f994`, growable list of `Map<String, Object>` `@0x293f96c`) |
-| `user_params[].param_type` | int (Smi, w) | yes | ? | `charging/http/http_request_repository_impl.dart @0x293f8fc` (value store `@0x293f910`, an unboxed int argument is tagged by `lsl x2, x1, #1` `@0x293f90c` and stored with a 32-bit store) |
+| `user_params[].param_type` | int (Smi, w) | yes | | `charging/http/http_request_repository_impl.dart @0x293f8fc` (value store `@0x293f910`, an unboxed int argument is tagged by `lsl x2, x1, #1` `@0x293f90c` and stored with a 32-bit store) |
 | `user_params[].param_value` | string | yes | `"1"` or `"0"` | `charging/http/http_request_repository_impl.dart @0x293f914` (value store `@0x293f938`, constants `"1"` `@0x293f928` and `"0"` `@0x293f934`, chosen by a bool argument `tbnz` `@0x293f924`) |
 
 The element map literal has type arguments `<String, Object>` (`@0x293f93c`), the outer map `<String, List<Map<String, Object>>>` (`@0x293f9b8`).

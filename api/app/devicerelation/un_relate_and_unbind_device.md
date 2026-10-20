@@ -33,7 +33,7 @@ Union over the three senders; the first two senders (`iotDeviceUnbind`) use the 
 | `bt_ble_mac` | string | yes | `"<bt_ble_mac>"` | `charging/http/http_business_impl.dart @0x33f7ee4` (value store `@0x33f7ef4`) |
 | `parent_device_sn` | string | yes (the two `iotDeviceUnbind` senders only) | `"<parent_device_sn>"` | `charging/http/http_business_impl.dart @0x33f7ef8` (value store `@0x33f7f08`) |
 | `parent_device_pn` | string | yes (the two `iotDeviceUnbind` senders only) | `"A17C0"` in `HttpBusinessImpl::iotDeviceUnbind`, a parameter in the other | `charging/http/http_business_impl.dart @0x33f7f0c` (constant `@0x33f7f18`) |
-| `unbind_type` | string | yes (`HttpRequestControllerImpl::deviceUnbind` only) | ? | `charging/http/http_request_repository_impl.dart @0x3430af0` (value store `@0x3430b00`, a parameter) |
+| `unbind_type` | string | yes (`HttpRequestControllerImpl::deviceUnbind` only) | | `charging/http/http_request_repository_impl.dart @0x3430af0` (value store `@0x3430b00`, a parameter) |
 
 The key sets differ per sender: `deviceUnbind` sends `bt_ble_mac`, `device_sn`, `unbind_type` (`charging/http/http_request_repository_impl.dart @0x3430ac8`); `HttpRequestControllerImpl::iotDeviceUnbind` sends `device_sn`, `bt_ble_mac`, `parent_device_sn`, `parent_device_pn` (`charging/http/http_request_repository_impl.dart @0x2762f10`).
 
