@@ -109,13 +109,24 @@ The station power limit page (`/stationPowerLimit`, with the type-19 output slid
 - The deeplink `/stationPowerLimit` opens the page with no guard (`station_power_limit_handler.dart @0x45e8d60`).
 - The request carries `app_ability: {"site_power_limit": true}` (see Request, same fact, not repeated). No response key named `support_*`, `is_support*` or `feature*` gates the page (asm-traced for absence in the traced functions). If `power_limit_option` is empty the output picker does nothing (`station_power_limit_logic.dart @0x4354fc8`).
 - Names: `power_site_type` 12 and 18 are `SolixSiteType.t_12` and `t_18` in upstream `api/apitypes.py` (upstream-confirmed); table in [../../../reference/enums.md](../../../reference/enums.md#power_site_type-upstream-solixsitetype).
-- Consequence, app side: a site of the SB2 types (`t_5` A17C1, `t_10` A17C3, `t_11` A17C2) never shows the row; SB2 devices behind an AE100 dock (type 18) do reach the page. The app never sends type 19 for SB2; this proves nothing about the server.
+- Consequence, app side: a site of the SB2 types (`t_5` A17C1, `t_10` A17C3, `t_11` A17C2) never shows the row (these values are compared elsewhere, see the [enums table](../../../reference/enums.md#power_site_type-upstream-solixsitetype); not in this gate); SB2 devices behind an AE100 dock (type 18) do reach the page. The app never sends type 19 for SB2; this proves nothing about the server.
+
+### Per-device AC input limit flag (`supportAcLimit`)
+
+Tag: asm-traced, app side. The flag decides the AC input limit shown per device row on the station power limit page; it is not a response key.
+
+- Field: `DeviceInfo` field_27 (bool). `DeviceInfo.fromJson` sets it to `false` (`station_power_limit_model.dart @0x237a85c`); it is not read from JSON (the key `"supportAcLimit"` appears only in the app's own `toJson`, `@0x237a0dc`). The only writer is the `device_info` mapping closure `station_power_limit_logic.dart @0x28cb19c`, through `copyWith`.
+- Rule 1 (pn list): when `device_pn` (DeviceInfo field_b) equals `"AE103"`, `"A17E2"` or `"AE111"` (string compares `@0x28cb1f0`, `@0x28cb218`, `@0x28cb244`) the flag is set to true if it was false (`copyWith(supportAcLimit: true)` `@0x28cb278`).
+- Rule 2 (device value): for every other pn the flag is taken from the connected device object, `HomeDeviceManager.getDeviceBySn(device_sn)` (`@0x28cb2c0`) followed by a getter call (`@0x28cb2e8`); a missing device or null gives false (`@0x28cb2f8`). The app logs it as `mqtt_isSupportAcLimit`. When the value differs from the stored flag the row gets `copyWith(inputPower: flag ? ac_input_limit text : "1200W", supportAcLimit: flag)` (`@0x28cb3f8..0x28cb41c`, string `"1200W"` `@0x28cb408`).
+- Reader: `_buildDeviceRow` stores `!supportAcLimit` (`eor x3, x2, #0x10`, `station_power_limit_view.dart @0x4357650`) as a row flag together with `status == 0` (`@0x4357658`); the effect of that flag on the row was not read.
+- Source of the getter value: not resolvable, see Known unknowns.
 
 ## Known unknowns
 
 - What `app_ability: {"site_power_limit": true}` changes in the server response compared with the upstream request that omits it.
 - Whether the server requires the encrypted request path for this endpoint (the upstream library uses the plain path).
-- Which `power_site_type` a given site carries is server data (scene info); the app only compares 12 and 18. The `where()` closure of `solarBankIsEnabled` (non-AE100 branch, `station_energy_system_logic.dart @0x23984a8`) was not decoded.
+- Which `power_site_type` a given site carries is server data (scene info). The gate compares only 12 and 18; the other compares in the app are listed in the [enums table](../../../reference/enums.md#power_site_type-upstream-solixsitetype). The `where()` closure of `solarBankIsEnabled` (non-AE100 branch, `station_energy_system_logic.dart @0x23984a8`) was not decoded.
+- The MQTT or attribute key behind `supportAcLimit` for pns other than AE103, A17E2 and AE111: not resolvable. The value comes from a dynamic getter call on the object `getDeviceBySn` returns (`station_power_limit_logic.dart @0x28cb2e0..0x28cb2e8` and the second call `@0x28cb330..0x28cb33c`, log label `mqtt_acPowerLimit`); the call goes through an unlinked switchable-call pool entry (`[pp+0xc59f8]`, `UnlinkedCall`), which carries no selector name. No function or getter named `*AcLimit*`, `*SupportAc*` or `*AcPowerLimit*` exists in the asm tree (grep of `asm` returns only the model/logic files and the log-label strings `a17c5_acLimit_` and `a17c2_acLimit_` at `a17c5_device_commands.dart @0x4862fb0` and `a17c2_device_commands.dart @0x4860954`), so the device class that answers is not identified.
 - Whether an A17C0 appears in the `device_info` list of a site-level answer (not derivable from the app; backlog row 120 in [../../../docs/DEVICE_TEST_BACKLOG.md](../../../docs/DEVICE_TEST_BACKLOG.md)).
 - The response fields are not a support indicator: an SB1 (A17C0) returns the same fields as newer devices (device-tested, see below) yet cannot set an output limit.
 

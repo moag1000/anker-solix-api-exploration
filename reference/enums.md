@@ -277,18 +277,44 @@ Tag: asm-traced. Audit references: `StationDeviceType` ENUMS audit doc lines 9 t
 
 ### power_site_type (upstream SolixSiteType)
 
-The app reads `power_site_type` from the site scene info (`SceneInfo` field_53, key `power_site_type`) and declares no enum for it. The names come from upstream `SolixSiteType` in `api/apitypes.py` lines 1219 to 1246 (`t_<value>`, upstream-confirmed; names verbatim). The two values the app compares in the output-limit gate are asm-traced.
+The app reads `power_site_type` from the site scene info (`SceneInfo` field_53 = byte offset 0x53, key `power_site_type`, 32-bit tagged Smi) and compares it in two ways: most sites compare the raw Smi (`cmp w1, #imm`, so imm/2), and some convert it with the app enum `AnkPowerSiteType` (see below). Names come from upstream `SolixSiteType` in `api/apitypes.py` lines 1219 to 1246 (`t_<value>`, upstream-confirmed; names verbatim). Tag of the compares: asm-traced for the load and the immediate; the object type is proven as `SceneInfo` only where noted.
 
-| value | upstream name | main device (upstream comment) | tag | app compare (width) |
+Raw compares, found by a script (a load of offset 0x53 followed within 16 instructions by `cmp wN, #imm` on that register; 129 sites in 3.24.3; indirect compares are not counted). Per row: file and number of sites, first load address (the compare is the 4th instruction after, +8 bytes):
+
+| value | upstream name | main device (upstream comment) | `cmp w, #imm` (tagged Smi, w register) | sites (first load) |
 |---|---|---|---|---|
-| 2 | `t_2` | A17C0 SB1 | upstream-confirmed | not compared in the gate |
-| 5 | `t_5` | A17C1 SB2 Pro | upstream-confirmed | not compared in the gate |
-| 10 | `t_10` | A17C3 SB2 Plus | upstream-confirmed | not compared in the gate |
-| 11 | `t_11` | A17C2 SB2 AC | upstream-confirmed | not compared in the gate |
-| 12 | `t_12` | A17C5 SB3 Pro, including the power dock option | asm-traced (compare), upstream-confirmed (name) | `cmp w1, #0x18`, 32-bit Smi, so 12: `station_home_settings_logic.dart @0x28b2e28` |
-| 18 | `t_18` | AE100 Power Dock for SB2+ (A17C1, A17C3, A17C5, ...) | asm-traced (compare), upstream-confirmed (name) | `cmp w1, #0x24`, 32-bit Smi, so 18: `station_home_settings_logic.dart @0x28b2aa0` |
+| 1 | `t_1` | A5143 + FS1200 (PPS) | `#2` | `energy_home_controller.dart` 4 (`@0x2e734e8`), `station_main_page_logic.dart` 1 (`@0x46a8684`), `station_setting_logic.dart` 1 (`@0x4002c2c`) |
+| 2 | `t_2` | A17C0 SB1 | `#4` | `station_main_page_logic.dart` 9 (`@0x23f1f8c`), `station_setting_logic.dart` 1 (`@0x27a212c`), `station_home_info_logic.dart` 1 (`@0x2c2034c`), `add_devices_logic.dart` 1 (`@0x349a454`) |
+| 5 | `t_5` | A17C1 SB2 Pro | `#0xa` | `station_energy_system_logic.dart` 6 (`@0x238a080`), `add_devices_logic.dart` 3, `manage_devices_logic.dart` 1, `station_home_settings_logic.dart` 1 (`@0x3435200`) |
+| 10 | `t_10` | A17C3 SB2 Plus | `#0x14` | `station_energy_system_logic.dart` 4 (`@0x238a098`), `add_devices_logic.dart` 2, `manage_devices_logic.dart` 1 |
+| 11 | `t_11` | A17C2 SB2 AC | `#0x16` | `station_energy_system_logic.dart` 7 (`@0x238a0b0`), `add_devices_logic.dart` 5, `power_usage_scenario_logic.dart` 1, `station_home_settings_logic.dart` 1 |
+| 12 | `t_12` | A17C5 SB3 Pro, including the power dock option | `#0x18` | `station_energy_system_logic.dart` 12 (`@0x237775c`), `add_devices_logic.dart` 6, `station_home_settings_logic.dart` 3 (output-limit gate `@0x28b2e28`, owner [get_power_limit](../api/power_service/site/get_power_limit.md#who-gets-the-output-limit-page-app-gate)), `manage_devices_logic.dart` 1, `power_usage_scenario_logic.dart` 1, `a17c1home_logic.dart` 1 (`@0x262fffc`) |
+| 13 | `t_13` | A1782 F3000 PPS (Solarbank PPS) | `#0x1a` | `station_energy_system_logic.dart` 3 (`@0x237e640`), `manage_devices_logic.dart` 1 |
+| 18 | `t_18` | AE100 Power Dock for SB2+ (A17C1, A17C3, A17C5, ...) | `#0x24` | `station_energy_system_logic.dart` 12 (`@0x2377b40`), `power_usage_scenario_logic.dart` 11, `add_devices_logic.dart` 6, `a17c1setting_logic.dart` 4, `station_home_settings_logic.dart` 4 (output-limit gate `@0x28b2aa0`), `system_house_view_logic.dart` 5, `a17c1home_logic.dart` 2, `manage_devices_logic.dart` 2, `a17c1_setting_handler.dart` 2, `scene_info.dart` 1 (`@0x26de750`), `station_home_settings_handler.dart` 1, `station_power_usage_scenario_handler.dart` 1 |
 
-Use of the two compared values: [get_power_limit, Who gets the output-limit page](../api/power_service/site/get_power_limit.md#who-gets-the-output-limit-page-app-gate). The values 12 and 18 equal the `EvStationType` members `a17c5` and `ae100` above (a separate enum of the load-balancing code; the gate does not read it).
+- `SceneInfo` is proven for the value 2 compare at `station_main_page_logic.dart @0x29003a0` (the object comes from `SceneInfo.fromJson` at `@0x290032c`, compare `cmp w1, #4` at `@0x29003a8`) and the `station_energy_system_logic.dart` sites read the offset from `Rx.value()` (for example `@0x238a080..0x238a0d0`, the values 5, 10, 11 and 12 in one chain); the file builds an `Rx<SceneInfo>` (`@0x237cafc`) but the identity of the Rx at each site was not traced. For the other files the object type is taken from the value domain and the surrounding site code, not read from a cast. The value 2 is proven at one site; the value 1 is not proven at any site.
+- Values not in the table (3, 4, 6 to 9, 14 to 17, 19 and up) were not compared by a raw `cmp` in this scan.
+- Not counted: `PN::getPnForPowerSiteType` (`charging_pn.dart @0x22acbfc`) converts a site type to a pn string through `PN::fromPowerSiteType` (`@0x22acc4c`, which calls `AnkPowerSiteType::fromValue` at `@0x22acca4`, see below); callers such as `station_energy_system_logic.dart @0x2377720` and `open_process_logic.dart @0x3db52fc` do not compare the value themselves. The `where()` closures were not decoded, so the table is a lower bound.
+
+#### AnkPowerSiteType (app enum)
+
+The app does declare an enum for the value: `AnkPowerSiteType` in `base_service/enum/charging_pn.dart` (26 members, pool list `[pp+0x1a058]`; `fromValue` `@0x22ab1d8` scans the list and compares the 64-bit unboxed `value` field at object offset 0x13 with the argument, `cmp x3, x2` `@0x22ab228`, so no halving; pool dumps print the real value). Members readable in the pool dump (9 of 26; `index` is the list position):
+
+| member | index | value | upstream name | pool  tag |
+|---|---|---|---|---|---|
+| `a17C1` | 5 | 5 | `t_5` | `[pp+0x4b160]` | value field compared at `@0x22ab228`, asm-traced |
+| `a17C3` | 10 | 10 | `t_10` | `[pp+0x4b170]` | value field compared at `@0x22ab228`, asm-traced |
+| `a17C2` | 11 | 11 | `t_11` | `[pp+0x4b168]` | value field compared at `@0x22ab228`, asm-traced |
+| `a17C5` | 12 | 12 | `t_12` | `[pp+0x4b178]` | value field compared at `@0x22ab228`, asm-traced |
+| `ae100` | 18 | 18 | `t_18` | `[pp+0x4b158]` | value field compared at `@0x22ab228`, asm-traced |
+| `a17E2` | 19 | 19 | `t_19` (A17E2 Solarbank Max AC, upstream comment) | `[pp+0x4b118]` | value field compared at `@0x22ab228`, asm-traced |
+| `ae103` | 20 | 20 | none (upstream has no `t_20`) | `[pp+0x4b110]` | value field compared at `@0x22ab228`, asm-traced |
+| `ae111` | 21 | 21 | none | `[pp+0x4b120]` | value field compared at `@0x22ab228`, asm-traced |
+| `ae113` | 22 | 25 | none; the only member whose value differs from its index | `[pp+0x4b128]` | value field compared at `@0x22ab228`, asm-traced |
+
+The other 17 members are not dumped in `pp.txt` (names and values not resolvable from the pool; addresses checked: `pp.txt` lines 17537 and 49791 to 49860, `grep "AnkPowerSiteType@.* : {"` gives 9 hits). Users: `fromValue` is called from `home_base_logic.dart @0x24409ac` and `@0x30e7da8` (result stored in a static, after `setCurrentStationType`), `station_device_manager.dart @0x22ab1ac`, `unity_config_manager.dart @0x22ab4e4`, `unity_device_click_handler.dart @0x2ca5df8` and `system_house_view_logic.dart @0x2876c1c`/`@0x287a71c` (input `SceneInfo` field_53, `@0x2876c08`). The compares there are identity compares of the members: `@0x2876c28..0x2876c74` (`ae100`, `a17C1`, `a17C2`, `a17C3`, `a17C5`, else the log line "non-combiner-box/C-series site type, skipped") and `@0x287a720..0x287a77c` (`a17C1` to `a17C5` to a pn string). Const sets: the 9 decoded members (`[pp+0x1e250]`, `unity_config_manager.dart @0x22ab02c`, `_isPowerSiteTypeSupported`) and `ae103`, `a17E2`, `ae111` (`[pp+0x9e7e0]`, `ae1x0_home_logic.dart @0x3aefe28`). The 5-member set `[pp+0x184150]` has no load site by `grep`.
+
+Which values SB1 and SB2 sites carry is server data; what the app compares: SB1 sites (value 2) in the station main/setting/home-info pages, SB2 sites (5, 10, 11) in the multi-device pages, and none of them in the output-limit gate. The values 12 and 18 equal the `EvStationType` members `a17c5` and `ae100` above (a separate enum; the gate does not read it).
 
 ## Energy, mode and price enums
 
