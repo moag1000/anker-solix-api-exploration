@@ -44,6 +44,8 @@ The parser reads nine tags (new read, tag numbers only; the field binding of `fe
 | `ab` | `grid_export_energy` | factor 0.00001 (upstream) | n/a | new read (no audit row); shelly_device_commands.dart parseDeviceAllInfo @0x3b612b4 (function); tag read @0x3b61838; upstream-confirmed (`mqttmap.py` line 5366) |
 | `ac` | (no upstream name) | - | n/a | new read (no audit row); shelly_device_commands.dart parseDeviceAllInfo @0x3b612b4 (function); tag read @0x3b618e4 |
 
+Types, widths and scale of every tag, new read 2026-10-20 (`parseDeviceAllInfo` @0x3b612b4; `listToInt` results are 64-bit unboxed real values, stores are 32-bit at raw offsets): `fe` is a `listToInt` integer (kept for the update-time debounce, stored at `field_6f`); `a2` is UTF-8 text; the first `a3` read (@0x3b61570) is a bool (true when the value is 1, `cmp x0,#1`) stored at offset 399; the first `a5` read (@0x3b615ec) is an integer stored at 999; `a8`, `a9`, `aa` and `ab` are plain `listToInt` integers stored at 1163, 1167, 1171 and 1175 with no division (the upstream factors 0.01 and 0.00001 are not applied by the app parser, app side); `ac` is a `listToInt` integer divided by 100 with a signed integer division (`r0 = 100`, `sdiv x2,x1,x0` @0x3b61940, unboxed) and stored at offset 1195, followed by the log string `ShellyPlugDevice shellyPlugOutPutPower: `; the second `a3` read (@0x3b619c0) is an integer stored at 1199 and the third (@0x3b61a54) a bool (`cmp x0,#1`) stored at 1179, followed by the log string `ShellyPlugDevice shellyPlugSwitch: `; the second `a5` read (@0x3b61b04) stores again at 999.
+
 #### Example
 synthesized. Frame layout only (TLV entries as in [envelope.md](envelope.md#tlv-frame)); not a capture.
 
@@ -60,7 +62,6 @@ No 3.18.0 comparison was made (no audit row).
 #### Known unknowns
 - The meaning of `a3`, `a5` and `ac` (no upstream name; `a3` and `a5` are read twice and sit next to the plug log strings).
 - Which tags belong to the meter and which to the plug: upstream maps only the meter (SHEMP3).
-- The widths and types of the values (tag numbers only).
 - Whether upstream `grid_to_home_power` and `pv_to_grid_power` are the values the old doc called `fromGrid` and `toGrid`: the strings are not in the Shelly parser.
 
 #### Device-tested by
@@ -108,7 +109,7 @@ none (MQTT only).
 No 3.18.0 comparison was made.
 
 #### Known unknowns
-- Whether the Shelly cloud payload uses the keys `fromGrid`, `toGrid`, `fromGridSum`, `toGridSum`: the literals belong to AE1R0 and A17X7 code in 3.24.3.
+- Whether the Shelly cloud payload uses the keys `fromGrid`, `toGrid`, `fromGridSum`, `toGridSum`: the literals belong to AE1R0 and A17X7 code in 3.24.3. — traced 2026-10-20: the app side is settled by the README source-conflict item ([README.md](README.md#source-conflicts-two-sided-app-side-re-checked-2026-10): `shelly_device_commands.dart` holds only the two plug log strings and the literals sit in `ae1r0_device_info.dart`, `event_receiver.dart`, `a1903/module.dart` and as `Trans.tr()` keys in `shellyhome_page.dart`); what a real Shelly sends under which tag is device test row 105. — reclassified: device test row 105
 - The old doc names (`grid_import_power` and so on) are labels of ours (no upstream name).
 
 #### Device-tested by

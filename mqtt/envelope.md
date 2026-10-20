@@ -43,8 +43,8 @@ Built by `MqttCommandTransformer.generateCommand` (`charging/communication/trans
 
 | field | value the app sends | type | source |
 |---|---|---|---|
-| `version` | not audited for the app; upstream sends `"1.0.0.1"` | string | upstream-confirmed (`api/mqtt.py` line 372) |
-| `client_id` | not audited for the app; upstream sends `android-<app_name>-<user_id>-<certificate_id>` | string | upstream-confirmed (`api/mqtt.py` line 373) |
+| `version` | the value of one static field (`LoadStaticField(0xdf0)` @0x226eebc), its initializer is not printed in the asm; upstream sends `"1.0.0.1"` | string | `getCommonMqttMessageHead` @0x226ee78; upstream-confirmed (`api/mqtt.py` line 372) |
+| `client_id` | `MqttServe.getClientId` @0x226f0f8: when the demo flag (`DemoSiteUtil` static field @0xdf8, the bool of [iot.md](iot.md#known-unknowns)) is true the literal `visitor-anonymous-anker_power-` plus the terminal id (`getTerminalId`); otherwise `SdkMqttManagerImpl.getClientId` @0x48120a0, which repeats the visitor form for the same flag and else returns a cached value or the result of `requestClientId`; upstream sends `android-<app_name>-<user_id>-<certificate_id>` | string | `getCommonMqttMessageHead` @0x226eed8..0x226eee0; upstream-confirmed for the upstream format (`api/mqtt.py` line 373) |
 | `sess_id` | `"1"` (upstream default `"1234-5678"`, lines 360 and 374) | string | audit row 26, audit row 64; generateCommand @0x226ef1c (pool string [pp+0xede8]) |
 | `msg_seq` | 1 (raw immediate is 2, stored with `stur w`) | int | audit row 27, audit row 65; generateCommand @0x226ef34; upstream-confirmed (`api/mqtt.py` line 375) |
 | `cmd` | the `cmdMap` lookup result for the `MqttCommandType`, see [Command types](#command-types) | int | audit row 28; cmdMap @0x226f2a4 |
@@ -76,8 +76,8 @@ payload: device_sn, account_id, data=<base64 frame>
 | `uploadLogCommand` | 5 | 0x05 | 10 | 4 | audit row 36; cmdMap @0x226f2e0; index: audit row 43 |
 | `remoteScanWifi` | 25 | 0x19 | 50 | 5 | audit row 37; cmdMap @0x226f2f4; index: audit row 44 |
 | `remoteSwitchWifi` | 26 | 0x1A | 52 | 6 | audit row 38; cmdMap @0x226f308; index: audit row 44 |
-| `unbindDevice` | 12 | 0x0C | 24 | not audited | audit row 39; cmdMap @0x226f31c |
-| `getDeviceBssid` | 28 | 0x1C | 56 | not audited | audit row 40; cmdMap @0x226f330 |
+| `unbindDevice` | 12 | 0x0C | 24 | 7 ([pp+0x137d0]) | audit row 39; cmdMap @0x226f31c; index: pool object, new read 2026-10-20 |
+| `getDeviceBssid` | 28 | 0x1C | 56 | 8 ([pp+0x137d8]) | audit row 40; cmdMap @0x226f330; index: pool object, new read 2026-10-20 |
 
 `otaCommand` and `a17y0OtaCommand` map to the same head value; the duplicate is real, only the old doc's value was doubled (audit row 35). Only the `normalCommand` value has upstream confirmation. Ordinary product commands (everything on the `mqtt/<pn>.md` pages) use `normalCommand`.
 
@@ -125,7 +125,7 @@ Built by `ZXCommandTransformer._getNormalCommand` (`charging/communication/trans
 | 2-3 | length, 16-bit little endian | total length including the header; the header is 9 bytes (`add x0,x1,#9`) | audit row 4 @0x22742a8; upstream-confirmed (`api/mqtttypes.py` lines 39-45: the length includes prefix and the XOR byte) |
 | 4 | `03` | constant (raw immediate 6, halved) | audit row 5; @0x2274368 |
 | 5 | `00` | the app writes the zero register; the receive variant `01` was not found in the app | audit row 6; @0x22743b8; upstream-confirmed (`api/mqtttypes.py` line 42, `03 00/01 0f` for send and receive) |
-| 6 | `0F` in captures | loaded from transformer field `field_23`, value unresolved | audit row 6; @0x22743f8; upstream-confirmed (`api/mqtttypes.py` line 82) |
+| 6 | `0F` in captures | read from transformer `field_23` (64-bit unboxed, `ldur x2,[x3,#0x23]` @0x22743f8); `formatCommand` @0x2275b34 sets it from its named argument `functionType` (default 1; `StoreField r2->field_23 = r6` @0x2275e60) and the constructor `ZXCommandTransformer` @0x3bb244c defaults it to 1 (@0x3bb24c8); the callers named in the opcode pages pass the raw 30, i.e. 15 = 0x0f (for example `A17C1DeviceController.getAllDeviceInfo` @0x40f4d5c, `A5101DeviceController.getDeviceVersion` @0x342cc58) | audit row 6; @0x22743f8; upstream-confirmed (`api/mqtttypes.py` line 82) |
 | 7-8 | opcode as written in the Dart hex string, for example `00 7A` for `"007a"` | pool lists such as `[0, 0x7a]` are the same two bytes in order | audit row 165 (pool list `[0, 0x5e]`), audit row 167; byte order on the wire: upstream-confirmed (`api/mqtttypes.py` line 43, `04 05` for status `0405`) |
 | last | XOR of all preceding bytes, start value 0 | checksum, included in the length | audit row 14 (address corrected 2026-10-19, see ble/protocol.md): ZXCmdUtil.getCheckSum `ak_cmd_util.dart` @0x2272e9c (start value @0x2272e2c); send side ZXCommandTransformer._getCheckSum `zx_command_transformer.dart` @0x22745f0 (eor @0x227463c, called @0x2274518). The audit's @0x22744a4 is the `eor` that folds the 0x40 encrypted flag into opcode byte 0, not the checksum |
 
@@ -200,7 +200,20 @@ Two of these three files are new in 3.24.3 (`i_mqtt_serve.dart` and `mqtt_types.
 | `base_service/services/mqtt_types.dart` | `enum MqttTopicSubscriptionStatus` with the values `doesNotExist` (0), `pending` (1) and `active` (2); the type `Map<MqttTopicSubscriptionStatus, String>` appears in `MqttServe` and `SdkImpMqttManager` | class header (`mqtt_types.dart` line 8, class id 17160); pool objects [pp+0x11e68] (0), [pp+0x33d30] (1), [pp+0x33d40] (2); `_enumToString` @0x472fdac; map type [pp+0xcca0] in `sdk_imp_mqtt_manager.dart` |
 | `charging/mqtt/local.dart` | not a local-network MQTT client: an `abstract class Certificates` with the accessors `ci()` @0x2408a9c, `mp()` @0x2408c90 and `rootCA()` @0x24094e8, and the classes `CI` @0x2408adc, `MP` @0x2408cd0, `UsMp` @0x2408d6c and `EuMp` @0x2408f20 that each build a PEM private key and a PEM certificate from base64 literals (rootCA: one PEM certificate); the material is not reproduced in this repository | constructor and accessor addresses from the asm function table of `local.dart`; the literals are pool strings |
 
-The old controller pointer called `local.dart` "local MQTT"; the file contains certificate and key material only, and the 3.18.0 copy has the same five classes and the same length (687 lines). No reference to `mqtt/local.dart` or to the three accessors was found outside the file itself (grep over the 3.24.3 asm tree), so which of the four certificate sets the app uses for which region or broker is not known.
+The old controller pointer called `local.dart` "local MQTT"; the file contains certificate and key material only, and the 3.18.0 copy has the same five classes and the same length (687 lines).
+
+#### Which certificate set and broker host the app picks (new read 2026-10-20)
+The earlier text on this page said no reference to the certificate classes exists outside `local.dart`; that was wrong: the static fields `Certificates.ci`, `beta`, `mp`, `qa` and `rootCA` are read by `MqttServe.startConnect` @0x2407d9c (size 0x540) and `MqttServe._getDemoSiteConfig` @0x24086b4 (size 0x3e8) (field references in `mqtt_serve.dart`, for example `[pp+0x11f38] Certificates.ci` @0x2408768; the grep for the file name missed them because the references print as `Field <Certificates.ci>`). `startConnect` runs the connectivity and login checks, calls `_getDemoSiteConfig` (@0x24080e0), builds an `MqttCertificateModel` (@0x2408138, @0x2408154), calls `_connect` (@0x2408160) and hands the connection to the native layer through the method channel `akiot.mqtt.connect_mqtt` (@0x24081e8). `_getDemoSiteConfig` reads `getCurrentServerRegion()` (@0x24086cc) and the static `serverEnv` (field @0x1bb4, a 64-bit compare chain `cmp x1,#2`, `#1`, `#0`, `#3` @0x240873c..0x24088fc, real values) and returns the broker host and a certificate set:
+
+| `serverEnv` | certificate set | host by `ServerRegion` | source |
+|---|---|---|---|
+| 0 | `Certificates.ci` | `aiot-mqtt-us-ci.anker.com` (one host, no region split) | @0x2408754..@0x2408794 |
+| 1 | `Certificates.beta` | US `aiot-mqtt-us-beta.anker.com`, EU `aiot-mqtt-eu-beta.anker.com` | @0x240879c..@0x2408818 |
+| 2 | `Certificates.mp` (one member of the `MP` holder per region: the US branch @0x2408830 loads its `field_b` @0x2408858, the EU branch @0x240888c loads `field_7` @0x24088b0; `UsMp` and `EuMp` are the two member classes of `local.dart`) | US `aiot-mqtt-us.anker.com`, EU `aiot-mqtt-eu.anker.com` | @0x2408830..@0x24088e4 |
+| 3 | `Certificates.qa` | US `aiot-mqtt-us-qa.anker.com`, EU `aiot-mqtt-eu-qa.anker.com` | @0x2408904..@0x2408984 |
+| above 3 | `Certificates.qa` | US `aiot-mqtt-us-qa2.anker.com`, EU `aiot-mqtt-eu-qa2.anker.com` | @0x240899c..@0x2408a1c |
+
+For any other region value the host is the empty string. After the switch the function loads `Certificates.rootCA` (@0x2408a48) for all environments. Which `serverEnv` value a production install holds (the page `server_env_list_page.dart` lets a user switch it, `getEnvSwitched` @0x24086f8) was not traced; the host names are app-side literals and say nothing about what the servers do.
 
 ## Since 3.18.0
 
@@ -209,12 +222,11 @@ The head immediates and the `cmdMap` immediates are the same raw values at the 3
 ## Known unknowns
 
 - Data type codes 0 (`str`) and 5 (`sfle`) are never produced by `_getDataType` (audit row 20, UNVERIFIABLE; searched the function and its inlined copies); they are known from upstream only.
-- Whether the app sends `encoding_type` at all: the audit searched `pp.txt` and `ev_charger/` for it without a hit (audit row 315, UNVERIFIABLE).
-- Byte 5 value `01` (receive variant) and the source of byte 6 (`field_23`) were not found (audit row 6).
-- Where `decompressPayload` is applied (whole MQTT body or `data` field) is open; upstream shows no gzip step.
-- `version` and `client_id` values the APK itself sends were not audited.
-- The enum indices of `unbindDevice` and `getDeviceBssid`, and what enum index 3 is, are not in the audit.
+- `encoding_type`: the string does not occur anywhere in the 3.24.3 app. New read 2026-10-20: `grep -rl "encoding_type"` over the whole asm root gives no file and `pp.txt` holds no such string (the audit searched `pp.txt` and `ev_charger/` only), so `generateCommand` and `getCommonMqttMessagePayload` cannot add it; the head and payload key lists are the literals read above (`getCommonMqttMessageHead` @0x226ee78, nine head keys plus `device_pn` and `device_sn`; `getCommonMqttMessagePayload` @0x226e850). The old doc's `seed` handling therefore stays the constant `"1"`.
+- Byte 5 value `01` (receive variant): the app's builder writes the zero register at byte 5 (@0x22743b8) and the `01` of upstream's `03 00/01 0f` belongs to frames the app only receives, so no app code produces it. — traced 2026-10-20: `_getNormalCommand` @0x2273fec.
+- Where `decompressPayload` is applied: it takes a base64 string (`base64Decode`, then a gzip magic test `0x1f 0x8b` and a direct UTF-8 JSON parse when the magic is absent, `MqttDecompressionUtil.decompressPayload` @0x2863c0c, size 0x810) and has 12 call sites in 9 files outside the per-device decode path ([iot.md](iot.md#known-unknowns)). New read 2026-10-20: in six of the sites a `"data"` key is read from the received map just before the call (`aiems_strategy_controller.dart` @0x33bfec4, `ax170_station_controller.dart` @0x3399490, `base_station_logic.dart` @0x339797c, @0x3398100, @0x33981f8, `basic_station_logic.dart` @0x3398af4) and `device_mode_tips_logic.dart` passes the value of `"data"` to `_parsePayload` @0x33af970 (key read @0x33af7c0, call @0x33af810), so these callers decompress the `data` field, not the whole body; `station_energy_system_logic.dart` @0x28615cc reads `"payload"`; the other sites (`scene_info_mgr.dart`, `device_main_logic.dart`, `station_main_page_logic.dart`) receive an argument whose origin was not traced. Upstream shows no gzip step.
+- The initializer of the static field read for `version` (`LoadStaticField(0xdf0)` @0x226eebc in `getCommonMqttMessageHead`, no field label in the asm): its value is not printed in the asm tree. The `client_id` is known: see the Head fields table.
+- What enum index 3 of `MqttCommandType` is: the pool holds objects for the indices 0, 1, 2, 4, 5, 6, 7 and 8 only (`pp.txt`, [pp+0x136d8], [pp+0x137a8] to [pp+0x137d8]), no object or name for 3, and `cmdMap` has no entry for it; `unbindDevice` is index 7 and `getDeviceBssid` index 8 (see the Command types table). — traced 2026-10-20.
 - Whether a device accepts a millisecond timestamp under tag 0xFD (as upstream describes) is untested here.
-- The old doc's claim that sequence numbers are not used for correlation (it says correlation is topic plus serial) has no audit row; only the constants themselves are traced.
+- The old doc's claim that sequence numbers are not used for correlation (it says correlation is topic plus serial) has no audit row; only the constants themselves are traced. — traced 2026-10-20: the string `"msg_seq"` occurs in exactly four files (`mqtt_command_transformer.dart`, `http_command_transformer.dart`, `a5101_mqtt_result_model.dart` as a key of `Head.fromJson` @0x23c747c, `station_mqtt_result_model.dart`); a read of the parsed `Head.msgSeq` through a dispatch-table getter has no name and cannot be excluded, so only "no named reader" is shown, not "unused".
 - The product-key and serial getters of `getCommonTopicString` are bound to `<pn>` and `<sn>` by upstream only.
-- Which certificate set of `local.dart` (`CI`, `MP`, `UsMp`, `EuMp`, `rootCA`) is used for which broker or region: no caller was found (see Infrastructure).

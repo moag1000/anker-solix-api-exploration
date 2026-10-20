@@ -116,7 +116,7 @@ none (MQTT only).
 No 3.18.0 comparison: the page indexes upstream, not the app. The audit confirms the TLV header tag `a1` of every upstream command table against the app builders (audit row 584).
 
 #### Known unknowns
-- Constants without an app builder: `CMD_SB_MAX_LOAD` has no 0x5a builder in either app version (audit rows 607, 608, 222); `CMD_SB_DEVICE_TIMEOUT` (`009a`) has no divisor 30 in the app setter (audit rows 614, 228).
+- Constants without an app builder: `CMD_SB_MAX_LOAD` has no 0x5a builder in either app version (audit rows 607, 608, 222). — traced 2026-10-20: the README conflict item for `005a` stands (no `[0, 0x5a]` pool list in `pp.txt` or any asm file); whether a device accepts it is device test rows 37 and 45. `CMD_SB_DEVICE_TIMEOUT` (`009a`) has an app builder and no divisor 30: `setSleepingTime` @0x3d9c55c (size 0x12c) sends `intToList` of its argument under `a2` (pool list `[0, 0x9a]` @0x3d9c65c) with no multiplication or division, see [a17c1.md](a17c1.md#009a-setsleepingtime).
 - Conflict: upstream `CMD_SOC_LIMITS_V2` describes `fd` as a timestamp, the app writes a CRC32 in tag `fd` (audit rows 599, 219); recorded in [README.md](README.md).
 - The EV charger and plug constants (`CMD_EV_*`, `CMD_PLUG_*`, `CMD_MODBUS_SWITCH` and others) have no asm audit; the PN pages for their products are not written.
 
