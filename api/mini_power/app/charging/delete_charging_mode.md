@@ -28,7 +28,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `id` | int (unboxed, x) | yes | ? | `charging/http/http_request_repository_impl.dart @0x26c3f94` (map literal `<String, int>` `charging/http/http_request_repository_impl.dart @0x26c3fbc`, value boxed by `BoxInt64Instr` `@0x26c3fa4`) |
+| `id` | int (unboxed, x) | yes | | `charging/http/http_request_repository_impl.dart @0x26c3f94` (map literal `<String, int>` `charging/http/http_request_repository_impl.dart @0x26c3fbc`, value boxed by `BoxInt64Instr` `@0x26c3fa4`) |
 
 ## `param_type`/`cmd`
 

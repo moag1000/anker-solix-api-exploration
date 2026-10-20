@@ -24,7 +24,7 @@ encrypted: `true` (asm-traced). `HttpRequestControllerImpl::requestHttp` declare
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `id` | int (unboxed, x) | yes | ? | `charging/http/http_request_repository_impl.dart @0x3e20f90` (map literal `<String, dynamic>` `charging/http/http_request_repository_impl.dart @0x3e20fb8`, value boxed by `BoxInt64Instr` `@0x3e20fa0`) |
+| `id` | int (unboxed, x) | yes | | `charging/http/http_request_repository_impl.dart @0x3e20f90` (map literal `<String, dynamic>` `charging/http/http_request_repository_impl.dart @0x3e20fb8`, value boxed by `BoxInt64Instr` `@0x3e20fa0`) |
 
 ## `param_type`/`cmd`
 

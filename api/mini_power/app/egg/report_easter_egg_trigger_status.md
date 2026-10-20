@@ -25,8 +25,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `device_sn` | string | yes | `"<device_sn>"` | `charging/http/http_request_repository_impl.dart @0x3e3bffc` (caller loads `charging/ui/page/device/a2345/a2345easter_egg/a2345easter_egg_logic.dart @0x3e3bee4` and `charging/ui/page/device/a91b2/a91b2easter_egg/a91b2easter_egg_logic.dart @0x3efc498` (see below)) |
-| `egg_type` | int (unboxed, x) | yes | ? | `charging/http/http_request_repository_impl.dart @0x3e3c010` (value boxed by `BoxInt64Instr` `charging/http/http_request_repository_impl.dart @0x3e3c020`) |
-| `report_time` | int (unboxed, x) | yes | ? | `charging/http/http_request_repository_impl.dart @0x3e3c038` (value boxed by `BoxInt64Instr` `@0x3e3c048`) |
+| `egg_type` | int (unboxed, x) | yes | | `charging/http/http_request_repository_impl.dart @0x3e3c010` (value boxed by `BoxInt64Instr` `charging/http/http_request_repository_impl.dart @0x3e3c020`) |
+| `report_time` | int (unboxed, x) | yes | | `charging/http/http_request_repository_impl.dart @0x3e3c038` (value boxed by `BoxInt64Instr` `@0x3e3c048`) |
 
 ## `param_type`/`cmd`
 

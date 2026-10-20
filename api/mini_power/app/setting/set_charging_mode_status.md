@@ -25,7 +25,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `device_sn` | string | yes | `"<device_sn>"` | `charging/http/http_request_repository_impl.dart @0x3e57a90` (caller load `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart @0x3e57860` (see below)) |
-| `charging_mode_status` | int (Smi, w) | yes | ? | `charging/http/http_request_repository_impl.dart @0x3e57aa4` (unboxed int parameter tagged by `lsl x2, x1, #1` `charging/http/http_request_repository_impl.dart @0x3e57ab4` and stored with `stur w2` `@0x3e57ab8`) |
+| `charging_mode_status` | int (Smi, w) | yes | | `charging/http/http_request_repository_impl.dart @0x3e57aa4` (unboxed int parameter tagged by `lsl x2, x1, #1` `charging/http/http_request_repository_impl.dart @0x3e57ab4` and stored with `stur w2` `@0x3e57ab8`) |
 
 ## `param_type`/`cmd`
 

@@ -24,7 +24,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38aa458` (parameter, not typed by the builder) |
+| `device_sn` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x38aa458` (typed by the one-hop caller trace in Known unknowns: `A2687ChargeModeLogic::setModeSubStatus` passes `field_3f?.field_6b ?? ""`, `String dyn:get:deviceSn(AnkerDevice)` `base_service/device/anker_device.dart @0x22053d4`) |
 | `mode` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38aa46c` (parameter, not typed by the builder) |
 | `protocol_key` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38aa480` (parameter, not typed by the builder) |
 | `status` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38aa494` (parameter, not typed by the builder) |
@@ -47,7 +47,7 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
 
 ```json
 {
-  "device_sn": "<?>",
+  "device_sn": "<device_sn>",
   "mode": "<?>",
   "protocol_key": "<?>",
   "status": "<?>"
