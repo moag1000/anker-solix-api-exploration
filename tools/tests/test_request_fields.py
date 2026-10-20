@@ -62,6 +62,39 @@ class RequestFieldsTest(unittest.TestCase):
         self.assertFalse(f['opt']['required'])
         self.assertEqual(f['opt']['guard_addr'], '0x1058')
 
+    def test_lsl_param_never_const(self):
+        _, f = analysed('0x2000')
+        self.assertEqual(list(f), ['type'])
+        self.assertEqual((f['type']['value_kind'], f['type']['raw']), ('param', 'fp-0x28'))
+        self.assertIsNone(f['type']['value'])
+
+    def test_spilled_array_literal(self):
+        info, _ = analysed('0x2000')
+        self.assertEqual([a['kind'] for a in info['maps']], ['map'])
+
+    def test_body_from_direct_caller(self):
+        root = tempfile.mkdtemp()
+        try:
+            dst = os.path.join(root, REL)
+            os.makedirs(os.path.dirname(dst))
+            shutil.copy(FIX, dst)
+            ep = {'rows': [{'url': '/power_service/v1/synth/no_map', 'service': 'power_service',
+                            'addr': '0x3000', 'class': 'HttpRequestControllerImpl',
+                            'function': 'synthNoMap', 'dart_file': REL, 'role': 'sender',
+                            'callers': [REL + '::synthCaller']}]}
+            r = R.run(root, ep, {'rows': []}, 'power_service')[0]
+            self.assertEqual(len(r['fields']), 1)
+            f = r['fields'][0]
+            self.assertEqual((f['key'], f['value_kind'], f['value'], f['source']),
+                             ('type_id', 'const_smi', 1, 'caller'))
+            self.assertEqual(f['caller'], 'HttpRequestControllerImpl::synthCaller @0x4000')
+            ep['rows'][0]['callers'] = []
+            r = R.run(root, ep, {'rows': []}, 'power_service')[0]
+            self.assertEqual(r['fields'], [])
+            self.assertIn('no map literal', r['note'])
+        finally:
+            shutil.rmtree(root)
+
     def test_response_class_and_key_from_closure(self):
         root = tempfile.mkdtemp()
         try:

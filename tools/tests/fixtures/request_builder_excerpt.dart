@@ -155,3 +155,48 @@ class HttpRequestControllerImpl extends HttpRequestControllerInterface {
     // 0x106c: r0 = GDT[cid_x0 + 0x6a9]()
     // 0x1090: r0 = Null
   }
+// SYNTHETIC: Smi built from an int parameter (ldur + lsl); `r2 = 4` is only the
+// AllocateArray size and must never become the value (review finding C1/I1).
+  _ synthLsl(/* No info */) {
+    // ** addr: 0x2000, size: 0x100
+    // 0x2004: SetupParameters(Synth this /* r1 => r1, fp-0x8 */, dynamic _ /* r2 => r2, fp-0x28 */)
+    // 0x2008: r1 = Null
+    // 0x200c: r2 = 4
+    // 0x2010: r0 = AllocateArray()
+    // 0x2014: r16 = "type"
+    // 0x2018: StoreField: r0->field_f = r16
+    //     0x2018: stur            w16, [x0, #0xf]
+    // 0x201c: ldur            x1, [fp, #-0x28]
+    // 0x2020: lsl             x2, x1, #1
+    // 0x2024: StoreField: r0->field_13 = r2
+    //     0x2024: stur            w2, [x0, #0x13]
+    // 0x2028: stur            x0, [fp, #-0x30]
+    // 0x202c: r16 = <String, dynamic>
+    // 0x2030: ldur            lr, [fp, #-0x30]
+    // 0x2034: stp             lr, x16, [SP]
+    // 0x2038: r0 = Map._fromLiteral()
+  }
+// SYNTHETIC: builder without a map literal and its direct caller with {type_id: 1}.
+  _ synthNoMap(/* No info */) {
+    // ** addr: 0x3000, size: 0x40
+    // 0x3004: SetupParameters(Synth this /* r1 => r1, fp-0x8 */, dynamic _ /* r2 => r2, fp-0x10 */)
+    // 0x3008: r30 = "/power_service/v1/synth/no_map"
+    // 0x300c: r0 = encryptionRequestHttp()
+  }
+  _ synthCaller(/* No info */) {
+    // ** addr: 0x4000, size: 0x80
+    // 0x4004: r1 = Null
+    // 0x4008: r2 = 4
+    // 0x400c: r0 = AllocateArray()
+    // 0x4010: mov             x2, x0
+    // 0x4014: r16 = "type_id"
+    // 0x4018: StoreField: r2->field_f = r16
+    //     0x4018: stur            w16, [x2, #0xf]
+    // 0x401c: r16 = 2
+    // 0x4020: StoreField: r2->field_13 = r16
+    //     0x4020: stur            w16, [x2, #0x13]
+    // 0x4024: r16 = <String, dynamic>
+    // 0x4028: stp             x2, x16, [SP]
+    // 0x402c: r0 = Map._fromLiteral()
+    // 0x4030: r0 = synthNoMap()
+  }

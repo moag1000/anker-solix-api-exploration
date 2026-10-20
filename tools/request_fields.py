@@ -37,9 +37,14 @@ REG_BOX_RE = re.compile(r'^r(\d+) = BoxInt64Instr\(r(\d+)\)$')
 REG_CALL_RE = re.compile(r'^r(\d+) = ([A-Za-z_$][\w$.<>]*)\(\)$')
 REG_ANY_RE = re.compile(r'^r(\d+) = ')
 GDT_RE = re.compile(r'^r\d+ = GDT\[cid_x0 \+ (0x[0-9a-f]+)\]\(\)$')
+REGN = r'(?:x(\d+)|(lr))'
 MOV_RE = re.compile(r'^mov\s+x(\d+), x(\d+)$')
-LDFP_RE = re.compile(r'^ldu?r\s+x(\d+), \[fp, #(-?)(0x[0-9a-f]+|\d+)\]$')
-STFP_RE = re.compile(r'^stu?r\s+x(\d+), \[fp, #(-?)(0x[0-9a-f]+|\d+)\]$')
+LSL_RE = re.compile(r'^lsl\s+x(\d+), x(\d+), #1$')
+DEFOP_RE = re.compile(r'^([a-z]+(?:\.[a-z]+)?)\s+[xw](\d+),')
+NODEF_OPS = frozenset(('str', 'stur', 'strb', 'sturb', 'strh', 'stp', 'cmp', 'cmn',
+                       'tst', 'cbz', 'cbnz', 'tbz', 'tbnz', 'b', 'bl', 'blr', 'ret'))
+LDFP_RE = re.compile(r'^ldu?r\s+(?:x|r)?(\d+|lr), \[fp, #(-?)(0x[0-9a-f]+|\d+)\]$')
+STFP_RE = re.compile(r'^stu?r\s+(?:x)?(\d+|lr), \[fp, #(-?)(0x[0-9a-f]+|\d+)\]$')
 LDOTHER_RE = re.compile(r'^ld[a-z]*\s+[xw](\d+), \[')
 SETUP_RE = re.compile(r'r(\d+) => r(\d+), fp-(0x[0-9a-f]+)')
 STOREFIELD_RE = re.compile(r'^StoreField: r(\d+)->field_([0-9a-f]+) = r(\d+)')
@@ -48,7 +53,7 @@ LOADFIELD_RE = re.compile(r'^(?:LoadField|ArrayLoad): r(\d+) = ')
 STORE_RAW_RE = re.compile(r'^(?:stur|str)\s+([wx])(\d+), \[x(\d+), #(0x[0-9a-f]+)\]$')
 STORE_ADD_RAW_RE = re.compile(r'^add\s+x25, x(\d+), #(0x[0-9a-f]+)$')
 STORE_X25_RE = re.compile(r'^str\s+([wx])(\d+), \[x25\]$')
-SP0_RE = re.compile(r'^(?:stp\s+x(\d+), x\d+|str\s+x(\d+)), \[SP\]$')
+SP_SPILL_RE = re.compile(r'^(?:stp\s+(x\d+|lr), (x\d+|lr)|str\s+(x\d+|lr)), \[SP(?:, #0x[0-9a-f]+)?\]!?$')
 CMPNULL_RE = re.compile(r'^cmp\s+[wx]\d+, NULL$')
 BRANCH_RE = re.compile(r'^b\.(?:eq|ne)\s+#(0x[0-9a-f]+)$')
 CALLS_LIST_RE = re.compile(r'List|GrowableArray|_literal|_withData')
@@ -70,6 +75,11 @@ def _hex(s):
     return int(s, 0)
 
 
+def _reg(tok):
+    tok = tok.lstrip('xr') if tok != 'lr' else tok
+    return 30 if tok == 'lr' else int(tok)
+
+
 def analyse_function(fn):
     """Return {'maps': [...], 'method': .., 'method_addr': .., 'cmp_null': [...]}.
 
@@ -79,13 +89,15 @@ def analyse_function(fn):
     regs = {}
     slots = {}
     arrays = []
-    sp0 = None
+    spill = []             # registers stored to [SP...] since the last call
     method = None
     method_addr = None
     cmp_null = []          # (cmp_addr, branch_target)
     pending_cmp = None
     last_len = None
     body_calls = []
+    calls = {}
+    map_lits = 0
     for ins in fn.instrs:
         text = ins.text
         raws = ins.raw
@@ -176,7 +188,8 @@ def analyse_function(fn):
                     (key, val, ins.addr, 'GDT[cid_x0 + %s]' % m.group(1)))
                 if val.kind in ('arr', 'map'):
                     arrays[val.data]['nested'] = True
-            regs[0] = V('unk', None, ins.addr, text)
+            regs = {0: V('unk', None, ins.addr, text)}
+            spill = []
             continue
         m = REG_CALL_RE.match(text)
         if m:
@@ -187,26 +200,42 @@ def analyse_function(fn):
             if name == 'AllocateArray':
                 arrays.append({'slots': {}, 'len': (last_len // 2) if last_len else None,
                                'nested': False, 'kind': None, 'addr': ins.addr})
-                regs[dst] = V('arr', len(arrays) - 1, ins.addr, text)
+                res = V('arr', len(arrays) - 1, ins.addr, text)
             elif name == 'Map._fromLiteral':
-                src = regs.get(sp0) if sp0 is not None else None
-                if src is not None and src.kind == 'arr':
-                    arrays[src.data]['kind'] = 'map'
-                    arrays[src.data]['lit_addr'] = ins.addr
-                    regs[dst] = V('map', src.data, ins.addr, text)
+                map_lits += 1
+                cands = [regs[r] for r in spill if r in regs and regs[r].kind == 'arr'
+                         and arrays[regs[r].data]['kind'] is None]
+                if cands:
+                    arrays[cands[-1].data]['kind'] = 'map'
+                    arrays[cands[-1].data]['lit_addr'] = ins.addr
+                    res = V('map', cands[-1].data, ins.addr, text)
                 else:
-                    regs[dst] = V('call', ('map', name), ins.addr, text)
+                    res = V('call', ('map', name), ins.addr, text)
             elif CALLS_MAP_RE.search(name):
-                regs[dst] = V('call', ('map', name), ins.addr, text)
+                res = V('call', ('map', name), ins.addr, text)
             elif CALLS_LIST_RE.search(name):
-                regs[dst] = V('call', ('list', name), ins.addr, text)
+                res = V('call', ('list', name), ins.addr, text)
             else:
-                regs[dst] = V('call', (None, name), ins.addr, text)
+                res = V('call', (None, name), ins.addr, text)
+            calls.setdefault(name, ins.addr)
+            # Dart keeps no value in a register across a call: only the result lives on
+            regs = {dst: res}
+            spill = []
+            last_len = None
             continue
         m = MOV_RE.match(text)
         if m:
             regs[int(m.group(1))] = regs.get(int(m.group(2)),
                                              V('unk', None, ins.addr, text))
+            continue
+        m = LSL_RE.match(text)
+        if m:
+            # Smi tag of an unboxed value: the stored value is the source's value
+            src = regs.get(int(m.group(2)))
+            if src is not None and src.kind == 'imm':
+                src = V('imm', src.data * 2, src.addr, src.text)
+            regs[int(m.group(1))] = src if src is not None else \
+                V('unk', None, ins.addr, text)
             continue
         m = LDFP_RE.match(text)
         if m:
@@ -215,13 +244,13 @@ def analyse_function(fn):
                 v = V('param', 'fp+0x%x' % off, ins.addr, text)
             else:
                 v = slots.get(off) or V('unk', None, ins.addr, text)
-            regs[int(m.group(1))] = v
+            regs[_reg(m.group(1))] = v
             continue
         m = STFP_RE.match(text)
         if m:
             off = _hex(m.group(3)) * (-1 if m.group(2) else 1)
-            if off < 0 and int(m.group(1)) in regs:
-                slots[off] = regs[int(m.group(1))]
+            if off < 0 and _reg(m.group(1)) in regs:
+                slots[off] = regs[_reg(m.group(1))]
             continue
         m = LOADFIELD_RE.match(text)
         if m:
@@ -231,14 +260,24 @@ def analyse_function(fn):
         if m:
             regs[int(m.group(1))] = V('unk', None, ins.addr, text)
             continue
+        mm = None
         for r in [text] + raws:
-            mm = SP0_RE.match(r)
+            mm = SP_SPILL_RE.match(r)
             if mm:
-                sp0 = int(mm.group(1) or mm.group(2))
+                for g in mm.groups():
+                    if g:
+                        spill.append(_reg(g))
+                break
+        if mm:
+            continue
+        m = DEFOP_RE.match(text)
+        if m and m.group(1) not in NODEF_OPS and not m.group(1).startswith('b.'):
+            regs[int(m.group(2))] = V('unk', None, ins.addr, text)
+            continue
         m = LDOTHER_RE.match(text)
         if m:
             regs[int(m.group(1))] = V('unk', None, ins.addr, text)
-    return {'body_calls': body_calls, 'maps': arrays, 'method': method, 'method_addr': method_addr,
+    return {'map_lits': map_lits, 'calls': calls, 'body_calls': body_calls, 'maps': arrays, 'method': method, 'method_addr': method_addr,
             'cmp_null': cmp_null}
 
 
@@ -277,10 +316,31 @@ def classify(val, width, rawtxt):
     return 'unknown', val.text or None, None, None
 
 
-def fields_of(info):
+def caller_body_fields(entry, callee_name):
+    """Fields of the map literal built right before the first call to `callee_name`."""
+    info = entry['info']
+    call = info['calls'].get(callee_name)
+    if call is None:
+        return []
+    before = [a for a in info['maps'] if a['kind'] == 'map' and not a['nested']
+              and _hex(a['lit_addr']) < _hex(call)]
+    if not before:
+        return []
+    last = max(before, key=lambda a: _hex(a['lit_addr']))
+    out = fields_of(info, only=last)
+    for f in out:
+        f['source'] = 'caller'
+        f['caller'] = entry['full'] + ' @' + entry['addr']
+        f['call_addr'] = call
+    return out
+
+
+def fields_of(info, only=None):
     """Flat field list over the top-level map literals of one analysed function."""
     out = []
     maps = [a for a in info['maps'] if a['kind'] == 'map' and not a['nested']]
+    if only is not None:
+        maps = [only]
     for mi, arr in enumerate(maps):
         for idx in sorted(arr['slots']):
             if idx % 2:
@@ -380,11 +440,14 @@ def scan_file(path, rel, want_addrs, want_callers):
             info['full'] = full
             builders[fn.addr] = info
         if fn.name in want_callers:
-            callers[fn.name] = {'own': fromjson_classes(fn), 'full': full}
+            info = analyse_function(fn)
+            callers.setdefault(fn.name, []).append(
+                {'own': fromjson_classes(fn), 'full': full, 'addr': fn.addr, 'info': info})
     for info in builders.values():
         info['closure_fromjson'] = closure_cls.get(info['full'], [])
-    for name, c in callers.items():
-        c['closure'] = closure_cls.get(c['full'], [])
+    for lst in callers.values():
+        for c in lst:
+            c['closure'] = closure_cls.get(c['full'], [])
     return builders, callers
 
 
@@ -459,7 +522,21 @@ def run(asm_root, endpoints, models, service=None, log=None):
         rec['method'], rec['method_addr'] = info['method'], info['method_addr']
         rec['fields'] = fields_of(info)
         if not rec['fields']:
-            rec['note'] = 'no map literal with string keys in the builder (body is probably built by a caller)'
+            for c in r.get('callers') or []:
+                f, n = caller_name(c)
+                for ent in results_c.get((f, n)) or []:
+                    rec['fields'] = caller_body_fields(ent, r['function'])
+                    if rec['fields']:
+                        break
+                if rec['fields']:
+                    break
+        if not rec['fields']:
+            if info['map_lits']:
+                rec['note'] = ('the builder only has empty or non-string-keyed map '
+                               'literal(s); no body map in its direct callers')
+            else:
+                rec['note'] = ('no map literal in the builder and none before the call '
+                               'in its direct callers')
             if info['body_calls']:
                 rec['note'] += '; calls ' + ', '.join(info['body_calls'])
         own = list(info['fromjson'])
@@ -475,12 +552,10 @@ def run(asm_root, endpoints, models, service=None, log=None):
             cc = []
             for c in r.get('callers') or []:
                 f, n = caller_name(c)
-                ci = results_c.get((f, n))
-                if not ci:
-                    continue
-                for k in ci['own'] + ci['closure']:
-                    if k not in [x[0] for x in cc]:
-                        cc.append((k, f))
+                for ent in results_c.get((f, n)) or []:
+                    for k in ent['own'] + ent['closure']:
+                        if k not in [x[0] for x in cc]:
+                            cc.append((k, f))
             if len(cc) == 1:
                 cls, src = cc[0][0], 'caller'
                 here = os.path.dirname(cc[0][1])
@@ -518,6 +593,15 @@ def find_unknown_model_keys(recs, model_keys):
                    if r.get('response_key') and r['response_key'] not in model_keys})
 
 
+def check_file(path, models):
+    with open(path, encoding='utf-8') as fh:
+        recs = json.load(fh)['rows']
+    bad = find_unknown_model_keys(recs, {r['key'] for r in models['rows']})
+    for k in bad:
+        print('unknown response_key: %s' % k)
+    return 1 if bad else 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('asm_root', nargs='?')
@@ -527,20 +611,20 @@ def main(argv=None):
     ap.add_argument('--all', action='store_true')
     ap.add_argument('--out')
     ap.add_argument('--check', action='store_true',
-                    help='read --out, exit 1 when a response_key is not in models.json')
+                    help='after an extraction (asm_root + --service/--all) or, alone, on an '
+                         'existing --out: exit 1 when a response_key is not in models.json')
     a = ap.parse_args(argv)
     with open(a.models, encoding='utf-8') as fh:
         models = json.load(fh)
-    if a.check:
+    extract = bool(a.asm_root and (a.service or a.all))
+    if a.check and not extract:
         if not a.out:
-            ap.error('--check needs --out')
-        with open(a.out, encoding='utf-8') as fh:
-            recs = json.load(fh)['rows']
-        bad = find_unknown_model_keys(recs, {r['key'] for r in models['rows']})
-        for k in bad:
-            print('unknown response_key: %s' % k)
-        return 1 if bad else 0
-    if not a.asm_root or not (a.service or a.all):
+            ap.error('--check needs --out (or an asm_root with --service/--all)')
+        if not os.path.isfile(a.out):
+            print('%s not found: run the extraction first' % a.out, file=sys.stderr)
+            return 2
+        return check_file(a.out, models)
+    if not extract:
         ap.error('asm_root and --service or --all required')
     with open(a.endpoints, encoding='utf-8') as fh:
         endpoints = json.load(fh)
@@ -551,7 +635,7 @@ def main(argv=None):
                  endpoints.get('snapshot'), recs)
     st = stats(recs)
     print(json.dumps(st, sort_keys=True))
-    return 0
+    return check_file(out, models) if a.check else 0
 
 
 if __name__ == '__main__':
