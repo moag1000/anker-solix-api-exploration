@@ -26,7 +26,9 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 |---|---|---|---|---|
 | `device_sn` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x33fbbcc` |
 | `insert_sn` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x33fbbe0` |
-| `install_mode` | ? | optional (added only when the parameter at `cbz x2` is non-zero, guard `@0x33fbc0c`) | ? | `charging/http/http_request_repository_impl.dart @0x33fbc38` |
+| `install_mode` | int (unboxed, x) | optional (added only when the parameter at `cbz x2` is non-zero, guard `@0x33fbc0c`) | | `charging/http/http_request_repository_impl.dart @0x33fbc38` |
+
+Typing (asm-traced): the value of `install_mode` is the unboxed integer parameter tested by `cbz x2` (`@0x33fbc0c`); it is boxed by `BoxInt64Instr` (`@0x33fbc10`) and inserted with the map `[]=` call under the key at `@0x33fbc38` (`charging/http/http_request_repository_impl.dart`). Callers: `EZ1SelectModeLogic.getOTAUpdateStatus` (`charging/ui/page/device/a17c0/ez1_select_mode/ez1_select_mode_logic.dart @0x3d65740`) passes the named argument `installMode`, an unboxed integer field of the logic read at `@0x3d656e4` and boxed at `@0x3d656e8`; `SelectSolarPowerLogic.getThirdOtaStatusRes` (`charging/ui/page/device/a17c0/select_solar_power/select_solar_power_logic.dart @0x3d7376c`) and `QrScannerLogic.getOTAUpdateStatus` (`charging/ui/page/qr_Scanner/qr_scanner_logic.dart @0x33fbaac`) pass no named argument, so the default 0 applies and `install_mode` is not sent.
 
 ## `param_type`/`cmd`
 
@@ -76,9 +78,9 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sn`, `insert_sn` and `install_mode`: the literal is `<String, dynamic>`; the `cbz x2` guard suggests an unboxed integer parameter, but the value store `@0x33fbc38..` was not read.
-- Which `install_mode` values the callers pass.
+- Types of `device_sn` and `insert_sn`: parameters of the builder (`charging/http/http_request_repository_impl.dart @0x33fbbd8`, `@0x33fbbec`) — attempted 2026-10-20 (two-hop not readable: the callers read them through field and dispatch-table reads with no declared type in the asm (`charging/ui/page/qr_Scanner/qr_scanner_logic.dart @0x33fba68`). Header stays string-only)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
+- Which values the integer `install_mode` field of `EZ1SelectModeLogic` (`charging/ui/page/device/a17c0/ez1_select_mode/ez1_select_mode_logic.dart @0x3d656e4`) takes: it is set elsewhere — traced 2026-10-20: the other two callers send no `install_mode`
 
 ## Device-tested by
 

@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Deletes a range-extender system (`RangeExtenderNetwork::delExtenderSystem`, `oe_a7320`); purpose inferred from the function name (string-only).
+Deletes a range-extender system (`RangeExtenderNetwork::delExtenderSystem`, `oe_a7320`); the description comes from the function name (string-only); the callers are listed under "Callers in app".
 
 ## Upstream name
 
@@ -16,7 +16,7 @@ Deletes a range-extender system (`RangeExtenderNetwork::delExtenderSystem`, `oe_
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Direct SDK call, path C (asm-traced), through the shared helper `AkNetwork::requestHttp`: the helper always sends `POST` and calls `handle` with `akiot.cloud_api` (`base_service/util/ak_util/src/ak_network.dart @0x21c3544`). The inventory flag `default-true (requestHttp)` does not apply: `AkNetwork::requestHttp` has no `needEncryption` switch and goes straight to the SDK; what the SDK encrypts is not visible in Dart (mechanics: [../../sdk_senders.md](../../sdk_senders.md#aknetworkrequesthttp), background: [../../encryption.md](../../encryption.md#rule-and-resulting-counts)). The builder calls the helper at `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x471ce88`.
 
 ## Request
 
@@ -56,7 +56,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
-- `oe_a7320/src/oe_a7320/network/range_extender_network.dart`: `delExtenderSystem` @0x471ce1c (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `RemoveSystemController._handleDeviceRemoval` (`oe_a7320/src/oe_a7320/page/range_extender_settings/menu_controller/remove_system_controller.dart @0x471c9d8`)
+- `oe_a7320/src/oe_a7320/network/range_extender_network.dart`: `delExtenderSystem` @0x471ce1c (`AkNetwork.requestHttp`, path C)
 
 ## Since/changed
 
@@ -64,9 +65,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Type of `extender_system_id`: parameter or object field read by the builder; the map literal is `<String, dynamic>` and the asm carries no static type.
-- Encryption: the call goes through `AkNetwork::requestHttp` and the SDK handler directly (path C in `api/encryption.md`); the "Encrypted?" line above is the inventory default.
-- No UI caller is recorded for this builder in `data/endpoints.json`, so the purpose is inferred from the function name.
+- Type of `extender_system_id`: the only caller, `RemoveSystemController._handleDeviceRemoval`, passes a null-checked `field_7` of an Rx `value` (`remove_system_controller.dart @0x471c9bc..@0x471c9d4`) — attempted 2026-10-20 (two-hop not readable: the field type is not shown in the asm (`remove_system_controller.dart @0x471c9c0`)).
 
 ## Device-tested by
 

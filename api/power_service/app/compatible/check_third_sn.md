@@ -75,7 +75,7 @@ Called from:
 
 ## Known unknowns
 
-- Which values of `device_model` and `brand_id` the scanner passes: the three values are parameters of the builder (`@0x33fa544`, `@0x33fa558`, `@0x33fa56c`) and the caller was not decoded for their content.
+- Which values of `device_model` and `brand_id` the scanner passes: the three values are parameters of the builder (`charging/http/http_request_repository_impl.dart @0x33fa544`, `@0x33fa558`, `@0x33fa56c`) and the caller was not decoded for their content. — traced 2026-10-20: the only caller, `QrScannerLogic.checkDeviceSnCode` (`charging/ui/page/qr_Scanner/qr_scanner_logic.dart @0x33fa480`), reads the values from `.value` of Rx fields and replaces nulls by the String literal `""` (`@0x33fa404`, `@0x33fa434`); the scanned content behind them is set elsewhere
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

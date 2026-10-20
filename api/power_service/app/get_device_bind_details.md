@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_device_bind_details
 
 ## Purpose
 
-Reads which range-extender system each device is bound to (`RangeExtenderNetwork::getDeviceBindDetails`, `oe_a7320`); no UI caller is recorded in `data/endpoints.json`, so the purpose is inferred from the function name (string-only).
+Reads which range-extender system each device is bound to (`RangeExtenderNetwork::getDeviceBindDetails`, `oe_a7320`); the callers are listed under "Callers in app"; the description itself comes from the function name (string-only).
 
 ## Upstream name
 
@@ -16,15 +16,17 @@ Reads which range-extender system each device is bound to (`RangeExtenderNetwork
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Direct SDK call, path C (asm-traced), through the shared helper `AkNetwork::requestHttp`: the helper always sends `POST` and calls `handle` with `akiot.cloud_api` (`base_service/util/ak_util/src/ak_network.dart @0x21c3544`). The inventory flag `default-true (requestHttp)` does not apply: `AkNetwork::requestHttp` has no `needEncryption` switch and goes straight to the SDK; what the SDK encrypts is not visible in Dart (mechanics: [../../sdk_senders.md](../../sdk_senders.md#aknetworkrequesthttp), background: [../../encryption.md](../../encryption.md#rule-and-resulting-counts)). The builder calls the helper at `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x228f020`.
 
 ## Request
 
-(asm-traced) The body is one map literal passed as the named argument `params` (`r4 = const [0, 0x2, 0x1, 0x1, params, 0x1, null]` at `@0x228f018`); its type arguments are `<String, dynamic>` (`@0x228f000`), so the literal gives no value type. Values come from parameters or object fields of the builder; the asm carries no static type.
+(asm-traced) The body is one map literal passed as the named argument `params` (`r4 = const [0, 0x2, 0x1, 0x1, params, 0x1, null]` at `@0x228f018`); its type arguments are `<String, dynamic>` (`@0x228f000`), so the literal gives no value type.
+
+Typing (two-hop, asm-traced): in `range_extender_network.dart` the builder's parameter is untyped (`SetupParameters(dynamic _ ...)`, `@0x228efbc`); its only caller, `ReSystemBiz.extenderSystemId` (`oe_a7320/src/oe_a7320/biz/re_system_biz.dart @0x228eef0`), builds the argument as a one-element growable list with type argument `<String>` (`@0x228eecc`, `AllocateGrowableArray` `@0x228eed0`), so the field is a list of strings.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn_list` | ? | yes | ? | `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x228efec` |
+| `device_sn_list` | list (`<String>` growable list built by the caller) | yes | | `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x228efec` |
 
 ## `param_type`/`cmd`
 
@@ -46,7 +48,7 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
 
 ```json
 {
-  "device_sn_list": "<?>"
+  "device_sn_list": ["<device_sn>"]
 }
 ```
 
@@ -58,7 +60,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
-- `oe_a7320/src/oe_a7320/network/range_extender_network.dart`: `getDeviceBindDetails` @0x228efb0 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `ReSystemBiz.extenderSystemId` (`oe_a7320/src/oe_a7320/biz/re_system_biz.dart @0x228eef0`)
+- `oe_a7320/src/oe_a7320/network/range_extender_network.dart`: `getDeviceBindDetails` @0x228efb0 (`AkNetwork.requestHttp`, path C)
 
 ## Since/changed
 
@@ -66,9 +69,6 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Type of `device_sn_list`: parameter or object field read by the builder; the map literal is `<String, dynamic>` and the asm carries no static type.
-- Encryption: the call goes through `AkNetwork::requestHttp` and the SDK handler directly (path C in `api/encryption.md`); the "Encrypted?" line above is the inventory default.
-- No UI caller is recorded for this builder in `data/endpoints.json`, so the purpose is inferred from the function name.
 
 ## Device-tested by
 

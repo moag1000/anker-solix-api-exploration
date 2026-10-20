@@ -27,7 +27,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-(asm-traced) Five senders, each with a one-pair `<String, String>` literal (type arguments `@0x2750788`, `@0x28652e0`, `@0x26208ec`, `@0x34541b8`, `@0x24443a8`) and the key `device_sn`; the value is a parameter or a field of the device object.
+(asm-traced) Five senders, each with a one-pair `<String, String>` literal (type arguments `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart @0x2750788`, `charging/ui/page/device/a17c1/a17c1home/a17c1home_logic.dart @0x28652e0`, `@0x26208ec`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart @0x34541b8`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x24443a8`) and the key `device_sn`; the value is a parameter or a field of the device object.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
@@ -40,6 +40,8 @@ n/a
 ## Response model (link)
 
 `charging::SocModel` (`data/models.json` key; no models page) as a list under the key `power_cutoff_data`: all five success closures read the string literal `"power_cutoff_data"` and map the entries with the type argument `<SocModel>` (the list `map` closure is the shared closure `@0x24446e4` in `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`, which calls `SocModel.fromJson` at `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x244470c`; literal/type-argument addresses: `@0x27508b4`/`@0x27509b8` in `a17c0setting_logic.dart`, `@0x2865418`/`@0x2865528` and `@0x26348b4`/`@0x26349b8` in `a17c1home_logic.dart`, `@0x34542e8`/`@0x34543ec` in `a17c1setting_logic.dart`, `@0x244454c`/`@0x2444650` in `device_main_logic.dart`). `A17C1SettingLogic::requestSoc` also constructs a `NewSocParamModel` (`charging::NewSocParamModel`) inside the same closure (`@0x3454244`).
+
+`NewSocParamModel` in `A17C1SettingLogic.requestSoc` (asm-traced): the success closure (`charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart @0x3454244`) passes the mapped `SocModel` list to the stored callback (`ClosureCall` `@0x3454458`) and builds the `NewSocParamModel` separately, by `NewSocParamModel.fromJson` applied to the whole response object (`@0x3454478`), then hands it to `updateWithNewSocValue` (`@0x345448c`); it is not derived from the `SocModel` list.
 
 ## Response
 
@@ -81,7 +83,6 @@ Called from:
 
 ## Known unknowns
 
-- How `NewSocParamModel` is filled from the `SocModel` list in `A17C1SettingLogic::requestSoc` (the closure `@0x3454244` builds it; the field mapping was not decoded).
 - Which device types answer with which cut-off entries (server data; the app queries by `device_sn` only).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

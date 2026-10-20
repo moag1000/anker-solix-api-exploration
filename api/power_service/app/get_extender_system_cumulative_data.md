@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Reads the accumulated energy data of a range-extender system (`RangeExtenderNetwork::getExtenderSystemCumulativeData`, `oe_a7320`); no UI caller is recorded in `data/endpoints.json`, so the purpose is inferred from the function name (string-only).
+Reads the accumulated energy data of a range-extender system (`RangeExtenderNetwork::getExtenderSystemCumulativeData`, `oe_a7320`); the callers are listed under "Callers in app"; the description itself comes from the function name (string-only).
 
 ## Upstream name
 
@@ -16,7 +16,7 @@ Reads the accumulated energy data of a range-extender system (`RangeExtenderNetw
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Direct SDK call, path C (asm-traced), through the shared helper `AkNetwork::requestHttp`: the helper always sends `POST` and calls `handle` with `akiot.cloud_api` (`base_service/util/ak_util/src/ak_network.dart @0x21c3544`). The inventory flag `default-true (requestHttp)` does not apply: `AkNetwork::requestHttp` has no `needEncryption` switch and goes straight to the SDK; what the SDK encrypts is not visible in Dart (mechanics: [../../sdk_senders.md](../../sdk_senders.md#aknetworkrequesthttp), background: [../../encryption.md](../../encryption.md#rule-and-resulting-counts)). The builder calls the helper at `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x3608d94`.
 
 ## Request
 
@@ -58,7 +58,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
-- `oe_a7320/src/oe_a7320/network/range_extender_network.dart`: `getExtenderSystemCumulativeData` @0x3608d24 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `ReSystemPsDetailHttpDS.fetch` (`oe_a7320/src/oe_a7320/page/range_extender_system/widgets/power_stat/logic/datasource/ps_detail_http_ds.dart @0x3608b4c`)
+- `oe_a7320/src/oe_a7320/network/range_extender_network.dart`: `getExtenderSystemCumulativeData` @0x3608d24 (`AkNetwork.requestHttp`, path C)
 
 ## Since/changed
 
@@ -66,9 +67,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Type of `extender_system_id`: parameter or object field read by the builder; the map literal is `<String, dynamic>` and the asm carries no static type.
-- Encryption: the call goes through `AkNetwork::requestHttp` and the SDK handler directly (path C in `api/encryption.md`); the "Encrypted?" line above is the inventory default.
-- No UI caller is recorded for this builder in `data/endpoints.json`, so the purpose is inferred from the function name.
+- Type of `extender_system_id`: the only caller, `ReSystemPsDetailHttpDS.fetch` (`ps_detail_http_ds.dart @0x3608b4c`), forwards its own untyped parameter (`SetupParameters(dynamic _ ...)`, `@0x3608b18`) — attempted 2026-10-20 (two-hop not readable: the caller of `fetch` is a data-source interface call, not a direct call (`ps_detail_http_ds.dart @0x3608b4c`)). Header stays string-only.
 
 ## Device-tested by
 

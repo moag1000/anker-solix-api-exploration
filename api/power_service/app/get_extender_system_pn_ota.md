@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Reads the OTA information per product number for range-extender systems (`RangeExtenderNetwork::getExtenderSystemPnOta`, `oe_a7320`); no UI caller is recorded in `data/endpoints.json`, so the purpose is inferred from the function name (string-only).
+Reads the OTA information per product number for range-extender systems (`RangeExtenderNetwork::getExtenderSystemPnOta`, `oe_a7320`); the callers are listed under "Callers in app"; the description itself comes from the function name (string-only).
 
 ## Upstream name
 
@@ -16,11 +16,11 @@ Reads the OTA information per product number for range-extender systems (`RangeE
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Direct SDK call, path C (asm-traced), through the shared helper `AkNetwork::requestHttp`: the helper always sends `POST` and calls `handle` with `akiot.cloud_api` (`base_service/util/ak_util/src/ak_network.dart @0x21c3544`). The inventory flag `default-true (requestHttp)` does not apply: `AkNetwork::requestHttp` has no `needEncryption` switch and goes straight to the SDK; what the SDK encrypts is not visible in Dart (mechanics: [../../sdk_senders.md](../../sdk_senders.md#aknetworkrequesthttp), background: [../../encryption.md](../../encryption.md#rule-and-resulting-counts)). The builder calls the helper at `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x22a1a9c`.
 
 ## Request
 
-(asm-traced) No request fields: the call to `AkNetwork::requestHttp` carries no named argument (`r4 = const [0, 0x1, 0, 0x1, null]` at `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x22a1a98`), so no `params` map is sent by this builder.
+(asm-traced) No request fields: the call to `AkNetwork::requestHttp` carries no named argument (`r4 = const [0, 0x1, 0, 0x1, null]` at `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x22a1a98`), so no `params` map is sent by this builder; `AkNetwork::requestHttp` declares `params` as `{dynamic params = Null}` (`SetupParameters`, `base_service/util/ak_util/src/ak_network.dart @0x21c3450`) and stores the argument unchanged under `param` in the command map (`@0x21c3518`), so the map handed to the SDK handler carries `param: null` here (app side; how the native SDK serialises it is outside the asm).
 
 ## `param_type`/`cmd`
 
@@ -48,7 +48,9 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
-- `oe_a7320/src/oe_a7320/network/range_extender_network.dart`: `getExtenderSystemPnOta` @0x22a1a68 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `RangeExtenderChecker.needOta` (`oe_a7320/src/oe_a7320/page/range_extender_system/tools/range_extender_checker.dart @0x229cf74`)
+- `ReSystemBiz._getSupportDeviceModels` (`oe_a7320/src/oe_a7320/biz/re_system_biz.dart @0x286899c`)
+- `oe_a7320/src/oe_a7320/network/range_extender_network.dart`: `getExtenderSystemPnOta` @0x22a1a68 (`AkNetwork.requestHttp`, path C)
 
 ## Since/changed
 
@@ -56,9 +58,6 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- What `AkNetwork::requestHttp` sends in `param` when its `params` argument is null (the command map stores the argument as it is, `base_service/util/ak_util/src/ak_network.dart @0x21c3518`; the SDK handler is outside the asm tree read).
-- No UI caller is recorded for this builder in `data/endpoints.json`.
-- Encryption: path C (`AkNetwork::requestHttp` to the SDK handler), see `api/encryption.md`; the "Encrypted?" line above is the inventory default.
 
 ## Device-tested by
 

@@ -44,7 +44,7 @@ n/a
 
 ## Response model (link)
 
-not parsed as a model in the senders read (asm-traced): the success closures read call `setSoc` (`charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart @0x3d60b24`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart @0x3d95b44`) or fire a `MessageEvent` (`@0x3d94ee0`); no `fromJson` or response key is read in them.
+not parsed as a model in the senders read (asm-traced): the success closure of `A17c0settingLogic.requestToSetSoc` calls `setSoc` with a context variable (`ArrayLoad r0 = r2[0]`, default raw 10 in an unboxed register when null, so 10; `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart @0x3d60b00`..`@0x3d60b24`), i.e. the value the user chose, not a response value, and then fires an event on `EventBusManager` (`@0x3d60b3c`); the success closures read call `setSoc` (`charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart @0x3d60b24`, `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart @0x3d95b44`) or fire a `MessageEvent` (`@0x3d94ee0`); no `fromJson` or response key is read in them.
 
 ## Response
 
@@ -98,10 +98,10 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sn`, `cutoff_data_id` and the four SoC values: fields of settings objects; the literals are `<String, Object?>`/`<String, Object>` and carry no field type.
-- Which sender writes which `cutoff_data_id` value (the id is the `SocModel.id` the user picked, see [get_power_cutoff](get_power_cutoff.md); the mapping was not decoded).
+- Types of `device_sn`, `cutoff_data_id` and the four SoC values: fields of settings objects; the literals are `<String, Object?>`/`<String, Object>` and carry no field type. — attempted 2026-10-20 (two-hop not readable: the values are field reads of settings objects with no declared type in the asm (`charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart @0x3d957c0`, `@0x3d95878`..`@0x3d95938`). Header stays string-only)
+- Which sender writes which `cutoff_data_id` value (the id is the `SocModel.id` the user picked, see [get_power_cutoff](get_power_cutoff.md); the mapping was not decoded). — traced 2026-10-20: the `cutoff_data_id` values are the `SocModel.id` of the entry the user picked (field read of a settings object, no literal except the constant 1 in `_dealWithBleResponse`); the readers of the pick were not followed
 - What `cmd_type` 1 selects on the server and whether the old two-key body is still accepted for A17C1 devices (server behaviour).
-- The success closures call `setSoc`; their effect on the UI state was not decoded.
+- The effect of `setSoc` in `A17C1SettingLogic.requestToSetSoc` and `requestNewSetSoc` on the UI state (`charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart @0x3d95b44`) — traced 2026-10-20: only the A17c0 closure was read (see Response model); the A17C1 closures were not
 
 ## Device-tested by
 

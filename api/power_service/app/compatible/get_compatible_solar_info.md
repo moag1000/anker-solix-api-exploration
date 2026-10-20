@@ -77,7 +77,7 @@ Called from:
 
 ## Known unknowns
 
-- Whether every sender reads the whole `data` object with `SolarInfo.fromJson`: the shared closure `@0x2443b28` is read, the senders' own success handling after it was not decoded.
+- What each of the three senders does with the `SolarInfo` after the shared closure returns it: all three allocate the same closure (`charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart @0x2750abc`, `charging/ui/page/device/a5140/a5140home/a5140home_logic.dart @0x34cf024`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2443780`), so each parses the received object with `SolarInfo.fromJson`; their handling of the result was not read
 - Which device types the three callers query (the `A5140` sender gates on firmware `"1.3.5"` `@0x34cedf8`; the `DeviceMainLogic` sender gates on the `"A17C0"` pn `@0x2443618`).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

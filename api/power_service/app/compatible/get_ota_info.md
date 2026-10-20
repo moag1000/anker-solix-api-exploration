@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Reads the OTA information of a third-party solar device that is attached to a solar bank (builder `getThirdOtaInfo`; no UI caller is recorded in `data/endpoints.json`, so the purpose is inferred from the builder name, string-only).
+Reads the OTA information of a third-party solar device that is attached to a solar bank (builder `getThirdOtaInfo`; the wrapper has no call site in the asm (see Callers in app), so the purpose is inferred from the builder name, string-only).
 
 ## Upstream name
 
@@ -56,7 +56,7 @@ Response: not synthesized; the keys are listed under Response (no capture exists
 
 ## Errors seen
 
-none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
+none traced: no numeric error code is compared in the sender or the closures read for this page. The failure closure (`charging/http/http_request_repository_impl.dart @0x36c7e90`) logs the text "checkSolarForceUpdateState failed", which is a copied string and does not name this call. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -66,14 +66,14 @@ Called from:
 
 - `charging/http/http_request_repository.dart::getThirdOtaInfo`
 
+No direct call site of the wrapper `HttpRequestController::getThirdOtaInfo` (`charging/http/http_request_repository.dart @0x36c7d34`) exists in the asm tree: a search for its call target address and for the function name found nothing outside the two repository files (2026-10-20); the app may reach it through a dispatch-table call, which Blutter does not name.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- No UI caller is recorded for `getThirdOtaInfo` in `data/endpoints.json`.
-- The error text in the failure closure reads "checkSolarForceUpdateState failed" (`@0x36c7e90` closure), a copied string; it does not name this call.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

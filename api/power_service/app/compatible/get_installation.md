@@ -20,12 +20,14 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-(asm-traced) `HttpRequestControllerImpl::getInstallationApi` (`charging/http/http_request_repository_impl.dart @0x23f2d64`) starts with an empty map literal (`THR::empty_array`, `@0x23f2dbc`) and replaces it by one of two one-pair literals: `{solarbank_sn: <parameter>}` when the first parameter is not null (`cmp w0, NULL` `@0x23f2dc8`, key `@0x23f2ddc`), else `{site_id: <parameter>}` when the second parameter is not null and a comparison with the empty string is false (`cmp w1, NULL` `@0x23f2e0c`, `r16 = ""` `@0x23f2e1c`, `tbz w0, #4` `@0x23f2e30` skips the insertion when the comparison is true, key `@0x23f2e44`); else the empty map is sent. The type-argument loads of these literals are not visible in the asm text.
+(asm-traced) `HttpRequestControllerImpl::getInstallationApi` (`charging/http/http_request_repository_impl.dart @0x23f2d64`) starts with an empty map literal (`THR::empty_array`, `@0x23f2dbc`). Two steps run one after the other: first, when the first parameter is not null (`cmp w0, NULL` `@0x23f2dc8`), the map becomes `{solarbank_sn: <parameter>}` (key `@0x23f2ddc`); then, when the second parameter is not null (`cmp w1, NULL` `@0x23f2e0c`) and its comparison with the empty string (`r16 = ""` `@0x23f2e1c`, equality call `@0x23f2e2c`) is false, the map is replaced by a new literal `{site_id: <parameter>}` (key `@0x23f2e44`, `Map._fromLiteral` `@0x23f2e5c`); `tbz w0, #4` `@0x23f2e30` skips this second step when the comparison is true (the second parameter equals the empty string). So the body carries `site_id` alone when the second parameter is non-null and not empty, else `solarbank_sn` alone when the first parameter is non-null, else the empty map. The type-argument loads of these literals are not visible in the asm text.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `solarbank_sn` | ? | optional (first parameter not null, guard `@0x23f2dc8`) | ? | `charging/http/http_request_repository_impl.dart @0x23f2ddc` |
-| `site_id` | ? | optional (second parameter not null, guard `@0x23f2e0c`) | ? | `charging/http/http_request_repository_impl.dart @0x23f2e44` |
+| `solarbank_sn` | ? | optional (first parameter not null, guard `@0x23f2dc8`; dropped when `site_id` is sent) | ? | `charging/http/http_request_repository_impl.dart @0x23f2ddc` |
+| `site_id` | string | optional (second parameter not null and not the empty string, guards `@0x23f2e0c`, `@0x23f2e30`; it replaces `solarbank_sn`) | | `charging/http/http_request_repository_impl.dart @0x23f2e44` |
+
+Callers and typing (asm-traced; the parameters are named `deviceSn` and `siteId` in the callers' call descriptors): `ez1_current_mode_logic.dart @0x40ae0a8` and `a17c0setting_logic.dart @0x344db4c` (both `getInstallationReq`) pass `deviceSn` and `siteId`; `ez1_select_mode_logic.dart @0x344f2f4` passes `deviceSn` only; `station_setting_logic.dart @0x2903a08` passes `siteId` only; `StationMainPageLogic.goSelectMode` (`charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart @0x23f2b9c`) and `StationHomeInfoLogic.goSelectMode` (`charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart @0x2c20cc0`) pass `siteId` only (with `showLoading`). The type of `site_id` is read at the first of these: `field_7` of an Rx `.value`, replaced by the String literal `""` when null (`station_main_page_logic.dart @0x23f2b68`), so it is a string. `solarbank_sn` is passed as `field_6b` of an Rx `.value` in the callers that send `deviceSn` (`ez1_current_mode_logic.dart @0x40ae078`) and has no declared type in the asm.
 
 ## `param_type`/`cmd`
 
@@ -77,8 +79,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `solarbank_sn` and `site_id` (parameters; the literal type arguments are not shown in the asm).
-- Which of the two keys each caller sets. The `site_id` branch also tests the second parameter against the empty string (`r16 = ""` `@0x23f2e1c`, `tbz w0, #4` `@0x23f2e30` skips the insertion when the test is true); the compared operand was not attributed to a parameter name.
+- Type of `solarbank_sn`: `field_6b` of an Rx `.value` in the callers that send it (`charging/ui/page/device/a17c0/ez1_current_mode/ez1_current_mode_logic.dart @0x40ae078`) — attempted 2026-10-20 (two-hop not readable: the field declaration is not shown in the asm. Header stays string-only)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

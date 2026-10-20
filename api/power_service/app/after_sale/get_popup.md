@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_popup
 
@@ -24,7 +24,9 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x23f1b28` |
+| `site_id` | string | yes | | `charging/http/http_request_repository_impl.dart @0x23f1b28` |
+
+Typing (two-hop, asm-traced): the value of `site_id` is an untyped parameter of the builder; its only caller, `StationMainPageLogic.getShow17YOPopup` (`charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart @0x23f1a60`), passes `field_7` of the `.value` of an Rx field (`@0x23f1a08`, `@0x23f1a0c`) and replaces null by the String literal `""` (`@0x23f1a1c`), so the field is a string.
 
 ## `param_type`/`cmd`
 
@@ -32,11 +34,11 @@ n/a
 
 ## Response model (link)
 
-no model class in the builder (asm-traced): the success closure (`charging/http/http_request_repository_impl.dart @0x23f1bc8`) forwards its single argument unchanged to the stored callback (null check `@0x23f1bf4`, `ClosureCall` `@0x23f1c08`); what the caller does with it was not decoded.
+no model class in the builder (asm-traced): the success closure (`charging/http/http_request_repository_impl.dart @0x23f1bc8`) forwards its single argument unchanged to the stored callback (null check `@0x23f1bf4`, `ClosureCall` `@0x23f1c08`); the caller `StationMainPageLogic.getShow17YOPopup` (`charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart`) passes its own success closure (`@0x23f1ca8`), which indexes the received object for two keys without a model class: `is_popup` (key `@0x23f1cd4`, cast to `bool`, default `false` `@0x23f1d00`) and `popup_code` (key `@0x23f1d48`, cast to `int`, default raw -2 in a tagged slot, so -1, `@0x23f1d74`). When `is_popup` is false the closure sets a state flag (`field_e3` of the logic, `value=` `@0x23f1e18`) to false; otherwise it compares `popup_code` with the tagged immediate 0x7d2 (`cmp w0, #0x7d2` `@0x23f1dc8`, so 1001) and sets the flag to true when equal (`@0x23f1dec`) and to false when not (`@0x23f1e18`).
 
 ## Response
 
-Not read: the response is handed to the caller of `queryA17Y0Popup` (`StationMainPageLogic::getShow17YOPopup`) as it is.
+The builder hands the object to the caller; the caller reads two keys (see Response model): `is_popup` (bool) and `popup_code` (int).
 
 ## Example request/response
 
@@ -44,11 +46,20 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
 
 ```json
 {
-  "site_id": "<?>"
+  "site_id": "<site_id>"
 }
 ```
 
-Response: not synthesized; the app passes the received object to the caller.
+Response, synthesized (keys read by the caller's closure; values are placeholders)
+
+```json
+{
+  "is_popup": "<bool>",
+  "popup_code": "<int>"
+}
+```
+
+Whether these keys sit under `data` or at the top of the body is decided by the call layer, not by this closure (it indexes the object it receives).
 
 ## Errors seen
 
@@ -69,8 +80,6 @@ Called from:
 
 ## Known unknowns
 
-- Type of `site_id` (parameter, `<String, dynamic>` literal).
-- The response keys: the closure forwards the object; the parser in `StationMainPageLogic::getShow17YOPopup` was not decoded.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

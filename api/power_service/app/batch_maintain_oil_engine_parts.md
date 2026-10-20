@@ -30,9 +30,11 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 |---|---|---|---|---|
 | `device_sn` | ? | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a021b8` (and `@0x3a06880` in the list variant) |
 | `parts_maintenance_list` | list | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a021cc` (and `@0x3a06894`) |
-| `parts_maintenance_list[].item_id` | ? | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a021e8` |
-| `parts_maintenance_list[].item_name` | ? | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a02210` |
-| `parts_maintenance_list[].maintenance_items` | ? | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a02224` |
+| `parts_maintenance_list[].item_id` | int (unboxed, x) | yes | | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a021e8` |
+| `parts_maintenance_list[].item_name` | string | yes | | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a02210` |
+| `parts_maintenance_list[].maintenance_items` | int (unboxed, x) | yes | | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a02224` |
+
+Typing (asm-traced): the sender `batchMaintainOilEnginePartsRequest` (`oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a02130`) takes five untyped parameters (`SetupParameters(dynamic _ ...)` `@0x3a0213c`). `item_id` and `maintenance_items` are stored through `BoxInt64Instr` (`@0x3a021f8` with store `@0x3a0220c`, and `@0x3a02234` with store `@0x3a02248`), so both are unboxed 64-bit integers; the caller `A7320MaintanceDetailLogic.batchMaintainOilEnginePartsRequest` (`oe_a7320/src/oe_a7320/page/home/setting/maintenance/a7320_maintance_detail_logic.dart @0x3a02108`) passes integers read with `LoadInt32Instr` from an object's Smi fields (`@0x3a02050`, `@0x3a020b8`; defaults 0 `@0x3a02048` and the raw odd immediate 1 `@0x3a020b0`, real 1 in an unboxed register). `item_name` is passed unchanged (`@0x3a0221c`); the caller supplies `field_7` of that object or the String literal `""` (`@0x3a02080`). `device_sn` is `field_6b` of the caller's logic object (`a7320_maintance_detail_logic.dart @0x3a02014`) and keeps `?`. The `...RequestList` sender (`a7320_requet_api.dart @0x3a06800`) builds `parts_maintenance_list` by `map` over a parameter list with the static closure `@0x3a069b4`, which only calls `toJson()` on the element (`@0x3a069cc`); the element class is not named there, so its keys are written by that class's `toJson`.
 
 ## `param_type`/`cmd`
 
@@ -40,11 +42,11 @@ n/a
 
 ## Response model (link)
 
-not parsed by the app in the builders (asm-traced): both pass `fail`, `showLoading` and `success` closures (`r4 = const [0x1, 0x7, 0x7, 0x4, fail, 0x6, showLoading, 0x4, success, 0x5, null]` at `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a02338`); the `success` closure is the shared forwarding closure `charging/http/http_request_repository_impl.dart @0x2268374`, which calls the caller's callback with its argument (`ClosureCall` `charging/http/http_request_repository_impl.dart @0x22683a8`). What the caller parses was not read.
+not parsed by the app in the builders (asm-traced): both pass `fail`, `showLoading` and `success` closures (`r4 = const [0x1, 0x7, 0x7, 0x4, fail, 0x6, showLoading, 0x4, success, 0x5, null]` at `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a02338`); the `success` closure is the shared forwarding closure `charging/http/http_request_repository_impl.dart @0x2268374`, which calls the caller's callback with its argument (`ClosureCall` `charging/http/http_request_repository_impl.dart @0x22683a8`). What the callers do (asm-traced): the success closure of `A7320MaintanceDetailLogic` (`oe_a7320/src/oe_a7320/page/home/setting/maintenance/a7320_maintance_detail_logic.dart @0x3a023fc`..`@0x3a0258c`) never loads its argument; the success closure of `A7320MaintanceLogic.batchMaintainOilEnginePartsRequestList` (`oe_a7320/src/oe_a7320/page/home/setting/maintenance/a7320_maintance_logic.dart @0x3a06bd0`) only interpolates it into a log string (`@0x3a06c34`, `@0x3a06c40`) before it calls `resetAllMaintainPartsValue` (`@0x3a06c74`), `getPartsMaintenancePlanRequest` (`@0x3a06c84`) and fires a `MessageEvent` (`@0x3a06cd4`).
 
 ## Response
 
-Not read: the response object is handed to the caller of the two builders.
+The app does not read the response body in either caller (see Response model).
 
 ## Example request/response
 
@@ -55,9 +57,9 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
   "device_sn": "<?>",
   "parts_maintenance_list": [
     {
-      "item_id": "<?>",
-      "item_name": "<?>",
-      "maintenance_items": "<?>"
+      "item_id": "<int>",
+      "item_name": "<string>",
+      "maintenance_items": "<int>"
     }
   ]
 }
@@ -71,6 +73,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
+- `A7320MaintanceLogic.batchMaintainOilEnginePartsRequestList` (`oe_a7320/src/oe_a7320/page/home/setting/maintenance/a7320_maintance_logic.dart @0x3a067b0`)
+- `A7320MaintanceDetailLogic.batchMaintainOilEnginePartsRequest` (`oe_a7320/src/oe_a7320/page/home/setting/maintenance/a7320_maintance_detail_logic.dart @0x3a02108`)
 - `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart`: `batchMaintainOilEnginePartsRequest` @0x3a02130 (encryptionRequestHttp; encrypted: true); `batchMaintainOilEnginePartsRequestList` @0x3a06800 (encryptionRequestHttp; encrypted: true)
 
 ## Since/changed
@@ -79,10 +83,9 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Types of `device_sn`, `item_id`, `item_name` and `maintenance_items` (parameters/fields; `<String, Object>` only says non-null).
-- Element shape of the list in the `...RequestList` variant (decided by the caller of `map`).
-- The response: the success closure forwards it; the caller was not decoded. No UI caller is recorded in `data/endpoints.json`.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
+- Element keys of the list in the `...RequestList` variant: the element is `toJson()` of an object of a class that the asm does not name at the call (`oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a069cc`) — traced 2026-10-20: the caller `A7320MaintanceLogic.batchMaintainOilEnginePartsRequestList` passes `field_6b` of a logic object (`oe_a7320/src/oe_a7320/page/home/setting/maintenance/a7320_maintance_logic.dart @0x3a06774`), no element class is named
+- Type of `device_sn`: `field_6b` of the caller's logic object (`oe_a7320/src/oe_a7320/page/home/setting/maintenance/a7320_maintance_detail_logic.dart @0x3a02014`) — attempted 2026-10-20 (two-hop not readable: the field declaration is not shown in the asm. Header stays string-only)
 
 ## Device-tested by
 

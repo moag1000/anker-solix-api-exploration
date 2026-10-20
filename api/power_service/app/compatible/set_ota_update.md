@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Starts the OTA of a third-party solar device that is attached to a solar bank (builder `setThirdOta`); no UI caller is recorded in `data/endpoints.json`, so the purpose is inferred from the builder name (string-only).
+Starts the OTA of a third-party solar device that is attached to a solar bank (builder `setThirdOta`); the wrapper has no call site in the asm (see Callers in app), so the purpose is inferred from the builder name (string-only).
 
 ## Upstream name
 
@@ -68,14 +68,15 @@ Called from:
 
 - `charging/http/http_request_repository.dart::setThirdOta`
 
+No direct call site of the wrapper `HttpRequestController::setThirdOta` (`charging/http/http_request_repository.dart @0x406b9b0`) exists in the asm tree: a search for its call target address and for the function name found nothing outside the two repository files (2026-10-20); the app may reach it through a dispatch-table call, which Blutter does not name.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- Types of the four values (parameters; `<String, Object>` only says non-null) and what `rollback_install_mode` selects.
-- No UI caller is recorded for this builder in `data/endpoints.json`.
+- Types of the four values (parameters; `<String, Object>` only says non-null) and what `rollback_install_mode` selects. — attempted 2026-10-20 (two-hop not readable: the wrapper `HttpRequestController::setThirdOta` has no call site, so there is no caller to read values from (`charging/http/http_request_repository.dart @0x406b9b0`); what `rollback_install_mode` selects is not recorded in the app) — reclassified: server
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

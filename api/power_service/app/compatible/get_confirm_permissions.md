@@ -71,7 +71,7 @@ Called from:
 
 ## Known unknowns
 
-- Which `device_model` values the caller passes (parameter `@0x26f8c3c`).
+- Which `device_model` values the caller passes (parameter `charging/http/http_request_repository_impl.dart @0x26f8c3c`). — traced 2026-10-20: the only caller, a closure of `ZxConfigWifiSucceesLogic.done` (`charging/ui/page/device/connect/zx_config_wifi_success/zx_config_wifi_succees_logic.dart @0x26f8950`), runs only when a firmware version number of the device is not below `"1.3.5"` (`@0x26f88c8`, compare `@0x26f88e0`) and passes a value read through a dispatch-table call on `field_53` of its logic object (`@0x26f8910`), so the device-model string itself is set elsewhere
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

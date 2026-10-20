@@ -38,7 +38,9 @@ no model class (asm-traced): the success closure (`charging/http/http_request_re
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `is_popup` | not cast (forwarded to the callback as read) | optional | `?` | `charging/http/http_request_repository_impl.dart @0x23f2810` |
+| `is_popup` | bool (cast by both callers) | optional | | `charging/http/http_request_repository_impl.dart @0x23f2810` |
+
+The callers cast the forwarded value to `bool` (asm-traced): `StationMainPageLogic.getSiteInstallationPopup` (`charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart @0x23f28dc`, type test `r8 = bool` `@0x23f298c`) and `StationHomeInfoLogic.getSiteInstallationPopup` (`charging/ui/page/device/main/station_device_home/station_home_info/controller/station_home_info_logic.dart @0x2c209e8`, `@0x2c20a40`); the latter skips its action when the value is false (`tbnz w0, #4` `@0x2c20a54`). On the SDK path the decorator hands the success callback the JSON-decoded `data` member of the result (or an empty map when it is missing or empty): `charging/http/HttpEncryptionDecorator.dart @0x486ab9c` (key `"data"`), `@0x486ac18` (`JsonCodec.decode`), `@0x486ac28` and `@0x486ac64` (the two `ClosureCall`s); so the object this closure indexes is the content of `data` (background: [encryption.md](../../../encryption.md#response-handling-and-error-codes)).
 
 ## Example request/response
 
@@ -80,8 +82,6 @@ Called from:
 
 ## Known unknowns
 
-- Type of the `is_popup` value (the closure forwards it without a cast; the callers' use was not decoded).
-- Whether `is_popup` sits under `data`: the closure casts the object it receives to a map and indexes it.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

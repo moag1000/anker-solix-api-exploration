@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Renames a range-extender system (`RangeExtenderNetwork::setExtenderSystemName`, `oe_a7320`); purpose inferred from the function name (string-only).
+Renames a range-extender system (`RangeExtenderNetwork::setExtenderSystemName`, `oe_a7320`); the description comes from the function name (string-only); the callers are listed under "Callers in app".
 
 ## Upstream name
 
@@ -16,7 +16,7 @@ Renames a range-extender system (`RangeExtenderNetwork::setExtenderSystemName`, 
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Direct SDK call, path C (asm-traced), through the shared helper `AkNetwork::requestHttp`: the helper always sends `POST` and calls `handle` with `akiot.cloud_api` (`base_service/util/ak_util/src/ak_network.dart @0x21c3544`). The inventory flag `default-true (requestHttp)` does not apply: `AkNetwork::requestHttp` has no `needEncryption` switch and goes straight to the SDK; what the SDK encrypts is not visible in Dart (mechanics: [../../sdk_senders.md](../../sdk_senders.md#aknetworkrequesthttp), background: [../../encryption.md](../../encryption.md#rule-and-resulting-counts)). The builder calls the helper at `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x2d17980`.
 
 ## Request
 
@@ -58,7 +58,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
-- `oe_a7320/src/oe_a7320/network/range_extender_network.dart`: `setExtenderSystemName` @0x2d178f4 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `SystemNameController.Future<Null> <anonymous closure>` (`oe_a7320/src/oe_a7320/page/range_extender_settings/menu_controller/system_name_controller.dart @0x2d178b0`)
+- `oe_a7320/src/oe_a7320/network/range_extender_network.dart`: `setExtenderSystemName` @0x2d178f4 (`AkNetwork.requestHttp`, path C)
 
 ## Since/changed
 
@@ -66,9 +67,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Type of `extender_system_id`, `extender_system_name`: parameter or object field read by the builder; the map literal is `<String, dynamic>` and the asm carries no static type.
-- Encryption: the call goes through `AkNetwork::requestHttp` and the SDK handler directly (path C in `api/encryption.md`); the "Encrypted?" line above is the inventory default.
-- No UI caller is recorded for this builder in `data/endpoints.json`, so the purpose is inferred from the function name.
+- Type of `extender_system_id`, `extender_system_name`: the only caller (a closure of `SystemNameController`, `system_name_controller.dart @0x2d178b0`) passes a null-checked field read (`@0x2d1789c`) and `field_f` of its context (`@0x2d178a8`) — attempted 2026-10-20 (two-hop not readable: the field types are not shown in the asm (`system_name_controller.dart @0x2d17894`, `@0x2d178a8`)). Header stays string-only.
 
 ## Device-tested by
 

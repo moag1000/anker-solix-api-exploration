@@ -76,7 +76,7 @@ Called from:
 
 ## Known unknowns
 
-- What the numeric `status` values and the `result` strings mean: the model stores them as `int?` and `String?` and this page does not trace their readers.
+- What the numeric `status` values and the `result` strings mean: the model stores them as `int?` and `String?` and this page does not trace their readers. — traced 2026-10-20: one of the seven callers was read: the success closure of `AiModeSuccessLogic.getAiModeStatus` (`charging/ui/page/device/a17c5/ai_mode_success/ai_mode_success_logic.dart @0x28d5d98`) reads `status` (`field_7`) and branches on zero (`cbnz` `@0x28d5e40`); with status 0 and `left_time` above 0 (`cmp x0, #0` `@0x28d5e7c`) it logs the string "倒计时中 finishTime:" (`@0x28d5e98`, the app's own log text, Chinese for "counting down") and divides `left_time` by 86400 (`@0x28d5f50`..`@0x28d5f58`); the meanings of the other values and of the `result` strings, and the other six callers, are not read
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

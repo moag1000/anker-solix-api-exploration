@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Uploads the accumulated energy data of a range-extender system (`RangeExtenderNetwork::setExtenderSystemCumulativeData`, `oe_a7320`); no UI caller is recorded in `data/endpoints.json`, so the purpose is inferred from the function name (string-only).
+Uploads the accumulated energy data of a range-extender system (`RangeExtenderNetwork::setExtenderSystemCumulativeData`, `oe_a7320`); the callers are listed under "Callers in app"; the description itself comes from the function name (string-only).
 
 ## Upstream name
 
@@ -16,7 +16,7 @@ Uploads the accumulated energy data of a range-extender system (`RangeExtenderNe
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Direct SDK call, path C (asm-traced), through the shared helper `AkNetwork::requestHttp`: the helper always sends `POST` and calls `handle` with `akiot.cloud_api` (`base_service/util/ak_util/src/ak_network.dart @0x21c3544`). The inventory flag `default-true (requestHttp)` does not apply: `AkNetwork::requestHttp` has no `needEncryption` switch and goes straight to the SDK; what the SDK encrypts is not visible in Dart (mechanics: [../../sdk_senders.md](../../sdk_senders.md#aknetworkrequesthttp), background: [../../encryption.md](../../encryption.md#rule-and-resulting-counts)). The builder calls the helper at `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x33b8dac`.
 
 ## Request
 
@@ -25,6 +25,12 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `extender_system_id` | ? | yes | ? | `oe_a7320/src/oe_a7320/network/range_extender_network.dart @0x33b8d5c` |
+| `total_power_generation` | int (declared `int?`) | optional (null-guarded, `@0x33b8e7c`) | | `oe_a7320/src/oe_a7320/network/models/src/extender_system_cumulative_data.dart @0x33b8e90` |
+| `consumption_gas` | int (declared `int?`) | optional (null-guarded, `@0x33b8eb4`) | | `extender_system_cumulative_data.dart @0x33b8ec8` |
+| `consumption_lpg` | int (declared `int?`) | optional (null-guarded, `@0x33b8eec`) | | `extender_system_cumulative_data.dart @0x33b8f00` |
+| `consumption_ng` | int (declared `int?`) | optional (null-guarded, `@0x33b8f24`) | | `extender_system_cumulative_data.dart @0x33b8f38` |
+
+The four lower rows are the keys of `ExtenderSystemCumulativeDataModel::toJson` (`oe_a7320/src/oe_a7320/network/models/src/extender_system_cumulative_data.dart @0x33b8e3c`); each is written only when the model field is not null. Their types are the declared `int?` of the model fields (`data/models.json`, `oe_a7320::ExtenderSystemCumulativeDataModel`); the width of the stored number is not shown by `toJson`. The builder merges the map into the body with `addAll` (`range_extender_network.dart @0x33b8d84`, `@0x33b8d90`).
 
 ## `param_type`/`cmd`
 
@@ -56,7 +62,9 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
-- `oe_a7320/src/oe_a7320/network/range_extender_network.dart`: `setExtenderSystemCumulativeData` @0x33b8ce8 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `RangeExtenderSystemLogic.onClose` (`oe_a7320/src/oe_a7320/page/range_extender_system/range_extender_system_logic.dart @0x33b8cbc`)
+- `RangeExtenderSystemLogic.onPaused` (`oe_a7320/src/oe_a7320/page/range_extender_system/range_extender_system_logic.dart @0x3afc048`)
+- `oe_a7320/src/oe_a7320/network/range_extender_network.dart`: `setExtenderSystemCumulativeData` @0x33b8ce8 (`AkNetwork.requestHttp`, path C)
 
 ## Since/changed
 
@@ -64,10 +72,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Type of `extender_system_id`: parameter or object field read by the builder; the map literal is `<String, dynamic>` and the asm carries no static type.
-- The remaining body keys come from `cumulativeData.toJson()` merged with `addAll` (`@0x33b8d84`, `@0x33b8d90`); the keys of that model were not decoded. The builder skips the request when the data is empty (log string "[Skip] Empty cumulativeData, no sync." `@0x33b8d38`).
-- Encryption: the call goes through `AkNetwork::requestHttp` and the SDK handler directly (path C in `api/encryption.md`); the "Encrypted?" line above is the inventory default.
-- No UI caller is recorded for this builder in `data/endpoints.json`, so the purpose is inferred from the function name.
+- Type of `extender_system_id`: `RangeExtenderSystemLogic.onClose` and `onPaused` pass `field_43?.field_2f ?? field_57` of the logic object (`range_extender_system_logic.dart @0x33b8c74..@0x33b8c90`) — attempted 2026-10-20 (two-hop not readable: the field types are not shown in the asm (`range_extender_system_logic.dart @0x33b8c90`)). Header stays string-only.
 
 ## Device-tested by
 

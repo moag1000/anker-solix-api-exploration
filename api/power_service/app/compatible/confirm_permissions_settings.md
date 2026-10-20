@@ -27,6 +27,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | `device_model` | string | yes | `"A17C0"` | `charging/http/http_request_repository_impl.dart @0x2444f14` |
 | `confirm_type` | string | yes | `"<confirm_type>"` | `charging/http/http_request_repository_impl.dart @0x2444f2c` |
 
+`confirm_type` comes from the callers (asm-traced): `DeviceMainLogic.getSolarBankParticleData` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2444da4`) passes the String literal `"APs"` (`@0x2444d98`); `SelectBrandLogic.getConfirmPermissionsSettings` (`charging/ui/page/device/a17c0/select_brand/select_brand_logic.dart @0x28c1ba4`) passes a field of the selected object (`field_b` of a `.value`, `@0x28c1b40`) and falls back to the same literal `"APs"` when it is null (`@0x28c1b50`). Which other values the field can hold is set elsewhere.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -37,7 +39,7 @@ n/a
 
 ## Response
 
-(asm-traced) The success closure (`charging/http/http_request_repository_impl.dart @0x2444fd0`) reads the key `brand_list` (string literal `@0x244501c`) and builds `BrandModel` objects with `BrandModel.fromJson` (`@0x2445120`).
+(asm-traced) The success closure (`charging/http/http_request_repository_impl.dart @0x2444fd0`) reads the key `brand_list` (string literal `@0x244501c`) and builds `BrandModel` objects with `BrandModel.fromJson` (`@0x2445120`), one per list entry: it iterates the list (iterator calls `@0x2445094`, `@0x24450cc`, `@0x24450f8`), appends each result to a growable list (`_growToNextCapacity` `@0x2445150`, store `@0x2445174`) and passes that list to the stored callback (`ClosureCall` `@0x24451c0`); when `brand_list` is null the closure returns without calling the callback (`@0x2445078`..`@0x2445088`).
 
 | field | type | required | example | source |
 |---|---|---|---|---|
@@ -80,8 +82,6 @@ Called from:
 
 ## Known unknowns
 
-- What `confirm_type` selects: it is a parameter (`@0x2444f2c`); the two callers were not decoded for its value.
-- Whether the `brand_list` entries are mapped one by one (the loop body was not decoded; only the `BrandModel.fromJson` call is read).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

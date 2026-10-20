@@ -22,6 +22,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 (asm-traced) No request fields: the body argument is the empty map literal (`THR::empty_array`, `Map._fromLiteral` at `charging/http/http_business_impl.dart @0x2618604`). The request is sent only when `isChinaRegion()` is false: `tbnz w0, #4` at `@0x26185b4` branches on false to the request code at `@0x26185fc`; when it is true the builder calls `setAfterSalesDeviceSns` with an empty list (`@0x26185e8`) and returns without a request (`ret` `@0x26185f8`).
 
+`DeviceUtil::isChinaRegion` (`charging/util/device_util.dart @0x224edac`) takes the region code from `getCurrentRegion` (`@0x224edcc`), uses the String literal `"US"` when it is null (`@0x224ede0`) and compares it with the String literal `"CN"` (`@0x224edf8`, equality dispatch call `@0x224ee10`): the request is skipped exactly when the current region code equals `"CN"` (app side).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -70,7 +72,7 @@ Called from:
 
 ## Known unknowns
 
-- Which regions `isChinaRegion()` covers (the function body was not decoded) and why the app skips the request there.
+- Why the app skips the request for the region code `"CN"` (see Request) is not stated in the app — reclassified: server
 - What the response keys mean beyond the model field names, and what the server returns for an account without recall devices.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

@@ -34,7 +34,7 @@ n/a
 
 ## Response model (link)
 
-not parsed by the app (asm-traced): the success closure (`charging/http/http_business_impl.dart @0x2860874`) logs a success string (`exeInfo`), takes `first` of a list and calls `removeAfterSalesDeviceSns` (`@0x2860928`); it reads no response key.
+not parsed by the app (asm-traced): the success closure (`charging/http/http_business_impl.dart @0x2860874`) logs a success string (`exeInfo`), takes `first` of a list and calls `removeAfterSalesDeviceSns` (`@0x2860928`); it reads no response key: the closure's own argument (the response, `ldr x1, [fp, #0x10]` `@0x28608d8`) is only interpolated into the log text (`_interpolate` `@0x28608e4`, `exeInfo` `@0x28608f0`), and `first` (`@0x286091c`) is applied to `field_f` of a static object (`LoadStaticField(0xc18)` `@0x28608f4`, `LoadField` `@0x2860914`), i.e. a locally held list, not to the response; the result goes to `removeAfterSalesDeviceSns` (`@0x2860928`).
 
 ## Response
 
@@ -76,9 +76,8 @@ Called from:
 
 ## Known unknowns
 
-- Type of `device_sns` (a field value; `<String, Object>` only says non-null) and its element format.
-- What `after_sale_type` and `mark_type` values other than 1 would do (the sender sends constants).
-- Whether the closure at `@0x286091c` (`first`) reads the response or a local list was not decoded.
+- Type of `device_sns` (a field value; `<String, Object>` only says non-null) and its element format. — attempted 2026-10-20 (two-hop not readable: the value is `field_f` of an object held by the builder (`charging/http/http_business_impl.dart @0x28606f8`); the five callers (`showNoIceBoxReplaceDialog`, `battery_replace_contact_sales_logic.dart::done`, `battery_replace_web_view.dart::build`, `battery_replace_ment_logic.dart::applicationSubmitted`, `feedback_logic.dart::showSuccessDialog`) reach it through that object and no declared type is shown. Header stays string-only)
+- What `after_sale_type` and `mark_type` values other than 1 would do (the sender sends constants). — reclassified: server
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
