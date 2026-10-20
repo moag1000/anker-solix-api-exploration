@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_compatible_solar_info
 
 ## Purpose
 
-<!-- TODO -->
+Reads the third-party solar device (brand, model, version, OTA state) attached to an A17C0 solar bank for its settings page, the A5140 home and the device list (callers `A17c0settingLogic::requestInfo`, `A5140homeController::onInit`, `DeviceMainLogic::getDeviceList`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,8 +12,12 @@
 
 ## Method+URL
 
-`/power_service/v1/app/compatible/get_compatible_solar_info`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart @0x2750af4`
-(literal also at 2 more site(s) in `data/endpoints.json`)
+`POST /power_service/v1/app/compatible/get_compatible_solar_info` (asm-traced): URL string at `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart @0x2750af4`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x2750aec`, in `A17c0settingLogic::requestSolarBankInfo` (`charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart @0x2750a4c`), sent through `encryptionRequestHttp` (`@0x2750b18`).
+
+Same URL and method object in the other sender(s) read:
+
+- `POST /power_service/v1/app/compatible/get_compatible_solar_info` (asm-traced): URL string at `charging/ui/page/device/a5140/a5140home/a5140home_logic.dart @0x34cf05c`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x34cf054`, in `A5140homeController::getA17C0Info` (`charging/ui/page/device/a5140/a5140home/a5140home_logic.dart @0x34ced84`), sent through `encryptionRequestHttp` (`@0x34cf080`).
+- `POST /power_service/v1/app/compatible/get_compatible_solar_info` (asm-traced): URL string at `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x24437b8`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x24437b0`, in `DeviceMainLogic::getSolarBankParticleData` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x244350c`), sent through `encryptionRequestHttp` (`@0x24437dc`).
 
 ## Encrypted?
 
@@ -21,11 +25,11 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+(asm-traced) Three senders, each with one `<String, String>` literal and one key: `A17c0settingLogic::requestSolarBankInfo` (`a17c0setting_logic.dart @0x2750a4c`, type arguments `@0x2750aa8`), `A5140homeController::getA17C0Info` (`a5140home_logic.dart @0x34ced84`, `@0x34cf010`) and `DeviceMainLogic::getSolarBankParticleData` (`device_main_logic.dart @0x244350c`, `@0x244376c`). The value is a field of the solar-bank device object in the two latter senders and a parameter in the first.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `solarbank_sn` | ? | ? | ? | `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart @0x2750a4c` |
-
-Rows are the union over 3 senders; `source` is the first sender that sets the key.
+| `solarbank_sn` | string | yes | `"<solarbank_sn>"` | `charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart @0x2750a94` (`A17c0settingLogic`), `charging/ui/page/device/a5140/a5140home/a5140home_logic.dart @0x34ceffc`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2443758` |
 
 ## `param_type`/`cmd`
 
@@ -33,19 +37,27 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+`charging/model/check_solar_force_update_model::SolarInfo` (`data/models.json` key; no models page): all three senders pass the closure `@0x2443b28` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`), which builds it with `SolarInfo.fromJson` (`@0x2443b60`, target `check_solar_force_update_model.dart @0x2443ba0`).
 
 ## Response
 
-<!-- TODO -->
+(asm-traced) `SolarInfo` top-level keys (`data/models.json`): `solar_sn` (String?), `solar_brand` (String?), `solar_model` (String?), `model_img` (String?), `version` (String?), `brand_id` (String?), `ota_status` (int?), `solar_model_name` (String?).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "solarbank_sn": "<solarbank_sn>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -61,11 +73,13 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Whether every sender reads the whole `data` object with `SolarInfo.fromJson`: the shared closure `@0x2443b28` is read, the senders' own success handling after it was not decoded.
+- Which device types the three callers query (the `A5140` sender gates on firmware `"1.3.5"` `@0x34cedf8`; the `DeviceMainLogic` sender gates on the `"A17C0"` pn `@0x2443618`).
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

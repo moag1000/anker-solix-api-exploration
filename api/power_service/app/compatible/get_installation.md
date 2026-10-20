@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # get_installation
 
 ## Purpose
 
-<!-- TODO -->
+Reads the installation (solar integration) mode that is saved for a solar bank or a site, for the A17C0 settings, the EZ1 mode pages and the station main page (callers `A17c0settingLogic::getInstallationReq`, `Ez1CurrentModeLogic::getInstallationReq`, `Ez1SelectModeLogic::getInstallationReq`, `StationMainPageLogic::goSelectMode`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/power_service/v1/app/compatible/get_installation`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x23f2ea4`
+`POST /power_service/v1/app/compatible/get_installation` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x23f2ea4`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x23f2e9c`, in `HttpRequestControllerImpl::getInstallationApi` (`charging/http/http_request_repository_impl.dart @0x23f2d64`), sent through `encryptionRequestHttp` (`@0x23f2ecc`).
 
 ## Encrypted?
 
@@ -20,10 +20,12 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+(asm-traced) `HttpRequestControllerImpl::getInstallationApi` (`charging/http/http_request_repository_impl.dart @0x23f2d64`) starts with an empty map literal (`THR::empty_array`, `@0x23f2dbc`) and replaces it by one of two one-pair literals: `{solarbank_sn: <parameter>}` when the first parameter is not null (`cmp w0, NULL` `@0x23f2dc8`, key `@0x23f2ddc`), else `{site_id: <parameter>}` when the second parameter is not null and a `tbz w0, #4` test passes (`cmp w1, NULL` `@0x23f2e0c`, key `@0x23f2e44`, test `@0x23f2e30`); else the empty map is sent. The type-argument loads of these literals are not visible in the asm text.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `solarbank_sn` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x23f2d64` |
-| `site_id` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x23f2d64` |
+| `solarbank_sn` | ? | optional (first parameter not null, guard `@0x23f2dc8`) | ? | `charging/http/http_request_repository_impl.dart @0x23f2ddc` |
+| `site_id` | ? | optional (second parameter not null, guard `@0x23f2e0c`) | ? | `charging/http/http_request_repository_impl.dart @0x23f2e44` |
 
 ## `param_type`/`cmd`
 
@@ -31,19 +33,29 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+- [`SaveCompatibleSolarModel`](../../../../models/firmware.md#savecompatiblesolarmodel), parsed by `SaveCompatibleSolarModel.fromJson` at `charging/http/http_request_repository_impl.dart @0x23f2f20`
 
 ## Response
 
-<!-- TODO -->
+(asm-traced) All keys belong to the model page; this endpoint adds no wrapper fields of its own in the code read.
+
+- `SaveCompatibleSolarModel` top-level keys (`data/models.json`, `charging::SaveCompatibleSolarModel`): `display_installation` (bool?), `install_mode` (int?), `solar_sn` (String?).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "solarbank_sn": "<?>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint). Alternative request bodies: `{"site_id": "<?>"}` or `{}`.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -61,11 +73,13 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Types of `solarbank_sn` and `site_id` (parameters; the literal type arguments are not shown in the asm).
+- Which of the two keys each caller sets. The `site_id` branch also tests the second parameter against the empty string (`r16 = ""` `@0x23f2e1c`, `tbz w0, #4` `@0x23f2e30` skips the insertion when the test is true); the compared operand was not attributed to a parameter name.
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 
