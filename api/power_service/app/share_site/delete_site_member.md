@@ -12,7 +12,7 @@ Removes a member from a shared site: `HomeCenterLogic::deleteInviteMemberAlready
 
 ## Method+URL
 
-`POST /power_service/v1/app/share_site/delete_site_member` (asm-traced) in every sender listed here; each sender loads the URL string and the method object (pool entry `pp+0xa7e0`, `Method.post`) in one call setup:
+`POST /power_service/v1/app/share_site/delete_site_member` (asm-traced) at the senders that load a `Method` object next to the URL string (pool entry `pp+0xa7e0`, `Method.post`):
 
 - `HttpRequestControllerImpl::deleteSiteMember` (`http_request_repository_impl.dart @0x405cac0`): URL string `@0x405cb40`, method object `Method.post` (`pp+0xa7e0`) `@0x405cb38`.
 - `DemoSiteUtilImpl::anonymousQuitSite` (`demosite_util_impl.dart @0x23f0cf4`): URL string `@0x23f0e2c`, method object `Method.post` (`pp+0xa7e0`) `@0x23f0e24`.

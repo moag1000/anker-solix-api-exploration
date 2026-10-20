@@ -12,7 +12,7 @@ Writes the do-not-disturb and push-scene settings of the message centre: `setEvC
 
 ## Method+URL
 
-`POST /power_service/v1/message_not_disturb` (asm-traced) in every sender listed here; each sender loads the URL string and the method object (pool entry `pp+0xa7e0`, `Method.post`) in one call setup:
+`POST /power_service/v1/message_not_disturb` (asm-traced) at the senders that load a `Method` object next to the URL string (pool entry `pp+0xa7e0`, `Method.post`):
 
 - `HttpRequestControllerImpl::setEvChargerPushMessage` (`http_request_repository_impl.dart @0x402b348`): URL string `@0x402b4d4`, method object `Method.post` (`pp+0xa7e0`) `@0x402b4cc`.
 - `HttpRequestControllerImpl::setMessageDisturb` (`http_request_repository_impl.dart @0x402c798`): URL string `@0x402c95c`, method object `Method.post` (`pp+0xa7e0`) `@0x402c954`.

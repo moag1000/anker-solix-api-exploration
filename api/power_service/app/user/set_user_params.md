@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # set_user_params
 
 ## Purpose
 
-<!-- TODO -->
+Writes user-level parameters: the personalization options page (`PersonalizationOptionsLogic::setPersonalizationOptionsStatus`) calls `setPersonalizationOptionsApi`; the EV charger code writes the driving plan through `ScheduleNetwork::_setUserParams` (`setDrivingPlan`) and `AKIotEVChargeCommand::setUserParams` (`EvChargerUserParams::setUserParam`).
 
 ## Upstream name
 
@@ -12,8 +12,7 @@
 
 ## Method+URL
 
-`/power_service/v1/app/user/set_user_params`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/user/about/about_http_request_repository_impl.dart @0x4036440`
-(literal also at 2 more site(s) in `data/endpoints.json`)
+`POST /power_service/v1/app/user/set_user_params` for the first sender (asm-traced): URL string `about_http_request_repository_impl.dart @0x4036440`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x4036438`, in `AboutHttpRequestControllerImpl::setPersonalizationOptionsApi` (`@0x4036308`). `AKIotEVChargeCommand::setUserParams` (`ev_charge_command.dart @0x405be14`) puts the path `"power_service/v1/app/user/set_user_params"` (`@0x405be6c`) and the string literal `"POST"` (`@0x405be84`) into a command map for `akIoTKitManager.handle` (`@0x405bf1c`). `ScheduleNetwork::_setUserParams` (`%20schedule_network.dart @0x39682d4`) calls its own `_requestHttp` helper with the path (`@0x3968388`); its method was not read.
 
 ## Encrypted?
 
@@ -21,15 +20,14 @@ encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header r
 
 ## Request
 
+Three senders, each with a `params` object.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `params` | ? | ? | ? | `charging/http/user/about/about_http_request_repository_impl.dart @0x4036308` |
-| `params.driving_plan` | ? | ? | ? | `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart @0x39682d4` |
-| `path` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x405be14` |
-| `method` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x405be14` |
-| `param.params` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x405be14` |
-
-Rows are the union over 3 senders; `source` is the first sender that sets the key.
+| `params` | object | yes | | `setPersonalizationOptionsApi`: outer map typed `<String, Map<String, bool>>` (`@0x40363f0`, pool `pp+0x36f90`), key `@0x403637c`, value store `@0x40363cc` |
+| `params.<code>` | bool | yes | `true` | inner map typed `<String, bool>` (`@0x40363b8`, pool `pp+0x9f90`): the key is `60002.toString()` (`r16 = 60002` `@0x4036388`, tagged Smi, so `"30001"`) and the value is a bool parameter (store `@0x40363b4`) |
+| `params.driving_plan` | ? | yes | | `ScheduleNetwork::_setUserParams`: inner map typed `<String, Map<String, dynamic>>` (`@0x396833c`), key `@0x3968328`, value store `@0x3968338` (parameter at `fp-0x10`) |
+| `params` | object | yes | | `AKIotEVChargeCommand::setUserParams`: key `@0x405bea8` inside the `param` map typed `<String, Map<String, dynamic>>` (`@0x405bebc`) |
 
 ## `param_type`/`cmd`
 
@@ -37,19 +35,25 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+None for the first sender: the response body is not parsed there. Its success callback is the forwarding template `http_request_repository_impl.dart @0x261b9a0` (a constant `true`) and its failure callback the template `@0x226824c`. Not read for the other two senders.
 
 ## Response
 
-<!-- TODO -->
+No response key is read by the first sender.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (first sender)
+
+```json
+{"params": {"30001": true}}
+```
+
+Response: none parsed by the first sender.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+None traced for the first sender (no compare in its callbacks). The other senders' callbacks were not read. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -65,11 +69,13 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. The endpoint is in none of the added, removed or changed-params lists of `tools/out/diff_3.18.0_3.24.3.md`, so there is no string-level parameter delta.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- The `driving_plan` value and the IoT-kit `params` content (parameters). Header stays string-only.
+- What option code 30001 means (see [get_user_params](get_user_params.md)).
+- The method of `ScheduleNetwork::_requestHttp` (not read) and the callers' handling of the answer.
 
 ## Device-tested by
 

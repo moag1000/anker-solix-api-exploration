@@ -12,7 +12,7 @@ Toggles a Shelly plug: `StationEnergySystemLogic::changeShellyPlugSwitch` and th
 
 ## Method+URL
 
-`POST /power_service/v1/app/shelly_ctrl_device` (asm-traced) in every sender listed here; each sender loads the URL string and the method object (pool entry `pp+0xa7e0`, `Method.post`) in one call setup:
+`POST /power_service/v1/app/shelly_ctrl_device` (asm-traced) at the senders that load a `Method` object next to the URL string (pool entry `pp+0xa7e0`, `Method.post`):
 
 - `HttpRequestControllerImpl::changeShellyDeviceStatus` (`http_request_repository_impl.dart @0x3073d34`): URL string `@0x3073dec`, method object `Method.post` (`pp+0xa7e0`) `@0x3073de4`.
 - `SystemA17E2FlowChartLogic::changeShellyDeviceStatus` (`system_a17e2_flow_chart_logic.dart @0x3291774`): URL string `@0x3291884`, method object `Method.post` (`pp+0xa7e0`) `@0x329187c`.

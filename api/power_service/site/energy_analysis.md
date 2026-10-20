@@ -12,7 +12,7 @@ Reads the energy statistics chart of a site or device: the A1782 station chart (
 
 ## Method+URL
 
-`POST /power_service/v1/site/energy_analysis` (asm-traced) in every sender listed here; each sender loads the URL string and the method object (pool entry `pp+0xa7e0`, `Method.post`) in one call setup:
+`POST /power_service/v1/site/energy_analysis` (asm-traced) at the senders that load a `Method` object next to the URL string (pool entry `pp+0xa7e0`, `Method.post`):
 
 - `A1782ChartHttpReposity::getChartStatistics` (`chart_http_repository.dart @0x2370b5c`): URL string `@0x2370ff8`, method object `Method.post` (`pp+0xa7e0`) `@0x2370ff0`.
 - `ChartHttpReposity::getGreenPPsStatistics` (`chart_http_repository.dart @0x23ff9fc`): URL string `@0x23ffc68`, method object `Method.post` (`pp+0xa7e0`) `@0x23ffc60`.

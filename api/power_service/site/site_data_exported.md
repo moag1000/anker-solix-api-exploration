@@ -54,6 +54,7 @@ None traced: no 3.24.3 sender. Error codes are catalogued in `api/errors.md`.
 
 ## Known unknowns
 
+- Header stays string-only: no 3.24.3 sender exists to read (only the pool string).
 - Whether the server still serves this URL: the 3.24.3 app no longer calls it; the diff file lists it as removed.
 - What replaced the export download in 3.24.3: `SiteEnergyExportLogic` still exists (it calls [site_data_check](site_data_check.md)); the file request was not located.
 - The 3.18.0 request keys (`toMap()` of the export parameters) and the response were not read for this page.

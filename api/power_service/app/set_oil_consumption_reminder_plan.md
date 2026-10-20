@@ -12,7 +12,7 @@ Sets the oil-consumption reminder interval of an A7320 device: the run-out-of-ga
 
 ## Method+URL
 
-`POST /power_service/v1/app/set_oil_consumption_reminder_plan` (asm-traced) in every sender listed here; each sender loads the URL string and the method object (pool entry `pp+0xa7e0`, `Method.post`) in one call setup:
+`POST /power_service/v1/app/set_oil_consumption_reminder_plan` (asm-traced) at the senders that load a `Method` object next to the URL string (pool entry `pp+0xa7e0`, `Method.post`):
 
 - `A7320RequestApi::setOilConsumptionReminderPlanDefaultRequest` (`a7320_requet_api.dart @0x2ce32b4`): URL string `@0x2ce33b0`, method object `Method.post` (`pp+0xa7e0`) `@0x2ce33a8`.
 - `A7320RequestApi::setOilConsumptionReminderPlanRequest` (`a7320_requet_api.dart @0x29dbd68`): URL string `@0x29dbed8`, method object `Method.post` (`pp+0xa7e0`) `@0x29dbed0`.

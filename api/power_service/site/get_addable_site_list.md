@@ -12,7 +12,7 @@ Asks which sites an A17B1 (or similar) device can join: `HttpBusinessImpl::getDe
 
 ## Method+URL
 
-`POST /power_service/v1/site/get_addable_site_list` (asm-traced) in every sender listed here; each sender loads the URL string and the method object (pool entry `pp+0xa7e0`, `Method.post`) in one call setup:
+`POST /power_service/v1/site/get_addable_site_list` (asm-traced) at the senders that load a `Method` object next to the URL string (pool entry `pp+0xa7e0`, `Method.post`):
 
 - `HttpBusinessImpl::getDeviceIsJoinedSite` (`http_business_impl.dart @0x239b964`): URL string `@0x239ba44`, method object `Method.post` (`pp+0xa7e0`) `@0x239ba3c`.
 - `HttpRequestControllerImpl::getAddableSiteList` (`http_request_repository_impl.dart @0x262e088`): URL string `@0x262e1a0`, method object `Method.post` (`pp+0xa7e0`) `@0x262e198`.

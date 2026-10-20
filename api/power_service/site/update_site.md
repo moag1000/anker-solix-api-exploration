@@ -12,7 +12,7 @@ Renames a site: the rename pages call `updateSiteNameInfoRequest` (`A17B1SystemI
 
 ## Method+URL
 
-`POST /power_service/v1/site/update_site` (asm-traced) in every sender listed here; each sender loads the URL string and the method object (pool entry `pp+0xa7e0`, `Method.post`) in one call setup:
+`POST /power_service/v1/site/update_site` (asm-traced) at the senders that load a `Method` object next to the URL string (pool entry `pp+0xa7e0`, `Method.post`):
 
 - `HttpRequestControllerImpl::updateSiteNameInfoRequest` (`http_request_repository_impl.dart @0x30c7640`): URL string `@0x30c76c0`, method object `Method.post` (`pp+0xa7e0`) `@0x30c76b8`.
 - `StationNameViewModel::requestRenameStation` (`station_name_view_model.dart @0x2cb53ec`): URL string `@0x2cb55a8`, method object `Method.post` (`pp+0xa7e0`) `@0x2cb55a0`.

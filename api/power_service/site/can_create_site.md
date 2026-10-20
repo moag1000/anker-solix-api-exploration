@@ -12,7 +12,7 @@ Asks the server whether a new site can be created and which device lists a site 
 
 ## Method+URL
 
-`POST /power_service/v1/site/can_create_site` (asm-traced) in every sender listed here; each sender loads the URL string and the method object (pool entry `pp+0xa7e0`, `Method.post`) in one call setup:
+`POST /power_service/v1/site/can_create_site` (asm-traced) at the senders that load a `Method` object next to the URL string (pool entry `pp+0xa7e0`, `Method.post`):
 
 - `HttpRequestControllerImpl::checkCanCreateSite` (`http_request_repository_impl.dart @0x2902144`): URL string `@0x2902200`, method object `Method.post` (`pp+0xa7e0`) `@0x29021f8`.
 - `HttpRequestControllerImpl::createSiteHomeRequest` (`http_request_repository_impl.dart @0x290487c`): URL string `@0x2904908`, method object `Method.post` (`pp+0xa7e0`) `@0x2904900`.

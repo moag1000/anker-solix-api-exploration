@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # add_site_devices
 
 ## Purpose
 
-<!-- TODO -->
+Adds devices to a site: the device-joining flows (A1782 AC params and electricity scene, A17B1 select-devices and scene, A17C1 open process, join-system, WiFi-config success, add-devices progress, station home info and the EV charger station selection) call `multiAddDeviceInfo`, or `AKIotEVChargeCommand::addSiteDevice` through the IoT kit.
 
 ## Upstream name
 
@@ -12,8 +12,9 @@
 
 ## Method+URL
 
-`/power_service/v1/site/add_site_devices`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x26f705c`
-(literal also at 1 more site(s) in `data/endpoints.json`)
+`POST /power_service/v1/site/add_site_devices` (asm-traced): URL string at `http_request_repository_impl.dart @0x26f705c`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x26f7054`, in `HttpRequestControllerImpl::multiAddDeviceInfo` (`http_request_repository_impl.dart @0x26f6f78`).
+
+The IoT-kit sender `AKIotEVChargeCommand::addSiteDevice` (`ev_charge_command.dart @0x3964400`) puts the path `"power_service/v1/site/add_site_devices"` (`@0x39644a4`, no leading slash), the string literal `"POST"` (`@0x39644bc`) and a `param` map into a command map for `akIoTKitManager.handle` (`@0x3964500`).
 
 ## Encrypted?
 
@@ -21,13 +22,15 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+The repository builder `multiAddDeviceInfo` (`http_request_repository_impl.dart @0x26f6f78`) has no map literal; each of its 13 callers builds its own body. Key sets read in the callers (value types are field reads and parameters, not read):
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3964400` |
-| `charging_pile_list` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3964400` |
-| `path` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3964400` |
-| `method` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3964400` |
-| `param` | ? | ? | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3964400` |
+| `site_id` | ? | yes | | `ACParamsSettingsLogic::next` (`ac_params_settings_logic.dart`, key `@0x3cd0f4c`), A1782 scene closure (`a1782_electricity_scene_logic.dart`, key `@0x28d3fec`), A17B1 scene closure (key `@0x3d07f18`), A17C1 `OpenProcessLogic` `next`/`join`/`mainDeviceJoin` (keys `@0x3db2688`, `@0x3db451c`, `@0x3db6e84`), `JoinSystemLogic::join` (`@0x3f23f04`), `ZxConfigWifiSucceesLogic::addDeviceToStation` (`@0x26f6bf8`), `StationHomeInfoLogic::addSitePPS` (`@0x279f684`) |
+| lists | ? | varies | | `solarbank_pps_list`, `grid_list`, `solar_list`, `pps_list`, `solarbank_list`, `powerpanel_list`, `smartplug_list`, `combiner_box_list`: one to four of them per caller (for example `solarbank_pps_list` `@0x3cd0f68`, `grid_list` `@0x3cd0fe4`, `solar_list` `@0x3d07f34`, `pps_list` `@0x279f6d8`) |
+| `app_ability` | object | optional | | the maps `{site_power_limit: true}` built in `OpenProcessLogic` (key `@0x3db26dc`, literal `true` `@0x3db26e8`), `JoinSystemLogic` (`@0x3f24024`) and `AddDevicesProgressLogic` (`@0x34a5dec`); the key `app_ability` itself was not located in these callers |
+| `site_id` | ? | yes | | IoT-kit sender `addSiteDevice`: `param` map typed `<String, dynamic>` (`@0x396445c`), key `@0x3964434`, value store `@0x3964444` (parameter at `fp-0x10`) |
+| `charging_pile_list` | ? | yes | | IoT-kit sender: key `@0x3964448`, value store `@0x3964458` (parameter at `fp-0x8`) |
 
 ## `param_type`/`cmd`
 
@@ -35,19 +38,25 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+Not determined. The repository builder passes forwarding templates (`rx_workers.dart @0x228e574`, `http_request_repository_impl.dart @0x2375ad8`); the callers' callbacks were read for `ACParamsSettingsLogic::next` only (`ac_params_settings_logic.dart @0x3cd10b4`: logs `加入电站成功`, refreshes the site list; no `fromJson`). The extractor's `EmsModeModel` attribution was not confirmed.
 
 ## Response
 
-<!-- TODO -->
+Not determined (see Response model).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (key set of the AC-params caller; types unresolved)
+
+```json
+{"site_id": "<site_id>", "solarbank_pps_list": "<list>", "grid_list": "<list>"}
+```
+
+Response: not determined.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+None traced. The callbacks read (`ac_params_settings_logic.dart @0x3cd10b4`, the failure closure `zx_config_wifi_succees_logic.dart @0x26f70a0` that logs `加入电站失败`) compare no code; the other callers' callbacks were not read. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -72,11 +81,13 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. The endpoint is in none of the added, removed or changed-params lists of `tools/out/diff_3.18.0_3.24.3.md`, so there is no string-level parameter delta.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Value types of every key (parameters and field reads in 13 callers). Header stays string-only.
+- Which callers send `app_ability` and with which keys: only the `{site_power_limit: true}` maps were located.
+- The response handling beyond the AC-params caller.
 
 ## Device-tested by
 

@@ -12,7 +12,7 @@ Sets the exercise plan (effective mode plus automatic and manual exercise interv
 
 ## Method+URL
 
-`POST /power_service/v1/app/set_oil_machine_exercise_plan` (asm-traced) in every sender listed here; each sender loads the URL string and the method object (pool entry `pp+0xa7e0`, `Method.post`) in one call setup:
+`POST /power_service/v1/app/set_oil_machine_exercise_plan` (asm-traced) at the senders that load a `Method` object next to the URL string (pool entry `pp+0xa7e0`, `Method.post`):
 
 - `A7320RequestApi::setOilMachineExercisePlanDefaultRequest` (`a7320_requet_api.dart @0x2ce3470`): URL string `@0x2ce3678`, method object `Method.post` (`pp+0xa7e0`) `@0x2ce3670`.
 - `A7320RequestApi::setOilMachineExercisePlanRequest` (`a7320_requet_api.dart @0x29dd6ec`): URL string `@0x29dd98c`, method object `Method.post` (`pp+0xa7e0`) `@0x29dd984`.

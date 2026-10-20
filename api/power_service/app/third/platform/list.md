@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # list
 
 ## Purpose
 
-<!-- TODO -->
+Lists the third-party (Shelly) platforms a user can add: `ScanLogic::onInit`, `ThirdPartyPlatformListLogic::requestThirdPartyPlatformList`, `ScanAppointDeviceLogic::onInit` and `DeviceMainLogic` (`_initLogic`, `onMessageDispatch`) call `getThirdPartyPlatformList`; the beginning flow (`PlatformAppointAddDeviceController::getThirdPartyPlatformList`) sends it through the IoT kit.
 
 ## Upstream name
 
@@ -12,8 +12,9 @@
 
 ## Method+URL
 
-`/power_service/v1/app/third/platform/list`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x26192fc`
-(literal also at 1 more site(s) in `data/endpoints.json`)
+`POST /power_service/v1/app/third/platform/list` (asm-traced): URL string at `http_request_repository_impl.dart @0x26192fc`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x26192f4`, in `HttpRequestControllerImpl::getThirdPartyPlatformList` (`http_request_repository_impl.dart @0x2619228`).
+
+The IoT-kit sender `PlatformAppointAddDeviceController::getThirdPartyPlatformList` (`platform_appoint_add_device_controller.dart @0x24e60d8`) selects the path string `"/power_service/v1/app/third/platform/list"` (`@0x24e610c`) unless a field is non-null (`cmp w1, NULL` `@0x24e6134`), in which case it selects `"/charging_hes_installer_svc/v2/app/third/platform/list"` (`@0x24e613c`, another page); its command closure `@0x24e6bd8` puts that path, the string literal `"POST"` (`@0x24e6c58`) and a `param` map into the command map passed to `akIoTKitManager`.
 
 ## Encrypted?
 
@@ -21,9 +22,11 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+Both senders send the single key `app_id`.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `app_id` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x2619228` |
+| `app_id` | string | yes | `"anker_power"` | repository sender `getThirdPartyPlatformList` (`http_request_repository_impl.dart @0x2619228`): map typed `<String, String>`, key `@0x2619284`, literal `@0x2619290`, store `@0x2619298`; IoT-kit sender: selected together with the path, literal `"anker_power"` `@0x24e611c` (the installer URL pairs with `"anker_pros"` `@0x24e6144`), put into the `param` map typed `<String, String>` (`@0x24e6c98`, key `@0x24e6c7c`, store `@0x24e6c94`) |
 
 ## `param_type`/`cmd`
 
@@ -31,19 +34,25 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+`base_service::ThirdPartyPlatformInfoModel` (`data/models.json` key; fields on [`models/other.md`](../../../../../models/other.md#thirdpartyplatforminfomodel)), one object per list element. Repository sender: the success closure `http_request_repository_impl.dart @0x2619340` calls `resolveListResponseData` (`@0x261936c`) and `ThirdPartyPlatformInfoModel.fromJson` per element. IoT-kit sender: the controller reads `data` (`@0x24e61e8`), decodes the JSON string (`JsonCodec.decode` `@0x24e6258`) and calls `ThirdPartyPlatformInfoModel.fromJson` (`@0x24e63f0`) per element.
 
 ## Response
 
-<!-- TODO -->
+The response is a list. Keys of one element (from `data/models.json`, all nullable): `index` (int), `name`, `content`, `logo`, `tag`, `url`, `callback_url`, `tag_code` (String), `products` (List).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body of the repository sender)
+
+```json
+{"app_id": "anker_power"}
+```
+
+Response keys: see Response; no capture.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+None traced. The repository sender's failure callback `http_request_repository_impl.dart @0x23a07f4` is a forwarding template; the IoT-kit controller logs `"Parse third party platform list error"` (`@0x24e6518`) on a parse failure; no code is compared. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -63,11 +72,13 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. The endpoint is in none of the added, removed or changed-params lists of `tools/out/diff_3.18.0_3.24.3.md`, so there is no string-level parameter delta. The model `ThirdPartyPlatformInfoModel` is `≤3.18.0` in `data/models.json`.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Which condition selects the installer variant (`field_5f` of the controller, `@0x24e612c`); only the pairing of `anker_pros` with the installer path is read.
+- The element structure of `products` (the model keeps it as an untyped list).
+- Whether the server filters the list by `app_id`: not derivable from the app.
 
 ## Device-tested by
 
