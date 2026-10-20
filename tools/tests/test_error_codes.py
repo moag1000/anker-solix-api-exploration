@@ -267,6 +267,13 @@ class MessageTableCheckTest(unittest.TestCase):
         self.assertEqual(len(gaps), 1)
         self.assertTrue(gaps[0].startswith('1000:'))
 
+    def test_message_column_in_main_table_fails(self):
+        text = ('## Table\n\n| code | message | meaning |\n|---|---|---|\n| 1000 | `x` | y |\n'
+                + self.page('| 10019 | `loginErrorPwd`, `loginErrorFiveTimes` | a |'))
+        gaps = E.message_table_gaps(text, self.ROWS)
+        self.assertEqual(len(gaps), 1)
+        self.assertIn('message column', gaps[0])
+
     def test_missing_row_fails(self):
         self.assertEqual(len(E.message_table_gaps(self.page(), self.ROWS)), 1)
 

@@ -466,10 +466,13 @@ def message_table_gaps(text, rows):
     nxt = re.search(r'^## ', section[len(MESSAGE_SECTION):], re.M)
     if nxt:
         section = section[:len(MESSAGE_SECTION) + nxt.start()]
-    have = {}
+    have = {}  # the main table's second column is not read: it has no message cell
     for m in re.finditer(r'^\|\s*(\d+)\s*\|([^|]*)\|', section, re.M):
         have.setdefault(int(m.group(1)), set()).update(re.findall(r'`([^`]+)`', m.group(2)))
     out = []
+    head = re.search(r'^## Table\n+(\|[^\n]*)', text, re.M)
+    if head and re.search(r'\|\s*message\s*\|', head.group(1)):
+        out.append('main table has a message column: keys live only in the message table')
     for c in sorted(set(want) | set(have)):
         w, h = want.get(c, set()), have.get(c, set())
         if w != h:
