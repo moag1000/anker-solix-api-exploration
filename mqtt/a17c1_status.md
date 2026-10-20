@@ -148,9 +148,11 @@ The fb list moved from 0x287 (647) to 0x293 (659) (audit row 408); the temperatu
 #### Known unknowns
 - `e0` is tested `== 7` in the parser (audit row 395) while upstream lists grid OK 1, no grid 6, connecting 3 (`mqttmap.py` line 1834): the meaning of 7 is open.
 - The roles of `fb` elements `[1]`, `[5]`, `[7]`, `[9]`, `[11]`, `[12]`, `[13]`, `[14]` (no upstream names) are open; the old doc's labels were not confirmed.
-- `ba` percentage scaling is confirmed on the read path only (audit row 403); `a3` and `ad` dual-store purpose is open.
-- The bytes of tag `ab` and others are unsigned except `aa`; sign handling for `ac` was not seen in the parser (upstream name `ac_output_power`).
-- Tags `a2` and `a4` are also read by `parseSubBatteryErrorInfoMap`; which of them is the error code and which the message was not traced (audit row 102; the status error code is tag `a5`).
+- The purpose of the double stores of `a3` and `ad`: `a3` is stored at offsets 803 and 991 from one `listToInt` read (`indexString` @0x4864b74), `ad` has a presence read (@0x4864c34) and a second read stored at 995 (@0x4864c70); no label or log string ties either store to a field name. — traced 2026-10-20: a17c1_device_commands.dart `parseDeviceAllInfo` @0x48648b4 (size 0x2450).
+
+`ba`: the parser stores the raw `listToInt` value at offset 631 with no arithmetic (@0x4865bd0); the division by 100.0 is on the read path only (`a17c1home_logic.dart`, row above). `ab` and `ac`: the parser divides the 64-bit `listToInt` result by 10 with `sdiv` (`r2 = 10`, `sdiv x3,x0,x2` @0x48652ec..@0x48652f0 for `ab`, stored at offset 535; the same shape for `ac`, stored at 579) and converts no sign: only `aa` has the signed 8-bit conversion (`cmp x0,#0x80`, `sub x1,x0,#0x100` @0x48651f0), so `ab` and `ac` are non-negative in the app model (app side).
+
+`parseSubBatteryErrorInfoMap` @0x3b58e30 (size 0x14c, a17c1_device_commands.dart) reads two tags of an expansion-battery error map: `a2` (`indexString` 162 @0x3b58e88) as an integer (`listToInt`, stored in `field_5f` of the target, @0x3b58ee0) and `a4` (164 @0x3b58ee8) as UTF-8 text (`Utf8Decoder.convert`, stored at offset 1291, @0x3b58f48). So the numeric tag is `a2` and the text tag is `a4`; the status error code is tag `a5` as above.
 
 #### Device-tested by
 A17C1 FW 1.0.6.10, mqtt_monitor session of 2026-03-28 (136 messages): values listed in the old doc (audit row 415, not decoded from asm); client version and tester are not recorded in this repo, so no field above carries `device-tested`. Source note: [../devices/solarbank.md](../devices/solarbank.md).
@@ -192,7 +194,7 @@ none (MQTT only).
 No change recorded by the audit.
 
 #### Known unknowns
-- The audit found the pool list used by the controllers (example @0x40f3ff4) but not the A17C1 call site of this opcode.
+- Whether the A17C1 request goes out over MQTT or BLE at a given moment: the A17C1 call site is `getAllDeviceInfo` @0x40f4ca0 (size 0x328, `a17c1_device_controller.dart`; pool list `[0, 0x40]` @0x40f4d78), which builds the frame with `formatCommand` and `generateCommand` and sends it with `sendCommand`; the `isBle` argument comes from two `DeviceConnectionStatus` compares at its start (@0x40f4cd4..@0x40f4cf8). The device class has a second builder, `sendDeviceInfoCmd` @0x3b0d79c (list @0x3b0d890). The transport per connection status was not traced. — traced 2026-10-20.
 
 #### Device-tested by
 none recorded for this opcode.
@@ -235,8 +237,9 @@ none (MQTT only).
 No change recorded by the audit.
 
 #### Known unknowns
-- Which controller class owns the 0x4081988 function for A17C1 (the audit names the address, not the class).
-- Upstream's limits 60 to 600 s are upstream values; the app's own value is not in the audit.
+- Upstream's limits 60 to 600 s are upstream values; the app sends a fixed value, see the new facts below the table.
+
+New read 2026-10-20: the function at 0x4081988 is `A17C1DeviceController.setDeviceUpdateEnergy` (`a17c1_device_controller.dart`, size 0xf8). It builds `a2` = `intToList(1)` (1 byte, constant 1, unboxed `r1 = 1` @0x40819a8) and `a3` = `intToList4(300)` (4 bytes, constant 300 seconds, unboxed `r1 = 300` @0x40819b0), and sends them with `sendCommandWithParam` (list `[0, 0x57]` @0x4081a4c) only when `_getCurrentStatus()` equals the `wifiConnected` instance of `DeviceConnectionStatus` (`[pp+0xca50]`, compare @0x4081a24); afterwards it stores zero in a field (`StoreField r1->field_6f = rZR` @0x4081a64). So the app's own timeout is 300 s, inside upstream's 60 to 600 s range.
 
 #### Device-tested by
 none recorded in this repo for the app's builder; upstream sends it routinely (upstream-confirmed).
