@@ -21,11 +21,11 @@ Same URL and method object in the other sender(s) read:
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Three senders (asm-traced). `getUpgradeRecord` (`charging/http/http_request_repository_impl.dart @0x2912048`) goes through `encryptionRequestHttp`. The two A5101 senders call the plain wrapper `BaseGetController::requestHttp` (`charging/base/get/getx_controller.dart @0x230eaa8`): `getOtaUpgradeRecord` at `charging/ui/page/device/a5101/ota/a5101_base_ota_logic.dart @0x28d9efc` and `_getOtaUpgradeRecord` at `charging/ui/page/device/a5101/setting/firmware_update_record/firmware_update_record_logic.dart @0x29717ac`, both without a `needEncryption` argument. In all three the default `needEncryption: true` applies and rule 3 of [encryption.md](../../encryption.md#rule-and-resulting-counts) holds: the SDK path is taken whenever the SDK reports a logged-in state and the URL passes the base-URL predicate, otherwise the plain Dio path; that is decided at run time by `HttpEncryptionDecorator::request` (`charging/http/HttpEncryptionDecorator.dart @0x4868ff4`), not by this page.
 
 ## Request
 
-(asm-traced) Three senders, each with one `<String, Object>` literal (type arguments `@0x29120c0`, `@0x28d9e88`, `@0x2971734`). `HttpRequestControllerImpl::getUpgradeRecord` (`charging/http/http_request_repository_impl.dart @0x2912048`) sends `{type, device_sn}` with `type` = the constant raw 2, so 1 (`@0x29120a4`). `A5101BaseOTALogic::getOtaUpgradeRecord` and `FirmwareUpdateRecordLogic::_getOtaUpgradeRecord` send `{type, site_id}` with `type` = the constant raw 4, so 2 (`@0x28d9dfc`, `@0x29716a8`); `site_id` is a field of the `A5101MqttLogic` object they look up with `safeFind`.
+(asm-traced) Three senders, each with one `<String, Object>` literal (type arguments `@0x29120c0`, `charging/ui/page/device/a5101/ota/a5101_base_ota_logic.dart @0x28d9e88`, `charging/ui/page/device/a5101/setting/firmware_update_record/firmware_update_record_logic.dart @0x2971734`). `HttpRequestControllerImpl::getUpgradeRecord` (`charging/http/http_request_repository_impl.dart @0x2912048`) sends `{type, device_sn}` with `type` = the constant raw 2, so 1 (`@0x29120a4`). `A5101BaseOTALogic::getOtaUpgradeRecord` and `FirmwareUpdateRecordLogic::_getOtaUpgradeRecord` send `{type, site_id}` with `type` = the constant raw 4, so 2 (`@0x28d9dfc`, `@0x29716a8`); `site_id` is a field of the `A5101MqttLogic` object they look up with `safeFind`.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
@@ -69,8 +69,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `getUpgradeRecord` @0x2912048 (encryptionRequestHttp; encrypted: true)
-- `charging/ui/page/device/a5101/ota/a5101_base_ota_logic.dart`: `getOtaUpgradeRecord` @0x28d9db0 (requestHttp; encrypted: default-true (requestHttp) — verify)
-- `charging/ui/page/device/a5101/setting/firmware_update_record/firmware_update_record_logic.dart`: `_getOtaUpgradeRecord` @0x297165c (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/ui/page/device/a5101/ota/a5101_base_ota_logic.dart`: `getOtaUpgradeRecord` @0x28d9db0 (requestHttp, default `needEncryption: true`)
+- `charging/ui/page/device/a5101/setting/firmware_update_record/firmware_update_record_logic.dart`: `_getOtaUpgradeRecord` @0x297165c (requestHttp, default `needEncryption: true`)
 
 Called from:
 
@@ -86,7 +86,6 @@ Called from:
 
 - Types of `device_sn` and `site_id` (a parameter and an object field; `<String, Object>` only says non-null).
 - What the `type` values 1 and 2 select on the server (the senders send constants).
-- The two A5101 senders go through `requestHttp` (`@0x28d9efc`, `@0x29717ac`), not `encryptionRequestHttp`; the "Encrypted?" line above is the inventory default for them.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

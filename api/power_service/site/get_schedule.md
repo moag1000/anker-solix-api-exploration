@@ -29,7 +29,7 @@ All three senders type their map, so the value is a String (or null where `Strin
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | string | yes | `"<site_id>"` | `HttpRequestControllerImpl::getSiteSchedule` (`http_request_repository_impl.dart @0x23a6010`): `<String, String>` (`@0x23a6078`), key `@0x23a6064`, store `@0x23a6074`; `A17E2HomeController::_updateEmsModeData` (`a17e2_home_controller.dart @0x355e0b0`): `<String, String?>` (`@0x355e260`), key `@0x355e24c`, store `@0x355e25c` (from `getSiteIdByDeviceSn` `@0x355e210`); `EmsServiceImpl::getSiteSchedule`: `<String, String>` (`@0x22d7680`), key `@0x22d766c`, store `@0x22d767c`; this sender returns without a request when the id is empty (`cbnz w1` `@0x22d75ec`) |
+| `site_id` | string | yes | `"<site_id>"` | key `http_request_repository_impl.dart @0x23a6064` in `HttpRequestControllerImpl::getSiteSchedule` (function `@0x23a6010`): `<String, String>` (`@0x23a6078`), store `@0x23a6074`; `A17E2HomeController::_updateEmsModeData` (`a17e2_home_controller.dart @0x355e0b0`): `<String, String?>` (`@0x355e260`), key `@0x355e24c`, store `@0x355e25c` (from `getSiteIdByDeviceSn` `@0x355e210`); `EmsServiceImpl::getSiteSchedule`: `<String, String>` (`ak_soft_ems/ems_service_impl.dart @0x22d7680`), key `@0x22d766c`, store `@0x22d767c`; this sender returns without a request when the id is empty (`cbnz w1` `@0x22d75ec`) |
 
 ## `param_type`/`cmd`
 
@@ -79,7 +79,7 @@ Called from:
 ## Known unknowns
 
 - Which of the two `SiteScheduleModel` shapes the server returns: the repository sender parses the `charging` class, the EMS service parses the `base_service` class; both read the same URL.
-- What the `status` values 1, 2 and 3 mean to the A17E2 home controller: only the compares are read.
+- What the `status` values 1, 2 and 3 mean to the A17E2 home controller: only the compares are read. — reclassified: server (the value meanings are defined by the server)
 - Failure handling of the repository sender's callers was not read.
 
 ## Device-tested by

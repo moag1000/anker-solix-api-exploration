@@ -16,7 +16,7 @@ Lists the sites a set of devices can join: `A1782ElectricitySceneLogic::_getAdda
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Plain-wrapper call (asm-traced): the sender calls `HttpRequestControllerImpl::requestHttp` (`charging/http/http_request_repository_impl.dart @0x2264938`) at `charging/http/http_request_repository_impl.dart @0x28bb240` without a `needEncryption` argument. So the default `needEncryption: true` applies and rule 3 of [encryption.md](../../encryption.md#rule-and-resulting-counts) holds: the SDK path is taken whenever the SDK reports a logged-in state and the URL passes the base-URL predicate, otherwise the plain Dio path; that is decided at run time by `HttpEncryptionDecorator::request` (`charging/http/HttpEncryptionDecorator.dart @0x4868ff4`), not by this page.
 
 ## Request
 
@@ -54,7 +54,7 @@ None traced. The builder's failure callback `@0x238cda4` is a forwarding templat
 
 ## Callers in app
 
-- `charging/http/http_request_repository_impl.dart`: `getDeviceJoinSiteList` @0x28bb164 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/http/http_request_repository_impl.dart`: `getDeviceJoinSiteList` @0x28bb164 (requestHttp, default `needEncryption: true`)
 
 Called from:
 
@@ -69,9 +69,8 @@ Called from:
 ## Known unknowns
 
 - The keys of a `DeviceJoinSiteModel` element (its `toJson` was not followed).
-- Whether `requestHttp` encrypts this call (non-`encryption` wrapper, default `needEncryption` true, see `api/encryption.md`).
 - The element structure of `site_list`.
-
+ — reclassified: server (elements of an untyped list; the content is server data)
 ## Device-tested by
 
 none

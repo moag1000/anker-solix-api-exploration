@@ -20,15 +20,17 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-The body is a 2-pair map literal (`<String, Object>`, `AllocateArray r2 = 8`, `@0x3a17d54`); the value of `manual_exercise_log` is a 3-pair map typed `<String, Object?>` (`AllocateArray r2 = 12`, `@0x3a17d84`) filled from a `ManualExerciseLog` object that the caller builds (`@0x3a17be4`). The caller passes `ankerDevice.field_6b` (`@0x3a17c84`); `field_6b` is the `deviceSn` getter, typed `String` in `String dyn:get:deviceSn(AnkerDevice)` at `anker_device.dart @0x22053d4`.
+The body is a 2-pair map literal (`<String, Object>`, `AllocateArray r2 = 8`, `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a17d54`); the value of `manual_exercise_log` is a 3-pair map typed `<String, Object?>` (`AllocateArray r2 = 12`, `@0x3a17d84`) filled from a `ManualExerciseLog` object that the caller builds (`a7320_oil_machine_exercise_logic.dart @0x3a17be4`). The caller passes `ankerDevice.field_6b` (`@0x3a17c84`); `field_6b` is the `deviceSn` getter, typed `String` in `String dyn:get:deviceSn(AnkerDevice)` at `anker_device.dart @0x22053d4`.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn` | string | yes | `"<device_sn>"` | key `@0x3a17d60`, value store `@0x3a17d70` (parameter r1) |
-| `manual_exercise_log` | object | yes | | key `@0x3a17d74`, value store `@0x3a17dec` |
-| `manual_exercise_log.execution_result` | bool | yes | `true` | key `@0x3a17d8c`, store `@0x3a17da4` (`ManualExerciseLog.field_f` = the flag parameter, tested with `tbnz w2, #4` `@0x3a17bd0`; the callers pass the literals `true` `@0x3a178d0` and `false` `@0x3a17a2c`) |
-| `manual_exercise_log.description` | int (Smi, w) | yes | `1` | key `@0x3a17da8`, store `@0x3a17dbc` (`field_13`): `r3 = 2` (`@0x3a17bd4`, tagged, so 1) when the flag is true, otherwise the named argument `failCode` (`@0x3a17bdc`), which the caller takes from a value it untags with `LoadInt32Instr` (`@0x3a17888`) |
-| `manual_exercise_log.execution_time` | int (unboxed, x) | yes | | key `@0x3a17dc0`, store `@0x3a17dd4` (`ArrayLoad r1[0]`, written by `BoxInt64Instr` of `getTimeStamp()` `@0x3a17c40`, store `@0x3a17c58`) |
+| `device_sn` | string | yes | `"<device_sn>"` | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a17d60`, value store `@0x3a17d70` (parameter r1) |
+| `manual_exercise_log` | object | yes | | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a17d74`, value store `@0x3a17dec` |
+| `manual_exercise_log.execution_result` | bool | yes | `true` | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a17d8c`, store `@0x3a17da4` (`ManualExerciseLog.field_f` = the flag parameter, tested with `tbnz w2, #4` `a7320_oil_machine_exercise_logic.dart @0x3a17bd0`; the callers pass the literals `true` `@0x3a178d0` and `false` `@0x3a17a2c`) |
+| `manual_exercise_log.description` | int (Smi, w) | yes | `1` | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a17da8`, store `@0x3a17dbc` (`field_13`): `r3 = 2` (`a7320_oil_machine_exercise_logic.dart @0x3a17bd4`, tagged, so 1) when the flag is true, otherwise the named argument `failCode` (`@0x3a17bdc`), which the caller takes from a value it untags with `LoadInt32Instr` (`@0x3a17888`) |
+| `manual_exercise_log.execution_time` | int (unboxed, x) | yes | | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a17dc0`, store `@0x3a17dd4` (`ArrayLoad r1[0]`, written by `BoxInt64Instr` of `getTimeStamp()` `a7320_oil_machine_exercise_logic.dart @0x3a17c40`, store `@0x3a17c58`) |
+
+Unit of `execution_time` (asm-traced): `A7320TimeHander::getTimeStamp` (`oe_a7320/src/oe_a7320/page/home/setting/a7320_time_hander.dart @0x27e0b60`) takes a `DateTime` and divides its epoch value, obtained through an unnamed getter call (`@0x27e0b8c`; the function's own log text calls the value "microsecondsSinceEpoch", `@0x27e0bcc`), by the double 1000.0 (`fdiv` `@0x27e0ba4`, constant `@0x27e0b9c`) and truncates the result to an integer (`fcvtzs` `@0x27e0c2c`), so the number is milliseconds since the Unix epoch. The caller builds the `DateTime` from the current time in microseconds (`_getCurrentMicros` `@0x3a17c1c` in `oe_a7320/src/oe_a7320/page/home/setting/oil_machine_exercise/a7320_oil_machine_exercise_logic.dart`, stored with `isUtc` false `@0x3a17c10`) and calls `getTimeStamp` at `@0x3a17c38`.
 
 ## `param_type`/`cmd`
 
@@ -66,9 +68,8 @@ None traced as HTTP codes. The caller of the builder compares the value returned
 
 ## Known unknowns
 
-- The unit and zero point of `execution_time` (`getTimeStamp()` is boxed as an Int64 at `@0x3a17c40`; its implementation was not followed).
 - What the server stores for `description` besides 1 for success: the failure codes come from the A7320 device command result, the full set was not decoded.
-- The response body: not read by the app, so its keys are unknown.
+- The response body: not read by the app, so its keys are unknown. — reclassified: server
 
 ## Device-tested by
 

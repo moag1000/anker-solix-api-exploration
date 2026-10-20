@@ -67,7 +67,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The date format of `earliest_date` is not decoded (the app only logs it and hands the string on).
+- The date format of `earliest_date` is not decoded (the app only logs it and hands the string on). — reclassified: server (the format is chosen by the server; the app hands the string on)
 - Whether other chart options besides `earliest_date` exist in the answer is not known; the endpoint name (`energy_options`) suggests more.
 - Server behaviour is not known.
 

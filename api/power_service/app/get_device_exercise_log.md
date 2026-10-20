@@ -62,6 +62,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
+- `A7320OilHistoryRecordLogic.getDeviceExerciseLogReqest` (`oe_a7320/src/oe_a7320/page/home/setting/oil_machine_exercise/a7320_oil_history_record_logic.dart @0x2ad8448`)
 - `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart`: `getDeviceExerciseLogRequest` @0x2ad845c (encryptionRequestHttp; encrypted: true)
 
 ## Since/changed
@@ -70,9 +71,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Type of `device_sn` (parameter; `<String, Object>` only says non-null); this is why the page stays string-only.
+- Type of `device_sn` (parameter; `<String, Object>` only says non-null); this is why the page stays string-only. — attempted 2026-10-20 (two-hop not readable: the only caller, `A7320OilHistoryRecordLogic.getDeviceExerciseLogReqest` (`oe_a7320/src/oe_a7320/page/home/setting/oil_machine_exercise/a7320_oil_history_record_logic.dart @0x2ad83fc`), passes `field_6b` of an object held in `field_3f` with no default and no declared type. Header stays string-only)
 - Whether the server counts pages from 0 or 1 (the app passes `page` from its own state).
-- No `data/endpoints.json` caller is recorded for this builder; the call site above was found by searching the A7320 logic files.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

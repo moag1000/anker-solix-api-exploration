@@ -16,7 +16,7 @@ Loads the annual report ("Post 2024") for the logged-in account (callers `HttpRe
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Plain-wrapper call (asm-traced): the sender calls `HttpRequestControllerImpl::requestHttp` (`charging/http/http_request_repository_impl.dart @0x2264938`) at `charging/http/http_request_repository_impl.dart @0x2404c48` without a `needEncryption` argument. So the default `needEncryption: true` applies and rule 3 of [encryption.md](../../encryption.md#rule-and-resulting-counts) holds: the SDK path is taken whenever the SDK reports a logged-in state and the URL passes the base-URL predicate, otherwise the plain Dio path; that is decided at run time by `HttpEncryptionDecorator::request` (`charging/http/HttpEncryptionDecorator.dart @0x4868ff4`), not by this page.
 
 ## Request
 
@@ -52,7 +52,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
-- `charging/http/http_request_repository_impl.dart`: `getAnnualReport` @0x2404b98 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/http/http_request_repository_impl.dart`: `getAnnualReport` @0x2404b98 (requestHttp, default `needEncryption: true`)
 
 Called from:
 
@@ -66,8 +66,6 @@ Called from:
 ## Known unknowns
 
 - Which account data the annual report covers and when the server has one: server behaviour, not visible in the app.
-- The call goes through `requestHttp` (`@0x2404c48`), not `encryptionRequestHttp`; whether the plain path encrypts it is decided in `HttpEncryptionDecorator` (`api/encryption.md`), the "Encrypted?" line above is the inventory default.
-
 ## Device-tested by
 
 none

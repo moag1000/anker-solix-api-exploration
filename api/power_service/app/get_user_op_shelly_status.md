@@ -86,7 +86,7 @@ Called from:
 
 ## Known unknowns
 
-- What the `op_type` strings mean: the closure casts them to `String` and stores them in `GrantDeviceRecordModel`; the consumer was not decoded.
+- What the `op_type` strings mean: the closure casts them to `String` and stores them in `GrantDeviceRecordModel`; the consumer was not decoded. — reclassified: server (the string meanings are defined by the server)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

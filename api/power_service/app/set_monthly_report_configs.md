@@ -20,12 +20,12 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-The caller builds the body: an outer 1-pair map typed `<String, Map<String, String>>` (`@0x402e990`, pool `pp+0xbec0`) whose value is an inner 1-pair map typed `<String, String>` (`@0x402e958`, pool `pp+0xa4d0`). The builder `setMonthlyReportConfigs` (`msg_http_request_repository_impl.dart @0x402ea60`) forwards the map to `encryptionRequestHttp` (`@0x402eb28`).
+The caller builds the body: an outer 1-pair map typed `<String, Map<String, String>>` (`charging/ui/page/message/settingDetail/message_setting_detail_logic.dart @0x402e990`, pool `pp+0xbec0`) whose value is an inner 1-pair map typed `<String, String>` (`@0x402e958`, pool `pp+0xa4d0`). The builder `setMonthlyReportConfigs` (`msg_http_request_repository_impl.dart @0x402ea60`) forwards the map to `encryptionRequestHttp` (`@0x402eb28`).
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `configs` | object | yes | | key `@0x402e910`, value store `@0x402e96c` (the inner map) |
-| `configs.mothly_report_messages` | string | yes | `"1"` or `"0"` | key `@0x402e928` (spelled `mothly`), value store `@0x402e954`; `"1"` (`@0x402e93c`) when the bool parameter is true, `"0"` (`@0x402e948`) when it is false (`tbnz w1, #4` `@0x402e938`, true when bit 4 is clear); the inner map is typed `<String, String>` |
+| `configs` | object | yes | | key `charging/ui/page/message/settingDetail/message_setting_detail_logic.dart @0x402e910`, value store `@0x402e96c` (the inner map) |
+| `configs.mothly_report_messages` | string | yes | `"1"` or `"0"` | key `charging/ui/page/message/settingDetail/message_setting_detail_logic.dart @0x402e928` (spelled `mothly`), value store `@0x402e954`; `"1"` (`@0x402e93c`) when the bool parameter is true, `"0"` (`@0x402e948`) when it is false (`tbnz w1, #4` `@0x402e938`, true when bit 4 is clear); the inner map is typed `<String, String>` |
 
 ## `param_type`/`cmd`
 
@@ -67,7 +67,7 @@ Called from:
 
 ## Known unknowns
 
-- The response body: not read by the app, so its keys are unknown.
+- The response body: not read by the app, so its keys are unknown. — reclassified: server
 - Whether the server echoes the stored `configs` object: the app builds its local cache from the request body, not from an answer.
 - Which other keys `configs` can hold on the server: the app sends only `mothly_report_messages`.
 

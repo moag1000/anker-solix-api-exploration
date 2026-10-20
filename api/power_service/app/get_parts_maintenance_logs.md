@@ -24,12 +24,14 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `item_id` | ? | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad5f68` |
-| `item_name` | ? | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad5fb4` |
-| `maintenance_items` | ? | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad5fec` |
+| `item_id` | int (unboxed, x) | yes | | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad5f68` |
+| `item_name` | string | yes | | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad5fb4` |
+| `maintenance_items` | int (unboxed, x) | yes | | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad5fec` |
 | `device_sn` | ? | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad6038` |
-| `page` | ? | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad6070` |
+| `page` | int (unboxed, x) | yes | | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad6070` |
 | `page_size` | int (Smi, w) | yes | `10` | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad60bc` |
+
+Typing (asm-traced, `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart`): the builder takes six untyped parameters (`SetupParameters(dynamic _ ...)` `@0x2ad5ee8`): `device_sn` is the first (`fp-0x8`, `@0x2ad6048`), `item_id` the third (`fp-0x18`) stored through `BoxInt64Instr` (`@0x2ad5f78`), `item_name` the fifth (`fp-0x20`, `@0x2ad5fc4`), `maintenance_items` the sixth (`fp-0x28`, `BoxInt64Instr` `@0x2ad5ffc`) and `page` the seventh (`fp-0x30`, `BoxInt64Instr` `@0x2ad6080`), so `item_id`, `maintenance_items` and `page` are unboxed 64-bit integers. `item_name` is typed at the caller `A7320MaintanceRecordLogic.getPartsMaintenanceLogsRequest` (`oe_a7320/src/oe_a7320/page/home/setting/maintenance/a7320_maintance_record_logic.dart @0x2ad7958`), which replaces a null value by the String literal `""` (`r5 = ""` `@0x2ad78cc`). The detail-page caller `A7320MaintanceDetailLogic.getPartsMaintenanceLogsRequest` (`oe_a7320/src/oe_a7320/page/home/setting/maintenance/a7320_maintance_detail_logic.dart @0x2ad5eb4`) passes the immediate 1 for the seventh parameter (`r7 = 1` `@0x2ad5eb0`, unboxed, real 1: the first page) and an integer read with default 1 for the sixth (`r6 = 1` `@0x2ad5e50`); the record-page caller reads the sixth from a Smi field with default 1 (`r6 = 1` `@0x2ad78ec`).
 
 ## `param_type`/`cmd`
 
@@ -51,11 +53,11 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
 
 ```json
 {
-  "item_id": "<?>",
-  "item_name": "<?>",
-  "maintenance_items": "<?>",
+  "item_id": "<int>",
+  "item_name": "<string>",
+  "maintenance_items": "<int>",
   "device_sn": "<?>",
-  "page": "<?>",
+  "page": "<int>",
   "page_size": 10
 }
 ```
@@ -68,6 +70,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
+- `A7320MaintanceRecordLogic.getPartsMaintenanceLogsRequest` (`oe_a7320/src/oe_a7320/page/home/setting/maintenance/a7320_maintance_record_logic.dart @0x2ad7958`)
+- `A7320MaintanceDetailLogic.getPartsMaintenanceLogsRequest` (`oe_a7320/src/oe_a7320/page/home/setting/maintenance/a7320_maintance_detail_logic.dart @0x2ad5eb4`)
 - `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart`: `getPartsMaintenanceLogsRequest` @0x2ad5edc (encryptionRequestHttp; encrypted: true)
 
 ## Since/changed
@@ -76,10 +80,9 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Types of `item_id`, `item_name`, `maintenance_items`, `device_sn` and `page` (parameters; `<String, Object>` only says non-null).
-- Which of the item keys the detail page and the record page each set (the builder always sends all six).
-- No `data/endpoints.json` caller is recorded for this builder; the call sites above were found by searching the A7320 logic files.
+- Type of `device_sn`: the first parameter of the builder (`oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x2ad6048`) — attempted 2026-10-20 (two-hop not readable: both callers read it from fields with no default and no declared type in the asm. Header stays string-only)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
+- Which item keys each caller fills with real values: the detail caller passes page 1 and defaults of 1 for `maintenance_items`; the values of `item_id`, `item_name` and `device_sn` come from field reads (`oe_a7320/src/oe_a7320/page/home/setting/maintenance/a7320_maintance_detail_logic.dart @0x2ad5e2c`, `a7320_maintance_record_logic.dart @0x2ad78dc`) that are not decoded — traced 2026-10-20: the builder always sends all six keys
 
 ## Device-tested by
 

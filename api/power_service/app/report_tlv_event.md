@@ -16,7 +16,7 @@ Uploads a device TLV/protobuf event record to the cloud (callers `BaseBleControl
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Plain-wrapper call (asm-traced): the sender calls `HttpRequestControllerImpl::requestHttp` (`charging/http/http_request_repository_impl.dart @0x2264938`) at `charging/http/http_request_repository_impl.dart @0x263ef38` without a `needEncryption` argument. So the default `needEncryption: true` applies and rule 3 of [encryption.md](../../encryption.md#rule-and-resulting-counts) holds: the SDK path is taken whenever the SDK reports a logged-in state and the URL passes the base-URL predicate, otherwise the plain Dio path; that is decided at run time by `HttpEncryptionDecorator::request` (`charging/http/HttpEncryptionDecorator.dart @0x4868ff4`), not by this page.
 
 ## Request
 
@@ -71,7 +71,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
-- `charging/http/http_request_repository_impl.dart`: `postEventData` @0x263e8c4 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/http/http_request_repository_impl.dart`: `postEventData` @0x263e8c4 (requestHttp, default `needEncryption: true`)
 
 Called from:
 
@@ -88,10 +88,8 @@ Called from:
 
 - The outer nesting of the `"tlv"` body (two extra literals wrap the inner one) and the exact key layout.
 - Types of `device_sn`, `version`, `local_time` and `device_model`.
-- How the builder uses the logged-in user id and token it reads before the call (`isLogin` `@0x263ee70`, `getUserId` `@0x263ee80`; two map reads `@0x263ee98`, `@0x263eec4` that fail with a null-cast error when absent).
+- How the builder uses the logged-in user id and token it reads before the call (`isLogin` `charging/http/http_request_repository_impl.dart @0x263ee70`, `getUserId` `@0x263ee80`; two map reads `@0x263ee98`, `@0x263eec4` that fail with a null-cast error when absent).
 - The success closure of the call (not decoded) and what the server does with the event.
-- The call goes through `requestHttp`, not `encryptionRequestHttp`; whether the plain path encrypts it is decided in `HttpEncryptionDecorator` (`api/encryption.md`), the "Encrypted?" line above is the inventory default.
-
 ## Device-tested by
 
 none

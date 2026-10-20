@@ -69,7 +69,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The value domains and formats of `type`, `data_type`, `start_time` and `end_time` are not decoded.
+- The value domains and formats of `type`, `data_type`, `start_time` and `end_time` are not decoded. — reclassified: server (the value domains and formats are defined by the server)
 - The unit and currency semantics of `total` and `unit` are not known.
 - Server behaviour is not known.
 

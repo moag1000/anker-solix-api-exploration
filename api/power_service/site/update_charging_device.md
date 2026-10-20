@@ -24,7 +24,16 @@ The builder `updateChargingDevice` (`http_request_repository_impl.dart @0x3bf49d
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| (keys of the passed object's `toJson()`) | ? | | | caller `a1340add_device_logic.dart::updateChargeDevice` (not read) |
+| `charging_device_id` | int (declared `int?`) | yes (key always written, value may be null) | | key `charging/model/a1340_device_info/a1340_charging_device_model.dart @0x286b450` |
+| `device_name` | string (declared `String?`) | yes (key always written, value may be null) | | key `0x286b46c` |
+| `device_type` | string (declared `String?`) | yes (key always written, value may be null) | | key `0x286b484` |
+| `battery_capacity` | int (declared `int?`) | yes (key always written, value may be null) | | key `0x286b49c` |
+| `new_battery_capacity` | ? (declared `unknown`) | yes (key always written, value may be null) | | key `0x286b4b4` |
+| `battery_uint` | string (declared `String?`) | yes (key always written, value may be null) | | key `0x286b4cc` |
+| `battery_health` | int (declared `int?`) | yes (key always written, value may be null) | | key `0x286b4e4` |
+| `update_flag` | bool (declared `bool?`) | yes (key always written, value may be null) | | key `0x286b4fc` |
+
+Keys (asm-traced): `A1340ChargingDeviceModel::toJson` (`charging/model/a1340_device_info/a1340_charging_device_model.dart @0x286b424`) writes eight keys unconditionally into one map literal (`AllocateArray r2 = 32` `@0x286b448`, `<String, dynamic>` `@0x286b514`): the value of each key is the model field stored unchanged, so the types are the declared field types of `A1340ChargingDeviceModel.fromJson` (`data/models.json`, `charging::A1340ChargingDeviceModel`, `charging/model/a1340_device_info/a1340_charging_device_model.dart @0x286b5fc`). The caller `A1340addDeviceLogic.updateChargeDevice` (`charging/ui/page/device/a1340/a1340add_device/a1340add_device_logic.dart @0x3bf4948`) passes the model object to `updateChargingDevice` and calls `toJson` only for a log line (`@0x3bf48d0`, label "设备修改参数json==" `@0x3bf48c0`), so the table holds the keys of the model's `toJson`; how the HTTP layer turns the object into the body is not visible in the Dart code read.
 
 ## `param_type`/`cmd`
 
@@ -40,7 +49,7 @@ Top-level keys of the model (from `data/models.json`): `device_list` (List, null
 
 ## Example request/response
 
-Request: the key set comes from the caller's `toJson()`, not read here; no synthesized body is given.
+Request: the keys of `A1340ChargingDeviceModel.toJson()` (table above); no synthesized body is given.
 
 Response keys: see Response; no capture.
 
@@ -63,9 +72,7 @@ Called from:
 
 ## Known unknowns
 
-- The request keys and types (the caller `updateChargeDevice` was not read). Header stays string-only.
-- Whether the update body equals the add body of [add_charging_device](add_charging_device.md).
-
+- Whether the HTTP layer serialises the passed `A1340ChargingDeviceModel` object with its `toJson` (the caller passes the object; `charging/ui/page/device/a1340/a1340add_device/a1340add_device_logic.dart @0x3bf4948`) — attempted 2026-10-20 (two-hop not readable: the serialisation happens after `encryptionRequestHttp` in the SDK handler, outside the asm tree. Header stays string-only)
 ## Device-tested by
 
 none

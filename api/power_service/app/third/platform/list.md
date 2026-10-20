@@ -26,7 +26,7 @@ Both senders send the single key `app_id`.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `app_id` | string | yes | `"anker_power"` | repository sender `getThirdPartyPlatformList` (`http_request_repository_impl.dart @0x2619228`): map typed `<String, String>`, key `@0x2619284`, literal `@0x2619290`, store `@0x2619298`; IoT-kit sender: selected together with the path, literal `"anker_power"` `@0x24e611c` (the installer URL pairs with `"anker_pros"` `@0x24e6144`), put into the `param` map typed `<String, String>` (`@0x24e6c98`, key `@0x24e6c7c`, store `@0x24e6c94`) |
+| `app_id` | string | yes | `"anker_power"` | key `http_request_repository_impl.dart @0x2619284` in the repository sender `getThirdPartyPlatformList` (function `@0x2619228`): map typed `<String, String>`, literal `@0x2619290`, store `@0x2619298`; IoT-kit sender: selected together with the path, literal `"anker_power"` `flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart @0x24e611c` (the installer URL pairs with `"anker_pros"` `@0x24e6144`), put into the `param` map typed `<String, String>` (`@0x24e6c98`, key `@0x24e6c7c`, store `@0x24e6c94`) |
 
 ## `param_type`/`cmd`
 
@@ -34,7 +34,7 @@ n/a
 
 ## Response model (link)
 
-`base_service::ThirdPartyPlatformInfoModel` (`data/models.json` key; fields on [`models/other.md`](../../../../../models/other.md#thirdpartyplatforminfomodel)), one object per list element. Repository sender: the success closure `http_request_repository_impl.dart @0x2619340` calls `resolveListResponseData` (`@0x261936c`) and `ThirdPartyPlatformInfoModel.fromJson` per element. IoT-kit sender: the controller reads `data` (`@0x24e61e8`), decodes the JSON string (`JsonCodec.decode` `@0x24e6258`) and calls `ThirdPartyPlatformInfoModel.fromJson` (`@0x24e63f0`) per element.
+`base_service::ThirdPartyPlatformInfoModel` (`data/models.json` key; fields on [`models/other.md`](../../../../../models/other.md#thirdpartyplatforminfomodel)), one object per list element. Repository sender: the success closure `http_request_repository_impl.dart @0x2619340` calls `resolveListResponseData` (`@0x261936c`) and `ThirdPartyPlatformInfoModel.fromJson` per element. IoT-kit sender: the controller reads `data` (`flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart @0x24e61e8`), decodes the JSON string (`JsonCodec.decode` `@0x24e6258`) and calls `ThirdPartyPlatformInfoModel.fromJson` (`@0x24e63f0`) per element.
 
 ## Response
 
@@ -52,7 +52,7 @@ Response keys: see Response; no capture.
 
 ## Errors seen
 
-None traced. The repository sender's failure callback `http_request_repository_impl.dart @0x23a07f4` is a forwarding template; the IoT-kit controller logs `"Parse third party platform list error"` (`@0x24e6518`) on a parse failure; no code is compared. Error codes are catalogued in `api/errors.md`.
+None traced. The repository sender's failure callback `http_request_repository_impl.dart @0x23a07f4` is a forwarding template; the IoT-kit controller logs `"Parse third party platform list error"` (`flutter_charging_beginning/beginning/state_cards/add_devices/platform_appoint_add_device/platform_appoint_add_device_controller.dart @0x24e6518`) on a parse failure; no code is compared. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -77,7 +77,7 @@ Called from:
 ## Known unknowns
 
 - Which condition selects the installer variant (`field_5f` of the controller, `@0x24e612c`); only the pairing of `anker_pros` with the installer path is read.
-- The element structure of `products` (the model keeps it as an untyped list).
+- The element structure of `products` (the model keeps it as an untyped list). — reclassified: server (elements of an untyped list; the content is server data)
 - Whether the server filters the list by `app_id`: not derivable from the app.
 
 ## Device-tested by

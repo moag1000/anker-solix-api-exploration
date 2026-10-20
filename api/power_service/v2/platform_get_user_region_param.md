@@ -31,7 +31,7 @@ Reads the grid code (grid standard) settings of a product for the user: the coun
 | `country_code` | String? | no | `"DE"` | `@0x2a4f808`; field at offset 0x1b of the same object (`@0x2a4f76c`) |
 | `grid_code` | String? | no | `"<grid code>"` | `@0x2a4f81c`; field at offset 0xf of the object (`@0x2a4f83c`) |
 
-The `settings` copy has the same keys (`product_code` `@0x29e4cf8`, `identifier_id` `@0x29e4d0c`, `scenario_type` `@0x29e4d20`, `grid_code_name` `@0x29e4d48`, `country_code` `@0x29e4d5c`, `grid_code` `@0x29e4d70`). `GridSettingLogic._getGridSetting` copies a base map (field at offset 0x93, `LinkedHashMap.of` `@0x28f5bf4`) and sets `grid_code_name` (`@0x28f5c30`), `country_code` (`@0x28f5c68`) and `grid_code` (`@0x28f5ca0`) from its selected grid object; the content of the base map was not traced. The `system_config_controller` closure sends `path`, `method`, `param` through the SDK (param keys not read).
+The `settings` copy has the same keys (`product_code` `device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x29e4cf8`, `identifier_id` `@0x29e4d0c`, `scenario_type` `@0x29e4d20`, `grid_code_name` `@0x29e4d48`, `country_code` `@0x29e4d5c`, `grid_code` `@0x29e4d70`). `GridSettingLogic._getGridSetting` copies a base map (field at offset 0x93, `LinkedHashMap.of` `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart @0x28f5bf4`) and sets `grid_code_name` (`@0x28f5c30`), `country_code` (`@0x28f5c68`) and `grid_code` (`@0x28f5ca0`) from its selected grid object; the content of the base map was not traced. The `system_config_controller` closure sends `path`, `method`, `param` through the SDK (param keys not read).
 
 ## `param_type`/`cmd`
 
@@ -64,7 +64,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 - `GridParamSettingController.getGridSetting` (`device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x2a4f638`; `settings/src/common/page/grid_param_setting/grid_param_setting_controller.dart @0x29e4b8c`), called from `onReady`, `_watchGridCode` and `showGridPicker` of both controllers: the grid parameter setting page of the `device` (station setting) and `settings` packages.
 - `GridSettingLogic._getGridSetting` (`charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart @0x28f5bb8`), called from `onReady`: the advanced grid setting page of the station home settings (package `charging`).
-- `SystemConfigController.updateCountryCodeByCloud` (closure `@0x3256434`): the system config card of the initial setup flow (`flutter_charging_beginning`).
+- `SystemConfigController.updateCountryCodeByCloud` (closure `flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart @0x3256434`): the system config card of the initial setup flow (`flutter_charging_beginning`).
 
 ## Since/changed
 
@@ -72,7 +72,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- What `scenario_type` 1 and 2 mean is not decoded.
+- What `scenario_type` 1 and 2 mean is not decoded. — reclassified: server (the value meanings are defined by the server)
 - Which other keys the `system_config_controller` and picker senders send is not read.
 - The content of the base map used by `_getGridSetting` is not traced.
 - Server behaviour is not known.

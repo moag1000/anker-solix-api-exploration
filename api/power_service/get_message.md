@@ -74,7 +74,7 @@ Called from:
 - Types of `device_sns` and `message_type`: both are parameters of `getMessage`; the three UI callers were not followed. Header stays string-only.
 - What `message_type` values the callers use and how `last_time`/`last_msg_id` page the list: cursor semantics are server side.
 - The structure of `data` items in `MsgHttpModel` (the model keeps them untyped).
-
+ — reclassified: server (items of an untyped list; the content is server data)
 ## Device-tested by
 
 none

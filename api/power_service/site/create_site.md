@@ -36,7 +36,9 @@ The body is a 12-pair map literal typed `<String, dynamic>` (type arguments `@0x
 | `smartplug_list` | list | yes | | key `@0x27b2718`, store `@0x27b2750`, null fallback `@0x27b272c` |
 | `combiner_box_list` | list | yes | | key `@0x27b2774`, store `@0x27b27ac`, null fallback `@0x27b2788` |
 | `charging_pile_list` | list | yes | | key `@0x27b27d0`, store `@0x27b2804`, null fallback `@0x27b27e4` |
-| `app_ability` | ? | optional | | `[]=` `@0x27b2860`, key `@0x27b2858`; added when the parameter at `fp-0x18` is non-null (`cmp w3, NULL` `@0x27b2844`) |
+| `app_ability` | ? | optional | | key `@0x27b2858`, `[]=` `@0x27b2860`; added when the parameter at `fp-0x18` is non-null (`cmp w3, NULL` `@0x27b2844`) |
+
+Elements of the ten lists (asm-traced): `SiteDeviceModel::toJson` (`charging/model/power_site/site_device_model.dart @0x225f4e8`) starts from an empty map and adds, with `Map.[]=` calls, the keys `device_sn` (`@0x225f534`), `device_name` (`@0x225f564`), `device_img` (`@0x225f594`), `generate_power` (`@0x225f5c4`), `power_unit` (`@0x225f5f4`), `status` (`@0x225f624`), `bind_site_status` (`@0x225f654`), `battery_power` (`@0x225f684`), `charging_power` (`@0x225f6b4`), `wireless_type` (`@0x225f6e4`), `priority_index` (`@0x225f714`), `device_pn` (`@0x225f744`), `initial_process` (`@0x225f774`), `bssid` (`@0x225f7a4`), `ssid` (`@0x225f7d4`), `password` (`@0x225f804`), `checked` (`@0x225f834`), `hardware_info` (`@0x225f864`), `hardware_main_sn` (`@0x225f894`), `hardware_status` (`@0x225f8c4`) and, only when a list field is not null (`cmp w3, NULL` `@0x225f8e8`), `bind_site_ids` (`@0x225f94c`). The declared types of `SiteDeviceModel.fromJson` (`data/models.json`, `charging::SiteDeviceModel`) are `String?` for all keys except `initial_process`, `hardware_info`, `hardware_status` (`int?`), `checked` (`bool?`) and `bind_site_ids` (`unknown`). The lists hold `SiteDeviceModel` objects (fallback `<SiteDeviceModel>` lists in the table), so each element carries these keys if the HTTP layer serialises the objects with `toJson`; that step is outside the Dart code read.
 
 ## `param_type`/`cmd`
 
@@ -81,10 +83,9 @@ Called from:
 
 ## Known unknowns
 
-- Type of `site_name` and of `app_ability` (parameters; the six callers were not followed). Header stays string-only.
-- Element JSON keys of the ten device lists (the elements are `SiteDeviceModel` objects serialized by the HTTP layer).
+- Type of `site_name` and of `app_ability` (parameters; the six callers were not followed). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: `app_ability` is a named argument of three callers (`charging/ui/page/device/a17c1/open_process/open_process_logic.dart @0x28d2b28`, `charging/ui/page/device/connect/create_join_device_to_system/create_system/create_system_logic.dart @0x2924090`, `charging/ui/page/green_energy/site/site_logic.dart @0x27b1fa4`) and its value is read from fields; `site_name` is a positional argument whose source differs per caller (`r2 = Null` in `a1782_electricity_scene_logic.dart @0x28d3824`, `electricity_scene_logic.dart @0x3d079c8`); no declared types are shown)
 - What `exist_site_id` carries the key name suggests the id of an existing site; not read.
-
+ — reclassified: server
 ## Device-tested by
 
 none

@@ -23,7 +23,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-Two builders send this URL. Both callers pass `ankerDevice.field_6b` as the serial; `field_6b` is the `deviceSn` getter, typed `String` in `String dyn:get:deviceSn(AnkerDevice)` at `anker_device.dart @0x22053d4`. Inner maps are added to the base map with `Map.[]=` (`GDT[cid_x0 + 0x6a9]` calls `@0x29dd854`, `@0x29dd920`).
+Two builders send this URL. Both callers pass `ankerDevice.field_6b` as the serial; `field_6b` is the `deviceSn` getter, typed `String` in `String dyn:get:deviceSn(AnkerDevice)` at `anker_device.dart @0x22053d4`. Inner maps are added to the base map with `Map.[]=` (`GDT[cid_x0 + 0x6a9]` calls `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dd854`, `@0x29dd920`).
 
 Builder `setOilMachineExercisePlanDefaultRequest` (`a7320_requet_api.dart @0x2ce3470`, caller `restore_default_a7320_controller.dart @0x2ce33f8`): a 4-pair map literal (`AllocateArray r2 = 16`, `@0x2ce34b8`), inner maps typed `<String, int>`.
 
@@ -45,17 +45,19 @@ Builder `setOilMachineExercisePlanRequest` (`a7320_requet_api.dart @0x29dd6ec`, 
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn` | string | yes | `"<device_sn>"` | key `@0x29dd784`, value store `@0x29dd794` (caller read `a7320_oil_machine_exercise_logic.dart @0x3a1c6dc`) |
-| `effective_mode` | int (Smi, w) | yes | | key `@0x29dd798`, `lsl x2, x1, #1` `@0x29dd7a8` (Smi-tagging the unboxed parameter), store `@0x29dd7ac`; the caller computes 1 or 2 (`csetm`/`and`/`add` then `LoadInt32Instr` `@0x3a1c71c`) |
-| `manual_exercise` | object | optional | | added with `[]=` `@0x29dd854` only when parameter r6 is non-null (`cmp w0, NULL` `@0x29dd7c8`) |
-| `manual_exercise.exercise_type` | int (Smi, w) | yes | `2` | key `@0x29dd7dc`, `mov x16, #4` `@0x29dd7e8` + `stur w16` `@0x29dd7ec`, so 2 |
-| `manual_exercise.interval_period_month` | int (Smi, w) or null | yes | | key `@0x29dd7f0`, store `@0x29dd808` (`field_f` of the manual object; map typed `<String, int?>`) |
-| `manual_exercise.interval_period_week` | int (Smi, w) or null | yes | | key `@0x29dd80c`, store `@0x29dd820` (`field_13` of the manual object) |
-| `automatic_exercise` | object | optional | | added with `[]=` `@0x29dd920` only when parameter r2 is non-null (`cmp w0, NULL` `@0x29dd864`) |
-| `automatic_exercise.exercise_type` | int (Smi, w) | yes | `1` | key `@0x29dd878`, `mov x16, #2` `@0x29dd884` + `stur w16` `@0x29dd888`, so 1 |
-| `automatic_exercise.next_automatic_exercise` | int (Smi, w) or null | yes | | key `@0x29dd88c`, store `@0x29dd8bc`; null when the automatic object's `field_7` is null (`@0x29dd8a4`..`@0x29dd8ac`) |
-| `automatic_exercise.interval_period_month` | int (Smi, w) or null | yes | | key `@0x29dd8c0`, store `@0x29dd8d4` |
-| `automatic_exercise.interval_period_week` | int (Smi, w) or null | yes | | key `@0x29dd8d8`, store `@0x29dd8ec` |
+| `device_sn` | string | yes | `"<device_sn>"` | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dd784`, value store `@0x29dd794` (caller read `a7320_oil_machine_exercise_logic.dart @0x3a1c6dc`) |
+| `effective_mode` | int (Smi, w) | yes | | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dd798`, `lsl x2, x1, #1` `@0x29dd7a8` (Smi-tagging the unboxed parameter), store `@0x29dd7ac`; the caller computes 1 or 2 (`csetm`/`and`/`add` then `LoadInt32Instr` `a7320_oil_machine_exercise_logic.dart @0x3a1c71c`) |
+| `manual_exercise` | object | optional | | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dd84c`, added with `[]=` `@0x29dd854` only when parameter r6 is non-null (`cmp w0, NULL` `@0x29dd7c8`) |
+| `manual_exercise.exercise_type` | int (Smi, w) | yes | `2` | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dd7dc`, `mov x16, #4` `@0x29dd7e8` + `stur w16` `@0x29dd7ec`, so 2 |
+| `manual_exercise.interval_period_month` | int (Smi, w) or null | yes | | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dd7f0`, store `@0x29dd808` (`field_f` of the manual object; map typed `<String, int?>`) |
+| `manual_exercise.interval_period_week` | int (Smi, w) or null | yes | | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dd80c`, store `@0x29dd820` (`field_13` of the manual object) |
+| `automatic_exercise` | object | optional | | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dd918`, added with `[]=` `@0x29dd920` only when parameter r2 is non-null (`cmp w0, NULL` `@0x29dd864`) |
+| `automatic_exercise.exercise_type` | int (Smi, w) | yes | `1` | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dd878`, `mov x16, #2` `@0x29dd884` + `stur w16` `@0x29dd888`, so 1 |
+| `automatic_exercise.next_automatic_exercise` | int (Smi, w) or null | yes | | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dd88c`, store `@0x29dd8bc`; null when the automatic object's `field_7` is null (`@0x29dd8a4`..`@0x29dd8ac`) |
+| `automatic_exercise.interval_period_month` | int (Smi, w) or null | yes | | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dd8c0`, store `@0x29dd8d4` |
+| `automatic_exercise.interval_period_week` | int (Smi, w) or null | yes | | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dd8d8`, store `@0x29dd8ec` |
+
+Meaning of the constants (asm-traced): The enum `EffectiveMode` (`oe_a7320/src/oe_a7320/module/a7320_oil_exercise_details.dart`, `enum EffectiveMode extends _Enum`) has two pool objects: `Obj!EffectiveMode@38fb8c1` (`pp+0x6baf0`, enum index 0, name string "automatic") and `Obj!EffectiveMode@38fb8e1` (`pp+0x6baf8`, index 1, name "manual") (`pp.txt` lines 228214 and 228220). The sender `setOilMachineExercisePlanRequest` gets `effective_mode` from a caller that loads the "manual" object `pp+0x6baf8` (`a7320_oil_machine_exercise_logic.dart @0x3a1c6f4`), compares it with the mode (`cmp w0, w16` `@0x3a1c6fc`) and builds tagged 4 (value 2) when equal and tagged 2 (value 1) otherwise (`csetm`/`and #2`/`add #2` `@0x3a1c700`..`@0x3a1c708`): 2 = `EffectiveMode.manual`, 1 = `EffectiveMode.automatic`, the same mapping as in [switch_exercise_mode](switch_exercise_mode.md#request). The defaults builder sends `effective_mode` 2 and its caller sets the restored state to the "manual" object (`restore_default_a7320_controller.dart @0x2ce3714`, `value=` `@0x2ce371c`). `exercise_type` is a property of the inner object: the literal under `automatic_exercise` carries 1 and the one under `manual_exercise` carries 2 (tables above), so 1 and 2 are the app's automatic and manual exercise kinds by the key names the app gives the objects.
 
 ## `param_type`/`cmd`
 
@@ -98,9 +100,8 @@ None traced. The failure callback of the defaults sender is an unresolved placeh
 
 ## Known unknowns
 
-- The meaning of the constants `exercise_type` 1 (automatic) and 2 (manual), and of `effective_mode` 1 and 2: the app sends them; the names are not decoded here (the other builders, [switch_exercise_mode](switch_exercise_mode.md), send `effective_mode` the same way).
 - Whether the server accepts a body with only one of the two optional inner maps: the app omits a map when its parameter is null, the server reaction is not derivable.
-- The response body: not read by the app, so its keys are unknown.
+- The response body: not read by the app, so its keys are unknown. — reclassified: server
 
 ## Device-tested by
 

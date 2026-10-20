@@ -27,8 +27,8 @@ Both senders send one key spelled `counrty` (sic) in a map typed `<String, Strin
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `counrty` | string | yes | `"US"` | repository sender `getCurrencyGetList` (`http_request_repository_impl.dart @0x29ad540`): key `@0x29ad5c4`, value store `@0x29ad5d4`, type arguments `@0x29ad5d8`; the value is the current region's `field_7` with the string `"US"` as null fallback (`@0x29ad5a4`) |
-| `counrty` | string | yes | `"country"` | A17EX sender (`a17ex_electricity_price_logic.dart @0x35fdabc`): key `@0x35fdb88`, value the literal string `"country"` (`@0x35fdb94`, not a country code), store `@0x35fdb9c`, type arguments `@0x35fdba0` |
+| `counrty` | string | yes | `"US"` | key `http_request_repository_impl.dart @0x29ad5c4` in the repository sender `getCurrencyGetList` (function `@0x29ad540`): value store `@0x29ad5d4`, type arguments `@0x29ad5d8`; the value is the current region's `field_7` with the string `"US"` as null fallback (`@0x29ad5a4`) |
+| `counrty` | string | yes | `"country"` | key `a17ex_electricity_price_logic.dart @0x35fdb88` in the A17EX sender (function `@0x35fdabc`): value the literal string `"country"` (`@0x35fdb94`, not a country code), store `@0x35fdb9c`, type arguments `@0x35fdba0` |
 
 ## `param_type`/`cmd`
 
@@ -77,7 +77,7 @@ Called from:
 - Whether the server reads the misspelled key `counrty` (both app senders use it); the library's behaviour for `country` is not known.
 - Whether the literal value `"country"` of the A17EX sender is intentional: it is a string constant at `@0x35fdb94`, not a variable.
 - The element structure of `currency_list`.
-
+ — reclassified: server (elements of an untyped list; the content is server data)
 ## Device-tested by
 
 none

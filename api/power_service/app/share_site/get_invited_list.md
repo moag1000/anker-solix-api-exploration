@@ -24,8 +24,8 @@ The body is a 2-pair map literal (`AllocateArray` in `getInviteMember`, `http_re
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | string | yes | `"<site_id>"` | key `@0x29162d4`, value store `@0x29162e4`; both callers pass `field_7` of an Rx value with the empty string for null (`r0 = ""` `home_center_logic.dart @0x291618c` and `@0x2916ce4`) |
-| `status` | int (Smi, w) | yes | `1` or `2` | key `@0x29162e8`, `lsl x2, x1, #1` `@0x29162f8` (Smi-tagging the unboxed parameter), store `@0x29162fc`; `getInviteMemberInviting` passes `r3 = 1` (`@0x29161c0`, unboxed), `getInviteMemberAlreadyInvited` passes `r3 = 2` (`@0x2916d10`) |
+| `site_id` | string | yes | `"<site_id>"` | key `charging/http/http_request_repository_impl.dart @0x29162d4`, value store `@0x29162e4`; both callers pass `field_7` of an Rx value with the empty string for null (`r0 = ""` `home_center_logic.dart @0x291618c` and `@0x2916ce4`) |
+| `status` | int (Smi, w) | yes | `1` or `2` | key `charging/http/http_request_repository_impl.dart @0x29162e8`, `lsl x2, x1, #1` `@0x29162f8` (Smi-tagging the unboxed parameter), store `@0x29162fc`; `getInviteMemberInviting` passes `r3 = 1` (`charging/ui/page/user/share_site/home_center/home_center_logic.dart @0x29161c0`, unboxed), `getInviteMemberAlreadyInvited` passes `r3 = 2` (`@0x2916d10`) |
 
 ## `param_type`/`cmd`
 
@@ -76,7 +76,7 @@ Called from:
 - What the status values 1 and 2 stand for on the server: the callers use them for the "inviting" and "already invited" tabs (function names only).
 - Whether the response carries keys other than `invited_list` that the app ignores.
 - The meaning of `member_type` values: not decoded here.
-
+ — reclassified: server (the value meanings are defined by the server)
 ## Device-tested by
 
 none

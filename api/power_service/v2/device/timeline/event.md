@@ -74,7 +74,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The element layout of `list` and `top_event` (event types, levels) is not decoded; "guardian" is the app's name for the feature, its meaning (a protection feature of the S1/S2 charger) is inferred.
+- The element layout of `list` and `top_event` (event types, levels) is not decoded; "guardian" is the app's name for the feature, its meaning (a protection feature of the S1/S2 charger) is inferred. — reclassified: server (the layouts and event types are defined by the server)
 - Paging or limits (the request has no such key) are not known.
 - Server behaviour is not known.
 

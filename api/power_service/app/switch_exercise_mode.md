@@ -20,12 +20,14 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-The body is a 2-pair map literal (`<String, Object>`, `AllocateArray r2 = 8`, `@0x3a1a090`). The caller passes `ankerDevice.field_6b` (`@0x3a19fa0`); `field_6b` is the `deviceSn` getter, typed `String` in `String dyn:get:deviceSn(AnkerDevice)` at `anker_device.dart @0x22053d4`.
+The body is a 2-pair map literal (`<String, Object>`, `AllocateArray r2 = 8`, `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a1a090`). The caller passes `ankerDevice.field_6b` (`a7320_oil_machine_exercise_logic.dart @0x3a19fa0`); `field_6b` is the `deviceSn` getter, typed `String` in `String dyn:get:deviceSn(AnkerDevice)` at `anker_device.dart @0x22053d4`.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn` | string | yes | `"<device_sn>"` | key `@0x3a1a098`, value store `@0x3a1a0a8` (parameter r1) |
-| `effective_mode` | int (Smi, w) | yes | | key `@0x3a1a0ac`, `lsl x2, x1, #1` `@0x3a1a0bc` (Smi-tagging the unboxed parameter), store `@0x3a1a0c0`; the caller computes the value from a compare with the pool object `Instance_EffectiveMode` (`csetm`, `and #0xfffffffffffffffe`, `add #4`, `@0x3a19fb8`..`@0x3a19fc0`, then `LoadInt32Instr` `@0x3a19fc4`): tagged 2 (value 1) when equal, tagged 4 (value 2) otherwise |
+| `device_sn` | string | yes | `"<device_sn>"` | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a1a098`, value store `@0x3a1a0a8` (parameter r1) |
+| `effective_mode` | int (Smi, w) | yes | | key `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a1a0ac`, `lsl x2, x1, #1` `@0x3a1a0bc` (Smi-tagging the unboxed parameter), store `@0x3a1a0c0`; the caller computes the value from a compare with the pool object `Instance_EffectiveMode` (`csetm`, `and #0xfffffffffffffffe`, `add #4`, `a7320_oil_machine_exercise_logic.dart @0x3a19fb8`..`@0x3a19fc0`, then `LoadInt32Instr` `@0x3a19fc4`): tagged 2 (value 1) when equal, tagged 4 (value 2) otherwise |
+
+`effective_mode` values (asm-traced): The enum `EffectiveMode` (`oe_a7320/src/oe_a7320/module/a7320_oil_exercise_details.dart`, `enum EffectiveMode extends _Enum`) has two pool objects: `Obj!EffectiveMode@38fb8c1` (`pp+0x6baf0`, enum index 0, name string "automatic") and `Obj!EffectiveMode@38fb8e1` (`pp+0x6baf8`, index 1, name "manual") (`pp.txt` lines 228214 and 228220). The caller (`oe_a7320/src/oe_a7320/page/home/setting/oil_machine_exercise/a7320_oil_machine_exercise_logic.dart @0x3a19fac`..`@0x3a19fc4`) loads `pp+0x6baf0` (the "automatic" object, `ldr x16, [x16, #0xaf0]` `@0x3a19fb0`), compares it with the mode (`cmp w2, w16` `@0x3a19fb4`) and builds tagged 2 (value 1) when equal and tagged 4 (value 2) otherwise, so `effective_mode` 1 stands for the app's `EffectiveMode.automatic` and 2 for `EffectiveMode.manual`.
 
 ## `param_type`/`cmd`
 
@@ -33,7 +35,7 @@ n/a
 
 ## Response model (link)
 
-None: the response body is not parsed by the app. The success callback `a7320_oil_machine_exercise_logic.dart @0x3a1a158` loads its argument once for the log string `"switchExerciseModeRequest ---"`, then sets two Rx values and shows the `saveSuccessful` toast (`showSuccessToast`). The failure callback is the shared `commonOK` dialog closure (`@0x2ad6164`).
+None: the response body is not parsed by the app. The success callback `a7320_oil_machine_exercise_logic.dart @0x3a1a158` loads its argument once for the log string `"switchExerciseModeRequest ---"`, then sets two Rx values and shows the `saveSuccessful` toast (`showSuccessToast`). The failure callback is the shared `commonOK` dialog closure (`a7320_run_out_of_gasoline_logic.dart @0x2ad6164`).
 
 ## Response
 
@@ -63,8 +65,7 @@ None traced. The failure callback is the shared `commonOK` dialog closure (`a732
 
 ## Known unknowns
 
-- Which mode the values 1 and 2 of `effective_mode` stand for: the app derives them from a compare with the pool object `Instance_EffectiveMode`, whose class was not decoded.
-- The response body: not read by the app, so its keys are unknown.
+- The response body: not read by the app, so its keys are unknown. — reclassified: server
 - What the server does when the mode equals the current mode: not derivable from the app.
 
 ## Device-tested by

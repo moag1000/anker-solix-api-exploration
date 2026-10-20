@@ -94,14 +94,14 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. `tools/out/diff_3.18.0_3.24.3.md` (changed params) lists `guardian_log` as added and `disturb_switch`, `end_time`, `start_time` as removed. In 3.24.3 `setMessageDisturb` still sets the three "removed" keys with `[]=` (`@0x402c840`, `@0x402c884`, `@0x402c8ac`); the string-level diff sees map-literal keys, so the "removed" part is an artefact of how those keys are built. `guardian_log` sits in a map literal (`@0x402c8d4`).
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. `tools/out/diff_3.18.0_3.24.3.md` (changed params) lists `guardian_log` as added and `disturb_switch`, `end_time`, `start_time` as removed. In 3.24.3 `setMessageDisturb` still sets the three "removed" keys with `[]=` (`charging/http/http_request_repository_impl.dart @0x402c840`, `@0x402c884`, `@0x402c8ac`); the string-level diff sees map-literal keys, so the "removed" part is an artefact of how those keys are built. `guardian_log` sits in a map literal (`@0x402c8d4`).
 
 ## Known unknowns
 
 - Type of `disturb_switch` (a parameter of `setMessageDisturb`; the four UI callers were not followed). Header stays string-only.
 - Whether 3.18.0 sent the time window in a map literal (the diff suggests literal keys there): not read, 3.18.0 asm was not opened for this page.
 - Which sender the server expects for which scene: the two key sets never appear together in one request.
-- The response body: not read by the app.
+- The response body: not read by the app. — reclassified: server
 
 ## Device-tested by
 

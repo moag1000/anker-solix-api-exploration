@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Reports the results of several firmware upgrades at once: `getReportsBleUpgrade` is called from `AnkerOtaBaseLogic::handleA17A3BleOtaRecords`, `WifiBleOtaLogic::handleOtaRecordResult` and `WifiBleParallelOtaLogic::handleOtaRecordResult`; the OTA kit reporter `OTAUpgradeRecordReporter::_reportBatch` (`@0x280a11c`) sends the same URL through the IoT kit.
+Reports the results of several firmware upgrades at once: `getReportsBleUpgrade` is called from `AnkerOtaBaseLogic::handleA17A3BleOtaRecords`, `WifiBleOtaLogic::handleOtaRecordResult` and `WifiBleParallelOtaLogic::handleOtaRecordResult`; the OTA kit reporter `OTAUpgradeRecordReporter::_reportBatch` (`ota_kit/src/services/ota_upgrade_record_reporter.dart @0x280a11c`) sends the same URL through the IoT kit.
 
 ## Upstream name
 
@@ -14,7 +14,7 @@ Reports the results of several firmware upgrades at once: `getReportsBleUpgrade`
 
 `POST /power_service/v1/app/upgrade_event_reports` (asm-traced): URL string at `http_request_repository_impl.dart @0x3423438`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x3423430`, in `HttpRequestControllerImpl::getReportsBleUpgrade` (`http_request_repository_impl.dart @0x3423398`).
 
-The IoT-kit sender `OTAUpgradeRecordReporter::_reportBatch` puts the path `"/power_service/v1/app/upgrade_event_reports"` (`@0x280a210`), the string literal `"POST"` (`@0x280a228`) and a `param` entry into a command map for `akIoTKitManager.handle` (`@0x280a358`); the method there is a string literal, not a `Method` pool object.
+The IoT-kit sender `OTAUpgradeRecordReporter::_reportBatch` puts the path `"/power_service/v1/app/upgrade_event_reports"` (`ota_kit/src/services/ota_upgrade_record_reporter.dart @0x280a210`), the string literal `"POST"` (`@0x280a228`) and a `param` entry into a command map for `akIoTKitManager.handle` (`@0x280a358`); the method there is a string literal, not a `Method` pool object.
 
 ## Encrypted?
 
@@ -24,8 +24,8 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `upgrade_even_device_infos` | ? | yes | | repository sender `getReportsBleUpgrade` (`http_request_repository_impl.dart @0x3423398`): 1-pair map literal (`AllocateArray r2 = 4` `@0x34233d8`, no printed type arguments), key `@0x34233e0` (sic `even`), value store `@0x34233f0` (parameter at `fp-0x10`) |
-| `upgrade_even_device_infos` | list | yes | | IoT-kit sender `_reportBatch`: `param` map typed `<String, List<Map<String, dynamic>>>` (`@0x280a2f4`), key `@0x280a250`; the elements are `<Map<String, dynamic>>` (`@0x280a278`) |
+| `upgrade_even_device_infos` | ? | yes | | key `http_request_repository_impl.dart @0x34233e0` (sic `even`) in the repository sender `getReportsBleUpgrade` (function `@0x3423398`): 1-pair map literal (`AllocateArray r2 = 4` `@0x34233d8`, no printed type arguments), value store `@0x34233f0` (parameter at `fp-0x10`) |
+| `upgrade_even_device_infos` | list | yes | | IoT-kit sender `_reportBatch`: key `ota_kit/src/services/ota_upgrade_record_reporter.dart @0x280a250`, `param` map typed `<String, List<Map<String, dynamic>>>` (`@0x280a2f4`); the elements are `<Map<String, dynamic>>` (`@0x280a278`) |
 
 ## `param_type`/`cmd`
 
@@ -74,7 +74,7 @@ Called from:
 
 - Type and element keys of the repository sender's `upgrade_even_device_infos` parameter (the three callers were not followed). Header stays string-only.
 - Whether the element keys equal those of [upgrade_event_report](upgrade_event_report.md) (the batch maps are `Map<String, dynamic>`).
-- The response body: not read.
+- The response body: not read. — reclassified: server
 
 ## Device-tested by
 

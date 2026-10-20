@@ -16,7 +16,7 @@ Reads the list of production years for a vehicle brand and model in the EV charg
 
 ## Encrypted?
 
-encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Direct SDK call, path C (asm-traced): the command function builds the map `{path, method, param}` and calls `AKIoTKitManagerImpl.handle` with the identifier `akiot.cloud_api` (`ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6b07c`) and no `*Http*` wrapper, so the inventory flag `encrypted: unknown` only says that no wrapper is called. The SDK sends the request natively; what it encrypts is not visible in Dart (mechanics: [../../sdk_senders.md](../../sdk_senders.md#the-common-envelope), background: [../../encryption.md](../../encryption.md#rule-and-resulting-counts)).
 
 ## Request
 
@@ -24,8 +24,10 @@ encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rul
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `brand_name` | ? | yes | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6afa8` |
-| `model_name` | ? | yes | ? | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6afbc` |
+| `brand_name` | string | yes | | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6afa8` |
+| `model_name` | string | yes | | `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6afbc` |
+
+Typing (two-hop, asm-traced): in `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart` the builder `getEvYearList` takes two untyped parameters (`SetupParameters(dynamic _ ...)` `@0x2c6af80`). Its caller `VehicleEditLogic.getYearList` (`ev_charger/src/ev_charger/page/vehicle/vehicle_edit_logic.dart @0x43e2a44`, `@0x43e2a58`) replaces a null brand and a null model by the String literal `""`, so both are strings.
 
 ## `param_type`/`cmd`
 
@@ -47,8 +49,8 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
 
 ```json
 {
-  "brand_name": "<?>",
-  "model_name": "<?>"
+  "brand_name": "<brand_name>",
+  "model_name": "<model_name>"
 }
 ```
 
@@ -60,6 +62,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
+- `VehicleEditLogic.getYearList` (`ev_charger/src/ev_charger/page/vehicle/vehicle_edit_logic.dart @0x43e2a5c`)
+- `AddVehicleController.getYearListIfNeed` (`ev_charger/src/ev_charger/page/vehicle/widgets/add_vehicle_controller.dart @0x2c6adfc`)
 - `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getEvYearList` @0x2c6af74 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6b018` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 Called from:
@@ -73,9 +77,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `brand_name`, `model_name` (parameters of the builder; the literal is `<String, dynamic>`).
-- How the SDK handler turns the body into `EvYearListModel`: the handler is not in the asm tree read; only the type argument is read here.
-- Encryption: the call is made by the command map directly to the SDK handler (path C, `api/encryption.md`); the "Encrypted?" line above is the inventory default.
+- How the SDK handler turns the body into `EvYearListModel`: the handler is not in the asm tree read; only the type argument is read here. — reclassified: server (the parser is in the native SDK handler, outside the asm tree)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

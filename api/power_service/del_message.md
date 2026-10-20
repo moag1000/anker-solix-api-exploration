@@ -27,7 +27,7 @@ The body is an empty `<String, dynamic>` map literal (`empty_array` `@0x3bb4a14`
 | `ids` | list | optional | | key `@0x3bb4a48`, `[]=` `@0x3bb4a50`; added only when the parameter is non-null (`cmp w3, NULL` `@0x3bb4a2c`) and its length field is non-zero (`LoadField field_b`, `cbz` `@0x3bb4a38`) |
 | `sns` | ? | optional | | key `@0x3bb4aa0`, `[]=` `@0x3bb4aa8`; added when the parameter is non-null (`@0x3bb4a60`) and a dispatch-table call (`GDT[cid_x0 + 0x3558d]` `@0x3bb4a74`, selector not named) returns true (`tbnz` `@0x3bb4a88`) |
 | `all` | ? | yes | | key `@0x3bb4acc`, `[]=` `@0x3bb4ad4` (value: parameter at `fp-0x10`, `@0x3bb4ac8`) |
-| `type` | int (Smi, w) | yes | | key `@0x3bb4af8`, `[]=` `@0x3bb4afc`; `lsl x3, x0, #1` `@0x3bb4ae4` Smi-tags the unboxed parameter; the two callers pass the small constants `r7 = 2` (`message_main_logic.dart @0x401aa40`) and `r7 = 1` (`message_system_logic.dart @0x3bb4874`) to the wrapper `delMessage`, not mapped to the key here |
+| `type` | int (Smi, w) | yes | | key `charging/http/http_request_repository_impl.dart @0x3bb4af8`, `[]=` `@0x3bb4afc`; `lsl x3, x0, #1` `@0x3bb4ae4` Smi-tags the unboxed parameter; the two callers pass the small constants `r7 = 2` (`message_main_logic.dart @0x401aa40`) and `r7 = 1` (`message_system_logic.dart @0x3bb4874`) to the wrapper `delMessage`, not mapped to the key here |
 
 ## `param_type`/`cmd`
 
@@ -53,7 +53,7 @@ Request, synthesized (key set of the always-present keys; value types of `all` u
 
 ## Errors seen
 
-None traced. The builder's failure callback `@0x3bb4bfc` logs the code and message and calls `exeError()`; the main-page failure callback `message_main_logic.dart @0x401aa68` also shows a message; no code is compared. Error codes are catalogued in `api/errors.md`.
+None traced. The builder's failure callback `charging/http/http_request_repository_impl.dart @0x3bb4bfc` logs the code and message and calls `exeError()`; the main-page failure callback `message_main_logic.dart @0x401aa68` also shows a message; no code is compared. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -73,7 +73,7 @@ Called from:
 
 - Types of `sns` and `all`, and what `ids`/`sns`/`all` mean together (`all` is a parameter; the callers were not followed). Header stays string-only.
 - Which of the constants 1 and 2 is the `type` of the system-message list and of the device-message list: both callers pass a constant to the wrapper, the mapping to the builder's parameter slot was not traced.
-- The response body: not read by the app, so its keys are unknown.
+- The response body: not read by the app, so its keys are unknown. — reclassified: server
 
 ## Device-tested by
 

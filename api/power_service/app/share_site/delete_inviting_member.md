@@ -68,7 +68,7 @@ Called from:
 
 ## Known unknowns
 
-- The response body: not read by the app, so its keys are unknown.
+- The response body: not read by the app, so its keys are unknown. — reclassified: server
 - Whether `member_id` here is the id returned by [get_invited_list](get_invited_list.md) (the item class `SiteInviteMemberModel` has a `member_id`): not followed from the item to the key.
 - What the server does for an unknown `member_id`: not derivable from the app.
 

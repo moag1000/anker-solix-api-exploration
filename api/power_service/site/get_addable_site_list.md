@@ -19,7 +19,7 @@ Asks which sites an A17B1 (or similar) device can join: `HttpBusinessImpl::getDe
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Two senders, both through a plain wrapper (asm-traced): `getAddableSiteList` calls `HttpRequestControllerImpl::requestHttp` (`charging/http/http_request_repository_impl.dart @0x2264938`) at `charging/http/http_request_repository_impl.dart @0x262e1c8`, and `getDeviceIsJoinedSite` calls `HttpBusinessImpl::requestHttp` (`charging/http/http_business_impl.dart @0x239ba88`) at `charging/http/http_business_impl.dart @0x239ba6c`; neither passes a `needEncryption` argument. So the default `needEncryption: true` applies in both and rule 3 of [encryption.md](../../encryption.md#rule-and-resulting-counts) holds: the SDK path is taken whenever the SDK reports a logged-in state and the URL passes the base-URL predicate, otherwise the plain Dio path; that is decided at run time by `HttpEncryptionDecorator::request` (`charging/http/HttpEncryptionDecorator.dart @0x4868ff4`), not by this page.
 
 ## Request
 
@@ -67,8 +67,8 @@ None traced. The failure callbacks are the forwarding templates (`http_request_r
 
 ## Callers in app
 
-- `charging/http/http_business_impl.dart`: `getDeviceIsJoinedSite` @0x239b964 (requestHttp; encrypted: default-true (requestHttp) — verify)
-- `charging/http/http_request_repository_impl.dart`: `getAddableSiteList` @0x262e088 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/http/http_business_impl.dart`: `getDeviceIsJoinedSite` @0x239b964 (requestHttp, default `needEncryption: true`)
+- `charging/http/http_request_repository_impl.dart`: `getAddableSiteList` @0x262e088 (requestHttp, default `needEncryption: true`)
 
 Called from:
 
@@ -86,10 +86,8 @@ Called from:
 
 ## Known unknowns
 
-- The element structures of `site_list` and `joined_site_id` (the model keeps them untyped).
+- The element structures of `site_list` and `joined_site_id` (the model keeps them untyped). — reclassified: server (elements of untyped lists; the content is server data)
 - Why `getAddableSiteList` may omit `device_sn`: the app sends the model-only body when the serial is null; the server reaction is not derivable.
-- Whether `requestHttp` (`getAddableSiteList`) encrypts the call (non-`encryption` wrapper, default `needEncryption` true, see `api/encryption.md`).
-
 ## Device-tested by
 
 none

@@ -74,7 +74,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The values of `order_status` and whether `page` is 0-based (upstream sends 0) or 1-based are not decoded from the sender.
+- The values of `order_status` and whether `page` is 0-based (upstream sends 0) or 1-based are not decoded from the sender. — reclassified: server (the status values and the paging base are defined by the server)
 - How this list differs from [get_charging_order_list](get_charging_order_list.md) for the server (both list orders) is not known.
 
 ## Device-tested by

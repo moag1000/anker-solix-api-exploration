@@ -16,7 +16,7 @@ Joins the anonymous demo site: `HomeBaseLogic::useA5101StationWidget` (`home_bas
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Plain-wrapper call (asm-traced): the sender calls `HttpBusinessImpl::requestHttp` (`charging/http/http_business_impl.dart @0x239ba88`) at `charging/util/demosite_util_impl.dart @0x23f0cc4` without a `needEncryption` argument. So the default `needEncryption: true` applies and rule 3 of [encryption.md](../../../encryption.md#rule-and-resulting-counts) holds: the SDK path is taken whenever the SDK reports a logged-in state and the URL passes the base-URL predicate, otherwise the plain Dio path; that is decided at run time by `HttpEncryptionDecorator::request` (`charging/http/HttpEncryptionDecorator.dart @0x4868ff4`), not by this page.
 
 ## Request
 
@@ -24,7 +24,7 @@ The body is a 1-pair map literal typed `<String, String?>` (`AllocateArray r2 = 
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | string | yes | `"<site_id>"` | key `@0x23f0c28`, value store `@0x23f0c38` (parameter r2; the map's value type is `String?`, so the value is a String or null; the caller passes `field_7` of a model object, `home_base_logic.dart @0x23adabc`) |
+| `site_id` | string | yes | `"<site_id>"` | key `charging/util/demosite_util_impl.dart @0x23f0c28`, value store `@0x23f0c38` (parameter r2; the map's value type is `String?`, so the value is a String or null; the caller passes `field_7` of a model object, `home_base_logic.dart @0x23adabc`) |
 
 ## `param_type`/`cmd`
 
@@ -32,7 +32,7 @@ n/a
 
 ## Response model (link)
 
-Not determined. The success and failure callbacks are the pool entries `pp+0x2e570` and `pp+0x2e578` (`@0x23f0c4c`, `@0x23f0c60`), printed as `Function: [dart:ui] _NativeScene::_NativeScene._ (0x49c1cac)`, a placeholder label that 790 pool entries in the asm share, so the callback code cannot be read. The `complete` callback (`@0x22bb130`, printed under `power_usage_scenario_controller.dart`) only calls `complete()` on the async completer.
+Not determined. The success and failure callbacks are the pool entries `pp+0x2e570` and `pp+0x2e578` (`charging/util/demosite_util_impl.dart @0x23f0c4c`, `@0x23f0c60`), printed as `Function: [dart:ui] _NativeScene::_NativeScene._ (0x49c1cac)`, a placeholder label that 790 pool entries in the asm share, so the callback code cannot be read. The `complete` callback (`@0x22bb130`, printed under `power_usage_scenario_controller.dart`) only calls `complete()` on the async completer.
 
 ## Response
 
@@ -54,7 +54,7 @@ None traced. No compare of an error code was found in the sender or in the resol
 
 ## Callers in app
 
-- `charging/util/demosite_util_impl.dart`: `anonymousJoinSite` @0x23f0b70 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/util/demosite_util_impl.dart`: `anonymousJoinSite` @0x23f0b70 (requestHttp, default `needEncryption: true`)
 
 Called from:
 
@@ -67,7 +67,6 @@ Called from:
 ## Known unknowns
 
 - What the response contains and whether the app reads it: the success callback is an unresolved placeholder pool entry. The header stays string-only for this reason.
-- Whether the sender encrypts: it calls `requestHttp` (default `needEncryption` is true, see `api/encryption.md`); the demo-site path was not decoded further.
 - What the server does for an anonymous (demo) session: not derivable from the app.
 
 ## Device-tested by

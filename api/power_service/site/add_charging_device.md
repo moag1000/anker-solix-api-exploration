@@ -20,11 +20,20 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-The builder `addChargingDevice` (`http_request_repository_impl.dart @0x3bf4284`) contains no map literal; it forwards the body map that its caller passes to `encryptionRequestHttp` (`@0x3bf432c`). The caller builds an `A1340ChargingDeviceModel` object (`@0x3bf3fe0`) from form fields (a trimmed text field `@0x3bf3fd8`, an Rx value `@0x3bf4000`, and a number parsed either as a double `@0x3bf4058` or an int `@0x3bf40d0`, chosen by a bool flag `@0x3bf4034`); the keys of the sent map are written by the model's `toJson()`, which was not followed.
+The builder `addChargingDevice` (`http_request_repository_impl.dart @0x3bf4284`) contains no map literal; it forwards the body map that its caller passes to `encryptionRequestHttp` (`@0x3bf432c`). The caller builds an `A1340ChargingDeviceModel` object (`charging/ui/page/device/a1340/a1340add_device/a1340add_device_logic.dart @0x3bf3fe0`) from form fields (a trimmed text field `@0x3bf3fd8`, an Rx value `@0x3bf4000`, and a number parsed either as a double `@0x3bf4058` or an int `@0x3bf40d0`, chosen by a bool flag `@0x3bf4034`); the keys of the sent map are written by the model's `toJson()`, which was not followed.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| (keys of `A1340ChargingDeviceModel.toJson()`) | ? | | | caller `a1340add_device_logic.dart @0x3bf3fa0`; the model class is not decoded for this page |
+| `charging_device_id` | int (declared `int?`) | yes (key always written, value may be null) | | key `charging/model/a1340_device_info/a1340_charging_device_model.dart @0x286b450` |
+| `device_name` | string (declared `String?`) | yes (key always written, value may be null) | | key `0x286b46c` |
+| `device_type` | string (declared `String?`) | yes (key always written, value may be null) | | key `0x286b484` |
+| `battery_capacity` | int (declared `int?`) | yes (key always written, value may be null) | | key `0x286b49c` |
+| `new_battery_capacity` | ? (declared `unknown`) | yes (key always written, value may be null) | | key `0x286b4b4` |
+| `battery_uint` | string (declared `String?`) | yes (key always written, value may be null) | | key `0x286b4cc` |
+| `battery_health` | int (declared `int?`) | yes (key always written, value may be null) | | key `0x286b4e4` |
+| `update_flag` | bool (declared `bool?`) | yes (key always written, value may be null) | | key `0x286b4fc` |
+
+Keys (asm-traced): `A1340ChargingDeviceModel::toJson` (`charging/model/a1340_device_info/a1340_charging_device_model.dart @0x286b424`) writes eight keys unconditionally into one map literal (`AllocateArray r2 = 32` `@0x286b448`, `<String, dynamic>` `@0x286b514`): the value of each key is the model field stored unchanged, so the types are the declared field types of `A1340ChargingDeviceModel.fromJson` (`data/models.json`, `charging::A1340ChargingDeviceModel`, `charging/model/a1340_device_info/a1340_charging_device_model.dart @0x286b5fc`). The caller `A1340addDeviceLogic.addChargeDevice` (`charging/ui/page/device/a1340/a1340add_device/a1340add_device_logic.dart @0x3bf3fe0`) allocates the model and passes the object itself to `addChargingDevice` (`@0x3bf4204`); it calls no `toJson` there, so the table holds the keys of the model's `toJson`, and how the HTTP layer turns the object into the body is not visible in the Dart code read (the update caller logs the model's `toJson` under the label "设备修改参数json==", `@0x3bf48c0`, `@0x3bf48d0`).
 
 ## `param_type`/`cmd`
 
@@ -40,7 +49,7 @@ Top-level keys of the model (from `data/models.json`): `device_list` (List, null
 
 ## Example request/response
 
-Request: the key set comes from `A1340ChargingDeviceModel.toJson()`, not read here; no synthesized body is given.
+Request: the keys of `A1340ChargingDeviceModel.toJson()` (table above); no synthesized body is given.
 
 Response keys: see Response; no capture.
 
@@ -63,9 +72,9 @@ Called from:
 
 ## Known unknowns
 
-- The request keys and their types: they are written by `A1340ChargingDeviceModel.toJson()` (not followed). Header stays string-only.
+- Whether the HTTP layer serialises the passed `A1340ChargingDeviceModel` object with its `toJson` (the caller passes the object, not the map; `charging/ui/page/device/a1340/a1340add_device/a1340add_device_logic.dart @0x3bf4204`) — attempted 2026-10-20 (two-hop not readable: the serialisation happens after `encryptionRequestHttp` in the SDK handler, outside the asm tree. Header stays string-only)
 - Whether the answer (`A1340ChargingDeviceData`) is the full device list after the add or only the new device: the app only logs it.
-
+ — reclassified: server
 ## Device-tested by
 
 none

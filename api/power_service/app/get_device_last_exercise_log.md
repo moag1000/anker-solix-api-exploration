@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_device_last_exercise_log
 
@@ -24,8 +24,10 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn` | ? | yes | ? | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dccf4` |
+| `device_sn` | string | yes | | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dccf4` |
 | `exercise_type` | int (Smi, w) | yes | `1` | `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x29dcd08` |
+
+Typing (two-hop, asm-traced): in `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart` the first parameter of the builder is untyped (`SetupParameters(dynamic _ ...)`); its only caller, `A7320HomeLogic.getDeviceLastExerciseLogReqest` (`oe_a7320/src/oe_a7320/page/home/a7320_home_logic.dart @0x29dcc6c`), reads `field_6b` of an object held in `field_4f` and replaces a null value by the String literal `""` (`r0 = ""` `@0x29dcc34`), so `device_sn` is a string.
 
 ## `param_type`/`cmd`
 
@@ -47,7 +49,7 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
 
 ```json
 {
-  "device_sn": "<?>",
+  "device_sn": "<device_sn>",
   "exercise_type": 1
 }
 ```
@@ -60,6 +62,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
+- `A7320HomeLogic.getDeviceLastExerciseLogReqest` (`oe_a7320/src/oe_a7320/page/home/a7320_home_logic.dart @0x29dcc6c`)
 - `oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart`: `getDeviceLastExerciseLogRequest` @0x29dcc7c (encryptionRequestHttp; encrypted: true)
 
 ## Since/changed
@@ -68,9 +71,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Type of `device_sn` (parameter; `<String, Object>` only says non-null).
-- What other `exercise_type` values select (the builder sends the constant 1).
-- No `data/endpoints.json` caller is recorded for this builder; the call site above was found by searching the A7320 logic files.
+- What other `exercise_type` values select (the builder sends the constant 1). — reclassified: server
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

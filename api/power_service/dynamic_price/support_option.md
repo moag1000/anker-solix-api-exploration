@@ -67,8 +67,8 @@ Called from:
 
 ## Known unknowns
 
-- The element structure of `country_info` (the model keeps it untyped).
-- Whether `site_id` may be empty for a device not yet in a site: the app passes whatever its caller holds.
+- The element structure of `country_info` (the model keeps it untyped). — reclassified: server (elements of an untyped list; the content is server data)
+- Whether `site_id` may be empty for a device not yet in a site: the app passes whatever its caller holds. — reclassified: server (what the server accepts is not in the app)
 - Failure handling in the callers was not read.
 
 ## Device-tested by

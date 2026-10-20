@@ -16,7 +16,7 @@ Reads the list of vehicle brands for the add-vehicle flow of the EV charger (cal
 
 ## Encrypted?
 
-encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Direct SDK call, path C (asm-traced): the command function builds the map `{path, method, param}` and calls `AKIoTKitManagerImpl.handle` with the identifier `akiot.cloud_api` (`ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6b66c`) and no `*Http*` wrapper, so the inventory flag `encrypted: unknown` only says that no wrapper is called. The SDK sends the request natively; what it encrypts is not visible in Dart (mechanics: [../../sdk_senders.md](../../sdk_senders.md#the-common-envelope), background: [../../encryption.md](../../encryption.md#rule-and-resulting-counts)).
 
 ## Request
 
@@ -50,6 +50,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
+- `AddVehicleController.getBrandListIfNeed` (`ev_charger/src/ev_charger/page/vehicle/widgets/add_vehicle_controller.dart @0x2c6b4b8`)
 - `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getEvBrandList` @0x2c6b5a4 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2c6b608` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 Called from:
@@ -62,10 +63,8 @@ Called from:
 
 ## Known unknowns
 
-- Response model not fully read: it is named only by the type argument `<EvBrandListModel>` of the handler call; the SDK parser that builds it is not in the asm tree read, so this page stays string-only.
-- How the SDK handler turns the body into `EvBrandListModel`: the handler is not in the asm tree read; only the type argument is read here.
-- Encryption: the call is made by the command map directly to the SDK handler (path C, `api/encryption.md`); the "Encrypted?" line above is the inventory default.
-
+- Response model not fully read: it is named only by the type argument `<EvBrandListModel>` of the handler call; the SDK parser that builds it is not in the asm tree read, so this page stays string-only. — reclassified: server (the parser is in the native SDK handler, outside the asm tree)
+- How the SDK handler turns the body into `EvBrandListModel`: the handler is not in the asm tree read; only the type argument is read here. — reclassified: server (the parser is in the native SDK handler, outside the asm tree)
 ## Device-tested by
 
 none

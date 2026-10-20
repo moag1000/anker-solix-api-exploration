@@ -72,7 +72,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The values of `order_status` are not decoded (3 is what the home card sends; upstream also notes them as unknown).
+- The values of `order_status` are not decoded (3 is what the home card sends; upstream also notes them as unknown). — reclassified: server (the status values are defined by the server)
 - Whether the server honours `start_time`/`end_time` as dates, and whether `page_num` is 1-based, is not tested.
 - No response was captured; the response layout is the model's `fromJson`, not a server sample.
 

@@ -24,7 +24,7 @@ Three senders, each with a `params` object.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `params` | object | yes | | `setPersonalizationOptionsApi`: outer map typed `<String, Map<String, bool>>` (`@0x40363f0`, pool `pp+0x36f90`), key `@0x403637c`, value store `@0x40363cc` |
+| `params` | object | yes | | `setPersonalizationOptionsApi`: key `@0x403637c`, outer map typed `<String, Map<String, bool>>` (`@0x40363f0`, pool `pp+0x36f90`), value store `@0x40363cc` |
 | `params.<code>` | bool | yes | `true` | inner map typed `<String, bool>` (`@0x40363b8`, pool `pp+0x9f90`): the key is `60002.toString()` (`r16 = 60002` `@0x4036388`, tagged Smi, so `"30001"`) and the value is a bool parameter (store `@0x40363b4`) |
 | `params.driving_plan` | ? | yes | | `ScheduleNetwork::_setUserParams`: inner map typed `<String, Map<String, dynamic>>` (`@0x396833c`), key `@0x3968328`, value store `@0x3968338` (parameter at `fp-0x10`) |
 | `params` | object | yes | | `AKIotEVChargeCommand::setUserParams`: key `@0x405bea8` inside the `param` map typed `<String, Map<String, dynamic>>` (`@0x405bebc`) |
@@ -58,7 +58,7 @@ None traced for the first sender (no compare in its callbacks). The other sender
 ## Callers in app
 
 - `charging/http/user/about/about_http_request_repository_impl.dart`: `setPersonalizationOptionsApi` @0x4036308 (encryptionRequestHttp; encrypted: true)
-- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_setUserParams` @0x39682d4 (_requestHttp; encrypted: default-true (requestHttp) — verify)
+- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_setUserParams` (`schedule_network.dart @0x39682d4`; _requestHttp; encrypted: default-true (requestHttp) — verify)
 - `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `setUserParams` @0x405be14 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x405be6c` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 Called from:
@@ -74,7 +74,7 @@ Called from:
 ## Known unknowns
 
 - The `driving_plan` value and the IoT-kit `params` content (parameters). Header stays string-only.
-- What option code 30001 means (see [get_user_params](get_user_params.md)).
+- What option code 30001 means (see [get_user_params](get_user_params.md)). — reclassified: server (the option code meaning is defined by the server)
 - The method of `ScheduleNetwork::_requestHttp` (not read) and the callers' handling of the answer.
 
 ## Device-tested by

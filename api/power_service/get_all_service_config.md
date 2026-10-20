@@ -16,7 +16,7 @@ Fills the QA environment list of the app's environment picker: `EnvListPageLogic
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Plain-wrapper call (asm-traced): the sender calls `HttpRequestControllerImpl::requestHttp` (`charging/http/http_request_repository_impl.dart @0x2264938`) at `charging/http/http_request_repository_impl.dart @0x2986338` without a `needEncryption` argument. So the default `needEncryption: true` applies and rule 3 of [encryption.md](../encryption.md#rule-and-resulting-counts) holds: the SDK path is taken whenever the SDK reports a logged-in state and the URL passes the base-URL predicate, otherwise the plain Dio path; that is decided at run time by `HttpEncryptionDecorator::request` (`charging/http/HttpEncryptionDecorator.dart @0x4868ff4`), not by this page.
 
 ## Request
 
@@ -50,7 +50,7 @@ None traced. The caller's failure callback `env_list_page_logic.dart @0x2986354`
 
 ## Callers in app
 
-- `charging/http/http_request_repository_impl.dart`: `getAllQaEnvConfig` @0x2986280 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/http/http_request_repository_impl.dart`: `getAllQaEnvConfig` @0x2986280 (requestHttp, default `needEncryption: true`)
 
 Called from:
 
@@ -63,10 +63,8 @@ Called from:
 
 ## Known unknowns
 
-- The element structure of `env_data`.
+- The element structure of `env_data`. — reclassified: server (elements of an untyped list; the content is server data)
 - Whether production servers answer this URL: the function and page names (`getAllQaEnvConfig`, `EnvListPageLogic`) point at a QA environment list; the app sends it only from the environment picker page.
-- Whether `requestHttp` encrypts this call: it is the non-`encryption` wrapper (default `needEncryption` true, see `api/encryption.md`); not decoded further.
-
 ## Device-tested by
 
 none

@@ -24,9 +24,9 @@ Three senders.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `params` | list | yes | `["30001"]` | `getPersonalizationOptionsApi`: map typed `<String, List<String>>` (`@0x298e8c4`), key `@0x298e844`, one element `60002.toString()` (`r16 = 60002` `@0x298e850`, tagged Smi, so 30001, `toString` `@0x298e858`) in a `<String>` list (`@0x298e87c`), list store `@0x298e8a0` |
+| `params` | list | yes | `["30001"]` | `getPersonalizationOptionsApi`: key `@0x298e844`, map typed `<String, List<String>>` (`@0x298e8c4`), one element `60002.toString()` (`r16 = 60002` `@0x298e850`, tagged Smi, so 30001, `toString` `@0x298e858`) in a `<String>` list (`@0x298e87c`), list store `@0x298e8a0` |
 | `params` | ? | yes | | `ScheduleNetwork::_getUserParams`: `<String, dynamic>` map, key `@0x2850470`, store `@0x2850480` (parameter at `fp-0x10`) |
-| `device_sn` | ? | optional | | `ScheduleNetwork::_getUserParams`: `[]=` `@0x28504b8`, key `@0x28504b0`; added when the parameter at `fp-0x18` is non-null (`cmp w3, NULL` `@0x285049c`) |
+| `device_sn` | ? | optional | | `ScheduleNetwork::_getUserParams`: key `@0x28504b0`, `[]=` `@0x28504b8`; added when the parameter at `fp-0x18` is non-null (`cmp w3, NULL` `@0x285049c`) |
 | `params` | object | yes | | `AKIotEVChargeCommand::getUserParams`: key `@0x2700ac4` inside the `param` map; its value type was not read |
 
 ## `param_type`/`cmd`
@@ -58,7 +58,7 @@ None traced. The first sender's failure callback is the forwarding template `htt
 ## Callers in app
 
 - `charging/http/user/about/about_http_request_repository_impl.dart`: `getPersonalizationOptionsApi` @0x298e7d8 (encryptionRequestHttp; encrypted: true)
-- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_getUserParams` @0x2850430 (_requestHttp; encrypted: default-true (requestHttp) — verify)
+- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_getUserParams` (`schedule_network.dart @0x2850430`; _requestHttp; encrypted: default-true (requestHttp) — verify)
 - `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart`: `getUserParams` @0x2700a98 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2700b20` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 
 Called from:
@@ -74,7 +74,7 @@ Called from:
 ## Known unknowns
 
 - The `params` and `device_sn` types of the schedule sender and the `param` map of the IoT-kit sender (parameters). Header stays string-only.
-- What the option code 30001 selects (an integer turned into a string): not decoded; the same code appears in [set_user_params](set_user_params.md).
+- What the option code 30001 selects (an integer turned into a string): not decoded; the same code appears in [set_user_params](set_user_params.md). — reclassified: server (the option code meaning is defined by the server)
 - The method of `ScheduleNetwork::_requestHttp` (not read).
 
 ## Device-tested by

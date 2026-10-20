@@ -66,7 +66,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The weather type codes and the unit of `temperature` (see `temperature_type`) are not decoded.
+- The weather type codes and the unit of `temperature` (see `temperature_type`) are not decoded. — reclassified: server (the code meanings and units are defined by the server)
 - Whether the server uses the account location or the sent coordinates is not known.
 - Server behaviour is not known.
 

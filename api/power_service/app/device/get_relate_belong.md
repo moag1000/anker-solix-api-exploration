@@ -79,7 +79,7 @@ Called from:
 
 ## Known unknowns
 
-- What the numeric `belong_type` values mean: the closure only casts the value to `int?`; the consumer in `A1790homeLogic` was not decoded.
+- What the numeric `belong_type` values mean: the closure only casts the value to `int?`; the consumer in `A1790homeLogic` was not decoded. — reclassified: server (the value meanings are defined by the server)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

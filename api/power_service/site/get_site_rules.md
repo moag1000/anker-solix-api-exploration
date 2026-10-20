@@ -16,7 +16,7 @@ Reads the site rule list of an A17B1 site: `SiteLogic::_getSiteRules` (`green_en
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+Plain-wrapper call (asm-traced): the sender calls `HttpRequestControllerImpl::requestHttp` (`charging/http/http_request_repository_impl.dart @0x2264938`) at `charging/http/http_request_repository_impl.dart @0x2910c3c` without a `needEncryption` argument. So the default `needEncryption: true` applies and rule 3 of [encryption.md](../../encryption.md#rule-and-resulting-counts) holds: the SDK path is taken whenever the SDK reports a logged-in state and the URL passes the base-URL predicate, otherwise the plain Dio path; that is decided at run time by `HttpEncryptionDecorator::request` (`charging/http/HttpEncryptionDecorator.dart @0x4868ff4`), not by this page.
 
 ## Request
 
@@ -50,7 +50,7 @@ None traced: the builder passes the `postJML` failure template (`@0x226824c`) to
 
 ## Callers in app
 
-- `charging/http/http_request_repository_impl.dart`: `getSiteRules` @0x2910b84 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/http/http_request_repository_impl.dart`: `getSiteRules` @0x2910b84 (requestHttp, default `needEncryption: true`)
 
 Called from:
 
@@ -64,8 +64,7 @@ Called from:
 
 ## Known unknowns
 
-- The element structure of `rule_list`.
-- Whether `requestHttp` encrypts this call (non-`encryption` wrapper, default `needEncryption` true, see `api/encryption.md`).
+- The element structure of `rule_list`. — reclassified: server (elements of an untyped list; the content is server data)
 - Failure handling in the two callers was not read.
 
 ## Device-tested by
