@@ -60,7 +60,7 @@ Two senders. In the generic sender `station_id` is `field_7` of the `StationMain
 | `utility_rate_plan.peak_sessions[].peak_valley_prices[].end_time_period` | string | yes | `"00:00"` | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278df60`; `@0x278df6c` |
 | `utility_rate_plan.peak_sessions[].peak_valley_prices[].peak_type` | int (Smi, w) | yes | `1` | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278df78` |
 | `utility_rate_plan.peak_sessions[].peak_valley_prices[].day_type` | int (Smi, w) | yes | `2` | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278df8c` |
-| `electricity_strategy.mode` | int (width not read) | optional | ? | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278e10c` |
+| `electricity_strategy.mode` | int | optional | ? | `charging/ui/page/device/a5101/setting/utility_rate_plan/rate_plan_structure/fixed_rate/fixed_rate_logic.dart @0x278e10c` |
 
 ## `param_type`/`cmd`
 
