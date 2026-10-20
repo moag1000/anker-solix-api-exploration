@@ -16,7 +16,7 @@ Uploads batched protobuf device events (and, with the other type, TLV events) re
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: `true` (asm-traced default): the sender calls `requestHttp` with the named arguments `fail` and `showLoading` only (`charging/http/http_request_repository_impl.dart @0x263ef30`), and `requestHttp` declares `needEncryption = true` (`charging/http/http_request_repository_impl.dart @0x2264944`). Scheme and header rules: `api/encryption.md`.
 
 ## Request
 

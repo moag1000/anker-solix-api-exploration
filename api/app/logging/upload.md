@@ -31,12 +31,12 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | `logging_time` | int (unboxed, x) | yes | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133cc0` (value store `@0x3133cec`) |
 | `level` | string | yes | `"info"` | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133d10` (value store `@0x3133d24`) |
 | `os` | string | yes | `"android"` | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133d28` (value store `@0x3133d38`) |
-| `version` | ? | yes | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133d3c` (value store `@0x3133d50`) |
-| `app_version` | ? | yes | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133d74` (value store `@0x3133d88`) |
+| `version` | string | yes | `"<version>"` | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133d3c` (value store `@0x3133d50`) |
+| `app_version` | string | yes | `"<app_version>"` | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133d74` (value store `@0x3133d88`) |
 | `related_device_sn` | ? | yes | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133dac` (value store `@0x3133dc0`) |
 | `device_sn` | ? | yes | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133de4` (value store `@0x3133df8`) |
 
-Union over the two senders; the table lists the keys of `DeviceLogsLogic::_notifyServer` (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80`, map literal `<String, Object?>` `@0x3133e1c`), which is not evidence of a value type. `UploadLogLogic::uploadLogURL` (`charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b62e0`, map literal `<String, dynamic>` `@0x46b64d8`) sends the same keys except `related_device_sn` and `device_sn`. `logging_time` is boxed by `BoxInt64Instr` (`@0x3133cd4`, `@0x46b6400`), so it is an unboxed int (in `uploadLogURL` the value is the current time in milliseconds computed with `sdiv`). `source` is `"app"`, `level` `"info"` and `os` `"android"` in both senders (constants; no platform test was found in the senders). `version` and `app_version` are awaited results of `systemVersion` and `appVersion` (`@0x3133c58`, `@0x3133c6c`).
+Union over the two senders; the table lists the keys of `DeviceLogsLogic::_notifyServer` (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80`, map literal `<String, Object?>` `@0x3133e1c`), which is not evidence of a value type. `UploadLogLogic::uploadLogURL` (`charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b62e0`, map literal `<String, dynamic>` `@0x46b64d8`) sends the same keys except `related_device_sn` and `device_sn`. `logging_time` is boxed by `BoxInt64Instr` (`@0x3133cd4`, `@0x46b6400`), so it is an unboxed int (in `uploadLogURL` the value is the current time in milliseconds computed with `sdiv`). `source` is `"app"`, `level` `"info"` and `os` `"android"` in both senders (constants; no platform test was found in the senders). `version` and `app_version` are awaited results of `systemVersion` and `appVersion` (`@0x3133c6c`, `@0x3133c58`); both functions declare `InitAsync() -> Future<String>` (`charging/util/device_util.dart @0x225093c` and `@0x224ee44`), so both values are strings (one-hop evidence).
 
 ## `param_type`/`cmd`
 
@@ -90,7 +90,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `url`, `version`, `app_version`, `related_device_sn` and `device_sn`: parameters, fields or awaited results stored into untyped map literals.
+- Types of `url` (a field in `_notifyServer`, a parameter in `uploadLogURL`), `related_device_sn` and `device_sn` (parameters of `_notifyServer`): no declared type was read at the callers.
 - Whether `source: "app"` and `os: "android"` are replaced on iOS: no branch was found in the senders.
 - How the failure path works: `uploadLogURL` calls `uploadLogFail` (`charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b6568`); the failure closures were not decoded.
 - Server behaviour is not known from the app: this page states what the app builds and parses.

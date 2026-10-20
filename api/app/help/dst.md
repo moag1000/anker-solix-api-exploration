@@ -20,7 +20,7 @@ Same URL in the other sender(s) read:
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: `true` for both senders (asm-traced): `getDaylightSavingTime` uses `encryptionRequestHttp`; `getCloudCurrentTimezone` calls `requestHttp` with the named argument `fail` only (`charging/http/http_request_repository_impl.dart @0x33c8960`), and `requestHttp` declares `needEncryption = true` (`charging/http/http_request_repository_impl.dart @0x2264944`). Scheme and header rules: `api/encryption.md`.
 
 ## Request
 
