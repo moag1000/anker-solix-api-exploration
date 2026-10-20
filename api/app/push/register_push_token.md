@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # register_push_token
 
@@ -23,9 +23,11 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `is_notification_enable` | bool | yes | `true` | `charging/http/http_request_repository_impl.dart @0x2741890` (value store `@0x27418a0`) |
-| `token` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x27418a4` (value store `@0x27418b4`) |
+| `token` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x27418a4` (value store `@0x27418b4`) |
 
-The body map literal has type arguments `<String, Object>` (`charging/http/http_request_repository_impl.dart @0x27418b8`), not evidence of a value type, so `token` stays `?`. `is_notification_enable` is the constant `true`. The key `Openudid` is in a separate `<String, String>` map (`@0x27418ec`) with the value of `getTerminalId` (`@0x274187c`) passed as the `header` named argument (`@0x2741958`), so it is a request header, not a body field.
+The body map literal has type arguments `<String, Object>` (`charging/http/http_request_repository_impl.dart @0x27418b8`), not evidence of a value type; `token` is typed through the declared parameter (see below). `is_notification_enable` is the constant `true`. The key `Openudid` is in a separate `<String, String>` map (`@0x27418ec`) with the value of `getTerminalId` (`@0x274187c`) passed as the `header` named argument (`@0x2741958`), so it is a request header, not a body field.
+
+Type and provider of `token` (app side, traced 2026-10-20): the interface method `HttpRequestController::uploadDeviceToken` takes the token as a declared `String` (the tear-off signature `uploadDeviceToken(dynamic, String, {success, fail})` at `charging/http/http_request_repository.dart` line 9706, call `@0x34c51cc`), so `token` is a string. The token comes from `MessagePushHandler::uploadPushToken` (`charging/push/message_push_handler.dart @0x273a110`), which awaits `PushServiceOversea::getPushToken` (`@0x273a16c`); that function asks `FirebaseMessaging.getToken` (`push_service/src/push_service_oversea.dart @0x273a22c`), so the token of this build is a Firebase Cloud Messaging token; the log text is `pushToken: ` (`@0x273a18c`) and a null token ends the function (`cmp w0, NULL` `@0x273a1b8`). `uploadPushToken` is called from `MessagePushHandler::initMessagePush` (`@0x2703e00`).
 
 ## `param_type`/`cmd`
 
@@ -71,9 +73,7 @@ Called from:
 
 ## Known unknowns
 
-- Type of `token` (a string for the push provider token, by name only): a parameter stored into a `<String, Object>` literal.
-- Which push provider the token belongs to (FCM, APNs or Baidu): not decoded; the sibling `clear_count` mentions Baidu for China.
-- The caller's conditions (when the token is registered): not traced beyond the interface.
+- The caller's conditions (when the token is registered): not traced beyond the interface. — traced 2026-10-20: `uploadPushToken` runs from `initMessagePush` (`charging/push/message_push_handler.dart @0x2703e00`) and returns without a request when the token is null (`@0x273a1b8`); whether other screens call the interface method (the login and bind-phone logic files reference `uploadDeviceToken`) with their own conditions was not decoded
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

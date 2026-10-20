@@ -65,7 +65,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 ## Known unknowns
 
 - Which serial number the caller passes: `A5150HomeHttpReposity::getMiStatus` receives it as a parameter; the callers were not found in the call index.
-- The unit of `power` and `energy`: only the class fields are listed.
+- The unit of `power` and `energy`: only the class fields are listed. — reclassified: server (2026-10-20: the unit is decided by the server values and the screens that show them)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

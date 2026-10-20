@@ -27,6 +27,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 Both values are ints: the map literal has type arguments `<String, int?>` (`@0x46998e8`); `handle_type` is the tagged result of an unboxed int (`lsl` `@0x46998e0`), stored with a 32-bit store. `banner_id` is typed `int` from the `<String, int?>` literal only; its store width is not claimed (a parameter could be boxed or null).
 
+Values of `handle_type` (app side, traced 2026-10-20, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`): both calls are in `DeviceMainLogic::bannerClick` (`@0x469944c`); the direct call passes the unboxed constant 1 (`r3 = 1` `@0x469974c`, call `@0x4699758`) and a call in a closure of the same function (`@0x4699db8`) passes 2 (`r3 = 2` `@0x4699e5c`, call `@0x4699e64`). The argument is unboxed (the sender tags it with `lsl`), so these are the real values. Which user action each stands for (shown, closed, answered) is not named in the asm.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -71,7 +73,7 @@ Called from:
 
 ## Known unknowns
 
-- What `handle_type` values mean (shown, closed, answered): the caller's argument was not decoded.
+- What the two `handle_type` values 1 and 2 stand for in the UI (shown, closed or answered): not named in the asm — traced 2026-10-20 (the values and call sites are in Request).
 - The fields of `SurveyPopupModel` and what the callback does with it: only the constructor call was read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

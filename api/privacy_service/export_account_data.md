@@ -72,7 +72,7 @@ none traced: no numeric error code is compared in the sender or its closures rea
 
 - Types of `account`, `send_email`, `access_token` and `export_data_type`: parameters stored into a `<String, Object>` literal.
 - Which `export_data_type` values exist and what `send_email` changes: the callers' arguments were not decoded.
-- Whether the export arrives by mail or as a record in `export_record_list`: not visible in the app.
+- Whether the export arrives by mail or as a record in `export_record_list`: not visible in the app. — reclassified: server (2026-10-20: delivery is decided by the server)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

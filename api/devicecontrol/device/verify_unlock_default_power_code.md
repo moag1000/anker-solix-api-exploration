@@ -73,7 +73,7 @@ None recorded. On a transport or server error the app logs `verifyUnlockDefaultP
 
 ## Known unknowns
 
-- Where the unlock code comes from for the user (printed on the device, shown in the image `unlock_pop_image`, given by support); the app only forwards what is typed.
+- Where the unlock code comes from for the user (printed on the device, shown in the image `unlock_pop_image`, given by support); the app only forwards what is typed. — reclassified: server (2026-10-20: how the user obtains the code is product knowledge, not an app-side fact)
 - Whether `verify_result` is the only key of the response and whether it is wrapped in `data`.
 - Whether a successful verification changes any server state (for example, allowing values above the legal limit for later `set_site_device_param` calls), or only gates the app UI.
 

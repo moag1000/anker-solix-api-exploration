@@ -50,13 +50,14 @@ Called from:
 
 - `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getAIOTPopupList`
 
+Call sites (grep of the asm, traced 2026-10-20): `getAIOTPopupListApi` is called from `DeviceMainLogic::getAIOTPopupList` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x260dcc4`).
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- Which screen calls `getAIOTPopupListApi`: the inventory lists none.
 - The element class of `popups` (typed `List?`).
 - What `aiotPlatformRequestHttp` (`charging/http/aiot/aiot_http_request_repository_impl.dart @0x260ddb8`) adds to the request (host, signing): the wrapper was not read here.
 - Server behaviour is not known from the app: this page states what the app builds and parses.

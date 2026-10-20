@@ -74,7 +74,7 @@ Called from:
 
 - Types of `popup_name` and `popup_type`: parameters stored into a `<String, Object?>` literal.
 - Whether the wrapper reads the response: `aiotPlatformRequestHttp` was not read.
-- Which popup event the call stands for (shown, closed, clicked): the key `popup_type` is not decoded.
+- Which popup event the call stands for (shown, closed, clicked): the key `popup_type` is not decoded. — attempted 2026-10-20 (two-hop not readable: the caller is a closure `(dynamic, int, String?, int?)` of `DeviceMainLogic` that forwards its own arguments (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2618360`))
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

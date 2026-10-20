@@ -106,7 +106,7 @@ Called from:
 
 ## Known unknowns
 
-- What `unbind_type` carries (the sender stores a parameter; the callers of `deviceUnbind` were not decoded for the value).
+- What `unbind_type` carries (the sender stores a parameter; the callers of `deviceUnbind` were not decoded for the value). — attempted 2026-10-20 (two-hop not readable: the three `deviceUnbind` callers pass `r5 = true` or `r5 = false` as a bool constant (`charging/ui/page/device/a1340/a1340setting/a1340setting_logic.dart @0x3c23f2c`, `charging/ui/page/device/a1770/a1770setting/a1770setting_logic.dart @0x3c816b8`, `charging/ui/page/device/a5143/match_bluetooth_scan/a5143_match_bluetooth_scan_logic.dart @0x343070c`) and the other arguments as slots of their frames; the string `unbind_type` is not among the constants)
 - Why `deleteByMac` runs twice in the repository closures (two different stores, not named in the asm).
 - Server behaviour for a parent device with children (`parent_device_sn`): not visible.
 - Server behaviour is not known from the app: this page states what the app builds and parses.

@@ -70,7 +70,7 @@ Called from:
 ## Known unknowns
 
 - Which serial number `WifiInfoLogic::_getWifiInfo` passes (the caller was not read).
-- The unit and range of `rssi`: only the class field type is listed.
+- The unit and range of `rssi`: only the class field type is listed. — reclassified: device test row 155 (2026-10-20: the number comes from the device through the cloud; compare the app display with the raw value)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

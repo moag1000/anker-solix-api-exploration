@@ -76,7 +76,7 @@ Called from:
 
 ## Known unknowns
 
-- What the `timezone` string looks like (an IANA name or a GMT offset): the app uses the value as stored name and as `timeZoneGMT`; its format was not read.
+- What the `timezone` string looks like (an IANA name or a GMT offset): the app uses the value as stored name and as `timeZoneGMT`; its format was not read. — reclassified: server (2026-10-20: the text format is decided by the server answer)
 - Why the response of the first sender is wrapped into a map with `timeZoneName` and `timeZoneGMT`: both keys are written from the same value or its default; the consumers of `setCurrentTimezoneInfo` were not read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

@@ -58,7 +58,7 @@ Called from:
 ## Known unknowns
 
 - The response keys: `UserMainPageLogic::_handleJMLResponse` decodes the value and was not read.
-- What `JML` stands for and why the path contains `xtest`: not visible in the app.
+- What `JML` stands for and why the path contains `xtest`: not visible in the app. — reclassified: server (2026-10-20: a server-side name that the app does not explain)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -63,13 +63,14 @@ Called from:
 - `charging/http/http_request_repository.dart::getBanners`
 - `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getBannerData`
 
+Call sites (grep of the asm, traced 2026-10-20): `getBanners` is called from `DeviceMainLogic::getBannerData` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26089f0`).
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- Which screen calls `getBanners`: the inventory lists only the repository interface as caller.
 - What the region string looks like (country code or region name): the value is a field of the object from `getCurrentRegion`, not decoded.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

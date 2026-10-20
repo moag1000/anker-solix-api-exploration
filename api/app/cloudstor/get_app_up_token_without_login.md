@@ -36,6 +36,8 @@ The body is built by `getAppUpTokenGeneral` (`charging/http/http_request_reposit
 
 The sender also passes a `header` map (named argument `charging/http/http_request_repository_impl.dart @0x2d90c88`) built by the callers (for example `CustomCropController` in `charging/ui/page/device/a2345/a2345_media_ability/custom_crop_controller.dart` builds one with the keys `teminal_id`, `@0x2d90858`, and `user_id`, `@0x2d90870`), not a body field.
 
+Values of `type` in the feedback flow (app side, traced 2026-10-20, `charging/ui/page/user/feedback/feedback_logic.dart`): the closure in `FeedbackLogic::clickSubmit` (`@0x31208a4`) tests a bool field of the logic (`tbnz w1, #4` `@0x3120978`); when it is true it loads the URL `/app/cloudstor/get_app_up_token_general` with the unboxed constant 6 (`@0x312097c`, `@0x3120984`), otherwise the URL `/app/cloudstor/get_app_up_token_without_login` (this page) with the unboxed constant 7 (`@0x312098c`, `@0x3120994`). The sender tags the argument with `lsl`, so these are the real values: the feedback flow sends `type` 7 on this endpoint and 6 on the logged-in one. The values passed by `uploadCroppedImage` (`charging/ui/page/device/a2345/a2345_media_ability/custom_crop_controller.dart @0x2d90620`) and `_uploadCroppedImage` (`small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/crop_logic.dart @0x3313658`) were not decoded.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -89,7 +91,7 @@ Called from:
 ## Known unknowns
 
 - The response keys for this variant: the sender forwards the value and the callers' parse was not read; the sibling endpoint returns `uptoken` and `key_prefix`.
-- Type of `file_name` and the values of `type` per call site (the feedback screen loads raw 6 and 7 next to the URL, `charging/ui/page/user/feedback/feedback_logic.dart @0x312097c`, `@0x3120994`).
+- Type of `file_name` (a parameter of the sender, no declared type read) and the values of `type` at the crop-upload call sites (`uploadCroppedImage`, `_uploadCroppedImage`): not decoded; the feedback flow sends 7, see Request — traced 2026-10-20.
 - Whether the server accepts this URL with an `Openudid`/terminal id header only (the callers add `teminal_id`): the headers are built per caller.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
