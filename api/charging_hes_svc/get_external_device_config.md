@@ -29,6 +29,8 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 | `stationId` | string | yes | `"<stationId>"` | `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart @0x28dfd9c` |
 | `pn` | string | yes | `"<pn>"` | `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart @0x28dfdb8` |
 
+Source of `pn` (traced 2026-10-20): `getExternalDeviceList` loads it from the logic field `field_8f` (`LoadField` `@0x28dfdac`, stored into the argument array `@0x28dfdb4`); the `DeviceManagerLogic` constructor sets that field (`charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart @0x41264e0`) to `value?.field_7` of an observable of `A5101StationLogic` (obtained with `getA5101StationController` `@0x412649c`, null test `@0x41264b4`) with the fallback `""` (`@0x41264d8`), so a missing value is sent as the empty string. (The earlier note `field_d3` at `@0x28dfde4` is a different field, loaded for the callback.)
+
 ## `param_type`/`cmd`
 
 n/a
@@ -40,6 +42,8 @@ n/a
 ## Response
 
 (asm-traced) Top-level keys of the model (`data/models.json`, `charging::ExternalDeviceConfigModel`): `deviceConfig` (unknown).
+
+Structure behind `deviceConfig` (traced 2026-10-20): `ExternalDeviceConfigModel.fromJson` (`charging/model/a5101/external_device_config_model.dart @0x28e0358`) builds a list with the type argument `<DeviceConfig>` (`@0x28e03c4`) and parses each element with `DeviceConfig.fromJson` (call `@0x28e0798`, function `@0x28e082c`), which reads `deviceType` (cast `int?` `@0x28e0898`, `field_7`) and `isAdd` (cast `int?` `@0x28e0920`, `field_b`); the class also has the text fields `icon`, `title` and `description` that `fromJson` does not read.
 
 ## Example request/response
 
@@ -75,8 +79,6 @@ Called from:
 
 ## Known unknowns
 
-- The `pn` value comes from a field (`field_d3`, `charging/ui/page/device/a5101/setting/device_manager/device_manager_logic.dart @0x28dfdb8`) that was not resolved; the map type `<String, String?>` allows null for it.
-- The inner structure of `deviceConfig`: `data/models.json` lists the key as `unknown`.
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

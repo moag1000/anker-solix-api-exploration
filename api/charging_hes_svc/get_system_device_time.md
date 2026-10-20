@@ -40,6 +40,8 @@ n/a
 
 (asm-traced) Top-level keys of the model (`data/models.json`, `charging::ManualBackupTimeModel`): `deviceTime` (String?), `timeStamp` (int?), `timeLocation` (String?).
 
+App side use (traced 2026-10-20): the success closure of `ManualBackupPowerLogic::_getDeviceCurrentTime` (`charging/ui/page/device/a5101/setting/manual_backup_power/manual_backup_power_logic.dart @0x29735d8`) logs the model with `jsonEncode` (`@0x2973638`), stores `timeLocation` (`field_f`, fallback `""`) in the logic field `field_af` (`@0x29736c4`) and calls `_calculateShowDateAndTime` (`@0x29736f4`) with `deviceTime` (`field_7`, fallback `""`) and `defaultTime: true`; `timeStamp` is not read. With `defaultTime` true that function applies a `parse` call (selector not named by Blutter) to the text (`@0x2972fa8`) and reads the date and time parts from the result; with it false it converts through `convertTimezoneToDateTime` with the stored `timeLocation` (`@0x297317c`, `@0x2973198`), so `timeLocation` is used as the zone name for that conversion.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -71,7 +73,7 @@ Called from:
 
 ## Known unknowns
 
-- The time zone and format of the returned time: only the parse was read.
+- The time zone and format of the returned time: only the parse was read. — traced 2026-10-20: narrowed, see Response (app side use); the text pattern accepted by the `parse` call at `manual_backup_power_logic.dart @0x2972fa8` is not named in the asm
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

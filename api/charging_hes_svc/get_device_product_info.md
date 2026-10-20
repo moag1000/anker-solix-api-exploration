@@ -64,7 +64,7 @@ Called from:
 
 ## Known unknowns
 
-- What `isLogResponse = false` changes: the HTTP layer was not read for it (the response is probably large; this is not read).
+- What `isLogResponse = false` changes: the HTTP layer was not read for it (the response is probably large; this is not read). — traced 2026-10-20: `isLogResponse` is a named parameter of `requestHttp` (`charging/http/http_request_repository_impl.dart @0x2264944`, default `false`) that is forwarded unchanged as a named argument to the HTTP service call (`charging/impl/http_service_impl.dart @0x2284518`, target `encryptionRequestHttp`); the code that reads it lies outside the app asm tree, so the effect is not readable (the name suggests response logging, not verified)
 - Whether the server filters the catalogue by user or product line: the app sends no key.
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.

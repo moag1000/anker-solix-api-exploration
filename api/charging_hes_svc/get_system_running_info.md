@@ -45,6 +45,8 @@ n/a
 
 (asm-traced) Top-level keys of the model (`data/models.json`, `charging::A5101SystemProfitModel`): `totalSystemSavings` (num?), `systemSavingsPriceUnit` (String?), `saveCarbonFootprint` (num?), `saveCarbonUnit` (String?), `totalSystemPowerGeneration` (num?), `systemPowerGenerationUnit` (String?), `mainSn` (String?), `mainDeviceModel` (String?), `connected` (bool?), `saveCarbonC` (num?), `catCount` (num?), `rePostTime` (int?), `batCount` (int?), `numberOfParallelDevice` (int?), `supportDiesel` (bool?), `net` (int?), `isAddHeatPump` (bool?), `realNet` (int?), `systemCode` (String?), `enwgs` (int?), `emsDisable` (bool?), `hasEvCharger` (bool?), `evChargerInfos` (List), `countryCode` (String?), `mode` (int?), `hasSwitch` (bool?).
 
+App side use on the family page (traced 2026-10-20): the success closure of `FamilyMainLogic::getSystemProfits` (`charging/ui/page/family/family_main_page_logic.dart @0x23e3234`, sender call `@0x23e2ec0`) logs the model with `toJson` (`@0x23e3274`), stores it in an observable (`value=` `@0x23e3328`), calls `changeDeviceNetType` (`@0x23e3364`), reads `rePostTime` (`field_33`, `@0x23e33b4`) and `enwgs` (`field_53`, `@0x23e3428`) into observables, copies `mainSn` (`field_1f`) to `field_6b` of the logic (`@0x23e3770`) and then calls `updateFinalEvergenShowStatus` (`@0x23e3524`), `getAiModeStatus` (`@0x23e366c`), the EV-charger helpers `refreshEvChargerName`, `checkEvChargerStatus`, `checkEvChargerStatusNotCharging`, `chargerPlugInStatus`, `checkEvChargerOfflineStatus` (`@0x23e36b8`..`@0x23e36f8`), `updateDeviceOnLineState` (`@0x23e37cc`) and `initAllStatusWhenDeviceOffline` (`@0x23e38b4`). (The field names follow the key order of `A5101SystemProfitModel.fromJson`.)
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -76,7 +78,6 @@ Called from:
 
 ## Known unknowns
 
-- What the family page does with the model: only the parse was read.
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

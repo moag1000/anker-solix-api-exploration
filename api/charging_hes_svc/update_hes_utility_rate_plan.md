@@ -27,7 +27,9 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `siteId` | string | yes | `""` (constant empty string) | `charging/http/http_request_repository_impl.dart @0x4326da0` |
-| `peakValleyPriceSeason` | ? | yes | the result of a `toJson` call on the parameter | `charging/http/http_request_repository_impl.dart @0x4326db4` |
+| `peakValleyPriceSeason` | object | yes |  | `charging/http/http_request_repository_impl.dart @0x4326db4` |
+
+Structure of `peakValleyPriceSeason` (traced 2026-10-20): the only caller `PeaksValleysLogic::submitPeakAndValley` (`charging/ui/page/device/a5101/setting/peaksAndValleys/peaks_valleys_logic.dart`) builds a `PeakValleyPriceSeasons` object (`@0x4326b44`), logs it with the text `peakValleyPriceSeasonsToJson--->` (`@0x4326b94`) and passes it to `updatePeakAndValley` (`@0x4326bf0`). `PeakValleyPriceSeasons::toJson` (`charging/model/a5101/a5101_hes_setting_model.dart @0x34d88c0`, declared return type `Map<String, dynamic>`) writes the keys `from` (`@0x34d88f0`), `to` (`@0x34d8904`), `energyUnit` (`@0x34d892c`), `priceUnits` (`@0x34d89c8`, list through `PriceUnits::toJson`, keys `priceUnit`, `isDefault`, `name`), `weekDay` (`@0x34d8a64`, list through `DaySchedule::toJson`, keys `from`, `to`, `sellPrice`, `buyPrice`, `peak`), `holiday` (`@0x34d8b00`) and `snDateTime` (`@0x34d8b30`). The value is therefore a JSON object; the element key list of `DaySchedule`/`PriceUnits` is by the field order of their `fromJson` and `toJson` in the same file.
 
 ## `param_type`/`cmd`
 
@@ -73,8 +75,7 @@ Called from:
 
 ## Known unknowns
 
-- Why `siteId` is always sent as the empty string: the builder stores the constant; the site is probably carried inside `peakValleyPriceSeason`, which is not read here.
-- The structure of `peakValleyPriceSeason`: the `toJson` of the parameter class was not read.
+- Why `siteId` is always sent as the empty string: the builder stores the constant (`charging/http/http_request_repository_impl.dart @0x4326dac`), and the `toJson` of `PeakValleyPriceSeasons` (see Request) has no site or station key, so this request carries no site identifier in its body (traced 2026-10-20); how the server picks the site is server behaviour and not known from the app. — reclassified: server
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

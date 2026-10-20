@@ -66,13 +66,14 @@ Called from:
 
 - `charging/ui/page/device/a5101/setting/remote_switch/remote_switch_logic.dart::chooseEvent`
 
+Use of `messageId` (traced 2026-10-20, app side): the sender reads the key `messageId` from the answer (`charging/ui/page/device/a5101/setting/remote_switch/remote_switch_logic.dart @0x3ea9788`), stores it in the logic field `field_67` only when the text is not empty (`cbz` `@0x3ea97f4`, store `@0x3ea9804`) and then starts `timeOut` (`@0x3ea9824`), a one-shot 10 s `Timer` (`Instance_Duration`, `objs.txt Obj!Duration@4218ba1` = 0x989680 microseconds) whose closure dismisses the loading and shows the text `settingFailed` (the shared closure `a5101_firmware_update_logic.dart @0x34819e0`). The message handler of the same logic accepts a message of type 10001 (unboxed `cmp x2, #10001` `@0x27ce884`, tagged compare with raw 20002 = Smi 10001 `@0x27ce8a4`), parses it as `A5101MqttOrderResultModel` (`@0x27ce8f0`), requires a non-empty `message_id` (`field_7`, `cbz` `@0x27ce90c`), compares it with `field_67` (`==` `@0x27ce934`) and on a match logs `远程开关机----> ` with `success` (`field_b`, `@0x27ce960`) and calls `cancelTimeOut` (`@0x27ce984`). Without a matching message the timer fires after 10 s.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- What `messageId` is used for: the app stores it and starts `timeOut`; the matching MQTT message was not read for this page.
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

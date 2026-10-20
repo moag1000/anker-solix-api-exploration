@@ -42,6 +42,8 @@ no model class: the success closure (`charging/ui/page/device/a5101/device_home_
 
 No key of the response is read in the sender: the map is handed on unchanged.
 
+App side keys read (traced 2026-10-20): the callback of `A5101DeviceHomeLogic::getDeviceCardDetails` (`charging/ui/page/device/a5101/device_home_page/device_home_logic.dart`, sender call `@0x33c4c3c`, closure `@0x33c5608`) looks up the keys `main_sn` (default `""`, stored in `field_9b` `@0x33c56e8`), `pn` (default `""`, `field_9f` `@0x33c579c`), `station_name` (default `""`), `grid_status` (default Smi 1: raw `r3 = 2` `@0x33c58c0`, tagged slot) and `pack_details` (`@0x33c5914`); after the lookups it calls `update` with the list `["packlist", "device"]` (array length raw 4 = 2 elements, `@0x33c5988`..`@0x33c59d0`). The key types are not checked here. Value meanings are not read from the asm.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -70,7 +72,6 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- The keys of the detail map: the consumer of the callback is not recorded in `data/endpoints.json`, so no key read was found.
 - Which `device_type` values exist: the parameter is passed through (`charging/ui/page/device/a5101/device_home_page/device_home_http_reposity.dart @0x33c4cc8`). — attempted 2026-10-20 (two-hop not readable: the two callers pass slots of their own frames, `charging/ui/page/device/a5101/device_home_page/device_home_logic.dart @0x33c4c3c` and `charging/ui/page/device/main/station_device_home/station_set_time/station_set_time_page.dart @0x4000c78`)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

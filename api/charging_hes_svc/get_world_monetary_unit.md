@@ -80,7 +80,7 @@ Called from:
 ## Known unknowns
 
 - Why `countryCodes` and `areaCodes` are always empty: the builder stores the constant empty string for both; the server side filter is not known.
-- Which element of the list the callers treat as the default unit: the callers were not read beyond their names.
+- Which element of the list the callers treat as the default unit: the callers were not read beyond their names. — traced 2026-10-20: `HomeSettingLogic::_getCurrency` (`charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart`, sender call `@0x292f4a4`) parses the list with `_parseCurrencySymbols` into a growable `List<PriceUnit>` held in `field_ab` (`@0x292f654`..`@0x292f668`) and then calls `_onRatePlanPartLoaded` with a value read as index 0 of `field_13` (`@0x292f604`..`@0x292f610`, the class of `field_13` not resolved); `SystemPolicyLogic::getCurrency` (`system_policy_logic.dart @0x28e9f6c`) only builds a `List<PriceUnit>`; no closure read selects a default element by position or name
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

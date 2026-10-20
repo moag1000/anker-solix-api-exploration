@@ -32,6 +32,8 @@ Not readable in 3.24.3. The five keys come from the 3.18.0 inventory of the buil
 | `time_stamp` | ? | ? | ? | 3.18.0 builder, address 0x1aa2cb4 |
 | `status` | ? | ? | ? | 3.18.0 builder, address 0x1aa2cb4 |
 
+3.18.0 builder read (traced 2026-10-20, 3.18.0 asm tree, not the 3.24.3 app): `reportDeviceState` (`charging/ui/page/family/family_main_page_logic.dart @0x1aa2cb4` in the 3.18.0 tree) builds a `<String, Object>` literal (`@0x1aa2ddc`, array length raw 20 = 10 slots, five pairs, `@0x1aa2cf0`) and sends it with `requestHttp` (`@0x1aa2e50`) and the method object `Obj!Method@2c736e1` (3.18.0 `pp.txt` `[pp+0x9b18]`, `objs.txt` of the 3.18.0 tree, name `post`), so the method was POST in 3.18.0. `station_id` and `status` are stored as received from the parameters (`@0x1aa2d0c`, `@0x1aa2db8`, no conversion), `sn` and `local_time` are strings with the fallback `""` for null (`@0x1aa2d28`, `@0x1aa2d50`), and `time_stamp` is an integer boxed from an unboxed 64-bit value (`BoxInt64Instr` `@0x1aa2d68`). The only 3.18.0 caller is a message-event closure of the same file (`@0x1aa2aa4`) that builds an `A5101DeviceStatusModel` from a map (`fromJson` `@0x1aa29f4`), takes the time as `_getCurrentMicros` divided twice by 1000 (`sdiv` `@0x1aa2a0c`, `@0x1aa2a10`, i.e. seconds) and loads `station_id` from a logic field with the fallback `""` (`@0x1aa2a48`). The page stays string-only because the 3.24.3 app has no sender.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -74,7 +76,7 @@ none traced: no 3.24.3 code references the URL.
 
 ## Known unknowns
 
-- Everything about the request and response: the sender exists only in 3.18.0 and was not read for this batch.
+- The response handling of the 3.18.0 sender (its success closure) and whether the 3.24.3 app sends the call through another builder: the request side of the 3.18.0 builder is read (see Request); no 3.24.3 code references the URL — traced 2026-10-20
 - Whether the server still accepts the endpoint: the 3.24.3 app no longer calls it.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

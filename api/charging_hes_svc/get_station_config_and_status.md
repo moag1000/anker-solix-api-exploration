@@ -66,13 +66,14 @@ Called from:
 - `charging/ui/page/device/a5101/setting/grid_dispatch/grid_dispatch_logic.dart::getAdvancedConfigStateFromCloud`
 - `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart::_getNetAutoDisasterPrepareStatus`
 
+Keys read by the two callers (traced 2026-10-20; the key names follow the field order of `A5101StationGridConfigModel.fromJson`: `afci` `field_7`, `rsd` `field_b`, `dred` `field_f`, `rcr` `field_13`, `faststop` `field_17`): `AutoDisasterTipsLogic::_getNetAutoDisasterPrepareStatus` (`charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart`) logs the model with `toJson` (`@0x34b6664`) and reads `dred` (`field_f`, shown by the asm as an `ArrayLoad` of index 0) and its `status` (`field_b`), comparing it with the integer 1 (raw 2 pushed `@0x34b66f4`, tagged compare); the log text it prints next to that value says `faststop`. `GridDispatchLogic::getAdvancedConfigStateFromCloud` (`charging/ui/page/device/a5101/setting/grid_dispatch/grid_dispatch_logic.dart @0x27c7c00`, await `@0x27c7c0c`) reads `dred` (`field_f`, null test `@0x27c7c24`, then its `config` `field_7` `@0x27c7c78`) only when the `isAU` test on a market field of the logic holds (`@0x27c7c38`), and `rcr` (`field_13`, `@0x27c7e1c`, `@0x27c7e8c`) behind the tests `isDE`, `isGB`, `isCZ`, `isAT` (`@0x27c7e40`..`@0x27c7e64`), and writes the values into observable fields of the logic (`value=` `@0x27c7cb4`, `@0x27c7e14`, `@0x27c8054`); the other three model keys are not read by this function.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- How the two callers differ in the keys they use: only the shared sender was read.
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

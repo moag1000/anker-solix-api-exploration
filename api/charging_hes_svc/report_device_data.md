@@ -31,6 +31,8 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 
 Types (traced 2026-10-20): the only caller `FamilyMainPageLogic::start5101DeviceReport` builds `siteIds` itself as a growable list with the type argument `<String>` holding one element: `field_7` of the value of the observable at offset 451 of the logic, or the empty string (`r17 = 451` `@0x23ec9c0`, `value()` `@0x23ec9cc`, `field_7` `@0x23ec9e0`, fallback `@0x23ec9f4`; `AllocateGrowableArray` `@0x23eca2c`, `charging/ui/page/family/family_main_page_logic.dart @0x23eca1c`..`@0x23eca3c`, call `@0x23eca7c`); the second argument, the value at offset 475 of the logic (`r17 = 475` `@0x23eca4c`, passed at `@0x23eca74`), is the numeric value that the builder tests for the timer or `day` path, so `siteIds` is a list of strings; `day` is the result of `DateUtil.getCurrentYYMMDDByDateStr`, declared `static String` (`base_service/util/date_util.dart @0x2352e04`), so it is a string.
 
+Rule of the two paths (traced 2026-10-20): the numeric value in the closure context is the interval `rePostTime * 60`. `FamilyMainPageLogic::start5101DeviceReport` passes the logic field at offset 475 (`charging/ui/page/family/family_main_page_logic.dart @0x23eca4c`, `@0x23eca74`); that field is written by the success closure of `getSystemProfits` from the key `rePostTime` of the [get_system_running_info](get_system_running_info.md) answer (`LoadField` `field_33` `@0x23e33b4`, fallback 0 when the key is null `@0x23e33c4`, `mul` by 60 as unboxed 64-bit `@0x23e33e0`, store `@0x23e33fc`) and by `_changeDevice` (`@0x479e8e4`..`@0x479e904`, same product), and it is reset to null at `@0x23e2554`. So a positive `rePostTime` selects the timer path (no `day`), and a missing, zero or negative value selects the `day` path with the date of the day; `rePostTime` itself comes from the server answer (value not known from the app).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -70,7 +72,6 @@ none traced: no numeric error code is compared in the success closure; the failu
 
 ## Known unknowns
 
-- The rule that decides between the timer path and the `day` path (the numeric context value at `charging/ui/page/family/family_main_http_reposity.dart @0x23ecb30`): its source was not decoded.
 - What the server renews: the app only logs the success text.
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.

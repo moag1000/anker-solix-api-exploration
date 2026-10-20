@@ -28,11 +28,13 @@ The body is not built in the sender: `HttpRequestControllerImpl::sendDeviceRepor
 |---|---|---|---|---|
 | `pn` | ? | yes | ? | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2605308` |
 | `stationId` | string | yes | `"<stationId>"` | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26053a4` |
-| `errorInfos` | ? | yes | ? | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2605424` |
+| `errorInfos` | list | yes |  | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2605424` |
 | `isClearAllFaults` | ? | yes | ? | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x260545c` |
 | `timeStamp` | int (unboxed, x) | yes | current time in seconds | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x260546c` |
 | `localTime` | ? | yes | a formatted time text | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26054b4` |
-| `isFirstFaultReport` | ? | yes | ? | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26054ec` |
+| `isFirstFaultReport` | bool | yes |  | `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26054ec` |
+
+Caller side (traced 2026-10-20, app side): both calls of `requesetDeviceReport` sit in `DeviceMainLogic::onMessageDispatch` (`@0x2601888`, `@0x2601998`). They take `field_13` of a message object, check it as `List<AtsAndMiErrModel>` (`r8 = List<AtsAndMiErrModel>`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2601840`, `@0x2601944`; the class is in `charging/model/a5150/ats_mi_error_model.dart`) and pass that list as `errorInfos` together with the result of a no-argument selector on the list as `isClearAllFaults` (`GDT[cid_x0 + 0x34bca]` `@0x2601864`, `@0x2601968`; the selector is not named by Blutter, the same one is used as a bool test in `FamilyMainLogic::closeException`, `charging/ui/page/family/family_main_page_logic.dart @0x400c598`). `isFirstFaultReport` is the named parameter of `requesetDeviceReport` with the default `false` (`SetupParameters` `@0x260521c`); one call site passes the constant `true` (`@0x260197c`, `@0x2601990`). So `errorInfos` is a list of `AtsAndMiErrModel` elements and `isFirstFaultReport` a bool; the type of `isClearAllFaults` is the (unnamed) selector result and stays `?`.
 
 ## `param_type`/`cmd`
 
@@ -83,8 +85,8 @@ Called from:
 
 ## Known unknowns
 
-- The types of `pn`, `errorInfos`, `isClearAllFaults`, `localTime` and `isFirstFaultReport`: the values are parameters, fields or call results not typed at a readable declaration. — attempted 2026-10-20 (two-hop not readable: `requesetDeviceReport` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2605544`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
-- The structure of `errorInfos`: it is the parameter `fp-0x18` of `requesetDeviceReport` stored as received (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2605438`).
+- The types of `pn`, `isClearAllFaults` and `localTime` (`errorInfos` and `isFirstFaultReport` are typed under Request): the values are parameters, fields or call results not typed at a readable declaration. — attempted 2026-10-20 (two-hop not readable: `requesetDeviceReport` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2605544`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
+- The element layout of `AtsAndMiErrModel` (`charging/model/a5150/ats_mi_error_model.dart`) as it is serialised into `errorInfos`: the `toJson` of the element class was not read for this page — traced 2026-10-20: the list itself is typed under Request
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

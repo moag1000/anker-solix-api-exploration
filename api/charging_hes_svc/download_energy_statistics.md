@@ -41,6 +41,8 @@ n/a
 
 - `charging::EnergyStatisticsModel`, parsed by `EnergyStatisticsModel.fromJson` at `charging/ui/page/device/a5101/charts/chart_http_repository.dart @0x301c5d4` (success closure `@0x301c59c`, `bl` target `[package:charging/model/a5101/a5101_statistics_model/energy_statistics_model.dart]`).
 
+App side use of the model (traced 2026-10-20): the success closure of `A5101ChartDetailController::downloadData` (`charging/ui/page/device/a5101/charts/detail/detail_page_logic.dart @0x301cf80`) reads `fileUrl` (field `field_7`, null and empty-string test `@0x301cfb0`..`@0x301cfe4`); when it is null or empty the closure logs `model.fileUrl is null` (`@0x301d024`) and calls `downloadError`; otherwise it calls `downloadAndShare` (`@0x301d01c`) with the URL and the `fileName` key (`field_b`) or, when that is null, the constant file name `EnergyData.csv` (`@0x301d000`). `downloadAndShare` creates a directory, downloads the file with `downloadFile` (`@0x301d254`) into it; the sharing step is inferred from the function name only.
+
 ## Response
 
 (asm-traced) Top-level keys of the model (`data/models.json`, `charging::EnergyStatisticsModel`): `fileUrl` (String?), `fileName` (String?).
@@ -84,7 +86,6 @@ Call sites (traced 2026-10-20): `getDownloadEnergyStatistics` is called from `A5
 ## Known unknowns
 
 - Which `dateType`, `sourceType` and `productCode` values `downloadData` passes: the values come from a map of the chart detail page (key `type`, `charging/ui/page/device/a5101/charts/detail/detail_page_logic.dart @0x301c3a8`) and `chartType()`, not decoded further — attempted 2026-10-20 (two-hop not readable: @0x301c3a8, @0x301c3ec, @0x301c444).
-- What the download action does with the model: only the sender was read.
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

@@ -71,7 +71,7 @@ Called from:
 
 ## Known unknowns
 
-- What `userBindEvChargersCount` means for the add page: only the parse was read.
+- What `userBindEvChargersCount` means for the add page: only the parse was read. — traced 2026-10-20: the success closure of `AddEvChargerLogic::_getUnBindList` (`charging/ui/page/device/a5101/setting/device_manager/ev_charger/add_ev_charger_logic.dart @0x226bcb4`) reads `evChargers` (`field_7`) and `userBindEvChargersCount` (`field_b`, untagged with `LoadInt32Instr` `@0x226bdf0`), appends the chargers to a list field (`addAll` `@0x226bd80`) and stores the count in an observable of the logic (`field_93`, `value=` `@0x226be1c`), and logs it in the text `获取未绑定充电桩列表成功，数量: ` ("got the list of unbound chargers, count", my translation); what the page shows with the observable was not read
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

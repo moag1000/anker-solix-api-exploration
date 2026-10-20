@@ -67,6 +67,8 @@ Called from:
 - `charging/http/http_request_repository.dart::getDeviceRunTime`
 - `charging/ui/page/device/a5101/setting/system_info/system_info_logic.dart::_getSystemRunTime`
 
+Argument sources (traced 2026-10-20): `SystemInfoLogic::onReady` (`charging/ui/page/device/a5101/setting/system_info/system_info_logic.dart`) calls `_getSystemRunTime` (`@0x2939e5c`) with two values: the device serial number, loaded as `field_6b` of a device object of the logic (`@0x2939e04`) and replaced by `null` when its length is 0 (`cbnz` `@0x2939e10`, `Null` `@0x2939e14`), and the station id, `value?.field_7` of a station observable with the fallback `""` (`@0x2939e34`..`@0x2939e44`). `_getSystemRunTime` passes both to `getDeviceRunTime` after a `Future.delayed` (`@0x2939f2c`, closure `@0x2939f48`, call `@0x2939fc4`). So the page fills both `sn` (device serial, omitted when empty) and `stationId` (`""` when unknown).
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
@@ -74,7 +76,6 @@ Called from:
 ## Known unknowns
 
 - The unit of `runningTime`: the app stores the number in `A5101SystemInfoModel`; the page that shows it was not read. — reclassified: server (2026-10-20: the app stores the number; its unit is not derivable from the code read here)
-- Which of `sn` and `stationId` the system-info page fills: only the sender was read.
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

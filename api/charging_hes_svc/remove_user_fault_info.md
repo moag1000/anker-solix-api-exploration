@@ -64,15 +64,17 @@ none traced: the callbacks could not be read (see Response model).
 
 - `charging/ui/page/family/family_main_http_reposity.dart`: `removeException` @0x400c634 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
+Caller argument source (traced 2026-10-20): `FamilyMainLogic::closeException` (`charging/ui/page/family/family_main_page_logic.dart @0x400c46c`) calls `removeException` (`@0x400c560`) with three fields of one list element object (`field_b`, `field_4f` and `field_67`, `@0x400c54c`..`@0x400c558`); the field layout equals that of `HesPushMessageModel` (`charging/model/hes_push_message_model.dart`: `stationId` `field_b` cast `String` `@0x23dd0fc`, `id` `field_4f` cast `int` `@0x23dd9f0`, `dataSource` `field_67` cast `int` `@0x23ddbdc`), the class itself is not named at the call. The caller then sets two observables (`value=` `@0x400c5c4`, `@0x400c5e0`) and, after a `Future.delayed` of 3 s (`@0x400c608`, `objs.txt Obj!Duration@4218bf1` = 0x2dc6c0 microseconds), calls `getExceptionMsgList` again (closure `@0x400c768`); it passes no callback, so the answer of this call is not read by the caller.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- The response handling: the callbacks resolve to a function outside the app asm tree.
+- The response handling: the callbacks resolve to a function outside the app asm tree. — traced 2026-10-20: the caller `closeException` passes no callback and refreshes the list with `getExceptionMsgList` after 3 s (see Callers in app); the callbacks inside the sender stay outside the app asm tree
 - The type of `stationId`: the parameter is stored without conversion into a `<String, Object>` map. — attempted 2026-10-20 (two-hop not readable: `closeException` (`charging/ui/page/family/family_main_page_logic.dart @0x400c560`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
-- Which `dataSource` numbers exist: the value is a parameter (`charging/ui/page/family/family_main_http_reposity.dart @0x400c6bc`).
+- Which `dataSource` numbers exist: the value is `field_67` of the message object (`int` cast in `HesPushMessageModel.fromJson`, `charging/model/hes_push_message_model.dart @0x23ddbdc`, see Callers in app), i.e. it is read from the data of the fault message and is not enumerated in the app. — reclassified: server (the set of values is decided by the message source)
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

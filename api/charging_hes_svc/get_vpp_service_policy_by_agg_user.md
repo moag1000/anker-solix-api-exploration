@@ -72,7 +72,7 @@ Called from:
 
 ## Known unknowns
 
-- Which map method call gates the read at `charging/http/http_request_repository_impl.dart @0x2979cbc` (selector not named by Blutter).
+- Which map method call gates the read at `charging/http/http_request_repository_impl.dart @0x2979cbc` (selector not named by Blutter). — traced 2026-10-20: the call is `GDT[cid_x0 + 0xbdf]` on the response `Map<String, dynamic>` with no argument except the receiver (`@0x2979cbc`), its result is tested as a bool (`tbnz w0, #4` `@0x2979cc8`, the read of `agreementInfo` `@0x2979cd8` is skipped when it is false); a no-argument bool getter of `Map` (`isNotEmpty` or `isEmpty` are the candidates), the selector is not named in the asm
 - What the server uses `current_version` for: the app sends the current time in seconds; no capture exists.
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.

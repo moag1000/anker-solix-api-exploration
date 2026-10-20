@@ -40,6 +40,8 @@ n/a
 
 (asm-traced) Top-level keys of the model (`data/models.json`, `charging::A5101EvChargerListModel`): `evChargers` (List), `userBindEvChargersCount` (int?).
 
+App side use (traced 2026-10-20): the success callback of `EvChargerManagerLogic::_getBindList` (`charging/ui/page/device/a5101/setting/device_manager/ev_charger/ev_charger_manager_logic.dart`, sender call `@0x28e0aa4`, closure `@0x28e0c18`) reads `evChargers` (`field_7`) and appends all elements to a list field of the logic (`addAll` `@0x28e0c68`) that the function first cleared (`clear` `@0x28e0a5c`), then sets an observable (`value=` `@0x28e0cac`). The shared parse closure also serves the sender of [get_user_bind_and_not_in_station_evchargers](get_user_bind_and_not_in_station_evchargers.md), whose page lists the same two model keys.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -71,7 +73,6 @@ Called from:
 
 ## Known unknowns
 
-- The parse closure is shared with the sender of `get_user_bind_and_not_in_station_evchargers`; the page of that URL lists the same model keys.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

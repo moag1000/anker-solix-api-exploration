@@ -29,11 +29,13 @@ First sender `HttpRequestControllerImpl::bindUnX1Charger` (`charging/http/http_r
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `stationId` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x226c38c` |
-| `evChargers` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x226c3a0`; `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3961684`;  `@0x39616a4` |
-| `deleteFlag` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x226c3b4` |
+| `evChargers` | list | yes |  | `charging/http/http_request_repository_impl.dart @0x226c3a0`; `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x3961684`;  `@0x39616a4` |
+| `deleteFlag` | bool | yes |  | `charging/http/http_request_repository_impl.dart @0x226c3b4` |
 | `forceBindFlag` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x226c3c8` |
 | `elbFlag` | bool | optional (first sender: only when `deleteFlag` is false) | `true` | `charging/http/http_request_repository_impl.dart @0x226c404` |
 | `greenproFlag` | bool | optional (first sender: only when `deleteFlag` is false) | `true` | `charging/http/http_request_repository_impl.dart @0x226c42c` |
+
+Types of the first sender (traced 2026-10-20, one hop up): `HttpRequestController::bindUnX1Charger` (`charging/http/http_request_repository.dart @0x226c294`) forwards its positional values unchanged to `bindUnX1Charger` (`@0x226c30c`); the impl reads `evChargers` from its first positional value (`fp-0x10`, `charging/http/http_request_repository_impl.dart @0x226c3ac`), `deleteFlag` from the third (`fp-0x20`, `@0x226c3c0`), `forceBindFlag` from the fourth (`fp-0x28`, `@0x226c3d4`, which the forwarder fills from its named parameter `isForceBind` with default `false`, `SetupParameters` `@0x226c2a0`, `@0x226c300`) and `stationId` from the first stack value (`@0x226c398`, the caller's sixth register value). `EvChargerManagerLogic::unBindEvCharger` (`charging/ui/page/device/a5101/setting/device_manager/ev_charger/ev_charger_manager_logic.dart @0x3e88f84`) passes a growable list with the type argument `<String>` and one element (`@0x3e88f20`) and the constant `true` for `deleteFlag` (`@0x3e88f78`), and `stationId` as the logic field `field_7f` (`@0x3e88ee8`); `AddEvChargerLogic::pushToStation` (`charging/ui/page/device/a5101/setting/device_manager/ev_charger/add_ev_charger_logic.dart @0x226c270`) passes a growable `<String>` list (`@0x226bfb8`), the constant `false` for `deleteFlag` (`@0x226c264`) and the named `isForceBind` from a frame slot (`@0x226c248`..`@0x226c268`). So `evChargers` is a list of strings and `deleteFlag` a bool (constants `true` / `false`); `stationId` (a logic field or frame slot) and the value of `forceBindFlag` for `pushToStation` have no declared type in the asm.
 
 ## `param_type`/`cmd`
 
@@ -88,7 +90,7 @@ Called from:
 
 ## Known unknowns
 
-- The types of `stationId`, `evChargers`, `deleteFlag` and `forceBindFlag` in the first sender: the map is `<String, dynamic>` and the values are parameters stored without conversion.
+- The types of `stationId` and `forceBindFlag` in the first sender: `stationId` is a logic field (`field_7f`) or a frame slot and `forceBindFlag` is the named parameter `isForceBind` (default `false`, a frame slot in `pushToStation`); no declared type is read — attempted 2026-10-20 (two-hop not readable: `ev_charger_manager_logic.dart @0x3e88ee8`, `add_ev_charger_logic.dart @0x226c248`)
 - Whether the server treats `elbFlag` and `greenproFlag` as filters on the bound chargers: only the keys and the constant `true` were read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

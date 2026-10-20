@@ -65,13 +65,14 @@ Called from:
 - `charging/http/http_request_repository.dart::getHesDeviceList`
 - `charging/ui/page/device/a5101/setting/sn_number/sn_number_logic.dart::_getSnList`
 
+SN page order (traced 2026-10-20): `SnNumberLogic::_getSnList` (`charging/ui/page/device/a5101/setting/sn_number/sn_number_logic.dart @0x28e5c84`) calls `getHesDeviceList` (`@0x28e5d58`) with the site id; the result is processed by `_dealResultWithList` and `_dealDeviceList`, which end in `_updateDeviceImgData` (`@0x28e6ebc`, function `@0x2788bb0`). That function collects the `SubDevInfo` lists (`addAll` `@0x2788c80`), flattens them to a `List<String>` (`expand` `@0x2788ca8`, `toList` `@0x2788cb4`) and awaits `DeviceImgController::deviceImgMap` (`@0x2788ce0`, function `charging/ui/page/device/a5101/setting/sn_number/device_img_controller.dart @0x27891c8`), which sends [get_device_pn_info](get_device_pn_info.md). So on this page the device-pn call is made after this call returns.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- How `get_device_pn_info` is combined with this list on the SN page: only this sender was read.
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
