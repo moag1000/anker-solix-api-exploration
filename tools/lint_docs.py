@@ -6,7 +6,7 @@ Usage (from the repo root):
 Rules (each finding is printed as `path:line: ERROR|WARN rule: message`):
   header                      status header on the first non-blank line of every fact page
   sections                    H2 (endpoint/model/flow/device) or H3/H4 (mqtt/ble) order matches docs/templates
-  uncited-int                 integer >= 2 in a table row without `@0xADDR` or a row tag
+  uncited-int                 integer >= 2 in a table row without `@0xADDR`, an `objs.txt Obj!Class@id` citation or a row tag
   tag-overclaim               `asm-traced` sentence or `Tag: asm-traced` section that says presumably/likely/inferred/not traced/assumed (--strict: also warns on @0x rows under an asm-traced header)
   inferred-as-traced-sequence a `[T]` traced-step line that says the same words
   todo-purpose  (warning)     `## Purpose` is `<!-- TODO -->` (grouped per service in text output)
@@ -295,6 +295,10 @@ def cells(row):
     return [c.strip() for c in row.strip().strip('|').split('|')]
 
 
+# Object-dump citation (Blutter objs.txt): `objs.txt Obj!<Class>@<hexid>`; `@0x…` stays asm-only.
+OBJ_CITE = re.compile(r'objs\.txt Obj![A-Za-z_][A-Za-z0-9_<>, ?]*@[0-9a-f]+')
+
+
 def rule_uncited_int(pg, ctx):
     # Fact pages only (see is_fact_page). Audit tables cite through their raw/decoded
     # columns. Cells of a count column (never the first) and of a `param_type` id column are
@@ -318,7 +322,7 @@ def rule_uncited_int(pg, ctx):
                          if ID_COL.match(h) or (k > 0 and COUNT_COL.search(h))}
         if sec_exempt or re.match(r'^\|[\s:|-]+\|?$', s):
             continue
-        if re.search(r'@0x[0-9a-fA-F]+', s) or ROW_TAG.search(s):
+        if re.search(r'@0x[0-9a-fA-F]+', s) or ROW_TAG.search(s) or OBJ_CITE.search(s):
             continue
         t = ' | '.join(c for k, c in enumerate(cells(s)) if k not in skip_cols)
         for r in ROW_STRIP + [COUNT_NOUN, STEP_REF]:

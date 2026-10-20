@@ -325,6 +325,12 @@ class RenderTests(unittest.TestCase):
         self.assertIn('| `power_limit.limit` |', page)
         self.assertNotIn('| `site_id` |', page)
 
+    def test_uncited_int_accepts_object_dump_citation(self):
+        import importlib
+        ld = importlib.import_module('tools.lint_docs')
+        self.assertIsNotNone(ld.OBJ_CITE.search('| 7 | scanWifiFailed | objs.txt Obj!BleCmdStatus@420dd21 |'))
+        self.assertIsNone(ld.OBJ_CITE.search('| 7 | scanWifiFailed | @0x420dd21 |'))
+
     def test_service_index_purpose_links_are_flattened(self):
         import re, importlib
         si = importlib.import_module('tools.service_index')

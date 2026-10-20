@@ -42,7 +42,7 @@ Use the template "Correction" (`.github/ISSUE_TEMPLATE/correction.md`). Give:
 - your evidence: a `file.dart @0xADDR` of the 3.24.3 asm, an upstream file and line, or a device test record as above;
 - what you think is correct.
 
-If a device result contradicts the asm reading, the device result is recorded as `device-tested` and the asm reading stays as a note: the device is the authority for what the server accepts, the asm for what the app sends ([METHODOLOGY.md](METHODOLOGY.md#sources-and-priority)). To cite asm, name the Dart file, the function and the address (`file.dart @0xADDR`) next to every number. How to read integers from the asm is in [METHODOLOGY.md](METHODOLOGY.md#smi-rule-reading-numbers-from-blutter-output); read it before quoting any number.
+If a device result contradicts the asm reading, the device result is recorded as `device-tested` and the asm reading stays as a note: the device is the authority for what the server accepts, the asm for what the app sends ([METHODOLOGY.md](METHODOLOGY.md#sources-and-priority)). To cite asm, name the Dart file, the function and the address (`file.dart @0xADDR`) next to every number. A value read from the Blutter object dump (an enum member, a pool `Duration`) is cited as `objs.txt Obj!<Class>@<id>` — never as `@0x…`, which is reserved for asm addresses. How to read integers from the asm is in [METHODOLOGY.md](METHODOLOGY.md#smi-rule-reading-numbers-from-blutter-output); read it before quoting any number.
 
 ## How a correction lands
 
