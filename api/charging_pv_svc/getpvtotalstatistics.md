@@ -58,14 +58,16 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 - `charging/ui/page/device/a5140/a5140home/a5140home_http_reposity.dart`: `getPvTotalStatistics` @0x34d0930 (encryptionRequestHttp; encrypted: true)
 
+Call sites (grep of the asm, traced 2026-10-20): `getPvTotalStatistics` is called from `A5140homeController::getPvTotalData` (`charging/ui/page/device/a5140/a5140home/a5140home_logic.dart @0x34d0914`).
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- Which serial number the caller passes (the callers were not found in the call index).
 - What `powerPopUpFlag` and `powerConfig` trigger in the UI: only the class fields are listed.
+- Which serial number `A5140homeController::getPvTotalData` passes: the value is a slot or field of its frame (`charging/ui/page/device/a5140/a5140home/a5140home_logic.dart @0x34d0914`); not decoded further — traced 2026-10-20.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

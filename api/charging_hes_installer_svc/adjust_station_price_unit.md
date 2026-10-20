@@ -59,6 +59,8 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 - `changeCurrencyUnit` (`electricity_usage_helper.dart @0x29ae5f0`), package `electricity_price`, the price-unit selection of the electricity price settings. The page that calls `changeCurrencyUnit` was not traced.
 
+Call sites (grep of the asm, traced 2026-10-20): the name `changeCurrencyUnit` is called from `HesFixedPriceLogic::savePrice` (`electricity_price/components/electricity_module/page/hes_fixed_price_logic.dart @0x43a06e0`), `HandInputPriceAndTimeLogic::changePriceUnit` (`electricity_price/components/tou/page/hand_input_price_and_time_logic.dart @0x29c11fc`), `SeasonEditPage::_showCurrencySelector` (`electricity_price/components/tou/impl_v2/page/season_edit/season_edit_page.dart @0x39394f8`) and `ImmediateSaveStrategy::changeCurrencyUnit` (`electricity_price/components/tou/impl_v2/page/season_edit/strategy/immediate_save_strategy.dart @0x4886c4c`); these names are not all `ElectricityUsageHelper::changeCurrencyUnit` (the caller list is by name).
+
 ## Since/changed
 
 3.18.0: absent as an installer URL (the 3.18.0 pool holds no `installer_svc` string); the consumer twin `/charging_hes_svc/adjust_station_price_unit` is in the 3.18.0 pool. 3.24.3: present (new). since: 3.24.3.
@@ -67,7 +69,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 - Server behaviour (which units are accepted, whether the unit applies to all price plans of the station) is not known.
 - Whether the installer variant is accepted by the consumer server and the reverse is not tested.
-- The caller of `changeCurrencyUnit` and the source of both arguments are not traced.
+- The source of the two arguments of `changeCurrencyUnit` at the call sites listed in Callers in app: not decoded — traced 2026-10-20.
 
 ## Device-tested by
 

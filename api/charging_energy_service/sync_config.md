@@ -25,8 +25,10 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `station_id` | ? | yes | `"<station_id>"` | `charging/http/http_request_repository_impl.dart @0x26786ac` (value store call `@0x26786b4`, parameter) |
-| `param_type` | ? | yes | `<param_type>` | `charging/http/http_request_repository_impl.dart @0x26786d4` (parameter, store call `@0x26786dc`) |
+| `param_type` | string | yes | `"sm_mode"`, `"fixedrate_mode"` or `"cyclePercent"` | `charging/http/http_request_repository_impl.dart @0x26786d4` (parameter, store call `@0x26786dc`) |
 | `param_data` | ? | yes | `<param_data>` | `charging/http/http_request_repository_impl.dart @0x2678730` (value is the result of a one-argument dispatch-table call on a parameter, `@0x2678708`, selector not named by Blutter; store call `@0x2678738`) |
+
+Callers (app side, traced 2026-10-20): the eleven call sites of `syncSiteConfig` pass a string literal as the second argument, which the sender stores as `param_type`: `"sm_mode"` (`charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart @0x26ea940`, `@0x28bc08c`; `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart @0x2678454`; `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/a17b1_utility_rate_plan_logic.dart @0x27c6008`; `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3fe08`; `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley_price_diff_secondary_edit/a17b1_peak_valley_price_diff_secondary_edit_logic.dart @0x274579c`), `"fixedrate_mode"` (`a17b1_utility_rate_plan_logic.dart @0x27c6118`, `a17b1_peak_valley_price_diff_secondary_edit_logic.dart @0x2745a24`) and `"cyclePercent"` (the three `setBatteryReserve` functions `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart @0x3d07300`, `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart @0x3d48334` and `charging/ui/page/device/a1782/station/electricity_scene/a1782_electricity_scene_logic.dart @0x3cdd0fc`), so `param_type` is a string. The value argument is the integer constant raw 2 (1 under the Smi rule) at `@0x27457a4` and `@0x27c6010`, and the strings `"1"` and `"2"` at `@0x2745a2c`, `@0x3d3fe10` and `@0x27c6120`, so callers pass numbers and texts, which the sender turns into `param_data` with a dispatch-table call whose selector Blutter does not name; the type of `param_data` therefore stays `?`.
 
 ## `param_type`/`cmd`
 
@@ -83,8 +85,8 @@ Called from:
 
 ## Known unknowns
 
-- Types of the three keys: wrapper parameters; `param_data` is the output of a dispatch-table call whose selector is not named, so even its type is not fixed.
-- Which `param_type` values the callers send (one caller passes the string `sm_mode`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart @0x28bc08c`) and what the server does with them.
+- The types of `station_id` and `param_data` (the first is a wrapper parameter, the second the result of an unnamed dispatch-table call): `param_type` is typed in Request — attempted 2026-10-20 (two-hop not readable: `param_data` selector not named, `charging/http/http_request_repository_impl.dart @0x2678708`).
+- What the server does with the three `param_type` strings (`sm_mode`, `fixedrate_mode`, `cyclePercent`): not known from the app; the callers and literals are in Request (traced 2026-10-20).
 - How the callers parse the returned object: the worksheet lists `A17B1RatePlanStructureModel` for one caller; that parse was not read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

@@ -25,7 +25,9 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `station_id` | ? | yes | `"<station_id>"` | `charging/http/http_request_repository_impl.dart @0x2890bfc` (value store `@0x2890c0c`, parameter) |
-| `param_types` | ? | yes | `<param_types>` | `charging/http/http_request_repository_impl.dart @0x2890c10` (value store `@0x2890c20`, parameter) |
+| `param_types` | list | yes |  | `charging/http/http_request_repository_impl.dart @0x2890c10` (value store `@0x2890c20`, parameter) |
+
+Values of `param_types` (app side, traced 2026-10-20): the three callers build it themselves as a growable list with the type argument `<String>` and two string literals (`AllocateGrowableArray`, element array of raw length 4): `["sm_mode", "fixedrate_mode"]` in `_getSiteConfig` of `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/a17b1_utility_rate_plan_logic.dart` (`@0x2937fdc`, `@0x2937fe8`, list `@0x2937ff8`, call `@0x2938038`) and `["cyclePercent", "sm_mode"]` in `_getSiteConfig` of `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart` (`@0x28bbbb0`, `@0x28bbbbc`, call `@0x28bbc28`) and in `requestSiteConfig` of `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart` (`@0x288ce78`, `@0x288ce84`, call `@0x288cef0`). So `param_types` is a list of strings, and the strings are the same config names that [sync_config.md](sync_config.md#request) sends as `param_type`.
 
 ## `param_type`/`cmd`
 
@@ -73,9 +75,8 @@ Called from:
 
 ## Known unknowns
 
-- Types of `station_id` and `param_types`: wrapper parameters; the literal `<String, Object>` names no value type. A list of numeric ids is plausible for `param_types` but not shown by the asm.
+- The type of `station_id`: a wrapper parameter; the three callers pass a slot of their own frame (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/a17b1_utility_rate_plan_logic.dart @0x2938028`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart @0x28bbc14`, `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart`); `param_types` is typed in Request — attempted 2026-10-20 (two-hop not readable for `station_id`).
 - The structure of the `configs` elements: the callers (`_getSiteConfig`, `requestSiteConfig`) parse them and were not read.
-- Which `param_types` values the callers send.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

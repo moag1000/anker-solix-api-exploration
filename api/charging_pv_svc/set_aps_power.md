@@ -60,14 +60,16 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 - `charging/ui/page/device/a5140/a5140home/a5140home_http_reposity.dart`: `requestApsMaxPower` @0x3ee8ffc (encryptionRequestHttp; encrypted: true)
 
+Call sites (grep of the asm, traced 2026-10-20): `requestApsMaxPower` is called from `A5140settingController::setMaxOutputPowerRequest` (`charging/ui/page/device/a5140/a5140setting/a5140setting_logic.dart @0x3ee8fdc`).
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- Type of `sn`: wrapper parameter; the literal `<String, Object>` names no value type.
-- The unit and range of `power`: the app passes an integer parameter; its callers were not found in the call index.
+- Type of `sn`: wrapper parameter; the literal `<String, Object>` names no value type. — attempted 2026-10-20 (two-hop not readable: `setMaxOutputPowerRequest` (`charging/ui/page/device/a5140/a5140setting/a5140setting_logic.dart @0x3ee8fdc`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
+- The unit and range of `power`: the app passes an integer parameter; its callers were not found in the call index. — traced 2026-10-20: the only caller is `A5140settingController::setMaxOutputPowerRequest` (`charging/ui/page/device/a5140/a5140setting/a5140setting_logic.dart @0x3ee8fdc`); the range checks of its page were not read
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

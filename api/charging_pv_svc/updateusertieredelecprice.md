@@ -80,6 +80,8 @@ Called from:
 
 - `charging/http/http_request_repository.dart::updateUserTieredElecPrice`
 
+Call sites (grep of the asm, traced 2026-10-20): the name `updateUserTieredElecPrice` has no call site outside the interface wrapper `charging/http/http_request_repository.dart`, so no screen builds the model for this sender in 3.24.3.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
@@ -88,7 +90,6 @@ Called from:
 
 - The JSON type of `price`: the field is a double in the class, and `toJson` stores the field object itself (`charging/ui/page/price_setting_page/currency_elec_model.dart @0x2401a44`); whether the encoder sends a number or text was not decoded.
 - The meaning of `from` and `to` (kWh bounds or time bounds): both are strings in the class; no reader was followed.
-- Which caller builds the model: no caller outside the wrapper is listed on this page.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

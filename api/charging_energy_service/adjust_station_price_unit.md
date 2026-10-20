@@ -74,7 +74,7 @@ Called from:
 
 ## Known unknowns
 
-- Type of `price_unit`, `sn` and `station_id`: values of the caller's parameters and fields (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x2fa7e18`); the literal names no value type.
+- Type of `price_unit`, `sn` and `station_id`: values of the caller's parameters and fields (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x2fa7e18`); the literal names no value type. — attempted 2026-10-20 (two-hop not readable: `switchPriceUnit` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x2fa7364`), `switchPriceUnit` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x2fa7f24`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - Which of `sn` and `station_id` a request carries: each is added only for one `JumpPeakRouterType` instance (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x2fa7e54`); the instances were not decoded.
 - The body built by `A17B1FixedRateLogic::switchPriceUnit` was not read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.

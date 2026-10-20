@@ -64,13 +64,15 @@ Called from:
 - `charging/ui/page/device/a5140/a5140home/a5140home_logic.dart::_isOffline`
 - `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getDeviceList`
 
+Call sites (grep of the asm, traced 2026-10-20): `getPvStatus` is called from `A5140homeController::_isOffline` (`charging/ui/page/device/a5140/a5140home/a5140home_logic.dart @0x34d0450`) and `DeviceMainLogic::_onGetDeviceListFailed` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x228a828`).
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- What the string `sns` carries when several devices are queried (a joined list or a single serial): the value is a `String` by the literal type; how the callers join it was not read.
+- What the string `sns` carries when several devices are queried (a joined list or a single serial): the value is a `String` by the literal type; how the callers join it was not read. — traced 2026-10-20: the callers are `A5140homeController::_isOffline` and `DeviceMainLogic::_onGetDeviceListFailed`; how they join the serial numbers was not read
 - The element structure of `pvStatuses`: owned by the model page.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

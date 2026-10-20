@@ -82,7 +82,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `station_id` and `sn`: values loaded from fields or parameters; the literals name no value type.
+- Types of `station_id` and `sn`: values loaded from fields or parameters; the literals name no value type. — attempted 2026-10-20 (two-hop not readable: an anonymous closure (`charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart @0x28bbc88`), an anonymous closure (`charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart @0x40adb40`), `onReady` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/a17b1_utility_rate_plan_logic.dart @0x2937f54`) and 5 more pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - Which `JumpPeakRouterType` instance selects `sn` or `station_id` in `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/a17b1_utility_rate_plan_logic.dart @0x29384a0` and `@0x29384f8`: the instances were not decoded.
 - What `accuracy` 5 selects on the server (probably the number of decimals of the prices; not shown by the asm).
 - The structure of the `peak_sessions` elements and of `FixedRate`: owned by the model classes; see [preprocess_utility_rate_plan](preprocess_utility_rate_plan.md) for the shape the app sends back.

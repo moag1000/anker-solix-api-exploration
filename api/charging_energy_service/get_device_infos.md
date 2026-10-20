@@ -38,6 +38,8 @@ n/a
 
 (asm-traced) Top-level keys of `DeviceInfosModel` (`data/models.json`, `charging::DeviceInfosModel`): `device_infos` (Iterable). The closure forwards the parsed model to the caller's callback; the field names inside the elements are listed on [models/device.md](../../models/device.md#deviceinfosmodel).
 
+Element shape (app side, traced 2026-10-20, `charging/model/device_infos_model.dart`, `fromJson` casts): `device_infos` is an iterable of `DeviceInfo` with `sn`, `ble_mac` and `product_code` (non-null `String`), `wifi_bind_type` and `ble_bind_type` (non-null `int`) and `connect` (non-null `bool`); the field names are also listed on [models/device.md](../../models/device.md#deviceinfosmodel).
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -70,7 +72,6 @@ Called from:
 ## Known unknowns
 
 - Which serial numbers the caller sends: `A17b1StationLogic::onA1790CardPressed` passes the list; its content was not decoded.
-- The element structure of `device_infos`: owned by the model page.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -62,13 +62,14 @@ Called from:
 
 - `charging/http/http_request_repository.dart::selectUserTieredElecPrice`
 
+Call sites (grep of the asm, traced 2026-10-20): the name `selectUserTieredElecPrice` has no call site outside the interface wrapper `charging/http/http_request_repository.dart`, so no screen calls this sender in 3.24.3.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- Which serial number the caller passes (no direct caller outside the wrapper is listed on this page).
 - Why the model page [models/pricing.md](../../models/pricing.md#currencyelecmodel) lists only `from`: that stub is owned by the model page and is not changed here.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

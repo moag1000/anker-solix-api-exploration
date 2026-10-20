@@ -58,6 +58,8 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 - `EmsAiModeConditionLogic._enableLargeSmartMode` (`ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x379e4b8`), the AI mode condition screen of the `ak_soft_ems` package (class `EmsAiModeConditionLogic`). The UI element that triggers it was not traced.
 
+UI trigger (grep of the asm, traced 2026-10-20): `_enableLargeSmartMode` is called from `EmsAiModeConditionLogic::next` (`ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x379dd74`), the next step of the AI mode condition flow.
+
 ## Since/changed
 
 3.18.0: absent as an installer URL (the 3.18.0 pool holds no `installer_svc` string); the consumer twin `/charging_hes_svc/enable_aiems_mode` is in the 3.18.0 pool. 3.24.3: present (new). since: 3.24.3.
@@ -65,7 +67,6 @@ No error code specific to this endpoint was traced. The failure closure of each 
 ## Known unknowns
 
 - Server behaviour (preconditions such as a prior [authorize_aiems](authorize_aiems.md), which strategy runs afterwards) is not known.
-- The trigger in the UI is not traced.
 
 ## Device-tested by
 

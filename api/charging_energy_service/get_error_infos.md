@@ -38,6 +38,8 @@ n/a
 
 (asm-traced) Top-level keys of `ErrorInfosModel` (`data/models.json`, `charging::ErrorInfosModel`): `error_infos` (Iterable). The closure forwards the parsed model to the caller's callback.
 
+Element shape (app side, traced 2026-10-20, `charging/model/error_info_model.dart`, `fromJson` casts): `error_infos` is an iterable of `ErrorInfo` with `sn` (`String?`), `code` (`int?`) and `pn` (`String?`).
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -72,7 +74,6 @@ Called from:
 ## Known unknowns
 
 - The value layout inside `sn_errors` (the field name suggests device serial numbers as keys; not shown by the asm): the literal type `<String, Map>` shows only that the value is a map; the caller `handlerSelfCheckError` builds it and was not read.
-- The element structure of `error_infos`: owned by the model page.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -84,14 +84,16 @@ none traced: no numeric error code is compared in the sender or the closures rea
 - `charging/ui/page/device/a5150/solarDetails/a5150_solar_details_http_repository.dart`: `getSolarStatistics` @0x2933314 (encryptionRequestHttp; encrypted: true)
 - `charging/ui/page/device/greenpower/charts/chart_http_repository.dart`: `getGreenPvStatistics` @0x23fec04 (encryptionRequestHttp; encrypted: true)
 
+Call sites (grep of the asm, traced 2026-10-20): `getPvStatistics` is called from `A5150HomeLogic::getPvStatisticsData` (`charging/ui/page/device/a5150/homePage/a5150_home_logic.dart @0x303d000`) and `ChartController::getDataWithDateInfo` (`charging/ui/page/device/a5140/a5140charts/chart_logic.dart @0x30361e8`); `getSolarStatistics` from `A5150SolarDetailsController::changeChartData` (`charging/ui/page/device/a5150/solarDetails/a5150_solar_details_logic.dart @0x29332ec`); `getGreenPvStatistics` from `GreenChartController::_getPvData` (`charging/ui/page/device/greenpower/charts/green_chart_logic.dart @0x23febe4`).
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- Types of `siteId`, `sn`, `start`, `end` and `type` in `getSolarStatistics`: the literal `<String, Object?>` names no value type.
-- Which `type` values (period names) and date formats the callers pass: the callers of the four functions were not found in the call index.
+- Types of `siteId`, `sn`, `start`, `end` and `type` in `getSolarStatistics`: the literal `<String, Object?>` names no value type. — attempted 2026-10-20 (two-hop not readable: `getPvStatisticsData` (`charging/ui/page/device/a5150/homePage/a5150_home_logic.dart @0x303d000`), `getDataWithDateInfo` (`charging/ui/page/device/a5140/a5140charts/chart_logic.dart @0x30361e8`), `getPvStatisticsData` (`charging/ui/page/device/a5150/homePage/a5150_home_logic.dart @0x303d000`) and 3 more pass slots or fields of their own frames; no literal or declared type in the argument setups)
+- Which `type` values (period names) and date formats the callers pass: the callers of the four functions were not found in the call index. — traced 2026-10-20: the four callers are listed in Callers in app; their `type` and date arguments were not decoded
 - Whether the server answers the three shapes from one handler or distinguishes the senders by `version`/`dcPort`/`siteId`: not known from the app.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

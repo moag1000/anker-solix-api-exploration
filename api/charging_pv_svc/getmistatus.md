@@ -58,14 +58,16 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 - `charging/ui/page/device/a5150/homePage/a5150_http_reposity.dart`: `getMiStatus` @0x34ce380 (requestHttp; encrypted: default-true (requestHttp) — verify)
 
+Call sites (grep of the asm, traced 2026-10-20): `getMiStatus` is called from `A5150HomeLogic::getPvTotalData` (`charging/ui/page/device/a5150/homePage/a5150_home_logic.dart @0x34ce364`).
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- Which serial number the caller passes: `A5150HomeHttpReposity::getMiStatus` receives it as a parameter; the callers were not found in the call index.
 - The unit of `power` and `energy`: only the class fields are listed. — reclassified: server (2026-10-20: the unit is decided by the server values and the screens that show them)
+- Which serial number `A5150HomeLogic::getPvTotalData` passes: the value is a slot or field of its frame (`charging/ui/page/device/a5150/homePage/a5150_home_logic.dart @0x34ce364`); not decoded further — traced 2026-10-20.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

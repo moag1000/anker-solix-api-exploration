@@ -73,7 +73,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `sn` and `station_id`: values loaded from fields (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x28be7f4`) of the caller; the literals name no value type.
+- Types of `sn` and `station_id`: values loaded from fields (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x28be7f4`) of the caller; the literals name no value type. — attempted 2026-10-20 (two-hop not readable: `getCurrency` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley_price_diff_secondary_edit/a17b1_peak_valley_price_diff_secondary_edit_logic.dart @0x28bef94`), `getCurrency` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x28c08ac`), `getCurrency` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x28be8a4`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - Which `JumpPeakRouterType` instance selects `sn` and which `station_id`: not decoded.
 - Whether the call is sent with an empty body (both keys absent): possible by the guards, not shown by the asm which router type each screen has.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
