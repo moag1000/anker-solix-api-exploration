@@ -72,7 +72,7 @@ Called from:
 
 ## Known unknowns
 
-- Why the app skips the request for the region code `"CN"` (see Request) is not stated in the app — reclassified: server
+- Why the app skips the request for the region code `"CN"` (see Request) is not stated in the app — reclassified: server (not visible in the app: the code read gives no reason)
 - What the response keys mean beyond the model field names, and what the server returns for an account without recall devices.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

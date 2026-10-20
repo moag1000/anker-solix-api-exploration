@@ -66,7 +66,7 @@ None traced. The failure callback `@0x27e0368` logs the code (`"setPartsMaintena
 ## Known unknowns
 
 - Type of `parts_maintenance_items`: the value is `iterable.map(...)` followed by a dispatch-table call with an unnamed selector (`@0x27e00d0`); that it is a `List` (`toList`) is the expectation, not read. Header stays string-only for this reason. — traced 2026-10-20: the same unnamed selector (`GDT[cid_x0 + 0x3506a]`) follows `map()` in the other list sender of this family (`oe_a7320/src/oe_a7320/page/home/a7320_requet_api.dart @0x3a068e0`) and in two other files of the asm, and its result is stored into a map slot (`@0x27e00e8`); Blutter prints no name for it
-- The response body: not read by the app, so its keys are unknown. — reclassified: server
+- The response body: not read by the app, so its keys are unknown. — reclassified: server (not visible in the app: the app does not read the body)
 
 ## Device-tested by
 

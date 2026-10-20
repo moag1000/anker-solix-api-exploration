@@ -103,9 +103,9 @@ None traced. The A1782 sender's success closure has no code compare; the failure
 ## Known unknowns
 
 - Types of the station sender's keys (the map is `<String, dynamic>`; values are Rx and parameter reads). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the station sender's values are Rx and parameter reads; not followed in this pass. Header stays string-only)
-- The station sender's response handling (`_onGetStationEnergyStatistics`, not read). — traced 2026-10-20: not decoded in this pass (`_onGetStationEnergyStatistics`); the reason given in the bullet stands
-- Which `type` and `device_type` values select which chart: the senders pass them through. — reclassified: server (which chart a `type` value selects is defined by the server and the screens that pass it)
-- Failure handling of the three senders was not read. — traced 2026-10-20: not decoded in this pass (three senders); the reason given in the bullet stands
+- The station sender's response handling (`_onGetStationEnergyStatistics`, not read). — not traced 2026-10-20 in this pass (`_onGetStationEnergyStatistics`); the reason given in the bullet stands
+- Which `type` and `device_type` values the callers pass, and which chart each selects. — traced 2026-10-20: `A1782ChartHttpReposity.getChartStatistics` is called with computed locals (`charging/ui/page/device/a1782/station/station_main_page/chart/a1782_chart_logic.dart @0x2370b3c`, `r5`/`r6`/`r7` loaded from stack slots `@0x2370b30` to `@0x2370b38`), `getGreenPPsStatistics` likewise (`charging/ui/page/device/greenpower/charts/green_chart_logic.dart @0x23ff9d8`), and no direct call of `getStationEnergyStatistics` was found by name; the chart pages that compute the values were not followed
+- Failure handling of the three senders was not read. — not traced 2026-10-20 in this pass (three senders); the reason given in the bullet stands
 
 ## Device-tested by
 

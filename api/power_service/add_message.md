@@ -26,15 +26,17 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 |---|---|---|---|---|
 | `messages` | list | yes | one element | `charging/model/msg_http_model.dart @0x261b6bc` |
 | `messages[].type_id` | int (unboxed, x) | yes | ? | `charging/model/msg_http_model.dart @0x261b7c4` (value boxed by `BoxInt64Instr` `@0x261b79c`) |
-| `messages[].msg_id` | ? | yes | ? | `charging/model/msg_http_model.dart @0x261b7f4` |
-| `messages[].product_code` | ? | yes | ? | `charging/model/msg_http_model.dart @0x261b824` |
+| `messages[].msg_id` | int (Smi, w) | yes | | `charging/model/msg_http_model.dart @0x261b7f4`; `MsgModel` constructor parameter `msgId` with default `0` (`base_service/msg/msg_model.dart @0x2306940`, stored to `field_3f` `@0x2307260`) |
+| `messages[].product_code` | string | yes | | `charging/model/msg_http_model.dart @0x261b824`; `MsgModel` constructor parameter `productCode` with default `""` (`base_service/msg/msg_model.dart @0x2306940`, stored to `field_2b` `@0x2307220`) |
 | `messages[].content` | string | yes | | `charging/model/msg_http_model.dart @0x261b854` |
-| `messages[].title` | ? | yes | ? | `charging/model/msg_http_model.dart @0x261b884` |
+| `messages[].title` | string | yes | | `charging/model/msg_http_model.dart @0x261b884`; `MsgModel` constructor parameter `title` with default `""` (`base_service/msg/msg_model.dart @0x2306940`, stored to `field_1f` `@0x2307198`) |
 | `messages[].device_sn` | ? | yes | ? | `charging/model/msg_http_model.dart @0x261b8b0` |
 | `messages[].ble_mac` | string (null when the source field is null) | yes | | `charging/model/msg_http_model.dart @0x261b8e0` |
 | `messages[].sub_sn` | string | yes | `""` | `charging/model/msg_http_model.dart @0x261b904` (the caller stores the empty string, `charging/ble/ble_business_impl.dart @0x261a994`) |
 
 Where `addCloudLoMessage` (`charging/ble/ble_business_impl.dart @0x261a7a4`, two untyped parameters `SetupParameters(dynamic _, dynamic _)` `@0x261a7b0`) takes each value (asm-traced; offsets are fields of the first argument unless noted, the class of that argument is not named in the asm): `type_id` is an unboxed 64-bit field (`charging/model/msg_http_model.dart @0x261b798`) set to the immediate `1` (`@0x261a8a0`) or `1027` (`@0x261a8a8`, both raw and real: odd values in an unboxed register) after the first argument's `field_b` (null becomes 0, `@0x261a804`; Smi-untagged `@0x261a80c`) was compared with Smi 0 (`cbz` `@0x261a894`) and Smi 2 (raw `cmp w0, #4` `@0x261a898`, tagged, so 2): 0 or 2 gives 1, any other value gives 1027. `msg_id` is `field_3f` (`@0x261a8b4`), `product_code` is `field_2b` (`@0x261a8f0`) and `title` is `field_1f` (`@0x261a8fc`) of that argument, stored unchanged. `content` is the result of `Trans.trArgs` (`@0x261a8d8`) of `field_27`, replaced by the String literal `""` (`@0x261a8e4`) when null. `device_sn` is the second parameter (`@0x261a984`). `ble_mac` is `StringExt.getUnifiedMac` (`@0x261a928`) applied to `field_33` when that field is not null (`@0x261a908`..`@0x261a910`), else null (`@0x261a920`).
+
+Typing of `msg_id`, `product_code` and `title` (two-hop, asm-traced): the first argument of `addCloudLoMessage` is a `MsgModel`, and its constructor declares named parameters `msgId = 0`, `productCode = ""` and `title = ""` (`SetupParameters` `base_service/msg/msg_model.dart @0x2306940`) that it stores unchanged into `field_3f` (`@0x2307260`), `field_2b` (`@0x2307220`) and `field_1f` (`@0x2307198`). One producer, `MsgModelBuilderImpl.buildSystemDeviceDisconnect` (`charging/model/msg_model_impl.dart @0x261bb08`, called from `StationMainPageLogic` at `charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart @0x27a1ca8`), builds it with `MsgModel(...)` (`charging/model/msg_model_impl.dart @0x261bca4`, call `@0x261bd18`, argument descriptor `@0x261bd10`): `msgId` is the zero register (`stp xzr, x16, [SP, #0x28]` `@0x261bcf0`), so 0; `title` is the result of `getNameByProductId` (`@0x261bc58`; `base_service/model/product_model.dart @0x22f62b0` returns a map value or the String literal `""` `@0x22f6344`); `productCode` is a getter result of the station object (`GDT[cid_x0 + 0x2b43b]` `@0x261bb98`, stored at `fp-0x38` `@0x261bbb4`, pushed in the `productCode` slot); `content` is `Trans.tr("systemMessageNotConnected")` (`@0x261bb7c`); `type` and `subType` are 0 (`stp xzr, xzr, [SP, #0x78]` `@0x261bcb8`), so `type_id` is 1 for this producer. The other callers' producers were not read; the constructor defaults are the evidence for the types.
 
 ## `param_type`/`cmd`
 
@@ -57,10 +59,10 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
   "messages": [
     {
       "type_id": "<int>",
-      "msg_id": "<?>",
-      "product_code": "<?>",
+      "msg_id": "<int>",
+      "product_code": "<string>",
       "content": "<string>",
-      "title": "<?>",
+      "title": "<string>",
       "device_sn": "<?>",
       "ble_mac": "<string>",
       "sub_sn": ""
@@ -89,8 +91,8 @@ Called from:
 
 ## Known unknowns
 
-- Types and required-ness of `msg_id`, `product_code`, `title` and `device_sn`: they are `field_3f`, `field_2b`, `field_1f` of the first argument and the second parameter of `addCloudLoMessage` (`charging/ble/ble_business_impl.dart @0x261a8b4`, `@0x261a8f0`, `@0x261a8fc`, `@0x261a984`) — attempted 2026-10-20 (two-hop not readable: the four callers (`station_main_page_logic.dart @0x27a1cd0`, `device_main_logic.dart @0x261a438`, `@0x261a6c8`, `HttpEncryptionDecorator.dart @0x486b624`) pass objects whose field declarations are not shown in the asm)
-- What the record means: `type_id` is 1 or 1027 (see Request), the meaning of the two values and of the record is inferred from the function name only — reclassified: server
+- Type of `device_sn` (the second parameter of `addCloudLoMessage`, `charging/ble/ble_business_impl.dart @0x261a984`) and whether `msg_id`, `product_code` and `title` carry other values from the producers other than `buildSystemDeviceDisconnect`. — attempted 2026-10-20 (two-hop not readable: `device_sn` is a local of the four callers (`charging/ui/page/device/main/station_device_home/station_main_page/station_main_page_logic.dart @0x27a1cd0`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x261a438`, `@0x261a6c8`, `charging/http/HttpEncryptionDecorator.dart @0x486b624`) whose declarations are not shown; the producers of the other callers' `MsgModel` were not read)
+- What the record means: `type_id` is 1 or 1027 (see Request); the meaning of the two values and of the record is inferred from the function name only. — reclassified: server (not visible in the app: the producer read, `buildSystemDeviceDisconnect`, builds a `systemMessageNotConnected` message with `type` 0, which gives `type_id` 1; the 1027 case was not traced)
 - What the server does with the record or answers (the app ignores the answer, see Response model).
 
 ## Device-tested by

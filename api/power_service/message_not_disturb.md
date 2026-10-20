@@ -102,7 +102,7 @@ Called from:
 
 - Type of `disturb_switch` (a parameter of `setMessageDisturb`; the four UI callers were not followed). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the four callers (`charging/ui/page/message/settingDetail/message_setting_detail_logic.dart @0x402fff4`, `@0x403062c`, `@0x4030bc0`; `charging/ui/page/message/settingDetail/guardian_diary_message_setting_logic.dart @0x402c6cc`) pass `disturb_switch` as a field of an Rx `.value` (`field_f`, `message_setting_detail_logic.dart @0x402ffa4`) with no default or declared type. Header stays string-only)
 - Which sender the server expects for which scene: the two key sets never appear together in one request.
-- The response body: not read by the app. — reclassified: server
+- The response body: not read by the app. — reclassified: server (not visible in the app: the app does not read the body)
 
 ## Device-tested by
 

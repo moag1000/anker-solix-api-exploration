@@ -80,7 +80,7 @@ Called from:
 
 - Types of `email`, `phone`, `phone_code` and `site_id`: they are field reads on form and Rx objects (the cited addresses); the object classes were not followed. Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the only caller, `InviteMembersLogic.sendInviteMessage` (`charging/ui/page/user/share_site/invite_members/invite_members_logic.dart @0x4061710`), reads form and Rx fields with no declared type. Header stays string-only)
 - Whether the server requires `phone_code` as a number or a string (the value comes from an Rx object).
-- Which of the two branches runs for a given user: it depends on the Rx flags at `@0x4061434`..`@0x4061534`, not decoded. — traced 2026-10-20: not decoded in this pass (Rx flags `@0x4061434`..`@0x4061534`); the reason given in the bullet stands
+- Which of the two branches runs for a given user: it depends on the Rx flags at `@0x4061434`..`@0x4061534`, not decoded. — not traced 2026-10-20 in this pass (Rx flags `@0x4061434`..`@0x4061534`); the reason given in the bullet stands
 
 ## Device-tested by
 

@@ -136,7 +136,7 @@ Called from:
 
 - Types of `device_sn` (parameter, field or constant depending on the sender) and the attribute value types of each sender (see Request); `<String, Object>` only says non-null. — attempted 2026-10-20 (two-hop not readable: about 25 senders; not followed per sender in this pass; header stays string-only)
 - Which attribute names the server accepts: the senders give many names, none was decoded to a complete list here; upstream `set_device_attributes` documents some.
-- The 25 senders not read in detail: bodies and the response handling were not decoded. — traced 2026-10-20: not decoded in this pass (25 senders); the reason given in the bullet stands
+- The 25 senders not read in detail: bodies and the response handling were not decoded. — not traced 2026-10-20 in this pass (25 senders); the reason given in the bullet stands
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

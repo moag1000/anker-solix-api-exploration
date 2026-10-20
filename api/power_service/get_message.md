@@ -27,10 +27,10 @@ The body is a 5-pair map literal typed `<String, dynamic>` built in `getMessage`
 | `last_time` | int (unboxed, x) | yes | | key `@0x297c3ac`, `BoxInt64Instr` `@0x297c3bc`, store `@0x297c3d4` |
 | `device_sns` | list (`<String>` growable list at the callers) | yes | | key `@0x297c3f8`, value store `@0x297c40c` (parameter at `fp-0x18`) |
 | `limit` | int (Smi, w) | yes | `10` | key `@0x297c430`, `mov x16, #20` `@0x297c43c` + `stur w16` `@0x297c440`, tagged, so 10 |
-| `message_type` | string | yes | | key `@0x297c444`, value store `@0x297c458` (stack parameter `fp+0x20`) |
+| `message_type` | ? | yes | | key `@0x297c444`, value store `@0x297c458` (stack parameter `fp+0x20`); a String at two of the three callers (see Typing), the third caller's value is not typed |
 | `last_msg_id` | int (unboxed, x) | yes | | key `@0x297c47c`, `BoxInt64Instr` `@0x297c48c`, store `@0x297c4a4` |
 
-Typing (two-hop, asm-traced): the builder `getMessage` takes `device_sns` and `message_type` as untyped parameters (`SetupParameters(dynamic _ ...)`). The callers build `device_sns` as a growable list with type argument `<String>` (`r1 = <String>`, `_GrowableList` length 0 in `MessageSystemLogic.requestCloudMessage`, `charging/ui/page/message/system/message_system_logic.dart @0x338eeec`, `@0x338eef0`; the same in `MessageMainLogic.requestCloudMessage`, `charging/ui/page/message/Main/message_main_logic.dart @0x297f2dc`, `@0x297f2e0`), so it is a list of strings. `message_type` is a String literal at two callers: `"system"` (`message_system_logic.dart @0x338ef34`) and `"others"` (`MessageMainLogic.requestOtherCloudMessage`, `message_main_logic.dart @0x297c28c`); the third caller passes it from a stack slot loaded earlier.
+Typing (two-hop, asm-traced): the builder `getMessage` takes `device_sns` and `message_type` as untyped parameters (`SetupParameters(dynamic _ ...)`). The callers build `device_sns` as a growable list with type argument `<String>` (`r1 = <String>`, `_GrowableList` length 0 in `MessageSystemLogic.requestCloudMessage`, `charging/ui/page/message/system/message_system_logic.dart @0x338eeec`, `@0x338eef0`; the same in `MessageMainLogic.requestCloudMessage`, `charging/ui/page/message/Main/message_main_logic.dart @0x297f2dc`, `@0x297f2e0`), so it is a list of strings. `message_type` is a String literal at two callers: `"system"` (`message_system_logic.dart @0x338ef34`) and `"others"` (`MessageMainLogic.requestOtherCloudMessage`, `message_main_logic.dart @0x297c28c`); the third caller, `MessageMainLogic.requestCloudMessage` (`message_main_logic.dart @0x297f350`), passes `field_13` of an object (`LoadField` `@0x297f2c8`, `@0x297f2d0`, stored at `fp-0x30` `@0x297f2d8`, pushed as the first stack argument `@0x297f32c`) whose class was not read, so `message_type` is typed only at two of the three callers and stays `?`.
 
 ## `param_type`/`cmd`
 
@@ -73,8 +73,8 @@ Called from:
 
 ## Known unknowns
 
-- What `message_type` values the callers use and how `last_time`/`last_msg_id` page the list: cursor semantics are server side.
-- The structure of `data` items in `MsgHttpModel` (the model keeps them untyped). — reclassified: server (items of an untyped list; the content is server data)
+- Which `message_type` value `MessageMainLogic.requestCloudMessage` sends (see Typing) and how `last_time`/`last_msg_id` page the list. — traced 2026-10-20: the third caller's object (`charging/ui/page/message/Main/message_main_logic.dart @0x297f2d0`) was not followed; the cursor semantics are not visible in the app (the callers' response handling was not read)
+- The structure of `data` items in `MsgHttpModel` (the model keeps them untyped). — reclassified: server (not visible in the app: the model keeps the items untyped)
 
 ## Device-tested by
 

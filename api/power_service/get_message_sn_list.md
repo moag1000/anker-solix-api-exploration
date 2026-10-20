@@ -68,7 +68,7 @@ Called from:
 ## Known unknowns
 
 - Whether the server wraps the list in an object for some accounts: the closure accepts only a bare `List`.
-- Ordering and paging of the list: not visible in the app (no parameter is sent). — reclassified: server (ordering and paging are decided by the server, the app sends no parameter)
+- Ordering and paging of the list: not visible in the app (no parameter is sent). — reclassified: server (not visible in the app: the app sends no ordering or paging parameter)
 
 ## Device-tested by
 

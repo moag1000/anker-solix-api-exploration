@@ -26,7 +26,7 @@ Reads the grid code (grid standard) settings of a product for the user: the coun
 |---|---|---|---|---|
 | `product_code` | String | yes | `"A5102"` | `device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x2a4f7a4`; value is a controller argument stored at `@0x2a4f7b4` (example from upstream's note on the sibling endpoint `platform_get_pn_region_code`) |
 | `identifier_id` | String | yes | `"<device or site id>"` | `@0x2a4f7b8`; value stored at `@0x2a4f7c8`, empty string literal as default (`r1 = ""`, `@0x2a4f744`) |
-| `scenario_type` | int | yes | `1` or `2` | `@0x2a4f7cc`; value is computed from a boolean argument: `csetm`, `and #2`, `add #2` (`@0x2a4f7e4` to `@0x2a4f7ec`), which yields tagged Smi 2 when the boolean is true and tagged Smi 1 when it is false (raw 4 and raw 2; the arithmetic runs on the tagged representation, so decoded 2 / 1) |
+| `scenario_type` | int | yes | `1` or `2` | `@0x2a4f7cc`; value is computed from the boolean controller field at offset 0x9b (`LoadField` `@0x2a4f6d0`; `onInit` stores `arguments["isSite"] == true` there: key `"isSite"` `@0x35a2414`, compare with `true` `@0x35a243c`, store `@0x35a2458`, all in `device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart`; the `settings` copy was not read) with `csetm`, `and #2`, `add #2` (`@0x2a4f7e4` to `@0x2a4f7ec`), which yields tagged Smi 2 when the page was opened for a site (`isSite` true) and tagged Smi 1 otherwise (raw 4 and raw 2; the arithmetic runs on the tagged representation, so decoded 2 / 1) |
 | `grid_code_name` | String? | no | `"VDE-AR-N 4105"` | `@0x2a4f7f4`; field at offset 0x13 of the selected grid object (`@0x2a4f788`), null if no object; example is illustrative |
 | `country_code` | String? | no | `"DE"` | `@0x2a4f808`; field at offset 0x1b of the same object (`@0x2a4f76c`) |
 | `grid_code` | String? | no | `"<grid code>"` | `@0x2a4f81c`; field at offset 0xf of the object (`@0x2a4f83c`) |
@@ -74,7 +74,6 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- What `scenario_type` 1 and 2 mean is not decoded. — reclassified: server (the value meanings are defined by the server)
 - Which other keys the `system_config_controller` and picker senders send is not read. — traced 2026-10-20: the `SystemConfigController` closure (`flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart @0x3256434`..`@0x32564e8`) builds only the command envelope (`path` `@0x325648c`, `method` `@0x32564a0`, `param` `@0x32564b8`) and takes `param` from a context field (`LoadField` `@0x32564c8`), so the keys are set outside the closure and were not followed
 - Server behaviour is not known.
 

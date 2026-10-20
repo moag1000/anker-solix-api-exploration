@@ -65,7 +65,7 @@ None traced. The failure callback is the shared `commonOK` dialog closure (`a732
 
 ## Known unknowns
 
-- The response body: not read by the app, so its keys are unknown. — reclassified: server
+- The response body: not read by the app, so its keys are unknown. — reclassified: server (not visible in the app: the app does not read the body)
 - What the server does when the mode equals the current mode: not derivable from the app.
 
 ## Device-tested by

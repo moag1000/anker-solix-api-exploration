@@ -113,7 +113,7 @@ Called from:
 ## Known unknowns
 
 - Types of `device_pn` and of `device_sn` in the `<String, Object>` sender. — attempted 2026-10-20 (two-hop not readable: the `<String, Object>` sender's callers were not followed in this pass; header stays string-only)
-- The seven senders not read (`TouHttpService`, `TOUPlanLogic`, `A5190HomeLogic`, `ElectricityUsageHelper` x3 closures/functions): bodies and parsers were not decoded. — traced 2026-10-20: not decoded in this pass (seven senders); the reason given in the bullet stands
+- The seven senders not read (`TouHttpService`, `TOUPlanLogic`, `A5190HomeLogic`, `ElectricityUsageHelper` x3 closures/functions): bodies and parsers were not decoded. — not traced 2026-10-20 in this pass (seven senders); the reason given in the bullet stands
 - Which model each caller expects for which device type (server data decides the keys).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

@@ -87,7 +87,7 @@ Called from:
 
 - Value types of every key (parameters and field reads in 13 callers). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: 13 callers build the body with parameters and field reads (named keys seen: `site_id`, `grid_list`, `solarbank_list`, `pps_list`, `solar_list`, `powerpanel_list`, `smartplug_list`, `combiner_box_list`, `site_power_limit`, `devices`); no declared types or defaults were read in this pass. Header stays string-only)
 - Which callers send `app_ability` and with which keys: only the `{site_power_limit: true}` maps were located. — traced 2026-10-20: the key `site_power_limit` is loaded at `OpenProcessLogic.next` (`charging/ui/page/device/a17c1/open_process/open_process_logic.dart @0x3db2744`), `.join` (`@0x3db45f0`), `.mainDeviceJoin` (`@0x3db6f84`) and in `AddDevicesProgressLogic` (`charging/ui/page/device/main/sitation_energy_system/station_home_settings/add_devices_progress/add_devices_progress_logic.dart @0x34a5e6c`); the map around `app_ability` was not decoded
-- The response handling beyond the AC-params caller. — traced 2026-10-20: not decoded in this pass (response handling of ten callers); the reason given in the bullet stands
+- The response handling beyond the AC-params caller. — not traced 2026-10-20 in this pass (response handling of ten callers); the reason given in the bullet stands
 
 ## Device-tested by
 

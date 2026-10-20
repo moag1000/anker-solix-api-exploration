@@ -71,7 +71,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- What other `exercise_type` values select (the builder sends the constant 1). — reclassified: server
+- What other `exercise_type` values select (the builder sends the constant 1). — reclassified: server (not visible in the app: the builder sends only the constant 1)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

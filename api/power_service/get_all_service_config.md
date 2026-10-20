@@ -63,7 +63,7 @@ Called from:
 
 ## Known unknowns
 
-- The element structure of `env_data`. — reclassified: server (elements of an untyped list; the content is server data)
+- The element structure of `env_data`. — reclassified: server (not visible in the app: the model keeps the items untyped)
 - Whether production servers answer this URL: the function and page names (`getAllQaEnvConfig`, `EnvListPageLogic`) point at a QA environment list; the app sends it only from the environment picker page.
 
 ## Device-tested by

@@ -72,7 +72,7 @@ Called from:
 
 ## Known unknowns
 
-- The response body: not read by the app. — reclassified: server
+- The response body: not read by the app. — reclassified: server (not visible in the app: the app does not read the body)
 
 ## Device-tested by
 

@@ -67,8 +67,8 @@ Called from:
 
 ## Known unknowns
 
-- The element structure of `country_info` (the model keeps it untyped). — reclassified: server (elements of an untyped list; the content is server data)
-- Whether `site_id` may be empty for a device not yet in a site: the app passes whatever its caller holds. — reclassified: server (what the server accepts is not in the app)
+- The element structure of `country_info` (the model keeps it untyped). — reclassified: server (not visible in the app: the model keeps the items untyped)
+- Whether `site_id` may be empty for a device not yet in a site: the app passes whatever its caller holds. — reclassified: server (not visible in the app: the app passes whatever its caller holds)
 - Failure handling in the callers was not read. — traced 2026-10-20: the call sites pass no `fail` closure among their named arguments: `StationPriceModeLogic.requestCloud` (`charging/feature/utilitiy_rate_plan/station_price_mode/station_price_mode_logic.dart @0x28b43d8`): named arguments `complete`; `DynamicPriceDetailLogic.getSupportOption` (`charging/feature/utilitiy_rate_plan/dynamic_price/detail/dynamic_price_detail_logic.dart @0x28a462c`): no named argument. Failure then falls to the callee's default or to the awaiting code, neither of which was read
 
 ## Device-tested by

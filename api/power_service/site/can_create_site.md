@@ -70,7 +70,7 @@ Called from:
 ## Known unknowns
 
 - Why `createSiteHomeRequest` shares this URL and closure with the check: only the shared pool closure is read; whether the server treats the two calls differently is not derivable (the body is empty in both).
-- Element structures of the `*_list` keys (the model keeps them untyped). — reclassified: server (elements of untyped lists; the content is server data)
+- Element structures of the `*_list` keys (the model keeps them untyped). — reclassified: server (not visible in the app: the model keeps the items untyped)
 - The server rule behind `can_create_site` (a String in the model): not visible in the app.
 
 ## Device-tested by

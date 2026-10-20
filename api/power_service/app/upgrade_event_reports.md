@@ -73,8 +73,8 @@ Called from:
 ## Known unknowns
 
 - Type and element keys of the repository sender's `upgrade_even_device_infos` parameter (the three callers were not followed). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the three callers (`WifiBleParallelOtaLogic.handleOtaRecordResult`, `WifiBleOtaLogic.handleOtaRecordResult`, `AnkerOTABaseLogic.handleA17A3BleOtaRecords`) log the string " maps = " and pass maps built locally; their element keys were not followed)
-- Whether the element keys equal those of [upgrade_event_report](upgrade_event_report.md) (the batch maps are `Map<String, dynamic>`). — traced 2026-10-20: not decoded in this pass (element keys of the batch maps); the reason given in the bullet stands
-- The response body: not read. — reclassified: server
+- Whether the element keys equal those of [upgrade_event_report](upgrade_event_report.md) (the batch maps are `Map<String, dynamic>`). — not traced 2026-10-20 in this pass (element keys of the batch maps); the reason given in the bullet stands
+- The response body: not read. — reclassified: server (not visible in the app: the app does not read the body)
 
 ## Device-tested by
 

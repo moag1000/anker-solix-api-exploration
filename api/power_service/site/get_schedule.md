@@ -43,6 +43,8 @@ Per sender. `getSiteSchedule` (repository): `charging::SiteScheduleModel` (`data
 
 Top-level keys of `charging::SiteScheduleModel` (from `data/models.json`): `status` (int), `remain_energy` (`RemainEnergyInfo`), `negative_price` (Iterable), `push_time` (String). The `base_service::SiteScheduleModel` of 3.24.3 adds `current_strategy` (`CurrentStrategy`). The A17E2 sender reads `status` only.
 
+Consumers of `status` (asm-traced): the A17E2 home controller (`micro_hes/src/a17e2/home/a17e2_home_controller.dart`, closure `@0x355e5c0`) reads `status` (key `@0x355e670`) and, for 1, 2 or 3 (`cmp w0, #2` `@0x355e6a0`, `#4` `@0x355e6a8`, `#6` `@0x355e6b0`, tagged), sets one Rx value to the enum instance `PowerUsageMode.smartModeNegativePrice` (`Instance_PowerUsageMode` `@0x355e6d4`, `objs.txt Obj!PowerUsageMode@38fc0c1`, index 11, `value=` `@0x355e6dc`); any other value leaves it alone (`@0x355e6e0`). The station home (`StationEnergySystemLogic.getRemainingPowerStr`, `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart @0x23a6db8`) reads the field at offset 0x7 (`@0x23a6e10`) of an Rx value (`value()` `@0x23a6dec`), presumably the schedule object that the getSchedule closure stores (`value=` `@0x23a6cf0`), and offset 0x7 is the first field of the model, `status`, in the `data/models.json` order. Null or 0 gives the default background (`imgAiModeMaskMainPageBg` `@0x23a6e28`); 1 to 6 (`cmp w1, #2` `@0x23a6e4c`, `#4` `@0x23a6f04`, `#6` `@0x23a6fb8`, `#8` `@0x23a7008`, `#0xa` `@0x23a70bc`, `#0xc` `@0x23a710c`) select the message keys `msgHasNegativeNotUse` (`@0x23a6e54`), `msgHasNegativeUsing` (`@0x23a6f0c`), `msgHasNegativeNotOpenPlugs` (`@0x23a6fc0`), `msgHasRemainNotOpenPlugs` (`@0x23a7010`), `msgHasRemainUsing` (`@0x23a70c4`) and `msgHasRemainUnderFeedNetwork` (`@0x23a7114`).
+
 ## Example request/response
 
 Request, synthesized
@@ -79,7 +81,6 @@ Called from:
 ## Known unknowns
 
 - Which of the two `SiteScheduleModel` shapes the server returns: the repository sender parses the `charging` class, the EMS service parses the `base_service` class; both read the same URL.
-- What the `status` values 1, 2 and 3 mean to the A17E2 home controller: only the compares are read. — reclassified: server (the value meanings are defined by the server)
 - Failure handling of the repository sender's callers was not read. — traced 2026-10-20: the call sites pass no `fail` closure among their named arguments: `AiEmsRequest.requestSiteSchedule` (`ak_soft_ems/aiems/api/ai_ems_request.dart @0x27e1e34`): no named argument; `ModeTipLogic.getSchedule` (`micro_hes/src/common_business/basic_station/module/mode_tip/mode_tip_logic.dart @0x22d7578`): no named argument; `CostSavingsLogic.getSchedule` (`charging/ui/page/device/a17c1/cost_savings/cost_savings_logic.dart @0x2928534`): no named argument; `StationEnergySystemLogic.getSchedule` (`charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart @0x23a5f94`): descriptor not located. Failure then falls to the callee's default or to the awaiting code, neither of which was read
 
 ## Device-tested by

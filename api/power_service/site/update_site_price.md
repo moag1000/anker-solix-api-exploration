@@ -107,9 +107,9 @@ Called from:
 ## Known unknowns
 
 - Types of `site_id`, `price`, `site_co2`, `site_price_unit` and `price_type` in most senders (parameters and `[]=` values). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: senders pass parameters and `[]=` values; not followed in this pass. Header stays string-only)
-- Which body `setFixedPrice` sends to this URL (its function holds several bodies and two requests). — traced 2026-10-20: not decoded in this pass (`setFixedPrice` bodies); the reason given in the bullet stands
-- `TouHttpService::updateSitePrice` (`tou_http_service.dart @0x4883d48`): body not read. `ElectricityPricePlanApiHelper::saveMediumChargingPlan` gets part of its body from the caller `GeneralPriceSettingLogic::setTOU` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a68ac`: `device_sn`, `attributes`, `use_time`), also not decoded. — traced 2026-10-20: not decoded in this pass (`TouHttpService::updateSitePrice` and `saveMediumChargingPlan`); the reason given in the bullet stands
-- Response handling was read only at the callback level; no model class is parsed there. — traced 2026-10-20: not decoded in this pass (callbacks); the reason given in the bullet stands
+- Which body `setFixedPrice` sends to this URL (its function holds several bodies and two requests). — not traced 2026-10-20 in this pass (`setFixedPrice` bodies); the reason given in the bullet stands
+- `TouHttpService::updateSitePrice` (`tou_http_service.dart @0x4883d48`): body not read. `ElectricityPricePlanApiHelper::saveMediumChargingPlan` gets part of its body from the caller `GeneralPriceSettingLogic::setTOU` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a68ac`: `device_sn`, `attributes`, `use_time`), also not decoded. — not traced 2026-10-20 in this pass (`TouHttpService::updateSitePrice` and `saveMediumChargingPlan`); the reason given in the bullet stands
+- Response handling was read only at the callback level; no model class is parsed there. — not traced 2026-10-20 in this pass (callbacks); the reason given in the bullet stands
 
 ## Device-tested by
 

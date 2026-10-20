@@ -43,6 +43,8 @@ n/a
 
 Top-level key of `ParamsModel` (from `data/models.json`): `params` (Map).
 
+Option 30001 (asm-traced): the sender `getPersonalizationOptionsApi` is called from `PersonalizationOptionsLogic.requestPersonalizationOptionsStatus` (`charging/ui/page/user/about/personalizationOptions/personalization_options_logic.dart @0x298e7b0`). Its success closure (`@0x298eb98`, parameter type `ParamsModel`) reads the field at offset 0x7 of the parameter (`@0x298ebc4`) and looks up the key `60002.toString()` (`r16 = 60002` `@0x298ebd0`, tagged, so `"30001"`; `_getValueOrData` `@0x298ebe4`), takes `false` when the key is missing (`cmp w0, NULL` `@0x298ec0c`, `r4 = false` `@0x298ec14`), checks the value is a `bool` (`@0x298ec4c` to `@0x298ec58`) and passes `"true"` or `"false"` (`@0x298ec70`, `@0x298ec78`) to `updateSwitch` (`@0x298ec7c`). Option 30001 is therefore the one switch of the personalization options page, whose title string is `personalizationOptionsTitle` (`charging/ui/page/user/about/personalizationOptions/personalization_options_page.dart @0x4035b28`); the answer is a map from option code to bool.
+
 ## Example request/response
 
 Request, synthesized (first sender)
@@ -76,7 +78,6 @@ Called from:
 ## Known unknowns
 
 - The `params` and `device_sn` types of the schedule sender and the `param` map of the IoT-kit sender (parameters). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: `ScheduleNetwork::_getUserParams` receives `params` and `device_sn` as untyped parameters (`schedule_network.dart @0x2850430`); its callers were not followed. Header stays string-only)
-- What the option code 30001 selects (an integer turned into a string): not decoded; the same code appears in [set_user_params](set_user_params.md). — reclassified: server (the option code meaning is defined by the server)
 
 ## Device-tested by
 

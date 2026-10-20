@@ -77,7 +77,7 @@ Called from:
 
 ## Known unknowns
 
-- How the SDK handler turns the body into `EvYearListModel`: the handler is not in the asm tree read; only the type argument is read here. — reclassified: server (the parser is in the native SDK handler, outside the asm tree)
+- How the SDK handler turns the body into `EvYearListModel`: the handler is not in the asm tree read; only the type argument is read here. — reclassified: server (not visible in the app: the parser is in the native SDK handler, outside the dumped Dart code)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

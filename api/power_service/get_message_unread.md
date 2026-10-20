@@ -69,7 +69,7 @@ Called from:
 
 ## Known unknowns
 
-- Whether the three keys come in one response or are returned according to account type: `initBadge` reads only `has_unread_msg`, the message page reads `system_msg` and `device_msg`. — reclassified: server (which keys the server returns for which account is not recorded in the app)
+- Whether the three keys come in one response or are returned according to account type: `initBadge` reads only `has_unread_msg`, the message page reads `system_msg` and `device_msg`. — reclassified: server (not visible in the app: the app reads only the keys named)
 - Other keys the server may add: the callers read only the three above.
 
 ## Device-tested by

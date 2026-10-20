@@ -39,7 +39,7 @@ Sender `DemoSiteUtilImpl::anonymousQuitSite` (`demosite_util_impl.dart @0x23f0cf
 | `site_id` | string | yes | `"<site_id>"` | key `@0x23f0db8`, value store `@0x23f0dc8` (parameter r2; value type `String?`) |
 | `member_id` | string | yes | `"<member_id>"` | key `@0x23f0dcc`, value store `@0x23f0ddc` (parameter r3; value type `String?`) |
 
-`isMember` (asm-traced): the caller `HomeCenterLogic.deleteInviteMemberAlreadyInvited` (`charging/ui/page/user/share_site/home_center/home_center_logic.dart @0x405c950`) builds the body map `{site_id, member_id}` from its two positional parameters (keys `@0x405c9dc`, `@0x405c9f0`) and calls `deleteSiteMember` (`@0x405ca48`) without testing the named parameter `isMember` between its entry and the call; the confirm-dialog caller passes `isMember: true` (`@0x405c918`, descriptor `@0x405c92c`). So `isMember` does not change the request.
+`isMember` (asm-traced): the caller `HomeCenterLogic.deleteInviteMemberAlreadyInvited` (`charging/ui/page/user/share_site/home_center/home_center_logic.dart @0x405c950`) builds the body map `{site_id, member_id}` from its two positional parameters (keys `@0x405c9dc`, `@0x405c9f0`) and calls `deleteSiteMember` (`@0x405ca48`) without testing the named parameter `isMember` between its entry and the call; the confirm-dialog caller passes `isMember: true` (`@0x405c918`, descriptor `@0x405c92c`). So `isMember` does not change the request. The parameter is stored into the closure context (`StoreField field_13` `@0x405c9cc`), so the callbacks passed to `deleteSiteMember` can read it; those callbacks were not read.
 
 ## `param_type`/`cmd`
 

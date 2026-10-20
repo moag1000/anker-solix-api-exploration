@@ -69,6 +69,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
+- The element types behind `result` and the list key `DeviceBindDetailsModel`: `data/models.json` lists `result` as `unknown` and the second key as a `List` without an element class. — reclassified: server (not visible in the app: the model keeps both untyped)
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

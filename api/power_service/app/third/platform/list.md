@@ -76,8 +76,8 @@ Called from:
 
 ## Known unknowns
 
-- Which condition selects the installer variant (`field_5f` of the controller, `@0x24e612c`); only the pairing of `anker_pros` with the installer path is read. — traced 2026-10-20: not decoded in this pass (`field_5f` of the controller); the reason given in the bullet stands
-- The element structure of `products` (the model keeps it as an untyped list). — reclassified: server (elements of an untyped list; the content is server data)
+- Which condition selects the installer variant (`field_5f` of the controller, `@0x24e612c`); only the pairing of `anker_pros` with the installer path is read. — not traced 2026-10-20 in this pass (`field_5f` of the controller); the reason given in the bullet stands
+- The element structure of `products` (the model keeps it as an untyped list). — reclassified: server (not visible in the app: the model keeps the items untyped)
 - Whether the server filters the list by `app_id`: not derivable from the app.
 
 ## Device-tested by

@@ -227,9 +227,9 @@ Called from:
 
 ## Known unknowns
 
-- Per-sender response handling: the model attributions of the extractor were not re-read here, and 21 of 36 senders have none. Header stays string-only. — traced 2026-10-20: not decoded in this pass (36 senders); the reason given in the bullet stands
+- Per-sender response handling: the model attributions of the extractor were not re-read here, and 21 of 36 senders have none. Header stays string-only. — not traced 2026-10-20 in this pass (36 senders); the reason given in the bullet stands
 - Types of `site_id` in the 7 builders whose map is `<String, Object>`, `<String, Object?>` or `<String, dynamic>`, and of `param_type` in `get17C1SiteDeviceParam` and `getSiteDeviceParam`. — attempted 2026-10-20 (two-hop not readable: seven builders with `<String, Object>` / `<String, Object?>` / `<String, dynamic>` maps; callers not followed in this pass. Header stays string-only)
-- The URL-literal-only senders (`HttpHelper::getDataFromService` users, `ElectricityUsageHelper` closures) and `parallel_type` values were not read. — traced 2026-10-20: not decoded in this pass (URL-literal-only senders); the reason given in the bullet stands
+- The URL-literal-only senders (`HttpHelper::getDataFromService` users, `ElectricityUsageHelper` closures) and `parallel_type` values were not read. — not traced 2026-10-20 in this pass (URL-literal-only senders); the reason given in the bullet stands
 - Whether the server accepts a missing `cmd` (most builders omit it): not derivable from the app.
 
 ## Device-tested by

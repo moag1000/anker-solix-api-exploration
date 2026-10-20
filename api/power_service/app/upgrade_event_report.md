@@ -81,7 +81,7 @@ Called from:
 ## Known unknowns
 
 - Types of `device_sn`, `device_pn`, `device_type`, `after_version`, `before_version` and `upgrade_time` (parameters; `reportBleOtaRecord` was not followed). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the only caller, `AnkerOTABaseLogic.reportBleOtaRecord` (`charging/ui/page/device/anker_ota/base/anker_ota_base_logic.dart @0x34225f0`), passes values with `""` defaults and an integer, but the slot-to-key mapping was not followed. Header stays string-only)
-- The `toMap()` keys of the IoT-kit record and whether they equal the repository keys. — traced 2026-10-20: not decoded in this pass (IoT-kit `toMap()`); the reason given in the bullet stands
+- The `toMap()` keys of the IoT-kit record and whether they equal the repository keys. — not traced 2026-10-20 in this pass (IoT-kit `toMap()`); the reason given in the bullet stands
 - The response body: not read by the repository caller; the IoT-kit callback was not read. — reclassified: server (the app does not read the body in the traced callers; its keys are not visible)
 
 ## Device-tested by

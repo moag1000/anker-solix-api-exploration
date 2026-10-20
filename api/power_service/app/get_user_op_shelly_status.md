@@ -42,6 +42,8 @@ no model file in `data/models.json`: the success closure (`charging/http/http_re
 | `op_list[].device_sn` | string (non-null cast) | yes | `"<device_sn>"` | `charging/http/http_request_repository_impl.dart @0x3f2ac10` |
 | `op_list[].op_type` | string (cast `String`) | yes | `?` | `charging/http/http_request_repository_impl.dart @0x3f2ac6c` |
 
+Consumer of `op_type` (asm-traced): `ThirdPartyPlatformLogic.selectDone` (`charging/ui/page/device/connect/third_party_platform/third_party_platform_logic.dart @0x3f2a964`) passes a success closure (`@0x3f2aec0`) that logs each record (`grantDeviceRecordList item = ` `@0x3f2afc4`, keys `device_sn` `@0x3f2b000` and `op_type` `@0x3f2b030`) and allocates a nested closure (`@0x3f2b1f4`, body `@0x3f2b258`). That nested closure filters the list with `where` (`@0x3f2b890`) through a predicate (`@0x3f2bb40`) that compares the record field at offset 0xb with the String literal `"add"` (`@0x3f2bb6c`, `==` call `@0x3f2bb80`); offset 0xb is `op_type` because `GrantDeviceRecordModel.toJson` writes it under that key (`base_service/bean/model/third_party/shelly/grant_device_record_model.dart @0x3f2ae4c`, key `@0x3f2ae64`). No other `op_type` compare was found in the closures read (the predicate `@0x3f2bc3c` reads the field at offset 0x7, `device_sn`, not `op_type`).
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -86,7 +88,7 @@ Called from:
 
 ## Known unknowns
 
-- What the `op_type` strings mean: the closure casts them to `String` and stores them in `GrantDeviceRecordModel`; the consumer was not decoded. — reclassified: server (the string meanings are defined by the server)
+- What `op_type` strings other than `"add"` mean: no other compare exists in the closures read (see Response). — reclassified: server (not visible in the app: the code read compares only `"add"`)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

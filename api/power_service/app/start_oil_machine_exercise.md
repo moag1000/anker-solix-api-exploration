@@ -69,7 +69,7 @@ None traced as HTTP codes. The caller of the builder compares the value returned
 ## Known unknowns
 
 - What the server stores for `description` besides 1 for success: the failure codes come from the A7320 device command result, the full set was not decoded.
-- The response body: not read by the app, so its keys are unknown. — reclassified: server
+- The response body: not read by the app, so its keys are unknown. — reclassified: server (not visible in the app: the app does not read the body)
 
 ## Device-tested by
 

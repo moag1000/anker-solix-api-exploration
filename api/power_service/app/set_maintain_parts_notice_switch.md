@@ -63,7 +63,7 @@ None traced. The failure callback `a7320_maintance_logic.dart @0x3a0a5a4` logs t
 
 ## Known unknowns
 
-- The response body: the app does not read it, so its keys are unknown. — reclassified: server
+- The response body: the app does not read it, so its keys are unknown. — reclassified: server (not visible in the app: the app does not read the body)
 - Whether the server treats a repeated call with the same `notice_switch` as a no-op: not derivable from the app.
 
 ## Device-tested by

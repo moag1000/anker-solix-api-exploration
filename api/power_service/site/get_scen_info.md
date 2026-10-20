@@ -103,7 +103,7 @@ Called from:
 ## Known unknowns
 
 - Type of `site_id` in the three `<String, dynamic>` senders (parameters; about 30 callers). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: about 30 callers pass the site id from Rx fields and parameters; not followed in this pass. Header stays string-only)
-- Which `SceneInfo` class the AI-mode sender's callers use: it reads keys directly and builds no model. — traced 2026-10-20: not decoded in this pass (AI-mode sender callers); the reason given in the bullet stands
+- Which `SceneInfo` class the AI-mode sender's callers use: it reads keys directly and builds no model. — not traced 2026-10-20 in this pass (AI-mode sender callers); the reason given in the bullet stands
 - The server rules behind `power_site_type` and the scene keys: not visible in the app.
 
 ## Device-tested by

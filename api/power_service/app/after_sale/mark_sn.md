@@ -77,7 +77,7 @@ Called from:
 ## Known unknowns
 
 - Type of `device_sns` (a field value; `<String, Object>` only says non-null) and its element format. — attempted 2026-10-20 (two-hop not readable: the value is `field_f` of an object held by the builder (`charging/http/http_business_impl.dart @0x28606f8`); the five callers (`showNoIceBoxReplaceDialog`, `battery_replace_contact_sales_logic.dart::done`, `battery_replace_web_view.dart::build`, `battery_replace_ment_logic.dart::applicationSubmitted`, `feedback_logic.dart::showSuccessDialog`) reach it through that object and no declared type is shown. Header stays string-only)
-- What `after_sale_type` and `mark_type` values other than 1 would do (the sender sends constants). — reclassified: server
+- What `after_sale_type` and `mark_type` values other than 1 would do (the sender sends constants). — reclassified: server (not visible in the app: the sender sends only constants)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -87,9 +87,9 @@ Called from:
 
 ## Known unknowns
 
-- The keys of the SDK sender (`RenameSiteController::save`): its `param` map is built outside the closure. — traced 2026-10-20: not decoded in this pass (`RenameSiteController::save` param map); the reason given in the bullet stands
-- Whether the callers of `updateSiteNameInfoRequest` read the answer: its callbacks are forwarded to the callers' closures, which were not read (header stays string-only). — traced 2026-10-20: not decoded in this pass (callers of `updateSiteNameInfoRequest`); the reason given in the bullet stands
-- Why `combination_type` was dropped: the 3.18.0 body was not opened for this page. — reclassified: server (the sender is traced above; why the key was dropped is not recorded in the app)
+- The keys of the SDK sender (`RenameSiteController::save`): its `param` map is built outside the closure. — not traced 2026-10-20 in this pass (`RenameSiteController::save` param map); the reason given in the bullet stands
+- Whether the callers of `updateSiteNameInfoRequest` read the answer: its callbacks are forwarded to the callers' closures, which were not read (header stays string-only). — not traced 2026-10-20 in this pass (callers of `updateSiteNameInfoRequest`); the reason given in the bullet stands
+- Why `combination_type` was dropped: the 3.18.0 body was not opened for this page. — reclassified: server (not visible in the app: the sender is traced above and nothing in it says why the key was dropped)
 
 ## Device-tested by
 

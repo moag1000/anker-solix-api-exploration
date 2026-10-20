@@ -73,7 +73,7 @@ No direct call site of the wrapper `HttpRequestController::saveThirdOtaInfo` (`c
 ## Known unknowns
 
 - Type of `solarbank_sn` (a parameter; `<String, Object>` only says non-null). — attempted 2026-10-20 (two-hop not readable: the wrapper `HttpRequestController::saveThirdOtaInfo` has no call site, so there is no caller to read the value from (`charging/http/http_request_repository.dart @0x372f528`))
-- What `ota_complete_status` values other than 2 mean (the builder sends the constant 2). — reclassified: server
+- What `ota_complete_status` values other than 2 mean (the builder sends the constant 2). — reclassified: server (not visible in the app: the builder sends only the constant 2)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

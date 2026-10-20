@@ -75,6 +75,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
+- The element structure of `device_list` (the model lists it as `unknown`). — reclassified: server (not visible in the app: the model keeps it untyped)
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

@@ -31,6 +31,8 @@ Three senders, each with a `params` object.
 
 Method of the schedule sender (asm-traced): `ScheduleNetwork::_requestHttp` (`schedule_network.dart @0x284f6d0`, the same helper for both schedule calls) stores the String literal `"POST"` as `method` (`@0x284f74c`, key `@0x284f740`) next to `path` (`@0x284f730`) and `param` (`@0x284f758`) and calls `handle` with `akiot.cloud_api` (`@0x284f780`, call `@0x284f790`); see [sdk_senders.md](../../../sdk_senders.md#schedulenetwork_requesthttp).
 
+Option 30001 (asm-traced): the sender `setPersonalizationOptionsApi` (`charging/http/user/about/about_http_request_repository_impl.dart @0x4036308`) is called from `PersonalizationOptionsLogic.setPersonalizationOptionsStatus` (`charging/ui/page/user/about/personalizationOptions/personalization_options_logic.dart @0x40362e8`), after a connectivity check (`@0x4036208`). The page that owns the switch has the title string `personalizationOptionsTitle` (`charging/ui/page/user/about/personalizationOptions/personalization_options_page.dart @0x4035b28`), so 30001 is its switch; the matching read is on [get_user_params](get_user_params.md#response).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -75,8 +77,7 @@ Called from:
 
 ## Known unknowns
 
-- The `driving_plan` value and the IoT-kit `params` content (parameters). Header stays string-only. — traced 2026-10-20: not decoded in this pass (`driving_plan` value and IoT-kit `params`); the reason given in the bullet stands
-- What option code 30001 means (see [get_user_params](get_user_params.md)). — reclassified: server (the option code meaning is defined by the server)
+- The `driving_plan` value and the IoT-kit `params` content (parameters). Header stays string-only. — not traced 2026-10-20 in this pass (`driving_plan` value and IoT-kit `params`); the reason given in the bullet stands
 - The callers' handling of the answer of `ScheduleNetwork::_setUserParams` (`schedule_network.dart @0x39682d4`) — traced 2026-10-20: the method is `"POST"` (see Request); the callers were not read for the answer
 
 ## Device-tested by

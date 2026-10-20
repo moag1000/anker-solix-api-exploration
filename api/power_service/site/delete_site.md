@@ -71,7 +71,7 @@ Called from:
 ## Known unknowns
 
 - Whether the server deletes only the site or also detaches its devices: the app sends only `site_id`; device removal is a separate call ([delete_site_devices](delete_site_devices.md)).
-- The response body: not read by the app, so its keys are unknown. — reclassified: server
+- The response body: not read by the app, so its keys are unknown. — reclassified: server (not visible in the app: the app does not read the body)
 
 ## Device-tested by
 

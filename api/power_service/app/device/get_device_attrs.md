@@ -146,7 +146,7 @@ Called from:
 
 - Types of `device_sn` and `attributes`: parameters or fields in every sender, with `<String, Object>`/`<String, dynamic>` literals; senders with a `<String, String>` outer literal do not exist for this URL. — attempted 2026-10-20 (two-hop not readable: about 25 senders with parameter or field values; the per-sender trace was not done in this pass; header stays string-only)
 - Which attribute names each sender requests (`attributes` is a list in most senders and a parameter in others) and which names the server knows (upstream `get_device_attributes` lists some).
-- The 23 senders other than the two `HttpRequestControllerImpl` ones: bodies and response parsing were not decoded (see Request). — traced 2026-10-20: not decoded in this pass (25 senders listed on the page); the reason given in the bullet stands
+- The 23 senders other than the two `HttpRequestControllerImpl` ones: bodies and response parsing were not decoded (see Request). — not traced 2026-10-20 in this pass (25 senders listed on the page); the reason given in the bullet stands
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -92,7 +92,7 @@ Called from:
 ## Known unknowns
 
 - Type of `site_id` in `getSiteWifiInfoRequest` (Rx field with no printed map type). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the three callers (`StationHomeInfoLogic.getSiteWifiInfo`, `StationEnergySystemLogic.getSiteWifiInfo`, `SystemWifiInfoLogic.getSiteWifiInfo`) read an Rx field with no default or declared type. Header stays string-only)
-- Why two `SiteWifiInfoModel` classes (charging and base_service) read the same answer. — reclassified: server (the reason for two model classes is not recorded in the app)
+- Why two `SiteWifiInfoModel` classes (charging and base_service) read the same answer. — reclassified: server (not visible in the app: no reason is recorded for the two model classes)
 - The element structure of `wifi_info_list` and `hardware_list`.
 
 ## Device-tested by

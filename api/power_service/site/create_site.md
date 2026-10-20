@@ -52,6 +52,8 @@ n/a
 
 Top-level keys of the model (from `data/models.json`, all nullable String): `site_id`, `site_name`, `exist_site_id`.
 
+The app reads none of the three fields in the code read: the success closure only logs the data and calls `exeSuccess()` (see Response model), and the key `exist_site_id` occurs in no file of the asm tree other than the model (`charging/model/power_site/create_site_response_model.dart`; whole-tree search 2026-10-20).
+
 ## Example request/response
 
 Request, synthesized (type of `site_name` and `app_ability` unresolved; the ten lists default to empty)
@@ -84,7 +86,7 @@ Called from:
 ## Known unknowns
 
 - Type of `site_name` and of `app_ability` (parameters; the six callers were not followed). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: `app_ability` is a named argument of three callers (`charging/ui/page/device/a17c1/open_process/open_process_logic.dart @0x28d2b28`, `charging/ui/page/device/connect/create_join_device_to_system/create_system/create_system_logic.dart @0x2924090`, `charging/ui/page/green_energy/site/site_logic.dart @0x27b1fa4`) and its value is read from fields; `site_name` is a positional argument whose source differs per caller (`r2 = Null` in `a1782_electricity_scene_logic.dart @0x28d3824`, `electricity_scene_logic.dart @0x3d079c8`); no declared types are shown)
-- What `exist_site_id` carries the key name suggests the id of an existing site; not read. — reclassified: server
+- What `exist_site_id` carries (the key name suggests the id of an existing site): no app code reads it (see Response). — reclassified: server (not visible in the app: the key is named only in the model)
 
 ## Device-tested by
 

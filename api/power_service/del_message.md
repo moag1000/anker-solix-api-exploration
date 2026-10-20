@@ -73,7 +73,7 @@ Called from:
 
 - Types of `sns` and `all`, and what `ids`/`sns`/`all` mean together (`all` is a parameter; the callers were not followed). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the callers pass named arguments `msgIds` (`message_system_logic.dart @0x3bb47d0`) and `snList` (`message_main_logic.dart @0x401a9a8`) and read no declared types; `all` has no named argument at the two call sites. Header stays string-only)
 - Which of the constants 1 and 2 is the `type` of the system-message list and of the device-message list: both callers pass a constant to the wrapper, the mapping to the builder's parameter slot was not traced. — traced 2026-10-20: `type` is the stack parameter of the builder (`ldr x0, [fp, #0x10]` `charging/http/http_request_repository_impl.dart @0x3bb4ae0`, Smi-tagged by `lsl` `@0x3bb4ae4`); the two callers load a raw immediate into `r7` before the wrapper call: 1 in `MessageSystemLogic.deleteMessage` (`charging/ui/page/message/system/message_system_logic.dart @0x3bb4874`) and 2 in `MessageMainLogic.deleteMsg` (`charging/ui/page/message/Main/message_main_logic.dart @0x401aa40`), so by position the system-message page sends 1 and the main/device-message page sends 2; the wrapper that forwards `r7` to the stack slot was not read
-- The response body: not read by the app, so its keys are unknown. — reclassified: server
+- The response body: not read by the app, so its keys are unknown. — reclassified: server (not visible in the app: the app does not read the body)
 
 ## Device-tested by
 

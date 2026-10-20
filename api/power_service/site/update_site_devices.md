@@ -69,7 +69,7 @@ Called from:
 ## Known unknowns
 
 - Types of `site_id` and `pps_list` (parameters; the caller was not followed). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the only caller, `SelectPpsLogic.updateSelectPPSDevice` (`charging/ui/page/device/greenpower/recharge/select_pps/select_pps_logic.dart @0x278e600`), passes values read from fields; no declared types. Header stays string-only)
-- Whether the answer is read: the caller's callbacks were not read. — traced 2026-10-20: not decoded in this pass (caller callbacks); the reason given in the bullet stands
+- Whether the answer is read: the caller's callbacks were not read. — not traced 2026-10-20 in this pass (caller callbacks); the reason given in the bullet stands
 
 ## Device-tested by
 

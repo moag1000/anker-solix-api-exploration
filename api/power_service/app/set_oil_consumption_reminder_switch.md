@@ -63,7 +63,7 @@ None traced. The run-out page failure callback `a7320_run_out_of_gasoline_logic.
 
 ## Known unknowns
 
-- The response body: not read by the app, so its keys are unknown. — reclassified: server
+- The response body: not read by the app, so its keys are unknown. — reclassified: server (not visible in the app: the app does not read the body)
 - What the server does when the switch is set while no reminder plan exists (the plan is set through [set_oil_consumption_reminder_plan](set_oil_consumption_reminder_plan.md)): not derivable from the app.
 
 ## Device-tested by

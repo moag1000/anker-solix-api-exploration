@@ -59,6 +59,9 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
+- What `AkNetwork::requestHttp` sends in `param` when its `params` argument is null (the command map stores the argument as it is, `base_service/util/ak_util/src/ak_network.dart @0x21c3518`). — reclassified: server (not visible in the app: the SDK handler is outside the dumped Dart code)
+- The element structure of `range_extender_systems` (the model lists it as `unknown`). — reclassified: server (not visible in the app: the model keeps it untyped)
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

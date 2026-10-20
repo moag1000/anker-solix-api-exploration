@@ -107,7 +107,7 @@ Called from:
 ## Known unknowns
 
 - Types of `site_id` in the five simple senders (all maps are `<String, Object>` or `<String, Object?>`). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: five simple senders with `<String, Object>` maps; callers not followed in this pass. Header stays string-only)
-- The two larger senders (`TOUPlanLogic::getDataFromAPi`, `GeneralPriceSettingLogic::getDevicePriceType`): method object, value types and response parsing were not read. — traced 2026-10-20: not decoded in this pass (`TOUPlanLogic::getDataFromAPi`, `GeneralPriceSettingLogic::getDevicePriceType`); the reason given in the bullet stands
+- The two larger senders (`TOUPlanLogic::getDataFromAPi`, `GeneralPriceSettingLogic::getDevicePriceType`): method object, value types and response parsing were not read. — not traced 2026-10-20 in this pass (`TOUPlanLogic::getDataFromAPi`, `GeneralPriceSettingLogic::getDevicePriceType`); the reason given in the bullet stands
 - What `accuracy` selects (the app sends 5 or a parameter): server side.
 
 ## Device-tested by

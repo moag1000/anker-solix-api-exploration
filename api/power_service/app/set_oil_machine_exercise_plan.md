@@ -101,7 +101,7 @@ None traced. The failure callback of the defaults sender is an unresolved placeh
 ## Known unknowns
 
 - Whether the server accepts a body with only one of the two optional inner maps: the app omits a map when its parameter is null, the server reaction is not derivable.
-- The response body: not read by the app, so its keys are unknown. — reclassified: server
+- The response body: not read by the app, so its keys are unknown. — reclassified: server (not visible in the app: the app does not read the body)
 
 ## Device-tested by
 

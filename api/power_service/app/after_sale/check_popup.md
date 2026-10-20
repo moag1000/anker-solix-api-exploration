@@ -82,7 +82,7 @@ Called from:
 ## Known unknowns
 
 - What the entries of the decoded `check_data` list contain: the closure only casts the result to `List?` (`charging/http/http_request_repository_impl.dart @0x28c15fc`); the consumers in the three callers were not decoded. — traced 2026-10-20: the consumer in the success closure of `A17c0energyPlanLogic.getCheckDevicePopUp` (`charging/ui/page/device/a17c0/a17c0energyPlan/a17c0energy_plan_logic.dart @0x28c163c`) casts the list to `Iterable` (`@0x28c1688`), iterates it, casts each element to `Map<String, dynamic>` (`@0x28c1724`), reads one value through unnamed dispatch-table calls (`@0x28c1738`..`@0x28c17a0`, no key string is loaded there) and casts it to `int` (`@0x28c17e8`) before it calls `getCurrentRegion` (`@0x28c17f4`); the key names inside the elements are not visible there and the other two callers were not read
-- What other `type_id` values would select (the three callers all send 1). — reclassified: server
+- What other `type_id` values would select (the three callers all send 1). — reclassified: server (not visible in the app: the three callers send only 1)
 - Whether `check_data` sits under `data` or at the top of the body: the closure indexes the object it receives (`charging/http/http_request_repository_impl.dart @0x28c1570`). — traced 2026-10-20: the success closure receives its argument as the already decoded object of the call (`encryption.md#response-handling-and-error-codes`: the decorator converts the SDK result and JSON-decodes its `data`) and indexes it for `check_data`; whether that object is the `data` member or the whole body is decided in that layer and was not followed per caller
 
 ## Device-tested by

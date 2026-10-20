@@ -74,7 +74,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The element layout of `list` and `top_event` (event types, levels) is not decoded; "guardian" is the app's name for the feature, its meaning (a protection feature of the S1/S2 charger) is inferred. — reclassified: server (the layouts and event types are defined by the server)
+- The element layout of `list` and `top_event` (event types, levels): `top_event` is read for `id` and `is_read` only; the log texts name `type` and `eventLevel` (`s1_s2/src/page/home/s1_s2_home_logic.dart @0x2a09270`, `@0x2a0929c`) but the journal service that parses them was not followed, and "guardian" is the app's name for the feature (its meaning, a protection feature of the S1/S2 charger, is inferred). — traced 2026-10-20: the elements of `data.list` (`s1_s2/src/page/home/s1_s2_home_logic.dart @0x2a08e64`) were not followed
 - Paging or limits (the request has no such key) are not known.
 - Server behaviour is not known.
 

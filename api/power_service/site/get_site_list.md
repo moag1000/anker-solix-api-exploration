@@ -81,8 +81,8 @@ Called from:
 
 ## Known unknowns
 
-- How the IoT-kit sender's caller parses `site_list` (not read). Header stays string-only. — traced 2026-10-20: not decoded in this pass (IoT-kit sender caller); the reason given in the bullet stands
-- Why the two app senders parse the same key into two different model classes (`UserSiteListModel` vs `StationModel`). — reclassified: server (the reason for two model classes is not recorded in the app)
+- How the IoT-kit sender's caller parses `site_list` (not read). Header stays string-only. — not traced 2026-10-20 in this pass (IoT-kit sender caller); the reason given in the bullet stands
+- Why the two app senders parse the same key into two different model classes (`UserSiteListModel` vs `StationModel`). — reclassified: server (not visible in the app: no reason is recorded for the two model classes)
 - What `cacheKey` does to the request: it is an argument of `requestHttp` (`@0x238e5ac`), not part of the body. — traced 2026-10-20: the call at `charging/ui/page/home/home_base_http_reposity.dart @0x238e5ac` passes `cacheKey` among the named arguments `cacheKey`, `complete`, `fail`, `needTerminal`, `success` to a mixin `requestHttp` that the dump does not contain; `charging/http/json_db_util.dart` keeps a SQLite table `json_db_cache2` with a `cacheKey` column (`setByKey`, `getByKey`), which suggests but does not prove that the mixin caches the response there
 
 ## Device-tested by

@@ -67,7 +67,7 @@ None traced. The failure callback `a7320_maintance_detail_logic.dart @0x39ff204`
 ## Known unknowns
 
 - What the server does with `ignore_reminders`: the app passes an integer through unchanged, the values it uses are not decoded here (the page-level callers `a7320_maintance_detail_page.dart @0x39fee3c` and `@0x3a01e68` supply it).
-- The response body: the app does not read it, so its keys are unknown. — reclassified: server
+- The response body: the app does not read it, so its keys are unknown. — reclassified: server (not visible in the app: the app does not read the body)
 - Whether the server rejects `item_id` values it does not know: not derivable from the app.
 
 ## Device-tested by

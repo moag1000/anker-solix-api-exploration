@@ -64,7 +64,7 @@ Called from:
 
 ## Known unknowns
 
-- The element structure of `rule_list`. — reclassified: server (elements of an untyped list; the content is server data)
+- The element structure of `rule_list`. — reclassified: server (not visible in the app: the model keeps the items untyped)
 - Failure handling in the two callers was not read. — traced 2026-10-20: the call sites pass no `fail` closure among their named arguments: `HomeBaseHttpReposity.checkNetworkConnect` (`charging/ui/page/home/home_base_http_reposity.dart @0x34bc90c`): no named argument; `SiteLogic._getSiteRules` (`charging/ui/page/green_energy/site/site_logic.dart @0x2910ad0`): named arguments `dialog`. Failure then falls to the callee's default or to the awaiting code, neither of which was read
 
 ## Device-tested by

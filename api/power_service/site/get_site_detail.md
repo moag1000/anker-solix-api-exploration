@@ -86,9 +86,9 @@ Called from:
 
 ## Known unknowns
 
-- The response handling of the IoT-kit sender (`loadName`): not read. Header stays string-only. — traced 2026-10-20: not decoded in this pass (IoT-kit sender `loadName`); the reason given in the bullet stands
-- Which sender each of the 15 callers uses was not mapped. — traced 2026-10-20: not decoded in this pass (15 callers); the reason given in the bullet stands
-- The element classes of the list keys in both models. — reclassified: server (element classes of untyped lists are not named in the app)
+- The response handling of the IoT-kit sender (`loadName`): not read. Header stays string-only. — not traced 2026-10-20 in this pass (IoT-kit sender `loadName`); the reason given in the bullet stands
+- Which sender each of the 15 callers uses was not mapped. — not traced 2026-10-20 in this pass (15 callers); the reason given in the bullet stands
+- The element classes of the list keys in both models. — reclassified: server (not visible in the app: the models keep the lists untyped)
 
 ## Device-tested by
 

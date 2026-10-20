@@ -40,6 +40,8 @@ no model class (asm-traced): the success closure (`charging/http/http_request_re
 |---|---|---|---|---|
 | `belong_type` | int (nullable, cast `int?`) | optional | `?` | `charging/http/http_request_repository_impl.dart @0x33d3eac` |
 
+Consumer of `belong_type` (asm-traced): `A1790homeLogic.getA1790DeviceBindInfo` (`charging/ui/page/device/a1790/a1790home_logic.dart @0x33d3c8c`) passes a success closure with an `int?` parameter (`@0x33d416c`). It tests the value: Smi 0 (`cbnz w0` `@0x33d4194`) calls `showUnbindDialog` (`@0x33d41a0`); the tagged 4, so 2 (`cmp w0, #4` `@0x33d41a8`), calls `showOtherBindDialog` (`@0x33d41d0`); any other value, and null, does nothing (`@0x33d41d4`). The error closure (`@0x33d3fe0`) logs `get A1790 Device Bind Info error` (`@0x33d4008`) and also calls `showUnbindDialog` (`@0x33d4024`). `objs.txt` holds no enum object with `belong` in its name (searched 2026-10-20), so the numbers have no app-side name beyond these two reactions.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -79,7 +81,7 @@ Called from:
 
 ## Known unknowns
 
-- What the numeric `belong_type` values mean: the closure only casts the value to `int?`; the consumer in `A1790homeLogic` was not decoded. — reclassified: server (the value meanings are defined by the server)
+- What the numeric `belong_type` values mean beyond the two app reactions (0 shows the unbind dialog, 2 the other-bind dialog, other values do nothing; see Response). — reclassified: server (not visible in the app: no enum object or name for the numbers exists in the code read)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

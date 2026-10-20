@@ -66,7 +66,7 @@ Called from:
 
 ## Known unknowns
 
-- Element structure of `list` (the self-test network targets); the caller `startSelfCheckNet` was not followed. — traced 2026-10-20: not decoded in this pass (`startSelfCheckNet` caller); the reason given in the bullet stands
+- Element structure of `list` (the self-test network targets); the caller `startSelfCheckNet` was not followed. — not traced 2026-10-20 in this pass (`startSelfCheckNet` caller); the reason given in the bullet stands
 - The response handling: the builder's callbacks are unresolved. Header stays string-only for this reason. — traced 2026-10-20: the builder's callbacks are pool entries with the shared placeholder label (`pp.txt`) and cannot be identified
 
 ## Device-tested by

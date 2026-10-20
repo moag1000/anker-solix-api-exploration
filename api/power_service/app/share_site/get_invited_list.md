@@ -39,6 +39,8 @@ n/a
 
 The success closure reads the key `invited_list` of the response data and parses every element with `SiteInviteMemberModel.fromJson`. Keys of one element (from `data/models.json`, all nullable): `site_id` (String), `user_id` (String), `member_id` (String), `email` (String), `phone` (String), `status` (int), `member_type` (int).
 
+Consumers of the parsed list (asm-traced): `HomeCenterLogic` passes two success callbacks to `getInviteMember` (`charging/ui/page/user/share_site/home_center/home_center_logic.dart`, closures `@0x2916b60` and `@0x2916d34`, allocated at `@0x29161a0` and `@0x2916cf8`). Each clears a list field (`clear` `@0x2916ba4`, `@0x2916d78`) and assigns the new list with `value=` (`@0x2916bc8`, `@0x2916d9c`); neither reads `member_type` or any other element field. The widgets that show the lists were not followed.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by `getInviteMember`)
@@ -55,7 +57,7 @@ Response, synthesized (keys from `SiteInviteMemberModel.fromJson`; values are pl
 
 ## Errors seen
 
-None traced: the success closure `@0x2916390` compares no error code; the builder's failure callback is an unresolved placeholder pool entry (`pp+0xc1390`, `@0x2916324`). Error codes are catalogued in `api/errors.md`.
+None traced: the success closure `charging/http/http_request_repository_impl.dart @0x2916390` compares no error code; the builder's failure callback is an unresolved placeholder pool entry (`pp+0xc1390`, `@0x2916324`). Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -75,7 +77,7 @@ Called from:
 
 - What the status values 1 and 2 stand for on the server: the callers use them for the "inviting" and "already invited" tabs (function names only).
 - Whether the response carries keys other than `invited_list` that the app ignores. — reclassified: server (keys the app does not read are not visible in the app)
-- The meaning of `member_type` values: not decoded here. — reclassified: server (the value meanings are defined by the server)
+- What the `member_type` values of an invited member mean to the UI: the two callbacks that receive the list do not read it (see Response). — traced 2026-10-20: the widgets that show the list fields of `HomeCenterLogic` (`charging/ui/page/user/share_site/home_center/home_center_logic.dart @0x2916bc8`, `@0x2916d9c`) were not followed
 
 ## Device-tested by
 

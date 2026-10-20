@@ -70,7 +70,7 @@ Called from:
 
 ## Known unknowns
 
-- The element structure of `site_list`. — reclassified: server (elements of an untyped list; the content is server data)
+- The element structure of `site_list`. — reclassified: server (not visible in the app: the model keeps the items untyped)
 
 ## Device-tested by
 

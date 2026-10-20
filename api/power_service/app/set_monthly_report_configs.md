@@ -67,7 +67,7 @@ Called from:
 
 ## Known unknowns
 
-- The response body: not read by the app, so its keys are unknown. — reclassified: server
+- The response body: not read by the app, so its keys are unknown. — reclassified: server (not visible in the app: the app does not read the body)
 - Whether the server echoes the stored `configs` object: the app builds its local cache from the request body, not from an answer.
 - Which other keys `configs` can hold on the server: the app sends only `mothly_report_messages`.
 

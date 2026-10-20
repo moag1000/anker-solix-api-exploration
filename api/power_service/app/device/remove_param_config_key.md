@@ -73,7 +73,7 @@ Called from:
 
 ## Known unknowns
 
-- The response: the builder forwards it; `ConfirmPeakValleyLogic` was not decoded. — traced 2026-10-20: not decoded in this pass (`ConfirmPeakValleyLogic` callback); the reason given in the bullet stands
+- The response: the builder forwards it; `ConfirmPeakValleyLogic` was not decoded. — not traced 2026-10-20 in this pass (`ConfirmPeakValleyLogic` callback); the reason given in the bullet stands
 - Which other `remove_key` values the server accepts (the builder sends the constant `use_time`).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
