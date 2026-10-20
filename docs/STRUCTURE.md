@@ -109,13 +109,13 @@ If a fact is needed on a non-owner page, link to the owner. When an owner page i
 | 870-896 | `ble/a17c1.md`, `ble/a17c2.md`, `ble/a17c3.md`, `ble/a17c5.md` | A17C1/C2/C3/C5 SET commands |
 | 897-910 | `ble/a17x8.md` | A17X8 Smart Plug SET commands |
 | 911-922 | `ble/a17c0.md` | A17C0 Solarbank Gen 1 SET commands |
-| 923-946 | `ble/a172x.md`, `ble/a176x.md`, `ble/a178x.md` | A172X / A176X / A178X Portable Power Stations (split by PN) |
+| 923-946 | `ble/a172x.md`, `ble/a176x_a178x.md` | A172X / A176X / A178X Portable Power Stations (the opcode rows are owned by `ble/a172x.md`, `ble/a1771.md`, `ble/a1781.md`, `ble/a1790.md`; `ble/a176x_a178x.md` checks every archive row against them; the asm has no per-PN controller for A1763, A1765, A1782, A1783, A1785, so one page) |
 | 947-958 | `ble/a1790.md` | A1790 F3800 SET commands |
 | 959-995 | `ble/a17x7.md`, `mqtt/a17x7.md` | A17X7 / A17X7US Smart Meter 0405 status tags, parseDeviceAllInfo, parseWorkInfo (A17X7US recorded as a variant on the a17x7 pages) |
 | 996-1029 | `ble/a1771.md`, `ble/a1753.md`, `ble/a1781.md` | A1771 / A1753 / A1781 status tags, parseDeviceAllInfo, A1753 extra tags |
-| 1030-1038 | `ble/a5190.md`, `ble/a5191.md` | A5190 / A5191 EV Charger V1 |
+| 1030-1038 | `ble/a5190_a5191.md` | A5190 / A5191 EV Charger V1 (one shared module and command file, no per-PN controller; one page) |
 | 1039-1057 | `ble/a5101.md` | A5101 X1 HES |
-| 1058-1078 | `ble/a17a0.md`, `ble/a17a3.md`, `ble/a17a4.md`, `ble/a17a5.md` | EverFrost Cooler (unmapped) |
+| 1058-1078 | `ble/a17a0.md`, `ble/a17a3.md` | EverFrost Cooler (unmapped); A17A4 and A17A5 have no controller of their own (the factory builds `A17A3DeviceController`), so their owner is `ble/a17a3.md` and no `a17a4.md` or `a17a5.md` exists |
 | 1079-1141 | `ble/a2345.md`, `ble/a91b2.md`, `mqtt/a2345.md` | A2345 / A91B2 Prime Charger, 0405 tags, parseChargePortInfo, port debug fields |
 | 1142-1162 | `ble/a17c2.md`, `mqtt/a17c2.md` | A17C2 AC / Hybrid Inverter status |
 | 1163-1193 | `ble/a1340.md`, `mqtt/a1340.md` | A1340 Portable Power Bank, per-port and device-level fields |
@@ -135,7 +135,7 @@ If a fact is needed on a non-owner page, link to the owner. When an owner page i
 | 1797-1949 | `ble/<pn>.md` of each PPS PN in the command matrix | Task 2 Groups 1 and 2: PPS AC/DC controls, display/light/port controls |
 | 1950-2107 | `ble/a17c1.md`, `ble/a17c5.md` | Task 2 Group 3: Solarbank extras |
 | 2108-2132 | `ble/a17x8.md` | Task 2 Group 4: Smartplug controls |
-| 2133-2296 | `ble/a5190.md`, `ble/a5191.md` | Task 2 Group 5: EV Charger controls |
+| 2133-2296 | `ble/a5190_a5191.md`, `devices/ev_charger.md` | Task 2 Group 5: EV Charger controls |
 | 2297-2308 | `ble/protocol.md` | Task 2 Group 6: common controls |
 | 2309-2402 | `ble/a17c5.md`, `mqtt/a17c5.md` | Task 3: A17C5 vs A17C1 tag differences, extra commands, SB3-exclusive features |
 
@@ -147,7 +147,7 @@ One row per Markdown file outside `docs/` as tracked before the Task 4.9 cleanup
 
 | Old path | New owner location(s) | What moves there | Status |
 |---|---|---|---|
-| `BLE_COMMAND_MAP.md` | `ble/protocol.md`, `ble/handshake.md` (encryption paragraph), `ble/a172x.md`, `ble/a176x.md` (planned), `ble/a178x.md` (planned), `ble/a17b1.md`, `ble/a17c0.md`, `ble/a17c1.md`, `ble/a17c2.md`, `ble/a17c3.md`, `ble/a17c5.md`, `ble/a17x7.md`, `ble/a17x8.md`, `ble/a1790.md`, `ble/a1771.md`, `ble/a1753.md`, `ble/a1781.md`, `ble/a1780.md`, `ble/a5140.md`, `ble/a5101.md`, `ble/a5190.md` (planned), `ble/a5191.md` (planned), `ble/a17a0.md`, `ble/a17a3.md`, `ble/a17a4.md` (planned), `ble/a17a5.md` (planned), `ble/a2345.md`, `ble/a91b2.md`, `ble/a1340.md`, `ble/a17d0.md` (planned); `mqtt/envelope.md`, `mqtt/shelly.md`, `mqtt/<pn>.md` for the same PNs (A17X7US is a variant on the a17x7 pages); `api/errors.md`; `reference/enums.md`, `reference/validation_model.md`, `reference/command_matrix.md` (planned); `models/` | Complete line-range assignment in the split table under "Page-length and split rules"; every section is assigned Unmoved sections (A176X/A178X, A5190/A5191, A17A4/A17A5, A17D0) are archived in `docs/archive/BLE_COMMAND_MAP-3.18.0.md` | partial |
+| `BLE_COMMAND_MAP.md` | `ble/protocol.md`, `ble/handshake.md` (encryption paragraph), `ble/a172x.md`, `ble/a176x_a178x.md`, `ble/a17b1.md`, `ble/a17c0.md`, `ble/a17c1.md`, `ble/a17c2.md`, `ble/a17c3.md`, `ble/a17c5.md`, `ble/a17x7.md`, `ble/a17x8.md`, `ble/a1790.md`, `ble/a1771.md`, `ble/a1753.md`, `ble/a1781.md`, `ble/a1780.md`, `ble/a5140.md`, `ble/a5101.md`, `ble/a5190_a5191.md`, `ble/a17a0.md`, `ble/a17a3.md` (also owns A17A4 and A17A5), `ble/a2345.md`, `ble/a91b2.md`, `ble/a1340.md`, `ble/a17d0.md`; `mqtt/envelope.md`, `mqtt/shelly.md`, `mqtt/<pn>.md` for the same PNs (A17X7US is a variant on the a17x7 pages); `api/errors.md`; `reference/enums.md`, `reference/validation_model.md`, `reference/command_matrix.md` (planned); `models/` | Complete line-range assignment in the split table under "Page-length and split rules"; every section is assigned The sections of A176X/A178X, A5190/A5191, A17A4/A17A5 and A17D0 have owner pages now (`ble/a176x_a178x.md`, `ble/a5190_a5191.md`, `ble/a17a3.md`, `ble/a17d0.md`); their prose stays in `docs/archive/BLE_COMMAND_MAP-3.18.0.md` as 3.18.0 history only | partial |
 | `BUSINESS_RULES.md` | `reference/business_rules.md` | Whole page, re-verified; rules citing an endpoint link to its `api/` owner | done |
 | `CHANGELOG.md` | `CHANGELOG.md` (kept) | Per-rework entry plus Errata section | kept |
 | `DART_PYTHON_MAPPING.md` | `data/models.json` (generated), `models/` field tables, `GLOSSARY.md` | Dart to JSON to Python name mapping; upstream-name column becomes part of model pages | partial |
@@ -162,7 +162,7 @@ One row per Markdown file outside `docs/` as tracked before the Task 4.9 cleanup
 | `REQUIRED_FIELDS.md` | `api/<service>/<endpoint>.md` | Required/optional flags merge into each endpoint page's parameter table | done |
 | `RESPONSE_EXAMPLES.md` | `api/<service>/<endpoint>.md` | Response examples move to the owning endpoint page | done |
 | `VALIDATION_MODEL.md` | `reference/validation_model.md`; `flows/<name>.md` (ranges used by a flow link back) | GET to SET validation model; per-command ranges stay on the owner page, flows link | partial |
-| `devices/ev_charger.md` | `devices/a5190.md`, `devices/a5191.md`; `mqtt/a5190.md`; `ble/a5190.md`; `api/charging_*` | Device summary and device-tested status stay in `devices/`; MQTT/BLE facts move to owners | partial |
+| `devices/ev_charger.md` | `devices/a5190.md`, `devices/a5191.md`; `mqtt/a5190.md`; `ble/a5190_a5191.md`; `api/charging_*` | Device summary and device-tested status stay in `devices/`; MQTT/BLE facts move to owners | partial |
 | `devices/home_power_panel.md` | `devices/a17b1.md`; `mqtt/a17b1.md`; `ble/a17b1.md` (the `sendA17B1Command()` part); `api/charging_disaster_prepared/` services it names | The page is the A17B1 Home Power Panel (Product Code A17B1). Device summary and status to `devices/a17b1.md`; MQTT facts to `mqtt/a17b1.md`; BLE command to `ble/a17b1.md`; endpoint facts to `api/` | partial |
 | `devices/smart_plug.md` | `devices/a17x8.md`; `mqtt/a17x8.md`; `ble/a17x8.md` | Device summary and device-tested status; timer/schedule field maps to `mqtt/a17x8.md` | partial |
 | `devices/solarbank.md` | `devices/a17c0.md`, `devices/a17c1.md`, `devices/a17c2.md`, `devices/a17c3.md`, `devices/a17c5.md`; `mqtt/<pn>.md`; `mqtt/a17b1.md` | Per-PN device pages with links; MQTT command sections to `mqtt/<pn>.md`. The page mentions A17B1 only in the section "MQTT Abbreviated Fields (A17B1 system context)", which goes to `mqtt/a17b1.md`; `devices/a17b1.md` is owned by `devices/home_power_panel.md`, not by this page | partial |

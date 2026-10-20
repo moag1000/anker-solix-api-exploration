@@ -42,15 +42,15 @@ Tag: asm-traced.
 | A1755 | SOLIX C800X | ZX | yes | [a1753.md](../ble/a1753.md) | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c44d8 |
 | A1761 | SOLIX C1000(X) | ZX | yes | [a1753.md](../ble/a1753.md) | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c4468 |
 | A1762 | Portable Power Station 1000 | ZX | yes | [a1753.md](../ble/a1753.md) | [a1753.md](../mqtt/a1753.md) | product_model.dart @0x22c43f8 |
-| A1763 | SOLIX C1000 Gen 2 | ZX | no | none | none | product_model.dart @0x22c32c0 |
+| A1763 | SOLIX C1000 Gen 2 | ZX | no | [a176x_a178x.md](../ble/a176x_a178x.md) | none | product_model.dart @0x22c32c0 |
 | A1770 | F1200 (Bluetooth) | legacy F5DA | yes | [a1770.md](../ble/a1770.md) | none | product_model.dart @0x22c49b0 |
 | A1771 | F1200 (Bluetooth and WLAN) | F1200 (2540) | yes | [a1771.md](../ble/a1771.md) | [a1771.md](../mqtt/a1771.md) | product_model.dart @0x22c4628 |
 | A1772 | SOLIX F1500 | ZX | yes | [a1772.md](../ble/a1772.md) | none | product_model.dart @0x22c4158 |
 | A1780 | 767 PowerHouse (SOLIX F2000) | legacy F5DA | yes | [a1780.md](../ble/a1780.md) | [a1780.md](../mqtt/a1780.md) | product_model.dart @0x22c4a20 |
 | A1780P | 767 Power House (SOLIX F2000) with WLAN | ZX | yes | [a1780p.md](../ble/a1780p.md) | none | product_model.dart @0x22c41c8 |
 | A1781 | SOLIX F2600 | ZX | yes | [a1781.md](../ble/a1781.md) | none | product_model.dart @0x22c4238 |
-| A1782 | SOLIX F3000 | ZX | no | none | none | product_model.dart @0x22c2ff8 |
-| A1783 | SOLIX C2000 Gen 2 | ZX | no | none | none | product_model.dart @0x22c2f88 |
+| A1782 | SOLIX F3000 | ZX | no | [a176x_a178x.md](../ble/a176x_a178x.md) | none | product_model.dart @0x22c2ff8 |
+| A1783 | SOLIX C2000 Gen 2 | ZX | no | [a176x_a178x.md](../ble/a176x_a178x.md) | none | product_model.dart @0x22c2f88 |
 | A1790 | SOLIX F3800 | ZX | yes | [a1790.md](../ble/a1790.md) | [a1790.md](../mqtt/a1790.md) | product_model.dart @0x22c4078 |
 | A1790P | SOLIX F3800 Plus | ZX | yes | [a1790.md](../ble/a1790.md) | [a1790.md](../mqtt/a1790.md) | product_model.dart @0x22c4008 |
 | A17A0 | Powered Cooler 30 | legacy F5DA | yes | [a17a0.md](../ble/a17a0.md) | none | product_model.dart @0x22c4940 |
@@ -81,8 +81,8 @@ Tag: asm-traced.
 | A5141 | MI80 Microinverter | name string | no | [a5140.md](../ble/a5140.md) | none | product_model.dart @0x22c3330 |
 | A5143 | MI80 Microinverter(BLE) | A5143 (effe) | yes | [a5140.md](../ble/a5140.md) | none | product_model.dart @0x22c4318 |
 | A5150 | A5150 Module | placeholder FF09 | no | [a5150.md](../ble/a5150.md) | none | product_model.dart @0x22600d8 |
-| A5190 | Ev Charger | ZX | yes | none | none | product_model.dart @0x22c3828 |
-| A5191 | Ev Charger | ZX | yes | none | none | product_model.dart @0x22c37b8 |
+| A5190 | Ev Charger | ZX | yes | [a5190_a5191.md](../ble/a5190_a5191.md) | none | product_model.dart @0x22c3828 |
+| A5191 | Ev Charger | ZX | yes | [a5190_a5191.md](../ble/a5190_a5191.md) | none | product_model.dart @0x22c37b8 |
 | A5220 | Battery Module | placeholder FF09 | no | none | none | product_model.dart @0x22c3210 |
 | A5341 | Backup Controller | placeholder FF09 | no | none | none | product_model.dart @0x22c3268 |
 | A5450 | A5450 Module | placeholder FF09 | no | none | none | product_model.dart @0x22c30d8 |
