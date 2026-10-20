@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_profile
 
 ## Purpose
 
-<!-- TODO -->
+Reloads the profile (e-mail, nick name, avatar) of the logged-in user; sent by `UserMainPageLogic::_listenEvenBus` when the profile page gets an event (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/passport/get_profile`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x34e6dc0`
+`POST /passport/get_profile` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x34e6dc0`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x34e6db8`, in `HttpRequestControllerImpl::getUserProfileRequest` (`charging/http/http_request_repository_impl.dart @0x34e6d48`), sent through `encryptionRequestHttp` (`@0x34e6de0`).
 
 ## Encrypted?
 
@@ -20,7 +20,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-No request keys found by the extractor. <!-- TODO -->
+No body field: the sender builds an empty map literal (`Map._fromLiteral` `@0x34e6d80`, no key store before it).
 
 ## `param_type`/`cmd`
 
@@ -28,19 +28,19 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+[`UserModel`](../../models/account.md#usermodel), parsed by `UserModel.fromJson` at `charging/http/http_request_repository_impl.dart @0x34e6ebc` in the success closure `@0x34e6e60`.
 
 ## Response
 
-<!-- TODO -->
+(asm-traced) Top-level keys of `UserModel` (`data/models.json`, `charging::UserModel`): `email` (String?), `phone_number` (String?), `nick_name` (String?), `phone` (String?), `avatar` (String?), `country` (String?), `promo_email` (bool?), `access_token` (String?), `id` (int?). The closure copies five of the fields into the stored user model (`StoreField` `@0x34e6ef4`..`@0x34e6f84`) and then calls `updateIotUserInfo` (`@0x34e6fb0`).
 
 ## Example request/response
 
-<!-- TODO -->
+Request: no body fields are built (see Request). Response: not synthesized; no capture exists for this endpoint.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -53,11 +53,12 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Which five of the nine `UserModel` fields the closure copies and into which fields: only the field offsets were read (`charging/http/http_request_repository_impl.dart @0x34e6eec`..`@0x34e6f84`), not their names.
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 
