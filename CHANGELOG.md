@@ -1,10 +1,69 @@
 # Changelog
 
+2026-10-20 — depth pass r2 ready for merge (branch followup/3.24.3-depth)
+
 2026-10-20 — rework merged (branch rework/3.24.3, tag v2026.10-app3.24.3); README/index version pass
 
 2026-10-20 — addendum: output-limit app gate (power_site_type 12/18), display_type origin, A17C1 picker decision tree, A17C0 negative; from issue #1 follow-up
 
 > **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/CHANGELOG_old_entries.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
+
+## 2026-10 — Depth pass (r2) on the 3.24.3 reference (branch followup/3.24.3-depth, tag v2026.10-app3.24.3-r2 — tag set at merge)
+
+The depth pass deepens the 3.24.3 reference without changing its structure (branch from `main` at `7aecc9e`, 97 commits at the start of the release step by `git rev-list --count 7aecc9e..HEAD`; `git diff --stat 5b6ad42..HEAD` = 580 files, +19234 / −5598). It did three things: it read the request side of the endpoint pages from the instructions instead of from names (most skeleton pages became `asm-traced`), it worked through the Known-unknowns bullets that the asm can answer, and it added the tools that make both repeatable. As before, an owner page holds each fact and this entry only links it. The tag `v2026.10-app3.24.3-r2` is set at merge; the generated block in [README.md](README.md#5-coverage-and-confidence-tags) wins over any count quoted here.
+
+### Added
+
+- Confidence of the pages (header tag, outside `docs/archive/` and the README files): `string-only` 368 → 169, `asm-traced` 258 → 436. API pages: 450, no skeletons left ([service indexes](api/README.md)). Of the 330 batch pages, 158 were promoted in the batches 3a to 3f and 16 more in Task 5a (an `asm-traced` header means Method, every request field's type and the response model were read from instructions).
+- BLE pages: [a176x_a178x](ble/a176x_a178x.md), [a5190_a5191](ble/a5190_a5191.md), [a17d0](ble/a17d0.md); A17A4 and A17A5 stay on [a17a3](ble/a17a3.md). BLE handler routing by product code and the ten classes without a `ZXBleFeature` handshake: [ble/handshake.md](ble/handshake.md).
+- Flows: [anka_assistant](flows/anka_assistant.md) and [ev_charger_setup_and_sessions](flows/ev_charger_setup_and_sessions.md).
+- MQTT: the broker host and certificate table by `serverEnv` and region, including the `switchedEnv` override, in [mqtt/envelope.md](mqtt/envelope.md); the source conflicts of the MQTT pages re-checked against the asm, 13 of 16 decided from the asm ([mqtt/README.md](mqtt/README.md)); the A17C1 picker decision tree and the block-5 flag ([mqtt/a17c1.md](mqtt/a17c1.md)); the 007e timer value is seconds, little-endian, on the app side ([mqtt/a17x8.md](mqtt/a17x8.md)).
+- Reference: the compared values of `power_site_type` and the `AnkPowerSiteType` enum ([reference/enums.md](reference/enums.md)); the discovery that Blutter's `objs.txt` holds the enum wire values that `pp.txt` omits (116 `objs.txt Obj!<Class>@<id>` citations in [reference/enums.md](reference/enums.md); the citation convention is in [CONTRIBUTING.md](CONTRIBUTING.md)); the A5101 `check_function` request every 60 s in [reference/business_rules.md](reference/business_rules.md) and [docs/SAFE_USAGE.md](docs/SAFE_USAGE.md).
+- Errors: `message_key`, `message_keys`, `message_en` and `message_tag` (proximity heuristic, branch-aware) in `data/errors.json`; the `en_US` translation table sits in the object pool at `pp+0x4b308` (18 locales, 9057 keys); the three client sentinels −9999999 / −9999998 / −9999997 and `processPassword` raw versus SHA-256 ([api/errors.md](api/errors.md), [api/passport/login.md](api/passport/login.md)).
+- [docs/audit/KNOWN_UNKNOWNS_TRIAGE.md](docs/audit/KNOWN_UNKNOWNS_TRIAGE.md): every Known-unknowns bullet classed as asm, server, device or unclear.
+- [docs/DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md): 21 rows (122 to 129 and 150 to 162) in one section "Added 2026-10-20 (depth pass)"; the numbers 130 to 149 are unused.
+
+### Changed
+
+Known-unknowns resolved by the asm. The triage (`tools/unknowns_triage.py`) first counted 913 bullets (asm 440 / server 254 / device 130 / unclear 89, placeholders excluded); after Task 5 the page holds 1579 bullets (asm 418 / server 770 / device 258 / unclear 133). The count rose because the 329 skeleton `<!-- TODO -->` placeholders were replaced by real bullets during promotion, so the totals do not measure progress; the table below does. The numbers come from the results files of the tasks in `.superpowers/sdd/2026-10-20-depth-pass-3.24.3/` (SDD results, not part of the reference).
+
+| Task | scope | resolved | of rows |
+|---|---|---|---|
+| 5b | `mqtt/` | 66 | 108 |
+| 5c | `ble/` | 84 | 101 |
+| 5d | `flows/`, `devices/`, `reference/`, `models/` | 68 (+26 partial) | 133 |
+| 5a | `api/` power_service | 134 (+7 promoted) | 309 |
+| 5a | `api/` other services | 77 + 127 (+32 partial) | 548 |
+
+- [solarbank2_schedule.md](flows/solarbank2_schedule.md): the site path and the device path are alternatives, not steps in sequence.
+
+### Corrected
+
+Earlier text that the asm contradicted (the corrected fact is on the linked owner page):
+
+- A17C1 messages 0082 and 006a are sent by the app, not received ([mqtt/a17c1.md](mqtt/a17c1.md)).
+- A2345 and A91B2: the status message id is 0a00 / 0303; 0405 is not in the app ([mqtt/a2345.md](mqtt/a2345.md), [mqtt/a91b2.md](mqtt/a91b2.md)).
+- The countdown tag a3 of the A2345 and A91B2 is a 5-byte list (the audit row was right; a fix that removed it was wrong).
+- The A1780 `dc` offset ([mqtt/a1780.md](mqtt/a1780.md)).
+- "No code references the certificate classes" in [mqtt/envelope.md](mqtt/envelope.md) was wrong.
+- `get_installation` sends `site_id` in preference ([get_installation](api/power_service/app/compatible/get_installation.md)); the data of `get_relate_device_fittings` is a list ([get_relate_device_fittings](api/power_service/app/get_relate_device_fittings.md)); `clear_share` goes through `akiot.cloud_api` ([clear_share](api/app/devicerelation/clear_share.md)).
+- `quit_disaster_prepare` and `set_site_device_disaster` do have senders ([quit_disaster_prepare](api/charging_disaster_prepared/quit_disaster_prepare.md), [set_site_device_disaster](api/charging_disaster_prepared/set_site_device_disaster.md)).
+- `BleCmdStatus` key 33 is `scanWifiFailed` ([reference/enums.md](reference/enums.md)).
+- "Only five `AnkPowerSiteType` members were dumped" was wrong ([reference/enums.md](reference/enums.md)).
+
+### Tools
+
+- `tools/unknowns_triage.py`: hash-keyed overrides (`<page>:<hash>`, stable under line shifts), `--rekey-overrides`, `--strict`.
+- `tools/request_fields.py`: register and stack-slot tracking, SP spill forms, caller bodies, `Map.[]=` keys, `stur wzr` as Smi 0, response-side-only `fromJson` ([tools/README.md](tools/README.md#9-request-field-extractor)).
+- Lint: the purpose column of the generated service indexes is link-flattened; `objs.txt Obj!<Class>@<id>` citations are accepted.
+- `tools/error_codes.py`: the `message_*` fields and a drift check between the page table and the JSON.
+
+### Known limitations
+
+- The `request_fields.py` typing is heuristic. It misses no case known today, but a page was promoted only after the builder was read from the asm; the worksheet is a starting point, not evidence.
+- 169 pages stay `string-only`, mostly because a request value comes from an untyped parameter or field, or because the sender is a mixin-deduplicated function absent from the dump.
+- `data/endpoints.json` misses senders that load the URL as `r1 = "/..."` and go through `getDataFromService` (found in Task 5a; `quit_disaster_prepare` and `set_site_device_disaster`). Follow-up for the next plan: `tools/endpoint_inventory.py`.
+- The batches 3a and 3b did not get the one-hop typing pass of the later batches, so some of their pages could still be promoted.
 
 ## 2026-10 — App 3.24.3 rework (merged 2026-10-20, branch rework/3.24.3, tag v2026.10-app3.24.3)
 
