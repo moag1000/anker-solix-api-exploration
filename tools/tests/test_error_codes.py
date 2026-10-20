@@ -239,6 +239,46 @@ class EqualPathBlockTest(unittest.TestCase):
         self.assertEqual(keys, ['keyA'])
 
 
+class MessageTableCheckTest(unittest.TestCase):
+    ROWS = [
+        {'code': 10019, 'kind': 'api', 'message_keys': ['loginErrorPwd', 'loginErrorFiveTimes']},
+        {'code': 10019, 'kind': 'api', 'message_keys': ['loginErrorPwd']},
+        {'code': 1000, 'kind': 'api', 'message_keys': []},
+        {'code': 5000, 'kind': 'api'},
+    ]
+
+    def page(self, *lines):
+        return ('| 1000 | `errorOccur` | main table, outside the section |\n'
+                '## User-visible message\n\n| code | keys | text |\n|---|---|---|\n'
+                + ''.join(l + '\n' for l in lines) + '\n## Next\n| 5000 | `zzz` | x |\n')
+
+    def test_exact_union_passes_in_any_order(self):
+        text = self.page('| 10019 | `loginErrorFiveTimes`, `loginErrorPwd` | a |')
+        self.assertEqual(E.message_table_gaps(text, self.ROWS), [])
+
+    def test_drifted_row_fails(self):
+        text = self.page('| 10019 | `loginErrorPwd` | a |')
+        self.assertEqual(len(E.message_table_gaps(text, self.ROWS)), 1)
+
+    def test_key_no_json_row_holds_fails(self):
+        text = self.page('| 10019 | `loginErrorPwd`, `loginErrorFiveTimes` | a |',
+                         '| 1000 | `errorOccur` | a |')
+        gaps = E.message_table_gaps(text, self.ROWS)
+        self.assertEqual(len(gaps), 1)
+        self.assertTrue(gaps[0].startswith('1000:'))
+
+    def test_missing_row_fails(self):
+        self.assertEqual(len(E.message_table_gaps(self.page(), self.ROWS)), 1)
+
+    def test_cli_check_fails_on_drifted_page(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, 'api'))
+            with open(os.path.join(tmp, 'api', 'errors.md'), 'w', encoding='utf-8') as fh:
+                fh.write(self.page('| 10019 | `loginErrorPwd` | a |'))
+            self.assertEqual(len(E.message_gaps(tmp, self.ROWS)), 1)
+            self.assertEqual(E.message_gaps(os.path.join(tmp, 'none'), self.ROWS), [])
+
+
 class MessageKeyTest(unittest.TestCase):
     def test_locale_block_only_and_unescaped(self):
         with tempfile.TemporaryDirectory() as tmp:

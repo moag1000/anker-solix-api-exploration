@@ -445,15 +445,45 @@ def page_gaps(repo, rows):
     return sorted({r['code'] for r in rows if r['kind'] == 'api'} - have)
 
 
+MESSAGE_SECTION = '## User-visible message'
+
+
+def message_table_gaps(text, rows):
+    """Differences between the page's message table and the JSON, as strings.
+
+    The table is the one under `## User-visible message`.  For every code row the
+    backticked keys of its second cell must be exactly the union of `message_keys`
+    over that code's api rows (order-insensitive); a code with keys in the JSON must
+    have a row; a key on the page that no JSON row of the code holds fails.
+    """
+    want = {}
+    for r in rows:
+        if r.get('kind') == 'api':
+            want.setdefault(r['code'], set()).update(r.get('message_keys') or [])
+    want = {c: k for c, k in want.items() if k}
+    i = text.find(MESSAGE_SECTION)
+    section = text[i:] if i >= 0 else ''
+    nxt = re.search(r'^## ', section[len(MESSAGE_SECTION):], re.M)
+    if nxt:
+        section = section[:len(MESSAGE_SECTION) + nxt.start()]
+    have = {}
+    for m in re.finditer(r'^\|\s*(\d+)\s*\|([^|]*)\|', section, re.M):
+        have.setdefault(int(m.group(1)), set()).update(re.findall(r'`([^`]+)`', m.group(2)))
+    out = []
+    for c in sorted(set(want) | set(have)):
+        w, h = want.get(c, set()), have.get(c, set())
+        if w != h:
+            out.append('%d: page %s, json %s' % (c, sorted(h), sorted(w)))
+    return out
+
+
 def message_gaps(repo, rows):
-    """Message keys in the JSON that api/errors.md never names in backticks."""
+    """Message-table drift of api/errors.md against the rows ([] when no page)."""
     page = os.path.join(repo, PAGE_REL)
     if not os.path.isfile(page):
         return []
     with open(page, encoding='utf-8') as fh:
-        text = fh.read()
-    keys = {r['message_key'] for r in rows if r.get('message_key')}
-    return sorted(k for k in keys if '`%s`' % k not in text)
+        return message_table_gaps(fh.read(), rows)
 
 
 def write_guarded(repo, text):
@@ -496,7 +526,7 @@ def main(argv=None):
         print('codes without a table row in %s: %s' % (PAGE_REL, gaps))
     kgaps = message_gaps(a.repo, rows)
     if kgaps:
-        print('message keys not named in %s: %s' % (PAGE_REL, kgaps))
+        print('message table of %s differs from the JSON: %s' % (PAGE_REL, kgaps))
     if a.check:
         stale = old != text
         print('data/errors.json: %s' % ('stale or missing' if stale else 'up to date'))
