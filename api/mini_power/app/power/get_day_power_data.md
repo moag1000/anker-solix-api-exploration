@@ -28,6 +28,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | `device_sn` | string | yes | `"<device_sn>"` | `charging/http/http_request_repository_impl.dart @0x28a84c4` (same literal) |
 | `date` | string | yes | `"<date>"` | `charging/http/http_request_repository_impl.dart @0x28a84d8` (same literal) |
 
+Caller values (traced 2026-10-20, app side): `A2345PowerCurveLogic::_getPowerCurveData` (`charging/ui/page/device/a2345/a2345power_curve/a2345power_curve_logic.dart`) passes the constant `"A2345"` as `device_model` (`r2 = "A2345"` `@0x28a83c4`), `field_6b` of its device object as `device_sn` (`@0x28a8370`) and, as `date`, the result of `DateUtil.getCurrentYYMMDDByDateStr` (`@0x28a837c`, stored in the frame `@0x28a838c`, passed as `r5` `@0x28a83b8`). That function (`base_service/util/date_util.dart @0x2352e1c`..`@0x2352e6c`) formats the current `DateTime` with the pattern `yyyy-MM-dd` (`@0x2352e50`), so the app sends today's date in the form `2026-10-20`; the method name says `YYMMDD` but the pattern is `yyyy-MM-dd`. The A91B2 caller (`charging/ui/page/device/a91b2/a91b2power_curve/a91b2power_curve_logic.dart`) calls the same date function (`@0x28f0ab8`) and sends the constant `"A91B2"` as `device_model` (`@0x28f0b00`).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -77,7 +79,6 @@ Called from:
 
 ## Known unknowns
 
-- The format of `date` (the value is a parameter; the callers were not decoded for it).
 - The unit and spacing of `power_points` (`interval` and `unit` are model fields; their values were not decoded). — reclassified: server (2026-10-20: `interval` and `unit` arrive in the answer; the app code read here does not name their values)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

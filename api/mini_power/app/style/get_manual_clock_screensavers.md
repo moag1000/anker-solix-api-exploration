@@ -26,6 +26,8 @@ encrypted: `true` (asm-traced). `HttpRequestControllerImpl::requestHttp` declare
 |---|---|---|---|---|
 | `sn` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x276bb44` (parameter, not typed by the builder) |
 
+Value of `sn` (traced 2026-10-20, app side): `getA2345CustomClockScreenSaversData` passes `field_6b` of the value of an observable device holder (`field_b3`, `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart @0x28b08d4`..`@0x28b08e0`), the same device serial getter as the `device_sn` of the other endpoints (see [add_manual_clock_screensavers](add_manual_clock_screensavers.md#request)); `sn` is therefore the device serial number, only the key name differs.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -37,6 +39,8 @@ Not read: the sender's success closure `charging/http/http_request_repository_im
 ## Response
 
 No response key is confirmed read (see Response model).
+
+Parse by one caller (traced 2026-10-20, app side): the success closure of `A2345CustomClockLogic::getA2345CustomClockScreenSaversData` (`charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart @0x28b09d0`, sender call `@0x28b0920`) logs the answer (`返回数据: `, `@0x28b0a14`), reads the key `list` (`@0x28b0a40`, checked as `List`, `@0x28b0b08`) and for each element (checked as `Map<String, dynamic>`, `@0x28b0c00`) the keys `name` (`@0x28b0c40`), `id` (`@0x28b0d48`, turned into text), `img_url` (`String?`, `@0x28b0dc0`..`@0x28b0e18`), `short_url` (`String?`, `@0x28b0e38`..`@0x28b0e90`) and `hash_code` (`String`, `@0x28b0eac`..`@0x28b0f00`); it logs `获取到 … 个自定义屏保` ("got N custom screen savers", my translation, `@0x28b1118`). The other seven callers were not decoded; the keys above are the ones this caller reads.
 
 ## Example request/response
 
@@ -77,8 +81,6 @@ Called from:
 ## Known unknowns
 
 - Type of `sn`: a parameter stored into a `<String, dynamic>` literal; the callers' argument type was not read. — attempted 2026-10-20 (two-hop not readable: the five call sites pass a slot of the caller frame (`charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart @0x28b0918`, `@0x3e3879c`; `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart @0x28ad6bc`, `@0x28ad724`))
-- The response shape: the callbacks of the eight callers were not decoded.
-- Whether `sn` is the device serial number or another id: the key name `sn` differs from `device_sn` on the other endpoints and the callers were not decoded for it.
 - Header stays `string-only` because the type of `sn` and the response model are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

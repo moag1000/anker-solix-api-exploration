@@ -95,7 +95,7 @@ Called from:
 ## Known unknowns
 
 - The type of `device_sn`: a parameter of the first sender; the three `_addCustomChargeModeToCloud` callers pass a slot of their frame (`charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x3e320a4`) — attempted 2026-10-20 (two-hop not readable); the other seven keys are typed in Request.
-- Whether the answer carries keys besides `id`: the app reads only `id` and hands the integer to the callback.
+- Whether the answer carries keys besides `id`: the app reads only `id` and hands the integer to the callback. — reclassified: server (2026-10-20: the app reads only `id` and drops the rest, see Response; which other keys the answer carries is not visible in the app)
 - Header stays `string-only` because the type of `device_sn` is missing and the mode object is typed through the observable and the slot layout only — rechecked 2026-10-20.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

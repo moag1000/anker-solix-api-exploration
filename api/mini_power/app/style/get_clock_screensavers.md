@@ -86,8 +86,8 @@ Called from:
 
 ## Known unknowns
 
-- Type of `product_code` in the first sender: its `<String, dynamic>` literal does not type it; the String type is proven only by the second sender's `<String, String>` literal, and the callers' argument types were not read.
-- Which `product_code` values the callers pass (device model codes); the callers were not decoded for it.
+- Type of `product_code` in the first sender: its `<String, dynamic>` literal does not type it; the String type is proven only by the second sender's `<String, String>` literal, and the callers' argument types were not read. — attempted 2026-10-20 (two-hop not readable: all six callers of the two senders pass a slot of their own frame as the code, `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart @0x28adc98`..`@0x28adca8`, `a2345clock_display_logic.dart @0x28d7668`..`@0x28d7678`, `small_charging_platform/src/screen_setting/clock_style/page/clock_style_logic.dart @0x2a79928`..`@0x2a7993c`, `a1782/.../screen_theme_setting_logic.dart @0x29de9b4`..`@0x29de9c8`, `a25x7screensaver_style_logic.dart @0x29e1124`..`@0x29e1138`, `a25x7screensaver_logic.dart @0x353b16c`..`@0x353b180`)
+- Which `product_code` values the callers pass (device model codes); the callers were not decoded for it. — traced 2026-10-20: the callers are the A2345 clock style and display pages, the small-charging-platform clock style page, the A1782 theme setting page and the two A25x7 screensaver pages (see Callers in app), so the code is the model code of the device behind each page; the codes themselves come from frame slots and are not constants
 - Why two models exist for one URL (different device families call different senders); the server answer for the two families was not compared.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

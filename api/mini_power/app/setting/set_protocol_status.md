@@ -27,6 +27,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | `device_sn` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x354073c` (parameter, not typed by the builder) |
 | `protocol_status` | bool | yes | ? | `charging/http/http_request_repository_impl.dart @0x3540750` (`true` when the unboxed int parameter equals 1: `cmp x1, #1` `charging/http/http_request_repository_impl.dart @0x3540760`, `r1 = true` `@0x3540768`, `r1 = false` `@0x3540770`) |
 
+Values the callers pass (traced 2026-10-20, app side): both `setProtocolAgreementStatus` functions (`charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_lab_function_logic.dart @0x38c683c` and `a2687_new_lab_function_logic.dart @0x38c8b4c`) receive a bool from a switch closure of their page (`(dynamic, bool)`, `a2687_lab_function_view.dart @0x38c6804`, `a2687_new_lab_function_view.dart @0x38c8b14`) and convert it to an integer before the call: `tst x1, #0x10` then `cset x2, eq` and a tag shift (`@0x38c6948`..`@0x38c6954`), i.e. 1 for true and 0 for false. So the callers pass 1 (switch on) or 0 (off), and the builder turns 1 back into `protocol_status: true`.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -74,7 +76,6 @@ Called from:
 ## Known unknowns
 
 - Type of `device_sn`: a parameter stored into a `<String, Object>` literal; the callers' argument type was not read. — attempted 2026-10-20 (two-hop not readable: the callers `setProtocolAgreementStatus` pass slots of their own frames (`charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_new_lab_function_logic.dart @0x38c8c94`..`@0x38c8ca0`, `a2687_lab_function_logic.dart @0x38c6980`..`@0x38c698c`))
-- Which integer values the callers pass (the builder sends `true` only for 1).
 - What the user agrees to (the endpoint and key names are the only evidence); the read side is `get_protocol_status`. — reclassified: server (2026-10-20: the agreement text is not visible in the app code read here; the sender and getter names `A2687ProtocolAgreementStatus` and the callers `a2687_lab_function_logic.dart`, `a2687_new_lab_function_logic.dart` tie it to the A2687 lab-function pages)
 - One-hop caller tracing (controller ruling): `A2687LabFunctionLogic::setProtocolAgreementStatus` (`charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_lab_function_logic.dart @0x38c683c`) and `A2687NewLabFunctionLogic::setProtocolAgreementStatus` (`charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_new_lab_function_logic.dart @0x38c8b4c`) pass `field_3f?.field_6b ?? ""` (`@0x38c691c`, `@0x38c8c2c`) like the other A2687 lab callers, but the two closures of the device-info service (`charging/ak_iot_kit/business/A2687/service/a2687_device_info_service.dart @0x3540538` and `@0x3540844`) take `device_sn` from their closure context (`LoadField r4 = r0->field_f` `@0x3540620`, `@0x3540914`), a captured value whose declared type was not traced, so the field stays `?`.
 - Header stays `string-only` because the type of `device_sn` is missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section

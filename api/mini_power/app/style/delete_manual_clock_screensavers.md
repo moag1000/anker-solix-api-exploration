@@ -26,6 +26,8 @@ encrypted: `true` (asm-traced). `HttpRequestControllerImpl::requestHttp` declare
 |---|---|---|---|---|
 | `id` | int (unboxed, x) | yes | | `charging/http/http_request_repository_impl.dart @0x3e20f90` (map literal `<String, dynamic>` `charging/http/http_request_repository_impl.dart @0x3e20fb8`, value boxed by `BoxInt64Instr` `@0x3e20fa0`) |
 
+Id source (traced 2026-10-20, app side): `A2345CustomClockLogic::deleteCustomClockScreenSavers` (`charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart @0x3e20dcc`) takes the entry object from `field_13` of its context, reads its String field `field_1b` with the fallback `""` (`@0x3e20e3c`..`@0x3e20e4c`) and parses it with `parse` (`@0x3e20e54`) before the call (`@0x3e20e90`). The entry is an item of the list from [get_manual_clock_screensavers](get_manual_clock_screensavers.md); the id arrives there as text and is parsed back to an integer here; an empty text would make `parse` fail inside the function.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -70,7 +72,6 @@ Called from:
 ## Known unknowns
 
 - What the server does when the id does not exist or belongs to another user: the app ignores the answer body.
-- Which id the caller passes beyond "the id of an entry listed by `get_manual_clock_screensavers`" (the caller parses it from a String field, `@0x3e20e54`).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -25,8 +25,10 @@ encrypted: `true` (asm-traced). `HttpRequestControllerImpl::requestHttp` declare
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `sn` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3e19d14` (parameter, not typed by the builder) |
-| `img_url` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3e19d28` (parameter, not typed by the builder) |
-| `hash_code` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3e19d3c` (parameter, not typed by the builder) |
+| `img_url` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3e19d28` (parameter, not typed by the builder) |
+| `hash_code` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3e19d3c` (parameter, not typed by the builder) |
+
+Caller values (traced 2026-10-20, app side): `A2345CustomClockLogic::handleEditedImage` (`charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart @0x3e38100`, parameters: the URL returned by the cloud upload and the local image path) logs both (`上传返回的图片URL: `, `本地图片路径: `), requires both texts to be non-empty (length fields `field_7`, `cbz`/`cbnz` `@0x3e381cc`..`@0x3e381dc`; otherwise it shows the text `uploadToTheCloudFailed`, `@0x3e381f8`), computes `calculateFileCRC32` for the local file (`@0x3e38218`, awaited, cast to `String` `@0x3e38254`..`@0x3e38260`) and calls the sender with the URL as `img_url`, the CRC-32 text as `hash_code` and `field_6b` of the selected device object as `sn` (`@0x3e38384`, call `@0x3e383cc`). So `img_url` is the cloud-storage URL of the uploaded image (see [get_app_up_token_general](../../../app/cloudstor/get_app_up_token_general.md)) and `hash_code` is the CRC-32 checksum of the image file as a String, not a cryptographic hash. The other caller (`a2345clock_style_logic.dart @0x3e19b18`) has the same shape, not decoded further.
 
 ## `param_type`/`cmd`
 
@@ -39,6 +41,8 @@ Not read: the sender's success closure `charging/http/http_request_repository_im
 ## Response
 
 No response key is confirmed read (see Response model).
+
+What the caller reads (traced 2026-10-20, app side): the success closure of `A2345CustomClockLogic::handleEditedImage` (`a2345custom_clock_logic.dart @0x3e384a0`) logs the answer (`服务器返回数据: `, `@0x3e384f0`), tests that it is a `Map` (`@0x3e38568`), reads the key `id` (`@0x3e38590`), converts it to text (`@0x3e385d0`) and passes it to `_appendNewThemeByFetch` (`@0x3e385f8`), sets a flag in the logic (`field_ab` `@0x3e3860c`) and posts an event on the event bus with `action: add` and the device serial number (`@0x3e38654`..`@0x3e3868c`); the failure closure (`@0x3e383e8`) logs `添加自定义屏保失败: ` (`@0x3e38428`) and shows `uploadToTheCloudFailed` (`@0x3e38468`).
 
 ## Example request/response
 
@@ -75,8 +79,6 @@ Called from:
 ## Known unknowns
 
 - Types of `sn`, `img_url` and `hash_code`: parameters stored into a `<String, dynamic>` literal; the callers' argument types were not read. — attempted 2026-10-20 (two-hop not readable: both callers `addCustomClockScreenSavers` pass slots of their own frames, `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart @0x3e383bc`..`@0x3e383cc` and `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart @0x3e19bdc`..`@0x3e19bec`)
-- Which hash `hash_code` is (algorithm and input) and how `img_url` is obtained: the callers were not decoded.
-- Whether and how the answer is used: the callers' success callbacks were not read.
 - Header stays `string-only` because the field types and the response handling are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

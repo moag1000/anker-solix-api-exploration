@@ -38,6 +38,8 @@ No model class (asm-traced): the success closure (`charging/http/http_request_re
 
 Top-level key read by the app: `device_setting` (object) with the integer keys `charging_mode_status`, `compatibility_status` and `charging_device_identity_status` (each `0` when absent). Other keys of the object are not read.
 
+Value use and absence (traced 2026-10-20, app side): the laboratory page closure (`charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart @0x28d8e9c`, argument `Map`) reads two integer keys and compares the second with the integer 1 (`cmp w0, #2` tagged = Smi 1, `@0x28d8fd0`) before calling `onCompatibilitySwitchChanged` (`@0x28d905c`), so 1 is the "on" value of `compatibility_status` there; the A2687 home closure stores `charging_device_identity_status` per device (see [get_charging_device_identity_new_status](get_charging_device_identity_new_status.md#response)). The object `device_setting` is cast to `Map<String, dynamic>` right after the lookup without a null branch (`charging/http/http_request_repository_impl.dart @0x28a7d68`..`@0x28a7d8c`), so a missing or null `device_setting` makes the cast fail inside the success closure; the three integers default to 0 when absent.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -73,8 +75,7 @@ Called from:
 
 ## Known unknowns
 
-- The value domain of the three integers: the closure casts them to `int`; the pages that use them were not decoded (the matching setters are `set_charging_mode_status`, `set_compatibility_status` and `set_charging_device_identity_status`).
-- Whether the object `device_setting` can be absent: the closure casts it without a null default (no null branch before the cast).
+- The value domain of the three integers: the closure casts them to `int`; the pages that use them were not decoded (the matching setters are `set_charging_mode_status`, `set_compatibility_status` and `set_charging_device_identity_status`). — traced 2026-10-20: the value 1 is read as "on" for `compatibility_status` on the A2345 laboratory page (see Response); the domains of the other two integers were not decoded in the other four callers
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

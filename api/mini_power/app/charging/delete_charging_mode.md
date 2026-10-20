@@ -30,6 +30,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 |---|---|---|---|---|
 | `id` | int (unboxed, x) | yes | | `charging/http/http_request_repository_impl.dart @0x26c3f94` (map literal `<String, int>` `charging/http/http_request_repository_impl.dart @0x26c3fbc`, value boxed by `BoxInt64Instr` `@0x26c3fa4`) |
 
+Id source (traced 2026-10-20, app side): the callers `_deleteCustomChargeModeByCloud` (`charging/ui/page/device/a2345/a2345custom_charging_mode/a2345custom_charging_mode_logic.dart @0x26c3d64`, `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_custom_charge_mode/a2687_custom_charge_mode_logic.dart @0x38c09b0`) take the mode object they are given and read its first field (`field_7`, `@0x26c3d80`, `@0x38c09cc`), which is the key `id` of `A2345CustomModeItem` in its `toJson` order (`charging/model/a2345/a2345_custom_mode_list.dart`); when that field is null they dismiss the loading dialog and return without a request (`cmp w2, NULL` `@0x26c3d88`, `GetExtension.dismiss` `@0x26c3db0`). So the id is the id of an entry of the list from [get_charging_mode_list](get_charging_mode_list.md).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -76,7 +78,6 @@ Called from:
 ## Known unknowns
 
 - What the server does when the mode is in use by a device, or when the id does not exist: the app ignores the answer body (see Response model).
-- Which id the callers pass beyond "the `id` returned by `add_charging_mode` or listed by `get_charging_mode_list`" (the callers were not decoded for it).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

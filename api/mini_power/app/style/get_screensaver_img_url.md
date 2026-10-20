@@ -32,6 +32,8 @@ Not re-read in 3.24.3: the sender is a mixin-deduplicated function whose body is
 | `id` | ? | ? | ? | 3.18.0 inventory row, not present in the 3.24.3 asm |
 | `type` | ? | ? | ? | 3.18.0 inventory row, not present in the 3.24.3 asm |
 
+3.18.0 builder read (traced 2026-10-20, 3.18.0 asm tree, not the 3.24.3 app): `getScreensaverImgUrl` (`small_charging_platform/src/screen_setting/clock_style/page/clock_style_logic.dart @0x2550030` in the 3.18.0 tree) fills a `<String, Object>` literal (`@0x25500e8`, 4 slots `@0x25500a4`) with `id` (an unboxed integer boxed by `BoxInt64Instr`, `@0x25500c0`) and `type` (a parameter stored as received, `@0x25500e4`) and sends it with `encryptionRequestHttp` (`@0x255015c`) and the method object `Obj!Method@2c736e1` (name `post`), so POST in 3.18.0 with `id` an integer; the success closure is the shared forwarder `charging/http/http_request_repository_impl.dart @0x19dc8a8` (3.18.0). The page stays `string-only` because the 3.24.3 sender body is not in the dump.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -43,6 +45,8 @@ not extracted: the sender body is not in the asm dump, so the response handling 
 ## Response
 
 No response key is confirmed read (see Response model).
+
+Callback keys (traced 2026-10-20, 3.24.3 app side): the success closure `small_charging_platform/src/screen_setting/clock_style/page/clock_style_logic.dart @0x2803a40` requires the answer to be a `Map` (`@0x2803af0`) and reads the keys `img_url` (`String?`, `@0x2803b30`..`@0x2803b7c`) and `url` (`String?`, `@0x2803b98`..`@0x2803be4`); the failure closure (`@0x28039cc`) logs `Failed to get holiday theme image: ` (`@0x28039f0`).
 
 ## Example request/response
 
@@ -64,9 +68,8 @@ none traced: the sender body is not in the asm dump, so the failure path of the 
 
 ## Known unknowns
 
-- The method, the request keys (`id`, `type` are 3.18.0 inventory rows), their types and whether they are required: the sender body is not in the asm dump. The call site `@0x2802a64` suggests an integer id and a string type (`festival`), which does not prove the stores.
-- Which `type` values exist besides `festival`.
-- The response shape and how the callbacks use it.
+- The method, request keys and types of the 3.24.3 sender: the 3.18.0 builder is read (see Request), the 3.24.3 mixin-deduplicated body is not in the dump — traced 2026-10-20
+- Which `type` values exist besides `festival`. — traced 2026-10-20: the only 3.24.3 call site that passes a text passes `festival` (`clock_style_logic.dart @0x2802a58`), and the failure text of the callback speaks of a holiday theme image; other values are not passed in the code read
 - Header stays `string-only` because Method, request types and the response model are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

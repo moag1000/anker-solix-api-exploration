@@ -38,6 +38,8 @@ No model class (asm-traced): the success closure (`charging/http/http_request_re
 
 Top-level key read by the app: `charging_device_identity_new_status` (bool, `false` when absent). No other key is read.
 
+Use of the flag (traced 2026-10-20, app side): the success closure in `A2687HomeLogic::getLaboratorySwitch` (`charging/ui/page/device/a2687/a2687home/a2687_home_logic.dart @0x353dc04`, argument `Map`) reads the key as a `bool` (`@0x353dca4`..`@0x353dcb8`), compares it with the device-side value `_deviceLabSwitchForCloudCompare` (`@0x353dcdc`; that function reads `getLocalChargingDeviceIdentityStandardStatus`, `@0x353e2c4`, when the device is connected, `@0x353e26c`) and, when they differ (`cmp w0, w1` `@0x353dd00`), sends the cloud value to the device with `_sendStandardChargingIdentityToDeviceWithRetry` (`@0x353dd24`). The sibling closure for `get_device_setting` (`@0x353e400`) reads the integer `charging_device_identity_status` and stores it for the device serial number with `setDeviceChargingIdentityStatus` (`@0x353e508`). So the bool is the cloud copy of the identity switch that the app pushes to a connected A2687, and the integer is the stored per-device status; the two are separate keys with separate uses.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -69,7 +71,6 @@ Called from:
 ## Known unknowns
 
 - What the flag controls on the device: the endpoint and key names are the only evidence. — reclassified: device test row 154 (2026-10-20: what the setting does on the charger is behaviour of the device, only the endpoint and key names are in the app)
-- How the flag relates to `charging_device_identity_status` (`get_device_setting`, `set_charging_device_identity_status`): both exist for A2687 and A2345; the relation was not decoded.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

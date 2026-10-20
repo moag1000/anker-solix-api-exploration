@@ -74,7 +74,7 @@ Called from:
 ## Known unknowns
 
 - Which `port_name` values are valid: `get_port_remarks` lists `C1`, `C2`, `C3`, `C4`, `A1` and `A2` on the read side; whether the server restricts the write side to them is not shown.
-- Length or character limits of `remark`: the caller trims a text value before the call (`trim` in `charging/ui/page/device/a2345/a2345home/a2345home_logic.dart @0x3e44868`, closure `@0x3e447c0`) but no limit was read.
+- Length or character limits of `remark`: the caller trims a text value before the call (`trim` in `charging/ui/page/device/a2345/a2345home/a2345home_logic.dart @0x3e44868`, closure `@0x3e447c0`) but no limit was read. — traced 2026-10-20: `A2345homeLogic::_saveDeviceName` (`charging/ui/page/device/a2345/a2345home/a2345home_logic.dart @0x3e44574`) reads the text of the input controller (`field_ef.field_27.field_7`, `@0x3e445ac`..`@0x3e445bc`), trims it (`@0x3e445c4`) and then checks the network state; it compares no length, so a limit, if any, is set by the input widget (not read) or by the server
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

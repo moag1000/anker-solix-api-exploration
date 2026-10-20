@@ -38,6 +38,8 @@ Not read: the sender's success closure `charging/http/http_request_repository_im
 
 No response key is confirmed read (see Response model).
 
+What the callers read (traced 2026-10-20, app side): the success closures of both `_getRealUrl` callers (`small_charging_platform/src/screen_setting/clock_style/page/clock_style_logic.dart @0x2865060` and `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/clock_style_manage_logic.dart @0x3ac98e8`) read the key `url` of the answer (`@0x2865094`, `@0x3ac991c`) and complete a `Completer<String?>` with it (`FutureOr<String?>` check `@0x28650c8`, `complete` `@0x28650ec`), so the real URL is the value of the key `url`.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -70,7 +72,6 @@ Called from:
 ## Known unknowns
 
 - Type of `short_url`: a parameter stored into a `<String, dynamic>` literal; the callers' argument type was not read. — attempted 2026-10-20 (two-hop not readable: both `_getRealUrl` callers pass a slot of their own frame (`small_charging_platform/src/screen_setting/clock_style/page/clock_style_logic.dart @0x286503c`, `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/clock_style_manage_logic.dart @0x3ac98bc`))
-- The response shape (which key holds the real URL): the callers' callbacks were not decoded.
 - Header stays `string-only` because the type of `short_url` and the response model are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
