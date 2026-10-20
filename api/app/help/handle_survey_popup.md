@@ -41,6 +41,8 @@ no top-level model: the success closure (`charging/http/http_request_repository_
 
 (asm-traced) One key is read from the top level of the response: `has_popup` (bool, nullable).
 
+Model and callback (traced 2026-10-20, app side): `SurveyPopupModel` (`charging/model/banner_model.dart`) has one field, `has_popup` (`field_7`, `toJson` key `has_popup`, `@0x4699a5c`). The callback of `DeviceMainLogic::bannerClick` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x4699b10`, argument typed `SurveyPopupModel`) reads `field_7` (`@0x4699b3c`) and, when it is true (compare `@0x4699b48`), builds a dialog from the texts `questionnaireTips`, `surveyPopupAgree` and `commonPrivacyPolicy` with a rich-text link element (`Trans.tr` `@0x4699b70`, `@0x4699b7c`, `@0x4699b98`, `RichTextElement` `@0x4699c24`).
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -74,7 +76,6 @@ Called from:
 ## Known unknowns
 
 - What the two `handle_type` values 1 and 2 stand for in the UI (shown, closed or answered): not named in the asm — traced 2026-10-20 (the values and call sites are in Request).
-- The fields of `SurveyPopupModel` and what the callback does with it: only the constructor call was read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

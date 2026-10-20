@@ -41,6 +41,8 @@ No literal body keys in the seven Dart senders: the body is the result of a `toJ
 
 The three keys exist only in the SDK-handler path (3.24.3 added `method`, `param` and `path`, see Since/changed); the other senders post the `toJson` object directly.
 
+Body keys of the device-list object (traced 2026-10-20, app side; key sets from the `toJson` methods, the field types are not declared there): `StationDeviceList::toJson` (`base_service/bean/model/firmware_update/station_device_model.dart`) writes the key `device_list` (`@0x229e448`), a list of `StationDevice::toJson` maps with the keys `device_sn` (`@0x229e530`), `device_pn` (`@0x229e560`), `version` (`@0x229e590`), `sub_package` (`@0x229e640`, a list of `SubPackageVersionModel` maps with the keys `device_type` `@0x229e844` and `version` `@0x229e874`), `sub_ota_way` (`@0x229e670`), `aliasName` (`@0x229e6a0`), `link_mode` (`@0x229e6d0`), `force_version` (`@0x229e700`) and `device_type` (`@0x229e730`). The value types of these keys come from fields of the classes and are not typed in the asm.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -52,6 +54,8 @@ n/a
 ## Response
 
 Top-level keys of `base_service::BatchDeviceModel` (`data/models.json`): `update_infos` (unknown), `popup_info` (BatchPopupInfo?). The repository closure logs `Ota upgrade pop: data: ` (`@0x264b598`) and passes the model to the callback (`ClosureCall` `@0x264b5ec`).
+
+Element class and parse sites (traced 2026-10-20): `BatchDeviceModel.fromJson` (`base_service/bean/model/firmware_update/batch_device_model.dart @0x229ea10`) builds `update_infos` as a list with the type argument `<UpdateInfo>` (`@0x229ea78`) and `popup_info` with `BatchPopupInfo.fromJson` (`@0x229eb7c`). `UpdateInfo` has the keys `is_pop_up`, `threshold_ver`, `children` (list of `ChildrenModel`), `need_update`, `need_rollback`, `lastPackage` (map), `current_version`, `upgrade_type` (int?), `upgrade_level` (int?), `device_sn`, `change_log`, `device_type` and `device_relation` (list of `DeviceRelation`). `BatchDeviceModel.fromJson` is called at nine sites: `charging/http/http_request_repository_impl.dart @0x264b5d0`, `base_service/util/firmware_update_utils.dart @0x229e9d0`, `micro_hes/src/common_business/basic_station/station/basic_station_logic.dart @0x235c118`, `micro_hes/src/a17e2/station/home/base_station_logic.dart @0x22c5568`, `micro_hes/src/common_business/basic_station/basic_station_setting/component/general_setting/station_firmware_update_controller.dart @0x2cd21dc`, `device/src/station_setting/controller/common_station_firmware_update/station_firmware_update_view_model.dart @0x366fec4`, `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0ac98` and `@0x2b0f2e0`, and `charging/ui/page/device/anker_ota/ats_ota/ats_ota_logic.dart @0x341e33c`. The AX170 sender `checkDeviceUpdate` has no such call in its own file.
 
 ## Example request/response
 
@@ -102,15 +106,15 @@ Called from:
 - `micro_hes/src/common_business/basic_station/station/basic_station_logic.dart::updateBusinessMessages`
 - `oe_a7320/src/oe_a7320/ota/range_extender_system_ota.dart::jumpToBatchOtaView`
 
+Sender split (app side): the senders are one per station or firmware flow, named by the controller class in the list above (AX170 station controller, firmware update utils, the repository, the common station firmware view model, the A17E2 base station logic, the two micro-HES station controllers and the firmware-upgrade state card); the asm shows no product-family switch beyond the class a caller lives in.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. Parameter delta in `tools/out/diff_3.18.0_3.24.3.md`: added `method`, `param`, `path` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- The request body: the `toJson` of the device-list object (`StationDeviceList`, `StationDevice`, `SubPackageVersionModel` appear in `AX170StationController::checkDeviceUpdate`) was not decoded, so no field types are known; `AX170StationController` reads `deviceSn`, `productCode`, `device_type`, `version` and `forceVersion` from device JSON (`anka`-independent station data, `ats_ax170/src/ats_ax170/page/station/ax170_station_controller.dart @0x234d788`..`@0x234dc08`).
-- How the nine senders differ (which product families use which): one sender per station family, named by the controller class.
-- The response parse of the six other senders, and the element classes of `update_infos` (typed `unknown` in `data/models.json`).
+- The request body: the `toJson` of the device-list object (`StationDeviceList`, `StationDevice`, `SubPackageVersionModel` appear in `AX170StationController::checkDeviceUpdate`) was not decoded, so no field types are known; `AX170StationController` reads `deviceSn`, `productCode`, `device_type`, `version` and `forceVersion` from device JSON (`anka`-independent station data, `ats_ax170/src/ats_ax170/page/station/ax170_station_controller.dart @0x234d788`..`@0x234dc08`). — attempted 2026-10-20 (key set read, see Request; value types: two-hop not readable, the `toJson` stores the class fields as they are, `station_device_model.dart @0x229e530`..`@0x229e730`)
 - Server behaviour for the installer variant (`/charging_hes_installer_svc/v2/ota/batch/check_update`): documented on its own page under `charging_hes_installer_svc`.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

@@ -49,6 +49,8 @@ not resolved (string-only): the success closure is the shared closure `charging/
 
 Not listed: the callback's use of the value was not traced (see Response model).
 
+What the caller does with the answer (traced 2026-10-20, app side): the success closure of `FeedbackLogic::submit` (`charging/ui/page/user/feedback/feedback_logic.dart @0x311fb20`, argument `dynamic`) does not read its argument; it resets two observables of the form (`value=` `@0x311fb6c`, `@0x311fb90`), calls `hideDialog` (`@0x311fba0`), unfocuses two inputs (`unfocus` `@0x311fbc0`, `@0x311fbe0`) and calls `showSuccessDialog` (`@0x311fbf0`).
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -93,7 +95,6 @@ Called from:
 
 - Types of `device_name`, `product_number`, `device_sn`, `user_name`, `user_email`, `message_content`, `type`, `device_mac`, `subject`, `order_number`: parameters stored into a `<String, Object>` literal. — attempted 2026-10-20 (two-hop not readable: `submit` (`charging/ui/page/user/feedback/feedback_logic.dart @0x311f708`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - Which values `type` takes (the feedback category) and what `purchase_channel` encodes: the callers' arguments were not decoded. — attempted 2026-10-20 (two-hop not readable: the one caller `FeedbackLogic::submit` passes slots of its frame, `charging/ui/page/user/feedback/feedback_logic.dart @0x311f6f4`..`@0x311f708`, and eleven stack arguments)
-- The response body (the shared closure forwards it unparsed; the caller's reading was not traced).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

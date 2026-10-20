@@ -84,15 +84,16 @@ Called from:
 - `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart::_putFile`
 - `charging/ui/page/user/upload_log/upload_log_logic.dart::uploadAppLogData`
 
+Failure path (traced 2026-10-20, app side): `UploadLogLogic::uploadLogFail` (`charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b6568`; body `@0x46b2680`..`@0x46b27d8`) logs `UploadLogLogic uploadLogFail: ` (`@0x46b269c`), reads the upload time (`getUploadTime` `@0x46b271c`), reports a tracking event (`eventTrackUploadLogInfo` `@0x46b2748`) and sets the status text `uploadLogFail` (`Trans.tr` `@0x46b277c`, `value=` `@0x46b2794`, `@0x46b27ac`). The notify call passes a `success` and a `fail` closure (`@0x46b64e8`, `@0x46b64fc`, argument list `@0x46b653c`); the `fail` closure (`@0x46b657c`) logs the error and calls `uploadLogFail` (`@0x46b6610`).
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- Types of `url` (a field in `_notifyServer`, a parameter in `uploadLogURL`), `related_device_sn` and `device_sn` (parameters of `_notifyServer`): no declared type was read at the callers.
+- Types of `url` (a field in `_notifyServer`, a parameter in `uploadLogURL`), `related_device_sn` and `device_sn` (parameters of `_notifyServer`): no declared type was read at the callers. — attempted 2026-10-20 (two-hop not readable: `_notifyServer` is called from `_putFile` (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x31339d8`) with six values taken from frame slots of `_putFile` itself (`fp-0xc0`..`fp-0xf8`, `@0x31339b8`..`@0x31339d4`) and `_putFile` PUTs the file with `put` (`@0x3133978`) before it notifies; no declared types)
 - Whether `source: "app"` and `os: "android"` are replaced on iOS: no branch was found in the senders. — reclassified: device test row 161 (2026-10-20: the workspace holds the Android build only, so an iOS branch cannot be checked here)
-- How the failure path works: `uploadLogURL` calls `uploadLogFail` (`charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b6568`); the failure closures were not decoded.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

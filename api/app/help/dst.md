@@ -42,6 +42,8 @@ no model: both success closures read one key from a map. `getCloudCurrentTimezon
 
 (asm-traced) One key is read from the top level of the response: `timezone` (String).
 
+Consumer of the wrapped map (traced 2026-10-20, app side): `DeviceUtil::getCurrentTimezoneGMT` (`charging/util/device_util.dart @0x36c21e4`) reads the stored text with `getCurrentTimezoneInfo` (`@0x36c226c`), JSON-decodes it (`@0x36c2280`) and takes `timeZoneName` (`@0x36c2288`) and `timeZoneGMT` (`@0x36c22ec`), both cast to String. It first asks for the local time zone name (`getLocalTimezone` `@0x36c2208`); when the stored `timeZoneName` equals it (`==` `@0x36c23b8`, branch `@0x36c23bc`) the function returns the stored `timeZoneGMT` (`@0x36c23c8`), otherwise it calls `getTimezone` (`@0x36c23cc`). So the map is a cache of the cloud answer under the name it was fetched for; the first sender writes the same value into both keys.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -77,7 +79,6 @@ Called from:
 ## Known unknowns
 
 - What the `timezone` string looks like (an IANA name or a GMT offset): the app uses the value as stored name and as `timeZoneGMT`; its format was not read. — reclassified: server (2026-10-20: the app stores and forwards the string; its format is not derivable from the app code read here)
-- Why the response of the first sender is wrapped into a map with `timeZoneName` and `timeZoneGMT`: both keys are written from the same value or its default; the consumers of `setCurrentTimezoneInfo` were not read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

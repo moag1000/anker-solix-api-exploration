@@ -39,6 +39,8 @@ The bill-analysis sender also sends a header `user_id` (a `<String, String>` map
 
 In the feedback screen the `type` argument next to the URL is the raw 6 (logged-in branch, `charging/ui/page/user/feedback/feedback_logic.dart @0x312097c`..`@0x3120984`) or 7 (other branch, `@0x3120994`); because `getAppUpTokenGeneral` tags its `type` from an unboxed int, I read these as 6 and 7 (my reading, the register was not followed to the call).
 
+Senders that derive the file values (traced 2026-10-20): `FeedbackLogic::upLoadSingleFile` (`charging/ui/page/user/feedback/feedback_logic.dart @0x31211e0`) takes the file name as the last element of the file path cut at `"/"` (`@0x31213d4`..`@0x31213e8`, `last` list getter), so a String, and the size from an awaited `length()` of the file (`@0x31213fc`..`@0x3121414`, `LoadInt32Instr` `@0x3121470`), so an integer; it passes `5` of `6` or `7` as `type` (`@0x3121448`, `@0x3121458`, raw 6 and 7 are the values given above) and the URL literal of the with-login or without-login call. `UploadLogLogic::requestUpToken` sends the constant `"app_log_upload.log"`. The BLE-log sender `_uploadBleFile` (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x31334c8`) reads `file_name` from a parameter slot (`field_13` of its context, `@0x3133598`..`@0x31335a8`) and `file_size` from a field of a file object (`@0x31335b4`..`@0x31335c8`); neither slot has a declared type in the asm.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -46,6 +48,8 @@ n/a
 ## Response model (link)
 
 `charging::GetUpToken` (`data/models.json`, no page under `models/`), parsed by `GetUpToken.fromJson` at `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133768` (closure `@0x3133710`) and at `charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b5ae0` (closure `@0x46b5aa8`). `getAppUpTokenGeneral` forwards the response value to its caller unparsed (`charging/http/http_request_repository_impl.dart @0x2268374`, `ClosureCall` `@0x22683a8`); the bill-analysis sender returns a `Map<String, dynamic>?` (`anka_agent/services/bill_analysis_upload_service.dart @0x2bf3cac`) and its parse was not read.
+
+What the callers read (traced 2026-10-20, app side): the bill-analysis flow `BillAnalysisUploadService::uploadFile` (`anka_agent/services/bill_analysis_upload_service.dart @0x2bf2e84`) awaits `_getUploadToken` (`@0x2bf2f48`), then reads the keys `uptoken` (`@0x2bf2f7c`, again `@0x2bf30f0`, cast to String) and `key_prefix` (`@0x2bf2fa8`) of the returned map and calls `_putToS3` (`@0x2bf307c`), which turns the text into a URI and opens an HTTP PUT with the file bytes (`parse` `@0x2bf3514`, `putUrl` `@0x2bf3520`, content type and length set `@0x2bf3554`, `@0x2bf3560`); on success it logs the `keyPrefix` and an `accessUrl`. The feedback closures (`feedback_logic.dart @0x3120c90`, `@0x3120d08`, `@0x31215f4`, `@0x312166c`) and the crop closure (`charging/ui/page/device/a2345/a2345_media_ability/custom_crop_controller.dart @0x2d90dd0`, `@0x2d90e44`) read the same two keys `uptoken` and `key_prefix`. The role of `uptoken` in the three flows is the same text (app side: the bill-analysis flow uses it as the target of the PUT).
 
 ## Response
 
@@ -97,9 +101,8 @@ Called from:
 
 ## Known unknowns
 
-- Type of `file_name` in the senders that pass a parameter or field, and of `file_size` in the BLE-log and app-log senders (`file_size` is `LoadField`/`LoadInt32Instr`-derived there, not decoded).
+- Type of `file_name` in the senders that pass a parameter or field, and of `file_size` in the BLE-log and app-log senders (`file_size` is `LoadField`/`LoadInt32Instr`-derived there, not decoded). — attempted 2026-10-20 (two-hop not readable for the BLE-log, crop and bill-analysis senders: `_uploadBleFile` `device_logs_logic.dart @0x3133598`, `@0x31335b4`; the feedback sender is typed under Request)
 - Which `type` values mean which upload kind (7 for logs, 50 for bill analysis, 6 and 7 from the feedback screen): the server's table is not visible.
-- The response parse of the bill-analysis sender (`Map<String, dynamic>?` returned from `anka_agent/services/bill_analysis_upload_service.dart`) and of the crop and feedback callers (`getAppUpTokenGeneral` forwards the value).
 - What the credential is used for (the upload target, expiry): not read here. — reclassified: server (2026-10-20: the app does not show the upload target or its expiry; they are not derivable here)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

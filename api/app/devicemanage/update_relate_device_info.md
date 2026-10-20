@@ -47,6 +47,8 @@ not parsed by the app (asm-traced): the success closures never read their respon
 
 No response key is read by the app (see Response model).
 
+App side result handling (traced 2026-10-20): the failure closure of the sender (`charging/http/http_business_impl.dart @0x2631724`, signature `(int, String)`) only logs `updateDeviceInfo fail` (`@0x2631738`, `@0x2631744`) and the success closure (`@0x26318b8`) only logs `updateDeviceInfo success` (`@0x26318cc`); neither retries nor changes app state.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -101,8 +103,7 @@ Called from:
 ## Known unknowns
 
 - What the server does with the values (whether it updates the stored device record or checks for conflicts): not visible in the app.
-- How often the callers send it: it is triggered from the BLE response handlers of each device home page (about fourteen callers); the trigger condition was not decoded.
-- Failure handling: the senders pass a `complete` callback only (`charging/http/http_business_impl.dart @0x263189c`, `charging/http/http_request_repository_impl.dart @0x2631708`); the failure closure `@0x2631724` is shared and was not read.
+- How often the callers send it: it is triggered from the BLE response handlers of each device home page (about fourteen callers); the trigger condition was not decoded. — traced 2026-10-20: the call sits in the BLE response handlers listed under Callers in app; each call site is behind a handler-specific condition (for example the closure in `BleHandlerImpl1::_startResponseListener`, `charging/ble/ble_handler_impl_1.dart @0x4196b08`, follows two dispatch calls whose selectors are not named by Blutter), so no common trigger rule is readable
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

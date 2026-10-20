@@ -38,6 +38,8 @@ n/a
 
 (asm-traced) Top-level keys of `AppUpdateModel` (`data/models.json`, `charging::AppUpdateModel`): `version` (String?), `push_way` (String?), `desc` (String?). The closure checks three of the parsed fields (`charging/http/http_request_repository_impl.dart @0x2609850`, `@0x2609860`, `@0x260986c`), stores the model with `setAppUpdateInfo` (`@0x26098b0`) and passes it to the callback (`ClosureCall` `@0x26098cc`).
 
+The three checks (traced 2026-10-20): the success closure (`charging/http/http_request_repository_impl.dart`) loads `field_7` (`version`, `@0x2609850`), `field_b` (`push_way`, `@0x2609860`) and `field_f` (`desc`, `@0x2609870`) of the parsed `AppUpdateModel` (offsets per its `fromJson` key order) and tests each against null (`cmp w0, NULL` `@0x2609858`, `@0x2609868`, `@0x2609878`); when any of the three is null the closure returns without storing the model and without calling the callback (`r0 = Null` `@0x2609880`).
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -69,7 +71,6 @@ Called from:
 
 ## Known unknowns
 
-- Which of the three fields the checks at `charging/http/http_request_repository_impl.dart @0x2609850`..`@0x260986c` read (field offsets only, not names).
 - Values of `push_way` (forced or optional update): the model key is typed `String?`; the allowed values are not visible. — traced 2026-10-20: `push_way` is a `String?` of `AppUpdateModel` (`charging/model/app_update_model.dart @0x2609774`); no function reads it by name, so the compared values were not found
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

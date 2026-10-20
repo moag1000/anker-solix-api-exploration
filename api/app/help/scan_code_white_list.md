@@ -34,6 +34,8 @@ n/a
 
 (asm-traced) Top-level key of `charging::UrlWhiteListModel` (`data/models.json`): `white_list` (List). The closure passes the model to the callback (`ClosureCall` `@0x33fd9f8`).
 
+Element type and matching (traced 2026-10-20): `UrlWhiteListModel.fromJson` (`charging/model/user_manuals_model.dart @0x33fda1c`) reads `white_list`, checks it as a `List` (`@0x33fda88`) and maps every element with `map<String>` (`<String>` `@0x33fdab8`, `GDT` call `@0x33fdacc`) to a list of strings. The success closure of `QrScannerLogic::checkUrlOptional` (`charging/ui/page/qr_Scanner/qr_scanner_logic.dart @0x33fe040`, argument `UrlWhiteListModel`) loops over the entries and tests each with a one-argument string method of the scanned text (`field_13` of the logic) with the entry as argument (`GDT[cid_x0 + -0x1000]` `@0x33fe150`, result tested `@0x33fe15c`); on a match it calls `parseQRCodeToSting` (`@0x33fe18c`), when no entry matches it calls `showInvalidQRCodeDialog` (`@0x33fe1b0`). The same selector is used with the constants `"https://"` (`@0x33fd7ac`) and `"charging-tutorial.anker.com"` (`@0x33fd7ec`) in `checkUrlOptional`; Blutter does not name it (`startsWith` and `contains` are the candidates), so whether entries are host names, prefixes or substrings is not decided by the asm.
+
 ## Example request/response
 
 Request: no body fields are built (see Request). Response: not synthesized; no capture exists for this endpoint.
@@ -57,7 +59,7 @@ Called from:
 
 ## Known unknowns
 
-- The element type of `white_list` (typed `List`) and whether entries are host names, prefixes or patterns: the matching code in `QrScannerLogic` was not read.
+- Whether the entries of `white_list` (a list of strings, see Response) are host names, prefixes or substrings: the one-argument string method that compares the scanned text with an entry is not named in the asm (`qr_scanner_logic.dart @0x33fe150`) — traced 2026-10-20
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

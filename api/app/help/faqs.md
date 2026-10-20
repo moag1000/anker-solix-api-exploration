@@ -36,6 +36,8 @@ n/a
 
 (asm-traced) The top level is a list of `FaqModel` (the helper `resolveListResponseData` extracts the list; its key handling was not read). Keys of `charging::FaqModel` (`data/models.json`): `faqs` (unknown), `index` (int?), `product_code` (String?), `model_name` (String?), `img_url` (String?).
 
+`resolveListResponseData` (traced 2026-10-20): `charging/http/http_response_util.dart @0x228997c` returns the value itself when it is already a `List` (`InstanceOf` `r8 = List` `@0x2289a30`..`@0x2289a48`); when it is a `Map` (`r8 = Map` `@0x2289af8`) it reads the key `data` (`@0x2289b38`, `@0x2289c14`) and takes that value when it is a `List` (`@0x2289bd8`, `@0x2289c5c`). So the list is the response itself or its `data` key; no other key is tried.
+
 ## Example request/response
 
 Request: no body fields are built (see Request). Response: not synthesized; no capture exists for this endpoint.
@@ -84,7 +86,6 @@ Called from:
 
 ## Known unknowns
 
-- How `resolveListResponseData` finds the list in the response (a fixed key or the `data` array): the helper was not read.
 - What the request does with the empty body map for a GET: how `Method.get` bodies are sent is described in `api/encryption.md`; the map has no entries here. — reclassified: device test row 160 (2026-10-20: whether an empty body is sent as `{}`, as no body or as null is decided by the HTTP layer and the SDK, which a capture shows)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

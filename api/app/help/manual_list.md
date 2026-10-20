@@ -34,6 +34,8 @@ n/a
 
 (asm-traced) Top-level keys of `charging::UserManualsModel` (`data/models.json`): `trace_id` (String?), `category_products` (List), `related_and_bind_device` (List). The closure passes the model to the callback (`ClosureCall` `@0x2700ec0`).
 
+Element classes (traced 2026-10-20): `UserManualsModel.fromJson` (`charging/model/user_manuals_model.dart @0x2700ee4`) builds `category_products` as a list with the type argument `<ProductCategoriesModel>` (`@0x2701004`, key read `@0x2700f88`) and `related_and_bind_device` as `<RelatedBindDevicModel>` (`@0x2701100`, key read `@0x2701080`); `RelatedBindDevicModel` serialises the keys `img_url`, `alias_name`, `product_name` and `product_code` (`@0x27013c4`..`@0x2701410`).
+
 ## Example request/response
 
 Request: no body fields are built (see Request). Response: not synthesized; no capture exists for this endpoint.
@@ -58,7 +60,6 @@ Called from:
 
 ## Known unknowns
 
-- The element classes of `category_products` and `related_and_bind_device` (typed `List` in `data/models.json`).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

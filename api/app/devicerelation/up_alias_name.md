@@ -113,15 +113,16 @@ Called from:
 - `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart::save`
 - `small_charging_platform/src/scp/setting/menu_controller/device_modify_name_controller.dart::showRenameDialog`
 
+The eight senders are the rename controllers of the A2693 menu, the generic device-name controller and its RN variant, `A17X8DeviceController._renameDevice`, the repository, the A25x7 name controller, the A2687 name controller and the small-charging-platform modify-name controller (the list above); the device family is named by the controller class, no other split is visible in the asm.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- Whether the callers of the rename dialogs read the response body: the closures forward it and the dialog code was not followed to the end.
+- Whether the callers of the rename dialogs read the response body: the closures forward it and the dialog code was not followed to the end. — traced 2026-10-20: three of the callers were sampled (`A1340settingLogic::_saveDeviceName` success closure `charging/ui/page/device/a1340/a1340setting/a1340setting_logic.dart @0x3c2816c`, `A5101DeviceHomeLogic::_saveDeviceName` `charging/ui/page/device/a5101/device_home_page/device_home_logic.dart @0x3e79aa4`, `RenameLogic::finish` `charging/ui/page/device/rename/rename_logic.dart @0x40042f0`); each loads its argument only in `SetupParameters` and reads no key, the new name comes from the text field; the other callers were not read
 - Length and character rules for `alias_name`: enforced on the server or in the dialog; neither was decoded here.
-- Why eight senders exist: one per device family menu; the families are named by the controller classes.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

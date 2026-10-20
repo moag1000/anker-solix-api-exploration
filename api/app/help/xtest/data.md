@@ -34,6 +34,8 @@ not resolved (string-only): the success closure is the shared closure `charging/
 
 Not listed: the response shape is decoded in `_handleJMLResponse`, which was not read.
 
+Keys read (traced 2026-10-20, app side): `UserMainPageLogic::_handleJMLResponse` (`charging/ui/page/user/main/user_main_page_logic.dart @0x2700090`) logs `JML response parsing: data=` (`@0x27000e0`), requires the value to be a `Map<String, dynamic>` (`@0x2700144`) and reads two keys: `h5_link` (`@0x2700184`, converted to text by a one-receiver call whose selector Blutter does not name, `@0x27001c8`) and `new_msg_count` (`@0x2700200`, text then `int.tryParse`, `@0x2700244`..`@0x270026c`). It logs both (`JML h5_link: `, `JML new_msg_count: `), stores the link in an observable of the logic (`value=` `@0x2700330`), sets a second observable from a comparison of the count with 0 (`cmp x4, #0` `@0x2700344`, `value=` `@0x2700360`) and logs `JML red dot status updated: ` (`@0x270036c`). So the app reads a link to an H5 page and a count of new messages, and shows a red-dot flag when the count is positive (reading of the comparison; the widget that shows the flag was not read).
+
 ## Example request/response
 
 Request: no body fields are built (see Request). Response: not synthesized; no capture exists for this endpoint.
@@ -57,7 +59,6 @@ Called from:
 
 ## Known unknowns
 
-- The response keys: `UserMainPageLogic::_handleJMLResponse` decodes the value and was not read.
 - What `JML` stands for and why the path contains `xtest`: not visible in the app. — reclassified: server (2026-10-20: the app does not explain the name; not derivable here)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

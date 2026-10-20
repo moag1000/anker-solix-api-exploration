@@ -22,6 +22,8 @@ encrypted: `true` (asm-traced default): `aiotPlatformRequestHttp` (`charging/htt
 
 No body: the function builds no parameter map (no `Map._fromLiteral` in `charging/http/aiot/aiot_http_request_repository_impl.dart @0x260dcf8`).
 
+The wrapper (traced 2026-10-20, app side): `getAIOTPopupListApi` calls `HttpRequestControllerImpl::aiotPlatformRequestHttp` (`charging/http/http_request_repository_impl.dart @0x260ddd4`; call `charging/http/aiot/aiot_http_request_repository_impl.dart @0x260ddb8`). The wrapper builds a header map with `Openudid` set to the terminal id (`getTerminalId` `@0x260de90`; value not documented) and `Content-Type: application/json` (`@0x260dec0`..`@0x260decc`), merges a second empty `<String, String>` map into it (`addAll` `@0x260df08`) and calls `requestHttp` (`@0x260df68`) with the method object (`@0x260df18`), the url and body of the caller, the caller's success and fail callbacks passed through unchanged and the named flags `isLogResponse`, `needTerminal`, `showLoading` and `useBaseUrl` as constants (`@0x260df34`..`@0x260df5c`, argument names `@0x260df60`; which constant belongs to which name is not decoded). The wrapper reads no key of the answer.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -60,7 +62,6 @@ Call sites (grep of the asm, traced 2026-10-20): `getAIOTPopupListApi` is called
 
 ## Known unknowns
 
-- What `aiotPlatformRequestHttp` (`charging/http/aiot/aiot_http_request_repository_impl.dart @0x260ddb8`) adds to the request (host, signing): the wrapper was not read here.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

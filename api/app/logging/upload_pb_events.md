@@ -34,6 +34,10 @@ The body is built per type; this table is the `pb` variant (the TLV variant is d
 
 The `tlv` variant builds `device_sn` (`@0x263ec64`), `version` (`@0x263ec78`), `local_time` (`@0x263ec8c`), `device_model` (`@0x263ecc8`) and the same `events` structure (`events` `@0x263ed00`, `params` `@0x263ed1c`, `payload` `@0x263ed34`) and is sent to the TLV path.
 
+Payload and type (traced 2026-10-20, app side): in the caller `IotAnkerController::_handleResponse` (`charging/ble/device/iot_anker_controller.dart`) a value is tested as `List<int>` (`@0x3b6a76c`) and, when it is one, encoded with `base64Encode` (`@0x3b6a7a0`), otherwise replaced by the empty string (`@0x3b6a7ac`); that text is the first value passed to `postEventData` (`@0x3b6aa50`), together with the type argument `"pb"` (`@0x3b6aa40`, `@0x3b6aa48`). So `events[].params.payload` is the base64 text of a byte list taken from the device answer (a `List<int>`); whether those bytes are a protobuf message is not visible in the Dart code (the endpoint and the key `protobuf_name` suggest it). The second caller `HttpServiceImpl::postEventData` (`charging/impl/http_service_impl.dart @0x35533a0`) also passes the constant `"pb"` (`@0x3553390`).
+
+What the code after the body does (traced 2026-10-20): `postEventData` calls `isLogin` (`charging/http/http_request_repository_impl.dart @0x263ee70`) and, when it returns true, `getUserId` (`@0x263ee80`), but the result of `getUserId` is not stored (the next instructions load other registers, `@0x263ee84`..`@0x263ee8c`), so no user identifier is added to the body or a header here; the following two lookups (`[]` with the type argument as key, `@0x263ee98`, `@0x263eec4`) pick the per-type entries and are null-checked (`@0x263eeb0`, `@0x263eed8`).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -90,9 +94,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sn`, `version`, `local_time`, `device_type` and `device_model`: parameters and results of `getCurrentTime` stored into a `<String, Object>` literal.
-- How the payload is encoded (the value of `events[].params.payload` is a String, by the inner literal type; whether it is base64 of a protobuf is not visible here).
-- What the code at `charging/http/http_request_repository_impl.dart @0x263ee70` does after the body is built (`isLogin`, `getUserId` and two map lookups): it may add user identifiers to a header or the body, not decoded.
+- Types of `device_sn`, `version`, `local_time`, `device_type` and `device_model`: parameters and results of `getCurrentTime` stored into a `<String, Object>` literal. — attempted 2026-10-20 (two-hop not readable: the three callers pass values of their own frame slots, `iot_anker_controller.dart @0x3b6aa50`..`@0x3b6aa60`, `http_service_impl.dart @0x35533a0`, `base_ble_controller.dart @0x263e83c` region; no declared type is read)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

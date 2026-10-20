@@ -51,6 +51,8 @@ Called from:
 - `charging/base/app_life_cycle_delegate.dart::didChangeAppLifecycleState`
 - `charging/util/third_party_service.dart::openAppOptional`
 
+Failure handling (traced 2026-10-20, app side): the failure closure (`charging/http/http_business_impl.dart @0x296d51c`, signature `(int, String)`) only logs `清除百度推送badge角标数量失败: msg-- …, code-- …` ("clearing the Baidu push badge count failed", my translation, `@0x296d540`, `@0x296d554`, `exeError` `@0x296d578`); it compares no code and does nothing else.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
@@ -58,7 +60,6 @@ Called from:
 ## Known unknowns
 
 - What the server does with the call (it may call the push provider): not visible in the app.
-- The failure closure `charging/http/http_business_impl.dart @0x296d51c` was not decoded; no code is compared in the sender or the callers read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

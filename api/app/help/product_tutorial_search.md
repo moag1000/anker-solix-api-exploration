@@ -24,10 +24,12 @@ The sender builds the body at run time: an empty map literal (`Map._fromLiteral`
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `keyword` | ? | optional (inserted only when a length field read from an argument is non-zero, `cbz` `@0x291a5a0`) | ? | `charging/http/http_request_repository_impl.dart @0x291a5b0` (`[]=` call `@0x291a5b8`) |
-| `pns` | ? | optional (inserted only when a list length read from an argument is non-zero, `cbnz` `@0x291a5e0`) | ? | `charging/http/http_request_repository_impl.dart @0x291a610` (`[]=` call `@0x291a618`) |
+| `keyword` | string | optional (inserted only when a length field read from an argument is non-zero, `cbz` `@0x291a5a0`) | ? | `charging/http/http_request_repository_impl.dart @0x291a5b0` (`[]=` call `@0x291a5b8`) |
+| `pns` | list | optional (inserted only when a list length read from an argument is non-zero, `cbnz` `@0x291a5e0`) | ? | `charging/http/http_request_repository_impl.dart @0x291a610` (`[]=` call `@0x291a618`) |
 
 The literal has no type arguments recorded; the guards read a string-like length for `keyword` (`field_7`) and a list-like length for `pns` (`field_b`), which is not a type proof.
+
+Caller arguments (traced 2026-10-20, app side): the sender takes `keyword` and `pns` as named parameters and each caller passes one of them (named argument list `@0x291a420`, `@0x34b25cc`). `SearchDeviceUserManualsLogic::searchDeviceNameList` (`charging/ui/page/user/userManuals/searchDeviceUserManuals/search_device_user_manuals_logic.dart @0x291a358`) passes `keyword`; it reads the length field of the text (`field_7` as `LoadInt32Instr` `@0x291a3cc`..`@0x291a3d0`) and returns without a request when the length is not greater than 1 (`cmp x2, #1` `@0x291a3d4`), so `keyword` is a String of at least 2 characters when sent (a text field value). `StationUsermanualsLogic::_getDevicesList` (`charging/ui/page/device/main/station_device_home/StationUsermanuals/station_usermanuals_logic.dart @0x34b25d4`) passes `pns`, built as a growable list from `map<String>` over the station's product lists (`<String>` `@0x34b2564`, `map` `@0x34b2578`, `_GrowableList.of` `@0x34b2588`), so `pns` is a list of strings; the source lists are the station product lists (`PpsList`, `ProductInfoModel`, `SolarList`, `SolarbankList` types, `@0x34b1f28`..`@0x34b2374`), so the entries are product identifiers taken from those lists (the mapped field is `field_1b` of each element, see Known unknowns). The sender sends an empty body only when `pns` is an empty list or the call has neither argument; the `keyword` caller cannot produce an empty body (length guard).
 
 ## `param_type`/`cmd`
 
@@ -66,9 +68,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `keyword` and `pns`: untyped `[]=` values; the guards suggest a string and a list of strings.
-- What `pns` holds (product numbers, as the key name suggests): the callers' arguments were not decoded.
-- Whether the sender sends an empty body when both arguments are empty: the guards skip both keys.
+- Which field of each station product ends in `pns`: the mapping closure `@0x34b296c` (code shared with another page, `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/clock_style_manage_logic.dart`) returns `field_1b` of its argument or `""` when that is null (`@0x34b2970`..`@0x34b2980`); that `field_1b` is a product number is the reading of the key name, not read from the asm — traced 2026-10-20
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

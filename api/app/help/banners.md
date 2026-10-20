@@ -26,6 +26,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 The value is a String or null: the map literal has type arguments `<String, String?>` (`@0x2608b00`); it is the field of the region object returned by `getCurrentRegion` (`@0x2608ac8`, field load `@0x2608acc`).
 
+Content of `region` (traced 2026-10-20, app side): `getCurrentRegion` is `DeviceUtil::getCurrentRegion` (`charging/util/device_util.dart @0x224fb50`; call `charging/http/http_request_repository_impl.dart @0x2608ac8`), which returns a `CountryModel` taken from the cached app region (`getAppRegionCache` `@0x224fbc0`) or, when none is cached, from the system region (`getCurrentSystemRegion` `@0x224fbd0`). The value sent is `field_7` of that object (`charging/http/http_request_repository_impl.dart @0x2608acc`), which `CountryModel.fromJson` (`base_service/bean/model/country_model.dart`) fills from the key `english` (further fields `chinese`, `abbr`, `spell`, `code`). So `region` is the English country name of the model, not the abbreviation; the default model in `SpHelper::getCurrentRegion` (`base_service/utils/sp_helper.dart @0x2450018`) shows the shape: English name `USA`, Chinese name, abbreviation `US`, spelling, code `1`.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -71,7 +73,6 @@ Call sites (grep of the asm, traced 2026-10-20): `getBanners` is called from `De
 
 ## Known unknowns
 
-- What the region string looks like (country code or region name): the value is a field of the object from `getCurrentRegion`, not decoded.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

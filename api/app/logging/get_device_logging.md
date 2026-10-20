@@ -26,6 +26,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 The value is a String: map literal with type arguments `<String, String>` (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x292254c`); it is read from a field of the polling state object (`@0x2922540`).
 
+Source of `upload_id` (traced 2026-10-20, app side): the success closure of `_notifyServer` (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3134588`) builds the id itself by string interpolation (`_interpolate` `@0x3134638`) of three parts: a text derived from `field_13` of its context by a one-receiver selector (`GDT[cid_x0 + 0x2abf7]` `@0x31345d4`, not named by Blutter), the separator `" "` (`@0x3134604`) and an integer (`field_27` of the first context slot, boxed by `BoxInt64Instr` `@0x313461c`). The result is passed to `_saveWifiPending` (`@0x3134698`) and `_pollUploadState` (`@0x31346b4`), which keeps it as `field_13` of the poll context read for the request. So the id comes from the app, composed from the log task data, not from a server answer; what `field_13` and `field_27` hold is not decoded.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -67,7 +69,6 @@ Poll rule (app side, traced 2026-10-20, `charging/ui/page/user/upload_log/device
 ## Known unknowns
 
 - The meaning of `url` (a link to the uploaded device log, by name only): not an app-side fact — reclassified: server (2026-10-20); the poll interval and the retry limit are in Callers in app.
-- Where `upload_id` comes from: it is a field of the polling state (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x2922540`), set by the code that started the upload; not traced.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

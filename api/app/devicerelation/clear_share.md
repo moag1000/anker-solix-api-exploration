@@ -39,6 +39,8 @@ not parsed by the app (asm-traced for the sender): `_clearShareDevice` awaits th
 
 No response key is read by the sender (see Response model). `AkNetwork::requestHttp` itself reads the key `data` from the handler result (`base_service/util/ak_util/src/ak_network.dart @0x21c3630`) and returns it as `Map<String, dynamic>?`.
 
+Result handling (traced 2026-10-20, app side): `RemoveDeviceController::_clearShareDevice` (`base_service/view/general_setting/remove_device_controller.dart @0x2816cb0`) awaits `requestHttp` (`@0x2816d68`) and then returns null (`@0x2816d6c`, `ReturnAsyncNotFuture` `@0x2816d70`); the result map is not read and no error is propagated to the callers `_handleDeviceRemoval`.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -73,7 +75,6 @@ Called from:
 
 - Type of `device_sn`: a parameter stored into a `<String, dynamic>` literal. — attempted 2026-10-20 (two-hop not readable: `_handleDeviceRemoval` (`balcony/src/ae100/settings/ae100_remove_device_controller.dart @0x471b384`), `_handleDeviceRemoval` (`base_service/view/general_setting/remove_device_controller.dart @0x2815ebc`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - What `member_type` 1 means (owner versus sharer): the value is a constant; the server table is not visible.
-- Whether the result `Map` carries an error that the caller should handle: the sender drops it.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
