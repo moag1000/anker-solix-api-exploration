@@ -64,7 +64,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The values of `status` are not decoded; `BubbleStatusService` (`report`, `_retrySingle`) retries failed reports. — reclassified: server (2026-10-20: status values are a server convention)
+- The values of `status` are not decoded; `BubbleStatusService` (`report`, `_retrySingle`) retries failed reports. — traced 2026-10-20: `BubbleStatusService::report` (`anka_agent/services/bubble_status_service.dart @0x2e0b3b8`) is called with enum constants of `BubbleStatus`: `exposed` (index 0, `bubble_entry_coordinator.dart @0x3580e0c`), `click` (index 1, `bubble_chat_helper.dart @0x35c9380`, `@0x35cc8e0`) and `close` (index 2, `bubble_entry_coordinator.dart @0x2e0af98`); whether the sender puts the enum value strings or an index on the wire is not shown by the page
 
 ## Device-tested by
 

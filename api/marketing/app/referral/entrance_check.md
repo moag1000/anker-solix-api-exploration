@@ -62,7 +62,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 ## Known unknowns
 
 - Whether the data is a bare boolean on the wire or a wrapped value that the SDK unwraps is not known (the Dart cast is `bool`).
-- The referral program itself (reward, codes) is not part of the traced endpoints. — reclassified: server (2026-10-20: the program rules are not an app-side fact)
+- The referral program itself (reward, codes) is not part of the traced endpoints. — reclassified: server (2026-10-20: program rules are not visible in the app)
 
 ## Device-tested by
 

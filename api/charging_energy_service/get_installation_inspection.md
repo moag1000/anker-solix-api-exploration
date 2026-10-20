@@ -70,7 +70,7 @@ Called from:
 ## Known unknowns
 
 - Which serial number the caller passes (`A17B1HomeLogic::getHomeLatestPage` was not read). — traced 2026-10-20: the only caller is `A17B1HomeLogic::getHomeLatestPage` (`charging/ui/page/device/a17b1/device_home/a17b1home_logic.dart @0x26543a4`), which passes slots of its own frame (`@0x2654394`..`@0x26543a0`); the chain behind the slots was not followed
-- What `latest_page` encodes (String?): only the class field is listed; the home logic that reads it was not followed. — reclassified: server (2026-10-20: the string is server data)
+- What `latest_page` encodes (String?): only the class field is listed; the home logic that reads it was not followed. — reclassified: server (2026-10-20: the app class holds the string; its meaning is not derivable here)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

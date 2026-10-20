@@ -70,7 +70,7 @@ Called from:
 ## Known unknowns
 
 - Which of the three fields the checks at `charging/http/http_request_repository_impl.dart @0x2609850`..`@0x260986c` read (field offsets only, not names).
-- Values of `push_way` (forced or optional update): the model key is typed `String?`; the allowed values are not visible. — reclassified: server (2026-10-20: the allowed values are decided by the server answer)
+- Values of `push_way` (forced or optional update): the model key is typed `String?`; the allowed values are not visible. — traced 2026-10-20: `push_way` is a `String?` of `AppUpdateModel` (`charging/model/app_update_model.dart @0x2609774`); no function reads it by name, so the compared values were not found
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

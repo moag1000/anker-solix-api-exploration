@@ -72,7 +72,7 @@ Called from:
 
 - Type of `identifier_id`: a value loaded from a manager field whose declared type is not visible. — attempted 2026-10-20 (two-hop not readable: the sender is `WeatherManager::fetchSupportCountryCodes` (`unity/src/main/weather/weather_manager.dart @0x451d8cc`), which reads a manager field with no declaration in the asm)
 - Why `support_country_code` is typed int in the class while the closure builds a list of strings from the parsed object (`unity/src/main/weather/weather_manager.dart @0x451db10`, type argument `<String>`): the conversion was not followed.
-- What `type` 2 selects: the app stores this constant only. — reclassified: server (2026-10-20: the app stores the constant 2 and the meaning of the number is a server enum)
+- What `type` 2 selects: the app stores this constant only. — reclassified: server (2026-10-20: the app stores the constant 2 (decoded on this page); what the number selects is not derivable from the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

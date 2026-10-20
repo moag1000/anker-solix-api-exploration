@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # del_red
 
@@ -59,6 +59,8 @@ Trigger (grep of the asm, traced 2026-10-20): `_delReferralRedDot` is called fro
 
 ## Known unknowns
 
+- What the cloud does with the deletion (whether the dot reappears for a new referral event): not visible in the app.
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

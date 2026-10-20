@@ -4,7 +4,7 @@
 
 ## Purpose
 
-A login URL the app knows by name but never sends in 3.24.3: the string is only compared against the URL of a failed request to decide whether the login screen must be started again after a forced logout.
+A login URL the app knows by name but never sends in 3.24.3: the string is only passed to a string predicate (selector not named by Blutter) together with the URL of a failed request to decide whether the login screen must be started again after a forced logout.
 
 ## Upstream name
 

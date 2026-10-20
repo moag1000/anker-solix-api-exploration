@@ -72,7 +72,7 @@ Called from:
 ## Known unknowns
 
 - How the two other callers (`ForgetPwdLogic::activeEmail`, `VerificationLogic::_activeEmail`) handle failures: their closures only forward to the sender and were not decoded further.
-- Rate limits of the activation mail: only the code 100053 compare is known (`api/errors.md`). — reclassified: server (2026-10-20: rate limits are server properties)
+- Rate limits of the activation mail: only the code 100053 compare is known (`api/errors.md`). — reclassified: server (2026-10-20: rate limits are not visible in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

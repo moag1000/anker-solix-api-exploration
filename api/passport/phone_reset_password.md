@@ -54,7 +54,9 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
   "phone_number": "<phone_number>",
   "verify_code": "<verify_code>",
   "password": "<password>",
-  "client_secret_info": {}
+  "client_secret_info": {
+    "public_key": "<public_key>"
+  }
 }
 ```
 

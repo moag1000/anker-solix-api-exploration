@@ -66,7 +66,7 @@ Call sites (grep of the asm, traced 2026-10-20): `getMiStatus` is called from `A
 
 ## Known unknowns
 
-- The unit of `power` and `energy`: only the class fields are listed. — reclassified: server (2026-10-20: the unit is decided by the server values and the screens that show them)
+- The unit of `power` and `energy`: only the class fields are listed. — reclassified: server (2026-10-20: the app reads the numbers from the answer; the unit is not derivable from the code read here)
 - Which serial number `A5150HomeLogic::getPvTotalData` passes: the value is a slot or field of its frame (`charging/ui/page/device/a5150/homePage/a5150_home_logic.dart @0x34ce364`); not decoded further — traced 2026-10-20.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

@@ -34,7 +34,7 @@ Values of `param_type` (app side, traced 2026-10-20): `AnalyticsAndImprovementLo
 
 see `api/param_types.md`
 
-`param_type` is not a constant at this sender: it is an unboxed int parameter tagged by `lsl` (`charging/http/http_request_repository_impl.dart @0x293f90c`); the callers' values are listed under Known unknowns.
+`param_type` is not a constant at this sender: it is an unboxed int parameter tagged by `lsl` (`charging/http/http_request_repository_impl.dart @0x293f90c`); the callers' values are in the paragraph "Values of `param_type`" below.
 
 ## Response model (link)
 

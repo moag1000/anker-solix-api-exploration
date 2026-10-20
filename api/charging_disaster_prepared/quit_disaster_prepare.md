@@ -24,6 +24,17 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 No request keys in 3.24.3 (no sender). In the 3.18.0 asm the map literal has the type arguments `<String, Object>` (`charging/ui/page/device/a1782/home/a1782_home_logic.dart @0x22a34d4`), which name no value type; array length raw 16 (`charging/ui/page/device/a1782/home/a1782_home_logic.dart @0x22a3460`), so four keys.
 
+3.24.3 body (two `EmsServiceImpl` closures, traced 2026-10-20, file `ak_soft_ems/ems_service_impl.dart`):
+
+| field | type | required | example | source |
+|---|---|---|---|---|
+| `type` | int (Smi, w) | yes | `2` (raw 4) | `ak_soft_ems/ems_service_impl.dart @0x33250d4` (key, first closure), value from the context constant `@0x3324ed0`, array slot `@0x3324ed8` |
+| `identifier_id` | ? | yes | `"<id>"` | `ak_soft_ems/ems_service_impl.dart @0x33250e8` (key), value from the parameter in the context `field_f` `@0x3324ecc` |
+| `is_ble` | int (Smi, w) | yes | `2` (raw 4) | `ak_soft_ems/ems_service_impl.dart @0x3325100` (key), value from the context `field_13` `@0x3324ed4` |
+| `disaster_type` | int (Smi, w) | yes | `2` in the severe-weather closure, `1` in the manual-backup closure | `ak_soft_ems/ems_service_impl.dart @0x3325114` (key, first closure), constants `@0x3325120` (raw 4) and `@0x3325460` (raw 2, second closure) |
+
+3.18.0 body (kept as history; the addresses in this table and in the paragraphs above and below that name `modules_logic.dart` or the 3.18.0 pool are 3.18.0 addresses):
+
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `type` | int (Smi, w) | yes | `1` (raw immediate 2, 32-bit store) | `charging/ui/page/device/a1782/home/a1782_home_logic.dart @0x22a3468` (value store `@0x22a3474`, constant `@0x22a3470`) |

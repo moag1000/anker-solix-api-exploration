@@ -53,7 +53,7 @@ none traced: not a request. Code meanings are owned by `api/errors.md`.
 ## Known unknowns
 
 - Whether the Alexa app opens a path with this exact prefix on a host of the Anker domain (an app link) or a custom scheme: only the matched strings are visible, not the manifest or associated-domain declarations.
-- What the marker `alexaapp_to_ankerpower` stands for (a query value or a scheme part): the string is matched, its position in the link is not visible. — reclassified: server (2026-10-20: the marker belongs to the Alexa app link, outside the Anker app)
+- What the marker `alexaapp_to_ankerpower` stands for (a query value or a scheme part): the string is matched, its position in the link is not visible. — reclassified: server (2026-10-20: the marker belongs to the link of the Alexa app, outside the Anker app)
 - Why the Anker app tests for `/openapi/oauth/authorize` at all, since the app never requests it: the string is the path of the OAuth authorize endpoint that the Alexa app opens; the server-side endpoint is not part of the app's own request set.
 
 ## Device-tested by

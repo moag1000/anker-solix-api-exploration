@@ -71,7 +71,7 @@ Called from:
 
 ## Known unknowns
 
-- What "protocol" means for the user (a data-sharing or a charging protocol agreement): the key names `protocol_status` and the caller names are the only evidence. — reclassified: server (2026-10-20: the callers `A2687DeviceInfoService::_fetchProtocolAgreementStatus` and `_resetProtocolAgreementForUserChange` name it a protocol agreement of the A2687; the agreement text is not an app-side fact)
+- What "protocol" means for the user (a data-sharing or a charging protocol agreement): the key names `protocol_status` and the caller names are the only evidence. — reclassified: server (2026-10-20: the agreement text is not visible in the app code read here; the callers `_fetchProtocolAgreementStatus` and `_resetProtocolAgreementForUserChange` of `A2687DeviceInfoService` name it a protocol agreement of the A2687)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

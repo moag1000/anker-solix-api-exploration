@@ -59,7 +59,7 @@ Called from:
 ## Known unknowns
 
 - Other keys the server may send: the app reads only `show_sms`.
-- Which regions get `show_sms: true`: not visible in the app. — reclassified: server (2026-10-20: region rules are decided by the server)
+- Which regions get `show_sms: true`: not visible in the app. — reclassified: server (2026-10-20: which regions the answer enables is not visible in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

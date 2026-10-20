@@ -100,7 +100,7 @@ Called from:
 - Type of `file_name` in the senders that pass a parameter or field, and of `file_size` in the BLE-log and app-log senders (`file_size` is `LoadField`/`LoadInt32Instr`-derived there, not decoded).
 - Which `type` values mean which upload kind (7 for logs, 50 for bill analysis, 6 and 7 from the feedback screen): the server's table is not visible.
 - The response parse of the bill-analysis sender (`Map<String, dynamic>?` returned from `anka_agent/services/bill_analysis_upload_service.dart`) and of the crop and feedback callers (`getAppUpTokenGeneral` forwards the value).
-- What the credential is used for (the upload target, expiry): not read here. — reclassified: server (2026-10-20: the upload target and expiry are properties of the storage service, not of the app code)
+- What the credential is used for (the upload target, expiry): not read here. — reclassified: server (2026-10-20: the app does not show the upload target or its expiry; they are not derivable here)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

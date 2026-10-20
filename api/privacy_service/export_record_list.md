@@ -53,7 +53,7 @@ No server code is compared. The closure itself raises the client-side code 10002
 ## Known unknowns
 
 - The types of `account` and `send_email` in the item model (`unknown` in `data/models.json`).
-- What `send_status` values mean (sent, pending, failed): the model key is typed `int?`; the table of values is not visible. — reclassified: server (2026-10-20: the value table belongs to the server)
+- What `send_status` values mean (sent, pending, failed): the model key is typed `int?`; the table of values is not visible. — reclassified: server (2026-10-20: the app only forwards `send_status`; the value table is not derivable here)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

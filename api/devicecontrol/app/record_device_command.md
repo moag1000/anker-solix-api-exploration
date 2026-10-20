@@ -67,7 +67,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The values of `command_type` and the meaning of `id` and `status` are not decoded; the three callers pass different values. — reclassified: server (2026-10-20: command types and status ids are decided by the server record)
+- The values of `command_type` and the meaning of `id` and `status` are not decoded; the three callers pass different values. — traced 2026-10-20: `updateBranchRecord` is called with `status` 1 or 0 from a bool (`tst` `ats_ax170/src/ats_ax170/page/home/ax170_home_logic.dart @0x2f444b0`, `ats_ax170/src/ats_ax170/page/widget/ats_load_status_dialog_controller.dart @0x2f434ec`), with the constant `status` 1 (raw 2, `ats_ax170/src/ats_ax170/branch_circuit/pages/backup_strategy/backup_strategy_controller.dart @0x2f43a20`) and, in `syncToIot`, with `commandType` 5 (raw 10, `backup_strategy_controller.dart @0x3811594`); the `ids` come from slots; what the numbers mean is not derivable from the app
 - Whether other device families record commands through this endpoint is not known (only the AX170 sender exists in 3.24.3).
 - Server behaviour is not known.
 

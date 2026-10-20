@@ -29,7 +29,7 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 | `siteIds` | list | yes |  | `charging/ui/page/family/family_main_http_reposity.dart @0x23ecaec` |
 | `day` | string | optional |  | `charging/ui/page/family/family_main_http_reposity.dart @0x23ecbc8` |
 
-Types (traced 2026-10-20): the only caller `FamilyMainPageLogic::start5101DeviceReport` builds `siteIds` itself as a growable list with the type argument `<String>` holding one element read from the logic object at offset 475 (`AllocateGrowableArray` `@0x23eca2c`, `charging/ui/page/family/family_main_page_logic.dart @0x23eca1c`..`@0x23eca3c`, call `@0x23eca7c`), so `siteIds` is a list of strings; `day` is the result of `DateUtil.getCurrentYYMMDDByDateStr`, declared `static String` (`base_service/util/date_util.dart @0x2352e04`), so it is a string.
+Types (traced 2026-10-20): the only caller `FamilyMainPageLogic::start5101DeviceReport` builds `siteIds` itself as a growable list with the type argument `<String>` holding one element: `field_7` of the value of the observable at offset 451 of the logic, or the empty string (`r17 = 451` `@0x23ec9c0`, `value()` `@0x23ec9cc`, `field_7` `@0x23ec9e0`, fallback `@0x23ec9f4`; `AllocateGrowableArray` `@0x23eca2c`, `charging/ui/page/family/family_main_page_logic.dart @0x23eca1c`..`@0x23eca3c`, call `@0x23eca7c`); the second argument, the value at offset 475 of the logic (`r17 = 475` `@0x23eca4c`, passed at `@0x23eca74`), is the numeric value that the builder tests for the timer or `day` path, so `siteIds` is a list of strings; `day` is the result of `DateUtil.getCurrentYYMMDDByDateStr`, declared `static String` (`base_service/util/date_util.dart @0x2352e04`), so it is a string.
 
 ## `param_type`/`cmd`
 
