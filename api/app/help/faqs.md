@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # faqs
 
 ## Purpose
 
-<!-- TODO -->
+Loads the FAQ entries (products and models with their help links); sent by `HttpRequestControllerImpl::getFaqs` for the device settings pages (`gotoHelpPage`), `HelpLogic::onInit`, `FeedbackLogic::getFaqList` and `MessageDetailInfoLogic::getViewFAQ` (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,8 +12,9 @@
 
 ## Method+URL
 
-`/app/help/faqs`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x347fcf8`
-(literal also at 2 more site(s) in `data/endpoints.json`)
+`GET /app/help/faqs` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x347fcf8`, method object `Method.get` (pool entry `pp+0x340e8`) at `@0x347fcf0`, in `HttpRequestControllerImpl::getFaqs` (`charging/http/http_request_repository_impl.dart @0x347fc70`), sent through `encryptionRequestHttp` (`@0x347fd20`).
+
+The two other rows of the inventory (`charging/util/manager/http_manager.dart @0x2cf6108` and its closure `@0x2cf6370`) are not senders: the literal there is a path check inside the generic manager (see Callers in app).
 
 ## Encrypted?
 
@@ -21,7 +22,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-No request keys found by the extractor. <!-- TODO -->
+No body field: the sender builds an empty map literal (`Map._fromLiteral` `charging/http/http_request_repository_impl.dart @0x347fcbc`, no key store before it).
 
 ## `param_type`/`cmd`
 
@@ -29,19 +30,19 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+[`FaqModel`](../../../models/other.md#faqmodel), parsed by `FaqModel.fromJson` at `charging/http/http_request_repository_impl.dart @0x347fe4c` in the element closure `@0x347fe24`; the success closure (`@0x347fd3c`) first resolves the list with `resolveListResponseData` (`@0x347fd68`) and maps each element through that closure to a `List<FaqModel>` (`@0x347fda8`), which it passes to the callback (`ClosureCall` `@0x347fe00`). Call target `#0x347fe68` in `charging/model/faq_model.dart`.
 
 ## Response
 
-<!-- TODO -->
+(asm-traced) The top level is a list of `FaqModel` (the helper `resolveListResponseData` extracts the list; its key handling was not read). Keys of `charging::FaqModel` (`data/models.json`): `faqs` (unknown), `index` (int?), `product_code` (String?), `model_name` (String?), `img_url` (String?).
 
 ## Example request/response
 
-<!-- TODO -->
+Request: no body fields are built (see Request). Response: not synthesized; no capture exists for this endpoint.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender, its closures or the caller functions read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -79,11 +80,13 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- How `resolveListResponseData` finds the list in the response (a fixed key or the `data` array): the helper was not read.
+- What the request does with the empty body map for a GET: how `Method.get` bodies are sent is described in `api/encryption.md`; the map has no entries here.
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 
