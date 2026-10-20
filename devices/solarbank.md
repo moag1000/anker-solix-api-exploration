@@ -31,7 +31,7 @@ Consumer balcony solar, sold on anker.com and Amazon EU. Product codes are class
 | grid export (`0080` fields, `setDevicePowerLimit` in a17c1_device_controller.dart @0x2277580) | [set_device_attrs](../api/power_service/app/device/set_device_attrs.md); flow: [solarbank_toggle_grid_export](../flows/solarbank_toggle_grid_export.md) | `0080` [setDevicePowerLimit](../mqtt/a17c1.md#0080-setdevicepowerlimit) | [ble/a17c1.md](../ble/a17c1.md) | no (upstream only) |
 | inverter type (A17C0 only) | none | `0068` `setMicroInversionModel` (a17C0_device_controller.dart @0x261d4c8), see [a17c0](../mqtt/a17c0.md#setters-0050-005e-0067-0068-0071) | [ble/a17c0.md](../ble/a17c0.md) | no |
 | light mode (A17C1) | none | `0068` [setDeviceLightMode](../mqtt/a17c1.md#0068-setdevicelightmode) (upstream-confirmed `CMD_SB_LIGHT_MODE`) | [ble/a17c1.md](../ble/a17c1.md) | no |
-| max load | none | `005a`, no app builder, see [a17c1](../mqtt/a17c1.md#opcodes-without-a-confirmed-app-builder-005a-0082-006a-0069) | none | yes: mqtt_monitor, A17C1 FW 1.0.6.10 (upstream-confirmed; audit row 24 UNVERIFIABLE for the app side) |
+| max load | none | `005a`, no app builder, see [a17c1](../mqtt/a17c1.md#opcodes-without-a-confirmed-app-builder-005a-0069) | none | yes: mqtt_monitor, A17C1 FW 1.0.6.10 (upstream-confirmed; audit row 24 UNVERIFIABLE for the app side) |
 | third-party PV | [set_site_device_param](../api/power_service/site/set_site_device_param.md) (cloud) | `0085`, cloud-driven, upstream-confirmed only; see [upstream_commands](../mqtt/upstream_commands.md) | none | no |
 
 All other features: unknown (not researched for this page).

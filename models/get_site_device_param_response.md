@@ -24,7 +24,7 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 
 ### GetSiteDeviceParamResponse
 
-The server sends `data.param_data` as a String that contains JSON. `fromJson` reads it as `String?` (`@0x2378088`, cast `@0x23780c8`), substitutes `"{}"` when it is null (`@0x23780e4`), decodes it to a `Map<String, dynamic>` (cast `@0x2378108`) and passes the map to `SiteDeviceParamData.fromJson` (`@0x237818c`), which becomes the single field of the response (stored at field 0x7, `@0x237819c`). The string `"Warning: Failed to decode param_data: ..."` (`@0x2378138`) is built on the failure path, so a decode error yields an empty object instead of an exception.
+App side: the app parses `data.param_data` as a String that contains JSON. `fromJson` reads it as `String?` (`@0x2378088`, cast `@0x23780c8`), substitutes `"{}"` when it is null (`@0x23780e4`), decodes it to a `Map<String, dynamic>` (cast `@0x2378108`) and passes the map to `SiteDeviceParamData.fromJson` (`@0x237818c`), which becomes the single field of the response (stored at field 0x7, `@0x237819c`). The string `"Warning: Failed to decode param_data: ..."` (`@0x2378138`) is built on the failure path, so a decode error yields an empty object instead of an exception.
 
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|

@@ -155,6 +155,36 @@ class TriageTests(unittest.TestCase):
         self.assertEqual(sorted(new), sorted([rows[0]['key'], 'api/x.md:999']))
         self.assertEqual(stale, ['api/x.md:999'])
 
+    def test_rekey_prune_drops_keys_without_bullet(self):
+        with tempfile.TemporaryDirectory() as d:
+            write(d, 'api/x.md', PAGE)
+            rows = U.collect(d)
+            live = rows[0]['key']
+            ov = {live: {'class': 'device', 'note': ''}, 'api/x.md:0123456789': {'class': 'asm', 'note': ''}}
+            new, stale = U.rekey(rows, ov, prune=True)
+            kept, stale2 = U.rekey(rows, ov)
+        self.assertEqual(sorted(new), [live])
+        self.assertEqual(stale, ['api/x.md:0123456789'])
+        self.assertEqual(sorted(kept), sorted(ov))
+        self.assertEqual(stale2, stale)
+
+    def test_rekey_cli_reports_counts_and_prunes(self):
+        with tempfile.TemporaryDirectory() as d:
+            write(d, 'api/x.md', PAGE)
+            live = U.collect(d)[0]['key']
+            path = os.path.join(d, 'ov.json')
+            with open(path, 'w') as f:
+                json.dump({live: {'class': 'device', 'note': ''},
+                           'api/x.md:0123456789': {'class': 'asm', 'note': ''}}, f)
+            out = io.StringIO()
+            with redirect_stdout(out), redirect_stderr(io.StringIO()):
+                rc = U.main([d, '--override', path, '--rekey-overrides', '--prune-stale', '--strict'])
+            with open(path) as f:
+                left = json.load(f)
+        self.assertEqual(rc, 0)
+        self.assertEqual(sorted(left), [live])
+        self.assertIn('1 keys matched no bullet (pruned)', out.getvalue())
+
     def test_cell_escapes_pipes_and_flattens_links(self):
         self.assertEqual(U.cell('a | b [t](../x.md#y) c'), 'a \\| b t c')
         self.assertTrue(U.cell('x' * 400).endswith('…'))

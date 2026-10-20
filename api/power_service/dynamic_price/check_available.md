@@ -65,7 +65,7 @@ Called from:
 ## Known unknowns
 
 - What the server derives from this empty call (the builder name `postHasChangeCountry` is the only hint).
-- Why the URL is under `dynamic_price/check_available`: the app sends no parameter, so the server decides from the session.
+- Why the URL is under `dynamic_price/check_available`: app side: the app sends no parameter; what the server uses instead (presumably the session) is not known.
 
 ## Device-tested by
 

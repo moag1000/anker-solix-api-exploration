@@ -36,7 +36,8 @@ One body per setup flow. Every sender builds a small map first (provider name, s
 | `dynamicPriceParam` | map | time-slot flows | not decoded | `tou_and_timeslot_settings_poly_logic.dart @0x43a326c`, `charge_discharge_setting_logic.dart @0x41b5030`, C5 `@0x41b5de0` |
 | `chargeTimeList`, `chargeDisTimeList` | list | charge/discharge settings | not decoded | `charge_discharge_setting_logic.dart @0x41b5230`, `@0x41b525c` |
 | `chargeNum`, `dischargeNum` | int | charge/discharge settings | not decoded | `@0x41b528c`, `@0x41b52bc` |
-| `export2Grid`, `cutoffPower` | not decoded | charge/discharge settings | not decoded | `@0x41b5300`, `@0x41b534c` |
+| `export2Grid` | bool | charge/discharge settings | `true` | `@0x41b5300`; the value is `.value()` of the observable `field_bb` (`@0x41b52e0`, `@0x41b52e8`), which the logic initialises as `false.obs` (`BoolExtension.obs`, `@0x4149fb4`, stored `@0x4149fbc`), so a bool |
+| `cutoffPower` | int (unboxed, x) | charge/discharge settings | | `@0x41b534c`; `field_5f` of the logic boxed with `BoxInt64Instr` (`@0x41b5324`) |
 
 The `custom_time_period_controller.dart` sender (`saveChargeTimes`) sets `sn`/`siteId` and also uses the strings `today` and `tomorrow` (`@0x41c7010`, `@0x41c701c`); how they enter the body (as keys or as values) was not decoded. The two helpers `ElectricityPriceModelApiHelper.changeToTimeSlotMode` and `ElectricityPricePlanApiHelper.changeToDynamicPlan` send only `setMode`, `sn` / `siteId` (no provider name). No integer literal was identified as a body value in these senders; integers inside the function bodies (for example the raw `120` at `charge_discharge_setting_logic.dart @0x41b4d70`) were not traced to a body key and are not reported here, so no Smi table applies to this page.
 

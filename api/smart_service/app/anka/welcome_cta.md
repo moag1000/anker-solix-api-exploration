@@ -25,7 +25,7 @@ Body is a `<String, dynamic>` map of three pairs (`r2 = 12`, `@0x2e55ca4`).
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `current_time` | String | yes | `"2026-10-19 14:30:00"` | `anka_agent_http.dart @0x2e55cb0`; first argument |
-| `welcome_type` | String | yes | `<welcome type>` | `anka_agent_http.dart @0x2e55cc4`; value from the greeting (the `welcome_type` of the `welcome` answer is the likely source, not traced) |
+| `welcome_type` | String | yes | `<welcome type>` | `anka_agent_http.dart @0x2e55cc4`; value from the greeting (the source is not traced; the `welcome_type` of the `welcome` answer is a candidate) |
 | `site_count` | int | yes | `1` | `anka_agent_http.dart @0x2e55cd8`; boxed with `BoxInt64Instr` (`@0x2e55ce8`), unboxed int64 |
 
 ## `param_type`/`cmd`

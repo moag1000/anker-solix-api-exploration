@@ -31,7 +31,7 @@ Body is `CustomReminderItem.toJson()` of the first argument (`toJson` call `@0x3
 | `image_url` | String? | no | `https://...` | `custom_reminder_item.dart @0x2a53ac8` |
 | `hash_code` | String? | no | `<hash>` | `custom_reminder_item.dart @0x2a53ae0` |
 | `cycle_type` | int? | yes | `1` | `custom_reminder_item.dart @0x2a53af8`; meaning not decoded |
-| `repeat_week_mask` | int? | no | `127` | `custom_reminder_item.dart @0x2a53b10`; probably a weekday bit mask (inferred from the name) |
+| `repeat_week_mask` | int? | no | `127` | `custom_reminder_item.dart @0x2a53b10`; the meaning (a weekday bit mask) is read from the key name, not decoded from code |
 | `interval_hour` | int? | no | `2` | `custom_reminder_item.dart @0x2a53b28` |
 | `status` | int? | yes | `1` | `custom_reminder_item.dart @0x2a53b40`; the manager sets it when it toggles a reminder |
 | `start_time` | int? | yes | `28800` | `custom_reminder_item.dart @0x2a53b58`; unit not decoded |

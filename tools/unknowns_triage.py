@@ -23,8 +23,10 @@ Classes (first matching rule wins, order server, device, asm; the rule goes to `
 <hash> = first 10 hex of the sha1 of the bullet text (strip, whitespace collapsed), so a
 line shift keeps the override (the row field `key` holds it). Identical bullets on one
 page share a key. --rekey-overrides rewrites the file from the current pages: old
-`<page>:<line>` keys are migrated by the bullet at that line, hash keys stay; keys that match
-no bullet are kept as they are and reported (repair path: edit the key or re-add the entry).
+`<page>:<line>` keys are migrated by the bullet at that line, hash keys stay (a hash key cannot
+be mapped to an edited bullet text); keys that match no bullet are kept and reported, or
+dropped with --prune-stale (the bullet text changed, so the override is obsolete and the bullet
+falls back to the heuristic class until it is classified again).
 A missing key keeps the heuristic class; the row then has hint `override` and keeps
 the heuristic class in `heuristic_class`. A key that matches no row is reported on
 stderr with its page and the exit code stays 0 (exit 1 with --strict); an invalid class exits 2.
@@ -166,8 +168,11 @@ def apply_overrides(rows, ov):
     return sorted(k for k in ov if k not in keys)
 
 
-def rekey(rows, ov):
-    """Return (new override dict, kept-stale keys): `page:line` keys become `page:hash`."""
+def rekey(rows, ov, prune=False):
+    """Return (new override dict, stale keys): `page:line` keys become `page:hash`.
+
+    A key that matches no bullet (a hash key whose bullet text changed cannot be mapped to the
+    new text) is kept as it is, or dropped when `prune` is true; it is listed in `stale` either way."""
     by_line = {'%s:%d' % (r['page'], r['line']): r['key'] for r in rows}
     live = {r['key'] for r in rows}
     out, stale = {}, []
@@ -176,6 +181,8 @@ def rekey(rows, ov):
         nk = by_line.get(k) if tail.isdigit() else (k if k in live else None)
         if nk is None:
             stale.append(k)
+            if prune:
+                continue
             nk = k
         out[nk] = v
     return out, sorted(stale)
@@ -251,6 +258,8 @@ def main(argv=None):
     ap.add_argument('--override', help='hand-maintained overrides JSON')
     ap.add_argument('--rekey-overrides', action='store_true',
                     help='rewrite the --override file with hash keys from the current pages')
+    ap.add_argument('--prune-stale', action='store_true',
+                    help='with --rekey-overrides: drop keys that match no bullet instead of keeping them')
     ap.add_argument('--strict', action='store_true', help='exit 1 on a stale override key')
     ap.add_argument('--date', default=datetime.date.today().isoformat())
     a = ap.parse_args(argv)
@@ -263,9 +272,13 @@ def main(argv=None):
                   file=sys.stderr)
             return 2
         if a.rekey_overrides:
-            ov, stale = rekey(rows, ov)
+            old = ov
+            ov, stale = rekey(rows, old, prune=a.prune_stale)
             write_text(a.override, json.dumps(ov, indent=1, sort_keys=True, ensure_ascii=False) + '\n')
-            print('rekeyed %d overrides in %s' % (len(ov), a.override))
+            migrated = sum(1 for k in old if k.rpartition(':')[2].isdigit() and k not in stale)
+            print('%s: %d line keys rekeyed, %d hash keys kept, %d keys matched no bullet (%s)'
+                  % (a.override, migrated, len(ov) - migrated - (0 if a.prune_stale else len(stale)),
+                     len(stale), 'pruned' if a.prune_stale else 'kept'))
         stale = apply_overrides(rows, ov)
         for k in stale:
             print('stale override (page %s: no bullet with this text hash): %s'

@@ -45,7 +45,7 @@ The success closure `@0x2a314bc` checks that the payload is a `Map<String, dynam
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `electricity_strategy` | map | no | `{ "isAuthorizeAIEms": 1 }` | `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x2a3155c` |
-| `electricity_strategy.isAuthorizeAIEms` | int (null counts as 0) | no | `1` | `@0x2a31580`; read through a pool helper with default 0 (`r4 = 0`, `@0x2a3158c`); the closure compares the value with raw `2` (`@0x2a315e0`, a Smi argument of a dispatch-table call, so 1; the call is most likely `==`) and stores the result with `value=` in the field at offset 0x97 (`@0x2a315fc`), the same observable that [authorize_aiems](authorize_aiems.md) sets to `true` |
+| `electricity_strategy.isAuthorizeAIEms` | int (null counts as 0) | no | `1` | `@0x2a31580`; read through a pool helper with default 0 (`r4 = 0`, `@0x2a3158c`); the closure compares the value with raw `2` (`@0x2a315e0`, a Smi argument of a dispatch-table call, so 1; the callee is not named in the dump) and stores the result with `value=` in the field at offset 0x97 (`@0x2a315fc`), the same observable that [authorize_aiems](authorize_aiems.md) sets to `true` |
 
 Everything else in the answer is ignored by this sender, although the consumer URL name (`get_device_command`) suggests a larger device-command document.
 

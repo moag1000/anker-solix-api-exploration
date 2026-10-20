@@ -107,7 +107,7 @@ MQTT twin and device page: [../mqtt/shelly.md](../mqtt/shelly.md). The handshake
 
 #### Known unknowns
 
-none.
+none (app side); device side: device test row 104 ([backlog](../docs/DEVICE_TEST_BACKLOG.md)).
 
 BLE is unavailable while the device is on WiFi; see `ble/protocol.md` (community finding, see protocol.md; not asm-traced).
 

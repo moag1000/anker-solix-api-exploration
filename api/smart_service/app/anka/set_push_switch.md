@@ -25,7 +25,7 @@ Body is a `<String, dynamic>` map of two pairs (`r2 = 8`, `@0x35c49a8`); the fun
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `switch_name` | String | yes | `"proactive_message"` | `anka_agent_http.dart @0x35c49b0`; the callers pass `"proactive_message"` (`AnkaAgentEntryConfigService.setProactivePushSwitch`, `anka_agent/services/anka_agent_entry_config_service.dart @0x37fe9a8`), `"power_outage"` (`setPowerOutagePushSwitch`, `@0x37fec40`) and `"bill_analysis"` (`FeatureIntroOrchestrator._setBillAnalysisSwitchRemote`, `anka_agent/pages/home/widgets/feature_intro/feature_intro_orchestrator.dart @0x35c4918`) |
-| `enabled` | bool (inferred) | yes | `true` | `anka_agent_http.dart @0x35c49c4`; second value argument, type not shown (see [set_memory_switch](set_memory_switch.md)) |
+| `enabled` | int (unboxed, x) | yes | `1` | `anka_agent_http.dart @0x35c49c4`; `setPushSwitch` takes the switch as an unboxed integer and boxes it with `BoxInt64Instr` before the store (`@0x35c495c`); `setProactivePushSwitch` tags it with `lsl x2, x0, #1` (`@0x37fe8bc`) and forwards it as an unboxed integer (`LoadInt32Instr`, `@0x37fe970`, `@0x37fec08`); the two dialog callers pass the constants `r3 = 1` (`ai_chat_content_edit_dialog.dart @0x37fe62c`) and `r3 = 0` (`@0x37fee1c`), unboxed, so real values. Same wire type as [set_memory_switch](set_memory_switch.md) |
 
 ## `param_type`/`cmd`
 
@@ -44,7 +44,7 @@ Not parsed by the sender.
 Request, synthesized
 
 ```json
-{ "switch_name": "power_outage", "enabled": true }
+{ "switch_name": "power_outage", "enabled": 1 }
 ```
 
 ## Errors seen
