@@ -26,6 +26,8 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 |---|---|---|---|---|
 | `sn_errors` | object | yes | `{"<sn>": ...}` | `charging/http/http_request_repository_impl.dart @0x26ec010` (value store `@0x26ec020`, parameter) |
 
+Value of `sn_errors` (traced 2026-10-20, app side): `A17B1SystemTestLogic::handlerSelfCheckError` (`charging/ui/page/device/a17b1/a17b1system_test/system_test_logic.dart`) builds a `Map<String, List>` literal of one pair (`<String, List>` `@0x26ebec0`, array `@0x26ebea8`): the key is `field_6b` of the logic's device object `field_8f` (the device serial number, `@0x26ebe94`, `@0x26ebeb4`) and the value is the list passed to the function as its parameter (`@0x26ebebc`). So `sn_errors` is `{ "<device sn>": [ ...errors... ] }`; the element type of the list is not declared.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -73,7 +75,6 @@ Called from:
 
 ## Known unknowns
 
-- The value layout inside `sn_errors` (the field name suggests device serial numbers as keys; not shown by the asm): the literal type `<String, Map>` shows only that the value is a map; the caller `handlerSelfCheckError` builds it and was not read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

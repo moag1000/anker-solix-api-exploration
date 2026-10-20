@@ -87,7 +87,7 @@ Called from:
 
 - The types of `station_id` and `param_data` (the first is a wrapper parameter, the second the result of an unnamed dispatch-table call): `param_type` is typed in Request — attempted 2026-10-20 (two-hop not readable: `param_data` selector not named, `charging/http/http_request_repository_impl.dart @0x2678708`).
 - What the server does with the three `param_type` strings (`sm_mode`, `fixedrate_mode`, `cyclePercent`): not known from the app; the callers and literals are in Request (traced 2026-10-20).
-- How the callers parse the returned object: the worksheet lists `A17B1RatePlanStructureModel` for one caller; that parse was not read.
+- How the callers parse the returned object: the worksheet lists `A17B1RatePlanStructureModel` for one caller; that parse was not read. — traced 2026-10-20: the callers in `A17B1ElectricitySceneLogic` (`charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart @0x26ea948`, `@0x28bc094`, `@0x3d07308`) and `SystemPolicyLogic` (`charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart @0x267845c`, `@0x3d4833c`) do not await the result: the next instruction after the call is another call (`setMode`, `update`) or a store, so these five sites ignore the answer; the other six call sites (`a17b1_utility_rate_plan_logic.dart`, `fixed_rate`, the secondary-edit logic and `a1782_electricity_scene_logic.dart`) were not read
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -76,8 +76,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Types of `siteId`, `sourceType`, `dateType`, `start`, `end` and `global`: parameters and a field of the mixin class; the literal `<String, Object?>` names no value type.
-- Which values `dateType`, `sourceType` and `global` take: the callers of `getChartStatistics` are not in the call index of this page and were not found.
+- Types of `siteId`, `sourceType`, `dateType`, `start`, `end` and `global`: parameters and a field of the mixin class; the literal `<String, Object?>` names no value type. — attempted 2026-10-20 (two-hop not readable: no call site of the sender was found, see the next bullet)
+- Which values `dateType`, `sourceType` and `global` take: the callers of `getChartStatistics` are not in the call index of this page and were not found. — traced 2026-10-20: a search of the asm for `r0 = getChartStatistics()` finds seven call sites, none in `charging/ui/page/station/` (income detail ×3 in `station_home`, `PPSTouHttpService`, the A1782, A17E2 and A5101 chart or benefit logics, each with its own sender class); the station-chart mixin function of this page (`charging/ui/page/station/mixin/station_chart_http_reposity.dart @0x2438ee4`) has no direct `bl` caller in the dump (mixin-deduplicated), so its call sites cannot be listed
 - The meaning of the request options (`cacheKey`, `loopSeconds`, `debounceMills`): passed as options of the mixin function, not body keys; the values were not decoded. — traced 2026-10-20: the arguments are consumed by `HttpRequestMixin` code that Blutter does not emit (`charging/http/http_request_mixin.dart` holds only `Debouncer::run` `@0x230f7f0`), so their effect is not in the asm
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

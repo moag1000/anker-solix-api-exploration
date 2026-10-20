@@ -28,6 +28,8 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 | `sn` | ? | optional | `"<sn>"` | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x2fa7e8c` (guard: `cmp w0, NULL` `@0x2fa7e3c` and a compare with `Instance_JumpPeakRouterType` `@0x2fa7e54`) |
 | `station_id` | ? | optional | `"<station_id>"` | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x2fa7edc` (guard: `cmp w0, NULL` `@0x2fa7ea4` and the same router-type compare `@0x2fa7ebc`) |
 
+Router-type rule and the second caller (traced 2026-10-20): `A17B1PeakValleyLogic::switchPriceUnit` adds `sn` when the router type is `devicePush` (compare `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x2fa7e54`, value `field_13`, key store `@0x2fa7e8c`) and `station_id` when it is `sitePush` (`@0x2fa7ebc`, `field_1f`, `@0x2fa7edc`); the instances are explained in [get_world_monetary_unit](get_world_monetary_unit.md#request). `A17B1FixedRateLogic::switchPriceUnit` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart`) builds the same body: `sn` from `field_13.field_6b` when the type is `devicePush` (compare `@0x2fa72a4`, key `@0x2fa72dc`) and `station_id` from `field_1f` when it is `sitePush` (`@0x2fa72fc`, key `@0x2fa731c`), added with `[]=` to a map that already holds `price_unit`.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -75,8 +77,6 @@ Called from:
 ## Known unknowns
 
 - Type of `price_unit`, `sn` and `station_id`: values of the caller's parameters and fields (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x2fa7e18`); the literal names no value type. — attempted 2026-10-20 (two-hop not readable: `switchPriceUnit` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x2fa7364`), `switchPriceUnit` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x2fa7f24`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
-- Which of `sn` and `station_id` a request carries: each is added only for one `JumpPeakRouterType` instance (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x2fa7e54`); the instances were not decoded.
-- The body built by `A17B1FixedRateLogic::switchPriceUnit` was not read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

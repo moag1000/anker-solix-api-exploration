@@ -25,10 +25,12 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `sn` | ? | yes | `"<sn>"` | `charging/http/http_request_repository_impl.dart @0x26eb0c8` (value store `@0x26eb0d8`, parameter) |
-| `page` | ? | yes | `"<page>"` | `charging/http/http_request_repository_impl.dart @0x26eb0dc` (value store `@0x26eb0ec`, parameter) |
+| `page` | string | yes | `"/a17b1Home"`, `"/electricityScene"`, `"/createSite"` or `"/systemTest"` (constants in the four callers) | `charging/http/http_request_repository_impl.dart @0x26eb0dc` (value store `@0x26eb0ec`, parameter) |
 | `errors` | list | yes | `[]` | `charging/http/http_request_repository_impl.dart @0x26eb0f0` (value is a new empty growable list, `_GrowableList` with length 0 `@0x26eb100`, `@0x26eb104`) |
 
 `errors` (app side, traced 2026-10-20): the wrapper always sends an empty list (`charging/http/http_request_repository_impl.dart @0x26eb104`), so no caller can add entries through this function.
+
+Caller values (traced 2026-10-20, app side): the four callers pass a route-name constant as `page`: `"/a17b1Home"` (`SiteLogic::toHomeInitialProcess`, `charging/ui/page/green_energy/site/site_logic.dart @0x27b3608`..`@0x27b3668`), `"/electricityScene"` (`A17B1ElectricitySceneLogic::syncGoHome`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart @0x26eaee8`), `"/createSite"` (`createOrJoinSuccess`, same file `@0x3d07c04`) and `"/systemTest"` (`A17B1SystemTestLogic::handlerSelfCheckComplete`, `charging/ui/page/device/a17b1/a17b1system_test/system_test_logic.dart @0x3d221a0`); `sn` is `field_6b` of a device object in the callers read (`site_logic.dart @0x27b363c`, `electricity_scene_logic.dart @0x26eae80`), the device serial-number getter (a String). So `page` names the app page from which the sync was triggered.
 
 ## `param_type`/`cmd`
 
@@ -78,8 +80,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `sn` and `page`: wrapper parameters; the literal names no value type.
-- What `page` values the callers send and what the server stores.
+- What the server stores with `page`: server behaviour; the four values the app sends are listed under Request.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

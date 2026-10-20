@@ -41,6 +41,8 @@ not parsed as a model: the closure passed as `complete` (`charging/http/http_req
 
 Key read by the closure: `configs` (list). Nothing else is read.
 
+Element structure (traced 2026-10-20, app side): the callback of `A17B1UtilityRatePlanLogic::_getSiteConfig` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/a17b1_utility_rate_plan_logic.dart @0x2938060`, argument `List<dynamic>`) picks entries with `firstWhereOrNull` on the key `param_type`, comparing it with the text `sm_mode` (closure `@0x29383ac`, compare `@0x29383fc`) and with `fixedrate_mode` (closure `@0x293832c`, compare `@0x293837c`), and reads the key `param_data` of each hit (`@0x29380bc`, `@0x2938118`), casts it to `String` and converts it with `parse` (integer text, `@0x29381b4`, `@0x2938248`). The parsed integers are compared with 2 (`cmp x0, #2` `@0x2938250`, unboxed, real value) and 1 (`cmp x0, #1` `@0x29382a8`) to decide which of two list entries (`first`/`last` of `field_57`, `@0x293826c`, `@0x2938290`, `@0x29382c8`, `@0x29382f0`) is selected before `update` (`@0x2938310`). So each element of `configs` is a map with `param_type` (text) and `param_data` (text holding an integer in these two cases). The other two callers (`electricity_scene_logic.dart`, `system_policy_logic.dart`) were not decoded.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -76,7 +78,7 @@ Called from:
 ## Known unknowns
 
 - The type of `station_id`: a wrapper parameter; the three callers pass a slot of their own frame (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/a17b1_utility_rate_plan_logic.dart @0x2938028`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart @0x28bbc14`, `charging/ui/page/device/a17b1/system_policy/system_policy_logic.dart`); `param_types` is typed in Request — attempted 2026-10-20 (two-hop not readable for `station_id`).
-- The structure of the `configs` elements: the callers (`_getSiteConfig`, `requestSiteConfig`) parse them and were not read.
+- The `param_data` of `cyclePercent` and the use by `ElectricityScene` / `SystemPolicy` callers: the shape of the two entries `sm_mode` and `fixedrate_mode` is in Response; the other callers were not decoded — traced 2026-10-20
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

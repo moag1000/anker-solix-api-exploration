@@ -27,6 +27,8 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 | `sn` | ? | optional | `"<sn>"` | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x28be80c` (guard compare `@0x28be7d4`); `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x28c0824`; `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley_price_diff_secondary_edit/a17b1_peak_valley_price_diff_secondary_edit_logic.dart @0x28bef0c` |
 | `station_id` | ? | optional | `"<station_id>"` | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x28be85c` (guard compare `@0x28be83c`); `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x28c0864`; `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley_price_diff_secondary_edit/a17b1_peak_valley_price_diff_secondary_edit_logic.dart @0x28bef4c` |
 
+Which key a request carries (traced 2026-10-20, app side; owner of this rule for the A17B1 rate-plan pages): the enum `JumpPeakRouterType` has two instances, `sitePush` (index 0, `objs.txt Obj!JumpPeakRouterType@420c961`) and `devicePush` (index 1, `objs.txt Obj!JumpPeakRouterType@420c981`). In the three callers the key `sn` is added only when the screen's router type is `devicePush` (compare `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x28be7d4`, value `field_6b` of a device object, `@0x28be7f4`; `a17b1_fixed_rate_logic.dart @0x28c07ec`, `field_6b`; `a17b1_peak_valley_price_diff_secondary_edit_logic.dart @0x28beed4`, `field_6b`), and `station_id` only when it is `sitePush` (`@0x28be83c`, `@0x28c0844`, `@0x28bef2c`, value `field_1f`, key store `@0x28be85c`). Because the enum has only these two instances, a request carries exactly one of the two keys, the one matching how the screen was opened (site or device); `field_6b` is the device serial-number getter (see [get_hes_dev_info](../charging_hes_svc/get_hes_dev_info.md)), so `sn` is the device serial and `station_id` the site id of the page. The key is absent only when its source field is null.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -74,8 +76,6 @@ Called from:
 ## Known unknowns
 
 - Types of `sn` and `station_id`: values loaded from fields (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x28be7f4`) of the caller; the literals name no value type. — attempted 2026-10-20 (two-hop not readable: `getCurrency` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley_price_diff_secondary_edit/a17b1_peak_valley_price_diff_secondary_edit_logic.dart @0x28bef94`), `getCurrency` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x28c08ac`), `getCurrency` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley/a17b1_peak_valley_logic.dart @0x28be8a4`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
-- Which `JumpPeakRouterType` instance selects `sn` and which `station_id`: not decoded.
-- Whether the call is sent with an empty body (both keys absent): possible by the guards, not shown by the asm which router type each screen has.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

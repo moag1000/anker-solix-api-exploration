@@ -38,7 +38,7 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `time` | ? | yes | `"<current time>"` | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f69c` (value from `DateUtil::getCurrentTime`, call `@0x3d3f6a8`) |
+| `time` | string | yes | `"<current time>"` | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f69c` (value from `DateUtil::getCurrentTime`, call `@0x3d3f6a8`) |
 | `peak_sessions` | list | yes | one session (below) | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f6d8` (growable list of `<Map<String, Object>>`, `@0x3d3f980`, store `@0x3d3fa20`) |
 | `sn` | ? | yes | `""` when no device is selected | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3fad0` (fallback constant `@0x3d3fab8`, store call `@0x3d3fad8`) |
 | `station_id` | ? | yes | `""` when no station is selected | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3fb24` (fallback constant `@0x3d3fb08`, store call `@0x3d3fb2c`) |
@@ -61,12 +61,14 @@ One element of `peak_valley_prices` (seven pairs, array length raw 28 at `chargi
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `id` | int (Smi, w) | yes | `0` (zero register) | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f86c` (store `@0x3d3f878`) |
-| `buy` | ? | yes | `<price>` | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f87c` (value from `num.parse`, call `@0x3d3f8a8`) |
+| `buy` | number | yes | `<price>` | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f87c` (value from `num.parse`, call `@0x3d3f8a8`) |
 | `energy_unit` | string | yes | `"/kWh"` | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f8d8` (constant `@0x3d3f8e4`) |
 | `start_time_period` | string | yes | `"00:00"` | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f8f0` (constant `@0x3d3f8fc`) |
 | `end_time_period` | string | yes | `"00:00"` | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f908` (constant `@0x3d3f914`) |
 | `peak_type` | int (Smi, w) | yes | `1` (raw immediate 2) | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f920` (constant `@0x3d3f92c`) |
 | `day_type` | int (Smi, w) | yes | `2` (raw immediate 4) | `charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f934` (constant `@0x3d3f940`) |
+
+Types read in the second pass (traced 2026-10-20): `time` is the result of `DateUtil.getCurrentTime`, declared `static String` (`base_service/util/date_util.dart @0x249c254`..`@0x249c324`), a `formatDate` call with the pieces `yyyy`, `-`, `mm`, `-`, `dd`, ` `, `HH`, `:`, `nn`, `:`, `ss` of the `date_format` package, i.e. text of the form `2026-10-20 14:05:09`; `buy` is the result of `num.parse` (`a17b1_fixed_rate_logic.dart @0x3d3f8a8`), a `num`, so a JSON number; `sn` is the String `field_6b` getter of the device object or `""` (fallback `@0x3d3fab8`). `station_id` (`field_1f` or `""`) has no declared type. For `dealUtilityRatePlanData` the caller `A17B1PeakValleyPriceDiffSecondaryEditLogic::sendPeakValleyData` (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/peak_valley_price_diff_secondary_edit/a17b1_peak_valley_price_diff_secondary_edit_logic.dart @0x3d3a2a4`) applies the router-type rule of [get_world_monetary_unit](get_world_monetary_unit.md#request) (`sn` from `field_83.field_6b` when `devicePush`, `@0x3d3a2fc`..`@0x3d3a31c`; `station_id` from `field_1f` when `sitePush`, `@0x3d3a33c`..`@0x3d3a344`), shows the loading dialog (`@0x3d3a390`) and calls `dealUtilityRatePlanData` (`@0x3d3a3d0`) with the session list built in the same logic.
 
 ## `param_type`/`cmd`
 
@@ -117,10 +119,9 @@ Called from:
 
 ## Known unknowns
 
-- Types of the parameter-backed keys (`peak_sessions` content of `dealUtilityRatePlanData`, `station_id`, `sn`, `time`, `buy`): the literals name no value type.
+- Types of the parameter-backed keys (`peak_sessions` content of `dealUtilityRatePlanData`, `station_id`, `sn`, `time`, `buy`): the literals name no value type. — traced 2026-10-20: `time` (string), `buy` (number) and `sn` (string) are typed under Request; `station_id` and the content of `peak_sessions` for `dealUtilityRatePlanData` stay untyped (two-hop not readable: `a17b1_peak_valley_price_diff_secondary_edit_logic.dart @0x3d3a344`)
 - Why `savePlanPrice` sends one session starting on 1 January and ending on 1 December of the current year with a single price and `peak_type` 1: the constants are read (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f744`, `@0x3d3f7a8`); the server's reading of them is not known from the app.
-- What `type` 1, `peak_type` 1, `day_type` 2 and `electricity_strategy.mode` 1 select: constants only.
-- The body `A17B1PeakValleyPriceDiffSecondaryEditLogic::sendPeakValleyData` passes to `dealUtilityRatePlanData` was not read.
+- What `type` 1, `peak_type` 1, `day_type` 2 and `electricity_strategy.mode` 1 select: constants only. — reclassified: server (2026-10-20: the app sends these as constants and names none of them; the meaning is decided by the server)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

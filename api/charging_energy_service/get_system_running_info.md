@@ -38,6 +38,8 @@ n/a
 
 (asm-traced) Top-level keys of `A17b1SystemInfoModel` (`data/models.json`, `charging::A17b1SystemInfoModel`): `connected` (bool?), `total_system_savings` (num?), `system_savings_price_unit` (String?), `save_carbon_footprint` (num?), `save_carbon_unit` (String?), `save_carbon_c` (num?), `total_system_power_generation` (num?), `system_power_generation_unit` (String?). The closure also stores the result in the station's reactive state and updates battery and MQTT state from it (`_updateA1790BatteryByA17B1Station`, `{A17S} @0x243807c`).
 
+Use of `connected` (traced 2026-10-20, app side): the closure `A17b1StationLogic` `@0x2437e44` stores the parsed model (`value=` `@0x2437eb4`) and tests its first field `connected` against null (`cmp w1, NULL` `@0x2437f2c`); when it is null the closure logs `当前电站 … 无connected字段，无法判断设备是否在离线` ("current station … has no connected field, cannot tell whether the device is offline", my translation, `@0x24380b4`, `@0x24380d0`) and skips the online-state update, otherwise it writes values into reactive fields of the station state (`value=` `@0x2437f78` and following) before the battery and MQTT updates. Which UI element shows the online flag was not followed.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -65,7 +67,6 @@ none traced: no numeric error code is compared in the sender or the closures rea
 ## Known unknowns
 
 - What the request options mean (`loopSeconds`, `cacheKey`): they are arguments of the mixin function, not body keys; their values were not decoded. — traced 2026-10-20: the arguments are consumed by `HttpRequestMixin` code that Blutter does not emit (`charging/http/http_request_mixin.dart` holds only `Debouncer::run` `@0x230f7f0`), so their effect is not in the asm
-- How the closure uses `connected` to decide a device's online state: only the log text `无connected字段` is read, the full logic was not followed.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

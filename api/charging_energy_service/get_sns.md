@@ -39,6 +39,8 @@ not parsed in this function: the success closure (`charging/ui/page/device/a17b1
 
 No response key is read by the sender (see Response model).
 
+Parse (traced 2026-10-20, app side): the success closure of `CheckUpdateLogic::matchDeviceMac` (`charging/ui/page/device/a17b1/check_update/check_update_logic.dart @0x36dd8c4`, argument `dynamic`) cancels a timer field (`cancel` `@0x36dd904`), requires the answer to be a `Map` (`r8 = Map` `@0x36dd99c`) and reads the key `mac_sn_map` (`@0x36dd9d8`) as a `Map` (`@0x36dd9fc`) from MAC to serial number; it then walks that map (`@0x36dda1c`..`@0x36ddb30`, texts `scanXXDevice`) and builds a list (`toList` `@0x36ddba4`). The failure closure (`@0x36dd87c`) calls `resetState` (`@0x36dd8a8`).
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -71,7 +73,6 @@ Called from:
 ## Known unknowns
 
 - Types of `main_sn` and `macs`: parameters; the literal `<String, Object>` names no value type. `macs` as a list of MAC strings follows from the function name only. — attempted 2026-10-20 (two-hop not readable: `matchDeviceMac` (`charging/ui/page/device/a17b1/check_update/check_update_logic.dart @0x36dd654`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
-- How the answer is parsed: the closure forwards it to `CheckUpdateLogic::matchDeviceMac`, which was not read.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
