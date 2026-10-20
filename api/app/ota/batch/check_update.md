@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # check_update
 
 ## Purpose
 
-<!-- TODO -->
+Asks the server which of a list of devices (the station and its sub-devices) have a firmware update; sent by the firmware update pages of the stations (`FirmwareUpdateUtils::checkBatchOTAUpdateWifi`, `StationFirmwareUpdateViewModel::checkDeviceUpdate`, `BaseStationLogic`/`BasicStationLogic::checkDeviceUpdate`, `AX170StationController::checkDeviceUpdate`, `FirmwareUpgradeController` and others in the caller chain of `data/endpoints.json`) (asm-traced).
 
 ## Upstream name
 
@@ -12,8 +12,18 @@
 
 ## Method+URL
 
-`/app/ota/batch/check_update`, method: not extracted by the inventory <!-- TODO -->; string-only: `ats_ax170/src/ats_ax170/page/station/ax170_station_controller.dart @0x234de68`
-(literal also at 8 more site(s) in `data/endpoints.json`)
+`POST /app/ota/batch/check_update` (asm-traced): URL string at `ats_ax170/src/ats_ax170/page/station/ax170_station_controller.dart @0x234de68`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x234de60`, in `AX170StationController::checkDeviceUpdate` (`ats_ax170/src/ats_ax170/page/station/ax170_station_controller.dart @0x234d650`), sent through `encryptionRequestHttp` (`@0x234de90`).
+
+Same URL in the other sender(s) read:
+
+- `POST /app/ota/batch/check_update` (asm-traced): URL string at `base_service/util/firmware_update_utils.dart @0x229e364`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x229e35c`, in `FirmwareUpdateUtils::checkBatchOTAUpdateWifi` (`base_service/util/firmware_update_utils.dart @0x229e16c`), sent through `encryptionRequestHttp` (`@0x229e394`).
+- `POST /app/ota/batch/check_update` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x264b510`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x264b508`, in `HttpRequestControllerImpl::checkBatchOTAUpdateWifi` (`charging/http/http_request_repository_impl.dart @0x264b354`), sent through `requestHttp` (`@0x264b540`).
+- `POST /app/ota/batch/check_update` (asm-traced): URL string at `device/src/station_setting/controller/common_station_firmware_update/station_firmware_update_view_model.dart @0x366f8c4`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x366f8bc`, in `StationFirmwareUpdateViewModel::checkDeviceUpdate` (`device/src/station_setting/controller/common_station_firmware_update/station_firmware_update_view_model.dart @0x366ebb8`), sent through `encryptionRequestHttp` (`@0x366f8ec`).
+- `POST /app/ota/batch/check_update` (asm-traced): URL string at `micro_hes/src/a17e2/station/home/base_station_logic.dart @0x22c544c`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x22c5444`, in `BaseStationLogic::checkDeviceUpdate` (`micro_hes/src/a17e2/station/home/base_station_logic.dart @0x22c4c08`), sent through `encryptionRequestHttp` (`@0x22c5474`).
+- `POST /app/ota/batch/check_update` (asm-traced): URL string at `micro_hes/src/common_business/basic_station/basic_station_setting/component/general_setting/station_firmware_update_controller.dart @0x2cd20c4`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x2cd20bc`, in `StationFirmwareUpdateController::checkDeviceUpdate` (`micro_hes/src/common_business/basic_station/basic_station_setting/component/general_setting/station_firmware_update_controller.dart @0x2cd17b8`), sent through `encryptionRequestHttp` (`@0x2cd20ec`).
+- `POST /app/ota/batch/check_update` (asm-traced): URL string at `micro_hes/src/common_business/basic_station/station/basic_station_logic.dart @0x235c060`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x235c058`, in `BasicStationLogic::checkDeviceUpdate` (`micro_hes/src/common_business/basic_station/station/basic_station_logic.dart @0x235b830`), sent through `encryptionRequestHttp` (`@0x235c088`).
+
+Two more senders go through the SDK handler instead of the Dart wrappers: the closures in `FirmwareUpgradeController::checkDeviceUpdate` (`flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d200`) and `::checkUpgradeViaMultiDeploy` (`@0x2b0f898`) build the map `{path, method, param}` with `path` `/app/ota/batch/check_update` (`@0x2b0d38c`, `@0x2b0fa14`), `method` the constant string `"POST"` (`@0x2b0d3a4`, `@0x2b0fa28`) and `param` the `toJson` result (`@0x2b0d3cc`, `@0x2b0fa40`) and call `handle` of the handler `akiot.cloud_api` (`@0x2b0d410`, `@0x2b0d420`). The same closures send `/charging_hes_installer_svc/v2/ota/batch/check_update` with a `LinkedHashMap.of` body for installer accounts (`flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d29c`, `@0x2b0f928`).
 
 ## Encrypted?
 
@@ -21,13 +31,15 @@ encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header r
 
 ## Request
 
+No literal body keys in the seven Dart senders: the body is the result of a `toJson` call on an object built before (for example `charging/http/http_request_repository_impl.dart @0x264b4d0` in `HttpRequestControllerImpl::checkBatchOTAUpdateWifi`, which first removes devices with the product codes `"SHEM3"`, `"SHEMP3"`, `"SHPPS"` and `"ECOIR"` by `removeWhere`, closure `@0x264b610`; my reading of the tests). The SDK-handler closures wrap that body:
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `path` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d200` |
-| `method` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d200` |
-| `param` | ? | ? | ? | `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d200` |
+| `path` | string | yes | `"/app/ota/batch/check_update"` | `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d384` (value store `@0x2b0d394`) |
+| `method` | string | yes | `"POST"` | `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d398` (value store `@0x2b0d3ac`) |
+| `param` | object | yes | the `toJson` result of the device list | `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d3b0` (value store `@0x2b0d3d4`) |
 
-Rows are the union over 2 senders; `source` is the first sender that sets the key.
+The three keys exist only in the SDK-handler path (3.24.3 added `method`, `param` and `path`, see Since/changed); the other senders post the `toJson` object directly.
 
 ## `param_type`/`cmd`
 
@@ -35,19 +47,19 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+[`BatchDeviceModel`](../../../../models/firmware.md#batchdevicemodel) (`data/models.json`, `base_service::BatchDeviceModel`), parsed by `BatchDeviceModel.fromJson` at `charging/http/http_request_repository_impl.dart @0x264b5d0` in the success closure `@0x264b564` of `HttpRequestControllerImpl::checkBatchOTAUpdateWifi`; the other six Dart senders carry the same response class in the inventory (their parse sites were not read one by one).
 
 ## Response
 
-<!-- TODO -->
+Top-level keys of `base_service::BatchDeviceModel` (`data/models.json`): `update_infos` (unknown), `popup_info` (BatchPopupInfo?). The repository closure logs `Ota upgrade pop: data: ` (`@0x264b598`) and passes the model to the callback (`ClosureCall` `@0x264b5ec`).
 
 ## Example request/response
 
-<!-- TODO -->
+Request: the keys of the device-list object are in its `toJson`, which was not decoded, so no body is synthesized. Response: not synthesized; no capture exists for this endpoint.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the senders read. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -92,11 +104,15 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. Parameter delta in `tools/out/diff_3.18.0_3.24.3.md`: added `method`, `param`, `path` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- The request body: the `toJson` of the device-list object (`StationDeviceList`, `StationDevice`, `SubPackageVersionModel` appear in `AX170StationController::checkDeviceUpdate`) was not decoded, so no field types are known; `AX170StationController` reads `deviceSn`, `productCode`, `device_type`, `version` and `forceVersion` from device JSON (`anka`-independent station data, `ats_ax170/src/ats_ax170/page/station/ax170_station_controller.dart @0x234d788`..`@0x234dc08`).
+- How the nine senders differ (which product families use which): one sender per station family, named by the controller class.
+- The response parse of the six other senders, and the element classes of `update_infos` (typed `unknown` in `data/models.json`).
+- Server behaviour for the installer variant (`/charging_hes_installer_svc/v2/ota/batch/check_update`): documented on its own page under `charging_hes_installer_svc`.
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 
