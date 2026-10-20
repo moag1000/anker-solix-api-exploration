@@ -1,13 +1,18 @@
 """Extract the error-code catalog (upstream errors.py, 3.24.3 asm, issue reports).
 
 Usage (repo root):
-  python3 -I tools/error_codes.py [--repo .] [--asm ROOT] [--upstream errors.py] [--check]
+  python3 -I tools/error_codes.py [--repo .] [--asm ROOT] [--upstream errors.py] [--pool pp.txt] [--check]
 
 Writes data/errors.json and nothing else (the path is fixed, there is no --out).
 With --check nothing is written: exit 1 when data/errors.json is missing or stale,
 or when api/errors.md exists and lacks a table row for a code in the JSON.
 Standard library only; the asm tree and the upstream file are only read
 (upstream is parsed with ast, never imported).
+
+Asm rows also carry `message_key` / `message_en`: the first localization key loaded
+next to the compare that exists in the app's en_US translation table (read from the
+Blutter pool dump `pp.txt`, `--pool`); `common*` button labels and GENERIC_KEYS are
+skipped; null when no key.  Proximity, not proof of what the user sees.
 
 Row sources (field `source`):
   upstream  class ERRORS entry of upstream api/errors.py, tag upstream-confirmed
@@ -306,9 +311,57 @@ def parse_upstream(path):
     return rows
 
 
-def build(asm_root, upstream_path, sites=None, msg_sites=None):
+# Keys that label a button or a generic state next to a compare; never the message.
+GENERIC_KEYS = {'failed', 'signUpGoSignIn', 'forgetPwdResend'}
+LOCALE = 'en_US'
+POOL_MAP_HEAD = re.compile(r'^\[pp\+0x[0-9a-f]+\] Map<String, Map<String, String>>\(\d+\) \{$')
+POOL_ENTRY = re.compile(r'^    "((?:[^"\\]|\\.)*)": "(.*)",?$')
+
+
+def load_locale(pool_path, locale=LOCALE):
+    """key -> text of one locale from the Blutter pool dump (read only).
+
+    The dump prints the app's translation table as `Map<String, Map<String, String>>`
+    with one `"<locale>": Map<String, String>(n) {` block per language; entries are
+    `    "key": "text",`.  Returns {} when no such block is found.
+    """
+    out, state = {}, 0
+    head = '  "%s": Map<String, String>' % locale
+    with open(pool_path, encoding='utf-8', errors='replace') as fh:
+        for line in fh:
+            line = line.rstrip('\n')
+            if state == 0:
+                state = 1 if POOL_MAP_HEAD.match(line) else 0
+            elif state == 1:
+                state = 2 if line.startswith(head) else 1
+            else:
+                if line.startswith('  }'):
+                    break
+                m = POOL_ENTRY.match(line)
+                if m:
+                    out[m.group(1)] = m.group(2).replace("\\'", "'").replace('\\?', '?')
+    return out
+
+
+def message_for(strings, texts):
+    """(key, text) of the first localization key among the strings next to a compare.
+
+    A key counts when it is in the locale table and is neither a `common*` button
+    label nor in GENERIC_KEYS.  Proximity, not proof: the key is loaded in the
+    branch after the compare, which is what the page reports as app side.
+    """
+    for s in strings:
+        if s in texts and not s.startswith('common') and s not in GENERIC_KEYS:
+            return s, texts[s]
+    return None, None
+
+
+def build(asm_root, upstream_path, sites=None, msg_sites=None, pool=None):
     rows = parse_upstream(upstream_path)
     asm_rows, missing = scan_sites(asm_root, sites)
+    texts = load_locale(pool) if pool else {}
+    for r in asm_rows:
+        r['message_key'], r['message_en'] = message_for(r['strings'], texts)
     msg = MSG_SITES if msg_sites is None else msg_sites
     msg_rows, miss2 = scan_sites(
         asm_root, [(f, a, lb, MSG_RANGE[0]) for f, a, lb in msg], 'message-type-excluded',
@@ -337,6 +390,17 @@ def page_gaps(repo, rows):
     return sorted({r['code'] for r in rows if r['kind'] == 'api'} - have)
 
 
+def message_gaps(repo, rows):
+    """Message keys in the JSON that api/errors.md never names in backticks."""
+    page = os.path.join(repo, PAGE_REL)
+    if not os.path.isfile(page):
+        return []
+    with open(page, encoding='utf-8') as fh:
+        text = fh.read()
+    keys = {r['message_key'] for r in rows if r.get('message_key')}
+    return sorted(k for k in keys if '`%s`' % k not in text)
+
+
 def write_guarded(repo, text):
     """The only write of this tool: data/errors.json under the repo."""
     path = os.path.join(repo, OUT_REL)
@@ -352,9 +416,13 @@ def main(argv=None):
     ap.add_argument('--asm', default=A.DEFAULT_NEW_ROOT)
     ap.add_argument('--upstream', default=os.path.join(
         os.path.dirname(A.DEFAULT_UPSTREAM), 'errors.py'))
+    ap.add_argument('--pool', default=os.path.join(os.path.dirname(A.DEFAULT_NEW_ROOT.rstrip('/')), 'pp.txt'))
     ap.add_argument('--check', action='store_true')
     a = ap.parse_args(argv)
-    rows, missing = build(a.asm, a.upstream)
+    if not os.path.isfile(a.pool):
+        print('pool dump not found (nothing written): %s' % a.pool, file=sys.stderr)
+        return 2
+    rows, missing = build(a.asm, a.upstream, pool=a.pool)
     if missing:
         print('sites not found (nothing written): %s' % ', '.join(missing), file=sys.stderr)
         return 2
@@ -371,10 +439,13 @@ def main(argv=None):
                      sort_keys=True))
     if gaps:
         print('codes without a table row in %s: %s' % (PAGE_REL, gaps))
+    kgaps = message_gaps(a.repo, rows)
+    if kgaps:
+        print('message keys not named in %s: %s' % (PAGE_REL, kgaps))
     if a.check:
         stale = old != text
         print('data/errors.json: %s' % ('stale or missing' if stale else 'up to date'))
-        return 1 if (stale or gaps) else 0
+        return 1 if (stale or gaps or kgaps) else 0
     print('changed: %s' % ('none' if old == text else OUT_REL))
     if old != text:
         write_guarded(a.repo, text)

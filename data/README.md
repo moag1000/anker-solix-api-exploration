@@ -134,7 +134,7 @@ One row per error code occurrence. Generator: `python3 -I tools/error_codes.py [
 | `source` | `tag` | Fields beyond the common ones |
 |---|---|---|
 | `upstream` | `upstream-confirmed` | `name`, `base`, `message`, `file`, `line`, `class_line` (entry in upstream `api/errors.py`) |
-| `asm` | `asm-traced` | `file`, `function`, `function_addr`, `addr`, `width`, `form`, `raw`, `odd_raw`, `branch` (str\|null), `strings` (the localization keys or log text next to the compare) |
+| `asm` | `asm-traced` | `file`, `function`, `function_addr`, `addr`, `width`, `form`, `raw`, `odd_raw`, `branch` (str\|null), `strings` (the localization keys or log text next to the compare), `message_key` (str\|null: first key of `strings` that is in the app's `en_US` translation table, no `common*` button label), `message_en` (str\|null: that key's English text; both null when there is none, a reader treats a missing field as null) |
 | `issue` | `device-tested` | `name`, `endpoint`, `context`, `url`, `reported_by`, `reported` |
 
 `kind` is `api` (an error code the catalog page is about) or `message-type-excluded` (a compare of a device message type that shares numbers with API codes; kept as data, never counted as a code). The Smi decoding of the `asm` rows is explained in [../METHODOLOGY.md](../METHODOLOGY.md).

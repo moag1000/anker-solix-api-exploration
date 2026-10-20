@@ -14,6 +14,7 @@ Not here: how the app signs and encrypts requests and what it does on HTTP 461, 
 1. [Table](#table)
 1. [Code families seen in the app](#code-families-seen-in-the-app)
 1. [Sources that disagree](#sources-that-disagree)
+1. [User-visible message](#user-visible-message)
 1. [Sources and method](#sources-and-method)
 1. [Known unknowns](#known-unknowns)
 1. [Related pages](#related-pages)
@@ -23,7 +24,7 @@ Not here: how the app signs and encrypts requests and what it does on HTTP 461, 
 Tag: asm-traced for the compares and the message keys next to them; the meaning column is my reading and is hedged where it rests on a key name only.
 
 - **Envelope.** A response body has `code`, `msg`, `data` and optionally `signature` (`Result`, [encryption.md](encryption.md#response-handling-and-error-codes)). Code 0 is success. Upstream raises on any other code (`raise_error`, `errors.py` line 124): a code in its `ERRORS` map gives that exception class, any other code of 10000 or more gives the base `AnkerSolixError` (line 131), a code below 10000 that is not in the map raises nothing. Upstream also copies the HTTP status into `code` when a request fails with a client error (`session.py` line 634); that check uses `hasattr` on a dict, so as written the status replaces any body code on that path (observation of the code, untested).
-- **Message.** For upstream rows the exception class and its docstring. For app rows the localization keys (`errorAccountOrPassWord`) or log strings that the branch of the compare loads, first two shown. The app resolves keys with `Trans.tr()` from translation tables that are not decoded here, so the text the user sees is not known; a key name is a hint, not a quote. Chinese log strings are translated by me and marked as such.
+- **Message.** For upstream rows the exception class and its docstring. For app rows the localization keys (`errorAccountOrPassWord`) or log strings that the branch of the compare loads, first two shown. The app resolves keys with `Trans.tr()` from the translation table in the pool dump; the English text of each key is listed in [User-visible message](#user-visible-message), but which text a user sees for a code is only as sure as the branch (a key name is a hint, not a quote). Chinese log strings are translated by me and marked as such.
 - **Seen on endpoint.** A link only where the handler is tied to one endpoint page. Most app handlers are screen or callback closures that receive `(?, int code, String msg)` from a failed request; which URL produced the failure is mostly unknown here, so the cell names the screen. Codes the app never tests say "not seen in the app".
 - **Source tag.** Every source that has the code: `asm-traced` (a compare of the code in a handler function of the app), `upstream-confirmed` (an entry in upstream `ERRORS`, the upstream checkout at commit `17d85d0`), `device-tested` (reported by a user against a real device). Tags are ranked in [../METHODOLOGY.md](../METHODOLOGY.md); the header tag is the lowest on the page.
 - **Citation.** `file.dart @0xADDR (width, raw N)`. The Smi rule applies by compare width ([../METHODOLOGY.md](../METHODOLOGY.md)): `w` is a 32-bit compare on a tagged int, so the code is raw / 2 (`w, raw 926 = 463`); `x` is a 64-bit compare on an unboxed int, so the code is the raw value. Compares of the shape `r17 = N` followed by `cmp w, w17` are the same rule through a register. Two citations are shown at most; "N compares in all" counts the rest, all listed in `data/errors.json`. A compare can be a case label of a switch that the compiler split into a range test (`branch` `gt`/`lt` in the JSON); the value is still one of the cases.
@@ -146,6 +147,80 @@ Agreements (same direction, no conflict found): 401 and 26084 (authorization, ki
 
 Also not a conflict but easy to misread: the numbers 10000 to 10007 are also device message types. 30 compares of them sit in 14 `onMessageDispatch` functions and two MQTT closures (found: 10000 twice, 10001 nineteen times, 10003 five times, 10004, 10005, 10006 and 10007 once each; the only 10004, 10005, 10006 and 10007 are in `auto_disaster_tips_logic.dart`, `0x27acc3c` is the 10004). They are recorded in `data/errors.json` with `kind: "message-type-excluded"` and their addresses, and are not catalogued as codes. 10005 is both: a passport code in `login_logic.dart`, `verification_logic.dart`, `forget_pwd_logic.dart` and `register_logic.dart` (table above) and a device message type in `auto_disaster_tips_logic.dart @0x27accfc`. So the app has no handler for upstream's 10004 or 10007 in the request path. 10003 is in the same position: an API code in the failure callbacks of the HTTP layer (table) and five message-type compares.
 
+## User-visible message
+
+Tag: asm-traced for the three client sentinels and the key next to each compare; the English text is read from the app's own translation table in the pool dump, so it is what the app holds, not a quote of what a given user saw (the app picks the table by the device language).
+
+**Result of the spike (Task 7).** There is no central table from an API code to a message. What exists:
+
+1. **One real switch, and it holds no API code.** `HttpEncryptionDecorator::_getErrorMsg` (HttpEncryptionDecorator.dart @0x486bd64) is the only code-to-key function of the HTTP layer. Its two call sites are both in `_handleSdkError` (@0x486af30 for 401, 26084 and 26085; @0x486af64 for every other code). It tests three negative values that are client-side sentinels, not server codes. The range split compares the unboxed code (64-bit, raw values -9999998 at @0x486bd80 and -9999999 at @0x486bd90); the equality tests are 32-bit compares on a tagged int, so value = raw / 2: raw -19999998 = -9999999 (@0x486bdb4) gives `netWorkError`, raw -19999994 = -9999997 (@0x486bdf8) gives `errorOccur`, and the value between the two range splits, -9999998, gives `requestTimeout` (reached without an equality test: the branch of @0x486bd94). Any other code returns the third argument unchanged, which `_handleSdkError` passes on as `msg`; where that string comes from (the response `msg` or a default) is not traced here, so whether the server's `msg` is ever shown is open. Where the sentinels are produced is not traced; they are not catalogued in the table above.
+2. **Keys next to the compares, branch by branch.** The screen and callback handlers listed in `SITES` load a localization key right after the compare of their code (the `message` column of the table, the `strings` field of `data/errors.json`). That is a code-to-key relation per branch, read from proximity, not a table; the same key can follow several codes (`errorOccur` after 1000, 5000 and 26202).
+3. **Key to text exists in the binary.** The pool holds the translation table as `Map<String, Map<String, String>>(18)` (pp.txt `[pp+0x4b308]`, 18 locales, `en_US` has 9057 keys). `tools/error_codes.py` reads the `en_US` block and sets `message_key` (the first key of the branch that is in the table, skipping `common*` button labels, `failed`, `signUpGoSignIn` and `forgetPwdResend`) and `message_en` on every asm row; both are null when the branch loads no such key (rows without a key are not listed below). The 461 handler logs the key as the string `RS.mismatchTimeAndNetworkCheck.tr`, so its row has no `message_key`; the text of `mismatchTimeAndNetworkCheck` in the same table is "Loading failed. Please check device time and network, then try again."
+4. **The sentinel texts** (`en_US`): `netWorkError` "Network abnormality. Please check the network connection.", `requestTimeout` "Request Timeout", `errorOccur` "An error occurred.". The 401 family opens the dialog `accountExpiredReminder` ("Account Sign In Reminder") with `accountExpiredReminderDetail` and `accountExpiredReminderOK` (`_handler401` @0x486b2bc).
+
+What the table cannot say: that the user sees the text for the code. A key can be loaded for a log line, a dialog title or a branch of a shared closure; several codes share a branch, and a branch with more than one key lists only the first in `message_key` (for example 100053 lists five keys from different screens). Read a row as "the app holds this text next to this code".
+
+| code | `message_key` | text (`en_US`) | first citation |
+|---|---|---|---|
+| 1000 | `errorOccur` | An error occurred. | bind_phone_number_logic.dart @0x3bc372c (+2) |
+| 2001 | `loginEmailHasSent` | The email has been sent. Please check your email and activate your account. | forget_pwd_logic.dart @0x3bc8f1c |
+| 2001 | `signUpSuccessTitle` | Thank You for Signing In | register_logic.dart @0x3be2838 |
+| 5000 | `errorOccur` | An error occurred. | bind_phone_number_logic.dart @0x3bc36c8 (+5) |
+| 10005 | `getEmailCodeFailure` | Email push failed, please try again later. | forget_pwd_logic.dart @0x3bc8fd0 (+4) |
+| 10019 | `loginErrorPwd` | Password Incorrect | login_logic.dart @0x3bd2544 (+2) |
+| 20006 | `comfirmChange` | Confirm changes? [%s] will also use the modified device and communication method. | evselect_station_logic.dart @0x39647f0 |
+| 20020 | `evChargeSubDeviceAlreadyBind` | This device is already linked to another energy system/device. Please unbind and try again. | add_ev_charger_logic.dart @0x24561e4 |
+| 20020 | `evChargerAlreadyLinkedWarning` | EV charger already linked to another energy system. Joining this one will disconnect it from the original. Continue? | evselect_station_logic.dart @0x39647b8 |
+| 20301 | `functionLimitingTips` | The current firmware does not support this function, please update the firmware version. | system_testing_logic.dart @0x43301d0 |
+| 21100 | `accountNotExist` | Account does not exist. | invite_members_logic.dart @0x4061904 |
+| 21101 | `familyMemberProgress` | You've already sent a request to join the household. | invite_members_logic.dart @0x4061970 |
+| 21102 | `membersReached` | Invite limit reached. | invite_members_logic.dart @0x40619dc |
+| 21103 | `expired` | Expired | device_main_logic.dart @0x26076a0 |
+| 21104 | `memberTheFamily` | This user is already part of your group. | invite_members_logic.dart @0x4061a48 |
+| 21106 | `noInviteSelf` | Can't Invite Myself | invite_members_logic.dart @0x4061ab4 |
+| 22100 | `stationTips` | The system name already exists. Please rename it. | http_exception.dart @0x27a1350 (+7) |
+| 22101 | `createStationError` | Solarbank only supports binding with the same MI80 or APsystems EZ1 to create a power station. Please rebind the microinverter and try again. | ez1_select_mode_logic.dart @0x3d654d4 (+2) |
+| 22101 | `invalidQRCode` | Invalid Barcode | qr_scanner_logic.dart @0x33fb0ec |
+| 22104 | `microTips` | The current device is not bound to the microinverter. Please bind the microinverter first. | http_exception.dart @0x27a13a4 |
+| 22106 | `oneSiteOneSolar` | Only one photovoltaic cell can be added to one system. | station_home_info_logic.dart @0x27a1290 |
+| 22106 | `maximumNumberOfEvChargersReached` | Maximum number of EV chargers reached. | evselect_station_logic.dart @0x3963650 |
+| 25059 | `maximumNumberOfEvChargersReached` | Maximum number of EV chargers reached. | evselect_station_logic.dart @0x3964878 |
+| 26008 | `getVerifyCodeFailure` | Failed to obtain the verification code, please try again later | bind_phone_number_logic.dart @0x3bc5934 (+3) |
+| 26053 | `loginErrorSendEmailMax` | Maximum attempts reached for email verification. | forget_pwd_logic.dart @0x3bc9048 (+2) |
+| 26105 | `forgetPwdNotVerified` | This email address has not been verified. Would you us to resend a verification link? | forget_pwd_logic.dart @0x3bca098 |
+| 26105 | `loginErrorNoVerified` | This email address has not been verified. | login_logic.dart @0x3bd234c (+1) |
+| 26106 | `forgetPwdEmailNotRegist` | The email address is not registered. | forget_pwd_logic.dart @0x3bca138 |
+| 26108 | `errorAccountOrPassWord` | Incorrect Account or Password | login_logic.dart @0x3bd22b8 (+1) |
+| 26109 | `loginEmailOrPwdIncorrect` | Email or password is incorrect. | login_logic.dart @0x3bd2714 (+1) |
+| 26114 | `signUpEmailHasRegistered` | This email address is already registered. Sign in now or register with a new email. | register_logic.dart @0x3be2788 |
+| 26114 | `phoneRegisterAlready` | Mobile number already registered. Please log in or register with a new number. | register_logic.dart @0x3be343c |
+| 26124 | `phoneNumNotRegist` | It appears this phone number is not registered. Please register before logging in. | bind_phone_number_logic.dart @0x3bc596c (+2) |
+| 26156 | `errorAccountOrPassWord` | Incorrect Account or Password | login_logic.dart @0x3bd2780 (+1) |
+| 26159 | `phoneRegisterAlready` | Mobile number already registered. Please log in or register with a new number. | register_logic.dart @0x3be572c |
+| 26202 | `errorOccur` | An error occurred. | verification_logic.dart @0x2fafdf8 |
+| 30001 | `evChargeSubDeviceAlreadyBind` | This device is already linked to another energy system/device. Please unbind and try again. | add_devices_logic.dart @0x3f9a808 (+1) |
+| 30005 | `evChargerAlreadyLinkedWarning` | EV charger already linked to another energy system. Joining this one will disconnect it from the original. Continue? | evselect_station_logic.dart @0x3963568 |
+| 30006 | `comfirmChange` | Confirm changes? [%s] will also use the modified device and communication method. | evselect_station_logic.dart @0x39635b4 |
+| 30007 | `evChargeSubDeviceOnSameSite` | Please remove the energy meter and EV charger from the current system, then try again. | add_devices_logic.dart @0x3f9a9d4 |
+| 31001 | `evVehicleNameExist` | Vehicle name already exists. Please choose another name. | vehicle_edit_logic.dart @0x2cf9bcc |
+| 31002 | `evVehicleDeleteIsCharging` | Charging in progress. Please stop charging, then try again. | vehicle_edit_logic.dart @0x3983814 |
+| 40011 | `deviceFirmwareUpdateRequiredHint` | Current device firmware doesn't support this feature. Please update the firmware. | evselect_station_logic.dart @0x39648a4 |
+| 40012 | `evChargerFirmwareUpdateRequired` | Current EV charger firmware doesn't support this feature. Please update the firmware. | evselect_station_logic.dart @0x39648e0 |
+| 100053 | `signUpErrorMaxLimit` | IP Registration Limit Reached | bind_phone_number_logic.dart @0x3bc3654 (+3) |
+| 100053 | `forgetPwdErrorMaxLimit` | Maximum Resets Reached | forget_pwd_logic.dart @0x3bc8ce8 (+1) |
+| 100053 | `loginErrorSendEmailMax` | Maximum attempts reached for email verification. | login_logic.dart @0x2fb0b70 (+1) |
+| 100053 | `loginErrorMaxLimit` | Login Limit Reached | login_logic.dart @0x3bd24d4 (+1) |
+| 100053 | `errorAccountOrPassWord` | Incorrect Account or Password | account_verification_logic.dart @0x4055ac0 |
+| 100056 | `loginErrorPwdReset` | It looks like you've forgotten your password. Do you want to reset? | login_logic.dart @0x3bd25c0 (+1) |
+| 200000 | `deviceIsOffline` | The system is offline. | a5101_firmware_update_logic.dart @0x42ea818 (+1) |
+| 200000 | `a5101NetworkAbnormal` | Network Abnormal | system_testing_logic.dart @0x4330168 |
+| 200000 | `deviceOffline` | Outage | fixed_rate_logic.dart @0x3ecffb8 (+3) |
+| 200000 | `evConfirmStationWifiSame` | Make sure the Energy System is online and on the same network as the EV charger, then try again | evselect_station_logic.dart @0x3964788 |
+| 200103 | `deviceInOtherPowerStationTips` | This device has been bound to another system. Please unbind it and try again. | ble_connect_logic.dart @0x3511a54 |
+| 200218 | `a5101SelfCheckFailTip` | System testing startup failed. Please try again later. | system_testing_logic.dart @0x433024c |
+| 240001 | `functionLimitingTips` | The current firmware does not support this function, please update the firmware version. | three_part_solar_setting_logic.dart @0x42fd880 |
+
+
 ## Sources and method
 
 1. **Upstream** `api/errors.py` (every `ERRORS` entry, read with `ast`; checkout `17d85d0`) and the handling in `session.py` (lines cited above). Tag `upstream-confirmed`.
@@ -164,7 +239,7 @@ python3 -I tools/error_codes.py --check    # exit 1 if the JSON is stale or a co
 
 Tag: untagged by design (no API fact).
 
-- What the server's `msg` text is for any code: the app shows its own translated text and the issue report gave the code only.
+- What the server's `msg` text is for any code, and whether the app shows it: `_getErrorMsg` passes its third argument through for every code except the three sentinels, and the screen handlers show their own keys; the issue report gave the code only.
 - Which request produced each failure: the callbacks are closures taking `(?, code, msg)`; the URL behind each is not traced except for the login handler.
 - Whether 997, 998, 999 and 502 to 504 are ever sent by the server or are client-side labels: upstream defines them, neither upstream's producers nor the app's handlers show them.
 - The role of 2001, 4007, 4017 and 20000002 (success or failure code spaces of the app or an SDK), and the branch bodies of 20005, 20008, 22107.

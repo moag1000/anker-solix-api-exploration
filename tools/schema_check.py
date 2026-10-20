@@ -67,6 +67,7 @@ ERROR_OPTIONAL = {
     'addr': STR, 'branch': (STR, NONE), 'file': STR, 'form': STR, 'function': STR,
     'function_addr': STR, 'odd_raw': BOOL, 'raw': INT, 'strings': LIST_STR, 'width': STR,
     'base': STR, 'class_line': INT, 'line': INT, 'message': STR, 'name': STR,
+    'message_key': (STR, NONE), 'message_en': (STR, NONE),
     'context': STR, 'endpoint': STR, 'reported': STR, 'reported_by': STR, 'url': STR,
 }
 

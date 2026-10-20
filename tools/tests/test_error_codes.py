@@ -28,6 +28,23 @@ ROOT_NEW = os.environ.get(
 UPSTREAM_ERRORS = os.environ.get(
     'ANKER_UPSTREAM_ERRORS', os.path.join(_SIBLINGS, 'anker-solix-api/api/errors.py'))
 
+POOL_NEW = os.environ.get(
+    'ANKER_POOL', os.path.join(_SIBLINGS, 'v3.24.3/blutter_output/pp.txt'))
+
+FAKE_POOL = '''[pp+0x1] String: "unrelated"
+[pp+0x4b308] Map<String, Map<String, String>>(2) {
+  "de_DE": Map<String, String>(1) {
+    "loginErrorPwd": "Passwort falsch",
+  },
+  "en_US": Map<String, String>(4) {
+    "commonOK": "OK",
+    "loginErrorPwd": "Password Incorrect",
+    "noInviteSelf": "Can\\'t Invite Myself",
+    "failed": "Failed",
+  },
+}
+'''
+
 FAKE_ERRORS = '''"""Errors."""
 
 
@@ -153,6 +170,34 @@ class ScanTest(unittest.TestCase):
             self.assertEqual(len(missing), 2)
 
 
+class MessageKeyTest(unittest.TestCase):
+    def test_locale_block_only_and_unescaped(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            pool = os.path.join(tmp, 'pp.txt')
+            with open(pool, 'w', encoding='utf-8') as fh:
+                fh.write(FAKE_POOL)
+            texts = E.load_locale(pool)
+        self.assertEqual(texts['loginErrorPwd'], 'Password Incorrect')
+        self.assertEqual(texts['noInviteSelf'], "Can't Invite Myself")
+        self.assertEqual(len(texts), 4)
+
+    def test_first_real_message_key_skips_buttons_and_logs(self):
+        texts = {'commonOK': 'OK', 'failed': 'Failed', 'loginErrorPwd': 'Password Incorrect'}
+        self.assertEqual(
+            E.message_for(['request fail', 'commonOK', 'failed', 'loginErrorPwd'], texts),
+            ('loginErrorPwd', 'Password Incorrect'))
+        self.assertEqual(E.message_for(['commonOK', 'unknownKey'], texts), (None, None))
+        self.assertEqual(E.message_for([], texts), (None, None))
+
+    def test_missing_pool_aborts_without_writing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out, err = io.StringIO(), io.StringIO()
+            with redirect_stdout(out), redirect_stderr(err):
+                rc = E.main(['--repo', tmp, '--pool', os.path.join(tmp, 'nope.txt')])
+            self.assertEqual(rc, 2)
+            self.assertFalse(os.path.exists(os.path.join(tmp, E.OUT_REL)))
+
+
 class UpstreamTest(unittest.TestCase):
     def test_parse(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -172,10 +217,14 @@ class BuildAndCliTest(unittest.TestCase):
         os.makedirs(repo, exist_ok=True)
         old, old_msg = E.SITES, E.MSG_SITES
         E.SITES, E.MSG_SITES = FAKE_SITES, FAKE_MSG
+        pool = os.path.join(tmp, 'pp.txt')
+        with open(pool, 'w', encoding='utf-8') as fh:
+            fh.write(FAKE_POOL)
         try:
             with redirect_stdout(out), redirect_stderr(err):
                 rc = E.main(['--repo', repo, '--asm', os.path.join(tmp, 'asm'),
-                             '--upstream', os.path.join(tmp, 'errors.py')] + list(extra))
+                             '--upstream', os.path.join(tmp, 'errors.py'),
+                             '--pool', pool] + list(extra))
         finally:
             E.SITES, E.MSG_SITES = old, old_msg
         return rc, out.getvalue(), repo
@@ -293,16 +342,30 @@ class BuildAndCliTest(unittest.TestCase):
             self.assertFalse(os.path.exists(os.path.join(repo, 'data')))
 
 
-@unittest.skipUnless(os.path.isdir(ROOT_NEW) and os.path.isfile(UPSTREAM_ERRORS),
-                     'asm root or upstream errors.py missing')
+@unittest.skipUnless(os.path.isdir(ROOT_NEW) and os.path.isfile(UPSTREAM_ERRORS)
+                     and os.path.isfile(POOL_NEW),
+                     'asm root, pp.txt or upstream errors.py missing')
 class RealDataTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.rows, cls.missing = E.build(ROOT_NEW, UPSTREAM_ERRORS)
+        cls.rows, cls.missing = E.build(ROOT_NEW, UPSTREAM_ERRORS, pool=POOL_NEW)
 
     def find(self, source, code, **kw):
         return [r for r in self.rows if r['source'] == source and r['code'] == code
                 and all(r.get(k) == v for k, v in kw.items())]
+
+    def test_message_key_extracted_for_known_code(self):
+        # 10004 has no compare in a request handler, so its row set has no key; the
+        # nearest real code with a branch key is 21102 (invite limit) and 10019
+        # (wrong password); both texts come from the en_US table of pp.txt
+        self.assertEqual(self.find('issue', 10004)[0].get('message_key'), None)
+        r = self.find('asm', 21102, addr='0x40619dc')[0]
+        self.assertEqual((r['message_key'], r['message_en']),
+                         ('membersReached', 'Invite limit reached.'))
+        r = self.find('asm', 10019, addr='0x2fafa94')[0]
+        self.assertEqual(r['message_key'], 'loginErrorPwd')
+        # a branch with only a button label has no message key
+        self.assertIsNone(self.find('asm', 4007, addr='0x3be28e4')[0]['message_key'])
 
     def test_every_site_found(self):
         self.assertEqual(self.missing, [])
