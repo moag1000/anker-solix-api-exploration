@@ -70,8 +70,8 @@ none traced: no 3.24.3 sender; the 3.18.0 closures read compare no numeric error
 ## Known unknowns
 
 - Whether the server still serves this URL: the 3.24.3 app has no sender for it; the diff file lists it as removed.
-- Type of `identifier_id` (parameter) and what `type` 1 selects: read from the 3.18.0 asm only, the constants were not re-checked in 3.24.3.
-- What replaced the call in 3.24.3: the sibling endpoints [get_site_device_disaster](get_site_device_disaster.md) and [get_support_func](get_support_func.md) are new; no new clear call was located.
+- Type of `identifier_id` (parameter) and what `type` 1 selects: read from the 3.18.0 asm only, the constants were not re-checked in 3.24.3. — traced 2026-10-20: a search of the whole 3.24.3 asm finds no `/charging_disaster_prepared/clear` literal (the other four endpoints of the service are loaded as literals), so the 3.18.0 constants cannot be re-checked; the endpoint has no 3.24.3 sender
+- What replaced the call in 3.24.3: the sibling endpoints [get_site_device_disaster](get_site_device_disaster.md) and [get_support_func](get_support_func.md) are new; no new clear call was located. — traced 2026-10-20: no replacement is visible; the 3.24.3 literals of the service are `get_support_func`, `quit_disaster_prepare` (two `EmsServiceImpl` senders), `set_site_device_disaster` (`ManualPowerBackupLogic::_callSaveDisasterApi`) and `get_site_device_disaster`, and which of them takes over the role of `clear` was not decided
 
 ## Device-tested by
 
