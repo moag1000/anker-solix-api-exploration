@@ -1,1909 +1,1909 @@
 {
- "api/app/devicerelation/confirm_invite.md:68": {
+ "api/app/devicerelation/confirm_invite.md:f76e7eceb9": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/app/devicerelation/device_invite.md:71": {
+ "api/app/devicerelation/device_invite.md:81210e5383": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/app/devicerelation/get_shared_device.md:73": {
+ "api/app/devicerelation/get_shared_device.md:94bbced8bd": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/app/devicerelation/update_share.md:70": {
+ "api/app/devicerelation/update_share.md:6fa7654e1d": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/auth.md:88": {
+ "api/auth.md:14aea695f5": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/auth.md:89": {
+ "api/auth.md:5b6d9e7701": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/auth.md:90": {
+ "api/auth.md:881e54f679": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "api/auth.md:93": {
+ "api/auth.md:f7d3d833d9": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "api/charging_hes_installer_svc/get_area_by_code.md:75": {
+ "api/charging_hes_installer_svc/get_area_by_code.md:3e006553c2": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_installer_svc/get_area_by_code.md:76": {
+ "api/charging_hes_installer_svc/get_area_by_code.md:89f4286b72": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_installer_svc/get_price.md:82": {
+ "api/charging_hes_installer_svc/get_price.md:6a4199831e": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_installer_svc/get_price_company.md:85": {
+ "api/charging_hes_installer_svc/get_price_company.md:6ce998e30a": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/charging_hes_installer_svc/get_third_jump_url.md:87": {
+ "api/charging_hes_installer_svc/get_third_jump_url.md:060ac3eb7f": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_installer_svc/get_third_jump_url.md:88": {
+ "api/charging_hes_installer_svc/get_third_jump_url.md:20414ac57e": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "api/charging_hes_installer_svc/get_utility_rate_plans.md:91": {
+ "api/charging_hes_installer_svc/get_utility_rate_plans.md:d226b46645": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_installer_svc/get_world_monetary_unit.md:74": {
+ "api/charging_hes_installer_svc/get_world_monetary_unit.md:32a128a426": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_installer_svc/passport_login.md:80": {
+ "api/charging_hes_installer_svc/passport_login.md:066b3a7b21": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_installer_svc/save_time_of_use.md:73": {
+ "api/charging_hes_installer_svc/save_time_of_use.md:7755683d1a": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/charging_hes_installer_svc/v2/app/third/platform/list.md:74": {
+ "api/charging_hes_installer_svc/v2/app/third/platform/list.md:88f1e9b936": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/charging_hes_installer_svc/v2/app/third/platform/list.md:75": {
+ "api/charging_hes_installer_svc/v2/app/third/platform/list.md:c7335a6b0a": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_svc/share_device/delete_installer_inviting_member.md:64": {
+ "api/charging_hes_svc/share_device/delete_installer_inviting_member.md:318d182d3a": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_svc/share_device/get_installer_invited_list.md:68": {
+ "api/charging_hes_svc/share_device/get_installer_invited_list.md:0df778d592": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_svc/share_device/invite_installer_member.md:64": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "api/charging_hes_svc/share_device/invite_installer_member.md:65": {
+ "api/charging_hes_svc/share_device/invite_installer_member.md:03fe97701b": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_third_party_service_svc/query_modbus_setting.md:102": {
+ "api/charging_hes_svc/share_device/invite_installer_member.md:6d9cdd2097": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/charging_hes_third_party_service_svc/query_modbus_setting.md:103": {
+ "api/charging_hes_third_party_service_svc/query_modbus_setting.md:44e5ab90d5": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_third_party_service_svc/query_modbus_setting.md:105": {
+ "api/charging_hes_third_party_service_svc/query_modbus_setting.md:590a441659": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_third_party_service_svc/set_modbus_setting.md:92": {
+ "api/charging_hes_third_party_service_svc/query_modbus_setting.md:b3acc67f39": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "api/charging_hes_third_party_service_svc/set_modbus_setting.md:de67533bcb": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_hes_third_party_service_svc/set_modbus_setting.md:93": {
+ "api/charging_hes_third_party_service_svc/set_modbus_setting.md:e3936c8113": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/charging_imsg_svc/app/referral/get_red.md:64": {
+ "api/charging_imsg_svc/app/referral/get_red.md:d4a32532bd": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/charging_imsg_svc/remove_user_floating_fault_info.md:66": {
+ "api/charging_imsg_svc/remove_user_floating_fault_info.md:33a1f587c2": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/device_svc/get_mes_devics_info.md:79": {
+ "api/device_svc/get_mes_devics_info.md:4e41b67ee1": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/device_svc/get_self_check_config.md:83": {
+ "api/device_svc/get_self_check_config.md:6cef5fd30f": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/device_svc/get_url_by_country_code.md:68": {
+ "api/device_svc/get_url_by_country_code.md:e0db9799d5": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/devicecontrol/app/record_device_command.md:71": {
+ "api/devicecontrol/app/record_device_command.md:10f83ceaca": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/devicecontrol/app/report_event_data.md:68": {
+ "api/devicecontrol/app/report_event_data.md:7f62f8ae1b": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/devicecontrol/device/verify_unlock_default_power_code.md:77": {
+ "api/devicecontrol/device/verify_unlock_default_power_code.md:fedcb053be": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/encryption.md:292": {
+ "api/encryption.md:7b07786375": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/encryption.md:300": {
+ "api/encryption.md:beb5bc8c19": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/energy/backup_report/popup_check.md:64": {
+ "api/energy/backup_report/popup_check.md:a459cfdea2": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/energy/backup_report/report_list.md:64": {
+ "api/energy/backup_report/report_list.md:686b586906": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/errors.md:170": {
+ "api/errors.md:22995fef13": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/errors.md:171": {
+ "api/errors.md:736eef46f4": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/errors.md:172": {
+ "api/errors.md:cae847639e": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/generator/app/get_standby_exercise_plan.md:67": {
+ "api/generator/app/get_standby_exercise_plan.md:1fdbb97e9c": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/marketing/app/referral/entrance_check.md:64": {
+ "api/marketing/app/referral/entrance_check.md:d0d4021e67": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/param_types.md:157": {
+ "api/param_types.md:565071d753": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/param_types.md:160": {
+ "api/param_types.md:ebdc2166bc": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/passport/external_login.md:63": {
+ "api/passport/external_login.md:9ba8bad726": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/passport/external_login.md:64": {
+ "api/passport/external_login.md:e015ccbbd7": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/passport/login.md:124": {
+ "api/passport/login.md:42169a3983": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "api/passport/login.md:125": {
+ "api/passport/login.md:712561de90": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/passport/third_party_login.md:87": {
+ "api/passport/third_party_login.md:bad5b92a37": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/passport/third_party_login.md:88": {
+ "api/passport/third_party_login.md:be7dc95c28": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/app/get_ocpp_endpoint_list.md:65": {
+ "api/power_service/app/get_ocpp_endpoint_list.md:e8b6444df6": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/app/get_ocpp_info.md:71": {
+ "api/power_service/app/get_ocpp_info.md:00976cfd89": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/app/get_ocpp_info.md:72": {
+ "api/power_service/app/get_ocpp_info.md:0fddefbc63": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/app/group/get_group_devices.md:74": {
+ "api/power_service/app/group/get_group_devices.md:1f6562fa33": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/app/order/delete_charging_order.md:64": {
+ "api/power_service/app/order/delete_charging_order.md:fbbeb22564": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/app/order/export_charge_order.md:71": {
+ "api/power_service/app/order/export_charge_order.md:b96c212ce8": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/app/order/get_charge_order_stats.md:73": {
+ "api/power_service/app/order/get_charge_order_stats.md:47d600db9b": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/app/order/get_charging_order_sec_detail.md:72": {
+ "api/power_service/app/order/get_charging_order_sec_detail.md:ad0e997d7e": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/app/vehicle/delete_vehicle.md:63": {
+ "api/power_service/app/vehicle/delete_vehicle.md:4218b83f1b": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/app/vehicle/set_charging_vehicle.md:68": {
+ "api/power_service/app/vehicle/set_charging_vehicle.md:74b892d88f": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/app/vehicle/update_vehicle.md:72": {
+ "api/power_service/app/vehicle/update_vehicle.md:3c951c5f5a": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/app/vehicle/update_vehicle.md:401d7150d5": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/power_service/app/vehicle/update_vehicle.md:73": {
+ "api/power_service/device/get_tamper_records.md:36728d3f02": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/device/get_tamper_records.md:72": {
+ "api/power_service/device/get_tamper_records.md:5dc280f0b0": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/device/get_tamper_records.md:73": {
+ "api/power_service/everhome/bind.md:1df92a5bc9": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/everhome/bind.md:74": {
+ "api/power_service/rfid/delete_device_card.md:1c416bc1c4": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/rfid/delete_device_card.md:64": {
+ "api/power_service/rfid/get_device_cards.md:e90ad12d9f": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/rfid/get_device_cards.md:68": {
+ "api/power_service/rfid/save_device_card.md:4e1459a3de": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/rfid/save_device_card.md:66": {
+ "api/power_service/set_user_site_param.md:b644da8903": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/set_user_site_param.md:60": {
+ "api/power_service/site/electrician/add.md:58013536f9": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/site/electrician/add.md:65": {
+ "api/power_service/site/electrician/get.md:7f98480db1": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/site/electrician/get.md:72": {
-  "class": "server",
-  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
- },
- "api/power_service/site/get_power_limit.md:119": {
+ "api/power_service/site/get_power_limit.md:b6898f8cab": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "api/power_service/site/get_site_detail_by_sn.md:71": {
+ "api/power_service/site/get_site_detail_by_sn.md:120b9be525": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/site/get_site_detail_by_sn.md:50ad2d73c2": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/power_service/site/get_site_detail_by_sn.md:72": {
+ "api/power_service/site/set_device_feature.md:3b20622d21": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/site/set_device_feature.md:71": {
-  "class": "server",
-  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
- },
- "api/power_service/site/set_site_device_param.md:100": {
+ "api/power_service/site/set_site_device_param.md:05f894efd3": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "api/power_service/site/set_site_device_param.md:106": {
+ "api/power_service/site/set_site_device_param.md:4e13db5f90": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/site/set_site_device_param.md:107": {
+ "api/power_service/site/set_site_device_param.md:d0a059fc44": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/v2/app/get_custom_branch_icon.md:63": {
+ "api/power_service/v2/app/get_custom_branch_icon.md:3774ee7606": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/v2/app/set_device_pv_name.md:67": {
+ "api/power_service/v2/app/set_device_pv_name.md:f79fedc184": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/v2/device/energy_analysis.md:83": {
+ "api/power_service/v2/device/energy_analysis.md:08561e7fab": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/v2/device/energy_options.md:71": {
+ "api/power_service/v2/device/energy_options.md:b605398cf4": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/v2/device/report_data.md:71": {
+ "api/power_service/v2/device/report_data.md:a426c77ac0": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/v2/device/timeline/event.md:78": {
+ "api/power_service/v2/device/timeline/event.md:a958a336b3": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/v2/platform_get_pn_region_code.md:67": {
+ "api/power_service/v2/platform_get_pn_region_code.md:62c11ca4e7": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/v2/platform_get_user_region_param.md:76": {
+ "api/power_service/v2/platform_get_user_region_param.md:b56f599b8a": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/power_service/v2/site/platform_energy_analysis_options.md:71": {
+ "api/power_service/v2/site/platform_energy_analysis_options.md:beae0f74b9": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/v2/site/platform_get_site_savings.md:73": {
+ "api/power_service/v2/site/platform_get_site_savings.md:55b801fe2c": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/power_service/v2/site/platform_get_site_scene.md:70": {
+ "api/power_service/v2/site/platform_get_site_scene.md:a6011ead4a": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/sdk_senders.md:79": {
+ "api/sdk_senders.md:d13c4002c3": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "api/site/get_user_site_param.md:61": {
+ "api/site/get_user_site_param.md:bfb6ccea5e": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/smart_service/app/anka/delete_all_memory.md:59": {
+ "api/smart_service/app/anka/delete_all_memory.md:3b9829e20e": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/smart_service/app/anka/get_all_config.md:66": {
+ "api/smart_service/app/anka/get_all_config.md:5a983b9f0f": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/smart_service/app/anka/get_entry_show.md:68": {
+ "api/smart_service/app/anka/get_entry_show.md:e2cceced5a": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/smart_service/app/anka/set_memory_switch.md:64": {
+ "api/smart_service/app/anka/set_memory_switch.md:a810f9adf6": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/smart_service/app/anka/set_push_switch.md:66": {
+ "api/smart_service/app/anka/set_push_switch.md:1c70d5e8f8": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "api/smart_service/app/anka/setting.md:63": {
+ "api/smart_service/app/anka/setting.md:3f9ab19d1c": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "api/smart_service/app/anka/welcome_cta.md:69": {
+ "api/smart_service/app/anka/welcome_cta.md:8417fa18df": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "ble/a1340.md:110": {
+ "ble/a1340.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a1340.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a1340.md:208": {
+ "ble/a1340.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a1340.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a1340.md:220": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a1340.md:221": {
+ "ble/a172x.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a172x.md:132": {
+ "ble/a172x.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a172x.md:213": {
+ "ble/a172x.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a172x.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a172x.md:225": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a172x.md:226": {
+ "ble/a1753.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a1753.md:108": {
+ "ble/a1753.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a1753.md:169": {
+ "ble/a1753.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a1753.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a1753.md:181": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a1753.md:182": {
+ "ble/a1770.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a1770.md:149": {
+ "ble/a1770.md:701c087e19": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "ble/a1770.md:81f4209381": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a1770.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a1770.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a1770.md:199": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a1770.md:200": {
+ "ble/a1771.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a1770.md:92": {
+ "ble/a1771.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a1770.md:93": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "ble/a1771.md:165": {
+ "ble/a1771.md:b9a89acfb7": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a1771.md:228": {
+ "ble/a1771.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a1771.md:240": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a1771.md:241": {
+ "ble/a1772.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a1772.md:150": {
+ "ble/a1772.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a1772.md:162": {
+ "ble/a1772.md:b9a89acfb7": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a1772.md:163": {
+ "ble/a1780.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a1780.md:148": {
+ "ble/a1780.md:701c087e19": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "ble/a1780.md:81f4209381": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a1780.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a1780.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a1780.md:160": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a1780.md:161": {
+ "ble/a1780p.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a1780.md:91": {
+ "ble/a1780p.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a1780.md:92": {
+ "ble/a1780p.md:b9a89acfb7": {
   "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a1780p.md:157": {
+ "ble/a1780p.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a1780p.md:169": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a1780p.md:170": {
+ "ble/a1781.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a1780p.md:96": {
+ "ble/a1781.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a1781.md:163": {
+ "ble/a1781.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a1781.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a1781.md:175": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a1781.md:176": {
+ "ble/a1790.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a1781.md:91": {
+ "ble/a1790.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a1790.md:173": {
+ "ble/a1790.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a1790.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a1790.md:185": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a1790.md:186": {
+ "ble/a17a0.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a1790.md:99": {
+ "ble/a17a0.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17a0.md:124": {
+ "ble/a17a0.md:b9a89acfb7": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17a0.md:195": {
+ "ble/a17a0.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a17a0.md:207": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a17a0.md:208": {
+ "ble/a17a3.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a17a3.md:124": {
+ "ble/a17a3.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17a3.md:195": {
+ "ble/a17a3.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a17a3.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a17a3.md:207": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a17a3.md:208": {
+ "ble/a17b1.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a17b1.md:112": {
+ "ble/a17b1.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17b1.md:169": {
+ "ble/a17b1.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a17b1.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a17b1.md:181": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a17b1.md:182": {
+ "ble/a17b2.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a17b2.md:103": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a17b2.md:104": {
-  "class": "device",
-  "note": "no BLE session against a real device is recorded"
- },
- "ble/a17b2.md:90": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a17b2.md:91": {
+ "ble/a17b2.md:701c087e19": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "ble/a17c0.md:111": {
+ "ble/a17b2.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17c0.md:180": {
+ "ble/a17b2.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a17c0.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17c0.md:81f4209381": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a17c0.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a17c0.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a17c0.md:192": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a17c0.md:193": {
+ "ble/a17c1.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a17c1.md:113": {
+ "ble/a17c1.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17c1.md:193": {
+ "ble/a17c1.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a17c1.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a17c1.md:205": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a17c1.md:206": {
+ "ble/a17c2.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a17c2.md:101": {
+ "ble/a17c2.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17c2.md:102": {
+ "ble/a17c2.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a17c3.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a17c2.md:89": {
+ "ble/a17c3.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17c3.md:100": {
+ "ble/a17c3.md:b9a89acfb7": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17c3.md:101": {
+ "ble/a17c5.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a17c3.md:88": {
+ "ble/a17c5.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17c5.md:102": {
+ "ble/a17c5.md:b9a89acfb7": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17c5.md:103": {
+ "ble/a17e2.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a17c5.md:90": {
+ "ble/a17e2.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17e2.md:104": {
+ "ble/a17e2.md:b9a89acfb7": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17e2.md:105": {
+ "ble/a17x7.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a17e2.md:91": {
+ "ble/a17x7.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17x7.md:116": {
+ "ble/a17x7.md:b9a89acfb7": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17x7.md:180": {
+ "ble/a17x7.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a17x7.md:192": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a17x7.md:193": {
+ "ble/a17x8.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a17x8.md:115": {
+ "ble/a17x8.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17x8.md:185": {
+ "ble/a17x8.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a17x8.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a17x8.md:197": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a17x8.md:198": {
+ "ble/a17y0.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a17y0.md:104": {
+ "ble/a17y0.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a17y0.md:164": {
+ "ble/a17y0.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a17y0.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a17y0.md:176": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a17y0.md:177": {
+ "ble/a2345.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a2345.md:119": {
+ "ble/a2345.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a2345.md:244": {
+ "ble/a2345.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a2345.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a2345.md:256": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a2345.md:257": {
+ "ble/a5101.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a5101.md:117": {
+ "ble/a5101.md:73d817de46": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "ble/a5101.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a5101.md:189": {
+ "ble/a5101.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a5101.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a5101.md:250": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "ble/a5101.md:262": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a5101.md:263": {
+ "ble/a5140.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a5140.md:155": {
+ "ble/a5140.md:701c087e19": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "ble/a5140.md:81f4209381": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a5140.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a5140.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a5140.md:167": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a5140.md:168": {
+ "ble/a5150.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a5140.md:98": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a5140.md:99": {
+ "ble/a5150.md:701c087e19": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "ble/a5150.md:147": {
+ "ble/a5150.md:81f4209381": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a5150.md:b9a89acfb7": {
+  "class": "asm",
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
+ },
+ "ble/a5150.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a5150.md:159": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a5150.md:160": {
+ "ble/a91b2.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/a5150.md:90": {
+ "ble/a91b2.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a5150.md:91": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "ble/a91b2.md:111": {
+ "ble/a91b2.md:b9a89acfb7": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/a91b2.md:198": {
+ "ble/a91b2.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/a91b2.md:210": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/a91b2.md:211": {
+ "ble/ae1x0.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/ae1x0.md:85": {
+ "ble/ae1x0.md:81f4209381": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/ae1x0.md:98": {
+ "ble/ae1x0.md:b9a89acfb7": {
   "class": "asm",
   "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/ae1x0.md:99": {
+ "ble/handshake.md:323bbb6272": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "ble/handshake.md:32654f8209": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "ble/handshake.md:5ff63e16b0": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "ble/handshake.md:77c151df4b": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "ble/handshake.md:d68cc00edc": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "ble/protocol.md:3ab72f48c2": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "ble/protocol.md:c04e1b1bce": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "ble/protocol.md:cef115d7ab": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "ble/shelly.md:5876809c0f": {
   "class": "device",
   "note": "no BLE session against a real device is recorded"
  },
- "ble/handshake.md:205": {
+ "ble/shelly.md:701c087e19": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "ble/handshake.md:206": {
+ "ble/shelly.md:81f4209381": {
   "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/handshake.md:208": {
-  "class": "device",
-  "note": "needs a device test, a capture or a runtime observation"
- },
- "ble/handshake.md:210": {
+ "ble/shelly.md:b9a89acfb7": {
   "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
  },
- "ble/handshake.md:211": {
-  "class": "device",
-  "note": "needs a device test, a capture or a runtime observation"
- },
- "ble/protocol.md:292": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "ble/protocol.md:295": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "ble/protocol.md:298": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "ble/shelly.md:160": {
+ "ble/shelly.md:e3a109be9e": {
   "class": "asm",
   "note": "payload tags and response handling of the listed methods are read from the controller asm"
  },
- "ble/shelly.md:172": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/shelly.md:173": {
-  "class": "device",
-  "note": "no BLE session against a real device is recorded"
- },
- "ble/shelly.md:97": {
-  "class": "asm",
-  "note": "which negotiation implementation a product uses is decided in the device class and factory code"
- },
- "ble/shelly.md:98": {
+ "devices/a17c5.md:ddc6f3bd21": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "devices/a17c5.md:24": {
+ "devices/ev_charger.md:47f2e0c947": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/ev_charger.md:90643c125e": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/ev_charger.md:f1e34df0e2": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/home_power_panel.md:3f861c92ea": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/home_power_panel.md:b7c1fecd33": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "devices/ev_charger.md:93": {
-  "class": "device",
-  "note": "needs a device test, a capture or a runtime observation"
- },
- "devices/ev_charger.md:94": {
-  "class": "device",
-  "note": "needs a device test, a capture or a runtime observation"
- },
- "devices/ev_charger.md:95": {
-  "class": "device",
-  "note": "needs a device test, a capture or a runtime observation"
- },
- "devices/home_power_panel.md:150": {
+ "devices/home_power_panel.md:f8bf2c5df7": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "devices/home_power_panel.md:152": {
+ "devices/modbus.md:0afd65ae91": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "devices/home_power_panel.md:153": {
+ "devices/modbus.md:1fe406867b": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "devices/modbus.md:5b71d774f1": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "devices/modbus.md:cb9b379eb2": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "devices/modbus.md:184": {
+ "devices/modbus.md:d5d09467f4": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "devices/modbus.md:186": {
+ "devices/modbus.md:e92ec5b58a": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "devices/modbus.md:187": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "devices/modbus.md:188": {
+ "devices/smart_plug.md:272364f0c1": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "devices/modbus.md:189": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "devices/modbus.md:190": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "devices/smart_plug.md:51": {
+ "devices/smart_plug.md:3f861c92ea": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "devices/smart_plug.md:52": {
+ "devices/smart_plug.md:a3cafaf110": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "devices/smart_plug.md:53": {
+ "devices/smart_plug.md:fc02c61793": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "devices/smart_plug.md:55": {
+ "devices/solarbank.md:8354c48500": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "devices/solarbank.md:81": {
+ "devices/solarbank.md:905cfc2ac4": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "devices/solarbank.md:83": {
+ "devices/solarbank.md:b08376bd7c": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "devices/solarbank.md:84": {
+ "devices/x1_hes_e10.md:7b1114fbac": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "devices/x1_hes_e10.md:bf5fe83f8e": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "devices/x1_hes_e10.md:170": {
+ "devices/x1_hes_e10.md:f86a31ff0f": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "devices/x1_hes_e10.md:171": {
+ "docs/ARCHITECTURE.md:5bf8b42655": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "devices/x1_hes_e10.md:172": {
-  "class": "device",
-  "note": "needs a device test, a capture or a runtime observation"
- },
- "docs/ARCHITECTURE.md:157": {
+ "docs/ARCHITECTURE.md:e7d2fa3594": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "docs/ARCHITECTURE.md:158": {
+ "flows/a5101_battery_reserve.md:b9f6729dad": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/a5101_battery_reserve.md:56": {
+ "flows/a5101_battery_reserve.md:d4286c42c9": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/a5101_battery_reserve.md:58": {
+ "flows/a5101_battery_reserve.md:d73658f91e": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/a5101_battery_reserve.md:59": {
+ "flows/a5101_storm_guard.md:11a697349d": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/a5101_storm_guard.md:59": {
+ "flows/a5101_storm_guard.md:2803a70560": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/a5101_storm_guard.md:61": {
+ "flows/a5101_storm_guard.md:4f4d6d008d": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/a5101_storm_guard.md:62": {
+ "flows/a5101_work_mode_change.md:8b33934bce": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/a5101_work_mode_change.md:58": {
+ "flows/a5101_work_mode_change.md:b3e3a003e6": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/a5101_work_mode_change.md:59": {
+ "flows/diy_unlock.md:5e9ee1d8ef": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/diy_unlock.md:55": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "flows/encrypted_request.md:89": {
+ "flows/encrypted_request.md:08a6f0f450": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "flows/encrypted_request.md:91": {
+ "flows/encrypted_request.md:9171a26311": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "flows/ev_charger_start_charging.md:55": {
+ "flows/ev_charger_start_charging.md:f39dce918a": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/installer_commissioning.md:60": {
+ "flows/installer_commissioning.md:c309caba96": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/installer_commissioning.md:61": {
+ "flows/installer_commissioning.md:ca31256372": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/installer_commissioning.md:62": {
+ "flows/installer_commissioning.md:d3504dd81f": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/installer_commissioning.md:63": {
+ "flows/installer_commissioning.md:d8682fd4a8": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/modbus_setup.md:78": {
+ "flows/modbus_setup.md:288bc8b472": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "flows/modbus_setup.md:9bb0567519": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "flows/modbus_setup.md:79": {
+ "flows/ota_monitor.md:0427f97384": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "flows/ota_monitor.md:0b84edb2a6": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "flows/ota_monitor.md:d28a6594bf": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "flows/pps_ac_output_toggle.md:5a754a7197": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "flows/pps_ac_output_toggle.md:bb612b3888": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "flows/site_price_configuration.md:1aa6f9879e": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "flows/site_price_configuration.md:71ae13b061": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "flows/site_price_configuration.md:fcaaf4a76e": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "flows/smart_plug_countdown_timer.md:94abc75759": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "flows/smart_plug_countdown_timer.md:d6c87f7883": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "flows/ota_monitor.md:63": {
+ "flows/smart_plug_relay_toggle.md:0110ba1110": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/ota_monitor.md:64": {
+ "flows/smart_plug_relay_toggle.md:314855b432": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/ota_monitor.md:65": {
+ "flows/smart_plug_relay_toggle.md:e984a4f3d9": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/pps_ac_output_toggle.md:58": {
+ "flows/smart_plug_schedule.md:7be59036b2": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/pps_ac_output_toggle.md:59": {
+ "flows/solarbank2_schedule.md:356803a8e9": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/site_price_configuration.md:60": {
+ "flows/solarbank2_schedule.md:ab8e82d502": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/site_price_configuration.md:61": {
+ "flows/solarbank2_schedule.md:de95ab189d": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/site_price_configuration.md:62": {
+ "flows/solarbank_soc_reserve_change.md:f6a7ef0d81": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/smart_plug_countdown_timer.md:61": {
+ "flows/solarbank_temperature_unit.md:003fd9930f": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/smart_plug_countdown_timer.md:64": {
+ "flows/solarbank_temperature_unit.md:49b8b53335": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "flows/smart_plug_relay_toggle.md:54": {
+ "flows/solarbank_temperature_unit.md:f255657102": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/smart_plug_relay_toggle.md:55": {
+ "flows/system_output_limit.md:3bf5841b0e": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/smart_plug_relay_toggle.md:56": {
+ "flows/system_output_limit.md:5c1af23e82": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/smart_plug_schedule.md:59": {
+ "models/a5190_device_info.md:3edca54f16": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/solarbank2_schedule.md:69": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "flows/solarbank2_schedule.md:70": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "flows/solarbank2_schedule.md:71": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "flows/solarbank_soc_reserve_change.md:65": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "flows/solarbank_temperature_unit.md:48": {
+ "models/a5190_device_info.md:ee2f1800e2": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "flows/solarbank_temperature_unit.md:49": {
+ "models/anka_agent_models.md:3e8b687d5b": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "flows/solarbank_temperature_unit.md:50": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "flows/system_output_limit.md:69": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "flows/system_output_limit.md:70": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "models/a5190_device_info.md:44": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "models/a5190_device_info.md:45": {
-  "class": "device",
-  "note": "needs a device test, a capture or a runtime observation"
- },
- "models/anka_agent_models.md:204": {
+ "models/anka_agent_models.md:5fc293a5c1": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/anka_agent_models.md:205": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "models/backup_report_models.md:100": {
+ "models/backup_report_models.md:3f1bb6edf6": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/backup_report_models.md:101": {
+ "models/backup_report_models.md:c2111c95e1": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/branch_icon_models.md:53": {
+ "models/branch_icon_models.md:2d850b4877": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "models/branch_icon_models.md:655ff74e57": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/branch_icon_models.md:54": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "models/combine_box_entity.md:38": {
+ "models/combine_box_entity.md:40006e78af": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/device_share_models.md:83": {
+ "models/device_share_models.md:9b4360982a": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "models/dynamic_price_company_model.md:234": {
+ "models/dynamic_price_company_model.md:a38c193dcf": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "models/electricity_price_model.md:165": {
+ "models/electricity_price_model.md:091ca1d92c": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "models/ev_charger_device_models.md:232": {
+ "models/ev_charger_device_models.md:849c231a8a": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "models/ev_charger_device_models.md:233": {
+ "models/ev_charger_device_models.md:b570537e13": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "models/ev_charger_session_models.md:355": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "models/ev_charger_session_models.md:358": {
+ "models/ev_charger_session_models.md:81f66beae6": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/ev_charger_vehicle_models.md:113": {
+ "models/ev_charger_session_models.md:c1fa09f628": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "models/ev_charger_vehicle_models.md:616a594f84": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/feed_grid_setting_param.md:60": {
+ "models/feed_grid_setting_param.md:789f6a2029": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/feed_net_work_limit_entity.md:38": {
+ "models/feed_net_work_limit_entity.md:1fd80f28b1": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "models/feed_net_work_limit_entity.md:39": {
+ "models/feed_net_work_limit_entity.md:97cca8b0ba": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "models/get_site_device_param_response.md:112": {
+ "models/get_site_device_param_response.md:739957b525": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/grid_code_model.md:65": {
+ "models/grid_code_model.md:235729a61a": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/grid_overload_auto_reduce_param.md:37": {
+ "models/grid_overload_auto_reduce_param.md:1f48e850d1": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/grid_param_setting_info.md:109": {
+ "models/grid_param_setting_info.md:41ea908146": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/grid_param_setting_info.md:110": {
+ "models/grid_param_setting_info.md:5bfa777f28": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/heat_pump_param.md:56": {
+ "models/heat_pump_param.md:0a31491142": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/hw_feed_grid_setting_param.md:38": {
+ "models/hw_feed_grid_setting_param.md:0dba5b4d11": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/hw_feed_grid_setting_param.md:39": {
+ "models/hw_feed_grid_setting_param.md:3675cb3183": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/income_detail_model.md:76": {
+ "models/income_detail_model.md:74ce4b7512": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "models/location_support_country_code.md:45": {
+ "models/location_support_country_code.md:6dacda4825": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "models/location_support_country_code.md:46": {
+ "models/location_support_country_code.md:e8a529e11b": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/meter_energy_analysis_model.md:63": {
+ "models/meter_energy_analysis_model.md:8c3099b5d4": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "models/peak_shaving_setting_param.md:39": {
+ "models/peak_shaving_setting_param.md:be9fbe82fe": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/peak_time_model.md:54": {
+ "models/peak_time_model.md:f6578ca071": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/s1_s2_charger_session_chart_model.md:75": {
+ "models/s1_s2_charger_session_chart_model.md:c66aaa59ca": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/scene_info_model.md:105": {
+ "models/scene_info_model.md:df604c58c5": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "models/site_device_param_response.md:38": {
+ "models/site_device_param_response.md:549cf19f42": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "models/site_device_param_response.md:39": {
+ "models/site_device_param_response.md:f6592adfb7": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/site_sn_relation_list.md:61": {
+ "models/site_sn_relation_list.md:76a7428855": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/soc_setting_param.md:41": {
+ "models/soc_setting_param.md:5735719f52": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "models/soc_setting_param.md:887cbf1f60": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/soc_setting_param.md:42": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "models/station_power_limit.md:105": {
+ "models/station_power_limit.md:0b4f7dc5cc": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/station_power_limit.md:107": {
+ "models/station_power_limit.md:6350be2b58": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "models/strategy_visualization_models.md:90": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "models/strategy_visualization_models.md:91": {
+ "models/strategy_visualization_models.md:1862ec61f3": {
   "class": "server",
   "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
  },
- "mqtt/a1340.md:114": {
+ "models/strategy_visualization_models.md:d65aab039c": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a1340.md:64": {
+ "mqtt/a1340.md:236d0676e7": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a1340.md:511d91738b": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a1340.md:c6c910d2c2": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a1340.md:d24684150f": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a1340.md:65": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a1340.md:66": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a172x.md:150": {
+ "mqtt/a172x.md:0371b760da": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a172x.md:151": {
+ "mqtt/a172x.md:93da70e88a": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a172x.md:89": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a172x.md:91": {
+ "mqtt/a172x.md:a5b6ef568a": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a1753.md:53": {
+ "mqtt/a172x.md:b08b165d15": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a1753.md:55": {
+ "mqtt/a1753.md:97e2617dd9": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a1771.md:107": {
+ "mqtt/a1753.md:d39fc79ba7": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a1780.md:102": {
+ "mqtt/a1771.md:c72b7b7b2c": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a1780.md:103": {
+ "mqtt/a1780.md:16607370aa": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a1780.md:104": {
+ "mqtt/a1780.md:26e5749edb": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a1780.md:105": {
+ "mqtt/a1780.md:3410a1d7bd": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a1780.md:527f8238c1": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a1780.md:158": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a1780.md:159": {
+ "mqtt/a1780.md:5cbab04fca": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a1780.md:203": {
+ "mqtt/a1780.md:6b7e6b1adf": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a1780.md:204": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a1780.md:254": {
+ "mqtt/a1780.md:8328d5ad31": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a1780.md:255": {
+ "mqtt/a1780.md:c4f7133840": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a1790.md:107": {
+ "mqtt/a1780.md:e40327236b": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a1790.md:108": {
+ "mqtt/a1780.md:fbc0e81c0c": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a1790.md:217df1cb30": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a1790.md:2e06161a3b": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a1790.md:6b0d4be055": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a1790.md:109": {
+ "mqtt/a1790.md:754fb0bc8d": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a1790.md:a9f185468b": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a1790.md:110": {
+ "mqtt/a1790.md:d574876a69": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a1790.md:dcf5037120": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a1790.md:170": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a1790.md:220": {
+ "mqtt/a1790.md:f373b61df5": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a1790.md:221": {
+ "mqtt/a17b1.md:00ed68d1d4": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a1790.md:222": {
+ "mqtt/a17b1.md:0ce546720c": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17b1.md:124": {
+ "mqtt/a17b1.md:23f0343e0a": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17b1.md:125": {
+ "mqtt/a17b1.md:2f02514666": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17b1.md:126": {
+ "mqtt/a17b1.md:7be40bb7c4": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17b1.md:be9036d3eb": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17b1.md:214": {
+ "mqtt/a17b1.md:f232a93505": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17b1.md:215": {
+ "mqtt/a17c0.md:08c7ca39ba": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17b1.md:252": {
+ "mqtt/a17c0.md:1c8cfbe6f7": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17b1.md:290": {
+ "mqtt/a17c0.md:5682c40de7": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17c0.md:137": {
+ "mqtt/a17c0.md:5c3878effe": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17c0.md:5c65f911d9": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17c0.md:138": {
+ "mqtt/a17c0.md:884cd29e3e": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17c0.md:139": {
+ "mqtt/a17c0.md:a1b2f2f209": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17c0.md:86": {
+ "mqtt/a17c1.md:563188ca37": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17c0.md:87": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17c0.md:88": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17c0.md:89": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17c1.md:112": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17c1.md:113": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17c1.md:163": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17c1.md:345": {
+ "mqtt/a17c1.md:69e6c793ad": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17c1.md:384": {
+ "mqtt/a17c1.md:6d80dad6f3": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17c1.md:423": {
+ "mqtt/a17c1.md:6e46e9f69f": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17c1.md:715f45f549": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17c1.md:461": {
+ "mqtt/a17c1.md:b65f6a3bf0": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17c1.md:ce916ce6e7": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17c1.md:501": {
+ "mqtt/a17c1.md:d7fbef6259": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17c1.md:59": {
+ "mqtt/a17c1.md:e2be4a9ff2": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17c1_status.md:149": {
+ "mqtt/a17c1_status.md:23d326c302": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17c1_status.md:4c7f79be90": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17c1_status.md:5152f46f7b": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17c1_status.md:150": {
+ "mqtt/a17c1_status.md:8a4a6a7193": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17c1_status.md:cfa198722c": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17c1_status.md:151": {
+ "mqtt/a17c1_status.md:f5e8505d7d": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17c1_status.md:152": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17c1_status.md:238": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17c1_status.md:239": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17c2.md:62": {
+ "mqtt/a17c2.md:58374b3cf4": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17c2.md:63": {
+ "mqtt/a17c2.md:5fca375873": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17c2.md:8f4f7b806a": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17c2.md:64": {
+ "mqtt/a17c5.md:1e3a0c09f2": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17c5.md:106": {
+ "mqtt/a17c5.md:2c50c4fb16": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17c5.md:107": {
+ "mqtt/a17c5.md:32e37ef524": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17c5.md:108": {
+ "mqtt/a17c5.md:4518c69881": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17c5.md:151": {
+ "mqtt/a17c5.md:c15e3d2512": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17c5.md:189": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17x7.md:123": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17x7.md:124": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17x7.md:162": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17x7.md:206": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17x7.md:66": {
+ "mqtt/a17x7.md:2197c20b95": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17x7.md:67": {
+ "mqtt/a17x7.md:6135845826": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17x7.md:68": {
+ "mqtt/a17x7.md:781eb432c1": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17x7.md:90238cfa22": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17x7.md:993ac47ef9": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17x8.md:116": {
+ "mqtt/a17x7.md:d4e1e4db60": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17x8.md:155": {
+ "mqtt/a17x7.md:f4c44f15f5": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17x8.md:246": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17x8.md:247": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a17x8.md:295": {
+ "mqtt/a17x8.md:4aca81128c": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17x8.md:379": {
+ "mqtt/a17x8.md:4ad29bb7c6": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17x8.md:418": {
+ "mqtt/a17x8.md:5510a8839e": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a17x8.md:66": {
+ "mqtt/a17x8.md:56ed077bda": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17x8.md:6e3f77a8c6": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17x8.md:9468be2303": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a17x8.md:94e5d02af5": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a17x8.md:67": {
+ "mqtt/a17x8.md:a7d628f5e5": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a2345.md:141": {
+ "mqtt/a17x8.md:a973b3e0ef": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a2345.md:00e08def5f": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a2345.md:3105c9af54": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a2345.md:142": {
+ "mqtt/a2345.md:3b4d5096d6": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a2345.md:143": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a2345.md:191": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a2345.md:192": {
+ "mqtt/a2345.md:583ca085e4": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a2345.md:193": {
+ "mqtt/a2345.md:804ec4c4a2": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a2345.md:89": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a2345.md:90": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/a2345.md:91": {
+ "mqtt/a2345.md:82e53ee58e": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a2345.md:92": {
+ "mqtt/a2345.md:a83e1eb861": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a5101.md:102": {
+ "mqtt/a2345.md:be64a8bb71": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a5101.md:173": {
+ "mqtt/a2345.md:e55a88a62d": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a5101.md:211": {
+ "mqtt/a2345.md:e6fec8282a": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a5101.md:285": {
+ "mqtt/a5101.md:06542cd2e5": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a5101.md:323": {
+ "mqtt/a5101.md:20785de004": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a91b2.md:122": {
+ "mqtt/a5101.md:2983ce9868": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a91b2.md:123": {
+ "mqtt/a5101.md:460994f997": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a91b2.md:73": {
+ "mqtt/a5101.md:481240c16e": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/a91b2.md:74": {
+ "mqtt/a91b2.md:3f7e959edb": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a91b2.md:41290c319c": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/a91b2.md:75": {
+ "mqtt/a91b2.md:9b216b6772": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "mqtt/a91b2.md:9b4b0587ab": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/envelope.md:212": {
+ "mqtt/a91b2.md:be64a8bb71": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/envelope.md:213": {
+ "mqtt/envelope.md:25f380dc3a": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/envelope.md:214": {
+ "mqtt/envelope.md:2a5b7b9559": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/envelope.md:215": {
+ "mqtt/envelope.md:8ab416e4c4": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/envelope.md:216": {
+ "mqtt/envelope.md:907ea2c131": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/envelope.md:218": {
+ "mqtt/envelope.md:a9dfbccea9": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/iot.md:106": {
+ "mqtt/envelope.md:e769ea34e3": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/iot.md:107": {
+ "mqtt/iot.md:1dabd28ca7": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/iot.md:195": {
+ "mqtt/iot.md:75a7d1a450": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/iot.md:466": {
+ "mqtt/iot.md:7cbf13e8b8": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/iot.md:468": {
+ "mqtt/iot.md:8937ec8e47": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/iot.md:469": {
+ "mqtt/iot.md:a70547ad93": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/iot.md:470": {
+ "mqtt/iot.md:af40fb4c92": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/iot.md:541": {
+ "mqtt/iot.md:d4da42a354": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/iot.md:542": {
+ "mqtt/iot.md:fc5e02f569": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/shelly.md:111": {
+ "mqtt/iot.md:fed2e758b8": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "mqtt/shelly.md:61": {
+ "mqtt/shelly.md:22c60de446": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/shelly.md:62": {
+ "mqtt/shelly.md:53629fc342": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "mqtt/shelly.md:63": {
-  "class": "asm",
-  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
- },
- "mqtt/shelly.md:64": {
+ "mqtt/shelly.md:be88d09864": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  },
- "reference/business_rules.md:295": {
+ "mqtt/shelly.md:c13e5911b5": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/business_rules.md:296": {
+ "mqtt/shelly.md:e9c07d6749": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/business_rules.md:297": {
+ "reference/business_rules.md:12018affc5": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/business_rules.md:302": {
+ "reference/business_rules.md:14fdd96e59": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/business_rules.md:306": {
+ "reference/business_rules.md:2def9fc377": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/business_rules.md:307": {
+ "reference/business_rules.md:3ee69a13ff": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/business_rules.md:308": {
+ "reference/business_rules.md:9342ecf8ac": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/business_rules.md:311": {
+ "reference/business_rules.md:a235fecf2e": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/business_rules.md:312": {
+ "reference/business_rules.md:ab7543cd2e": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/enums.md:463": {
+ "reference/business_rules.md:b1323317a8": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/enums.md:464": {
+ "reference/business_rules.md:ef323cea27": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/iot_kit_channels.md:203": {
+ "reference/enums.md:3b5d3976fe": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/validation_model.md:121": {
+ "reference/enums.md:e0c1545d51": {
   "class": "asm",
   "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
  },
- "reference/validation_model.md:122": {
+ "reference/iot_kit_channels.md:2ce748d00e": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "reference/validation_model.md:124727df4e": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "reference/validation_model.md:fe17418f54": {
   "class": "device",
   "note": "needs a device test, a capture or a runtime observation"
  }

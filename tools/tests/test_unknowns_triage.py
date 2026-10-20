@@ -102,24 +102,58 @@ class TriageTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d:
             write(d, 'api/x.md', PAGE)
             rows = U.collect(d)
-            ov = {'api/x.md:15': {'class': 'device', 'note': 'n'},
-                  'api/gone.md:1': {'class': 'asm', 'note': ''}}
+            ov = {rows[0]['key']: {'class': 'device', 'note': 'n'},
+                  'api/gone.md:0123456789': {'class': 'asm', 'note': ''}}
             stale = U.apply_overrides(rows, ov)
         self.assertEqual(rows[0]['class'], 'device')
         self.assertEqual(rows[0]['heuristic_class'], 'server')
         self.assertEqual(rows[0]['hint'], 'override')
-        self.assertEqual(stale, ['api/gone.md:1'])
+        self.assertEqual(stale, ['api/gone.md:0123456789'])
 
     def test_bad_override_class_exits_2(self):
         with tempfile.TemporaryDirectory() as d:
             write(d, 'api/x.md', PAGE)
             with open(os.path.join(d, 'ov.json'), 'w') as f:
-                json.dump({'api/x.md:15': {'class': 'bogus'}}, f)
+                json.dump({'api/x.md:0123456789': {'class': 'bogus'}}, f)
             err = io.StringIO()
             with redirect_stderr(err), redirect_stdout(io.StringIO()):
                 rc = U.main([d, '--override', os.path.join(d, 'ov.json'),
                              '--out', os.path.join(d, 'o.md')])
         self.assertEqual(rc, 2)
+
+    def test_line_shift_keeps_override(self):
+        with tempfile.TemporaryDirectory() as d:
+            write(d, 'api/x.md', PAGE)
+            key = U.collect(d)[0]['key']
+            write(d, 'api/x.md', 'new line\n\nanother\n' + PAGE)
+            rows = U.collect(d)
+            stale = U.apply_overrides(rows, {key: {'class': 'device', 'note': ''}})
+        self.assertEqual((rows[0]['line'], rows[0]['class'], stale), (18, 'device', []))
+
+    def test_text_change_makes_override_stale_and_exit_codes(self):
+        with tempfile.TemporaryDirectory() as d:
+            write(d, 'api/x.md', PAGE)
+            key = U.collect(d)[0]['key']
+            ovp = os.path.join(d, 'ov.json')
+            with open(ovp, 'w') as f:
+                json.dump({key: {'class': 'device', 'note': ''}}, f)
+            write(d, 'api/x.md', PAGE.replace('accepts a free value', 'accepts a value'))
+            err = io.StringIO()
+            with redirect_stderr(err), redirect_stdout(io.StringIO()):
+                rc = U.main([d, '--override', ovp])
+                rc_strict = U.main([d, '--override', ovp, '--strict'])
+        self.assertEqual((rc, rc_strict), (0, 1))
+        self.assertIn('api/x.md', err.getvalue())
+        self.assertIn(key, err.getvalue())
+
+    def test_rekey_migrates_line_keys(self):
+        with tempfile.TemporaryDirectory() as d:
+            write(d, 'api/x.md', PAGE)
+            rows = U.collect(d)
+            new, stale = U.rekey(rows, {'api/x.md:15': {'class': 'device', 'note': ''},
+                                        'api/x.md:999': {'class': 'asm', 'note': ''}})
+        self.assertEqual(sorted(new), sorted([rows[0]['key'], 'api/x.md:999']))
+        self.assertEqual(stale, ['api/x.md:999'])
 
     def test_cell_escapes_pipes_and_flattens_links(self):
         self.assertEqual(U.cell('a | b [t](../x.md#y) c'), 'a \\| b t c')

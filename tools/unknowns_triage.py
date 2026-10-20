@@ -19,14 +19,20 @@ Classes (first matching rule wins, order server, device, asm; the rule goes to `
   asm      resolvable by reading more of the disassembly
   unclear  no rule matched
 
---override: JSON {"<page>:<line>": {"class": "...", "note": "..."}}, hand-maintained.
+--override: JSON {"<page>:<hash>": {"class": "...", "note": "..."}}, hand-maintained;
+<hash> = first 10 hex of the sha1 of the bullet text (strip, whitespace collapsed), so a
+line shift keeps the override (the row field `key` holds it). Identical bullets on one
+page share a key. --rekey-overrides rewrites the file from the current pages: old
+`<page>:<line>` keys are migrated by the bullet at that line, hash keys stay; keys that match
+no bullet are kept as they are and reported (repair path: edit the key or re-add the entry).
 A missing key keeps the heuristic class; the row then has hint `override` and keeps
 the heuristic class in `heuristic_class`. A key that matches no row is reported on
-stderr (the page changed since the override was written); an invalid class exits 2.
+stderr with its page and the exit code stays 0 (exit 1 with --strict); an invalid class exits 2.
 The "Manual pass" section of the markdown is generated from the override file.
 """
 import argparse
 import datetime
+import hashlib
 import json
 import os
 import re
@@ -119,6 +125,11 @@ def bullets(text):
         yield cur[0], cur[1]
 
 
+def text_key(text):
+    norm = ' '.join(text.split())
+    return hashlib.sha1(norm.encode('utf-8')).hexdigest()[:10]
+
+
 def collect(root):
     rows = []
     for rel in pages(root):
@@ -128,7 +139,8 @@ def collect(root):
             if PLACEHOLDER.match(t):
                 continue    # skeleton bullet, carries no question
             cls, hint = classify(t)
-            rows.append({'page': rel, 'line': n, 'text': t, 'class': cls, 'hint': hint})
+            rows.append({'page': rel, 'line': n, 'text': t, 'class': cls, 'hint': hint,
+                         'key': '%s:%s' % (rel, text_key(t))})
     return rows
 
 
@@ -141,17 +153,32 @@ def load_overrides(path):
 
 def apply_overrides(rows, ov):
     """Apply overrides in place; return the keys that match no row."""
-    keys = {'%s:%d' % (r['page'], r['line']): r for r in rows}
+    keys = {}
+    for r in rows:
+        keys.setdefault(r['key'], []).append(r)
     for k, v in ov.items():
-        r = keys.get(k)
-        if r is None:
-            continue
-        r['heuristic_class'] = r['class']
-        r['heuristic_hint'] = r['hint']
-        r['class'] = v['class']
-        r['hint'] = 'override'
-        r['note'] = v.get('note', '')
+        for r in keys.get(k, ()):
+            r['heuristic_class'] = r['class']
+            r['heuristic_hint'] = r['hint']
+            r['class'] = v['class']
+            r['hint'] = 'override'
+            r['note'] = v.get('note', '')
     return sorted(k for k in ov if k not in keys)
+
+
+def rekey(rows, ov):
+    """Return (new override dict, kept-stale keys): `page:line` keys become `page:hash`."""
+    by_line = {'%s:%d' % (r['page'], r['line']): r['key'] for r in rows}
+    live = {r['key'] for r in rows}
+    out, stale = {}, []
+    for k, v in ov.items():
+        page, _, tail = k.rpartition(':')
+        nk = by_line.get(k) if tail.isdigit() else (k if k in live else None)
+        if nk is None:
+            stale.append(k)
+            nk = k
+        out[nk] = v
+    return out, sorted(stale)
 
 
 def cell(text, limit=TRUNC):
@@ -200,7 +227,7 @@ def render(rows, date):
     out += ['', '## Manual pass', '',
             'Every row that the keyword rules left `unclear` was read once more by hand; where the text '
             'names who can answer it, the class was set in `docs/audit/unknowns_overrides.json` '
-            '(keyed `page:line`; a missing key keeps the heuristic class). Re-classified: %d.' % len(ovr)]
+            '(keyed `page:hash`; a missing key keeps the heuristic class). Re-classified: %d.' % len(ovr)]
     if ovr:
         out += ['', '| page | line | new class | note |', '|---|---|---|---|']
         for r in ovr:
@@ -222,17 +249,27 @@ def main(argv=None):
     ap.add_argument('--out', help='markdown output path')
     ap.add_argument('--json', help='JSON output path (one row per bullet)')
     ap.add_argument('--override', help='hand-maintained overrides JSON')
+    ap.add_argument('--rekey-overrides', action='store_true',
+                    help='rewrite the --override file with hash keys from the current pages')
+    ap.add_argument('--strict', action='store_true', help='exit 1 on a stale override key')
     ap.add_argument('--date', default=datetime.date.today().isoformat())
     a = ap.parse_args(argv)
     rows = collect(a.root)
+    stale = []
     if a.override and os.path.isfile(a.override):
         ov, bad = load_overrides(a.override)
         if bad:
             print('override entries with an invalid class (nothing written): %s' % ', '.join(bad),
                   file=sys.stderr)
             return 2
-        for k in apply_overrides(rows, ov):
-            print('stale override (no such bullet): %s' % k, file=sys.stderr)
+        if a.rekey_overrides:
+            ov, stale = rekey(rows, ov)
+            write_text(a.override, json.dumps(ov, indent=1, sort_keys=True, ensure_ascii=False) + '\n')
+            print('rekeyed %d overrides in %s' % (len(ov), a.override))
+        stale = apply_overrides(rows, ov)
+        for k in stale:
+            print('stale override (page %s: no bullet with this text hash): %s'
+                  % (k.rpartition(':')[0], k), file=sys.stderr)
     if a.out:
         write_text(a.out, render(rows, a.date))
     if a.json:
@@ -242,7 +279,7 @@ def main(argv=None):
     counts = {c: sum(1 for r in rows if r['class'] == c) for c in CLASSES}
     print(json.dumps({'rows': len(rows), 'pages': len({r['page'] for r in rows}), **counts},
                      sort_keys=True))
-    return 0
+    return 1 if (stale and a.strict) else 0
 
 
 if __name__ == '__main__':
