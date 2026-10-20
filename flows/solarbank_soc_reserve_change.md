@@ -38,6 +38,7 @@ The `L` rows belong to the legacy route and the `N` rows to the new one; rows 1,
 - Legacy only: the UI message 2214 is fired before the device command (data value 1: the raw 2 is a tagged Smi), not after it as the old page said.
 - The device command exists only if the cloud call succeeded: both `setSoc` calls are inside the success callbacks (`a17c1setting_logic.dart @0x3d94f90`, `@0x3d95b44`). If the cloud call fails the command is never built.
 - Analytics: `APP_DEVICE_RESERVE_POWER_CHOOSE` on the legacy route (`@0x3d95044`).
+- New route result path (app side): the result callback `@0x3d955f4` returns a `Future<bool>` built on an `_AsyncCompleter` (`@0x3d95638` to `@0x3d95680`); it copies the three limits of the returned `SocLimitModel` and turns its bool slot into the integer 1 or 0 for `backup_reserve_switch` (`tst x5, #0x10`, `cset eq`, `@0x3d956b4` to `@0x3d956bc`) in the `NewSocParamModel` (`@0x3d956c4`), then calls `requestNewSetSoc` with the closure `@0x3d95b94` as its result callback. The success callback `@0x3d95abc` calls `setSoc` (step 4N) and then the result callback; the failure callback `@0x3d95a20` logs `cx新版soc设置错误：<code>` and calls the same result callback without sending `setSoc`. The result callback `@0x3d95b94` runs `updateWithNewSocValue` with the requested values and completes the `Future<bool>` with true (`@0x3d95bf0`), so after a failed cloud call the page still shows the requested values (app side). The legacy route's failure callbacks were not read.
 
 ## Timing (delays/polling)
 
@@ -61,6 +62,6 @@ Corrections of the old FLOWS.md (audit rows in brackets), with the old value:
 ## Known unknowns
 
 - What the offset 1307 flag means (the name is not in the asm) and which devices have it set.
-- The bodies of the failure callbacks and of the `Future<bool>` result closure `a17c1setting_logic.dart @0x3d955f4`.
-- How the new SoC page chooses `backup_reserve_switch` and its defaults (`SocManager`, not read).
+- How the new SoC page chooses `backup_reserve_switch` and its defaults (`SocManager`, not read). — traced 2026-10-20: `SocManager::gotoSocSetting` (`soc/soc_setting/soc_manager.dart @0x2cbf8c0`) only builds `SocSettingPage` with the route arguments (keys `backupReserveValue`, `backupReserveEnable`, `backupReserveTips` among others, `@0x2cbfff8` to `@0x2cc0230`); it does not choose the switch or the defaults, so the choice sits in the page's own controller, which was not read.
+- The body of the failure callback of the legacy `requestToSetSoc` (`a17c1setting_logic.dart @0x3d94e70` and its closures) was not read; the new route's callbacks are described in Side effects.
 - Which of the 3-tag and 4-tag forms the device accepts for which firmware (owner page: [mqtt/a17c1.md](../mqtt/a17c1.md#0067-setsoc)).

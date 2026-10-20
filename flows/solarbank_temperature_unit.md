@@ -28,6 +28,8 @@ On the A17C1 settings page the user taps the temperature unit entry: `A17C1Setti
 
 - The page flag of step 5 is a 3 s lock on the control (what exactly it disables in the UI is not read).
 - No cloud request is sent and no local copy of the unit is written by `setTempUnit` itself; the old page's "optimistic UI update" is not visible in this function.
+- The unit shown on the page is the page state's text value `field_6b` (an `RxString`), and it is also the `initData` of the picker (`state.field_6b.value`, `a17c1setting_logic.dart @0x3d98c3c` to `@0x3d98c78`), so the picker opens on the symbol shown. `A17C1SettingLogic::initData` (`@0x2756790`) writes it from the device field at offset 963: 0 gives `℃`, any other value `℉` (`cbnz w4` at `@0x27568c0`, strings at `@0x27568c4`, `@0x27568d0`, store `@0x27568d8`). `setTempUnit` itself writes neither this value nor the device field, so the page shows the new unit only after the next status refresh runs `initData`.
+- The page flag at offset 307 (`RxBool`, `true.obs` in `a17c1setting_state.dart @0x4116114` to `@0x4116124`) gates that refresh: `initData` rewrites the unit text only while the flag is true (`tbnz` at `@0x2756898`, flag read at `@0x2756888`). `setTempUnit` sets it false for 3 s (step 5), so a status that arrives inside the 3 s window does not overwrite the displayed unit. (The read at `@0x3d92064` belongs to the home state, not this flag.)
 
 ## Timing (delays/polling)
 
@@ -46,5 +48,3 @@ On the A17C1 settings page the user taps the temperature unit entry: `A17C1Setti
 ## Known unknowns
 
 - Which status field carries the unit (audit row 54): tag `a9` exists in the A17C1 status parser but its meaning is unconfirmed; owner [mqtt/a17c1_status.md](../mqtt/a17c1_status.md).
-- Where the picker keeps the selected index shown on the page (the optimistic update of the old page).
-- What the page flag at offset 307 disables.

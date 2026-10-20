@@ -14,6 +14,7 @@ On the timing settings page (`a17x8timing_setting_view.dart`) the user sets the 
 - Save only: the page state read at `@0x3de57f8` must allow saving; `saveData` returns when it is false (`tbnz` at `@0x3de5804`).
 - Save only: no other slot may have the same time on the same day. `_checkSameTime` (`@0x3de5818`, function `@0x3de598c`) compares the new time with the list of slots; on a clash the page shows the dialog `a17x8SetSameTimeTips` (`@0x3de5840`, `showDialog` at `@0x3de5890`) and sends nothing.
 - Slot limit: the home page reads the device attribute `timing_limit` and falls back to 24 when it is absent (`a17x8home_logic.dart @0x3463844` for the key, default at `@0x3463920`, an unboxed register, so 24; audit row 36).
+- The page-state flag of the save gate (`field_8f`, `a17x8timing_setting_logic.dart @0x3de57f8`) is an `RxBool` that starts false (`@0x411cc84`). `checkEnable` (`@0x3467874`) sets it to whether the length of the page's switch text (`field_93`, an `RxString` that starts as the empty string, `@0x411ccac` to `@0x411ccc0`) is non-zero (`cbnz w1` at `@0x34678ac`). `checkEnable` runs after the time, the repeat days and the switch choice are set (calls at `@0x3de51a8`, `@0x3de5624`, `@0x3de3d70`, `@0x3467814`) and the switch text is written by `setSwitchStatus` (`@0x3de55b4`). So save does nothing until an on/off choice exists. `saveData` also derives the action from the edit flag (`field_b7`): the compare sequence at `@0x3de57dc` to `@0x3de57f4` yields tagged 4 for an edit (so 2, modify) and tagged 2 otherwise (so 1, create) before it stores the value in the page's action field (`field_bb`, 64-bit, unboxed).
 
 ## Steps
 
@@ -34,6 +35,7 @@ On the timing settings page (`a17x8timing_setting_view.dart`) the user sets the 
 - The slot list of the page is changed only after the device answers (step 8), not at the tap.
 - The relay switch state in the page is refreshed by the timing readback (step 9); schedule and relay state travel together in that answer. Which of the two the parser writes first is not read.
 - Event bus messages 1352 (delete) and 1354 (create or modify) are fired for the list page.
+- Branch detail of the response handler (`a17x8timing_setting_logic.dart @0x2767d18`, branch on the action `field_bb`, 64-bit unboxed): delete (0) runs `removeWhere` on the device's slot list at offset 1163 with the closure `@0x2768600` (matches by the slot's first field), fires message 1352 (`@0x2767e2c`, raw 64-bit store) and closes the page (`@0x2767e50`); create (1) appends the page's `TimingInfo` (read from `field_a3`) to that list (`ArrayStore` at `@0x2767f10`), runs `sortTimingList` (`@0x2767f40`), fires message 1354 with a map of the keys `isEdit` and `data` (`@0x2767f78` to `@0x2768020`) and closes the page; modify (2, tagged compare `cmp w0, #4` at `@0x2768064`) walks the list, replaces the slot whose first field equals that of the page's slot (compare at `@0x2768160` to `@0x2768198`, store at `@0x276824c`), sorts and fires the same message 1354 map (`@0x2768378`), then closes the page. The message ids are raw because the stores are 64-bit.
 
 ## Timing (delays/polling)
 
@@ -44,6 +46,7 @@ No delay, timer or retry in `saveData`, `deleteTiming` or `_setTimingCmd`. The l
 - Plug not reachable or same time clash: toast or dialog, nothing sent.
 - Error or non-zero result codes in the response: `_dealWithResponse` shows no error text in the branches read here (no `Trans.tr` call between `a17x8timing_setting_logic.dart @0x2767d60` and `@0x2768378`); whether the response code is tested at all was not decoded.
 - No answer: the overlay is not dismissed by this logic; no timeout is set here. Error codes: [errors](../api/errors.md).
+- Empty weekday list: `setTimingCmd` adds the tag `a7` (map key 334, tagged 167 = 0xa7) only when the weekday list is not empty (length load at `a17x8_device_controller.dart @0x3de1e74`, `cbz w0, #0x3de1e9c` skips the map store at `@0x3de1e90`). With an empty list the frame carries only `a2` to `a6`.
 
 ## Since/changed
 
@@ -56,6 +59,3 @@ Corrections of the old FLOWS.md (audit rows in brackets), with the old value:
 ## Known unknowns
 
 - Upstream documents the slot index as 1 to 10 (owner page); the app's default limit is 24. Which one the firmware enforces is open.
-- Whether the weekday list is omitted from the frame when it is empty (the old page said so; not re-read).
-- The meaning of the page-state flag tested at `a17x8timing_setting_logic.dart @0x3de5804`.
-- The create and modify branches of the response handler (`a17x8timing_setting_logic.dart @0x2767e60` to `@0x2768378`) beyond the message ids.

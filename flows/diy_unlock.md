@@ -35,6 +35,7 @@ The sheet opens when the user confirms a power value that is above the legal lim
 
 - Whether a successful verification changes server state (for example allowing later requests above the legal limit) is not known; the grid-connected entry point has no follow-up call in the app, which makes server-side state the only consequence there (owner page, Known unknowns).
 - The H5 page is loaded from a host whose name contains `qa` (`anker-webview-us-qa`) in this build (`diy_legal_power_limit_sheet.dart @0x43583b0`).
+- Confirm path of the `h5` variant (`diy_legal_power_limit_sheet.dart`): `_DiyLegalPowerLimitSheetState.build` (`@0x30b92ec`) builds `_H5Content` for the type index 0 (`cmp x4, #0`/`#1` at `@0x30b9334`, `@0x30b933c`, the index is an unboxed field) with the country code, a bool closure for the consent toggle (`@0x30b9390`) and the sheet's callback slot `field_f` as its confirm callback (`@0x30b93a8`, `ArrayStore` at `@0x30b93ac`). `_H5Content` passes that callback to `_confirmButton` only when the consent value is true (`tbnz` at `@0x4358dcc`, call at `@0x4358de8`), otherwise it passes null, so the button is inactive without consent. No `verify_unlock_default_power_code` request is made on the `h5` variant: the confirm button calls the sheet's callback directly, which has the entry-point specific effect of step 8.
 
 ## Timing (delays/polling)
 
@@ -52,7 +53,5 @@ The sheet, the endpoint and the three model keys are new in 3.24.3 (3.18.0 has n
 
 ## Known unknowns
 
-- The confirm path of the `h5` variant (the toggle and `_confirmButton` are identified; the callback they call was not followed).
 - What the server does with a successful verification and whether `legal_limit` is enforced server-side (see [verify_unlock_default_power_code](../api/devicecontrol/device/verify_unlock_default_power_code.md#known-unknowns)).
-- The owner page of the endpoint states that the station page is the only caller; the A17C1 picker and the grid-connected settings are two more callers that pass a device serial, so the request there carries `device_sn` instead of `site_id`.
 - Where the user gets the unlock code (printed, shown in the image, or from support).

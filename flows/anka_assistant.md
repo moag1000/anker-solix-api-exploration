@@ -89,6 +89,7 @@ Every row is tagged by its citation: `file.dart @0xADDR` is asm-traced, rows of 
 - Message timeout: 300 s (step C4, same pool object), a second timer is started by `_handleMessageTimeout` while the output grows (`ai_chat_controller.dart @0x2d7a28c`; its duration was not read).
 - Native hand-over timeout: 30 s (step C3, pool `Duration` `pp+0x29af0`).
 - No timer re-reads the settings; they are read when their page opens (D1, D3).
+- Ball animation timer (app side): `AnkaAgentEntryLogic::_transitTo` (`anka_agent_entry_logic.dart @0x3587b50`) cancels the previous timer (`field_5f`, `@0x3587bac`), stores the new `_EntryAnimState` (`field_4f`) and a counter (`field_57`, +1 at `@0x3587be4`), clears the live-image cache when the state has an entry in the pool map `Map<_EntryAnimState, int>` (`pp+0x17fce8`; `clearLiveImages`, `@0x3587c58`), sets the displayed WebP from `_webpForState` (`@0x3587c80`) and arms a one-shot `Timer` of (map value + 16) times 1000 microseconds (`add x0, x2, #0x10`, `mul x2, x0, 1000`, `@0x3587cac` to `@0x3587cb4`). The map values are real milliseconds from the pool: `normalInit` 0x47c = 1148, `noticeOn` 0x6f0 = 1776, `noticeOff` 0x290 = 656, and one more member 0x47c = 1148 whose name was not readable in the pool. The enum `_EntryAnimState` has the members `normalInit` (index 0), `normalLoop` (1), `noticeOn` (3), `noticeLoop` (4) and `noticeOff` (5); the loop states have no map entry, so no timer ends them. The timer closure (`@0x3587e5c`) acts only while a state flag of the controller (`field_2f`) is true, picks the next state by the finished one and, in the notice cycle, ends in `_startAutoCollapseTimer` (`@0x3587f2c`).
 
 ## Failure paths
 
@@ -102,7 +103,7 @@ Every row is tagged by its citation: `file.dart @0xADDR` is asm-traced, rows of 
 
 - What the chat engine sends to which server, over which transport (the controller only passes `aiChatSendAskTextData` to the native module; `request.dart` carries a `useWebsocket` flag whose use was not traced), and what the answer events contain.
 - The conditions that gate `get_question_bank` (step B3) and `evaluateFeatureIntro` (step B4), and the meaning of the `status` values of `set_bubble_status` (step A10).
-- How the entry model (`show`, switches, bubble) drives the ball's states beyond the polling shown here; `_transitTo` and the bubble coordinator were not decoded.
+- How the entry model (`show`, switches, bubble) drives the ball's states: the bubble coordinator and the conditions that call `_transitTo` were not decoded — traced 2026-10-20: the ball's animation state machine `_transitTo` is described in Timing; the callers of `_transitTo` outside the timer closure were not listed.
 - Which account state decides `show` and `get_entry_show` on the server side; the app only forwards the answer.
 - Whether the 300 s pool `Duration` of the proactive polling and of the message timeout is the same constant by design or by pool sharing (both sites load `pp+0x1f438`).
 - No device or live-account test of any Anka call is recorded in this repository.

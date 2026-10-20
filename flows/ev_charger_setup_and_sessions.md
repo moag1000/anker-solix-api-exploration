@@ -120,6 +120,7 @@ The pages are the "tutorial" pages: the analytics entrance string is `TutorialPa
 - D: a deleted order disappears from the list through `needRefresh`; the statistics are not reloaded by the delete itself (not decoded whether the list page reloads them).
 - E: app side, the app treats a saved OCPP server as replacing the previous one (one `prop_write_ocpp_info` write of the whole record); the app shows the disconnect warning first (step E5) because of this.
 - Analytics events are written at most steps (`ev_event_duration`, `ev_is_success`, `ev_failure_reason` and similar keys); none of them is a request to the cloud.
+- Link between steps A1 and A2 (traced): `IotAnkerDeviceConfigBuilder.build` (`base_service/util/iot_device_config.dart @0x45448dc` to `@0x4544aac`) loads the builder field at offset 0x37 (the one `withDeviceBindInitPage` fills with `/chargerAccessInitialPage`, `@0x45ab00c` to `@0x45ab018`) and stores it into the built configuration at offset 0x1b (`@0x4544a70`, `@0x4544a74`); `getDeviceBindAfterPage` reads offset 0x1b of the configuration found by product code (`@0x35099d4`). So the registered string is the page A2 navigates to.
 
 ## Timing (delays/polling)
 
@@ -137,8 +138,7 @@ The pages are the "tutorial" pages: the analytics entrance string is `TutorialPa
 
 ## Known unknowns
 
-- Whether the builder field set by `withDeviceBindInitPage` (field offset 0x37) is the field `getDeviceBindAfterPage` reads (offset 0x1b of the built configuration); the build step was not decoded, so the chain A1 to A2 is the registered string plus the reader, not a proven link.
-- How the binding itself (BLE or QR scan, `startBindDeviceServer`, `fetchRelateBelong`) works for the charger; it is shared kit plumbing in `base_service/util/bind_task.dart` and is not traced here.
+- How the binding itself (BLE or QR scan, `startBindDeviceServer`, `fetchRelateBelong`) works for the charger; it is shared kit plumbing in `base_service/util/bind_task.dart` and is not traced here. — traced 2026-10-20: not traced; `bind_task.dart` was not opened. Only the registration was traced, see the Known unknowns text above.
 - What the kit sends over BLE or MQTT for each property read and write named above (owner page [../ble/a5190_a5191.md](../ble/a5190_a5191.md)); all of it is below the Dart layer.
 - The conditions of the firmware dialog before the OCPP page (E1), the write path of a server chosen from the list (E5) and the meaning of `lBConnToSite` and `gEPConnToSite`, which feed the field 0x67 flag of A12 (what that flag controls was not traced) and not the jump choice.
 - Whether the server enforces the card limit of 10 (B4) or the vehicle limit of 5 (C2); both are app-side checks only.

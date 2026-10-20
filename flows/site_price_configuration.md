@@ -35,6 +35,7 @@ Other pages send `update_site_price` too, with their own bodies: `StationPriceSe
 - The page returns the saved prices and the currency symbol to the calling page (step 8).
 - HES case: the price unit is changed first, in its own cloud request, before the plan is written.
 - The site co2 factor sent is the fixed value 0.997; the old page's "CO2 calculation is server-side only" is consistent: the app sends the constant and does no calculation.
+- HES case, both writes: `savePrice` calls `changeCurrencyUnit` (`hes_fixed_price_logic.dart @0x43a06e0`, with a success closure `@0x43a1664` and a failure closure `@0x43a15b8`, only the `showLoading` option) and then, with no test in between, builds the `device_command` body and calls `setDeviceEMSPriceArgument` (`@0x43a12ac`). So in the HES case both requests are always issued, the unit change first, and neither waits for the other. The two unit-change closures only write a log line (`HesFixedPriceLogic==model=========>` and an info log), so their order against the callbacks of step 8 has no effect on the page state; the page closes in the callback of the `device_command` request.
 
 ## Timing (delays/polling)
 
@@ -57,6 +58,5 @@ Corrections of the old FLOWS.md (audit rows in brackets):
 ## Known unknowns
 
 - The names of the three type predicates (`GDT` offsets `-0xa38`, `-0x667`, `-0xbd8`): from the URL each one selects they are the HES, site and device tests, but the method names are not in the asm.
-- Whether the HES case writes both the `device_command` and the unit change in all cases, and the order of the two callbacks.
-- What the empty-URL fallback does for an unknown type.
-- The fixed-price flows of the other pages listed in Trigger (`station_price_setting_logic.dart`, TOU components) and the dynamic and TOU variants of `update_site_price` (`price_type` `use_time`).
+- What the empty-URL fallback does for an unknown type. — traced 2026-10-20: `setDeviceEMSPriceArgument` has no empty-URL test; it calls `HttpService.encryptionRequestHttp` with the empty string (`electricity_usage_helper.dart @0x249e35c` to `@0x249e404`); what that call does with an empty path is inside `HttpService` and was not read.
+- The fixed-price flows of the other pages listed in Trigger (`station_price_setting_logic.dart`, TOU components) and the dynamic and TOU variants of `update_site_price` (`price_type` `use_time`). — traced 2026-10-20: not traced in this pass; the other call sites are named in Trigger.

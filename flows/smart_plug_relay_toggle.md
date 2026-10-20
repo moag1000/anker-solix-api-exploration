@@ -13,6 +13,7 @@ On the plug home page the user taps the main switch; the view calls `A17X8homeLo
 - `changeSwitch` returns without doing anything unless the first page flag (`field_83.field_1b`) is true (`tbz` at `a17x8home_logic.dart @0x3dd7014` jumps on true; the fall-through at `@0x3dd7018` returns).
 - It then sends when the second page flag (`field_83.field_23`) is false (`tbnz` at `@0x3dd7044` jumps to the send on false). When that flag is true it sends only if the device field at offset 999 holds 1 or 3 (compares against the tagged values 2 and 6 at `@0x3dd7060` and `@0x3dd7068`); otherwise it returns. In the 3.24.3 build a Dart `false` has bit 4 set, so `tbnz w, #4` branches on false and `tbz w, #4` on true. The names of the flags and of the offset 999 field are not in the asm.
 - There is no reachability test in `changeSwitch` itself; an unreachable plug is handled by the transport gate in step 5.
+- The device field at offset 999 is the device error code: `_checkDeviceErrorCode` passes it as the named argument `code` to `_showDeviceMessage` (`a17x8home_logic.dart @0x2764314` to `@0x2764330`). So when the second flag is true, `changeSwitch` sends only if the error code is 1 or 3 (tagged 2 and 6 at `@0x3dd7060`, `@0x3dd7068`).
 
 ## Steps
 
@@ -33,6 +34,7 @@ On the plug home page the user taps the main switch; the view calls `A17X8homeLo
 - The device object and the page show the new relay value immediately (step 6).
 - Turning the relay off clears the energy graph data the page built from the grid power curve (`_clearFromGridCurve`).
 - Pending-command bookkeeping lives on the device object (offsets 1231 and 1211) and is shared by every page that uses the same device.
+- The response handler `_handleResponse` (`a17x8_device_controller.dart @0x3b62168`) runs for both transports: it is called from `_dealWithMqttResponse` (`@0x3b62060`) and from `handleZXProtocolDeviceResponse` (`@0x3b7672c`, the BLE answers), so the confirmation of step 8 happens for MQTT and BLE answers alike.
 
 ## Timing (delays/polling)
 
@@ -42,6 +44,7 @@ No delay or debounce timer in `changeSwitch`, `onSwitchCommandSent` or the sette
 
 - Plug not connected over BLE or WiFi: the command is dropped by the gate in step 5 (`a17x8_device_controller.dart @0x2419080`, `@0x24191bc`); the optimistic value of step 6 has already been written and the counter stays raised until a response arrives, so the update-allowed flag stays false. How the page recovers from this is not read.
 - No response: the counter is not lowered; no timeout is visible in these functions. Error codes: [errors](../api/errors.md).
+- Dropped command: the app has no recovery in this flow. `onSwitchCommandConfirmed` has one caller, the response handler (`a17x8_device_controller.dart @0x3b62ba8`), and the pending counter at device offset 1231 is read or written only by `onSwitchCommandSent` and `onSwitchCommandConfirmed` in the A17X8 class files (grep `r17 = 1231`; `a17x8_anker_device.dart @0x3073984` to `@0x30739bc`, `@0x3b64368` to `@0x3b64410`). A command dropped at the transport gate (step 5) therefore leaves the counter raised and the update-allowed flag (offset 1211) false, so `parseDeviceAllInfo` keeps skipping the switch tag (step 9).
 
 ## Since/changed
 
@@ -51,6 +54,5 @@ No delay or debounce timer in `changeSwitch`, `onSwitchCommandSent` or the sette
 
 ## Known unknowns
 
-- The names of the two flags and the offset 999 field in Preconditions.
-- How the page recovers when a command is dropped at the gate (the counter and flag then stay unchanged).
-- Whether the response handler also runs for MQTT answers; only the shared controller function was read.
+- The names of the two flags are not in the asm (class `A17X8homeState` has no field names in the dump). Both are `RxBool` fields created with `false.obs` (`a17x8home_state.dart @0x411bcc0` to `@0x411bd24`), so the first flag is false until some code sets it and `changeSwitch` sends nothing before that — traced 2026-10-20: the setter sites of the first flag were not identified among the many `field_1b` stores of `a17x8home_logic.dart`, which mix several objects.
+- Whether the counter heals through another path (for example a new device object after a reconnect) was not traced; within the A17X8 class files no other writer of offset 1231 was found (traced 2026-10-20, grep `r17 = 1231`).

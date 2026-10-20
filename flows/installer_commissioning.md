@@ -8,11 +8,14 @@ How the installer build of the app ("Anker Pros", package name `anker.pros`) com
 
 The installer opens the initial setup page of a system (`InitialSetupController`, `Initial_setup_controller.dart`); its start-up runs `onReady`, `_supportRecordElectrician`, `_initStepHandlers` and `fetchSetupSteps` (`Initial_setup_controller.dart @0x29c9a88`, `@0x29c9a90`, `@0x29c9a98`, `@0x29c9aa0`). How the installer reaches this page (navigation from the installer home) was not traced. The installer variant of the whole app is selected by the static flag `isProApp` (`base_service/api_url.dart`, set once from the package name `anker.pros`: [charging_hes_installer_svc](../api/charging_hes_installer_svc/README.md#variant-selector-installer-app-versus-consumer-app)).
 
+How the installer reaches the page and where its system id comes from (app side): `InitialSetupController.onInit` (`Initial_setup_controller.dart @0x3517468`) reads the navigation arguments of the route `/initialSetupPage` with the keys `deviceModel`, `siteId`, `setupType`, `isSyncWifiType`, `opProductCode`, `combinationType` and `systemId` (`@0x3517630` to `@0x351799c`); `systemId` is read as a nullable int and stored in `field_5b` (`@0x35179f0`), `combinationType` defaults to 0 (`@0x3517928`). The files that contain both the route name and a `systemId` key literal (file-level grep, so a hit does not prove the key goes into that call) are `device_add_results_controller.dart` (4 hits), `ble_connect_logic.dart` of `device_bind` (3), `select_scene_controller.dart` (2), `guidelines_logic.dart` (2), `firmware_upgrade_controller.dart` (1) and `wifi_connect_logic.dart` (1); the product home pages that push the same route (`as200_home_logic.dart`, `s1_s2_home_logic.dart`, `ax170_home_logic.dart`, `a17e2_home_controller.dart`, `a7320_init_checker.dart` and others) contain no `systemId` literal, so they most likely run the consumer variant. The installer's own entry (the page that first holds the system id) is not among them and was not traced.
+
 ## Preconditions
 
 - Installer sign-in: the identity dialog verifies the installer account with [passport_login](../api/charging_hes_installer_svc/passport_login.md) (`IdentityAuthView.installerLogin`); its answer is only a success flag. The dialog is also reachable from consumer settings pages, so it is not a proof that the app runs as the installer variant.
 - A system id: the installer paths test a non-null system id (`field_5f` in `select_scene_controller.dart @0x2abdfb8`; `field_5b` of the setup controller in `Initial_setup_controller.dart @0x3243c18`). Without it the consumer variants run.
 - The main device serial and product number are known (`getMainDeviceSn` at `Initial_setup_controller.dart @0x29c9b80`, `getMainDevicePn` at `@0x29c9cb8`).
+- The installer URL choice is not tied to `isProApp`: the platform-appoint page picks `/charging_hes_installer_svc/v2/app/third/platform/list` with the app id `anker_pros` when its system id (`field_5f`) is non-null and otherwise `/power_service/v1/app/third/platform/list` with `anker_power` (`platform_appoint_add_device_controller.dart getThirdPartyPlatformList @0x24e60d8`, test `@0x24e612c` to `@0x24e6150`). So the installer endpoint can be reached by any build that supplies a system id.
 
 ## Steps
 
@@ -36,6 +39,8 @@ The installer opens the initial setup page of a system (`InitialSetupController`
 - The installer branch of step 11 does not fire message 580 or close the page in `sendSetupFinish` itself (it returns after `getSiteDetail`); the callbacks of step 11 and the sync manager take over.
 - `InstallerDeviceSyncManager` is a singleton: its sync and the authorisation run for every page that triggers `codeRefreshDevice`, not only the setup page.
 - Step 5 changes the Wi-Fi configuration of the devices and ties them to the system id and the owner uid.
+- Step 11 callbacks: the success branch calls `InstallerDeviceSyncManager.getSiteDetail` with a success closure (`@0x324789c`, argument a map) and a failure closure (`@0x3247764`, arguments an int and a string); both call `syncDeviceInfoBySystemId(field_5b)` and, when it completes, run the closure `@0x324771c`, which calls `closePage` of the controller (`@0x3247748`). So after a commission the page closes after the second sync whether `getSiteDetail` succeeded or failed.
+- `_changeSetupStepStates` (`@0x29ce1e4`) does not order the step cards: when the setup type is one of two `DeviceSetupType` values and the device reports WiFi mode or WiFi connected, and the connect-net step is not already successful (`isStepSuccess`, `@0x29ce32c`), it schedules `setStateDelayConnectSuccess` after a `Future.delayed` (`@0x29ce354`), which sets the `connectNet` entry of the step-state map (`_stepStateMap`, `late final Map<SetupStep, Rx>`, offset 0x114) and the connect-net state to true (`@0x29ce3f0` to `@0x29ce430`). The delay value was not read.
 
 ## Timing (delays/polling)
 
@@ -57,7 +62,6 @@ All `akiot.opening.*` channels, the pro Wi-Fi channel `akiot.pairing.activate_mu
 ## Known unknowns
 
 - What the native kit sends for the four `akiot.opening.*` identifiers (the HTTP endpoints behind them are not visible in Dart) and what `installerSystemCommission` changes on the server.
-- How the installer reaches the setup page and how the system id (`field_5b`, `field_5f`) is first obtained.
-- The bodies of the callbacks of step 11 beyond the second sync, and the navigation after a successful commission.
-- The order in which the step cards run for a given product (`_changeSetupStepStates`, `_stepStateMap`) and which steps the filter drops for which product.
-- Whether the installer endpoints ([passport_login](../api/charging_hes_installer_svc/passport_login.md) and the others) are used in the consumer build.
+- Where the number in the system id comes from before the installer's select-scene step (the creation of the installer system) was not traced — traced 2026-10-20: see Trigger for how the id reaches the setup page.
+- The order in which the step cards run for a given product and which steps the filter drops: the list comes from `InitSetupModel` (the kit's `initflow_opening_params` answer, step 1) and the business-side callback `shouldShowSetupStep`; neither is visible in Dart — traced 2026-10-20: `_changeSetupStepStates` is not an ordering function (see Side effects).
+- Whether the consumer build ever reaches the installer endpoints: the URL choice of the platform list is by the system id, not by `isProApp` (see Preconditions); whether a consumer flow ever supplies a system id was not determined — traced 2026-10-20: the callers of `/initialSetupPage` that put the key `systemId` into the arguments are listed in Trigger; the other callers (product home pages) do not.
