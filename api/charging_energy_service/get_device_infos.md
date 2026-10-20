@@ -71,7 +71,7 @@ Called from:
 
 ## Known unknowns
 
-- Which serial numbers the caller sends: `A17b1StationLogic::onA1790CardPressed` passes the list; its content was not decoded.
+- Which serial numbers the caller sends: `A17b1StationLogic::onA1790CardPressed` passes the list; its content was not decoded. — traced 2026-10-20: `A17b1StationLogic::onA1790CardPressed` (`charging/ui/page/station/A17b1/a17b1_station_logic.dart @0x2e8b930`) passes slots of its own frame (`@0x2e8b920`..`@0x2e8b924`) and the named arguments `dialog` and `fail`; the content of the list was not followed
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

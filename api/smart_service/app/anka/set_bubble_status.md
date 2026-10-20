@@ -64,7 +64,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The values of `status` are not decoded; `BubbleStatusService` (`report`, `_retrySingle`) retries failed reports.
+- The values of `status` are not decoded; `BubbleStatusService` (`report`, `_retrySingle`) retries failed reports. — reclassified: server (2026-10-20: status values are a server convention)
 
 ## Device-tested by
 

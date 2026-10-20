@@ -73,7 +73,7 @@ Called from:
 
 - Type of `identifier_id`: a value loaded from a station model field whose declared type is not visible. — attempted 2026-10-20 (two-hop not readable: the sender is in a closure of `SystemA17E2FlowChartLogic` (`micro_hes/src/a17e2/station/system_flow/system_a17e2_flow_chart_logic.dart @0x35614c0`) and the station model field behind `identifier_id` has no declaration in the asm)
 - Which other `type` values exist: the app stores the constant 2 here; `type` 1 appears in the removed 3.18.0 senders of the sibling endpoints (see [clear](clear.md)). What the numbers select on the server is not known.
-- What `disaster_details` encodes (int): only the class field is listed; no reader was followed.
+- What `disaster_details` encodes (int): only the class field is listed; no reader was followed. — reclassified: server (2026-10-20: the integer is server data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

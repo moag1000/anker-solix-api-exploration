@@ -58,13 +58,15 @@ none traced: no numeric error code is compared in the sender or its closures rea
 
 - `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart`: `<anonymous closure> in DeviceLogsLogic::_pollUploadState` @0x29224f0 (encryptionRequestHttp; encrypted: true)
 
+Poll rule (app side, traced 2026-10-20, `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart`): `_pollUploadState` (`@0x2921f38`..`@0x29220b8`) starts a one-shot `Timer` with a constant `Duration` of 6000000 microseconds (`pp+0x36d40`, `@0x29220b0`), that is 6 seconds, and `_recheckPoll` (`@0x292270c`) logs `deviceLog_pollCount=` with the count and `max=` (`@0x2922758`, `@0x2922780`), compares the count with 100 as an unboxed integer (`cmp x1, #0x64` `@0x29227b0`, branch `@0x29227b4`) and polls again below it (`_pollUploadState` `@0x29227c4`) or ends the task with `_finishTask` (`@0x29227f8`). So the app asks at most 100 times every 6 seconds, about ten minutes.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- The meaning of `url` (a link to the uploaded device log, by name only) and how long the poll runs: the poll interval and the retry limit are in `_recheckPoll`, which was not read.
+- The meaning of `url` (a link to the uploaded device log, by name only): not an app-side fact — reclassified: server (2026-10-20); the poll interval and the retry limit are in Callers in app.
 - Where `upload_id` comes from: it is a field of the polling state (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x2922540`), set by the code that started the upload; not traced.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

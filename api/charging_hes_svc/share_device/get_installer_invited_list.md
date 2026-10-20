@@ -64,7 +64,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The meaning of `sourceType` is not decoded.
+- The meaning of `sourceType` is not decoded. — reclassified: server (2026-10-20: source types are server enums)
 - Whether the installer app (variant of the same URLs) reads the same list is not known.
 
 ## Device-tested by

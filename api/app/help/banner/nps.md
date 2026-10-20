@@ -52,6 +52,8 @@ Called from:
 - `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart::getNpsBannerData`
 - `charging/ui/page/user/discover/user_discover_logic.dart::getNpsBannerData`
 
+Answer path (app side, traced 2026-10-20): the survey popup is answered through `DeviceMainLogic::bannerClick`, which calls `handleSurveyPopup` with `handle_type` 1 directly and 2 in a dialog closure; the values and addresses are on [../handle_survey_popup.md](../handle_survey_popup.md#request).
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
@@ -59,7 +61,6 @@ Called from:
 ## Known unknowns
 
 - What distinguishes an NPS banner from the `banners` of the sibling endpoint `banners` (the same model is parsed): the server selects by URL; the model has `category` and `banner_id` but their values were not read.
-- How the survey popup is answered: see `handle_survey_popup`.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

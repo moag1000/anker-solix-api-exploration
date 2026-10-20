@@ -27,6 +27,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | `device_sn` | string | yes | `"<device_sn>"` | `charging/http/http_request_repository_impl.dart @0x38c7648` (caller load `charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_lab_function_logic.dart @0x38c7558` (see below)) |
 | `charging_device_identity_status` | int (Smi, w) | yes | | `charging/http/http_request_repository_impl.dart @0x38c765c` (unboxed int parameter tagged by `lsl x2, x1, #1` `charging/http/http_request_repository_impl.dart @0x38c766c` and stored with `stur w2` `@0x38c7670`) |
 
+Values sent (app side, traced 2026-10-20): The caller sends 1 when its bool parameter is true and 0 otherwise; the read side `get_device_setting` casts the same-named key to `int` (`charging/http/http_request_repository_impl.dart @0x28a7eec`).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -70,7 +72,6 @@ Called from:
 
 ## Known unknowns
 
-- The value domain of the status: the caller sends 1 when its bool parameter is true and 0 otherwise; the read side `get_device_setting` casts the same-named key to `int` (`charging/http/http_request_repository_impl.dart @0x28a7eec`).
 - What the status controls on the device (names only). — reclassified: device test row 154 (2026-10-20: what the setting does on the charger is behaviour of the device, only the endpoint and key names are in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

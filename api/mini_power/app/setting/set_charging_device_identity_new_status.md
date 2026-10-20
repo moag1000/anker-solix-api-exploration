@@ -27,6 +27,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | `device_sn` | string | yes | `"<device_sn>"` | `charging/http/http_request_repository_impl.dart @0x38c9774` (caller load `charging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_new_lab_function_logic.dart @0x38c9684` (see below)) |
 | `charging_device_identity_new_status` | bool | yes | | `charging/http/http_request_repository_impl.dart @0x38c9788` (`true` when the unboxed int parameter equals 1: `cmp x1, #1` `charging/http/http_request_repository_impl.dart @0x38c9798`, `r1 = true` `@0x38c97a0`, `r1 = false` `@0x38c97a8`) |
 
+Values sent (app side, traced 2026-10-20): It sends 1 when its bool parameter is true and 0 otherwise (`tst` in `arging/ui/page/device/a2687/a2687setting/a2687_lab_function/a2687_new_lab_function_logic.dart @0x38c96b0`), so the builder sends `true` for 1 only.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -70,7 +72,6 @@ Called from:
 
 ## Known unknowns
 
-- Which integer values the caller passes: it sends 1 when its bool parameter is true and 0 otherwise (`tst` `@0x38c96b0`), so the builder sends `true` for 1 only.
 - What the flag controls on the device (names only). — reclassified: device test row 154 (2026-10-20: what the setting does on the charger is behaviour of the device, only the endpoint and key names are in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

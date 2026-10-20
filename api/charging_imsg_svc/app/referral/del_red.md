@@ -51,13 +51,14 @@ No error code specific to this endpoint was traced; the shared transport codes a
 - `HttpRequestController.delReferralRedDot` (`charging/http/http_request_repository.dart @0x46ada14`)
 - `UserMainLogic._delReferralRedDot` (`charging/ui/page/user/main/user_main_page_logic.dart @0x46ad9cc`), through `HttpRequestController.delReferralRedDot`
 
+Trigger (grep of the asm, traced 2026-10-20): `_delReferralRedDot` is called from `UserMainLogic::pushToReferralPage` (`charging/ui/page/user/main/user_main_page_logic.dart @0x46ad948`), so the red dot is deleted when the user opens the referral page from the user main page.
+
 ## Since/changed
 
 3.18.0: absent (the URL string is not in the 3.18.0 object pool). 3.24.3: present (pool `pp+0xc1c18`). since: 3.24.3.
 
 ## Known unknowns
 
-- The trigger (which tap calls `_delReferralRedDot`) was not traced beyond the caller function.
 
 ## Device-tested by
 

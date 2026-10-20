@@ -74,7 +74,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The meaning and range of `reminder_type`, `cycle_type`, `repeat_week_mask`, `interval_hour` and `status` and the time unit are not decoded.
+- The meaning and range of `reminder_type`, `cycle_type`, `repeat_week_mask`, `interval_hour` and `status` and the time unit are not decoded. — reclassified: device test row 154 (2026-10-20: reminder types and masks act on the charger)
 - Whether a missing `id` creates a reminder (and the answer returns the new id) is inferred, not traced.
 
 ## Device-tested by

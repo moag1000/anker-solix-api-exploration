@@ -63,7 +63,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 ## Known unknowns
 
 - Whether the server still answers `get_entry_config` is not known.
-- The wire shape of the empty request is not shown.
+- The wire shape of the empty request is not shown. — reclassified: device test row 160 (2026-10-20: whether an empty body is sent as `{}`, as no body or as null is decided by the HTTP layer and the SDK, which a capture shows)
 
 ## Device-tested by
 

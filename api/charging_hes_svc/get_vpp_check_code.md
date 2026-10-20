@@ -35,6 +35,8 @@ Both senders store 3 keys in a map literal with type arguments `<String, Object>
 | `get_code` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x292c614`; `settings/src/common/menu_controller/vpp_menu_controller.dart @0x367aca0` |
 | `current_version` | int (unboxed, x) | yes | current time in seconds | `charging/http/http_request_repository_impl.dart @0x292c628`; `settings/src/common/menu_controller/vpp_menu_controller.dart @0x367acb4` |
 
+Values of `get_code` (app side, traced 2026-10-20): `HomeSettingLogic::requestVppInfo` passes the bool constant `false` as the second argument of `getVppInfo` (`r3 = false`, `charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart @0x292c488`, call `@0x292c494`) and `VppMenuController::onInit` calls `checkSupport` with `false` (`r2 = false`, `settings/src/common/menu_controller/vpp_menu_controller.dart @0x367abc4`, call `@0x367abd8`); `VppController::requestVppInfo` (`charging/ui/page/device/a5101/setting/vpp/controller.dart @0x2978a84`, call `@0x2978a94`) passes a slot of its own frame. So `get_code` is a bool in two of the three call paths and `false` in both of them.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -85,8 +87,8 @@ Called from:
 
 ## Known unknowns
 
-- The types of `station_id` and `get_code` in `getVppInfo`: both are parameters stored without conversion into a `<String, Object>` map.
-- What `get_code` selects: `checkSupport` sends the constant false, `getVppInfo` a caller value.
+- The type of `station_id` and of the `get_code` value passed by `VppController::requestVppInfo`: slots of the caller frames (`charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart @0x292c47c`, `charging/ui/page/device/a5101/setting/vpp/controller.dart @0x2978a80`); `get_code` is a bool constant in the other two paths (Request) — attempted 2026-10-20 (two-hop not readable).
+- What `get_code` selects: `checkSupport` sends the constant false, `getVppInfo` a caller value. — traced 2026-10-20: the app sends `false` from `HomeSettingLogic::requestVppInfo` and `checkSupport`, and a frame slot from `VppController::requestVppInfo` (Request); what `true` selects on the server is not known from the app
 - Why `current_version` is the current time: the app sends seconds since the epoch (two integer divisions of the microsecond clock); the server meaning is not known.
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.

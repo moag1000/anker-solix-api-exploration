@@ -68,7 +68,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The format of `current_time` and the values of `welcome_type` are not decoded.
+- The format of `current_time` and the values of `welcome_type` are not decoded. — reclassified: server (2026-10-20: the value formats are a server convention)
 
 ## Device-tested by
 

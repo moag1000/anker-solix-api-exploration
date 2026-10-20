@@ -78,7 +78,7 @@ Called from:
 
 ## Known unknowns
 
-- The type of `stationId`: `field_97` of `A5101MqttLogic` was not resolved to a declaration.
+- The type of `stationId`: `field_97` of `A5101MqttLogic` was not resolved to a declaration. — attempted 2026-10-20 (two-hop not readable: `field_97` of `A5101MqttLogic` is set by `updateDeviceStationId` (`charging/ui/page/device/a5101/ota/a5101_mqtt_logic.dart @0x479dca4`) from `FamilyMainPageLogic::_changeDevice` (`charging/ui/page/family/family_main_page_logic.dart @0x479d134`), which passes `field_7` of an `Rx` value or the empty string, and the class of that value has no declaration in the asm; the caller closure of `sendSetTimeOta` passes `field_f` of its context, `charging/ui/page/device/a5101/setting/firmware_update/a5101_firmware_update_logic.dart @0x42ea5ec`)
 - The unit and meaning of the first field of the delay parameter (times 3600, so probably hours): only the arithmetic was read.
 - How `messageId` is matched with the MQTT progress messages: `timeOut` was not read.
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)

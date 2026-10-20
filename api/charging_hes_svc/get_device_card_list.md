@@ -30,6 +30,8 @@ encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryptio
 |---|---|---|---|---|
 | `station_id` | string | yes | `"<station_id>"` | `charging/ui/page/family/family_main_http_reposity.dart @0x479c644` |
 
+Polling helper (app side, traced 2026-10-20, `charging/ui/page/family/family_main_http_reposity.dart`): `FamilyMainHttpReposity::_startTimer` (`@0x23e305c`) looks the URL up in a map field of the repository (`field_8b` `@0x23e30a8`, `_getValueOrData` `@0x23e30bc`), and when there is no entry it creates a `Timer.periodic` (`@0x23e30fc`) and stores it under the URL with `[]=` (`@0x23e310c`); the timer closure (`@0x23e3128`) calls `isLogin` (`@0x23e3168`) and skips its work when the app is not logged in (`tbnz` `@0x23e316c`). The period comes from the `loopSeconds` argument, whose body in `HttpRequestMixin` is not emitted.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -68,8 +70,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- What `_startTimer` (`charging/ui/page/family/family_main_http_reposity.dart @0x479c634`) does with the URL: it is called with the same URL literal before the request and was not read.
-- The named argument `isAIotErrorCode` (`charging/ui/page/family/family_main_http_reposity.dart @0x479c6c0`) changes how the HTTP layer reads error codes; the layer was not read for it.
+- The named argument `isAIotErrorCode` (`charging/ui/page/family/family_main_http_reposity.dart @0x479c6c0`) changes how the HTTP layer reads error codes; the layer was not read for it. — traced 2026-10-20: the name occurs only in the argument lists of the repository files (for example `charging/ui/page/family/family_main_http_reposity.dart @0x479c6c0`) and in no function of `charging/http/` or `charging/impl/http_service_impl.dart`, so no reader of the flag was found in the emitted code
 - Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

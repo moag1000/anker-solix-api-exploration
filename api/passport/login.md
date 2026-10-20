@@ -42,6 +42,8 @@ What `processPassword` (`validate_account_model.dart @0x2faf368`) does to the pa
 
 Scope note: pre-processing named only; not described (vendor protection; decision pending with the repo owner).
 
+Login entry (app side, traced 2026-10-20): the Dart `LoginLogic::startLogin` that sends this request is called from `LoginLogic::checkIsFormat` (`charging/ui/page/account/login/login_logic.dart @0x3bd6d6c`) on the Dart login page; the feature code of the app (35 call sites) calls `LoginHandler::startLoginFlow`, which starts the native `ank_user_module` container instead; the evidence is on [../auth.md](../auth.md#login-endpoints).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -121,8 +123,8 @@ Transport-level codes (401, 461, 463, 26084, 26085) are handled before the login
 
 ## Known unknowns
 
+- Which entry a first start of the app shows (the Dart login page or the native container): not decided, see [../auth.md](../auth.md#login-endpoints) — traced 2026-10-20.
 - Which transport path the login request takes at run time (SDK path or plain Dio path); depends on the SDK state, not decidable from asm.
-- Whether the native `ank_user_module` login is the default entry in 3.24.3 or only a variant; it receives a `UserData` with the token (`user_data.dart`), not the HTTP response.
 - What the server returns for `26123` and when it returns `26109`.
 - Whether the server requires `ab`, `time_zone`, `transaction` for accounts in non-default regions (upstream sends them, the app does not).
 

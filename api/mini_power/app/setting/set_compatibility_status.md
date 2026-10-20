@@ -27,6 +27,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | `device_sn` | string | yes | `"<device_sn>"` | `charging/http/http_request_repository_impl.dart @0x3e55ed8` (caller load `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart @0x3e55cec` (see below)) |
 | `compatibility_status` | int (Smi, w) | yes | | `charging/http/http_request_repository_impl.dart @0x3e55eec` (unboxed int parameter tagged by `lsl x2, x1, #1` `charging/http/http_request_repository_impl.dart @0x3e55efc` and stored with `stur w2` `@0x3e55f00`) |
 
+Values sent (app side, traced 2026-10-20): The caller sends 1 when its bool parameter is true and 0 otherwise (`tst` in `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart @0x3e55d04`); the read side `get_device_setting` casts the same-named key to `int` (`charging/http/http_request_repos
+
 ## `param_type`/`cmd`
 
 n/a
@@ -71,7 +73,6 @@ Called from:
 
 ## Known unknowns
 
-- The value domain of the switch: the caller sends 1 when its bool parameter is true and 0 otherwise (`tst` in `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart @0x3e55d04`); the read side `get_device_setting` casts the same-named key to `int` (`charging/http/http_request_repository_impl.dart @0x28a7e74`).
 - What the switch controls on the device (names only). — reclassified: device test row 154 (2026-10-20: what the setting does on the charger is behaviour of the device, only the endpoint and key names are in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

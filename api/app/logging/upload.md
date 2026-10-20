@@ -91,7 +91,7 @@ Called from:
 ## Known unknowns
 
 - Types of `url` (a field in `_notifyServer`, a parameter in `uploadLogURL`), `related_device_sn` and `device_sn` (parameters of `_notifyServer`): no declared type was read at the callers.
-- Whether `source: "app"` and `os: "android"` are replaced on iOS: no branch was found in the senders.
+- Whether `source: "app"` and `os: "android"` are replaced on iOS: no branch was found in the senders. — reclassified: device test row 161 (2026-10-20: the workspace holds the Android build only, so an iOS branch cannot be checked here)
 - How the failure path works: `uploadLogURL` calls `uploadLogFail` (`charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b6568`); the failure closures were not decoded.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

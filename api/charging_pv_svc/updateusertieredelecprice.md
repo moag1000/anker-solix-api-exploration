@@ -89,7 +89,7 @@ Call sites (grep of the asm, traced 2026-10-20): the name `updateUserTieredElecP
 ## Known unknowns
 
 - The JSON type of `price`: the field is a double in the class, and `toJson` stores the field object itself (`charging/ui/page/price_setting_page/currency_elec_model.dart @0x2401a44`); whether the encoder sends a number or text was not decoded.
-- The meaning of `from` and `to` (kWh bounds or time bounds): both are strings in the class; no reader was followed.
+- The meaning of `from` and `to` (kWh bounds or time bounds): both are strings in the class; no reader was followed. — reclassified: server (2026-10-20: the bounds are strings decided by the server model)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

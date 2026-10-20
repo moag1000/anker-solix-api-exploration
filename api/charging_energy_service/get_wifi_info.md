@@ -69,7 +69,7 @@ Called from:
 
 ## Known unknowns
 
-- Which serial number `WifiInfoLogic::_getWifiInfo` passes (the caller was not read).
+- Which serial number `WifiInfoLogic::_getWifiInfo` passes (the caller was not read). — traced 2026-10-20: `_getWifiInfo` (`charging/ui/page/device/a17b1/wifi_info/wifi_info_logic.dart @0x344b2b4`) passes slots of its own frame (`@0x344b2a4`..`@0x344b2b0`); the chain behind the slots was not followed
 - The unit and range of `rssi`: only the class field type is listed. — reclassified: device test row 155 (2026-10-20: the number comes from the device through the cloud; compare the app display with the raw value)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

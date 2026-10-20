@@ -85,7 +85,7 @@ Called from:
 ## Known unknowns
 
 - How `resolveListResponseData` finds the list in the response (a fixed key or the `data` array): the helper was not read.
-- What the request does with the empty body map for a GET: how `Method.get` bodies are sent is described in `api/encryption.md`; the map has no entries here.
+- What the request does with the empty body map for a GET: how `Method.get` bodies are sent is described in `api/encryption.md`; the map has no entries here. — reclassified: device test row 160 (2026-10-20: whether an empty body is sent as `{}`, as no body or as null is decided by the HTTP layer and the SDK, which a capture shows)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

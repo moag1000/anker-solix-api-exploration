@@ -64,7 +64,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- What the request options mean (`loopSeconds`, `cacheKey`): they are arguments of the mixin function, not body keys; their values were not decoded.
+- What the request options mean (`loopSeconds`, `cacheKey`): they are arguments of the mixin function, not body keys; their values were not decoded. — traced 2026-10-20: the arguments are consumed by `HttpRequestMixin` code that Blutter does not emit (`charging/http/http_request_mixin.dart` holds only `Debouncer::run` `@0x230f7f0`), so their effect is not in the asm
 - How the closure uses `connected` to decide a device's online state: only the log text `无connected字段` is read, the full logic was not followed.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

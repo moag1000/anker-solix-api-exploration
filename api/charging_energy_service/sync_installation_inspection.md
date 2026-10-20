@@ -28,6 +28,8 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 | `page` | ? | yes | `"<page>"` | `charging/http/http_request_repository_impl.dart @0x26eb0dc` (value store `@0x26eb0ec`, parameter) |
 | `errors` | list | yes | `[]` | `charging/http/http_request_repository_impl.dart @0x26eb0f0` (value is a new empty growable list, `_GrowableList` with length 0 `@0x26eb100`, `@0x26eb104`) |
 
+`errors` (app side, traced 2026-10-20): the wrapper always sends an empty list (`charging/http/http_request_repository_impl.dart @0x26eb104`), so no caller can add entries through this function.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -77,7 +79,6 @@ Called from:
 ## Known unknowns
 
 - Types of `sn` and `page`: wrapper parameters; the literal names no value type.
-- Whether `errors` is ever filled: the wrapper always sends an empty list (`charging/http/http_request_repository_impl.dart @0x26eb104`); a caller cannot add entries through this function.
 - What `page` values the callers send and what the server stores.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

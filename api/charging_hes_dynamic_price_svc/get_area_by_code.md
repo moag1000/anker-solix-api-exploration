@@ -18,6 +18,8 @@ The URL is chosen at run time by `Api.getAreaByCode` (`base_service/api_url.dart
 
 The installer variant is documented under `charging_hes_installer_svc`.
 
+The static flag `0xad8` (traced 2026-10-20): it is `Api::isProApp`, stored once in `Api.init` (`base_service/api_url.dart @0x49ce9dc`) from a package-name test against `"anker.pros"` (`@0x49ce9c0`..`@0x49ce9cc`); true selects the installer URLs; the rule is owned by [../charging_hes_installer_svc/README.md](../charging_hes_installer_svc/README.md#variant-selector-installer-app-versus-consumer-app).
+
 ## Encrypted?
 
 encrypted: `true` (asm-traced: the sender read reaches `encryptionRequestHttp`, `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e47a8`). Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
@@ -74,7 +76,6 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 - Types of `code`, `sn` and `siteId`: values loaded from fields (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e465c`, `@0x41e460c`); the literal names no value type.
 - What the area list the closure builds contains and where `groupId` is read from (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e4874`): the closure works on a locally cached provider list; the answer's role was not decoded.
-- What static flag `0xad8` represents (installer mode): the flag's setter was not searched.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

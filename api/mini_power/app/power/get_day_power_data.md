@@ -78,7 +78,7 @@ Called from:
 ## Known unknowns
 
 - The format of `date` (the value is a parameter; the callers were not decoded for it).
-- The unit and spacing of `power_points` (`interval` and `unit` are model fields; their values were not decoded).
+- The unit and spacing of `power_points` (`interval` and `unit` are model fields; their values were not decoded). — reclassified: server (2026-10-20: `interval` and `unit` are values of the server answer)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

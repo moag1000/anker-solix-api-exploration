@@ -78,7 +78,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 - Types of `siteId`, `sourceType`, `dateType`, `start`, `end` and `global`: parameters and a field of the mixin class; the literal `<String, Object?>` names no value type.
 - Which values `dateType`, `sourceType` and `global` take: the callers of `getChartStatistics` are not in the call index of this page and were not found.
-- The meaning of the request options (`cacheKey`, `loopSeconds`, `debounceMills`): passed as options of the mixin function, not body keys; the values were not decoded.
+- The meaning of the request options (`cacheKey`, `loopSeconds`, `debounceMills`): passed as options of the mixin function, not body keys; the values were not decoded. — traced 2026-10-20: the arguments are consumed by `HttpRequestMixin` code that Blutter does not emit (`charging/http/http_request_mixin.dart` holds only `Debouncer::run` `@0x230f7f0`), so their effect is not in the asm
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -68,7 +68,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 ## Known unknowns
 
 - The role of `sub_devices` (always empty here) and of `is_delete: false` is not known.
-- The meaning of `member_type` 1 (also sent by `device_invite`) is not decoded.
+- The meaning of `member_type` 1 (also sent by `device_invite`) is not decoded. — reclassified: server (2026-10-20: member types are server enums)
 
 ## Device-tested by
 
