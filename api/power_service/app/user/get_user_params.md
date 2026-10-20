@@ -29,6 +29,8 @@ Three senders.
 | `device_sn` | ? | optional | | `ScheduleNetwork::_getUserParams`: key `@0x28504b0`, `[]=` `@0x28504b8`; added when the parameter at `fp-0x18` is non-null (`cmp w3, NULL` `@0x285049c`) |
 | `params` | object | yes | | `AKIotEVChargeCommand::getUserParams`: key `@0x2700ac4` inside the `param` map; its value type was not read |
 
+Method of the schedule sender (asm-traced): `ScheduleNetwork::_requestHttp` (`schedule_network.dart @0x284f6d0`, the same helper for both schedule calls) stores the String literal `"POST"` as `method` (`@0x284f74c`, key `@0x284f740`) next to `path` (`@0x284f730`) and `param` (`@0x284f758`) and calls `handle` with `akiot.cloud_api` (`@0x284f780`, call `@0x284f790`); see [sdk_senders.md](../../../sdk_senders.md#schedulenetwork_requesthttp).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -73,9 +75,8 @@ Called from:
 
 ## Known unknowns
 
-- The `params` and `device_sn` types of the schedule sender and the `param` map of the IoT-kit sender (parameters). Header stays string-only.
+- The `params` and `device_sn` types of the schedule sender and the `param` map of the IoT-kit sender (parameters). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: `ScheduleNetwork::_getUserParams` receives `params` and `device_sn` as untyped parameters (`schedule_network.dart @0x2850430`); its callers were not followed. Header stays string-only)
 - What the option code 30001 selects (an integer turned into a string): not decoded; the same code appears in [set_user_params](set_user_params.md). — reclassified: server (the option code meaning is defined by the server)
-- The method of `ScheduleNetwork::_requestHttp` (not read).
 
 ## Device-tested by
 

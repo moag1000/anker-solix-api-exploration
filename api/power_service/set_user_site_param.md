@@ -20,7 +20,7 @@ Yes by wrapper (asm-traced): ``setUserParams`` calls `encryptionRequestHttp` (`c
 
 ## Request
 
-The body is the argument that `setUserParams` receives in register `r3` (stored at `@0x2886db4`, pushed for the call at `@0x2886e2c`); the other two arguments (`r2`, `r6`) become the callback closures. The function builds no keys itself. No direct call site of `HttpRequestControllerImpl::setUserParams` appears in the Blutter dump, but the dump omits mixin-deduplicated code, where the forwarder `AE100ApiExt.setUserParamsAsync` lives. UNCONFIRMED candidate (mixin dump incomplete): callers of that forwarder exist in `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart` (`@0x2886c44`, `@0x28874a8`, `@0x28876bc`) and pass a body of the shape `{site_id, user_params: [{param_type, param_value}]}`, with `param_type` raw `80002` (Smi, so 40001) and `param_value` the string `"2"`. That the forwarder reaches this wrapper and URL is not proven.
+The body is the argument that `setUserParams` receives in register `r3` (stored at `charging/http/http_request_repository_impl.dart @0x2886db4`, pushed for the call at `@0x2886e2c`); the other two arguments (`r2`, `r6`) become the callback closures. The function builds no keys itself. No direct call site of `HttpRequestControllerImpl::setUserParams` appears in the Blutter dump, but the dump omits mixin-deduplicated code, where the forwarder `AE100ApiExt.setUserParamsAsync` lives. UNCONFIRMED candidate (mixin dump incomplete): callers of that forwarder exist in `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart` (`@0x2886c44`, `@0x28874a8`, `@0x28876bc`) and pass a body of the shape `{site_id, user_params: [{param_type, param_value}]}`, with `param_type` raw `80002` (Smi, so 40001) and `param_value` the string `"2"`. That the forwarder reaches this wrapper and URL is not proven.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
@@ -56,9 +56,9 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The request body keys are only a candidate (see Request); the forwarder is not in the dump.
+- The request body keys are only a candidate (see Request); the forwarder is not in the dump. — traced 2026-10-20: the forwarder is a mixin application that the dump does not contain; no body literal exists for it in the asm
 - Which user-level site parameters the endpoint stores is not known.
-- Whether the forwarder really calls this wrapper is not established (mixin code missing from the dump); the unit of `param_type` 40001 and the meaning of `param_value` "2" are not known.
+- Whether the forwarder really calls this wrapper is not established (mixin code missing from the dump); the unit of `param_type` 40001 and the meaning of `param_value` "2" are not known. — attempted 2026-10-20 (two-hop not readable: the forwarder is mixin code that Blutter does not emit, so the type of the value and the caller cannot be read)
 
 ## Device-tested by
 

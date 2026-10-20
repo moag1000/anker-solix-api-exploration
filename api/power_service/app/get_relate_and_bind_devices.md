@@ -78,7 +78,7 @@ Called from:
 
 ## Known unknowns
 
-- What the `deviceInfos` entries of the installer-check sender contain (the closure maps them with `List.from` in `@0x2ac46d0`; no model class is named).
+- What the `deviceInfos` entries of the installer-check sender contain (the closure maps them with `List.from` in `base_service/service/business_service.dart @0x2ac46d0`; no model class is named). — traced 2026-10-20: the closure maps the entries with `List.from` (no model class), so the app keeps them as an untyped list; their content is server data
 - Why `data` holds a JSON string in that sender (the closure `jsonDecode`s it): the server shape is not visible from the app.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

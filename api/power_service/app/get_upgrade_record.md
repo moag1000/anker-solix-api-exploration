@@ -84,7 +84,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sn` and `site_id` (a parameter and an object field; `<String, Object>` only says non-null).
+- Types of `device_sn` and `site_id` (a parameter and an object field; `<String, Object>` only says non-null). — attempted 2026-10-20 (two-hop not readable: the wrapper caller read in this pass, `FirmwareUpdatesHistoryLogic.getUpgradeRecordReq` (`charging/ui/page/user/firmware_updates/firmware_updates_history/firmware_updates_history_logic.dart @0x2911fcc`), shows no default or declared type for the values; the two A5101 senders (`requestHttp`) were not followed. Header stays string-only)
 - What the `type` values 1 and 2 select on the server (the senders send constants).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

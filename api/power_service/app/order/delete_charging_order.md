@@ -55,6 +55,8 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 - `SessionsDetailLogic._performDeleteSession` (`ev_charger/src/ev_charger/page/home/charge_sessions/sessions_detail/sessions_detail_logic.dart @0x395b15c`)
 
+Failure handling of the caller (asm-traced): `SessionsDetailLogic._performDeleteSession` (`ev_charger/src/ev_charger/page/home/charge_sessions/sessions_detail/sessions_detail_logic.dart`) awaits `deleteChargingSession` (`@0x395b15c`, `@0x395b168`) and compares the result type with the `AKResultType` object "success" (`pp+0xa5b0`, `cmp w1, w16` `@0x395b1b0`). On success it shows the toast `deleteSucceed` (`@0x395b1e0`, `show` `@0x395b200`) and navigates back with `needRefresh`; otherwise it logs "deleteSession failed: " (`@0x395b284`) and shows a toast with a localisation key (`commonNetWorkErrorFix` is one of them, `@0x395b374`, `show` `@0x395b394`); the compares between `@0x395b29c` and `@0x395b36c` that pick the key were not decoded.
+
 ## Since/changed
 
 3.18.0: present (URL string in the 3.18.0 object pool, `pp+0x83520`); the sender function has no literal difference between 3.18.0 and 3.24.3 (`tools/cmp_since.py`: ordered string, integer and type literals compared; branch logic not compared). Not new in 3.24.3: the inventory learned URL literals without a leading slash, which made the URL visible. 3.24.3: present. since: ≤3.18.0.
@@ -62,7 +64,6 @@ No error code specific to this endpoint was traced; the shared transport codes a
 ## Known unknowns
 
 - Whether the deletion is permanent and whether a charger-side record also disappears is not known.
-- How the caller reacts to a failure result was not read.
 
 ## Device-tested by
 

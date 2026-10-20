@@ -29,7 +29,7 @@ No request keys: all three senders send an empty body.
 
 - `HttpRequestControllerImpl::getUserSiteList` (`http_request_repository_impl.dart @0x28c2f6c`): an empty map literal (`empty_array`, `Map._fromLiteral`), no `[]=` call.
 - `HomeBaseHttpReposity::querySiteList` (`home_base_http_reposity.dart @0x238e380`): an empty `<String, String>` map (`@0x238e51c`, `empty_array` `@0x238e524`, `Map._fromLiteral` `@0x238e52c`); the call also carries a `cacheKey` argument built from the URL and the user id (`getUserId` `@0x238e488`).
-- `AKIotEVChargeCommand::getUserSiteList`: the `param` entry of the command map is an empty map (`empty_array` `@0x2aaeabc`, `Map._fromLiteral` `@0x2aaeac4`).
+- `AKIotEVChargeCommand::getUserSiteList`: the `param` entry of the command map is an empty map (`empty_array` `ev_charger/src/ev_charger/sdk/command/ev_charge_command.dart @0x2aaeabc`, `Map._fromLiteral` `@0x2aaeac4`).
 
 ## `param_type`/`cmd`
 
@@ -55,7 +55,7 @@ Response keys: see Response; no capture.
 
 ## Errors seen
 
-None traced. The builders' failure callbacks (`postJML` template `@0x226824c`, `home_base_http_reposity.dart @0x238fa00`/`@0x238f974` which call `_onQuerySiteListSuccess` for both outcomes) compare no code. Error codes are catalogued in `api/errors.md`.
+None traced. The builders' failure callbacks (`postJML` template `charging/http/http_request_repository_impl.dart @0x226824c`, `home_base_http_reposity.dart @0x238fa00`/`@0x238f974` which call `_onQuerySiteListSuccess` for both outcomes) compare no code. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -81,9 +81,9 @@ Called from:
 
 ## Known unknowns
 
-- How the IoT-kit sender's caller parses `site_list` (not read). Header stays string-only.
-- Why the two app senders parse the same key into two different model classes (`UserSiteListModel` vs `StationModel`).
-- What `cacheKey` does to the request: it is an argument of `requestHttp` (`@0x238e5ac`), not part of the body.
+- How the IoT-kit sender's caller parses `site_list` (not read). Header stays string-only. — traced 2026-10-20: not decoded in this pass (IoT-kit sender caller); the reason given in the bullet stands
+- Why the two app senders parse the same key into two different model classes (`UserSiteListModel` vs `StationModel`). — reclassified: server (the reason for two model classes is not recorded in the app)
+- What `cacheKey` does to the request: it is an argument of `requestHttp` (`@0x238e5ac`), not part of the body. — traced 2026-10-20: the call at `charging/ui/page/home/home_base_http_reposity.dart @0x238e5ac` passes `cacheKey` among the named arguments `cacheKey`, `complete`, `fail`, `needTerminal`, `success` to a mixin `requestHttp` that the dump does not contain; `charging/http/json_db_util.dart` keeps a SQLite table `json_db_cache2` with a `cacheKey` column (`setByKey`, `getByKey`), which suggests but does not prove that the mixin caches the response there
 
 ## Device-tested by
 

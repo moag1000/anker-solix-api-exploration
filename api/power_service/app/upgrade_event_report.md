@@ -14,7 +14,7 @@ Reports the result of one firmware upgrade: `AnkerOtaBaseLogic::reportBleOtaReco
 
 `POST /power_service/v1/app/upgrade_event_report` (asm-traced): URL string at `http_request_repository_impl.dart @0x34227b4`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x34227ac`, in `HttpRequestControllerImpl::getReportBleUpgrade` (`http_request_repository_impl.dart @0x3422678`).
 
-The IoT-kit sender `OTAUpgradeRecordReporter::_reportSingle` puts the path `"/power_service/v1/app/upgrade_event_report"` (`@0x280a8f4`), the string literal `"POST"` (`@0x280a90c`) and a `param` entry into a command map for `akIoTKitManager.handle` (`@0x280a97c`); the method there is a string literal, not a `Method` pool object.
+The IoT-kit sender `OTAUpgradeRecordReporter::_reportSingle` puts the path `"/power_service/v1/app/upgrade_event_report"` (`ota_kit/src/services/ota_upgrade_record_reporter.dart @0x280a8f4`), the string literal `"POST"` (`@0x280a90c`) and a `param` entry into a command map for `akIoTKitManager.handle` (`@0x280a97c`); the method there is a string literal, not a `Method` pool object.
 
 ## Encrypted?
 
@@ -35,7 +35,7 @@ The repository sender `getReportBleUpgrade` (`http_request_repository_impl.dart 
 | `upgrade_time` | ? | yes | | key `@0x3422748`, value store `@0x3422758` (parameter at `fp-0x30`) |
 | `site_id` | string | yes | `""` | key `@0x342275c`, literal empty string `@0x3422768`, store `@0x342276c` |
 
-The IoT-kit sender's `param` entry is the result of `toMap()` on a record object (`@0x280a928`); its keys were not read.
+The IoT-kit sender's `param` entry is the result of `toMap()` on a record object (`ota_kit/src/services/ota_upgrade_record_reporter.dart @0x280a928`); its keys were not read.
 
 ## `param_type`/`cmd`
 
@@ -80,9 +80,9 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sn`, `device_pn`, `device_type`, `after_version`, `before_version` and `upgrade_time` (parameters; `reportBleOtaRecord` was not followed). Header stays string-only.
-- The `toMap()` keys of the IoT-kit record and whether they equal the repository keys.
-- The response body: not read by the repository caller; the IoT-kit callback was not read.
+- Types of `device_sn`, `device_pn`, `device_type`, `after_version`, `before_version` and `upgrade_time` (parameters; `reportBleOtaRecord` was not followed). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the only caller, `AnkerOTABaseLogic.reportBleOtaRecord` (`charging/ui/page/device/anker_ota/base/anker_ota_base_logic.dart @0x34225f0`), passes values with `""` defaults and an integer, but the slot-to-key mapping was not followed. Header stays string-only)
+- The `toMap()` keys of the IoT-kit record and whether they equal the repository keys. — traced 2026-10-20: not decoded in this pass (IoT-kit `toMap()`); the reason given in the bullet stands
+- The response body: not read by the repository caller; the IoT-kit callback was not read. — reclassified: server (the app does not read the body in the traced callers; its keys are not visible)
 
 ## Device-tested by
 

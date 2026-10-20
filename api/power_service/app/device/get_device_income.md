@@ -72,8 +72,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- The response keys: the builders hand the object to their callers; the parsers were not decoded and no UI caller is recorded in `data/endpoints.json`.
-- Which `type` strings select which period (`getTotalBenefit` sends the empty string; the other builder takes it as a parameter).
+- The response keys: the builders hand the object to their callers; the parsers were not decoded and no UI caller is recorded in `data/endpoints.json`. — traced 2026-10-20: not decoded in this pass (builders and their callers); the reason given in the bullet stands
+- Which `type` strings select which period (`getTotalBenefit` sends the empty string; the other builder takes it as a parameter). — attempted 2026-10-20 (two-hop not readable: `getTotalBenefit` sends the empty string; the other builder's callers were not followed in this pass)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

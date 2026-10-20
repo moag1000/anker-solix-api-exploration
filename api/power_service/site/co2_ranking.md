@@ -67,7 +67,7 @@ Called from:
 
 ## Known unknowns
 
-- Type of `site_id`: the value is `field_7` of an Rx object with no default (`@0x23a8d38`); the object class was not followed. Header stays string-only.
+- Type of `site_id`: the value is `field_7` of an Rx object with no default (`@0x23a8d38`); the object class was not followed. Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the only caller, `StationEnergySystemLogic.getRankingInfo` (`charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart @0x23a8d80`), passes an Rx field without default. Header stays string-only)
 
 ## Device-tested by
 

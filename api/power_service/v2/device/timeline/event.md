@@ -46,7 +46,7 @@ Read by `S1S2HomeLogic._fetchAndShowGuardianUnlockSheet` (`s1_s2/src/page/home/s
 | `data.list` | list | no | `[ ... ]` | `@0x2a08e64` |
 | `data.top_event` | map | no | `{ "id": ..., "is_read": false }` | `@0x2a08ec8`; when missing the app logs `No top_event found` (`@0x2a08eec`) |
 | `data.top_event.is_read` | bool | no | `false` | `@0x2a08fc4`; when true the sheet is skipped (`top_event already read - skip`, `@0x2a09194`) |
-| `data.top_event.id` | not decoded | yes | not decoded | `@0x2a091dc`; a missing `id` logs `top_event missing id field` (`@0x2a09244`); the app then marks the event read with [batch_read](event/batch_read.md) |
+| `data.top_event.id` | int (type-checked `int?`, `r8 = int?` `@0x2a09228`) | yes | not decoded | `@0x2a091dc`; a missing `id` logs `top_event missing id field` (`@0x2a09244`); the app then marks the event read with [batch_read](event/batch_read.md) |
 
 The log texts at `@0x2a09270` and `@0x2a0929c` name the fields `type` and `eventLevel` of the top event (parsed by the journal service, not in this function).
 

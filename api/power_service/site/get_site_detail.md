@@ -29,7 +29,7 @@ All three senders type their `site_id` map `<String, String>`, so the value is a
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | string | yes | `"<site_id>"` | `getGreenPPSSiteDetail` (`http_request_repository_impl.dart @0x28f4c38`): key `@0x28f4c8c`, store `@0x28f4c9c`, type arguments `@0x28f4ca0`; `getStationDetail` (`@0x23f69d8`): key `@0x23f6a30`, store `@0x23f6a40`, type arguments `@0x23f6a44`; IoT-kit sender: `param` map key `@0x47ade0c`, store `@0x47ade24` (`field_f` of the controller), type arguments `@0x47ade28` |
+| `site_id` | string | yes | `"<site_id>"` | key `charging/http/http_request_repository_impl.dart @0x28f4c8c`; `getGreenPPSSiteDetail` (`http_request_repository_impl.dart @0x28f4c38`): key `@0x28f4c8c`, store `@0x28f4c9c`, type arguments `@0x28f4ca0`; `getStationDetail` (`@0x23f69d8`): key `@0x23f6a30`, store `@0x23f6a40`, type arguments `@0x23f6a44`; IoT-kit sender: `param` map key `flutter_charging_beginning/beginning/state_cards/rename_device/rename_device_controller.dart @0x47ade0c`, store `@0x47ade24` (`field_f` of the controller), type arguments `@0x47ade28` |
 
 ## `param_type`/`cmd`
 
@@ -86,9 +86,9 @@ Called from:
 
 ## Known unknowns
 
-- The response handling of the IoT-kit sender (`loadName`): not read. Header stays string-only.
-- Which sender each of the 15 callers uses was not mapped.
-- The element classes of the list keys in both models.
+- The response handling of the IoT-kit sender (`loadName`): not read. Header stays string-only. — traced 2026-10-20: not decoded in this pass (IoT-kit sender `loadName`); the reason given in the bullet stands
+- Which sender each of the 15 callers uses was not mapped. — traced 2026-10-20: not decoded in this pass (15 callers); the reason given in the bullet stands
+- The element classes of the list keys in both models. — reclassified: server (element classes of untyped lists are not named in the app)
 
 ## Device-tested by
 

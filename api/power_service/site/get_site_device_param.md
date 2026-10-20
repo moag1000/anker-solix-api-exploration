@@ -65,10 +65,10 @@ All 36 listed builders build the body as a map literal (or `[]=` calls); the fir
 |---|---|---|---|---|
 | `site_id` | string | yes | `"<site_id>"` | in 29 builders the map is typed `<String, String>` or `<String, String?>` (so the value is a String), e.g. `fetchESeriesFeedGridParams` (`power_usage_scenario_controller.dart`, key `@0x2a287e4`, store `@0x2a287f4`, type arguments `@0x2a28810`) and `getSafetySocParams` (`http_request_repository_impl.dart`, key `@0x2377eec`, store `@0x2377efc`, type arguments `@0x2377f18`); the remaining 7 builders (`<String, Object>`, `<String, Object?>` or `<String, dynamic>`) store a parameter or field whose type was not read |
 | `param_type` | string | yes | `"6"` | a string literal in 33 builders, e.g. `"6"` in `_checkPlatformHasSetTOUData` (key `@0x37b1d50`, literal `@0x37b1d5c`, store `@0x37b1d64`); in `get17C1SiteDeviceParam` (`@0x279d494`) and in `getSiteDeviceParam` (`@0x2896ca0`) the value is a parameter, type not read |
-| `cmd` | int (Smi, w) | optional | | present in 5 builders only (`_checkPlatformHasSetTOUData` `@0x37b1d68`, `_fetchPowerLimits` `@0x3564ea4`, `get17C1SiteDeviceParam` `@0x279d4a8`, `getThreePvParam` `@0x237dd00`, `TouHttpService::getSiteDeviceParam` `@0x487959c`); the constant is stored with `stur w16`; its value is owned by [param_types.md](../../param_types.md) |
-| `device_sn` | string | optional | | `_fetchPowerLimits` (literal empty string, key `@0x3564eb8`, literal `@0x3564ec4`) and `get17C1SiteDeviceParam` (key `@0x279d4bc`, null default `""`) |
-| `parallel_type` | ? | optional | | `_fetchPowerLimits` (key `@0x3564ecc`) and `get17C1SiteDeviceParam` (key `@0x279d4e8`); value not read |
-| `path`, `method`, `param.site_id`, `param.param_type` | ? | | | keys of the IoT-kit command map of `fetchSocSetting` (`@0x36780ac`..`@0x36780e0`); `method` is the literal `"POST"`; the `param` map was not read |
+| `cmd` | int (Smi, w) | optional | | present in 5 builders only (`_checkPlatformHasSetTOUData` `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x37b1d68`, `_fetchPowerLimits` `@0x3564ea4`, `get17C1SiteDeviceParam` `charging/http/http_request_repository_impl.dart @0x279d4a8`, `getThreePvParam` `@0x237dd00`, `TouHttpService::getSiteDeviceParam` `electricity_price/components/tou/impl_v2/service/tou_http_service.dart @0x487959c`); the constant is stored with `stur w16`; its value is owned by [param_types.md](../../param_types.md) |
+| `device_sn` | string | optional | | `_fetchPowerLimits` (literal empty string, key `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x3564eb8`, literal `@0x3564ec4`) and `get17C1SiteDeviceParam` (key `charging/http/http_request_repository_impl.dart @0x279d4bc`, null default `""`) |
+| `parallel_type` | ? | optional | | `_fetchPowerLimits` (key `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x3564ecc`) and `get17C1SiteDeviceParam` (key `charging/http/http_request_repository_impl.dart @0x279d4e8`); value not read |
+| `path`, `method`, `param.site_id`, `param.param_type` | ? | | | keys of the IoT-kit command map of `fetchSocSetting` (`device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x36780ac`..`@0x36780e0`); `method` is the literal `"POST"`; the `param` map was not read |
 
 `ElectricityUsageHelper::getCurEmsModeType` (`electricity_usage_helper.dart @0x292e1f4`) builds its body with `[]=` calls (`site_id` `@0x292e3d0`, `device_sn` `@0x292e448`, `station_id` `@0x292e4dc`) on a `<String, dynamic>` map; values were not read.
 
@@ -227,9 +227,9 @@ Called from:
 
 ## Known unknowns
 
-- Per-sender response handling: the model attributions of the extractor were not re-read here, and 21 of 36 senders have none. Header stays string-only.
-- Types of `site_id` in the 7 builders whose map is `<String, Object>`, `<String, Object?>` or `<String, dynamic>`, and of `param_type` in `get17C1SiteDeviceParam` and `getSiteDeviceParam`.
-- The URL-literal-only senders (`HttpHelper::getDataFromService` users, `ElectricityUsageHelper` closures) and `parallel_type` values were not read.
+- Per-sender response handling: the model attributions of the extractor were not re-read here, and 21 of 36 senders have none. Header stays string-only. — traced 2026-10-20: not decoded in this pass (36 senders); the reason given in the bullet stands
+- Types of `site_id` in the 7 builders whose map is `<String, Object>`, `<String, Object?>` or `<String, dynamic>`, and of `param_type` in `get17C1SiteDeviceParam` and `getSiteDeviceParam`. — attempted 2026-10-20 (two-hop not readable: seven builders with `<String, Object>` / `<String, Object?>` / `<String, dynamic>` maps; callers not followed in this pass. Header stays string-only)
+- The URL-literal-only senders (`HttpHelper::getDataFromService` users, `ElectricityUsageHelper` closures) and `parallel_type` values were not read. — traced 2026-10-20: not decoded in this pass (URL-literal-only senders); the reason given in the bullet stands
 - Whether the server accepts a missing `cmd` (most builders omit it): not derivable from the app.
 
 ## Device-tested by

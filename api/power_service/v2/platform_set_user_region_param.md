@@ -70,7 +70,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 ## Known unknowns
 
 - What `is_push_device` 1 and 2 mean (probably "cloud only" and "also pushed to the device") is inferred; the semantics are not decoded. — reclassified: server (the value meanings are defined by the server)
-- The full document structure sent by `updateCloudSetting` (built by the caller page) is not traced.
+- The full document structure sent by `updateCloudSetting` (built by the caller page) is not traced. — traced 2026-10-20: the page names the document as the `GridParamSettingInfo` keys; `setGridInfo` passes three captured values to `updateCloudSetting` (`device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x47c84cc`), whose construction in the three callers was not decoded beyond the keys the senders add or remove (table above)
 - Server behaviour is not known.
 
 ## Device-tested by

@@ -20,22 +20,22 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-The caller builds the body (`<String, dynamic>` maps) and passes it to `inviteMemberSite` (`http_request_repository_impl.dart @0x4061788`), which forwards it to `encryptionRequestHttp`. Two branches exist, selected by an Rx flag (`@0x4061434`..`@0x4061534`).
+The caller builds the body (`<String, dynamic>` maps) and passes it to `inviteMemberSite` (`http_request_repository_impl.dart @0x4061788`), which forwards it to `encryptionRequestHttp`. Two branches exist, selected by an Rx flag (`charging/ui/page/user/share_site/invite_members/invite_members_logic.dart @0x4061434`..`@0x4061534`).
 
 Email branch:
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `email` | ? | yes | | key `@0x4061550`, value store `@0x4061578` (read as `field_27` then `field_7` of a form object, `@0x4061568`, `@0x4061570`) |
-| `site_id` | ? | yes | | key `@0x406157c`, value store `@0x40615a8` (`field_7` of an Rx value, `@0x4061598`) |
+| `email` | ? | yes | | key `charging/ui/page/user/share_site/invite_members/invite_members_logic.dart @0x4061550`, value store `@0x4061578` (read as `field_27` then `field_7` of a form object, `@0x4061568`, `@0x4061570`) |
+| `site_id` | ? | yes | | key `charging/ui/page/user/share_site/invite_members/invite_members_logic.dart @0x406157c`, value store `@0x40615a8` (`field_7` of an Rx value, `@0x4061598`) |
 
 Phone branch:
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `phone` | ? | yes | | key `@0x40615fc`, value store `@0x4061624` (`field_27` then `field_7`, `@0x4061614`, `@0x406161c`) |
-| `phone_code` | ? | yes | | key `@0x4061628`, value store `@0x4061648` (`value()` of an Rx object, `@0x4061640`) |
-| `site_id` | ? | yes | | key `@0x4061670`, value store `@0x40616a0` (`field_7` of an Rx value, `@0x4061690`) |
+| `phone` | ? | yes | | key `charging/ui/page/user/share_site/invite_members/invite_members_logic.dart @0x40615fc`, value store `@0x4061624` (`field_27` then `field_7`, `@0x4061614`, `@0x406161c`) |
+| `phone_code` | ? | yes | | key `charging/ui/page/user/share_site/invite_members/invite_members_logic.dart @0x4061628`, value store `@0x4061648` (`value()` of an Rx object, `@0x4061640`) |
+| `site_id` | ? | yes | | key `charging/ui/page/user/share_site/invite_members/invite_members_logic.dart @0x4061670`, value store `@0x40616a0` (`field_7` of an Rx value, `@0x4061690`) |
 
 ## `param_type`/`cmd`
 
@@ -78,9 +78,9 @@ Called from:
 
 ## Known unknowns
 
-- Types of `email`, `phone`, `phone_code` and `site_id`: they are field reads on form and Rx objects (the cited addresses); the object classes were not followed. Header stays string-only.
+- Types of `email`, `phone`, `phone_code` and `site_id`: they are field reads on form and Rx objects (the cited addresses); the object classes were not followed. Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the only caller, `InviteMembersLogic.sendInviteMessage` (`charging/ui/page/user/share_site/invite_members/invite_members_logic.dart @0x4061710`), reads form and Rx fields with no declared type. Header stays string-only)
 - Whether the server requires `phone_code` as a number or a string (the value comes from an Rx object).
-- Which of the two branches runs for a given user: it depends on the Rx flags at `@0x4061434`..`@0x4061534`, not decoded.
+- Which of the two branches runs for a given user: it depends on the Rx flags at `@0x4061434`..`@0x4061534`, not decoded. — traced 2026-10-20: not decoded in this pass (Rx flags `@0x4061434`..`@0x4061534`); the reason given in the bullet stands
 
 ## Device-tested by
 

@@ -60,7 +60,7 @@ Sender `StationChartHttpReposity::getStationEnergyStatistics` (`common_view/char
 | `device_type` | ? | yes | | key `@0x230de7c`, value store `@0x230de90` |
 | `enable_third_party_pv` | int (Smi, w) | yes | `1` | key `@0x230deb4`, `r16 = 2` `@0x230dec0` + store `@0x230dec4`, tagged, so 1 |
 | `end_time` | ? | yes | | key `@0x230dec8`, value store `@0x230dedc` |
-| `battery_type` | ? | optional | | `[]=` `@0x230df34`, key `@0x230df2c`; added only when a length field is non-zero (`cbz` `@0x230df1c`, `LoadField field_7` `@0x230df18`) |
+| `battery_type` | ? | optional | | key `common_view/charts/station_chart_http_reposity.dart @0x230df2c`, `[]=` `@0x230df34`; added only when a length field is non-zero (`cbz` `@0x230df1c`, `LoadField field_7` `@0x230df18`) |
 
 ## `param_type`/`cmd`
 
@@ -102,10 +102,10 @@ None traced. The A1782 sender's success closure has no code compare; the failure
 
 ## Known unknowns
 
-- Types of the station sender's keys (the map is `<String, dynamic>`; values are Rx and parameter reads). Header stays string-only.
-- The station sender's response handling (`_onGetStationEnergyStatistics`, not read).
-- Which `type` and `device_type` values select which chart: the senders pass them through.
-- Failure handling of the three senders was not read.
+- Types of the station sender's keys (the map is `<String, dynamic>`; values are Rx and parameter reads). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the station sender's values are Rx and parameter reads; not followed in this pass. Header stays string-only)
+- The station sender's response handling (`_onGetStationEnergyStatistics`, not read). — traced 2026-10-20: not decoded in this pass (`_onGetStationEnergyStatistics`); the reason given in the bullet stands
+- Which `type` and `device_type` values select which chart: the senders pass them through. — reclassified: server (which chart a `type` value selects is defined by the server and the screens that pass it)
+- Failure handling of the three senders was not read. — traced 2026-10-20: not decoded in this pass (three senders); the reason given in the bullet stands
 
 ## Device-tested by
 

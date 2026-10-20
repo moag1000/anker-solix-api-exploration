@@ -79,7 +79,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 - `electricity_price/components/electricity_price_common/tou_auto_preview/tou_auto_price_pkg_result_logic.dart`: `_getDevicePriceUnit` @0x31acd90 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart`: `getDataFromAPi` @0x2c49144 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart`: `<anonymous closure> in GeneralPriceSettingLogic::getDevicePriceType` @0x29a4e04 (URL literal only, no `*Http*` call; sends in the same function (`HttpServiceImpl::encryptionRequestHttp`); resolved from the URL literal at `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a5064` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md)); `_getDevicePriceUnit` @0x2a799d0 (encryptionRequestHttp; encrypted: true); `getDevicePriceType` @0x29a4974 (encryptionRequestHttp; encrypted: true); `getPriceTypeUrl` @0x29a4d20 (URL literal only, no `*Http*` call; sender `GeneralPriceSettingLogic::getDevicePriceType` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4974`), reached through callers `GeneralPriceSettingLogic::getDevicePriceType` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4974`); resolved from the URL literal at `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4d44` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
-- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_getDeviceAttrs` @0x2851084 (_requestHttp; encrypted: default-true (requestHttp) — verify)
+- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_getDeviceAttrs` (`schedule_network.dart @0x2851084`; _requestHttp; encrypted: default-true (requestHttp) — verify)
 - `micro_hes/src/a17ex/home/components/electricity_price/a17ex_electricity_price_logic.dart`: `_fetchDeviceCurrency` @0x35fe644 (encryptionRequestHttp; encrypted: true)
 - `micro_hes/src/common_business/basic_station/module/system_flow/common/energy_system_cover_helper.dart`: `getSolarPvNameMode` @0x2c8d5a0 (encryptionRequestHttp; encrypted: true)
 - `settings/src/common/menu_controller/equipment_feed_power_menu_controller.dart`: `getMenuVisible` @0x3691b40 (encryptionRequestHttp; encrypted: true)
@@ -144,9 +144,9 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sn` and `attributes`: parameters or fields in every sender, with `<String, Object>`/`<String, dynamic>` literals; senders with a `<String, String>` outer literal do not exist for this URL.
+- Types of `device_sn` and `attributes`: parameters or fields in every sender, with `<String, Object>`/`<String, dynamic>` literals; senders with a `<String, String>` outer literal do not exist for this URL. — attempted 2026-10-20 (two-hop not readable: about 25 senders with parameter or field values; the per-sender trace was not done in this pass; header stays string-only)
 - Which attribute names each sender requests (`attributes` is a list in most senders and a parameter in others) and which names the server knows (upstream `get_device_attributes` lists some).
-- The 23 senders other than the two `HttpRequestControllerImpl` ones: bodies and response parsing were not decoded (see Request).
+- The 23 senders other than the two `HttpRequestControllerImpl` ones: bodies and response parsing were not decoded (see Request). — traced 2026-10-20: not decoded in this pass (25 senders listed on the page); the reason given in the bullet stands
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

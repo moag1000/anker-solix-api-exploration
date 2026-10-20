@@ -66,7 +66,7 @@ Called from:
 
 ## Known unknowns
 
-- That the dispatch-table call after `map()` is `toList` is the expectation; its selector is not named by Blutter (the list is passed to `setProductAccessories`).
+- That the dispatch-table call after `map()` is `toList` is the expectation; its selector is not named by Blutter (the list is passed to `setProductAccessories`). — traced 2026-10-20: the same unnamed selector (`GDT[cid_x0 + 0x3506a]`) follows `map()` in several senders of this app and Blutter prints no name for it
 - Which products the server includes for an account: not derivable from the app.
 
 ## Device-tested by

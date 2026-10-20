@@ -69,7 +69,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- Where the app takes the integer `transaction_id` from (the order list rows carry both `order_id` and, in the statistics list, `transaction_id`) is not traced in the sender.
+- Where the app takes the integer `transaction_id` from (the order list rows carry both `order_id` and, in the statistics list, `transaction_id`) is not traced in the sender. — traced 2026-10-20: in `A5190HomeLogic._getOrderCostAndUpdateUI` (`ev_charger/src/ev_charger/page/home/a5190_home_logic.dart @0x3393694`) `transaction_id` is the function's own unboxed integer parameter (zero test `cbnz x2` `@0x33936d0`); that function is called from `_listenSmartChargingUpdate` (`@0x3393610`), `_listenRealTimeData` (`@0x33943cc`), two closures (`@0x350a7f0`, `@0x39490c8`) and `onRefresh` (`@0x43b1e20`), and the value they pass was not read; `SessionsDetailLogic.getSessionsDetail` (`ev_charger/src/ev_charger/page/home/charge_sessions/sessions_detail/sessions_detail_logic.dart @0x2aac6f0`) is called from `onReady` (`@0x2aac2cc`) and `SessionsDetailPage.changeChargingVehicle` (`ev_charger/src/ev_charger/page/home/charge_sessions/sessions_detail/sessions_detail_page.dart @0x3959b44`)
 - Whether the server accepts upstream's `order_id` form is not known (the app does not send it).
 
 ## Device-tested by

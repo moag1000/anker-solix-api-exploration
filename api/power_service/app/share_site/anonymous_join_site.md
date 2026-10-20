@@ -66,7 +66,7 @@ Called from:
 
 ## Known unknowns
 
-- What the response contains and whether the app reads it: the success callback is an unresolved placeholder pool entry. The header stays string-only for this reason.
+- What the response contains and whether the app reads it: the success callback is an unresolved placeholder pool entry. The header stays string-only for this reason. — traced 2026-10-20: `pp.txt` carries only the shared placeholder label for that callback entry, so the callback cannot be identified; the sender is `DemoSiteUtilImpl.anonymousJoinSite` (`charging/util/demosite_util_impl.dart @0x23f0b70`)
 - What the server does for an anonymous (demo) session: not derivable from the app.
 
 ## Device-tested by

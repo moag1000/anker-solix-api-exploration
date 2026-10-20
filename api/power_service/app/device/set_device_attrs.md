@@ -71,7 +71,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 - `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_power_limit/station_power_limit_logic.dart`: `_setDevicePowerLimit` @0x4356240 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/electricity_price_common/electricity_usage_helper.dart`: `getSaveDeviceEMSPrice` @0x249e420 (URL literal only, no `*Http*` call; sender `ElectricityUsageHelper::setDeviceEMSPriceArgument` (`electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x249e2cc`), reached through callers `ElectricityUsageHelper::setDeviceEMSPriceArgument` (`electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x249e2cc`); resolved from the URL literal at `electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x249e4c4` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 - `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart`: `setFixedPrice` @0x41a7afc (encryptionRequestHttp; encrypted: true); `setTOU` @0x41a68ac (encryptionRequestHttp; encrypted: true)
-- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_setDeviceAttrs` @0x3968464 (_requestHttp; encrypted: default-true (requestHttp) — verify)
+- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_setDeviceAttrs` (`schedule_network.dart @0x3968464`; _requestHttp; encrypted: default-true (requestHttp) — verify)
 - `micro_hes/src/a17ex/home/components/electricity_price/a17ex_electricity_price_logic.dart`: `_saveCurrencyThenPrice` @0x39cd088 (encryptionRequestHttp; encrypted: true)
 - `micro_hes/src/common_business/basic_station/module/system_flow/common/energy_system_cover_helper.dart`: `editPvName` @0x32b02b4 (encryptionRequestHttp; encrypted: true)
 - `settings/src/common/page/feed_grid/feed_grid_controller.dart`: `<anonymous closure> in FeedGridController::updateByDevice` @0x2283f70 (encryptionRequestHttp; encrypted: true)
@@ -134,9 +134,9 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sn` (parameter, field or constant depending on the sender) and the attribute value types of each sender (see Request); `<String, Object>` only says non-null.
+- Types of `device_sn` (parameter, field or constant depending on the sender) and the attribute value types of each sender (see Request); `<String, Object>` only says non-null. — attempted 2026-10-20 (two-hop not readable: about 25 senders; not followed per sender in this pass; header stays string-only)
 - Which attribute names the server accepts: the senders give many names, none was decoded to a complete list here; upstream `set_device_attributes` documents some.
-- The 25 senders not read in detail: bodies and the response handling were not decoded.
+- The 25 senders not read in detail: bodies and the response handling were not decoded. — traced 2026-10-20: not decoded in this pass (25 senders); the reason given in the bullet stands
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

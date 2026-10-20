@@ -29,6 +29,8 @@ Three senders, each with a `params` object.
 | `params.driving_plan` | ? | yes | | `ScheduleNetwork::_setUserParams`: inner map typed `<String, Map<String, dynamic>>` (`@0x396833c`), key `@0x3968328`, value store `@0x3968338` (parameter at `fp-0x10`) |
 | `params` | object | yes | | `AKIotEVChargeCommand::setUserParams`: key `@0x405bea8` inside the `param` map typed `<String, Map<String, dynamic>>` (`@0x405bebc`) |
 
+Method of the schedule sender (asm-traced): `ScheduleNetwork::_requestHttp` (`schedule_network.dart @0x284f6d0`, the same helper for both schedule calls) stores the String literal `"POST"` as `method` (`@0x284f74c`, key `@0x284f740`) next to `path` (`@0x284f730`) and `param` (`@0x284f758`) and calls `handle` with `akiot.cloud_api` (`@0x284f780`, call `@0x284f790`); see [sdk_senders.md](../../../sdk_senders.md#schedulenetwork_requesthttp).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -73,9 +75,9 @@ Called from:
 
 ## Known unknowns
 
-- The `driving_plan` value and the IoT-kit `params` content (parameters). Header stays string-only.
+- The `driving_plan` value and the IoT-kit `params` content (parameters). Header stays string-only. — traced 2026-10-20: not decoded in this pass (`driving_plan` value and IoT-kit `params`); the reason given in the bullet stands
 - What option code 30001 means (see [get_user_params](get_user_params.md)). — reclassified: server (the option code meaning is defined by the server)
-- The method of `ScheduleNetwork::_requestHttp` (not read) and the callers' handling of the answer.
+- The callers' handling of the answer of `ScheduleNetwork::_setUserParams` (`schedule_network.dart @0x39682d4`) — traced 2026-10-20: the method is `"POST"` (see Request); the callers were not read for the answer
 
 ## Device-tested by
 

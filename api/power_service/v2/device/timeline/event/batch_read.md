@@ -25,7 +25,7 @@ Direct SDK call (asm-traced), path C of [encryption.md](../../../../../encryptio
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `device_sn` | String | yes | `"<device sn>"` | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2a09784`; function argument stored at `@0x2a09794` |
-| `event_ids` | list | yes | `[ "<event id>" ]` | `@0x2a09798`; function argument stored at `@0x2a097a8`; the home page builds a one-element growable list (`AllocateGrowableArray`, `s1_s2/src/page/home/s1_s2_home_logic.dart @0x2a0952c`) from the `id` of the top event; the element type is not decoded |
+| `event_ids` | list of int (`<int>` growable list) | yes | `[ <event id> ]` | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2a09798`; function argument stored at `@0x2a097a8`; the home page builds a one-element growable list (`AllocateGrowableArray`, `s1_s2/src/page/home/s1_s2_home_logic.dart @0x2a0952c`) from the `id` of the top event; the list is created with the type argument `<int>` (`r1 = <int>` `@0x2a09528`) and the id is the `int?` read of the top event's `id` key (type check `r8 = int?` `@0x2a09228`, `s1_s2/src/page/home/s1_s2_home_logic.dart`) |
 
 ## `param_type`/`cmd`
 
@@ -44,7 +44,7 @@ No response field is read by the traced caller (asm-traced). `S1S2HomeLogic._mar
 Request, synthesized
 
 ```json
-{ "path": "/power_service/v2/device/timeline/event/batch_read", "method": "POST", "param": { "device_sn": "<device sn>", "event_ids": [ "<event id>" ] } }
+{ "path": "/power_service/v2/device/timeline/event/batch_read", "method": "POST", "param": { "device_sn": "<device sn>", "event_ids": [ <event id> ] } }
 ```
 
 Response: no captured response; no field is read.
@@ -63,7 +63,6 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The type of the ids (the journal events carry an `id` field, see [event](../event.md#response)) is not decoded.
 - Whether the server accepts several ids in one call is likely from the name (`batch_read`) but the app sends one.
 - Server behaviour is not known.
 

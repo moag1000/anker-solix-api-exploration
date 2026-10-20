@@ -101,9 +101,9 @@ Called from:
 
 ## Known unknowns
 
-- What `home_load_data` contains (a String in `setDeviceHomeLoadRes`, empty in `set17C1DeviceHomeLoadRes`, `jsonEncode` output in `TouHttpService`): the structure is decided by the callers.
-- Types of `mode_type` and `custom_rate_plan`, and the body of `postCloudSiteOrDeviceEms` (no keys found by the extractor).
-- The response: forwarded; the callers were not decoded.
+- What `home_load_data` contains (a String in `setDeviceHomeLoadRes`, empty in `set17C1DeviceHomeLoadRes`, `jsonEncode` output in `TouHttpService`): the structure is decided by the callers. — traced 2026-10-20: not decoded in this pass (three senders and `jsonEncode` output); the reason given in the bullet stands
+- Types of `mode_type` and `custom_rate_plan`, and the body of `postCloudSiteOrDeviceEms` (no keys found by the extractor). — attempted 2026-10-20 (two-hop not readable: `mode_type` and `custom_rate_plan` callers not followed in this pass; header stays string-only)
+- The response: forwarded; the callers were not decoded. — traced 2026-10-20: not decoded in this pass (callers); the reason given in the bullet stands
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

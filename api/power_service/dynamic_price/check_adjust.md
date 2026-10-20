@@ -52,6 +52,8 @@ None traced. The failure callback `home_page.dart @0x2b9a3b8` logs `"adjustDynam
 
 - `charging/ui/page/home/home_page.dart`: `initState` @0x2b990ac (encryptionRequestHttp; encrypted: true)
 
+Guard (asm-traced): in `HomePageState.initState` (`charging/ui/page/home/home_page.dart @0x2b990ac`) the request is sent through `encryptionRequestHttp` (`@0x2b99164`, named arguments `fail`, `showLoading`, `success`, `showLoading` false `@0x2b9914c`) without a preceding login test: the only branch before it is the null check of the `HttpService` lookup (`@0x2b990ec`); the `isLogin` call (`@0x2b99210`) comes after the request. So `initState` does not skip this call for logged-out users.
+
 ## Since/changed
 
 3.18.0: present. 3.24.3: present. since: ≤3.18.0. The endpoint is in none of the added, removed or changed-params lists of `tools/out/diff_3.18.0_3.24.3.md`, so there is no string-level parameter delta.
@@ -59,7 +61,6 @@ None traced. The failure callback `home_page.dart @0x2b9a3b8` logs `"adjustDynam
 ## Known unknowns
 
 - What the server does with this call: the app sends an empty body and reads nothing back; the log label `adjustDynamicPrice` is the only hint.
-- Whether the call is skipped for logged-out users: the surrounding code in `initState` (`isLogin` check `@0x2b99210` follows the call) was not followed.
 
 ## Device-tested by
 

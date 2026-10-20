@@ -67,7 +67,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- No caller was found, so it is not known whether the app ever sends this request; the page documents the body the function would send.
+- No caller was found, so it is not known whether the app ever sends this request; the page documents the body the function would send. — traced 2026-10-20: searched again: the function name `getPlatformEnergyAnalysisOptions` occurs only in `ats_ax170/src/sdk/command/ax170_command.dart` (no `bl` to `0x2334664` elsewhere) and the path string `pp+0x20a00` (`pp.txt` line 21518) is referenced only from that function; the asm shows no caller
 - The meaning of `select_type` and the answer layout are unknown.
 
 ## Device-tested by

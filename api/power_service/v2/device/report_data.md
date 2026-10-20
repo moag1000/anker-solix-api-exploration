@@ -61,13 +61,15 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 - `DeviceMainLogic._uploadLowBatteryWarning` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x26031c4`), called from `DeviceMainLogic.onMessageDispatch`: the device main page of the station device home (package `charging`), triggered by incoming device messages.
 
+Upload conditions seen so far (asm-traced, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`): `_uploadLowBatteryWarning` (`@0x26031c4`) returns without a request when `getLowBatteryWarningConfig` is null (`@0x260320c`), when the device connection status is not `bleBusinessConnected` (enum index 3, pool object `pp+0xca68`, compare `@0x2603244`; `pp.txt` line 9357) and when the `battery` value read from the device info is not an integer (type test `@0x26032dc`..`@0x26032e4`). It keeps per-device state under the keys `isPending` (`@0x26033bc`), `lastBattery` (`@0x260341c`) and `isUpload` (`@0x2603478`), compares an integer with the immediate 5 (`cmp x0, #5` `@0x2603504`, `@0x260354c`) and then builds the body with `device_sn`, `data_type` = `battery_soc` and `data` with `soc` and `report_time` (`@0x2603624`..`@0x26036b0`). The two call sites in `DeviceMainLogic.onMessageDispatch` (`@0x26027b0`, `@0x2602b64`) pass the `device` entry of the message payload (`r2 = "device"` `@0x260274c`, type check `IAnkerDevice?` `@0x2602798`).
+
 ## Since/changed
 
 3.18.0: absent (the URL string is not in the 3.18.0 pool as a code-referenced URL; see the inventory row `since`). 3.24.3: present (new). since: 3.24.3.
 
 ## Known unknowns
 
-- The conditions under which the warning is uploaded (thresholds, resend rules) are not decoded.
+- The thresholds behind the compare with 5 (`cmp x0, #5` `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x2603504`, `@0x260354c`) and the fields of the low-battery warning config in `_uploadLowBatteryWarning` — traced 2026-10-20: the early exits (config null, connection status not `bleBusinessConnected`, `battery` not an integer), the per-device state keys `isPending` / `lastBattery` / `isUpload` and the two call sites in `onMessageDispatch` (`@0x26027b0`, `@0x2602b64`) were read; see Callers in app
 - Whether other `data_type` values exist is not known; only `battery_soc` is sent by the traced sender.
 - Server behaviour (what the cloud does with the report, for example push notifications) is not known.
 

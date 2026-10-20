@@ -42,6 +42,8 @@ Success closure `@0x23486b4` hands the payload to `_parseSiteSceneV2` (`micro_he
 |---|---|---|---|---|
 | `data` | map | yes | `{ "site_id": "...", ... }` | `micro_hes/src/a17e2/station/home/base_station_logic.dart @0x234891c`; the content is the `SceneInfoModel` document, keys on the model page |
 
+Relation to the V1 scene endpoint [get_scen_info](../../site/get_scen_info.md) (from `data/models.json`): V1 parses `charging::SceneInfo` (45 top-level keys, the AI-mode and EMS senders use other classes), V2 parses `base_service::SceneInfoModel` (35 keys). Both take `site_id` and return the scene document. They share 14 top-level keys: `aiems_profit`, `charging_pile_info`, `custom_charging_type`, `ems_mode_power`, `error_code`, `feature_switch`, `grid_info`, `home_load_power`, `power_site_type`, `site_id`, `smart_plug_info`, `solarbank_info`, `style_id` and `switch_0w`; 31 keys occur only in `SceneInfo` (for example `statistics`, `site_info`, `solar_list`, `pps_info`, `powerpanel_list`) and 21 only in `SceneInfoModel` (for example `branch_list`, `diesel_info`, `hardware_info`, `off_grid_info`, `home_backup_system_info`, `ems_mode`, `function_switch`).
+
 ## Example request/response
 
 Request, synthesized
@@ -66,7 +68,6 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The relation between this V2 endpoint and the V1 site scene (`get_scen_info`) is not documented here.
 - Which keys of `SceneInfoModel` the V2 answer fills is not known.
 - Server behaviour is not known.
 

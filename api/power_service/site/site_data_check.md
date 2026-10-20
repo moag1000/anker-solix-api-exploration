@@ -27,6 +27,8 @@ The body is a 2-pair map literal typed `<String, String>` (type arguments `@0x2c
 | `site_id` | string | yes | `"<site_id>"` | key `@0x2c34dec`, value store `@0x2c34e04` (`field_13` of the closure context, `@0x2c34dfc`) |
 | `current_time` | string | yes | `"<current_time>"` | key `@0x2c34e08`, value store `@0x2c34e18` (result of `timeParamOfDate()` `@0x2c34d10`) |
 
+Format of `current_time` and export support (asm-traced): `timeParamOfDate` (`base_service/bean/export_data/energy_export_mode.dart @0x2c34ea4`) takes a `DateTime` and interpolates three integers separated by the literal `"-"` (`@0x2c34f14`, `@0x2c34fd8`); the first is used as it is (`BoxInt64Instr` `@0x2c34ee0`), the second and third are converted to text and padded to width 2 with the literal `"0"` (calls with `2` and `"0"`: `@0x2c34f84`..`@0x2c34fa0`, `@0x2c35044`..`@0x2c35060`), so `current_time` is a dash-separated date with two-digit month and day (the three getters are unnamed dispatch calls `@0x2c34ed0`, `@0x2c34f2c`, `@0x2c34fec`, read here as year, month, day). The success closure calls `supportExportWithSiteType` (`charging/widgets/data_export/energy_flow/site_energy_export_logic.dart @0x2c352ac`, function `@0x2c353ac`), which maps the 15 `PN` constants of the pool list `pp+0x154470` to strings (`map` `@0x2c353f4`, then the unnamed dispatch call `@0x2c35410`), converts the site type with `getPnForPowerSiteType` (`@0x2c35448`) and returns whether that product number is in the list (`contains` `@0x2c35454`).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -71,9 +73,7 @@ Called from:
 
 ## Known unknowns
 
-- The format of `current_time` (it comes from `timeParamOfDate()`, not decoded here).
 - Whether the server answers with other keys than `exist_data`.
-- How the app decides export support beyond this call (`supportExportWithSiteType`, `@0x2c352ac`).
 
 ## Device-tested by
 

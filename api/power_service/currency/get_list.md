@@ -75,7 +75,7 @@ Called from:
 ## Known unknowns
 
 - Whether the server reads the misspelled key `counrty` (both app senders use it); the library's behaviour for `country` is not known.
-- Whether the literal value `"country"` of the A17EX sender is intentional: it is a string constant at `@0x35fdb94`, not a variable.
+- Whether the literal value `"country"` of the A17EX sender is intentional: it is a string constant at `@0x35fdb94`, not a variable. — reclassified: server (whether the constant is intended is not recorded in the app)
 - The element structure of `currency_list`. — reclassified: server (elements of an untyped list; the content is server data)
 
 ## Device-tested by

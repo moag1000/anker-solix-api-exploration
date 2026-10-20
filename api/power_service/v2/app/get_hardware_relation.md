@@ -67,8 +67,8 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Callers in app
 
-- `DeviceRelationMgr.requestHardwareRelation` (`base_service/ak_iot_kit/business/basic/model/station_device_relation.dart @0x22a4864`, static): the device relation manager of the IoT kit (package `base_service`); the caller was not traced.
-- `SubPackageInfoProvider.getHardwareRelation` (`ota_kit/src/providers/sub_package_info_provider.dart @0x2b0b4ec`): the sub-package info of the OTA kit (package `ota_kit`).
+- `DeviceRelationMgr.requestHardwareRelation` (`base_service/ak_iot_kit/business/basic/model/station_device_relation.dart @0x22a4864`, static): the device relation manager of the IoT kit (package `base_service`); its caller is `DeviceMainLogic.requestDeviceRelationInfo` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x22a483c`).
+- `SubPackageInfoProvider.getHardwareRelation` (`ota_kit/src/providers/sub_package_info_provider.dart @0x2b0b4ec`): the sub-package info of the OTA kit (package `ota_kit`); its caller is `SubPackageInfoProvider.buildAtsSubPackages` (`ota_kit/src/providers/sub_package_info_provider.dart @0x2b0b330`).
 
 ## Since/changed
 
@@ -77,7 +77,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 ## Known unknowns
 
 - Whether the server accepts both the string form and the list form of `sn_list` is not tested.
-- The caller of `requestHardwareRelation` and the reading of the SDK sender's result are not traced.
+- How the callers read the answer of the SDK sender (`DeviceMainLogic.requestDeviceRelationInfo`, `SubPackageInfoProvider.buildAtsSubPackages`) — traced 2026-10-20: the callers are now named in Callers in app, their reading of the result was not decoded
 - Server behaviour is not known (upstream saw an empty list).
 
 ## Device-tested by

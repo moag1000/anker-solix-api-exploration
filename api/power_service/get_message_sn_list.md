@@ -50,7 +50,7 @@ Response, synthesized (keys from `MessageDeviceSnModel.fromJson`; values are pla
 
 ## Errors seen
 
-None traced. The builder's failure callback `@0x34e0ba0` logs `"---> getMessageSnList request failed, code: "` and the message, then calls `exeError()`; the caller's failure callback `family_main_page_logic.dart @0x25f6be0` (pool-shared) only logs the code and message; no code is compared. Error codes are catalogued in `api/errors.md`.
+None traced. The builder's failure callback `charging/http/http_request_repository_impl.dart @0x34e0ba0` logs `"---> getMessageSnList request failed, code: "` and the message, then calls `exeError()`; the caller's failure callback `family_main_page_logic.dart @0x25f6be0` (pool-shared) only logs the code and message; no code is compared. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -68,7 +68,7 @@ Called from:
 ## Known unknowns
 
 - Whether the server wraps the list in an object for some accounts: the closure accepts only a bare `List`.
-- Ordering and paging of the list: not visible in the app (no parameter is sent).
+- Ordering and paging of the list: not visible in the app (no parameter is sent). — reclassified: server (ordering and paging are decided by the server, the app sends no parameter)
 
 ## Device-tested by
 

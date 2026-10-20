@@ -31,8 +31,8 @@ Six senders; each sends `site_id` only.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | string | yes | `"<site_id>"` | typed maps: `DeviceWifiInfoSettingController::fetchDeviceWifiInfo` (`@0x29e6fd0`): `<String, String>` (`@0x29e705c`), key `@0x29e7040`, store `@0x29e7058`; `WifiManagementController::fetchDeviceWifiInfo` (`@0x29eb244`): `<String, String>` (`@0x29eb2d0`), key `@0x29eb2b4`, store `@0x29eb2cc`; `SelectPowerDeviceController::_fetchSiteWifiSignal` (`@0x29ecfb4`): `<String, String>` (`@0x29ed058`), key `@0x29ed03c`, store `@0x29ed054`; `DeviceWifiInfoController::fetchDeviceWifiInfo` (`@0x29ec464`): `<String, String>` (`@0x29ec4f0`), key `@0x29ec4d4`, store `@0x29ec4ec`; `BasicStationNavigationBarLogic::getSiteWifiInfo` (`@0x27db43c`): `<String, String?>` (`@0x27db5cc`), key `@0x27db528`, store `@0x27db5a8` |
-| `site_id` | ? | yes | | `HttpRequestControllerImpl::getSiteWifiInfoRequest` (`http_request_repository_impl.dart @0x238507c`): key `@0x2384f24`, store `@0x2384f50` (`field_7` of an Rx value); the map literal carries no printed type arguments |
+| `site_id` | string | yes | `"<site_id>"` | key `device/src/station_setting/controller/common_station_wifi/page/device_wifi_info_setting_controller.dart @0x29e7040`; typed maps: `DeviceWifiInfoSettingController::fetchDeviceWifiInfo` (`device/src/station_setting/controller/common_station_wifi/page/device_wifi_info_setting_controller.dart @0x29e6fd0`): `<String, String>` (`@0x29e705c`), key `@0x29e7040`, store `@0x29e7058`; `WifiManagementController::fetchDeviceWifiInfo` (`device/src/station_setting/controller/common_station_wifi/page/wifi_management_controller.dart @0x29eb244`): `<String, String>` (`@0x29eb2d0`), key `@0x29eb2b4`, store `@0x29eb2cc`; `SelectPowerDeviceController::_fetchSiteWifiSignal` (`flutter_charging_beginning/beginning/state_cards/add_devices/select_power_device/select_power_device_controller.dart @0x29ecfb4`): `<String, String>` (`@0x29ed058`), key `@0x29ed03c`, store `@0x29ed054`; `DeviceWifiInfoController::fetchDeviceWifiInfo` (`micro_hes/src/a17ex/station_setting/device_wifi_info_controller.dart @0x29ec464`): `<String, String>` (`@0x29ec4f0`), key `@0x29ec4d4`, store `@0x29ec4ec`; `BasicStationNavigationBarLogic::getSiteWifiInfo` (`micro_hes/src/common_business/basic_station/module/navigation_bar/basic_station_navigation_bar_logic.dart @0x27db43c`): `<String, String?>` (`@0x27db5cc`), key `@0x27db528`, store `@0x27db5a8` |
+| `site_id` | ? | yes |  | key `charging/http/http_request_repository_impl.dart @0x238c818`; `HttpRequestControllerImpl::getSiteWifiInfoRequest` (`http_request_repository_impl.dart @0x238507c`): key `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart @0x2384f24`, store `@0x2384f50` (`field_7` of an Rx value); the map literal carries no printed type arguments |
 
 ## `param_type`/`cmd`
 
@@ -40,7 +40,7 @@ n/a
 
 ## Response model (link)
 
-Per sender. `getSiteWifiInfoRequest`: `SiteWifiInfoModel` from `charging/model/site_wifi_info_model.dart` (`data/models.json` key `charging::SiteWifiInfoModel`; fields on [`models/connectivity.md`](../../../models/connectivity.md#sitewifiinfomodel)), parsed in `http_request_repository_impl.dart @0x2385144`. `WifiManagementController` (`@0x29e7c70`), `SelectPowerDeviceController` (`@0x29ed0cc`) and `BasicStationNavigationBarLogic` (`@0x27db714`): `base_service::SiteWifiInfoModel` (`base_service/bean/model/init_flow/site_wifi_info_model.dart`, `data/models.json` key). `DeviceWifiInfoSettingController` (`@0x29e71f4`) and `DeviceWifiInfoController` (`@0x29eb474`): no model class; they read the key `wifi_info_list` (`@0x29e72e0`).
+Per sender. `getSiteWifiInfoRequest`: `SiteWifiInfoModel` from `charging/model/site_wifi_info_model.dart` (`data/models.json` key `charging::SiteWifiInfoModel`; fields on [`models/connectivity.md`](../../../models/connectivity.md#sitewifiinfomodel)), parsed in `http_request_repository_impl.dart @0x2385144`. `WifiManagementController` (`device/src/station_setting/controller/common_station_wifi/page/wifi_management_controller.dart @0x29e7c70`), `SelectPowerDeviceController` (`flutter_charging_beginning/beginning/state_cards/add_devices/select_power_device/select_power_device_controller.dart @0x29ed0cc`) and `BasicStationNavigationBarLogic` (`micro_hes/src/common_business/basic_station/module/navigation_bar/basic_station_navigation_bar_logic.dart @0x27db714`): `base_service::SiteWifiInfoModel` (`base_service/bean/model/init_flow/site_wifi_info_model.dart`, `data/models.json` key). `DeviceWifiInfoSettingController` (`device/src/station_setting/controller/common_station_wifi/page/device_wifi_info_setting_controller.dart @0x29e71f4`) and `DeviceWifiInfoController` (`micro_hes/src/a17ex/station_setting/device_wifi_info_controller.dart @0x29eb474`): no model class; they read the key `wifi_info_list` (`@0x29e72e0`).
 
 ## Response
 
@@ -91,8 +91,8 @@ Called from:
 
 ## Known unknowns
 
-- Type of `site_id` in `getSiteWifiInfoRequest` (Rx field with no printed map type). Header stays string-only.
-- Why two `SiteWifiInfoModel` classes (charging and base_service) read the same answer.
+- Type of `site_id` in `getSiteWifiInfoRequest` (Rx field with no printed map type). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: the three callers (`StationHomeInfoLogic.getSiteWifiInfo`, `StationEnergySystemLogic.getSiteWifiInfo`, `SystemWifiInfoLogic.getSiteWifiInfo`) read an Rx field with no default or declared type. Header stays string-only)
+- Why two `SiteWifiInfoModel` classes (charging and base_service) read the same answer. — reclassified: server (the reason for two model classes is not recorded in the app)
 - The element structure of `wifi_info_list` and `hardware_list`.
 
 ## Device-tested by

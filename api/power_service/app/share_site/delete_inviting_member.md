@@ -69,7 +69,7 @@ Called from:
 ## Known unknowns
 
 - The response body: not read by the app, so its keys are unknown. — reclassified: server
-- Whether `member_id` here is the id returned by [get_invited_list](get_invited_list.md) (the item class `SiteInviteMemberModel` has a `member_id`): not followed from the item to the key.
+- Whether `member_id` here is the id returned by [get_invited_list](get_invited_list.md) (the item class `SiteInviteMemberModel` has a `member_id`): not followed from the item to the key. — traced 2026-10-20: `SiteInviteMemberModel` carries `member_id` (String?, `data/models.json`); the delete callers' source of the id was not followed
 - What the server does for an unknown `member_id`: not derivable from the app.
 
 ## Device-tested by

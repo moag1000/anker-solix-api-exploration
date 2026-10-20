@@ -33,6 +33,8 @@ Reads the grid code (grid standard) settings of a product for the user: the coun
 
 The `settings` copy has the same keys (`product_code` `device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x29e4cf8`, `identifier_id` `@0x29e4d0c`, `scenario_type` `@0x29e4d20`, `grid_code_name` `@0x29e4d48`, `country_code` `@0x29e4d5c`, `grid_code` `@0x29e4d70`). `GridSettingLogic._getGridSetting` copies a base map (field at offset 0x93, `LinkedHashMap.of` `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart @0x28f5bf4`) and sets `grid_code_name` (`@0x28f5c30`), `country_code` (`@0x28f5c68`) and `grid_code` (`@0x28f5ca0`) from its selected grid object; the content of the base map was not traced. The `system_config_controller` closure sends `path`, `method`, `param` through the SDK (param keys not read).
 
+Base map of `GridSettingLogic` (asm-traced): the map copied by `_getGridSetting` (field `0x93`) is created in `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart` as a 3-pair `<String, dynamic>` literal (`AllocateArray r2 = 12` `@0x34af2cc`, `Map._fromLiteral` `@0x34af318`, stored `@0x34af320`) with `product_code` (`@0x34af2d4`; the product code of the first `CombinerBoxList` entry, else the String literal `"AE100"` `@0x34af2a4`), `identifier_id` (`@0x34af2e8`) and `scenario_type` (`@0x34af2fc`, raw 4 in a tagged slot `@0x34af308`, so 2); `_getGridSetting` then adds `grid_code_name` (`@0x28f5c30`) and `country_code` (`@0x28f5c68`).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -73,8 +75,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 ## Known unknowns
 
 - What `scenario_type` 1 and 2 mean is not decoded. — reclassified: server (the value meanings are defined by the server)
-- Which other keys the `system_config_controller` and picker senders send is not read.
-- The content of the base map used by `_getGridSetting` is not traced.
+- Which other keys the `system_config_controller` and picker senders send is not read. — traced 2026-10-20: the `SystemConfigController` closure (`flutter_charging_beginning/beginning/state_cards/settings/system_config/system_config_controller.dart @0x3256434`..`@0x32564e8`) builds only the command envelope (`path` `@0x325648c`, `method` `@0x32564a0`, `param` `@0x32564b8`) and takes `param` from a context field (`LoadField` `@0x32564c8`), so the keys are set outside the closure and were not followed
 - Server behaviour is not known.
 
 ## Device-tested by

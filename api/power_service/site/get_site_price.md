@@ -32,9 +32,9 @@ Five senders send exactly `site_id` and `accuracy`; two senders add more keys.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | ? | yes | | `EmsAiModeConditionLogic::getSitePrice` (`ems_ai_mode_condition_logic.dart @0x2a30408`): `<String, Object>` (`@0x2a304a0`), key `@0x2a30470`, store `@0x2a30488`; `PowerUsageScenarioController::_fetchSitePriceUnit` (`power_usage_scenario_controller.dart @0x37af378`): `<String, Object?>` (`@0x37af418`), key `@0x37af3f0`, store `@0x37af400`; `PowerUsageScenarioController::getSitePrice` (`@0x2a2783c`): `<String, Object>` (`@0x2a27904`), key `@0x2a278d4`, store `@0x2a278ec`; `HttpRequestControllerImpl::getSitePriceRequest` (`http_request_repository_impl.dart @0x23a1180`): `<String, Object>` (`@0x23a1238`), key `@0x23a1210`, store `@0x23a1220`; `ElectricityUsageHelper::fetchSitePriceUnit` (`electricity_usage_helper.dart @0x2c5ebc0`): `<String, Object?>` (`@0x2c5ec70`), key `@0x2c5ec44`, store `@0x2c5ec54` |
-| `accuracy` | int (Smi, w) | yes | `5` | constant in four senders: `mov` + `stur w`, tagged, so 5 (`@0x2a30498`/`@0x2a3049c`, `@0x37af410`/`@0x37af414`, `@0x2a278fc`/`@0x2a27900`, `@0x23a1230`/`@0x23a1234`) |
-| `accuracy` | int (Smi, w) | yes | | `ElectricityUsageHelper::fetchSitePriceUnit`: key `@0x2c5ec58`, `lsl x, x, #1` `@0x2c5ec68` Smi-tags the unboxed parameter, store `@0x2c5ec6c` |
+| `site_id` | ? | yes |  | key `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x2a30470`; `EmsAiModeConditionLogic::getSitePrice` (`ems_ai_mode_condition_logic.dart @0x2a30408`): `<String, Object>` (`@0x2a304a0`), key `@0x2a30470`, store `@0x2a30488`; `PowerUsageScenarioController::_fetchSitePriceUnit` (`power_usage_scenario_controller.dart @0x37af378`): `<String, Object?>` (`@0x37af418`), key `@0x37af3f0`, store `@0x37af400`; `PowerUsageScenarioController::getSitePrice` (`@0x2a2783c`): `<String, Object>` (`@0x2a27904`), key `@0x2a278d4`, store `@0x2a278ec`; `HttpRequestControllerImpl::getSitePriceRequest` (`http_request_repository_impl.dart @0x23a1180`): `<String, Object>` (`@0x23a1238`), key `@0x23a1210`, store `@0x23a1220`; `ElectricityUsageHelper::fetchSitePriceUnit` (`electricity_usage_helper.dart @0x2c5ebc0`): `<String, Object?>` (`@0x2c5ec70`), key `@0x2c5ec44`, store `@0x2c5ec54` |
+| `accuracy` | int (Smi, w) | yes | `5` | key `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x2a3048c`; constant in four senders: `mov` + `stur w`, tagged, so 5 (`@0x2a30498`/`@0x2a3049c`, `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x37af410`/`@0x37af414`, `@0x2a278fc`/`@0x2a27900`, `charging/http/http_request_repository_impl.dart @0x23a1230`/`@0x23a1234`) |
+| `accuracy` | int (Smi, w) | yes | | `ElectricityUsageHelper::fetchSitePriceUnit`: key `electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x2c5ec58`, `lsl x, x, #1` `@0x2c5ec68` Smi-tags the unboxed parameter, store `@0x2c5ec6c` |
 
 `TOUPlanLogic::getDataFromAPi` (`tou_plan_logic.dart @0x2c49144`: `site_id` `@0x2c492c8`, `accuracy` constant 5 `@0x2c492d8`/`@0x2c492dc`, `price_type` the string `"use_time"` `@0x2c494a8`, `[]=` keys `device_sn`, `station_id`, `attributes`) and `GeneralPriceSettingLogic::getDevicePriceType` (`general_price_setting.dart @0x29a4974`: several `<String, Object?>` maps with `site_id`, `accuracy`, `device_sn`, `attributes`, `station_id`, `not_include_nem`, `currency`) build larger bodies; their URL literals (`@0x2c4928c`, `@0x29a4a48`) have no `Method` object next to them and their value types were not read.
 
@@ -106,8 +106,8 @@ Called from:
 
 ## Known unknowns
 
-- Types of `site_id` in the five simple senders (all maps are `<String, Object>` or `<String, Object?>`). Header stays string-only.
-- The two larger senders (`TOUPlanLogic::getDataFromAPi`, `GeneralPriceSettingLogic::getDevicePriceType`): method object, value types and response parsing were not read.
+- Types of `site_id` in the five simple senders (all maps are `<String, Object>` or `<String, Object?>`). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: five simple senders with `<String, Object>` maps; callers not followed in this pass. Header stays string-only)
+- The two larger senders (`TOUPlanLogic::getDataFromAPi`, `GeneralPriceSettingLogic::getDevicePriceType`): method object, value types and response parsing were not read. — traced 2026-10-20: not decoded in this pass (`TOUPlanLogic::getDataFromAPi`, `GeneralPriceSettingLogic::getDevicePriceType`); the reason given in the bullet stands
 - What `accuracy` selects (the app sends 5 or a parameter): server side.
 
 ## Device-tested by
