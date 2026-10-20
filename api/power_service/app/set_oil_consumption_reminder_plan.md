@@ -58,7 +58,7 @@ No response key is read by the app.
 Request, synthesized (types only, `setOilConsumptionReminderPlanRequest`)
 
 ```json
-{"device_sn": "<device_sn>", "interval_period_month": 0, "interval_period_week": 0}
+{"device_sn": "<device_sn>", "interval_period_month": "<interval_period_month>", "interval_period_week": "<interval_period_week>"}
 ```
 
 Request of the defaults builder, constants as read: month 1, week 0 (see the Request section).

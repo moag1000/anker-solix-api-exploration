@@ -25,7 +25,7 @@ The body is a 2-pair map literal (`AllocateArray` in `getInviteMember`, `http_re
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `site_id` | string | yes | `"<site_id>"` | key `@0x29162d4`, value store `@0x29162e4`; both callers pass `field_7` of an Rx value with the empty string for null (`r0 = ""` `home_center_logic.dart @0x291618c` and `@0x2916ce4`) |
-| `status` | int (unboxed, x) | yes | `1` or `2` | key `@0x29162e8`, `lsl x2, x1, #1` `@0x29162f8` (Smi-tagging the unboxed parameter), store `@0x29162fc`; `getInviteMemberInviting` passes `r3 = 1` (`@0x29161c0`, unboxed), `getInviteMemberAlreadyInvited` passes `r3 = 2` (`@0x2916d10`) |
+| `status` | int (Smi, w) | yes | `1` or `2` | key `@0x29162e8`, `lsl x2, x1, #1` `@0x29162f8` (Smi-tagging the unboxed parameter), store `@0x29162fc`; `getInviteMemberInviting` passes `r3 = 1` (`@0x29161c0`, unboxed), `getInviteMemberAlreadyInvited` passes `r3 = 2` (`@0x2916d10`) |
 
 ## `param_type`/`cmd`
 

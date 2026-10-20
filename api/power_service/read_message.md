@@ -26,7 +26,7 @@ The body is an empty `<String, dynamic>` map (`empty_array` `@0x3bb57c0`, `Map._
 |---|---|---|---|---|
 | `id` | int (unboxed, x) | optional | | key `@0x3bb5828`, `[]=` `@0x3bb5830`; the value is `int.parse(...)` of a string field of the parameter object (`parse()` `@0x3bb57f4`, `BoxInt64Instr` `@0x3bb57fc`); added only when the parameter object is non-null (`cmp w0, NULL` `@0x3bb57d8`) |
 | `all` | ? | yes | | key `@0x3bb5858`, `[]=` `@0x3bb5860` (parameter at `fp-0x10`, loaded `@0x3bb5854`) |
-| `type` | int (unboxed, x) | yes | | key `@0x3bb5884`, `[]=` `@0x3bb5888`; `lsl x3, x0, #1` `@0x3bb5870` Smi-tags the unboxed parameter |
+| `type` | int (Smi, w) | yes | | key `@0x3bb5884`, `[]=` `@0x3bb5888`; `lsl x3, x0, #1` `@0x3bb5870` Smi-tags the unboxed parameter |
 | `sns` | ? | optional | | key `@0x3bb58d8`, `[]=` `@0x3bb58e0`; added when the parameter is non-null (`@0x3bb5898`) and a dispatch-table call (`GDT[cid_x0 + 0x3558d]` `@0x3bb58ac`, selector not named) returns true (`tbnz` `@0x3bb58c0`) |
 
 ## `param_type`/`cmd`
@@ -46,7 +46,7 @@ No response key is read by the app.
 Request, synthesized (types of `all` and `sns` unresolved)
 
 ```json
-{"id": 0, "all": "<all>", "type": 0}
+{"id": "<id>", "all": "<all>", "type": "<type>"}
 ```
 
 `sns` is added when set. Response: none parsed.

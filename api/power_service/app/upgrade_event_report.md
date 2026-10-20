@@ -29,7 +29,7 @@ The repository sender `getReportBleUpgrade` (`http_request_repository_impl.dart 
 | `device_sn` | ? | yes | | key `@0x34226cc`, value store `@0x34226dc` (parameter at `fp-0x10`) |
 | `device_pn` | ? | yes | | key `@0x34226e0`, value store `@0x34226f0` (parameter at `fp-0x18`) |
 | `device_type` | ? | yes | | key `@0x34226f4`, value store `@0x3422704` (stack parameter `fp+0x20`) |
-| `upgrade_type` | int (unboxed, x) | yes | | key `@0x3422708`, `lsl x2, x1, #1` `@0x3422718` Smi-tags the unboxed stack parameter, store `@0x342271c` |
+| `upgrade_type` | int (Smi, w) | yes | | key `@0x3422708`, `lsl x2, x1, #1` `@0x3422718` Smi-tags the unboxed stack parameter, store `@0x342271c` |
 | `after_version` | ? | yes | | key `@0x3422720`, value store `@0x3422730` (parameter at `fp-0x20`) |
 | `before_version` | ? | yes | | key `@0x3422734`, value store `@0x3422744` (parameter at `fp-0x28`) |
 | `upgrade_time` | ? | yes | | key `@0x3422748`, value store `@0x3422758` (parameter at `fp-0x30`) |
@@ -54,7 +54,7 @@ No response key is read by the repository sender's caller.
 Request, synthesized (types of the parameters unresolved)
 
 ```json
-{"device_sn": "<device_sn>", "device_pn": "<device_pn>", "device_type": "<device_type>", "upgrade_type": 0, "after_version": "<after_version>", "before_version": "<before_version>", "upgrade_time": "<upgrade_time>", "site_id": ""}
+{"device_sn": "<device_sn>", "device_pn": "<device_pn>", "device_type": "<device_type>", "upgrade_type": "<upgrade_type>", "after_version": "<after_version>", "before_version": "<before_version>", "upgrade_time": "<upgrade_time>", "site_id": ""}
 ```
 
 Response: none parsed.

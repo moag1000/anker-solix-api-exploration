@@ -65,13 +65,13 @@ No response key is read by the app.
 Request, synthesized (`setEvChargerPushMessage`)
 
 ```json
-{"disturb_scenes": {"start_charging": true, "stop_charging": true, "paused_charging": true, "paused_car_charging": true, "restore_charging": true, "smart_charging": true, "boost_charging": true}}
+{"disturb_scenes": {"start_charging": "<bool>", "stop_charging": "<bool>", "paused_charging": "<bool>", "paused_car_charging": "<bool>", "restore_charging": "<bool>", "smart_charging": "<bool>", "boost_charging": "<bool>"}}
 ```
 
 Request, synthesized (`setMessageDisturb`, `disturb_switch` type unresolved)
 
 ```json
-{"start_time": 0, "end_time": 0, "disturb_switch": "<disturb_switch>", "disturb_scenes": {"guardian_log": true}}
+{"start_time": "<start_time>", "end_time": "<end_time>", "disturb_switch": "<disturb_switch>", "disturb_scenes": {"guardian_log": "<bool>"}}
 ```
 
 ## Errors seen

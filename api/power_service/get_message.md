@@ -47,7 +47,7 @@ Top-level keys of the model (from `data/models.json`): `data` (element type not 
 Request, synthesized (types of `device_sns` and `message_type` unresolved)
 
 ```json
-{"last_time": 0, "device_sns": "<device_sns>", "limit": 10, "message_type": "<message_type>", "last_msg_id": 0}
+{"last_time": "<last_time>", "device_sns": "<device_sns>", "limit": 10, "message_type": "<message_type>", "last_msg_id": "<last_msg_id>"}
 ```
 
 ## Errors seen

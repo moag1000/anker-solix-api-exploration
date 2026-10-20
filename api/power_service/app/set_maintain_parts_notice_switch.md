@@ -37,7 +37,7 @@ None: the response body is not parsed by the app. The success callback `a7320_ma
 
 ## Response
 
-No response key is read by the app. The builder wraps the callbacks the caller supplied (`postJML` closure templates `@0x2268374`/`@0x226824c`, `pp+0xaa630`/`pp+0xaa638`).
+No response key is read by the app. The builder wraps the callbacks the caller supplied (`postJML` closure templates in `http_request_repository_impl.dart`: `@0x2268374`/`@0x226824c`, `pp+0xaa630`/`pp+0xaa638`).
 
 ## Example request/response
 

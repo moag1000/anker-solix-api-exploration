@@ -47,7 +47,7 @@ No response key is read by the app.
 Request, synthesized (types only, decrypted body as built by `startOilMachineExerciseRequest`)
 
 ```json
-{"device_sn": "<device_sn>", "manual_exercise_log": {"execution_result": true, "description": 0, "execution_time": 0}}
+{"device_sn": "<device_sn>", "manual_exercise_log": {"execution_result": true, "description": "<description>", "execution_time": "<execution_time>"}}
 ```
 
 Response: none parsed.

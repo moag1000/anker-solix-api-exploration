@@ -46,7 +46,7 @@ No response key is read by the first sender.
 Request, synthesized (first sender)
 
 ```json
-{"params": {"30001": true}}
+{"params": {"30001": "<bool>"}}
 ```
 
 Response: none parsed by the first sender.

@@ -25,7 +25,7 @@ The body is a 2-pair map literal (`<String, Object>`, `AllocateArray r2 = 8`, `@
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `device_sn` | string | yes | `"<device_sn>"` | key `@0x3a1a098`, value store `@0x3a1a0a8` (parameter r1) |
-| `effective_mode` | int (unboxed, x) | yes | | key `@0x3a1a0ac`, `lsl x2, x1, #1` `@0x3a1a0bc` (Smi-tagging the unboxed parameter), store `@0x3a1a0c0`; the caller computes the value from a compare with the pool object `Instance_EffectiveMode` (`csetm`, `and #0xfffffffffffffffe`, `add #4`, `@0x3a19fb8`..`@0x3a19fc0`, then `LoadInt32Instr` `@0x3a19fc4`): tagged 2 (value 1) when equal, tagged 4 (value 2) otherwise |
+| `effective_mode` | int (Smi, w) | yes | | key `@0x3a1a0ac`, `lsl x2, x1, #1` `@0x3a1a0bc` (Smi-tagging the unboxed parameter), store `@0x3a1a0c0`; the caller computes the value from a compare with the pool object `Instance_EffectiveMode` (`csetm`, `and #0xfffffffffffffffe`, `add #4`, `@0x3a19fb8`..`@0x3a19fc0`, then `LoadInt32Instr` `@0x3a19fc4`): tagged 2 (value 1) when equal, tagged 4 (value 2) otherwise |
 
 ## `param_type`/`cmd`
 
@@ -44,7 +44,7 @@ No response key is read by the app.
 Request, synthesized (types only, decrypted body as built by `switchExerciseModeRequest`)
 
 ```json
-{"device_sn": "<device_sn>", "effective_mode": 0}
+{"device_sn": "<device_sn>", "effective_mode": "<effective_mode>"}
 ```
 
 Response: none parsed.

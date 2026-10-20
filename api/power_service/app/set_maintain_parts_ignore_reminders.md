@@ -28,7 +28,7 @@ The body is a 5-pair map literal (`<String, Object>`, `AllocateArray r2 = 20` = 
 | `item_id` | int (unboxed, x) | yes | | key `@0x39ff088`, `BoxInt64Instr` `@0x39ff098`, store `@0x39ff0b0`; caller untags a Smi field (`LoadInt32Instr` `@0x39fef00`) with null default 0 (`@0x39feef8`) |
 | `item_name` | string | yes | | key `@0x39ff0d4`, store `@0x39ff0e8`; caller null default is the empty string (`r6 = ""` `@0x39fef30`) |
 | `maintenance_items` | int (unboxed, x) | yes | | key `@0x39ff10c`, `BoxInt64Instr` `@0x39ff11c`, store `@0x39ff134`; caller null default 1 (`mov x7, #1` `@0x39fef60`, 64-bit, so 1) |
-| `ignore_reminders` | int (unboxed, x) | yes | | key `@0x39ff158`, the unboxed parameter is Smi-tagged (`lsl x1, x0, #1` `@0x39ff168`) and stored (`stur w1` `@0x39ff16c`); the caller compares the same parameter with `cmp x3, #2` (64-bit, so 2) at `@0x39fee94` only to pick the string "0" or "1" for a callback context |
+| `ignore_reminders` | int (Smi, w) | yes | | key `@0x39ff158`, the unboxed parameter is Smi-tagged (`lsl x1, x0, #1` `@0x39ff168`) and stored (`stur w1` `@0x39ff16c`); the caller compares the same parameter with `cmp x3, #2` (64-bit, so 2) at `@0x39fee94` only to pick the string "0" or "1" for a callback context |
 
 ## `param_type`/`cmd`
 
@@ -40,14 +40,14 @@ None: the response body is not parsed by the app. The success callback `a7320_ma
 
 ## Response
 
-No response key is read by the app. The builder passes two callback closures (`postJML` closure templates `@0x2268374` and `@0x226824c`, `pp+0xaaa10`/`pp+0xaaa18`) that forward to the callbacks the caller supplied (`@0x39ff2c4` success, `@0x39ff204` failure).
+No response key is read by the app. The builder passes two callback closures (`postJML` closure templates in `http_request_repository_impl.dart`: `@0x2268374` and `@0x226824c`, `pp+0xaaa10`/`pp+0xaaa18`) that forward to the callbacks the caller supplied (`@0x39ff2c4` success, `@0x39ff204` failure).
 
 ## Example request/response
 
 Request, synthesized (types only, decrypted body as built by `setMaintainPartsIgnoreRemindersRequest`)
 
 ```json
-{"device_sn": "<device_sn>", "item_id": 0, "item_name": "<item_name>", "maintenance_items": 0, "ignore_reminders": 0}
+{"device_sn": "<device_sn>", "item_id": "<item_id>", "item_name": "<item_name>", "maintenance_items": "<maintenance_items>", "ignore_reminders": "<ignore_reminders>"}
 ```
 
 Response: none parsed.

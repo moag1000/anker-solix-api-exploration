@@ -44,7 +44,7 @@ No response key is read by the app.
 Request, synthesized (type of `extender_system_id` unresolved)
 
 ```json
-{"extender_system_id": "<extender_system_id>", "extender_system_params": {"effective_strategy": 0, "by_time_strategy": {}, "by_soc_strategy": {}}}
+{"extender_system_id": "<extender_system_id>", "extender_system_params": "<RangeExtenderStrategyParamsModel.toJson()>"}
 ```
 
 Response: none parsed.

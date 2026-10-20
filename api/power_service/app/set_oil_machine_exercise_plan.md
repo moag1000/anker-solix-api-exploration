@@ -46,7 +46,7 @@ Builder `setOilMachineExercisePlanRequest` (`a7320_requet_api.dart @0x29dd6ec`, 
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `device_sn` | string | yes | `"<device_sn>"` | key `@0x29dd784`, value store `@0x29dd794` (caller read `a7320_oil_machine_exercise_logic.dart @0x3a1c6dc`) |
-| `effective_mode` | int (unboxed, x) | yes | | key `@0x29dd798`, `lsl x2, x1, #1` `@0x29dd7a8` (Smi-tagging the unboxed parameter), store `@0x29dd7ac`; the caller computes 1 or 2 (`csetm`/`and`/`add` then `LoadInt32Instr` `@0x3a1c71c`) |
+| `effective_mode` | int (Smi, w) | yes | | key `@0x29dd798`, `lsl x2, x1, #1` `@0x29dd7a8` (Smi-tagging the unboxed parameter), store `@0x29dd7ac`; the caller computes 1 or 2 (`csetm`/`and`/`add` then `LoadInt32Instr` `@0x3a1c71c`) |
 | `manual_exercise` | object | optional | | added with `[]=` `@0x29dd854` only when parameter r6 is non-null (`cmp w0, NULL` `@0x29dd7c8`) |
 | `manual_exercise.exercise_type` | int (Smi, w) | yes | `2` | key `@0x29dd7dc`, `mov x16, #4` `@0x29dd7e8` + `stur w16` `@0x29dd7ec`, so 2 |
 | `manual_exercise.interval_period_month` | int (Smi, w) or null | yes | | key `@0x29dd7f0`, store `@0x29dd808` (`field_f` of the manual object; map typed `<String, int?>`) |
@@ -76,9 +76,9 @@ Request, synthesized (types only, `setOilMachineExercisePlanRequest` with both i
 ```json
 {
   "device_sn": "<device_sn>",
-  "effective_mode": 1,
-  "manual_exercise": {"exercise_type": 2, "interval_period_month": 0, "interval_period_week": 0},
-  "automatic_exercise": {"exercise_type": 1, "next_automatic_exercise": 0, "interval_period_month": 0, "interval_period_week": 0}
+  "effective_mode": "<effective_mode>",
+  "manual_exercise": {"exercise_type": 2, "interval_period_month": "<interval_period_month>", "interval_period_week": "<interval_period_week>"},
+  "automatic_exercise": {"exercise_type": 1, "next_automatic_exercise": "<next_automatic_exercise>", "interval_period_month": "<interval_period_month>", "interval_period_week": "<interval_period_week>"}
 }
 ```
 
