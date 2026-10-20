@@ -69,9 +69,9 @@ Called from:
 
 ## Known unknowns
 
-- Type of `short_url`: a parameter stored into a `<String, dynamic>` literal; the callers' argument type was not read.
+- Type of `short_url`: a parameter stored into a `<String, dynamic>` literal; the callers' argument type was not read. — attempted 2026-10-20 (two-hop not readable: both `_getRealUrl` callers pass a slot of their own frame (`small_charging_platform/src/screen_setting/clock_style/page/clock_style_logic.dart @0x286503c`, `small_charging_platform/src/screen_setting/clock_style/custom_screensaver/page/clock_style_manage_logic.dart @0x3ac98bc`))
 - The response shape (which key holds the real URL): the callers' callbacks were not decoded.
-- Header stays `string-only` because the type of `short_url` and the response model are missing.
+- Header stays `string-only` because the type of `short_url` and the response model are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

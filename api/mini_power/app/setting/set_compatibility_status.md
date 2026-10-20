@@ -72,7 +72,7 @@ Called from:
 ## Known unknowns
 
 - The value domain of the switch: the caller sends 1 when its bool parameter is true and 0 otherwise (`tst` in `charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart @0x3e55d04`); the read side `get_device_setting` casts the same-named key to `int` (`charging/http/http_request_repository_impl.dart @0x28a7e74`).
-- What the switch controls on the device (names only).
+- What the switch controls on the device (names only). — reclassified: device test row 154 (2026-10-20: what the setting does on the charger is behaviour of the device, only the endpoint and key names are in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

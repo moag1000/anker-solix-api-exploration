@@ -92,10 +92,10 @@ Called from:
 
 ## Known unknowns
 
-- Types of `id`, `name`, `total_power`, `max_total_power`, `auto_exit` and `power_settings`: object-field values the builders do not type (map literal `<String, Object?>`); the mode object's class was not read.
+- Types of `id`, `name`, `total_power`, `max_total_power`, `auto_exit` and `power_settings`: object-field values the builders do not type (map literal `<String, Object?>`); the mode object's class was not read. — attempted 2026-10-20 (two-hop not readable: the five callers pass the mode object as a slot of their own frame, `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_platform_edit_logic.dart @0x3a9f6cc`, `charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x3470d84`, `@0x3e31d4c`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart @0x3e05f0c`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_charging_edit_logic.dart @0x34699bc`; its class is not named in the asm)
 - The element shape of `power_settings` (built by `buildPowerSettingsForCloud` in the second sender, not read).
 - Whether the server requires every key or accepts a partial update: the app always sends all seven.
-- Header stays `string-only` because the field types above are missing.
+- Header stays `string-only` because the field types above are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

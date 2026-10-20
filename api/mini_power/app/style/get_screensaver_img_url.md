@@ -67,7 +67,7 @@ none traced: the sender body is not in the asm dump, so the failure path of the 
 - The method, the request keys (`id`, `type` are 3.18.0 inventory rows), their types and whether they are required: the sender body is not in the asm dump. The call site `@0x2802a64` suggests an integer id and a string type (`festival`), which does not prove the stores.
 - Which `type` values exist besides `festival`.
 - The response shape and how the callbacks use it.
-- Header stays `string-only` because Method, request types and the response model are missing.
+- Header stays `string-only` because Method, request types and the response model are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

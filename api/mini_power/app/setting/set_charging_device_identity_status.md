@@ -71,7 +71,7 @@ Called from:
 ## Known unknowns
 
 - The value domain of the status: the caller sends 1 when its bool parameter is true and 0 otherwise; the read side `get_device_setting` casts the same-named key to `int` (`charging/http/http_request_repository_impl.dart @0x28a7eec`).
-- What the status controls on the device (names only).
+- What the status controls on the device (names only). — reclassified: device test row 154 (2026-10-20: what the setting does on the charger is behaviour of the device, only the endpoint and key names are in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

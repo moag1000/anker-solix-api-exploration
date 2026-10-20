@@ -74,10 +74,10 @@ Called from:
 
 ## Known unknowns
 
-- Types of `sn`, `img_url` and `hash_code`: parameters stored into a `<String, dynamic>` literal; the callers' argument types were not read.
+- Types of `sn`, `img_url` and `hash_code`: parameters stored into a `<String, dynamic>` literal; the callers' argument types were not read. — attempted 2026-10-20 (two-hop not readable: both callers `addCustomClockScreenSavers` pass slots of their own frames, `charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart @0x3e383bc`..`@0x3e383cc` and `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart @0x3e19bdc`..`@0x3e19bec`)
 - Which hash `hash_code` is (algorithm and input) and how `img_url` is obtained: the callers were not decoded.
 - Whether and how the answer is used: the callers' success callbacks were not read.
-- Header stays `string-only` because the field types and the response handling are missing.
+- Header stays `string-only` because the field types and the response handling are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

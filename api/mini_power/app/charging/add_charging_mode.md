@@ -92,10 +92,10 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sn`, `name`, `number`, `total_power`, `max_total_power`, `auto_exit` and `power_settings`: they are parameter or object-field values the builders do not type (map literal `<String, Object?>`); the mode object's class and the callers' argument types were not read.
+- Types of `device_sn`, `name`, `number`, `total_power`, `max_total_power`, `auto_exit` and `power_settings`: they are parameter or object-field values the builders do not type (map literal `<String, Object?>`); the mode object's class and the callers' argument types were not read. — attempted 2026-10-20 (two-hop not readable: the three `_addCustomChargeModeToCloud` callers pass the `value` of an observable (`value()` `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_platform_edit_logic.dart @0x3aa5db4`, `charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x3e32070`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart @0x3e06cf4`) and slots of their frames; the class of the mode object is not named)
 - The element shape of `power_settings` (the second sender builds it in `buildPowerSettingsForCloud`, which was not read).
 - Whether the answer carries keys besides `id`: the app reads only `id` and hands the integer to the callback.
-- Header stays `string-only` because the field types above are missing.
+- Header stays `string-only` because the field types above are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -68,7 +68,7 @@ Called from:
 
 ## Known unknowns
 
-- What the flag controls on the device: the endpoint and key names are the only evidence.
+- What the flag controls on the device: the endpoint and key names are the only evidence. — reclassified: device test row 154 (2026-10-20: what the setting does on the charger is behaviour of the device, only the endpoint and key names are in the app)
 - How the flag relates to `charging_device_identity_status` (`get_device_setting`, `set_charging_device_identity_status`): both exist for A2687 and A2345; the relation was not decoded.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

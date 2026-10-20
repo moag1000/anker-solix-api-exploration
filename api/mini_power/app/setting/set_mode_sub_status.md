@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # set_mode_sub_status
 
@@ -25,9 +25,11 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `device_sn` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x38aa458` (typed by the one-hop caller trace in Known unknowns: `A2687ChargeModeLogic::setModeSubStatus` passes `field_3f?.field_6b ?? ""`, `String dyn:get:deviceSn(AnkerDevice)` `base_service/device/anker_device.dart @0x22053d4`) |
-| `mode` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38aa46c` (parameter, not typed by the builder) |
-| `protocol_key` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38aa480` (parameter, not typed by the builder) |
-| `status` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38aa494` (parameter, not typed by the builder) |
+| `mode` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x38aa46c` (parameter, not typed by the builder) |
+| `protocol_key` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x38aa480` (parameter, not typed by the builder) |
+| `status` | bool | yes |  | `charging/http/http_request_repository_impl.dart @0x38aa494` (parameter, not typed by the builder) |
+
+Second hop (app side, traced 2026-10-20, `charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_charge_mode_view.dart`): `A2687ChargeModeLogic::setModeSubStatus` is called from five switch closures with the signature `(dynamic, bool)`; each passes the bool of the switch as `status` (`ldr x5, [fp, #0x10]`, `@0x38aa26c`, `@0x38aaf9c`, `@0x38ab0c0`, `@0x38ab17c`, `@0x38ab238`), so `status` is a bool. `protocol_key` is a string literal at each site: `"4.5-21V PPS"` (`@0x38aa27c`), `"5-16V PPS"` (`@0x38aafa4`), `"5-11V PPS"` (`@0x38ab0c8`), `"UFCS"` (`@0x38ab184`) and `"SCP"` (`@0x38ab240`). `mode` is the literal `"normal"` at the first site (`@0x38aa274`) and, at the second site, `"normal"` when a bool field of the closure context is true and `"ai"` otherwise (`@0x38aaf54`..`@0x38aaf64`); the other three sites pass the same kind of context slot (`@0x38ab0bc`, `@0x38ab17c`, `@0x38ab238`). What a protocol key and the two modes mean on the charger is not known from the app.
 
 ## `param_type`/`cmd`
 
@@ -48,9 +50,9 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
 ```json
 {
   "device_sn": "<device_sn>",
-  "mode": "<?>",
-  "protocol_key": "<?>",
-  "status": "<?>"
+  "mode": "<mode>",
+  "protocol_key": "<protocol_key>",
+  "status": "<status>"
 }
 ```
 
@@ -74,10 +76,6 @@ Called from:
 
 ## Known unknowns
 
-- Types of all four values: parameters stored into a `<String, Object>` literal; the caller's argument types were not read.
-- The valid values of `mode`, `protocol_key` and `status`: the caller `setModeSubStatus` was not decoded for them.
-- One-hop caller tracing (controller ruling): the only caller `A2687ChargeModeLogic::setModeSubStatus` (`charging/ui/page/device/a2687/a2687setting/a2687_charge_mode/a2687_charge_mode_logic.dart @0x38aa2a0`) passes `field_3f?.field_6b ?? ""` (`@0x38aa344`) as `device_sn`, but `mode`, `protocol_key` and `status` are its own untyped parameters (context stores `@0x38aa2e8`..`@0x38aa300`), so those three need a second hop and stay `?`.
-- Header stays `string-only` because the types are missing.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

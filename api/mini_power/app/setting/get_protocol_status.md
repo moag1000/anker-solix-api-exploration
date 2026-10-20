@@ -70,7 +70,7 @@ Called from:
 ## Known unknowns
 
 - The element shape of `modes` (`unknown` in `data/models.json`; `models/charger.md` lists no fields for this model).
-- What "protocol" means for the user (a data-sharing or a charging protocol agreement): the key names `protocol_status` and the caller names are the only evidence.
+- What "protocol" means for the user (a data-sharing or a charging protocol agreement): the key names `protocol_status` and the caller names are the only evidence. — reclassified: server (2026-10-20: the callers `A2687DeviceInfoService::_fetchProtocolAgreementStatus` and `_resetProtocolAgreementForUserChange` name it a protocol agreement of the A2687; the agreement text is not an app-side fact)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

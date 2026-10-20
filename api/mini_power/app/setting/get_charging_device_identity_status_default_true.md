@@ -71,7 +71,7 @@ Called from:
 ## Known unknowns
 
 - The type of the returned value (bool or int): the closure forwards it unchecked; the callers `getDeviceIdentityStatusSwitch` were not decoded for it.
-- What the flag controls on the device (names only).
+- What the flag controls on the device (names only). — reclassified: device test row 154 (2026-10-20: what the setting does on the charger is behaviour of the device, only the endpoint and key names are in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

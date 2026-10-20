@@ -71,7 +71,7 @@ Called from:
 ## Known unknowns
 
 - The value domain of the flag: the caller sends 1 when its bool parameter is true and 0 otherwise (`tst` `@0x3e557f0`, `cset`, `lsl`); what the server does with the numbers is not known.
-- What the flag controls on the device (names only).
+- What the flag controls on the device (names only). — reclassified: device test row 154 (2026-10-20: what the setting does on the charger is behaviour of the device, only the endpoint and key names are in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -71,7 +71,7 @@ none traced: the sender body is not in the asm dump, so the failure path of the 
 - Whether the callbacks receive the response body unchanged: the sender body was not read, so `PortProtocolStatusResponse` is only the model the callers apply.
 - Why the diff lists the URL under "Removed endpoints": the inventory finds no code reference to the string in 3.24.3, while the callers still `bl` into the mixin function.
 - The element shape of `port_list` (`unknown` in `data/models.json`).
-- Header stays `string-only` because Method and request types are missing.
+- Header stays `string-only` because Method and request types are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -69,7 +69,7 @@ none traced: the sender body is not in the asm dump, so the failure path of the 
 - The method, the request keys, their types and whether they are required: the sender body is not in the asm dump. The inventory rows are 3.18.0 data. The model `small_charging_platform::PortProtocolStatusResponse` has `toJson` (`small_charging_platform/src/custom_protocol/model/port_protocol_status_model.dart @0x2859c40`) and the manager logic calls it (`small_charging_platform/src/custom_protocol/page/custom_protocol_manager_logic.dart @0x2a24f9c`), which fits the keys `version` and `port_list`, but the link to this body was not read.
 - What `type` takes (the call site `small_charging_platform/src/custom_protocol/page/custom_protocol_manager_logic.dart @0x3a77730` passes `Instance_PortProtocolSetType`); the enum values were not decoded.
 - How the answer is used: the callbacks were not read.
-- Header stays `string-only` because Method, request types and response handling are missing.
+- Header stays `string-only` because Method, request types and response handling are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

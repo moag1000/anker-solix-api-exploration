@@ -76,10 +76,10 @@ Called from:
 
 ## Known unknowns
 
-- Type of `sn`: a parameter stored into a `<String, dynamic>` literal; the callers' argument type was not read.
+- Type of `sn`: a parameter stored into a `<String, dynamic>` literal; the callers' argument type was not read. — attempted 2026-10-20 (two-hop not readable: the five call sites pass a slot of the caller frame (`charging/ui/page/device/a2345/a2345custom_clock/a2345custom_clock_logic.dart @0x28b0918`, `@0x3e3879c`; `charging/ui/page/device/a2345/a2345clock_style/a2345clock_style_logic.dart @0x28ad6bc`, `@0x28ad724`))
 - The response shape: the callbacks of the eight callers were not decoded.
 - Whether `sn` is the device serial number or another id: the key name `sn` differs from `device_sn` on the other endpoints and the callers were not decoded for it.
-- Header stays `string-only` because the type of `sn` and the response model are missing.
+- Header stays `string-only` because the type of `sn` and the response model are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

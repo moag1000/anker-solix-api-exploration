@@ -75,7 +75,7 @@ Called from:
 ## Known unknowns
 
 - What `egg_type` and `report_time` carry (value domain, time unit): the A2345 caller computes `report_time` with `sdiv` (`charging/ui/page/device/a2345/a2345easter_egg/a2345easter_egg_logic.dart @0x3e3bd98`) from the current time, the unit was not decoded further.
-- What "status" the record reports: the endpoint name is the only evidence.
+- What "status" the record reports: the endpoint name is the only evidence. — reclassified: device test row 154 (2026-10-20: what the reported status stands for is decided by the device event and the server record)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
