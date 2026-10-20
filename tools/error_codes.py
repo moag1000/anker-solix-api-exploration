@@ -9,10 +9,14 @@ or when api/errors.md exists and lacks a table row for a code in the JSON.
 Standard library only; the asm tree and the upstream file are only read
 (upstream is parsed with ast, never imported).
 
-Asm rows also carry `message_key` / `message_en`: the first localization key loaded
-next to the compare that exists in the app's en_US translation table (read from the
-Blutter pool dump `pp.txt`, `--pool`); `common*` button labels and GENERIC_KEYS are
-skipped; null when no key.  Proximity, not proof of what the user sees.
+Asm rows also carry `message_keys` (every localization key loaded in the equal-path
+block after the compare that exists in the app's en_US translation table, read from the
+Blutter pool dump `pp.txt`, `--pool`), `message_key` (the first; may be a dialog title,
+not the body), `message_en` (its text) and `message_tag` (`asm-traced (proximity)`,
+only when a key exists).  The equal-path block is the fall-through of `b.ne` or the
+target of `b.eq`, up to an unconditional branch, `ret`, the `b.ne` target or the next
+compare; a range split (gt/lt) has none.  `common*` button labels and GENERIC_KEYS
+are skipped.  Proximity, not proof of what the user sees.
 
 Row sources (field `source`):
   upstream  class ERRORS entry of upstream api/errors.py, tag upstream-confirmed
@@ -229,6 +233,47 @@ def _compare(instrs, i):
     return None
 
 
+BR_COND = re.compile(r'^b\.(\w+)\s+#(0x[0-9a-f]+)')
+BR_UNCOND = re.compile(r'^(b\s+#|ret\b|br\s)')
+BLOCK_MAX = 80
+
+
+def equal_block_strings(ins, j, stop):
+    """String literals loaded on the path where the compare was equal.
+
+    ins[j] is the conditional branch after the compare.  `b.ne T`: the equal path
+    is the fall-through, which ends at the address T, at an unconditional branch,
+    at `ret` or at the next compare (index `stop`).  `b.eq T`: the equal path starts
+    at T and ends at the first unconditional branch, `ret` or compare.  Any other
+    condition (a range split) has no single equal path: returns [].
+    """
+    m = BR_COND.match(ins[j].text) if j < len(ins) else None
+    if not m or m.group(1) not in ('eq', 'ne'):
+        return []
+    target = m.group(2)
+    if m.group(1) == 'ne':
+        start, limit = j + 1, None
+    else:
+        idx = [k for k, x in enumerate(ins) if x.addr == target]
+        if not idx:
+            return []
+        start, limit = idx[0], None
+        stop = len(ins)
+    out = []
+    for k in range(start, min(len(ins), start + BLOCK_MAX)):
+        if m.group(1) == 'ne' and (ins[k].addr == target or k >= stop):
+            break
+        if m.group(1) == 'eq' and k > start and _compare(ins, k):
+            break
+        t = ins[k].text
+        if BR_UNCOND.match(t):
+            break
+        s = STR_LIT.match(t)
+        if s and s.group(1) not in out:
+            out.append(s.group(1))
+    return out
+
+
 def scan_function(fn, min_value, label=None, max_value=None):
     """Return the code compares of one function as row dicts (no source fields)."""
     ins = fn.instrs
@@ -257,6 +302,7 @@ def scan_function(fn, min_value, label=None, max_value=None):
             'addr': ins[i].addr, 'function': label or fn.name,
             'function_addr': fn.addr, 'odd_raw': width == 'w' and raw % 2 == 1,
             'strings': strings[:4],
+            'block': equal_block_strings(ins, j, stop),
         })
     return rows
 
@@ -314,6 +360,7 @@ def parse_upstream(path):
 # Keys that label a button or a generic state next to a compare; never the message.
 GENERIC_KEYS = {'failed', 'signUpGoSignIn', 'forgetPwdResend'}
 LOCALE = 'en_US'
+MESSAGE_TAG = 'asm-traced (proximity)'
 POOL_MAP_HEAD = re.compile(r'^\[pp\+0x[0-9a-f]+\] Map<String, Map<String, String>>\(\d+\) \{$')
 POOL_ENTRY = re.compile(r'^    "((?:[^"\\]|\\.)*)": "(.*)",?$')
 
@@ -344,16 +391,18 @@ def load_locale(pool_path, locale=LOCALE):
 
 
 def message_for(strings, texts):
-    """(key, text) of the first localization key among the strings next to a compare.
+    """(keys, text of the first key) of the localization keys loaded in the equal-path block.
 
     A key counts when it is in the locale table and is neither a `common*` button
-    label nor in GENERIC_KEYS.  Proximity, not proof: the key is loaded in the
-    branch after the compare, which is what the page reports as app side.
+    label nor in GENERIC_KEYS.  Proximity, not proof: the first key may be a dialog
+    title, not the body (see MESSAGE_TAG).  ([], None) when there is none.
     """
+    keys = []
     for s in strings:
-        if s in texts and not s.startswith('common') and s not in GENERIC_KEYS:
-            return s, texts[s]
-    return None, None
+        if s in texts and not s.startswith('common') and s not in GENERIC_KEYS \
+                and s not in keys:
+            keys.append(s)
+    return keys, (texts[keys[0]] if keys else None)
 
 
 def build(asm_root, upstream_path, sites=None, msg_sites=None, pool=None):
@@ -361,12 +410,18 @@ def build(asm_root, upstream_path, sites=None, msg_sites=None, pool=None):
     asm_rows, missing = scan_sites(asm_root, sites)
     texts = load_locale(pool) if pool else {}
     for r in asm_rows:
-        r['message_key'], r['message_en'] = message_for(r['strings'], texts)
+        keys, en = message_for(r['block'], texts)
+        r['message_key'], r['message_en'] = (keys[0] if keys else None), en
+        r['message_keys'] = keys
+        if keys:
+            r['message_tag'] = MESSAGE_TAG
     msg = MSG_SITES if msg_sites is None else msg_sites
     msg_rows, miss2 = scan_sites(
         asm_root, [(f, a, lb, MSG_RANGE[0]) for f, a, lb in msg], 'message-type-excluded',
         MSG_RANGE[1])
     missing += miss2
+    for r in asm_rows + msg_rows:
+        r.pop('block', None)
     rows += asm_rows + msg_rows + [dict(r) for r in ISSUE_ROWS]
     rows.sort(key=lambda r: (r['code'], r['source'], r.get('file', ''),
                              r.get('addr', ''), r.get('line', 0)))

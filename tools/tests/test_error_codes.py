@@ -170,6 +170,75 @@ class ScanTest(unittest.TestCase):
             self.assertEqual(len(missing), 2)
 
 
+BRANCH_ASM = '''class H {
+  _ ne_shape(/* No info */) {
+    // ** addr: 0x3000, size: 0x40
+    // 0x3000: r17 = 10019
+    //     0x3000: mov             x17, #0x2723
+    // 0x3004: cmp             x0, x17
+    // 0x3008: b.ne            #0x3020
+    // 0x300c: r1 = "keyA"
+    //     0x300c: add             x1, PP, #1, lsl #12
+    // 0x3010: r1 = "keyA2"
+    //     0x3010: add             x1, PP, #1, lsl #12
+    // 0x3014: b               #0x3030
+    // 0x3020: r1 = "keyB"
+    //     0x3020: add             x1, PP, #1, lsl #12
+    // 0x3030: ret
+    //     0x3030: ret
+  }
+  _ ne_else_only(/* No info */) {
+    // ** addr: 0x3100, size: 0x40
+    // 0x3100: r17 = 10019
+    //     0x3100: mov             x17, #0x2723
+    // 0x3104: cmp             x0, x17
+    // 0x3108: b.ne            #0x3120
+    // 0x310c: r1 = "other"
+    // 0x3110: b               #0x3130
+    // 0x3120: r1 = "keyB"
+    // 0x3130: ret
+  }
+  _ eq_shape(/* No info */) {
+    // ** addr: 0x3200, size: 0x40
+    // 0x3200: r17 = 10019
+    //     0x3200: mov             x17, #0x2723
+    // 0x3204: cmp             x0, x17
+    // 0x3208: b.eq            #0x3220
+    // 0x320c: r1 = "keyB"
+    // 0x3210: b               #0x3230
+    // 0x3220: r1 = "keyA"
+    // 0x3224: ret
+  }
+}
+'''
+
+
+class EqualPathBlockTest(unittest.TestCase):
+    def keys(self, addr):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, 'h.dart')
+            with open(path, 'w', encoding='utf-8') as fh:
+                fh.write(BRANCH_ASM)
+            fns = {f.addr: f for f in A.iter_functions(path, 'h.dart')}
+            rows = E.scan_function(fns[addr], 400, 'x')
+        texts = {'keyA': 'A', 'keyA2': 'A2', 'keyB': 'B', 'other': 'O'}
+        return E.message_for(rows[0]['block'], texts)
+
+    def test_ne_takes_fall_through_not_else(self):
+        keys, en = self.keys('0x3000')
+        self.assertEqual(keys, ['keyA', 'keyA2'])
+        self.assertEqual(en, 'A')
+
+    def test_else_key_is_not_attributed(self):
+        keys, en = self.keys('0x3100')
+        self.assertEqual(keys, ['other'])  # equal path loads only this one
+        self.assertNotIn('keyB', keys)
+
+    def test_eq_takes_branch_target(self):
+        keys, _ = self.keys('0x3200')
+        self.assertEqual(keys, ['keyA'])
+
+
 class MessageKeyTest(unittest.TestCase):
     def test_locale_block_only_and_unescaped(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -185,9 +254,9 @@ class MessageKeyTest(unittest.TestCase):
         texts = {'commonOK': 'OK', 'failed': 'Failed', 'loginErrorPwd': 'Password Incorrect'}
         self.assertEqual(
             E.message_for(['request fail', 'commonOK', 'failed', 'loginErrorPwd'], texts),
-            ('loginErrorPwd', 'Password Incorrect'))
-        self.assertEqual(E.message_for(['commonOK', 'unknownKey'], texts), (None, None))
-        self.assertEqual(E.message_for([], texts), (None, None))
+            (['loginErrorPwd'], 'Password Incorrect'))
+        self.assertEqual(E.message_for(['commonOK', 'unknownKey'], texts), ([], None))
+        self.assertEqual(E.message_for([], texts), ([], None))
 
     def test_missing_pool_aborts_without_writing(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -362,8 +431,16 @@ class RealDataTest(unittest.TestCase):
         r = self.find('asm', 21102, addr='0x40619dc')[0]
         self.assertEqual((r['message_key'], r['message_en']),
                          ('membersReached', 'Invite limit reached.'))
-        r = self.find('asm', 10019, addr='0x2fafa94')[0]
-        self.assertEqual(r['message_key'], 'loginErrorPwd')
+        r = self.find('asm', 10019, addr='0x3bd2544')[0]
+        self.assertEqual(r['message_keys'], ['loginErrorPwd', 'loginErrorFiveTimes'])
+        self.assertEqual(r['message_tag'], 'asm-traced (proximity)')
+        # else-branch keys are not attributed (reviewer I-1)
+        for code, addr in ((1000, '0x3bc372c'), (26202, '0x2fafdf8'),
+                           (100053, '0x4055ac0'), (200218, '0x433024c')):
+            r = self.find('asm', code, addr=addr)[0]
+            self.assertIsNone(r['message_key'])
+            self.assertEqual(r['message_keys'], [])
+            self.assertNotIn('message_tag', r)
         # a branch with only a button label has no message key
         self.assertIsNone(self.find('asm', 4007, addr='0x3be28e4')[0]['message_key'])
 
