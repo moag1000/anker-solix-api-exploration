@@ -60,4 +60,4 @@ Corrections of the old FLOWS.md (audit rows in brackets):
 
 ## Known unknowns
 
-- Whether the manual backup window and the automatic disaster preparedness can be active together is device behaviour — reclassified: device, [device test row 127](../docs/DEVICE_TEST_BACKLOG.md#flow-device-and-model-findings-that-need-a-device-asm-depth-pass-task-5d).
+- Whether the manual backup window and the automatic disaster preparedness can be active together is device behaviour — reclassified: device, [device test row 127](../docs/DEVICE_TEST_BACKLOG.md#added-2026-10-20-depth-pass).

@@ -34,4 +34,4 @@ New class in 3.24.3.
 
 ## Known unknowns
 
-- The transport behind `akiot.device.get_external_field` (BLE, local or cloud) is decided inside the native plugin and is not visible in Dart. This page does not claim any BLE or cloud fallback behaviour — reclassified: native plugin, not in Dart asm, [device test row 156](../docs/DEVICE_TEST_BACKLOG.md#flow-device-and-model-findings-that-need-a-device-asm-depth-pass-task-5d).
+- The transport behind `akiot.device.get_external_field` (BLE, local or cloud) is decided inside the native plugin and is not visible in Dart. This page does not claim any BLE or cloud fallback behaviour — reclassified: native plugin, not in Dart asm, [device test row 156](../docs/DEVICE_TEST_BACKLOG.md#added-2026-10-20-depth-pass).

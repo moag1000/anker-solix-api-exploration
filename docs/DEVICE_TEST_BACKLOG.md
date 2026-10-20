@@ -30,6 +30,7 @@ BLE rows need the device off WiFi: BLE is unavailable while the device is on WiF
 1. [Any MQTT device (envelope)](#any-mqtt-device-envelope)
 1. [Any BLE device (handshake)](#any-ble-device-handshake)
 1. [Output-limit app gate (SB2 behind an AE100 dock, A17C0)](#output-limit-app-gate-sb2-behind-an-ae100-dock-a17c0)
+1. [Added 2026-10-20 (depth pass)](#added-2026-10-20-depth-pass)
 
 ## How to read the table
 
@@ -65,7 +66,8 @@ BLE rows need the device off WiFi: BLE is unavailable while the device is on WiF
 | [Any MQTT device (envelope)](#any-mqtt-device-envelope) | 3 | 0 | 2 | 1 |
 | [Any BLE device (handshake)](#any-ble-device-handshake) | 5 | 0 | 4 | 1 |
 | [Output-limit app gate (SB2 behind an AE100 dock, A17C0)](#output-limit-app-gate-sb2-behind-an-ae100-dock-a17c0) | 3 | 1 | 2 | 0 |
-| total | 121 | 25 | 78 | 18 |
+| [Added 2026-10-20 (depth pass)](#added-2026-10-20-depth-pass) | 21 | 0 | 4 | 17 |
+| total | 142 | 25 | 82 | 35 |
 
 ## A17C5 (Solarbank 3)
 
@@ -280,34 +282,22 @@ The app-side gate is on [get_power_limit](../api/power_service/site/get_power_li
 | 120 | P2 | [api/power_service/site/get_power_limit.md § Known unknowns](../api/power_service/site/get_power_limit.md#known-unknowns): A17C0 in the site-level page | A17C0 | On a site that holds an A17C0, read `get_power_limit` and open the station power limit page (deeplink or entry row). | Whether the A17C0 is listed in `device_info`, and what the page shows for it. | open |  |
 | 121 | P2 | [api/power_service/site/set_site_device_param.md § Known unknowns](../api/power_service/site/set_site_device_param.md#known-unknowns): type 19 on an SB2 site | A17C1, A17C3, A17C2 | Send the type-19 request raw on an SB2 site (site type 5, 10 or 11). | Whether it is rejected and with which API error code (thomluther reported that SB2 supports neither type 18 nor 19; no code recorded). | open |  |
 
-## BLE session setup of kit-routed and non-ZX classes
+## Added 2026-10-20 (depth pass)
 
-Rows added by the depth pass of 2026-10-20 (Task 5c); they use the same columns as the table above.
+Rows added by the depth pass of 2026-10-20 (Tasks 5a to 5d), in row-number order; they use the same columns as the tables above. Row numbers are never reused or renumbered because owner pages cite them; the numbers 130 to 149 are unused (a numbering gap left by the parallel tasks), so the next free row is 163.
 
 | # | prio | page / section | PN | what to send | what to look for | status | who could test |
 |---|---|---|---|---|---|---|---|
 | 122 | P2 | [ble/handshake.md § Which implementation runs for a product](../ble/handshake.md#which-implementation-runs-for-a-product): session of the classes without `ZXBleFeature` (A1770, A1780, A17A0 to A17A2, A17B2, A5140, A5141, A5143, A5150) | A1770, A1780, A17A0, A5140 | With WiFi off, connect over BLE and capture the first frames in both directions (no commands needed). | Whether the app sends any handshake-like frame and whether later frames are encrypted; the Dart conferers send no start-connect request for these classes. | open |  |
 | 123 | P2 | [ble/handshake.md § Which implementation runs for a product](../ble/handshake.md#which-implementation-runs-for-a-product): negotiation of the SDK-registered codes (A17E1, A17E2, AE103, AE111, AE113, AE1X0, AE1R0, A5191) | A17E2, AE1X0, A5191 | With WiFi off, capture one BLE negotiation. | The request and response stages, the capability layout and the key text, to compare with the Dart conferer stages; the negotiation of these codes runs in the native kit, not in the Dart asm. | open |  |
-
-## MQTT findings that need a device (asm depth pass, Task 5b)
-
-| # | prio | page / section | PN | what to send | what to look for | status | who could test |
-|---|---|---|---|---|---|---|---|
 | 124 | P2 | [mqtt/a17x8.md § 007c setTimingCmd](../mqtt/a17x8.md#007c-settimingcmd): 007c `a5` byte order | A17X8 | Create one schedule at 07:30 in the app with mqtt_monitor running, or send 007c raw with both byte orders. | Whether the two `a5` bytes on the wire are [hour, minute] (the order the app builder writes) or [minute, hour] (upstream's `min;hour` comment), and which order the plug accepts. | open |  |
 | 125 | P3 | [mqtt/a17x8.md § 0079 and 007b other controller opcodes](../mqtt/a17x8.md#0079-and-007b-other-controller-opcodes): 007b location light | A17X8 | Send 007b with `a2` = 1 (the only value the app sends) with mqtt_monitor running. | What the plug does (location light state) and whether another value is accepted. | open |  |
 | 126 | P3 | [mqtt/a1790.md § Setters 0078, 005f, 0060, 0091](../mqtt/a1790.md#setters-0078-005f-0060-0091): 005f and 0060 argument roles | A1790 | Switch one expansion battery's power and its light from the app with mqtt_monitor running. | Which of `a2`, `a3`, `a4` carries the battery id (`a3` is a string in the builder), the switch value and, for 0060, the constant 1. | open |  |
-| 150 | P3 | [api/encryption.md § Which calls are encrypted](../api/encryption.md#which-calls-are-encrypted): calls that keep the default `needEncryption: true` | any | Capture one default-true call (for example `/power_service/v1/site/get_site_list`) while logged in and once as a visitor session, on the wire (proxy or mqtt_monitor-style capture of the HTTPS body). | Whether the body is the encrypted envelope (headers `X-Signature`, `X-Encryption-Info`) or plain JSON, and which base URLs take the plain path. | open |  |
-
-## Flow, device and model findings that need a device (asm depth pass, Task 5d)
-
-Rows added by the depth pass of 2026-10-20 (Task 5d); they use the same columns as the table above.
-
-| # | prio | page / section | PN | what to send | what to look for | status | who could test |
-|---|---|---|---|---|---|---|---|
 | 127 | P3 | [flows/a5101_storm_guard.md](../flows/a5101_storm_guard.md#side-effects): manual backup window and automatic disaster preparedness together | A5101 | Enable the automatic disaster preparedness switch, then set a manual backup window in the app (and the other order) with mqtt_monitor running. | Whether the station accepts both at once, what the status shows afterwards, and which of the two the app keeps (the device fields at offset 415 and the auto switch). | open |  |
 | 128 | P3 | [flows/ota_monitor.md](../flows/ota_monitor.md#known-unknowns): transport of the kit's OTA status and progress channels | A17C1, A1780P | Start a firmware update from the app while the device is on WiFi, with mqtt_monitor running and, if possible, a second capture of the phone's traffic; then repeat on a device off WiFi. | Whether the progress and the in-progress answer reach the app over MQTT or over another path, and whether the unit of the monitor timeout (the app passes 600 for the single device and 600000 for the batch) matters. No BLE path is assumed while the device is on WiFi. | open |  |
-| 151 | P3 | [api/charging_hes_svc/check_update.md § Known unknowns](../api/charging_hes_svc/check_update.md#known-unknowns): which update check the app sends first | A5101 | Open the app, go to home settings and then to the firmware update page with a proxy capture (or mqtt_monitor-style HTTPS log) and note the order of `/charging_hes_svc/check_update` calls. | Which call comes first on a fresh settings visit and whether the `stationId` values of the calls are equal. | open |  |
 | 129 | P3 | [reference/business_rules.md](../reference/business_rules.md#known-unknowns): smart plug timer and schedule at the same time | A17X8 | Create a schedule that starts within a running countdown timer (and the reverse) in the app, with mqtt_monitor running. | Whether the plug accepts both, which one switches the relay, and what the 0405 status shows for each. | open |  |
+| 150 | P3 | [api/encryption.md § Which calls are encrypted](../api/encryption.md#which-calls-are-encrypted): calls that keep the default `needEncryption: true` | any | Capture one default-true call (for example `/power_service/v1/site/get_site_list`) while logged in and once as a visitor session, on the wire (proxy or mqtt_monitor-style capture of the HTTPS body). | Whether the body is the encrypted envelope (headers `X-Signature`, `X-Encryption-Info`) or plain JSON, and which base URLs take the plain path. | open |  |
+| 151 | P3 | [api/charging_hes_svc/check_update.md § Known unknowns](../api/charging_hes_svc/check_update.md#known-unknowns): which update check the app sends first | A5101 | Open the app, go to home settings and then to the firmware update page with a proxy capture (or mqtt_monitor-style HTTPS log) and note the order of `/charging_hes_svc/check_update` calls. | Which call comes first on a fresh settings visit and whether the `stationId` values of the calls are equal. | open |  |
 | 152 | P2 | [api/encryption.md § Known unknowns](../api/encryption.md#known-unknowns): native request layer (signature hash, headers, terminal id) | any | Capture one encrypted API request and its answer on the wire (a proxy that sees the HTTPS body or a debug build of the SDK); read the headers and the X-Signature value. | Whether a terminal-id header is sent on SDK calls, the length and format of X-Signature (64 hex characters suggest SHA-256), and which hash and key encoding reproduce it from the signed text. | open |  |
 | 153 | P3 | [api/sdk_senders.md § Known unknowns](../api/sdk_senders.md#known-unknowns): native SDK and agent kit requests | any | Run the app behind a proxy that records HTTPS traffic; open the Anka agent screen and trigger one SDK call (for example a site list) and note host, path, headers and whether the body is encrypted. | Which headers the native SDK adds, whether `/app/ai/anka` is an HTTP path or an agent protocol route, and what the native layer does with the negotiated key. | open |  |
 | 154 | P3 | [api/mini_power/app/setting/set_charging_mode_status.md § Known unknowns](../api/mini_power/app/setting/set_charging_mode_status.md#known-unknowns): A2345 and A2687 setting switches (identity status, charging-mode status, compatibility status, easter-egg status) | A2345, A2687 | With one charger attached, toggle each setting in the app (laboratory and identity pages) one at a time and watch the charger and its screen; capture the cloud calls. | What each switch changes on the charger (output behaviour, display, protocol handshake) and whether the cloud value and the charger state stay in step. | open |  |

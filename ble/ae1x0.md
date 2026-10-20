@@ -95,6 +95,6 @@ none.
 
 Tag: untagged by design (no API fact).
 
-- What the kit's negotiation does for these codes (stages, key derivation): it runs in the native plugin — reclassified: native plugin, not in Dart asm, [device test row 123](../docs/DEVICE_TEST_BACKLOG.md#ble-session-setup-of-kit-routed-and-non-zx-classes).
+- What the kit's negotiation does for these codes (stages, key derivation): it runs in the native plugin — reclassified: native plugin, not in Dart asm, [device test row 123](../docs/DEVICE_TEST_BACKLOG.md#added-2026-10-20-depth-pass).
 - Device-test status: no BLE session against a real device is recorded in this repository.
 
