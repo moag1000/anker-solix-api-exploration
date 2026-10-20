@@ -66,7 +66,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The element type of `questions` is not read here (the proactive call uses `ProactiveCtaItem` with `title` and `value`).
+- The element type of `questions` is not read here (the proactive call uses `ProactiveCtaItem` with `title` and `value`). — attempted 2026-10-20 (two-hop not readable: `QuestionBankResponse.fromJson` casts `questions` to `List?` without an element conversion, `anka_agent/pages/home/models/question_bank_response_model.dart @0x2e561b0`, so the elements stay as received; the proactive call uses `ProactiveCtaItem` with `title` and `value`)
 
 ## Device-tested by
 

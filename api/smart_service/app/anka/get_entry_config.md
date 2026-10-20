@@ -38,6 +38,8 @@ Unknown (string-only): the 3.18.0 response parse was not read. The 3.24.3 succes
 
 Unknown (string-only); see the successor page for the 3.24.3 response keys.
 
+3.18.0 parse read (traced 2026-10-20, 3.18.0 asm tree): `getAnkaAgentEntry` (`anka_agent/http/anka_agent_http.dart`, URL load `@0x1fe41f0`) parses the answer with `AnkaAgentEntryConfigModel.fromJson` (`@0x1fe4364`); that model reads the keys `show`, `domain`, `key_exchange_domain`, `setting_switch`, `enable` and `setting_images` (elements with `function_description` and `image_url`) in `anka_agent/bean/anka_agent_entry_config_model.dart` of 3.18.0, which are the same first six keys that the 3.24.3 model reads (see [get_all_config](get_all_config.md#response)); 3.24.3 reads further keys (`has_proactive_message`, `memory_switch`, the `bill_analysis_*`, `power_outage_switch` and `bubble_config` keys). So `get_all_config` is not a pure rename of the call: the answer model gained keys while the six older keys stayed.
+
 ## Example request/response
 
 None: nothing to synthesize without the 3.18.0 asm.
@@ -58,7 +60,6 @@ none traced: the 3.18.0 sender is not readable here.
 
 - The response parse of the 3.18.0 call (the method POST and the absence of a body literal are in Method+URL; the 3.18.0 asm tree is in the workspace) — traced 2026-10-20.
 - Whether the 3.18.0 server still answers this URL: not tested; the 3.24.3 app no longer sends it.
-- Whether `get_all_config` is a pure rename or also changed the response keys: the successor page documents only the 3.24.3 side.
 
 ## Device-tested by
 

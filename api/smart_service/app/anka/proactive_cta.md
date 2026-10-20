@@ -26,6 +26,8 @@ Body is a `<String, dynamic>` map; it holds `scene_type` only when the argument 
 |---|---|---|---|---|
 | `scene_type` | String | no | `"power_outage"` | `anka_agent_http.dart @0x2e544d0`; the example scene is a placeholder (the values are not shown by the sender) |
 
+Source of `scene_type` (traced 2026-10-20, app side): `AiChatController::refreshReminderCta` (`anka_agent/pages/home/controller/ai_chat_controller.dart @0x2e54354`, named parameter `sceneType`) is called from `_fetchCtaForSpecialMessages` (`@0x2e5432c`) with the scene taken from the chat message data: the string key `scene_type` is read from message maps at `ai_chat_controller.dart @0x2e6112c`, `@0x2e61b80`, `@0x2e63170` and passed on in the log text ` sceneType=`. So the scene values are delivered with the messages (server data) and are not enumerated in the app.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -70,7 +72,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The set of `scene_type` values is not decoded here.
+- The set of `scene_type` values: delivered with the chat messages, not enumerated in the app — reclassified: server (2026-10-20, see Request)
 
 ## Device-tested by
 
