@@ -6,7 +6,7 @@ This directory holds one page per cloud endpoint, grouped by service (the first 
 
 ## Service index
 
-One directory per URL prefix: 450 distinct URLs (439 with a code reference in 3.24.3, 9 only in the 3.24.3 object pool with no code reference, 2 absent from 3.24.3 and only in 3.18.0). The pages column counts the pages on disk per service: one per URL plus hand-written pages that have no inventory row (3 in total). Skeleton pages are rendered from `data/endpoints.json` by `tools/render_pages.py`. Page status over all 453 pages on disk (a page has exactly one status; `pool-only` and `removed` come from the inventory and take precedence over `skeleton`): `owner` 124, `skeleton` 318, `pool-only` 9, `removed` 2.
+One directory per URL prefix: 450 distinct URLs (439 with a code reference in 3.24.3, 9 only in the 3.24.3 object pool with no code reference, 2 absent from 3.24.3 and only in 3.18.0). The pages column counts the pages on disk per service: one per URL plus hand-written pages that have no inventory row (3 in total). Skeleton pages are rendered from `data/endpoints.json` by `tools/render_pages.py`. Page status over all 453 pages on disk (a page has exactly one status; `pool-only` and `removed` come from the inventory and take precedence over `skeleton`): `owner` 442, `skeleton` 0, `pool-only` 9, `removed` 2.
 
 | service | pages | index |
 |---|---|---|

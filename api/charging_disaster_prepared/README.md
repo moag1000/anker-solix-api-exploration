@@ -6,10 +6,10 @@ Service index for the URL prefix `/charging_disaster_prepared/`. Each endpoint p
 
 | endpoint | purpose | upstream key | status |
 |---|---|---|---|
-| [`/charging_disaster_prepared/clear`](clear.md) | TODO | - | pool-only |
-| [`/charging_disaster_prepared/get_site_device_disaster`](get_site_device_disaster.md) | TODO | - | skeleton |
-| [`/charging_disaster_prepared/get_support_func`](get_support_func.md) | TODO | - | skeleton |
-| [`/charging_disaster_prepared/quit_disaster_prepare`](quit_disaster_prepare.md) | TODO | - | pool-only |
-| [`/charging_disaster_prepared/set_site_device_disaster`](set_site_device_disaster.md) | TODO | - | pool-only |
+| [`/charging_disaster_prepared/clear`](clear.md) | Clears the disaster-preparedness (backup power) state of a device before the app also sends the clear command to the device itself (callers `clearDisasterPreparednessInfo` of the `PreparednessModuleMixin` copies in `A1782RestoreDefaultMenuController` and `DeviceMainLogic`) (3.18.0 asm: the HTTP call is followed by `AKIotDisasterPreparednessCommand::clearBackup`; the meaning is string-only). | - | pool-only |
+| [`/charging_disaster_prepared/get_site_device_disaster`](get_site_device_disaster.md) | Reads the disaster-preparedness (backup power) switches of a site for the A17E2 flow chart (caller `SystemA17E2FlowChartLogic::_fetchDisasterSetting`, started from `onInit` and from an event-bus listener) (asm-traced for the call; the meaning of the switches is taken from the model key names, string-only). | - | owner |
+| [`/charging_disaster_prepared/get_support_func`](get_support_func.md) | Asks which country codes support the automatic disaster-preparedness (backup power) function for the current site (caller `WeatherManager::fetchSupportCountryCodes`, started from `WeatherDisplayView::_navigateToPlaceSelectionView`) (string-only: inferred from the caller and class names, the chain is not in `data/endpoints.json`). | - | owner |
+| [`/charging_disaster_prepared/quit_disaster_prepare`](quit_disaster_prepare.md) | Tells the cloud that the A1782 left the current disaster-preparedness event, before the app sends the quit command to the device (caller: the closure in `onQuitCurrentEvent` of the A1782 home logic mixin stack; the 3.18.0 success closure then refreshes the auto-disaster state and sends `setBackup` with `quitCurrentBackup`) (3.18.0 asm for the call chain; the meaning is string-only). | - | pool-only |
+| [`/charging_disaster_prepared/set_site_device_disaster`](set_site_device_disaster.md) | Writes the automatic disaster-preparedness switch of a site (caller `_updateAutoDisasterSwitch` of the A1782 modules logic mixin stack; the 3.18.0 success closure then sends the switch to the device with `sendCommandToSetPreparednessSwitch`) (3.18.0 asm for the call chain; the meaning is string-only). | - | pool-only |
 
 Not here: MQTT or BLE facts (see [../../mqtt/README.md](../../mqtt/README.md), [../../ble/README.md](../../ble/README.md)), step-by-step flows ([../../flows/README.md](../../flows/README.md)); ownership rules are in [../../docs/STRUCTURE.md](../../docs/STRUCTURE.md).
