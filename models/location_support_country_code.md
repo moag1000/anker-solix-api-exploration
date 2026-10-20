@@ -30,7 +30,7 @@ The class does not exist in 3.18.0 (no class of this name in the 3.18.0 asm), so
 
 ## Produced by
 
-Not linked to an endpoint: the request of the location feature is made by `LocationFetchedData._request` (`location_util_mixin.dart @0x2cbae54`) and the URL is not a literal in that function, so the rule "model to endpoint only through a same-function URL literal" does not give a link. The inventory lists `/charging_common_svc/location/support` ([support](../api/charging_common_svc/location/support.md)) as the likely source (its `support_country_code` list); that link is a candidate, not established. `get_site_device_param` with `param_type` 20 (see [param_types.md](../api/param_types.md)) does not produce this model: its GET response is read as a single `country_code` String.
+Not linked to an endpoint: the request of the location feature is made by `LocationFetchedData._request` (`location_util_mixin.dart @0x2cbae54`) and the URL is not a literal in that function, so the rule "model to endpoint only through a same-function URL literal" does not give a link. The inventory lists `/charging_common_svc/location/support` ([support](../api/charging_common_svc/location/support.md)) as a candidate source; the asm does not support it: that URL is parsed with `SupportLocation` (key `country_code`), not with `LocationSupportFunc`. `get_site_device_param` with `param_type` 20 (see [param_types.md](../api/param_types.md)) does not produce this model: its GET response is read as a single `country_code` String.
 
 ## Consumed by
 
@@ -42,5 +42,5 @@ New in 3.18.0 to 3.24.3: the class and its container `LocationSupportFunc` do no
 
 ## Known unknowns
 
-- Which endpoint fills `LocationSupportFunc` (candidate above).
+- Which endpoint fills `LocationSupportFunc`: not decided — traced 2026-10-20: the URL literal `/charging_common_svc/location/support` appears at two sites and both parse a different container, `SupportLocation` (key `country_code`; `charging/http/http_request_repository_impl.dart @0x2892f0c` with `SupportLocation.fromJson` `@0x2892f88`, and `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x2a2fbe8`), whose keys differ from the keys of `LocationSupportFunc` (`support_auto_disaster`, `support_country_code`); `location_util_mixin.dart` contains no URL literal and no `LocationFetchedData` construction appears outside that file in the dump, so the candidate named in Produced by is not supported by the asm.
 - Whether `code` is the ISO 3166 alpha-2 code that is written as `country_code` in `param_type` 20 (see [param_types.md](../api/param_types.md)); not verified.

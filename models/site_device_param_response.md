@@ -12,7 +12,7 @@ Carries the time-of-use (TOU) response of `get_site_device_param` for `param_typ
 
 ## Fields
 
-Column `since`: the class does not exist in 3.18.0 (no class of this name in the 3.18.0 asm), so every key is `3.24.3`. The class reads `param_data` first (`@0x4879668`); when it is null the constructor returns an empty object (`@0x4879688`). `use_time`, `mode_type` and `unit` are then read through a helper call (`@0x4879698`, `@0x48796c4`, `@0x48797fc`) whose receiver was not traced, so whether they are keys of `param_data` or of the outer response is not established.
+Column `since`: the class does not exist in 3.18.0 (no class of this name in the 3.18.0 asm), so every key is `3.24.3`. The class reads `param_data` first (`@0x4879668`); when it is null the constructor returns an empty object (`@0x4879688`). `use_time`, `mode_type` and `unit` are then read through a helper call (`@0x4879698`, `@0x48796c4`, `@0x48797fc`) whose receiver is the `param_data` value itself: `fromJson` keeps it in a local (`stur x0, [fp, #-8]`, `@0x4879680`) and every one of the three reads uses that local as the receiver of the `[]` call (`@0x4879698`, `@0x48796c4`), so `use_time`, `mode_type` and `unit` are keys of `param_data`, which this class treats as a map (it is not decoded from a string here, unlike `GetSiteDeviceParamResponse`).
 
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
@@ -35,5 +35,4 @@ New class in 3.24.3. The 3.18.0 asm has neither a class `SiteDeviceParamResponse
 
 ## Known unknowns
 
-- The receiver of the `use_time` / `mode_type` / `unit` reads (see Fields).
 - The element structure of `use_time` (the upstream-confirmed example for the related type 12, `api/schedule.py` lines 210-220, has `use_time[]` with `sea`, `weekday`, `weekend`, `weekday_price`, `weekend_price`, `unit`, `is_same`; whether the same shape applies to type 6 is not verified).

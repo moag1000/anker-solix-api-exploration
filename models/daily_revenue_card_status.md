@@ -24,9 +24,9 @@ Answer of `daily_revenue_card/status`.
 |---|---|---|---|---|
 | `status` | `int` | yes | 3.24.3 | `yesterday_earning_tips_view.dart @0x27e8dcc` |
 | `is_dynamic` | `bool` | yes | 3.24.3 | `yesterday_earning_tips_view.dart @0x27e8e40` |
-| `revenue` | `unknown` | yes | 3.24.3 | `yesterday_earning_tips_view.dart @0x27e8eb4` |
-| `currency_unit` | `unknown` | yes | 3.24.3 | `yesterday_earning_tips_view.dart @0x27e8f2c` |
-| `link_url` | `unknown` | yes | 3.24.3 | `yesterday_earning_tips_view.dart @0x27e8fa4` |
+| `revenue` | `String` (`value?.toString() ?? "0"`: `toString` through the dispatch table `@0x27e8ef4`, default `"0"` `@0x27e8f0c`) | yes | 3.24.3 | `yesterday_earning_tips_view.dart @0x27e8eb4` |
+| `currency_unit` | `String` (`toString()` `@0x27e8f6c`, default `""` `@0x27e8f84`) | yes | 3.24.3 | `yesterday_earning_tips_view.dart @0x27e8f2c` |
+| `link_url` | `String` (same `toString()` pattern, default `""`) | yes | 3.24.3 | `yesterday_earning_tips_view.dart @0x27e8fa4` |
 | `is_abnormal` | `false` | yes | 3.24.3 | `yesterday_earning_tips_view.dart @0x27e9018` |
 
 ## Produced by
@@ -43,4 +43,4 @@ The class is new in 3.24.3.
 
 ## Known unknowns
 
-- The `status` codes, the unit of `revenue`, and what `is_abnormal` and `link_url` do on the card are not decoded; the extractor could not resolve the types of `revenue`, `currency_unit` and `link_url`.
+- The `status` codes, the unit of `revenue`, and what `is_abnormal` and `link_url` do on the card are not decoded — traced 2026-10-20: the three string fields are `toString()` conversions with defaults (table above), so the app tolerates numbers or strings from the server; no compare of `status` against a literal was followed in `YesterdayEarningTipsLogic`.

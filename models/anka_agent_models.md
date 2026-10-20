@@ -42,7 +42,7 @@ Answer of `get_all_config` (3.18.0: `get_entry_config`): whether the Anka entry 
 | `key_exchange_domain` | `String` | yes | ≤3.18.0 | `anka_agent_entry_config_model.dart @0x2737400` |
 | `setting_switch` | `bool?` | yes | ≤3.18.0 | `anka_agent_entry_config_model.dart @0x2737490` |
 | `enable` | `bool?` | yes | ≤3.18.0 | `anka_agent_entry_config_model.dart @0x273750c` |
-| `setting_images` | `List` of `SettingImageModel` | no | ≤3.18.0 | `anka_agent_entry_config_model.dart @0x273757c` |
+| `setting_images` | `List` of `SettingImageModel` (mapping closure `@0x2737618` calls `SettingImageModel.fromJson` `@0x2737ed4`) | no | ≤3.18.0 | `anka_agent_entry_config_model.dart @0x273757c` |
 | `has_proactive_message` | `bool` | yes | 3.24.3 | `anka_agent_entry_config_model.dart @0x27376a8` |
 | `proactive_message_expire_time` | `int?` | yes | 3.24.3 | `anka_agent_entry_config_model.dart @0x2737734` |
 | `proactive_message_push_switch` | `int?` | yes | 3.24.3 | `anka_agent_entry_config_model.dart @0x27377ac` |
@@ -85,7 +85,7 @@ Answer of `get_menu_config`: the menu list and the bill-analysis entry.
 
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
-| `menu_list` | `List` of `MenuItem` | no | ≤3.18.0 | `anka_agent_menu_config_model.dart @0x35c549c` |
+| `menu_list` | `List` of `MenuItem` (closure calls `MenuItem.fromJson` `@0x35c5ca8`) | no | ≤3.18.0 | `anka_agent_menu_config_model.dart @0x35c549c` |
 | `bill_analysis_entry` | `BillAnalysisEntry?` | yes | 3.24.3 | `anka_agent_menu_config_model.dart @0x35c55b4` |
 
 ### BillAnalysisEntry
@@ -109,7 +109,7 @@ One menu item with sub items.
 |---|---|---|---|---|
 | `id` | `int?` | yes | ≤3.18.0 | `anka_agent_menu_config_model.dart @0x35c5cf4` |
 | `title` | `String?` | yes | ≤3.18.0 | `anka_agent_menu_config_model.dart @0x35c5d54` |
-| `sub_items` | `List` of `SubItem` | no | ≤3.18.0 | `anka_agent_menu_config_model.dart @0x35c5db4` |
+| `sub_items` | `List` of `SubItem` (closure calls `SubItem.fromJson` `@0x35c5f2c`) | no | ≤3.18.0 | `anka_agent_menu_config_model.dart @0x35c5db4` |
 
 ### SubItem
 
@@ -202,5 +202,4 @@ Keys marked `3.24.3` in the tables are new in this app version (proactive messag
 ## Known unknowns
 
 - Whether the switches (`*_switch`) are 0/1 integers on the wire (they are `int?` in the models) is inferred from the Dart types only.
-- `setting_images` and the `list`-typed fields of the menu classes are `List` for the extractor; the element classes `SettingImageModel`, `MenuItem` and `SubItem` are read from the type arguments where present.
-- `BubbleConfig.bubble_type` values are not decoded here.
+- `BubbleConfig.bubble_type` values are not decoded here — traced 2026-10-20: the field is a `String` (`bubble_config_model.dart @0x2737d44`) and the key is passed on as a map key at `bubble_chat_helper.dart @0x35c914c` and `@0x35cc740`, `bubble_http.dart @0x2bc15cc` and `anka_agent_http.dart @0x35c6f90`; the status that goes with it is the enum `BubbleStatus` with the string values `exposed`, `click` and `close` (object dump `@0x4215d01`, `@0x4215d21`, `@0x4215ce1`); no compare against a literal bubble type value was found in these sites.

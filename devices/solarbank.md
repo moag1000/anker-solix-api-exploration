@@ -77,8 +77,8 @@ Status keys of the A17B1 system context (`soc`, `bp`, `pp`, `gp`, `lp`, `op`, `m
 
 Tag: untagged by design (no API fact).
 
-- `005a` and `0085`: the app has no builder; only upstream and mqtt_monitor know them (audit rows 24, 29, 32).
-- `0080` field `a9` (`export_limit`) is not in `setDevicePowerLimit` (audit row 30); the field names `a6` `disable_switch` and the `005e` `a2` mode range (1 to 8) are upstream's (audit rows 33).
+- `005a` and `0085`: the app has no builder — checked 2026-10-20: the pool holds 119 opcode lists of the form `[0, x]` and none is `[0, 0x5a]` or `[0, 0x85]`, and the strings `"005a"`, `"005A"` and `"0085"` are not in the pool (grep of `pp.txt` and `const [0, 0x5a]` over the asm root: 0 hits); only upstream and mqtt_monitor know them (audit rows 24, 29, 32).
+- `0080` field `a9` (`export_limit`) is not in `setDevicePowerLimit`: confirmed 2026-10-20, the builder (`a17c1_device_controller.dart setDevicePowerLimit @0x2276e48`) uses the raw tag keys 324, 326, 328, 330, 332, 334 and 336, which are `a2` to `a8`, and no key 338 (`a9`); the field names `a6` `disable_switch` and the `005e` `a2` mode range (1 to 8) are upstream's (audit rows 33).
 - Meaning of the attribute keys `feeder0w`, `pv_power_limit_option` and `user_power_limit` named on the old page: not found in the upstream `api/api.py` lines checked; no owner yet.
 - Which of the five PNs accept each opcode: only A17C1 is device-tested.
 - Open test requests for these products: [../docs/DEVICE_TEST_BACKLOG.md](../docs/DEVICE_TEST_BACKLOG.md).

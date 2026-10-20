@@ -28,6 +28,8 @@ One entry of the answer of `get_self_check_config`.
 | `checkType` | `int?` | yes | 3.24.3 | `self_check_config_model.dart @0x2ad25a4` |
 | `title` | `String?` | yes | 3.24.3 | `self_check_config_model.dart @0x2ad262c` |
 
+Wrapper `SelfCheckConfigModel.fromJson` (traced 2026-10-20, `self_check_config_model.dart @0x2ad1404`): the argument is the answer itself, not a key of an object. A non-empty `String` is decoded with `JsonCodec.decode` first (class-id test `@0x2ad143c` to `@0x2ad1444`, decode `@0x2ad145c`); when the value is then a `List` (`InstanceOf` `@0x2ad1518`) its elements are mapped through the closure `@0x2ad1544` that builds `SelfCheckConfigItem` (type argument `@0x2ad1558`, `toList` `@0x2ad159c`) and stored in the model's single field (`@0x2ad15b4`); any other value leaves the field unset.
+
 ## Produced by
 
 - [`get_self_check_config`](../api/device_svc/get_self_check_config.md): `SelfCheckConfigModel.fromJson` (`flutter_charging_beginning/beginning/state_cards/self_check/self_check_config_model.dart @0x2ad1404`) maps the answer to a list of `SelfCheckConfigItem` (type argument `@0x2ad1558`); the wrapper class `SelfCheckConfigModel` itself has no JSON key in `data/models.json`.
@@ -42,5 +44,4 @@ The class is new in 3.24.3.
 
 ## Known unknowns
 
-- How `SelfCheckConfigModel.fromJson` reaches the list (which key of the answer, or whether the answer itself is the list) is not decoded: its key loads are not plain string loads. The fail controller checks that the data is a `List`.
-- The meaning of `checkType` and the relation of `checkId` to the failure codes (see [self_check_report](../api/devicecontrol/app/self_check_report.md)) are not decoded.
+- The meaning of `checkType` and the relation of `checkId` to the failure codes (see [self_check_report](../api/devicecontrol/app/self_check_report.md)) are not decoded. — traced 2026-10-20: not traced; no enum for `checkType` is in the object dump (class names searched).

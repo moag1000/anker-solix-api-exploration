@@ -96,6 +96,6 @@ All five classes are new in 3.24.3 (every key is marked `3.24.3`).
 
 ## Known unknowns
 
-- The values of `status` and `push_status` (strings) and the unit of `outage_start_time` are not decoded.
+- The values of `status` and `push_status` (strings) and the unit of `outage_start_time` are not decoded. — traced 2026-10-20: the two consumers named under Consumed by (`anker_monthly_report_list_logic.dart`, `backup_report_push_util.dart`) contain no string literal compared with `status` or `push_status`, no `fromMillisecondsSinceEpoch` and no `outage_start_time` key; the popup path in `user_main_page_logic.dart` was searched for the same names (see the grep result of this pass: no `outage` hit). The values and the unit therefore stay server data.
 - `backup_duration_hours` and `total_score` are nullable; how the score is computed is not shown in the app.
 - The format of `report_url` (a web page or a file) is not known.

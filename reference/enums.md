@@ -100,6 +100,8 @@ Tag: asm-traced.
 
 Reading the table. Products sharing a GATT group and a BLE page share a device class; the class hierarchy is on the `ble/<pn>.md` pages. A5102 and A5103 are on the [../ble/a5101.md](../ble/a5101.md) page because they carry the same profile as A5101 and have no class of their own. Models marked `BLE map` no are not scanned by name: the 15 not in the map besides A2687 and A120J are A5140, A5141, A1763, A5341, A5220, A5102, A5103, A5150, A5450, A25X7, A1782, A1783 and the three Shelly models. The rows A5140 and A5141 carry the product name instead of UUIDs, and A5150, A5220, A5341 and A5450 carry the short string `0000FF09` in service, write and notify, so they have no usable GATT profile in the table.
 
+Models without a BLE page (traced 2026-10-20, where the asm uses each product code beyond the model function): `A120J`, `A2687` and `A25X7` (ZX UUIDs, not in the BLE map) appear in the rename page and the message model (`device_bind/.../device_rename_logic.dart`, `base_service/msg/msg_model.dart`); `A2687` also has about 90 files, among them the small charging platform charge modes (`small_charging_platform/src/scp/chargingMode/custom_charge/`) and `charging/ui/page/device/a2687/`, so the app treats it as a charger with its own mode pages; `A120J` and `A25X7` have no such pages. `A5220`, `A5341` and `A5450` (placeholder GATT UUIDs, not in the BLE map) are used by the TOU device-type helper (`electricity_price/.../tou/model/device_type_helper.dart`), `micro_hes/src/a17ex/station_setting/device_wifi_info_controller.dart` and `base_service/device/anker_device.dart`, the code paths of the home-energy-system family. `A7320` and `AX170` are in the BLE map and have their own modules (`oe_a7320`, `ats_ax170`) outside `charging/ble/device`.
+
 ### Code lists
 
 Tag: asm-traced.
@@ -312,7 +314,7 @@ The app does declare an enum for the value: `AnkPowerSiteType` in `base_service/
 | `ae111` | 21 | 21 | none | `[pp+0x4b120]` | value field compared at `@0x22ab228`, asm-traced |
 | `ae113` | 22 | 25 | none; the only member whose value differs from its index | `[pp+0x4b128]` | value field compared at `@0x22ab228`, asm-traced |
 
-The other 17 members are not dumped in `pp.txt` (names and values not resolvable from the pool; addresses checked: `pp.txt` lines 17537 and 49791 to 49860, `grep "AnkPowerSiteType@.* : {"` gives 9 hits). Users: `fromValue` is called from `home_base_logic.dart @0x24409ac` and `@0x30e7da8` (result stored in a static, after `setCurrentStationType`), `station_device_manager.dart @0x22ab1ac`, `unity_config_manager.dart @0x22ab4e4`, `unity_device_click_handler.dart @0x2ca5df8` and `system_house_view_logic.dart @0x2876c1c`/`@0x287a71c` (input `SceneInfo` field_53, `@0x2876c08`). The compares there are identity compares of the members: `@0x2876c28..0x2876c74` (`ae100`, `a17C1`, `a17C2`, `a17C3`, `a17C5`, else the log line "non-combiner-box/C-series site type, skipped") and `@0x287a720..0x287a77c` (`a17C1` to `a17C5` to a pn string). Const sets: the 9 decoded members (`[pp+0x1e250]`, `unity_config_manager.dart @0x22ab02c`, `_isPowerSiteTypeSupported`) and `ae103`, `a17E2`, `ae111` (`[pp+0x9e7e0]`, `ae1x0_home_logic.dart @0x3aefe28`). The 5-member set `[pp+0x184150]` has no load site by `grep`.
+The other 17 members are not printed in `pp.txt` (`grep "AnkPowerSiteType@.* : {"` gives 9 hits there) but all 26 objects are in the object dump `objs.txt` of the same Blutter output (`Obj!AnkPowerSiteType@42123e1` to `@4212701`; the value is `off_14`, the index `off_8`, each object also carries its `PN` object). All members as index and value: `a5143` 0 and 1, `a5140` 1 and 1, `a17C0` 2 and 2, `a5101` 3 and 3, `a17B1` 4 and 4, `a17C1` 5 and 5, `a5341` 6 and 6, `a5101Ev` 7 and 7 (its `PN` object is `A5101`), `a5102` 8 and 8, `a5103` 9 and 9, `a17C3` 10 and 10, `a17C2` 11 and 11, `a17C5` 12 and 12, `a1782` 13 and 13, `a5191` 14 and 14, `a17E1` 15 and 15, `a1903` 16 and 16, `aX170` 17 and 17, `ae100` 18 and 18, `a17E2` 19 and 19, `ae103` 20 and 20, `ae111` 21 and 21, `ae113` 22 and 25, `as510` 23 and 22, `as520` 24 and 23, `as521` 25 and 24. Two members share the value 1 (`a5143` and `a5140`), and `ae113`, `as510`, `as520` and `as521` have values different from their index. Users: `fromValue` is called from `home_base_logic.dart @0x24409ac` and `@0x30e7da8` (result stored in a static, after `setCurrentStationType`), `station_device_manager.dart @0x22ab1ac`, `unity_config_manager.dart @0x22ab4e4`, `unity_device_click_handler.dart @0x2ca5df8` and `system_house_view_logic.dart @0x2876c1c`/`@0x287a71c` (input `SceneInfo` field_53, `@0x2876c08`). The compares there are identity compares of the members: `@0x2876c28..0x2876c74` (`ae100`, `a17C1`, `a17C2`, `a17C3`, `a17C5`, else the log line "non-combiner-box/C-series site type, skipped") and `@0x287a720..0x287a77c` (`a17C1` to `a17C5` to a pn string). Const sets: the 9 decoded members (`[pp+0x1e250]`, `unity_config_manager.dart @0x22ab02c`, `_isPowerSiteTypeSupported`) and `ae103`, `a17E2`, `ae111` (`[pp+0x9e7e0]`, `ae1x0_home_logic.dart @0x3aefe28`). The 5-member set `[pp+0x184150]` has no load site by `grep`.
 
 Which values SB1 and SB2 sites carry is server data; what the app compares: SB1 sites (value 2) in the station main/setting/home-info pages, SB2 sites (5, 10, 11) in the multi-device pages, and none of them in the output-limit gate. The values 12 and 18 equal the `EvStationType` members `a17c5` and `ae100` above (a separate enum; the gate does not read it).
 
@@ -325,7 +327,7 @@ Notes per enum (the table below lists the pool members):
 - `PvType`: ENUMS audit, doc lines 48 to 52.
 - `EmsModeType`: the API value is `off_14`; the index (`off_8`) is not stable across versions (3.24.3 added `normalMode`, `customMode`, `timeSlot` and `smartMode`, so the old indices 0 to 5 moved; ENUMS audit, doc lines 209 to 216, audit rows 103 to 108). Two members share the value 8 in the pool, `timeSlot` and `onlyBackupPower`; which one the app sends for which screen is not decided by the enum.
 - `AiModeEnum`: ENUMS audit, doc lines 218 to 229; `TOUDynamicPrice` (index 6) has the wire value 8 and `ModeTypeAIEMS` (index 7) the wire value 7; the old table was right.
-- `EnergyFlowType`: the wire value is a single-bit mask; the enum is an 18-bit field in 3.24.3 (`batteryToLoadPort` 0x10000 and `batteryToGrid` 0x20000 are new). The flags are tested on unboxed integers (`and x4,x2,x1` in `base_service/view/energy_flow/energy_flow_type.dart @0x22f3214`), so the masks are real values. Only the instantiated entries are in the pool; `dcToHome` 0x80, `dcToGrid` 0x100, `acToHome` 0x400 and `acToGrid` 0x800 follow the pattern mask = 1 shifted by the index but have no pool object (see [Known unknowns](#known-unknowns)). ENUMS audit, doc lines 231 to 252.
+- `EnergyFlowType`: the wire value is a single-bit mask; the enum has 19 members in 3.24.3 (indices 0 to 18; `batteryToLoadPort` 0x10000 and `batteryToGrid` 0x20000 are new in 3.24.3, `homeToEvCharger` 0x40000 is the last, by the object dump `objs.txt`). The flags are tested on unboxed integers (`and x4,x2,x1` in `base_service/view/energy_flow/energy_flow_type.dart @0x22f3214`), so the masks are real values. `pp.txt` holds only the instantiated entries; the object dump `objs.txt` holds all 19, including `dcToHome` 0x80, `dcToGrid` 0x100, `acToHome` 0x400 and `acToGrid` 0x800, which follow mask = 1 shifted by the index (table below). ENUMS audit, doc lines 231 to 252.
 - `ChargeDischargeStatus` (PPS work status): ENUMS audit, doc lines 297 to 305; five members with wire values 0 to 4, and the pool name of 0 is `standby`, not `idle`. A second enum with the same name has the members `charging`, `discharging` and `idle` (no wire value) in `station_home/src/ui/shared/node_dialog/default_battery_dialog.dart`; it is left out of the table.
 - `RangeExtenderStrategyType`: ENUMS audit, doc lines 343 to 348; the wire values are 1 for `bySoc` and 2 for `byTime` (`off_14`) and the indices are 0 and 1.
 - `PlatformPricePlan`: ENUMS audit, doc lines 105 to 109. The old table listed the indices; the wire values (`off_14`) are what the app sends: fixed 0, manualTou 5, autoTou 52 (0x34) and dynamic 6. Do not send the index.
@@ -362,13 +364,18 @@ Notes per enum (the table below lists the pool members):
 | EnergyFlowType | 4 | 16 (0x10) | `thirdPvToHome` | device_data_mapper.dart @0x22f27e4 |
 | EnergyFlowType | 5 | 32 (0x20) | `thirdPvToGrid` | device_data_mapper.dart @0x22f27f8 |
 | EnergyFlowType | 6 | 64 (0x40) | `dcToBattery` | device_line_data.dart @0x22f2d58 |
+| EnergyFlowType | 7 | 128 (0x80) | `dcToHome` | object dump `objs.txt` `@0x4210401` |
+| EnergyFlowType | 8 | 256 (0x100) | `dcToGrid` | object dump `objs.txt` `@0x42103e1` |
 | EnergyFlowType | 9 | 512 (0x200) | `acToBattery` | device_line_data.dart @0x22f2d44 |
+| EnergyFlowType | 10 | 1024 (0x400) | `acToHome` | object dump `objs.txt` `@0x42103c1` |
+| EnergyFlowType | 11 | 2048 (0x800) | `acToGrid` | object dump `objs.txt` `@0x42103a1` |
 | EnergyFlowType | 12 | 4096 (0x1000) | `gridToBattery` | device_line_data.dart @0x22f2d30 |
 | EnergyFlowType | 13 | 8192 (0x2000) | `gridToHome` | system_a17e2_flow_chart_logic.dart @0x22f3770 |
 | EnergyFlowType | 14 | 16384 (0x4000) | `batteryToHome` | device_line_data.dart @0x22f2d1c |
 | EnergyFlowType | 15 | 32768 (0x8000) | `batteryToDC` | device_line_data.dart @0x22f2d08 |
 | EnergyFlowType | 16 | 65536 (0x10000) | `batteryToLoadPort` | device_line_data.dart @0x22f2cf4 |
 | EnergyFlowType | 17 | 131072 (0x20000) | `batteryToGrid` | device_line_data.dart @0x22f2ce0 |
+| EnergyFlowType | 18 | 262144 (0x40000) | `homeToEvCharger` | object dump `objs.txt` `@0x4210361` |
 | ChargeDischargeStatus | 0 | 0 | `standby` | s1_s2_home_state.dart @0x35528a0 |
 | ChargeDischargeStatus | 1 | 1 | `discharge` | s1_s2_home_state.dart @0x3a44190 |
 | ChargeDischargeStatus | 2 | 2 | `charge` | s1_s2_home_state.dart @0x2a0efc0 |
@@ -390,7 +397,7 @@ Notes per enum (the table below lists the pool members):
 
 ### ModeState
 
-Three different enums are called `ModeState` in the pool (ENUMS audit, doc lines 256 to 283). All members are indices; there is no wire value.
+Four different enums are called `ModeState` (ENUMS audit, doc lines 256 to 283, listed three; the object dump `objs.txt` holds four member sets). All members are indices; the objects carry only the index `off_8` and the name `off_10` and no wire value (checked in `objs.txt` for all four sets). Four files declare an `enum ModeState`: `micro_hes/src/common_business/basic_station/module/mode_tip/mode_tip_logic.dart`, `base_service/view/device_mode_tips/widgets/mode_state_definition.dart`, `station_home/src/ui/shared/mode_tip/mode_state.dart` and `charging/ui/page/family/auto_disaster/auto_disaster_tips_logic.dart`; which member set belongs to which file is bound only for the `vppState` variant (the string occurs in `mode_tip_logic.dart` and in none of the other three files).
 
 SolarBank (8 members): 0 `forcedRechargeState` (`[pp+0x2d950]`), 1 `sohCalibrationState` (`[pp+0x2d958]`), 2 `socCalibrationState` (`[pp+0x2d978]`), 3 `autoDisasterState` (`[pp+0x2d960]`), 4 `manualDisasterState` (`[pp+0x2d970]`), 5 `fastStopState` (`[pp+0x2d948]`), 6 `lowPowerState` (`[pp+0x2d890]`), 7 `defaultState` (`[pp+0x2d980]`). Tag: string-only (pool objects listed; the audit rows verify the member positions and give no use site).
 
@@ -398,13 +405,15 @@ Home Power System (11 members): 0 `naStatus` (`[pp+0x23e68]`), 1 `selfUserState`
 
 The 17-member enum has `selfUserState` 0, `timeOfUserState` 1, `manualBackupState` 2, `automaticBackupState` 3, `onlyBackupPower` 4, `socCalibration` 5, `gridOutage` 6, `naStatus` 7, `defaultState` 8, `offGridState` 9, `customState` 10, `smartPlugState` 11, `aiModeState` 12, `timeSlot` 13, `thirdPartyControlState` 14, `activateDeviceWhenWeakSunshine` 15 and `vppState` 16 (pool objects from `[pp+0x1cc40]` to `[pp+0x1ccf0]`). The old root page's "HES state machine values 0 to 9 and 20" has no source in the asm (BUSINESS_RULES audit, doc lines 541 to 559): the 11-member enum has `forcedRecharge` at index 10 and different names at 4, 6 and 8. Tag: string-only.
 
+A second 17-member set has the same names at 0 to 15 and `standardMode` at index 16 instead of `vppState` (object dump `Obj!ModeState@38f53b1` to `@38f55b1`, 17 objects); the `vppState` set is `Obj!ModeState@38fc621` to `@38fc821`. The 8-member SolarBank set is `Obj!ModeState@420a351` to `@420a431` and the 11-member Home Power System set starts at `@4210501`.
+
 ### Solarbank usage mode (upstream)
 
 The app has no enum with these values; the numbers come from the upstream `SolarbankUsageMode` (`api/apitypes.py` line 1089, upstream-confirmed): `unknown` 0, `smartmeter` 1, `smartplugs` 2, `manual` 3, `backup` 4, `use_time` 5, `smart` 7 and `time_slot` 8 (6 is a TODO comment upstream). ENUMS audit, doc lines 123 to 133: identical to the old table. The values 1 to 5, 7 and 8 equal the `AiModeEnum` wire values above.
 
 ## Device-specific enums
 
-Tag: asm-traced. Notes: `EvChargerDeviceStatus` audit rows 109 to 117; `EvChargerGestureFunction` has four members 0 to 3 (audit rows 127 to 131; the old `startImmediately` 4 has no pool object and upstream also has only 0 to 3); `ScreenBrightType` audit rows 139 to 142; `RESystemBatterySubPackageConnectionStatusEnum` is the sub-battery connection status of the range-extender system, its numbers are enum indices (no wire value) and index 0 `standby` is missing from the old table (audit rows 145 to 150); `RESystemTemperatureUnitEnum` has only `celsius` in the pool (ENUMS audit, doc lines 60 to 63); `RESystemDeviceLightEnum` (doc lines 66 to 69); `ReSystemConnectionStatus` (doc lines 74 to 79); `A17EXConnectStatus` also has `Connecting` 0 and `Connected` 1 in the pool, which the old table did not list (doc lines 82 to 84); `ApplianceType` (doc lines 89 to 93).
+Tag: asm-traced. Notes: `EvChargerDeviceStatus` audit rows 109 to 117; `EvChargerGestureFunction` has five members 0 to 4 (audit rows 127 to 131; `startImmediately` 4 is not in `pp.txt` but is an object in the object dump `objs.txt`; upstream has only 0 to 3); `ScreenBrightType` audit rows 139 to 142; `RESystemBatterySubPackageConnectionStatusEnum` is the sub-battery connection status of the range-extender system, its numbers are enum indices (no wire value) and index 0 `standby` is missing from the old table (audit rows 145 to 150); `RESystemTemperatureUnitEnum` has only `celsius` in the pool (ENUMS audit, doc lines 60 to 63); `RESystemDeviceLightEnum` (doc lines 66 to 69); `ReSystemConnectionStatus` (doc lines 74 to 79); `A17EXConnectStatus` also has `Connecting` 0 and `Connected` 1 in the pool, which the old table did not list (doc lines 82 to 84); `ApplianceType` (doc lines 89 to 93).
 
 | enum | index | wire value | member | site |
 |---|---|---|---|---|
@@ -421,6 +430,7 @@ Tag: asm-traced. Notes: `EvChargerDeviceStatus` audit rows 109 to 117; `EvCharge
 | EvChargerGestureFunction | 1 | 1 | `startCharging` | gesture_util.dart @0x43c31ac |
 | EvChargerGestureFunction | 2 | 2 | `stopCharging` | gesture_util.dart @0x43c31b8 |
 | EvChargerGestureFunction | 3 | 3 | `startBoostMode` | gesture_util.dart @0x43c31c4 |
+| EvChargerGestureFunction | 4 | 4 | `startImmediately` | object dump `objs.txt` `@0x4207951` |
 | ScreenBrightType | 0 | 0 | `off` | a7320_widget.dart @0x32c9a70 |
 | ScreenBrightType | 1 | 1 | `low` | a7320_widget.dart @0x32c9aac |
 | ScreenBrightType | 2 | 2 | `medium` | a7320_widget.dart @0x32c9ae8 |
@@ -433,6 +443,7 @@ Tag: asm-traced. Notes: `EvChargerDeviceStatus` audit rows 109 to 117; `EvCharge
 | RESystemBatterySubPackageConnectionStatusEnum | 5 | none | `subPackagePressureDifference` | res_device_sheet_helper.dart @0x446f2f8 |
 | RESystemBatterySubPackageConnectionStatusEnum | 6 | none | `other` | res_device_sheet_helper.dart @0x446f30c |
 | RESystemTemperatureUnitEnum | 0 | 0 | `celsius` | re_system_device_status_enum.dart @0x3606e60 |
+| RESystemTemperatureUnitEnum | 1 | 1 | `fahrenheit` | object dump `objs.txt` `@0x38fa8e1` |
 | RESystemDeviceLightEnum | 0 | none | `on` | re_system_pps_status_ui_helper.dart @0x447fb78 |
 | RESystemDeviceLightEnum | 1 | none | `off` | range_extender_model.dart @0x360d47c |
 | ReSystemConnectionStatus | 0 | none | `loading` | generator_top_more_bar.dart @0x445a8bc |
@@ -446,9 +457,64 @@ Tag: asm-traced. Notes: `EvChargerDeviceStatus` audit rows 109 to 117; `EvCharge
 | ApplianceType | 1 | none | `washingMachine` | range_extender_model.dart @0x360c910 |
 | ApplianceType | 2 | none | `kettle` | range_extender_model.dart @0x360c93c |
 
-### StartWayEnum, GeneratorMode and LoadBalancingErrorType
+### DeviceShareStatus and DeviceShareMemberType
 
-Only one member of each enum is in the pool as an object: `StartWayEnum.unknown` (index 8, wire value -1, `ev_charger/.../start_way_enum.dart @0x39594bc`), `GeneratorMode.eco` (value 3, `oe_a7320/src/oe_a7320/page/range_extender_system/models/generator_mode.dart @0x446e3f4`) and `LoadBalancingErrorType.normal` (value 0, `ev_charger/.../load_balancing_logic.dart @0x36fd7a8`). The other members are in [Known unknowns](#known-unknowns).
+Tag: asm-traced (object dump). The EV charger device-sharing models convert the cloud integers with these enums inside `DeviceShareListModel.fromJson`: `DeviceShareStatus.fromValue` is called at `device_share_list_model.dart @0x21c3110` and `DeviceShareMemberType.fromValue` at `@0x21c31ac`. The wire value is `off_14`, the index `off_8` (objects in `objs.txt`). Model: [device_share_models](../models/device_share_models.md).
+
+| enum | index | wire value | member | object |
+|---|---|---|---|---|
+| DeviceShareStatus | 0 | 1 | `inviting` | `@0x4207e11` |
+| DeviceShareStatus | 1 | 2 | `joined` | `@0x4207df1` |
+| DeviceShareStatus | 2 | 3 | `rejected` | `@0x4207dd1` |
+| DeviceShareStatus | 3 | 4 | `expired` | `@0x4207db1` |
+| DeviceShareStatus | 4 | 0 | `other` | `@0x4207d91` |
+| DeviceShareMemberType | 0 | 1 | `normal` | `@0x4207e91` |
+| DeviceShareMemberType | 1 | 2 | `owner` | `@0x4207e71` |
+| DeviceShareMemberType | 2 | 10 | `installer` | `@0x4207e51` |
+| DeviceShareMemberType | 3 | 11 | `other` | `@0x4207e31` |
+
+### StartWayEnum and ChargingPauseReason
+
+Tag: asm-traced (object dump). `pp.txt` shows one object of each enum; the complete objects are in the object dump `objs.txt` of the same Blutter output (`Obj!StartWayEnum@42084d1` to `@42085d1`, `Obj!ChargingPauseReason@42077d1` to `@42078b1`). The wire value is the field `off_14`, the index the field `off_8`; both are printed as real integers (the same reading as [ChargeControlType](../models/ev_charger_device_models.md#chargecontroltype-ev-charger-command-value)). The string switch `startMethodString` (`start_way_enum.dart @0x3959300`) works on the indexes. The list `[pp+0xb1c98]` holds the nine `StartWayEnum` members and `[pp+0x118050]` the eight `ChargingPauseReason` members.
+
+| enum | index | wire value | member | object |
+|---|---|---|---|---|
+| StartWayEnum | 0 | 1 | `wifi` | `@0x42085d1` |
+| StartWayEnum | 1 | 2 | `ble` | `@0x42085b1` |
+| StartWayEnum | 2 | 3 | `touch` | `@0x4208591` |
+| StartWayEnum | 3 | 4 | `rfid` | `@0x4208571` |
+| StartWayEnum | 4 | 5 | `plug` | `@0x4208551` |
+| StartWayEnum | 5 | 6 | `timed` | `@0x4208531` |
+| StartWayEnum | 6 | 7 | `autoResume` | `@0x4208511` |
+| StartWayEnum | 7 | 8 | `modbus` (label `"Modbus TCP"`, `start_way_enum.dart @0x39593e4`) | `@0x42084f1` |
+| StartWayEnum | 8 | -1 | `unknown` (`@0x39594bc`) | `@0x42084d1` |
+| ChargingPauseReason | 0 | 0 | `none` | `@0x42078b1` |
+| ChargingPauseReason | 1 | 1 | `loadBalance` | `@0x4207891` |
+| ChargingPauseReason | 2 | 2 | `singlePhaseSwitch` | `@0x4207871` |
+| ChargingPauseReason | 3 | 3 | `greenElectricityLack` | `@0x4207851` |
+| ChargingPauseReason | 4 | 4 | `smartCharging` | `@0x4207831` |
+| ChargingPauseReason | 5 | 5 | `other` | `@0x4207811` |
+| ChargingPauseReason | 6 | 6 | `modbus` (key `evChargerPauseModbusTCP`, `charging_pause_reason_enum.dart @0x3505fd0`) | `@0x42077f1` |
+| ChargingPauseReason | 7 | 7 | `digitalInput` | `@0x42077d1` |
+
+The session detail page converts the cloud number with `StartWayEnum.fromValue` (`start_way_enum.dart @0x3959420`: `firstWhere` over the nine members comparing the wire value, `orElse` gives `unknown`; call at `sessions_detail_logic.dart @0x39592cc`, argument: an int field at offset 0x23 of the loaded session detail model, -1 when null, `@0x3959294` to `@0x39592b4`) and shows the label from `startMethodString`; the field is the start way of [ev_charger_session_models](../models/ev_charger_session_models.md) (the field name is not in the dump). `ChargingPauseReason` is read by the index in `charging_pause_reason_enum.dart` (labels only).
+
+### GeneratorMode and LoadBalancingErrorType
+
+Tag: asm-traced (object dump `objs.txt`: `Obj!GeneratorMode@38faa21` to `@38faae1`, `Obj!LoadBalancingErrorType@4208191` to `@42081d1`). Wire value `off_14` equals the index `off_8` for all members.
+
+| enum | index | wire value | member | object |
+|---|---|---|---|---|
+| GeneratorMode | 0 | 0 | `silentDc` | `@0x38faae1` |
+| GeneratorMode | 1 | 1 | `saveDc` | `@0x38faac1` |
+| GeneratorMode | 2 | 2 | `fastDc` | `@0x38faaa1` |
+| GeneratorMode | 3 | 3 | `eco` (`oe_a7320/.../generator_mode.dart @0x446e3f4`) | `@0x38faa81` |
+| GeneratorMode | 4 | 4 | `turbo` | `@0x38faa61` |
+| GeneratorMode | 5 | 5 | `exerciseAc` | `@0x38faa41` |
+| GeneratorMode | 6 | 6 | `exerciseDc` | `@0x38faa21` |
+| LoadBalancingErrorType | 0 | 0 | `normal` (`ev_charger/.../load_balancing_logic.dart @0x36fd7a8`) | `@0x42081d1` |
+| LoadBalancingErrorType | 1 | 1 | `mainDeviceDisconnected` | `@0x42081b1` |
+| LoadBalancingErrorType | 2 | 2 | `mainDeviceAndMeterDisconnected` | `@0x4208191` |
 
 ## String lists
 
@@ -481,12 +547,7 @@ Tag: asm-traced (3.24.3 side).
 Tag: untagged by design (no API fact).
 
 - `BleCmdStatus` keys 33 to 37, 113 and 114 exist in the code map; by pool-instance order the names are `scanWifi` 33, `wifiConnectFailedForWrongPwd` 34, `wifiConnectFailedForOtherReason` 35, `wifiActivateFailedForMissIp` 36, `wifiActivateFailedForCommFailed` 37, `crc32VerifyFailed` 113 and `fireWarmVeriryFailed` 114 (name binding inferred from instance order; the old table gave the indices 7 to 13). The names of keys 1 to 4 and 6 are bound the same way.
-- `StartWayEnum`: the members `wifi`, `ble`, `touch`, `rfid`, `plug`, `timed`, `autoResume` and `modbus` are indices 0 to 7 (the string switch in `startMethodString` `@0x3959300` matches the old order); their wire values are not in the pool, the old values 1 to 8 are index + 1 by inference.
-- `GeneratorMode`: the enum has 7 members (`List<GeneratorMode>(7)` `[pp+0xa9218]`) but the names `silentDc`, `saveDc`, `fastDc`, `exerciseAc` and `exerciseDc` are not found in the pool or the asm; only `eco` is an object (ENUMS audit, doc lines 285 to 295).
-- `LoadBalancingErrorType`: the enum has 3 members but only `normal` is an object; `mainDeviceDisconnected` and `mainDeviceAndMeterDisconnected` are not pool strings.
-- `EvChargerGestureFunction` `startImmediately` 4 and `RESystemTemperatureUnitEnum` `fahrenheit` 1 have no pool object.
-- `EnergyFlowType` masks of `dcToHome`, `dcToGrid`, `acToHome` and `acToGrid` (indices 7, 8, 10 and 11) have no pool object.
-- Which `ModeState` enum each screen uses, and the wire values of the mode-state numbers (none are declared).
-- The meaning of the 15 products without a BLE class in the ProductModel table beyond their names (A25X7, A2687 and A120J, for example, have a ProductModel and the ZX UUIDs but no `charging/ble/device` class).
+- Which `ModeState` member set each screen uses: only the `vppState` variant is bound to a declaring file (see ModeState); the other three bindings were not determined (traced 2026-10-20: the four declaring files do not list their members in the asm, and the object dump has no class names for the objects).
+- The meaning of the products without a BLE class beyond their names and the use sites listed under the ProductModel table: what an `A120J`, `A25X7`, `A5220`, `A5341` or `A5450` is in the field is product knowledge the asm does not carry — traced 2026-10-20: the bullet's count of 15 is not reproduced by the table (8 rows have BLE page `none` and 17 rows have BLE map `no`; the table's two columns are the reference).
 
 BLE is unavailable while the device is on WiFi (community finding, see `ble/protocol.md`; not asm-traced).

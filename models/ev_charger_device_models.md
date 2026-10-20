@@ -229,6 +229,6 @@ The values are pool object fields, not Smi immediates (audit row 16 of docs/audi
 
 ## Known unknowns
 
-- `rel_bizs` is typed `String` in `DeviceFeature` but `List` in `SubDeviceModel`; the senders send a list of strings (`["greenpro","elb"]`, see `set_device_feature`).
-- `OcppItemModel.source` and the Dart type of `OcppListModel.list` are `unknown`/`List?` for the extractor; the element class `OcppItemModel` is inferred from the type argument.
-- Meaning of `rel_type`, `status`, `device_type`, `ms_type`, `power_site_type` is not decoded.
+- `rel_bizs` is typed `String` in `DeviceFeature` but `List` in `SubDeviceModel`; the senders send a list of strings (`["greenpro","elb"]`, see `set_device_feature`) — traced 2026-10-20: the two types are two separate response models, the `String` read in `ev_charger_site_info_model.dart @0x45b11d0` and the `List?` read in `group_device_model.dart @0x45b53e4`; no code converts one to the other, so which type the server really sends for each answer cannot be decided from the app.
+- `OcppItemModel.source`: the value is loaded with `[]` and stored without any type test (`ocpp_list_model.dart @0x284ac28` to `@0x284ace4`, no `r8 =` check between the key load and the constructor), so it is a Dart `dynamic` field; the app has no cast that says what it holds. The list type of `OcppListModel.list` is `List?` and its element class `OcppItemModel` comes from the type argument next to the key.
+- Meaning of `rel_type`, `status`, `device_type` and `ms_type` is not decoded; `power_site_type` takes the values of [enums, power_site_type](../reference/enums.md#power_site_type-upstream-solixsitetype) (an integer compared with the app enum `AnkPowerSiteType`). — traced 2026-10-20: the consumers of the other four fields were not followed.

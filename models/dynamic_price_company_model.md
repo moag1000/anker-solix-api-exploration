@@ -91,7 +91,7 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 |---|---|---|---|---|
 | `area` | `List<NordpoolArea>` | no | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bd120` |
 | `recommendParams` | `RecommendParams?` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bd260` |
-| `enableSellType` | `unknown` | not determined | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bd2fc` |
+| `enableSellType` | `int?` (stored only when the loaded value is an `int`: class-id test `@0x27bd330` to `@0x27bd338`, store `@0x27bd340`) | not determined | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bd2fc` |
 
 ### NordpoolArea
 
@@ -138,9 +138,9 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
 | `buyRate` | `int?` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bd398` |
-| `buyFixFee` | `unknown` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bd41c` |
-| `sellFixRate` | `unknown` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bd4c8` |
-| `exportTariff` | `unknown` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bd574` |
+| `buyFixFee` | `dynamic` (no type test between the key load and the constructor store) | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bd41c` |
+| `sellFixRate` | `dynamic` (no type test between the key load and the constructor store) | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bd4c8` |
+| `exportTariff` | `dynamic` (no type test between the key load and the constructor store) | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bd574` |
 | `sellType` | `int?` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bd620` |
 
 ### TimeSlotRecommendParams
@@ -149,8 +149,8 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
-| `chargeTimePeriod` | `unknown` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bc194` |
-| `dischargeTimePeriod` | `unknown` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bc250` |
+| `chargeTimePeriod` | `List?` of `ChargeTimePeriod` (mapping closure allocated `@0x27bc1f8`) | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bc194` |
+| `dischargeTimePeriod` | `List?` of `ChargeTimePeriod` (mapping closure allocated `@0x27bc2b4`) | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bc250` |
 | `dischargeTime` | `num?` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bc310` |
 | `chargeTime` | `num?` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bc398` |
 | `chargeTotalTime` | `num?` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bc420` |
@@ -163,13 +163,13 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
 | `buyRate` | `int?` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bb518` |
-| `buyFixFee` | `unknown` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bb5a0` |
-| `sellRate` | `unknown` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bb654` |
+| `buyFixFee` | `dynamic` (no type test between the key load and the constructor store) | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bb5a0` |
+| `sellRate` | `dynamic` (no type test between the key load and the constructor store) | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bb654` |
 | `sellType` | `int?` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bb708` |
 | `area` | `String?` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bb790` |
 | `currency` | `String?` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bb818` |
 | `enableSellType` | `int?` | yes | ≤3.18.0 | `dynamic_price_company_model.dart @0x27bb8a0` |
-| `sellVat` | `unknown` | yes | 3.24.3 | `dynamic_price_company_model.dart @0x27bb928` |
+| `sellVat` | `dynamic` (no type test between the key load and the constructor store) | yes | 3.24.3 | `dynamic_price_company_model.dart @0x27bb928` |
 
 ### UserOctopusParam
 
@@ -231,5 +231,4 @@ Keys with `since` 3.24.3 are new in this version: `UserFlatpeakParam.aggregation
 
 ## Known unknowns
 
-- Types marked `unknown` (`buyFixFee`, `sellFixRate`, `exportTariff`, `sellRate`, `sellVat`, `enableSellType` of `NordpoolParam`, the time-period lists) were not resolved by the extractor.
 - The meaning of `type` values and of the `name` strings (provider names such as the ones the app sends as `companyName`) is not documented; no captured response exists.

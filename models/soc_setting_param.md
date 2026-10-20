@@ -28,6 +28,8 @@ Column `since`: the class is absent from the 3.18.0 asm, so every key is `3.24.3
 
 [`get_site_device_param`](../api/power_service/site/get_site_device_param.md) with `param_type` 27: `getSocSetting` (`station_peak_shaving_controller.dart @0x2afab38`, closure `@0x2afac88`, `SocSettingParam.fromJson` `@0x2afadf8`) and `query` (`station_soc_data_source.dart @0x2afe7a0`, closure `@0x2afe92c`, `fromJson` `@0x2afeb00`). `fetchSocSetting` (`soc_command_capability_v2.dart @0x3677fc4`) sends the same request through the handler `akiot.cloud_api` and returns an `IoTAKResult`; the model parse of that path was not traced. Written with [`set_site_device_param`](../api/power_service/site/set_site_device_param.md) (`_saveSocSetting`; see [param_types.md](../api/param_types.md)).
 
+`SocCommandCapabilityV2.fetchSocSetting` (`device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4`) does not parse the answer itself: it sends the kit channel `akiot.cloud_api` with the path `/power_service/v1/site/get_site_device_param`, the method `POST` and the parameters `site_id` and `param_type` `"27"` (`@0x36780b4` to `@0x3678110`), logs `success=` of the result (`@0x36781a8` to `@0x36781ec`) and returns it; the `device` copy of `SocSettingParam.fromJson` is called in `station_soc_settings_v2_controller.dart @0x36783ec`, in the controller that calls `fetchSocSetting` (`@0x3677f7c`).
+
 ## Consumed by
 
 `StationPeakShavingController` (`station_peak_shaving_controller.dart`), `StationSocDataSource.query`, and the SOC settings v2 controller (`station_soc_settings_v2_controller.dart`); field-level use is not traced. The unrelated device capability class `SocSettings` (camelCase `chargeLimit`, `dischargeLimit`, `backupReserve`) is described in [soc_settings.md](soc_settings.md).
@@ -39,4 +41,3 @@ New: the class and the `param_type` 27 requests do not exist in 3.18.0.
 ## Known unknowns
 
 - The units (percent) and ranges of the limits, and the meaning of `backup_reserve_switch` (0/1).
-- Whether `fetchSocSetting` (cloud API handler) parses the response with this class.

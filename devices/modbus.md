@@ -44,7 +44,7 @@ Products for which the 3.24.3 app builds a Modbus entry point. Product codes are
 | EV charger (`ev_charger` module, model `A5190DeviceInfo`) | EV charger; upstream maps the Modbus fields under `A5191` (upstream-confirmed, `api/mqttmap.py`) | EV charger settings, "Integrations" page, Modbus TCP section | `integrations_setting_logic.dart @0x35f51e8` |
 | `A5101` (X1 HES) | X1 | none: its Bluetooth support list names `isSupportModbus`, but the value is only logged, not stored (see [Support flags](#support-flags)) | `a5101_device_controller.dart @0x34cdab0` |
 
-All third-party control menus use one controller, `CommunicationSettingMenuController` (title key `threePartyControlSettings`, `communication_setting_menu_controller.dart @0x4154870`). The first two rows are the device-settings list returned by `SettingConfig.getSettingsConfig` for exactly these four PN strings; for any other PN it returns an empty list (`setting_config.dart @0x361af20`). Whether the int argument of the station rule is the site type is not verified; upstream lists site type 19 as "Main A17E2 Solarbank Max AC" (`SolixSiteType.t_19` in `api/apitypes.py`).
+All third-party control menus use one controller, `CommunicationSettingMenuController` (title key `threePartyControlSettings`, `communication_setting_menu_controller.dart @0x4154870`). The first two rows are the device-settings list returned by `SettingConfig.getSettingsConfig` for exactly these four PN strings; for any other PN it returns an empty list (`setting_config.dart @0x361af20`). The int argument of the station rule is the route argument `powerSiteType` of the station setting controller (`base_station_setting_controller.dart @0x370d2d0` reads the key `powerSiteType` from the navigation arguments as `int?`, stores it at `@0x370d334`; `initContext` passes it to `_getSettingList` at `@0x3a6f50c`, and a null becomes -1 at `@0x3a6f5ec`). The four values are the `AnkPowerSiteType` members `a17E2` (19), `ae103` (20), `ae111` (21) and `ae113` (25) ([enums](../reference/enums.md#ankpowersitetype-app-enum)); upstream lists site type 19 as "Main A17E2 Solarbank Max AC" (`SolixSiteType.t_19` in `api/apitypes.py`). A site with `power_site_type` 12 (main A17C5, upstream `t_12`) or 18 (AE100 dock, `t_18`) is not among the four values, and `A17C5` is not one of the four PN strings of the device list, so the app offers no third-party control menu for the A17C5 through these rules (app side); sites that carry one of the four values may still contain Solarbank 3 devices as members.
 
 No asm site ties Modbus to `A17C5` (Solarbank 3); [a17c5.md](a17c5.md) is therefore unchanged.
 
@@ -104,7 +104,7 @@ Upstream names (upstream-confirmed, `api/mqttmap.py` and `api/mqttcmdmap.py`): f
 
 Link error detection (`analyzeModbusConnectError`, `integrations_setting_logic.dart @0x35f4740`, called from `onInit` at `@0x35f4600` and on every device-info update at `@0x35f52f4`): the app walks `errorCodeArray` byte by byte and counts trailing zero bits, adding 8 for each zero byte (`add x1, x3, #8`, arithmetic, `@0x35f48d8`, so 8) until it finds the first non-zero byte. If the lowest set bit is bit number 32 (`cmp x0, #0x20` on the unboxed count, `@0x35f498c`, so 32), it logs `Modbus connect error detected!` and, while the Modbus switch is on, shows the warning `evModbusConnectTips` (`@0x35f49f8`; text in [UI texts](#ui-texts)). Any other error bit, or an all-zero array, clears the warning. That is the only error class the app derives for Modbus.
 
-Two EV charger enums also have a Modbus entry (labels only; their wire values are not traced): `StartWayEnum` index 7 shows the string literal `"Modbus TCP"` as the start/stop method of a charging session (`cmp x0, #7` on the unboxed enum index, `start_way_enum.dart @0x39593e4`, so 7; label at `@0x39593ec`), and `ChargingPauseReason` index 6 shows the pause reason `evChargerPauseModbusTCP` (`cmp x2, #6` / `#5` on the unboxed index, `charging_pause_reason_enum.dart @0x3505fd0`, `@0x3505fd8`, so 6; key at `@0x3505ff8`). The enum values belong to `reference/enums.md` (not written yet).
+Two EV charger enums also have a Modbus entry (wire values: `StartWayEnum.modbus` is 8 and `ChargingPauseReason.modbus` is 6, [enums](../reference/enums.md#startwayenum-and-chargingpausereason); the labels are): `StartWayEnum` index 7 shows the string literal `"Modbus TCP"` as the start/stop method of a charging session (`cmp x0, #7` on the unboxed enum index, `start_way_enum.dart @0x39593e4`, so 7; label at `@0x39593ec`), and `ChargingPauseReason` index 6 shows the pause reason `evChargerPauseModbusTCP` (`cmp x2, #6` / `#5` on the unboxed index, `charging_pause_reason_enum.dart @0x3505fd0`, `@0x3505fd8`, so 6; key at `@0x3505ff8`). The enum values are owned by [enums](../reference/enums.md#startwayenum-and-chargingpausereason).
 
 ### Support flags
 
@@ -180,14 +180,11 @@ Tag: untagged by design (no API fact).
 
 ## Known unknowns
 
-- The Modbus register map, function codes and unit id handling of any product. The app does not contain them (see [Register map](#register-map)).
 - The fixed TCP port of the third-party control devices; the app only displays `tcpPort` from the cloud.
-- How the IoT kit encodes `action_ha_communication_setting` and `prop_write_evcharger` on Bluetooth or MQTT (opcode, TLV or field ids). Upstream has the EV charger MQTT field `b7` (`modbus_switch`); its identity with the app key `modbusTcpSwitch` is not traced.
+- How the IoT kit encodes `action_ha_communication_setting` and `prop_write_evcharger` on Bluetooth or MQTT (opcode, TLV or field ids) runs in the native plugin, and the identity of the EV charger MQTT field `b7` (`modbus_switch`, upstream) with the app key `modbusTcpSwitch` is a device observation — reclassified: native plugin, not in Dart asm, [device test rows 59 and 60](../docs/DEVICE_TEST_BACKLOG.md#modbus-a17e2-ae103-ev-charger-and-a17e2--ae1x0-ble).
 - Whether `set_modbus_setting` reaches the device through the cloud (for example over MQTT) when the app took the cloud path, or whether the cloud only records the state.
-- The meaning of the int argument of the station menu rule (19, 20, 21, 25), and the marketing names of `AE111` and `AE113`.
+- The marketing names of `AE111` and `AE113`: the app knows them only by product code and by the `AnkPowerSiteType` members `ae111` and `ae113` ([enums](../reference/enums.md#ankpowersitetype-app-enum)); no marketing name string is bound to them in the asm checked here.
 - Which other bits of the EV charger `errorCodeArray` exist; the app only names bit 32.
-- The wire values of the `StartWayEnum` and `ChargingPauseReason` Modbus entries.
-- Whether `A17C5` or other Solarbank 3 sites get the station menu (depends on the unverified station rule above).
 
 ## Device-tested by
 

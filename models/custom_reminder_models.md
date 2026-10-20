@@ -22,18 +22,18 @@ One reminder; also the shape sent to `set_reminder` (`toJson`).
 
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
-| `id` | `unknown` | ? | 3.24.3 | `custom_reminder_item.dart @0x2a53564` |
+| `id` | `int?` (read with `_readInt`, `custom_reminder_item.dart @0x2a53bc8`: null stays null, a number is converted to int, a string goes through `int.tryParse`, anything else gives null) | yes | 3.24.3 | `custom_reminder_item.dart @0x2a53564` |
 | `device_sn` | `String?` | yes | 3.24.3 | `custom_reminder_item.dart @0x2a535b4` |
-| `reminder_type` | `unknown` | ? | 3.24.3 | `custom_reminder_item.dart @0x2a53638` |
+| `reminder_type` | `int?` (read with `_readInt`, `custom_reminder_item.dart @0x2a53bc8`: null stays null, a number is converted to int, a string goes through `int.tryParse`, anything else gives null) | yes | 3.24.3 | `custom_reminder_item.dart @0x2a53638` |
 | `title` | `String?` | yes | 3.24.3 | `custom_reminder_item.dart @0x2a53688` |
 | `image_url` | `String?` | yes | 3.24.3 | `custom_reminder_item.dart @0x2a53708` |
 | `hash_code` | `String?` | yes | 3.24.3 | `custom_reminder_item.dart @0x2a5378c` |
-| `cycle_type` | `unknown` | ? | 3.24.3 | `custom_reminder_item.dart @0x2a53810` |
-| `repeat_week_mask` | `unknown` | ? | 3.24.3 | `custom_reminder_item.dart @0x2a53860` |
-| `interval_hour` | `unknown` | ? | 3.24.3 | `custom_reminder_item.dart @0x2a538b0` |
-| `status` | `unknown` | ? | 3.24.3 | `custom_reminder_item.dart @0x2a53900` |
-| `start_time` | `unknown` | ? | 3.24.3 | `custom_reminder_item.dart @0x2a53950` |
-| `end_time` | `unknown` | ? | 3.24.3 | `custom_reminder_item.dart @0x2a5399c` |
+| `cycle_type` | `int?` (read with `_readInt`, `custom_reminder_item.dart @0x2a53bc8`: null stays null, a number is converted to int, a string goes through `int.tryParse`, anything else gives null) | yes | 3.24.3 | `custom_reminder_item.dart @0x2a53810` |
+| `repeat_week_mask` | `int?` (read with `_readInt`, `custom_reminder_item.dart @0x2a53bc8`: null stays null, a number is converted to int, a string goes through `int.tryParse`, anything else gives null) | yes | 3.24.3 | `custom_reminder_item.dart @0x2a53860` |
+| `interval_hour` | `int?` (read with `_readInt`, `custom_reminder_item.dart @0x2a53bc8`: null stays null, a number is converted to int, a string goes through `int.tryParse`, anything else gives null) | yes | 3.24.3 | `custom_reminder_item.dart @0x2a538b0` |
+| `status` | `int?` (read with `_readInt`, `custom_reminder_item.dart @0x2a53bc8`: null stays null, a number is converted to int, a string goes through `int.tryParse`, anything else gives null) | yes | 3.24.3 | `custom_reminder_item.dart @0x2a53900` |
+| `start_time` | `int?` (read with `_readInt`, `custom_reminder_item.dart @0x2a53bc8`: null stays null, a number is converted to int, a string goes through `int.tryParse`, anything else gives null) | yes | 3.24.3 | `custom_reminder_item.dart @0x2a53950` |
+| `end_time` | `int?` (read with `_readInt`, `custom_reminder_item.dart @0x2a53bc8`: null stays null, a number is converted to int, a string goes through `int.tryParse`, anything else gives null) | yes | 3.24.3 | `custom_reminder_item.dart @0x2a5399c` |
 
 ### CustomReminderListResponse
 
@@ -46,6 +46,8 @@ Answer of `get_reminder_list`: the reminders under one of three possible keys.
 | `items` | `unknown` | yes | 3.24.3 | `custom_reminder_item.dart @0x2a532b0` |
 | `reminder_list` | `unknown` | yes | 3.24.3 | `custom_reminder_item.dart @0x2a532dc` |
 | `list` | `List` of `CustomReminderItem` | no | 3.24.3 | `custom_reminder_item.dart @0x2a53304` |
+
+Value sets of `reminder_type` and `cycle_type` (traced 2026-10-20): the getters `parsedReminderType` (`custom_reminder_item.dart @0x35aa594`) and `parsedCycleType` (`@0x2a55c38`) compare the tagged int with 2, 4, 6, 8 and 0xa, so the values 1 to 5. `reminder_type`: 1 `birthday`, 2 `anniversary`, 3 `water`, 4 `sedentary`, 5 `custom`; every other value also gives `custom` (`@0x35aa600`). `cycle_type`: 1 `everyDay`, 2 `everyWeek`, 3 `everyMonth`, 4 `everyYear`, 5 `oneTime`; every other value gives null (`@0x2a55ca4`). The enum members are objects `CustomReminderType` and `CustomReminderCycleType` in `custom_reminder_type.dart` and `custom_reminder_cycle_model.dart` (object dump `@0x38f6361`, `@0x38f6341`, `@0x38f6321`, `@0x38f6301`, `@0x38f62e1` and `@0x38f6501`, `@0x38f64e1`, `@0x38f64c1`, `@0x38f64a1`, `@0x38f6481`); the enum indices (custom 0 to sedentary 4, oneTime 0 to everyYear 4) differ from the wire values above, which come from the compare chains.
 
 ## Produced by
 
@@ -63,4 +65,4 @@ Both classes are new in 3.24.3.
 ## Known unknowns
 
 - `CustomReminderListResponse.fromJson` reads the keys `items`, `reminder_list` and `list` in that order and maps the first list found to `CustomReminderItem`; which key the server uses is not known (the extractor lists all three as keys).
-- The values of `reminder_type`, `cycle_type`, `repeat_week_mask`, `interval_hour` and `status`, and the unit of `start_time`/`end_time`, are not decoded (the extractor could not resolve their types).
+- The values of `repeat_week_mask`, `interval_hour` and `status`, and the unit of `start_time`/`end_time`, are not decoded — traced 2026-10-20: no asm string or enum binds them (`repeat_week_mask` occurs only in the item model and `custom_reminder_set_request.dart`). `reminder_type` and `cycle_type` are decoded in the next paragraph.
