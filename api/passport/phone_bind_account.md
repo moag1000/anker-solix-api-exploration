@@ -22,14 +22,16 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `phone_number` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3bc3000` (value store `@0x3bc3010`) |
-| `verify_code` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3bc3014` (value store `@0x3bc3024`) |
-| `access_token` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3bc3028` (value store `@0x3bc3038`) |
-| `third_party` | ? | yes | `"apple"` or `"wechat"` (constants in the two callers) | `charging/http/http_request_repository_impl.dart @0x3bc303c` (value store `@0x3bc304c`) |
+| `phone_number` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3bc3000` (value store `@0x3bc3010`) |
+| `verify_code` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3bc3014` (value store `@0x3bc3024`) |
+| `access_token` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3bc3028` (value store `@0x3bc3038`) |
+| `third_party` | string | yes | `"apple"` or `"wechat"` (constants in the two callers) | `charging/http/http_request_repository_impl.dart @0x3bc303c` (value store `@0x3bc304c`) |
 | `client_secret_info` | object | yes | `{"public_key": "<public_key>"}` | `charging/http/http_request_repository_impl.dart @0x3bc3050` (value store `@0x3bc3090`) |
-| `open_id` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3bc30b8` (value store `@0x3bc30cc`) |
+| `open_id` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3bc30b8` (value store `@0x3bc30cc`) |
 
 The map literal has type arguments `<String, Object?>` (`@0x3bc30f0`), which is not evidence of a value type, so the scalar types stay `?`. `client_secret_info` is a nested map literal `<String, String?>` (`@0x3bc307c`) with the key `public_key` (`@0x3bc3068`); its value is a parameter, not a constant. `open_id` is stored like the others (`@0x3bc30cc`); the `tbz`/`b.eq` pairs after the array stores (`@0x3bc3098`, `@0x3bc30d4`) are write-barrier checks, not value guards.
+
+Caller values (traced 2026-10-20, app side): `BindPhoneNumberLogic::bindPhoneNumberWithApple` (`charging/ui/page/account/bind_phone_number/bind_phone_number_logic.dart @0x3bc2dc8`) passes `phone_number` and `verify_code` as the text of two `TextEditingController` fields (`field_57`, `field_5b`, created in the constructor `@0x40f8d74`, `@0x40f8db0`; text chain `field_27` then `field_7`, `@0x3bc2e7c`..`@0x3bc2ea8`, on such a controller that chain is `value.text`, a String: `flutter/src/widgets/editable_text.dart @0x2573d7c`, as on [register](register.md)), `open_id` from `field_8f` (`@0x3bc2ec0`) and `access_token` from `field_93` (`@0x3bc2eb4`); `bindPhoneNumberWithWechat` passes the same two texts (`@0x3bc45a8`..`@0x3bc45d4`), `open_id` from `field_8b` (`@0x3bc45e0`) and `access_token` from `field_93` (`@0x3bc45ec`). `onInit` fills these three fields from the route arguments with a `String` cast each: `openID` into `field_8b` (cast `@0x34d6050`, store `@0x34d6068`), `userIdentify` into `field_8f` (cast `@0x34d61f8`, store `@0x34d6210`) and `authToken` into `field_93` (store `@0x34d635c`, `charging/ui/page/account/bind_phone_number/bind_phone_number_logic.dart`). So all four values are strings; for an Apple login `open_id` is the `userIdentify` argument, for WeChat the `openID` argument.
 
 ## `param_type`/`cmd`
 
@@ -80,8 +82,6 @@ Called from:
 
 ## Known unknowns
 
-- Types of `phone_number`, `verify_code`, `access_token`, `open_id`: parameters of the sender stored into a `<String, Object?>` literal; the callers pass fields read from state (`@0x3bc2e7c`..`@0x3bc2ec0`) whose types were not read.
-- What the callers pass for `open_id` (the field is stored without a null guard, but its content for an Apple login was not decoded).
 - What the two secret-bearing fields of the response (`auth_token`, `server_secret_info`) are used for after the re-login: the roles are described in `api/auth.md`; they are not repeated here.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

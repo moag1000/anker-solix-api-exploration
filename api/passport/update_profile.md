@@ -29,6 +29,8 @@ The sender builds no body: it forwards the map it receives (`HttpRequestControll
 
 `LanguageLogic::updateLanguage` calls the sender with the empty string instead of a map (`charging/ui/page/user/language/language_logic.dart @0x404ff3c`); the language is not a body key in the code read.
 
+Language change (traced 2026-10-20, app side): `LanguageLogic::updateLanguage` (`charging/ui/page/user/language/language_logic.dart`) first stores the chosen language through `SpUtil` (`updateLanguage` `@0x404fe44`, awaited `@0x404fe50`), reads it back (`getLanguage` `@0x404fe60`, log `Update language result `), and then calls the profile sender with the empty string as body (`r2 = ""` `@0x404ff3c`, call `@0x404ff40`); the failure closure shows the text `failed` (`@0x404fee4`..`@0x404ff00`). The language is therefore not a body key; the common request header `Language` ([../auth.md](../auth.md#common-request-headers)) carries the stored value on every call, so the header is the only language carrier in this request. That the server stores the profile language from that header is server behaviour and not known from the app.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -74,8 +76,7 @@ Called from:
 
 ## Known unknowns
 
-- How the language change is sent: `updateLanguage` passes `""` as the body argument (`@0x404ff3c`); the language is probably carried in a request header, not read here.
-- Whether other callers send further profile keys (for example `avatar` or `country`): only the two callers above build a map.
+- Whether other callers send further profile keys: only the three callers listed under Callers in app call the sender, and only `changePhoneNumber` and `changeNickname` build a map (`phone_number`, `nick_name`); `updateLanguage` sends the empty string (traced 2026-10-20 with a grep of the sender name over the asm, call sites `account_setting_page_logic.dart` and `language_logic.dart` only)
 - Value rules for `nick_name` (the dialog passes `maxLength` 40, `account_setting_page_logic.dart @0x403c834`) and the phone number: server side checks are not visible.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

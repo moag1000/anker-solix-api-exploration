@@ -58,6 +58,8 @@ Response: not synthesized; the keys are listed under Response (no capture exists
 
 none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
+Failure handling (traced 2026-10-20, app side): the failure closure of `UserChangePasswordLogic::changePassword` (`charging/ui/page/user/changePassword/user_change_password_logic.dart @0x4041cc8`, signature `(int, String)`) compares no code; it shows the message string it receives in a dialog with the button text `commonOK` (`Trans.tr` `@0x4041d00`, `GetExtension.showDialog` `@0x4041d28`, `backVisible` and `showTitle` false), so the text shown for a wrong `original_password` is the message of the answer.
+
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `changePwdRequest` @0x4041e8c (encryptionRequestHttp; encrypted: true)
@@ -73,7 +75,7 @@ Called from:
 
 ## Known unknowns
 
-- Password policy and the error codes for a wrong `original_password`: the failure closure (`charging/http/http_request_repository_impl.dart @0x4041f9c`) logs code and message and forwards both; no code is compared in it or read in the caller.
+- Password policy and the code for a wrong `original_password`: the app compares no code and shows the message text of the answer (see Errors seen); the policy and the codes are decided by the server — reclassified: server (2026-10-20)
 - Whether other sessions or tokens are invalidated after a change: not visible in the app. — reclassified: server (2026-10-20: session handling on the server is not visible in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

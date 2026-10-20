@@ -60,6 +60,8 @@ Response: not synthesized; the keys are listed under Response (no capture exists
 
 none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
+Caller side (traced 2026-10-20, app side): `AccountSetPasswordLogic::changePassword` passes only a success closure to `userSetPasswordApi` (`charging/ui/page/user/routerInfo/account_set_password/account_set_password_logic.dart @0x40554c0`, one closure `@0x405582c`, no failure callback). The success closure (`charging/ui/page/user/routerInfo/account_verification/account_verification_logic.dart @0x405582c`, shared code) sets an observable (`value=` `@0x4055884`) and opens the route `/routerInfoDetailPage` with the stored route arguments (`GetNavigation.offAndToNamed` `@0x40558a0`). No code is compared in the caller.
+
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `userSetPasswordApi` @0x4055530 (encryptionRequestHttp; encrypted: true)
@@ -76,7 +78,6 @@ Called from:
 ## Known unknowns
 
 - Why the same `verify_kind` value `"export_account"` is used here and in `validate_pass`: not visible in the app. — reclassified: server (traced 2026-10-20: the app sends the constant `"export_account"` from both senders, `charging/http/http_request_repository_impl.dart @0x40555a0`; why the server uses one purpose name for the two requests is not visible in the app)
-- The failure closure and error codes of the caller were not decoded: none compared in the caller function.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

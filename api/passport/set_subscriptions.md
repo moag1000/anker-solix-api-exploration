@@ -24,9 +24,11 @@ The body map is built at run time: the sender creates an empty map (`Map._fromLi
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `subscribe` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x35a3920` (`[]=` call `@0x35a392c`, value from a parameter) |
-| `sms_subscribe` | ? | optional (null check `cmp w3, NULL` `@0x35a3934`, branch `@0x35a3938`) | ? | `charging/http/http_request_repository_impl.dart @0x35a3940` (`[]=` call `@0x35a3948`) |
+| `subscribe` | bool | yes |  | `charging/http/http_request_repository_impl.dart @0x35a3920` (`[]=` call `@0x35a392c`, value from a parameter) |
+| `sms_subscribe` | bool | optional (null check `cmp w3, NULL` `@0x35a3934`, branch `@0x35a3938`) | ? | `charging/http/http_request_repository_impl.dart @0x35a3940` (`[]=` call `@0x35a3948`) |
 | `phone_number` | ? | optional (null check `@0x35a3950`, then a zero-length test `cbz` `@0x35a395c` on a length field) | ? | `charging/http/http_request_repository_impl.dart @0x35a3964` (`[]=` call `@0x35a396c`) |
+
+Caller values (traced 2026-10-20, app side): `SmsManager::subscribeSms` (`charging/common_business/sms/sms_manager.dart @0x3bbcd74`, parameters: an int flag, the phone number, named `result` and `showLoading`) passes `subscribe` as the stored flag (`getSubscribe` `@0x3bbce5c`, text length test `cbnz` `@0x3bbce94`, bool class-id test `cmp x1, #0x3f` `@0x3bbceb4`, fallback `false` `@0x3bbce98`, `@0x3bbcebc`), so a bool; `smsSubscribe` is a bool formed from the flag (`cmp x0, #1`, `csel` of `true`/`false`, `@0x3bbcecc`..`@0x3bbced8`); and `phoneNumber` is the second parameter (`@0x3bbcf1c`..`@0x3bbcf24`, named list `@0x3bbcf28`). `SubscribeEmailLogic::subscribeSms` (`charging/ui/page/user/subscribe/subscribe_email_logic.dart @0x4064304`) calls it with the flag 0 (raw 0, Smi 0, `r2 = 0` `@0x40642f8`), a phone number from a field of the logic (`fp-0x20`, `@0x40642f4`) and `showLoading` true (`@0x40642e8`), so it sends `sms_subscribe` false there; `showReplyDialog` (`@0x3bbbacc`) passes values of its own frame. `SubscribeEmailLogic::_setSubscribe` (`@0x35a36a4`) calls the sender without named arguments (`r4 = const [0, 0x4, 0, 0x4, null]` `@0x35a3734`), so the two optional keys are omitted there.
 
 ## `param_type`/`cmd`
 
@@ -64,9 +66,8 @@ Called from:
 
 ## Known unknowns
 
-- Types of `subscribe`, `sms_subscribe` and `phone_number`: the map has no type arguments and the values are parameters; the `field_7` load before the `cbz` (`charging/http/http_request_repository_impl.dart @0x35a3958`) looks like a string length, which is not a type proof.
-- What the callers pass for `sms_subscribe` and when they omit `phone_number`.
-- Error codes: none compared in the callers read (`sms_manager.dart`, `subscribe_email_logic.dart`).
+- Which user actions in `showReplyDialog` (`charging/common_business/sms/sms_manager.dart @0x3bbbacc`) lead to the flag values 1 or 0: the dialog callbacks pass values of their own frame slots and were not decoded; the calls of `SubscribeEmailLogic` are listed under Request — traced 2026-10-20
+- Error codes: none compared in the callers read (`sms_manager.dart`, `subscribe_email_logic.dart`). — traced 2026-10-20: `SubscribeEmailLogic::_setSubscribe` passes a success closure (`charging/ui/page/user/subscribe/subscribe_email_logic.dart @0x35a3b7c`, stores the value with `setSubScribe` `@0x35a3be4`) and a failure closure (`@0x35a3b08`, `(int, String)`) that shows a dialog with the button text `commonOK` (`Trans.tr` `@0x35a3b40`, `showDialog` `@0x35a3b60`) and compares no code; `SmsManager::subscribeSms` passes its `result` callback through the shared closure `charging/base/get/get_extension.dart @0x23f3d20` (calls the stored callback when it is not null) and a second closure whose code compare was not decoded
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

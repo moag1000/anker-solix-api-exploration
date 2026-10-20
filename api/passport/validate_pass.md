@@ -40,6 +40,8 @@ no model: the success closure (`charging/ui/page/account/privacy_policy/verifica
 
 (asm-traced) One key is read from the top level of the response: `check_token` (String). What the app does with it next (which later request sends it back) was not traced.
 
+Use of `check_token` (traced 2026-10-20, app side): the string `check_token` occurs only in the success closure of `verifyAccount` (`charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faf0b4`, `@0x2faf12c`); no other code reads that key. The caller callbacks receive the token as a String argument: in `VerificationLogic::passwordVerify` (`charging/ui/page/account/privacy_policy/verification/verification_logic.dart`, call `@0x2faed6c`) the success closure `@0x2faf68c` passes it on through a stored closure (`ClosureCall` `@0x2faf6f4`), and in `AccountVerificationLogic::getAccountName` (`charging/ui/page/user/routerInfo/account_verification/account_verification_logic.dart`, call `@0x4055a18`) the success closure is `@0x4055a2c`. The success closure of the sender logs `sendVerifyCode success: ` (a log text copied from `phone_verification_code`, `@0x2faf09c`) together with the token value, so the token reaches the app log.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -69,9 +71,8 @@ none traced: no numeric error code is compared in the sender or the closures rea
 ## Known unknowns
 
 - The type of `password`: a parameter of the sender stored into a `<String, Object>` literal; the callers' values were not read. — attempted 2026-10-20 (two-hop not readable: an anonymous closure (`charging/ui/page/user/routerInfo/account_verification/account_verification_logic.dart @0x4055a18`), an anonymous closure (`charging/ui/page/account/privacy_policy/verification/verification_logic.dart @0x2faed6c`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
-- Which later request consumes `check_token`, and its lifetime: not traced.
-- The success closure logs `sendVerifyCode success: ` (a copied log text, `@0x2faf09c`) with the `check_token` value.
-- Error codes: none traced in the two call sites.
+- Which later request consumes `check_token`, and its lifetime: not traced. — traced 2026-10-20: no request builder in the asm reads or sends a field named `check_token` (the string occurs once, in the sender above), so the app passes the value only to closures; which later request, if any, carries it is not readable from the Dart code read (the next step is inside the stored closure of `passwordVerify`, `verification_logic.dart @0x2faf6f4`, not resolved to a function)
+- Error codes: none traced in the two call sites. — traced 2026-10-20: the sender's failure closure (`verification_http_reposity.dart @0x2faefe8`) logs `sendVerifyCode fail` (`@0x2faf010`) and calls the caller-supplied failure callback (`ClosureCall` `@0x2faf040`) without comparing a code; the callbacks of the two call sites (`verification_logic.dart @0x2faed6c`, `account_verification_logic.dart @0x4055a18`) were not decoded for codes
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -26,6 +26,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 The value is a String: map literal with type arguments `<String, String>` (`charging/http/http_request_repository_impl.dart @0x404c724`). The caller (`charging/ui/page/user/freeze_account/freeze_account_logic.dart`) reads the stored user phone (`getUserPhone` `@0x404c604`) before the send; that this is the value of `account` was not decoded.
 
+Source of `account` (traced 2026-10-20, app side): `FreezeAccountLogic::_freezeAccountRequest` (`charging/ui/page/user/freeze_account/freeze_account_logic.dart`) stores the result of `getUserPhone` (`@0x404c604`) in its frame (`stur x0, [fp, #-0x10]`) and passes that slot as the first argument of `freezeAccount` (`@0x404c634`, call `@0x404c640`), so `account` is the stored user phone. `SpUtilImpl::getUserPhone` (`charging/util/save/sp_util_impl.dart @0x34e4608`) reads the shared-preferences key `phone`, decrypts it with the local-info routine (`decryptLocalInfo` `@0x34e4690`) and returns `""` when nothing is stored (`@0x34e466c`, `@0x34e469c`), so the value is a String. The page does not send the e-mail address.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -69,9 +71,8 @@ Called from:
 
 ## Known unknowns
 
-- Whether `account` is the phone number or the e-mail: `FreezeAccountLogic::_freezeAccountRequest` loads the user phone (`charging/ui/page/user/freeze_account/freeze_account_logic.dart @0x404c604`) but the link to the argument was not decoded.
 - What the server does with the frozen account (reversibility, session invalidation): not visible in the app; the app logs out after success (`@0x404c8a8`).
-- The failure closure (`charging/http/http_request_repository_impl.dart @0x404c7b4`) logs the code and message; no code is compared there, and the caller's failure closure is a shared closure that is not in the caller's file and was not read.
+- The failure closure of the sender (`charging/http/http_request_repository_impl.dart @0x404c7b4`) logs the code and message and compares no code; the caller's failure callback is the shared closure `StationEnergySystemLogic` `(int, String)` at `charging/ui/page/device/main/sitation_energy_system/station_energy_system_logic.dart @0x238c8d0`, which calls `show` with the message string (`@0x238c8ec`) — traced 2026-10-20
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

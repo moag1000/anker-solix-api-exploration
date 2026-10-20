@@ -34,6 +34,8 @@ no model: the success closure (`charging/http/http_request_repository_impl.dart 
 
 Not a keyed object in the code read: the value is consumed as a list of `int?` built from a comma-separated string (see Response model).
 
+How the text is parsed (traced 2026-10-20, app side): `SmsManager::getDirectionPhoneNum` (`charging/common_business/sms/sms_manager.dart @0x34e88b0`, an `async*` generator of `List<int>`) awaits `getPreDirectionPhoneCode` (`@0x34e88dc`), applies a one-argument method with `","` to the answer (`GDT[cid_x0 + -0xffc]` `@0x34e88fc`; Blutter does not name it, the shape is a split on commas), maps the parts with `map<int?>` (`@0x34e8930`), filters the nulls with a `<int>` typed call (`GDT[cid_x0 + 0x3562a]` `@0x34e894c`), builds a list (`@0x34e8978`) and adds it to a `StreamController<List<int>>` (`@0x34e8a88`). The per-part closure (`@0x34e9ba0`, `(String) -> int?`) calls `parse` (an integer parse, result boxed from an unboxed int `@0x34e9bd8`) and, in its catch block, logs `Error parsing phone codes` (`@0x34e9c84`) and returns null. The only consumer is `SmsPhoneVerifyLogic::onInit` (`charging/common_business/sms/sms_phone_verify_logic.dart @0x34e8838`), which listens to the stream with the closure `charging/common_business/sms/sms_phone_verify_logic.dart @0x34e9d88`; the order is the order of the text, no sort is applied in the generator.
+
 ## Example request/response
 
 Request: no body fields are built (see Request). Response: not synthesized; no capture exists for this endpoint.
@@ -57,9 +59,7 @@ Called from:
 
 ## Known unknowns
 
-- The exact selector of the call at `sms_manager.dart @0x34e88fc` (Blutter prints `GDT[cid_x0 + -0xffc]`): the `","` argument and the `map` to `int?` make it a split in my reading, not a named call.
-- The closure `@0x34e9ba0` (the per-part parse) was not decoded.
-- Whether the list is the order the picker shows: not read.
+- Whether the list is the order the picker shows: not read. — traced 2026-10-20: no sort in the generator (see Response); the picker widget that consumes the stream closure (`sms_phone_verify_logic.dart @0x34e9d88`) was not read
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

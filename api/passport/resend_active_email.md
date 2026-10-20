@@ -54,6 +54,8 @@ Response: not synthesized; the keys are listed under Response (no capture exists
 
 Codes compared in the failure closures of `LoginLogic::activeEmail` (`login_logic.dart`): 10005 (`@0x2fb0a04`, `@0x2fb0a7c`), 26053 (`@0x2fb0ae8`, `@0x2fb0af4`), 100053 (`@0x2fb0b60` x, `@0x2fb0b70` w), as listed in `data/errors.json`; the other two callers are forwarding closures. Meanings are owned by `api/errors.md`.
 
+The other two callers (traced 2026-10-20, app side): both pass a success and a failure closure to the sender and the failure closures compare codes. `ForgetPwdLogic::activeEmail` (`charging/ui/page/account/forget_pwd/forget_pwd_logic.dart`) has a success closure that logs `sendVerifyEmailRequest result:` and waits (`Future.delayed` `@0x3bc9178`, closure `@0x3bc90e4`) and a failure closure (`@0x3bc8e84`, `(int, String)`) with a switch over the code that ends in the dialog texts `commonOK` and `loginEmailHasSent`; `VerificationLogic::_activeEmail` (`charging/ui/page/account/privacy_policy/verification/verification_logic.dart`) has a failure closure (`@0x2fb0608`) that compares the code and shows `loginEmailHasSent` for the success-like branch. The compared code values and their meanings are owned by [errors.md](../errors.md) (rows citing `forget_pwd_logic.dart @0x3bc8eac` and the row for the code compared at `verification_logic.dart`/`forget_pwd_logic.dart` in the send-e-mail-code screens); this page does not repeat them.
+
 ## Callers in app
 
 - `charging/http/http_request_repository_impl.dart`: `sendVerifyEmailRequest` @0x2fb004c (encryptionRequestHttp; encrypted: true)
@@ -71,7 +73,6 @@ Called from:
 
 ## Known unknowns
 
-- How the two other callers (`ForgetPwdLogic::activeEmail`, `VerificationLogic::_activeEmail`) handle failures: their closures only forward to the sender and were not decoded further.
 - Rate limits of the activation mail: only the code 100053 compare is known (`api/errors.md`). — reclassified: server (2026-10-20: rate limits are not visible in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

@@ -39,6 +39,8 @@ not parsed by the app (asm-traced for the sender and the login caller): the succ
 
 No response key is read by the app (see Response model).
 
+Callbacks of the other three screens (traced 2026-10-20, app side): the success closures of `RegisterLogic::sendVerifyCode` (`charging/ui/page/account/register/register_logic.dart @0x3be589c`), `ForgetPwdLogic::sendVerifyCode` (`charging/ui/page/account/forget_pwd/forget_pwd_logic.dart @0x3bcbde4`) and `BindPhoneNumberLogic::sendVerifyCode` (`charging/ui/page/account/bind_phone_number/bind_phone_number_logic.dart @0x3bc5b04`) take one `dynamic` argument, do not read it, and call `_startCountdown` (`@0x3be58c8`, `@0x3bcbe10`, `@0x3bc5b30`), like the login screen; their failure closures (`(int, String)`, for example `@0x3be56ec`..`@0x3be5708`) show a message with `Trans.tr` and `show`/`showDialog`.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -74,7 +76,6 @@ Called from:
 
 ## Known unknowns
 
-- Whether the callbacks of the register, forgot-password and bind-phone screens also ignore the response (only the login callback was read).
 - The server's rate limit and code lifetime: not visible in the app; `api/errors.md` lists the retry-limit code 100053.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

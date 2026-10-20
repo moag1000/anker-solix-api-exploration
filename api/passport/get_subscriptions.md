@@ -34,6 +34,8 @@ n/a
 
 (asm-traced) Top-level keys of `SubscribeEmailModel` (`data/models.json`, `charging::SubscribeEmailModel`): `email` (String?), `accept_survery` (bool?), `subscribe` (bool?), `phone_number` (String?), `sms_subscribe` (bool?). The callers store the `subscribe` flag with `setSubScribe` (`sms_manager.dart @0x291c630`, `account_setting_page_logic.dart @0x29839a0`) and a null value counts as false (`@0x291c62c`).
 
+Which caller reads which flag (traced 2026-10-20; offsets by the `fromJson` key order `email` `field_7`, `accept_survery` `field_b`, `subscribe` `field_f`, `phone_number`, `sms_subscribe`): `SmsManager::_getSubscribe` (`charging/common_business/sms/sms_manager.dart @0x291c61c`), `SubscribeEmailLogic::_getSubscribe` (`charging/ui/page/user/subscribe/subscribe_email_logic.dart @0x2988d74`) and `AccountSettingPageLogic::getSubscribe` (`charging/ui/page/user/accountSetting/account_setting_page_logic.dart @0x298398c`) all read only `field_f`, i.e. `subscribe`, and pass it to `setSubScribe` (null counts as false in `SmsManager`, `@0x291c62c`); none of the three reads `sms_subscribe` or `phone_number` from this answer. `subscribeSms` (`subscribe_email_logic.dart`) does not read the model either: its closures update the SMS state (`updateSmsStatus` `@0x4064430`) and call `getSubscription` again (`@0x4064498`).
+
 ## Example request/response
 
 Request: no body fields are built (see Request). Response: not synthesized; no capture exists for this endpoint.
@@ -60,7 +62,6 @@ Called from:
 
 ## Known unknowns
 
-- Which of the two flags `subscribe` and `sms_subscribe` is read by which caller: the field offsets were read (`charging/common_business/sms/sms_manager.dart @0x291c61c`), not mapped to names.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
