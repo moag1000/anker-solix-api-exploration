@@ -58,7 +58,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Callers in app
 
-- `base_service/view/general_setting/remove_device_controller.dart`: `_clearShareDevice` @0x2816cb0 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `base_service/view/general_setting/remove_device_controller.dart`: `_clearShareDevice` @0x2816cb0 (`AkNetwork::requestHttp`, SDK handler `akiot.cloud_api`; encryption per the SDK path, see Encrypted?)
 
 Called from:
 

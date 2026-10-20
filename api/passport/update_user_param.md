@@ -32,7 +32,7 @@ The element map literal has type arguments `<String, Object>` (`@0x293f93c`), th
 
 see `api/param_types.md`
 
-param_type is a variable at this sender (traced by heuristic — verify against the callers in `data/param_types.json`).
+`param_type` is not a constant at this sender: it is an unboxed int parameter tagged by `lsl` (`charging/http/http_request_repository_impl.dart @0x293f90c`); the callers' values are listed under Known unknowns.
 
 ## Response model (link)
 

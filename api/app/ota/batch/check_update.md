@@ -27,7 +27,7 @@ Two more senders go through the SDK handler instead of the Dart wrappers: the cl
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: `true` for the Dart senders (asm-traced): the `encryptionRequestHttp` senders default to true, and `HttpRequestControllerImpl::checkBatchOTAUpdateWifi` calls `requestHttp` with the named arguments `cancelToken`, `fail`, `isLogResponse`, `showLoading` only (`charging/http/http_request_repository_impl.dart @0x264b538`), so `needEncryption = true` (`charging/http/http_request_repository_impl.dart @0x2264944`) applies. The two SDK-handler closures go through `akiot.cloud_api` (SDK path, `api/encryption.md`). Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
 ## Request
 
@@ -65,7 +65,7 @@ none traced: no numeric error code is compared in the senders read. Code meaning
 
 - `ats_ax170/src/ats_ax170/page/station/ax170_station_controller.dart`: `checkDeviceUpdate` @0x234d650 (encryptionRequestHttp; encrypted: true)
 - `base_service/util/firmware_update_utils.dart`: `checkBatchOTAUpdateWifi` @0x229e16c (encryptionRequestHttp; encrypted: true)
-- `charging/http/http_request_repository_impl.dart`: `checkBatchOTAUpdateWifi` @0x264b354 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/http/http_request_repository_impl.dart`: `checkBatchOTAUpdateWifi` @0x264b354 (requestHttp; encrypted: true, `needEncryption` default)
 - `device/src/station_setting/controller/common_station_firmware_update/station_firmware_update_view_model.dart`: `checkDeviceUpdate` @0x366ebb8 (encryptionRequestHttp; encrypted: true)
 - `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart`: `<anonymous closure> in FirmwareUpgradeController::checkDeviceUpdate` @0x2b0d200 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d38c` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md)); `<anonymous closure> in FirmwareUpgradeController::checkUpgradeViaMultiDeploy` @0x2b0f898 (URL literal only, no `*Http*` call; sends in the same function (`AKIoTKitManagerImpl::handle`); resolved from the URL literal at `flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0fa14` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 - `micro_hes/src/a17e2/station/home/base_station_logic.dart`: `checkDeviceUpdate` @0x22c4c08 (encryptionRequestHttp; encrypted: true)

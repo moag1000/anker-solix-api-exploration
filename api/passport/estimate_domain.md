@@ -18,7 +18,7 @@ The URL literal is appended to a base URL: `getLocalHostByRegion` (`@0x27408a8`)
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: `false` (asm-traced): the sender passes `needEncryption` explicitly in the named arguments (`charging/http/http_request_repository_impl.dart @0x2740974`, list `fail`, `needEncryption`, `needTerminal`, `showLoading`, `useBaseUrl`); by the slot indices in that list the value is the `false` loaded at `charging/http/http_request_repository_impl.dart @0x2740964`, as it is for `needTerminal` and `showLoading`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
 ## Request
 
@@ -60,7 +60,7 @@ none traced: no numeric error code is compared in the sender or its closures. Th
 
 ## Callers in app
 
-- `charging/http/http_request_repository_impl.dart`: `getRegionHostRequest` @0x274080c (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/http/http_request_repository_impl.dart`: `getRegionHostRequest` @0x274080c (requestHttp; encrypted: false, `needEncryption` passed explicitly)
 
 Called from:
 

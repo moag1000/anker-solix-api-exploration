@@ -16,7 +16,7 @@ Reports that a news popup of the AIoT platform was shown or handled; sent by `AI
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: `true` (asm-traced default): `aiotPlatformRequestHttp` (`charging/http/http_request_repository_impl.dart @0x260ddd4`) calls `requestHttp` (`@0x260df68`) without `needEncryption` in its named arguments (`@0x260df60`), and `requestHttp` declares `needEncryption = true` (`charging/http/http_request_repository_impl.dart @0x2264944`). Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
 ## Request
 
@@ -60,7 +60,7 @@ none traced: no numeric error code is compared in the sender or its closures rea
 
 ## Callers in app
 
-- `charging/http/aiot/aiot_http_request_repository_impl.dart`: `reportAIOTPopupApi` @0x2618388 (aiotPlatformRequestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/http/aiot/aiot_http_request_repository_impl.dart`: `reportAIOTPopupApi` @0x2618388 (aiotPlatformRequestHttp; encrypted: true, `needEncryption` default)
 
 Called from:
 

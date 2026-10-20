@@ -18,7 +18,7 @@ Read the entry configuration of the Anka AI assistant for the account (3.18.0 on
 
 ## Encrypted?
 
-encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+not readable (3.18.0-only endpoint): the inventory records the wrapper `encryptionRequestHttpByGHttpRequest` for the 3.18.0 sender, but no asm of it is available here. Scheme and header rules: `api/encryption.md`.
 
 ## Request
 
@@ -46,7 +46,7 @@ none traced: the 3.18.0 sender is not readable here.
 
 ## Callers in app
 
-- `anka_agent/http/anka_agent_http.dart`: `getAnkaAgentEntry` (3.18.0 address 0x1fe414c) (encryptionRequestHttpByGHttpRequest; encrypted: true)
+- `anka_agent/http/anka_agent_http.dart`: `getAnkaAgentEntry` (3.18.0 address 0x1fe414c) (encryptionRequestHttpByGHttpRequest; encrypted: inventory flag only, 3.18.0 asm not available)
 
 ## Since/changed
 

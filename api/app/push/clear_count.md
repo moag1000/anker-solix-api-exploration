@@ -16,7 +16,7 @@ Clears the push badge counter at the Baidu push service, used for China-region a
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: `true` (asm-traced default): `HttpBusinessImpl::requestHttp` (`charging/http/http_business_impl.dart @0x239ba88`) declares `needEncryption = true` (`@0x239ba94`) and the sender passes no named arguments (`@0x296d4f0`). Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
 ## Request
 
@@ -44,7 +44,7 @@ none traced: no numeric error code is compared in the sender or its closures rea
 
 ## Callers in app
 
-- `charging/http/http_business_impl.dart`: `clearBaiDuPushBadge` @0x296d444 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/http/http_business_impl.dart`: `clearBaiDuPushBadge` @0x296d444 (requestHttp; encrypted: true, `needEncryption` default)
 
 Called from:
 
