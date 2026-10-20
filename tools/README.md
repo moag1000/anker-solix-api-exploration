@@ -107,3 +107,16 @@ python3 -I -m unittest discover -s tools/tests -t . -p 'test_model_fields_dedupe
 ```
 
 `schema_check.py` validates the four exports against the inline schemas that [../data/README.md](../data/README.md) documents: envelope keys, required and optional row fields with their types, unknown fields, unique `models.json` keys and equal `app_version`/`snapshot` across the files. It prints one line per violation; `--check` makes any violation exit 1. When a generator gains a field, extend the schema and `data/README.md` in the same change. `model_fields.py` keys every row `package::Class` (extended to a unique directory or file path where the package key collides; `class` keeps the short name) and by default drops the `sentry` package only; `--include-noise` keeps it. Field-less app classes stay with an empty `fields` list.
+
+## 8. Known-unknowns triage
+
+```bash
+python3 -I tools/unknowns_triage.py . --out docs/audit/KNOWN_UNKNOWNS_TRIAGE.md --json tools/out/unknowns.json --override docs/audit/unknowns_overrides.json
+python3 -I -m unittest discover -s tools/tests -t . -p 'test_unknowns_triage.py'      # own tests, under 1 s
+```
+
+`unknowns_triage.py` reads every `*.md` under the root except `docs/archive/`, `docs/superpowers/`, `docs/templates/`, `.superpowers/`, `tools/out/` and hidden directories. Every bullet (`- `, with its indented continuation lines) under a Known-unknowns heading is one row: `## Known unknowns`, `## Known unknowns on this page` or the `#### Known unknowns` of a command section; the section ends at the next heading of the same or a higher level, fenced code is skipped, and the skeleton placeholders `<!-- TODO -->` and `<open question>` are not rows. The class comes from ordered keyword rules (`RULES` in the script; the first match wins and its name goes to `hint`): `server` (server, accepts, rejects, enforces, returns, cloud side, backend), then `device` (firmware, device test, on a real, capture, which devices, hardware), then `asm` (polarity, closure, register, not traced, not decoded, not re-derived, which function, caller, builder, `@0x`), else `unclear`. Words match at a word start, case-insensitive.
+
+`--override` reads a hand-maintained JSON file, `{"<page>:<line>": {"class": "asm|server|device|unclear", "note": "..."}}` (keyed by page path and the line of the bullet; `docs/audit/unknowns_overrides.json`). A missing key keeps the heuristic class; an override sets `class`, sets `hint` to `override` and keeps the heuristic result in `heuristic_class`. A key that matches no bullet is printed on stderr (the page was edited since, so the line moved: re-key it); an invalid class exits 2 and writes nothing. The "Manual pass" section of the audit page is generated from the override file, so a regeneration keeps it.
+
+`tools/out/unknowns.json` (git-ignored scratch) holds one row per bullet: `page`, `line`, `text`, `class`, `hint` (plus `heuristic_class`, `heuristic_hint` and `note` on overridden rows). Line numbers go stale as soon as a page is edited: re-run the tool before every use of the JSON.
