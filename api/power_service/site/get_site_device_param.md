@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # get_site_device_param
 
 ## Purpose
 
-<!-- TODO -->
+Reads one parameter set of a site: 36 app builders send `site_id` and a `param_type` that selects the set (power-limit, feed-grid, SOC, third-party PV, peak time, country code, and others); [param_types.md](../../param_types.md) owns the `param_type` values, the `cmd` values and the response model of each value.
 
 ## Upstream name
 
@@ -12,8 +12,46 @@
 
 ## Method+URL
 
-`/power_service/v1/site/get_site_device_param`, method: not extracted by the inventory <!-- TODO -->; string-only: `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x2a28884`
-(literal also at 42 more site(s) in `data/endpoints.json`)
+`POST /power_service/v1/site/get_site_device_param` (asm-traced) at the senders that load a `Method` object next to the URL string (pool entry `pp+0xa7e0`, `Method.post`):
+
+- `PowerUsageScenarioController::_checkPlatformHasSetTOUData` (`power_usage_scenario_controller.dart @0x37b1cc4`): URL string `@0x37b1dc8`, method object `Method.post` (`pp+0xa7e0`) `@0x37b1dc0`.
+- `PowerUsageScenarioController::_fetchPowerLimits` (`power_usage_scenario_controller.dart @0x3564988`): URL string `@0x3564f28`, method object `Method.post` (`pp+0xa7e0`) `@0x3564f20`.
+- `PowerUsageScenarioController::fetchESeriesFeedGridParams` (`power_usage_scenario_controller.dart @0x2a28750`): URL string `@0x2a28884`, method object `Method.post` (`pp+0xa7e0`) `@0x2a2887c`.
+- `HttpRequestControllerImpl::get17C1SiteDeviceParam` (`http_request_repository_impl.dart @0x279d378`): URL string `@0x279d558`, method object `Method.post` (`pp+0xa7e0`) `@0x279d550`.
+- `HttpRequestControllerImpl::getCombineBoxListData` (`http_request_repository_impl.dart @0x237a9e0`): URL string `@0x237aaac`, method object `Method.post` (`pp+0xa7e0`) `@0x237aaa4`.
+- `HttpRequestControllerImpl::getSafetySocParams` (`http_request_repository_impl.dart @0x2377e5c`): URL string `@0x2377f64`, method object `Method.post` (`pp+0xa7e0`) `@0x2377f5c`.
+- `HttpRequestControllerImpl::getSiteDeviceParam` (`http_request_repository_impl.dart @0x2896c30`): URL string `@0x2896d00`, method object `Method.post` (`pp+0xa7e0`) `@0x2896cf8`.
+- `HttpRequestControllerImpl::getSiteEnablePeakDeviceParam` (`http_request_repository_impl.dart @0x28f215c`): URL string `@0x28f221c`, method object `Method.post` (`pp+0xa7e0`) `@0x28f2214`.
+- `HttpRequestControllerImpl::getSiteGreenModeDeviceParam` (`http_request_repository_impl.dart @0x28f2c2c`): URL string `@0x28f2cec`, method object `Method.post` (`pp+0xa7e0`) `@0x28f2ce4`.
+- `HttpRequestControllerImpl::getSiteLowerLimitDeviceParam` (`http_request_repository_impl.dart @0x28f2674`): URL string `@0x28f2734`, method object `Method.post` (`pp+0xa7e0`) `@0x28f272c`.
+- `HttpRequestControllerImpl::getSitePeakTimeDeviceParam` (`http_request_repository_impl.dart @0x28f1538`): URL string `@0x28f15f8`, method object `Method.post` (`pp+0xa7e0`) `@0x28f15f0`.
+- `HttpRequestControllerImpl::getStationCountryCode` (`http_request_repository_impl.dart @0x237eed8`): URL string `@0x237efa8`, method object `Method.post` (`pp+0xa7e0`) `@0x237efa0`.
+- `HttpRequestControllerImpl::getThreePvParam` (`http_request_repository_impl.dart @0x237dc80`): URL string `@0x237dd60`, method object `Method.post` (`pp+0xa7e0`) `@0x237dd58`.
+- `FeedGridNewController::getFeedGridParam` (`feed_network_limit_new_logic.dart @0x2aa8c90`): URL string `@0x2aa8dac`, method object `Method.post` (`pp+0xa7e0`) `@0x2aa8da4`.
+- `SubLocationListController::getStationCountryCode` (`sub_location_list_controller.dart @0x38ecf1c`): URL string `@0x38ed00c`, method object `Method.post` (`pp+0xa7e0`) `@0x38ed004`.
+- `ThirdPvLogic::_getThirdPvFromCloud` (`third_pv_logic.dart @0x35ee8f0`): URL string `@0x35eea14`, method object `Method.post` (`pp+0xa7e0`) `@0x35eea0c`.
+- `TouHttpService::getSiteDeviceParam` (`tou_http_service.dart @0x4879544`): URL string `@0x48795c4`, method object `Method.post` (`pp+0xa7e0`) `@0x48795e0`.
+- `PowerPlantConfigController::_getMeterTypeAsync` (`power_plant_config_controller.dart @0x3638f00`): URL string `@0x363907c`, method object `Method.post` (`pp+0xa7e0`) `@0x3639074`.
+- `PowerPlantConfigController::getGatewayCurrentLimit` (`power_plant_config_controller.dart @0x3638a88`): URL string `@0x3638b8c`, method object `Method.post` (`pp+0xa7e0`) `@0x3638b84`.
+- `PowerPlantConfigController::getThirdPv` (`power_plant_config_controller.dart @0x3637d84`): URL string `@0x3637e6c`, method object `Method.post` (`pp+0xa7e0`) `@0x3637e64`.
+- `SystemConfigController::getThirdPv` (`system_config_controller.dart @0x364d850`): URL string `@0x364d924`, method object `Method.post` (`pp+0xa7e0`) `@0x364d91c`.
+- `A17E2StationLogic::_getFeedGridConfig` (`a17e2_station_logic.dart @0x233e8c0`): URL string `@0x233eaa8`, method object `Method.post` (`pp+0xa7e0`) `@0x233eaa0`.
+- `SystemA17E2FlowChartLogic::_fetchThirdPvConnectType` (`system_a17e2_flow_chart_logic.dart @0x3560e88`): URL string `@0x3560ff0`, method object `Method.post` (`pp+0xa7e0`) `@0x3560fe8`.
+- `GatewayCurrentLimitMenuController::_loadCurrentLimit` (`gateway_current_limit_menu_controller.dart @0x36836d8`): URL string `@0x3683808`, method object `Method.post` (`pp+0xa7e0`) `@0x3683800`.
+- `MonitoringDeviceMenuController::_loadCurrentMeterType` (`monitoring_device_menu_controller.dart @0x2cf3ae0`): URL string `@0x2cf3c10`, method object `Method.post` (`pp+0xa7e0`) `@0x2cf3c08`.
+- `EvChargerSettingController::getSettingInfo` (`ev_charger_setting_controller.dart @0x2aed370`): URL string `@0x2aed490`, method object `Method.post` (`pp+0xa7e0`) `@0x2aed488`.
+- `FeedGridController::getFeedGridParam` (`feed_grid_controller.dart @0x2aedeb8`): URL string `@0x2aedfe4`, method object `Method.post` (`pp+0xa7e0`) `@0x2aedfdc`.
+- `HardwareFeedGridController::getFeedGridParam` (`hardware_feed_grid_controller.dart @0x2aecf90`): URL string `@0x2aed0a4`, method object `Method.post` (`pp+0xa7e0`) `@0x2aed09c`.
+- `HeatPumpSettingController::getHeatPumpParam` (`heat_pump_setting_controller.dart @0x2af6630`): URL string `@0x2af6754`, method object `Method.post` (`pp+0xa7e0`) `@0x2af674c`.
+- `StationAdvancedSettingController::_getGridOverloadAutoReduceSetting` (`station_advanced_setting_controller.dart @0x2a78b08`): URL string `@0x2a78c1c`, method object `Method.post` (`pp+0xa7e0`) `@0x2a78c14`.
+- `StationPeakShavingController::getPeakShavingSetting` (`station_peak_shaving_controller.dart @0x2af9e24`): URL string `@0x2af9f80`, method object `Method.post` (`pp+0xa7e0`) `@0x2af9f78`.
+- `StationPeakShavingController::getSocSetting` (`station_peak_shaving_controller.dart @0x2afab38`): URL string `@0x2afac4c`, method object `Method.post` (`pp+0xa7e0`) `@0x2afac44`.
+- `GridConnectUtil::fetchSiteGridPowerList` (`grid_connect_util.dart @0x2af5dfc`): URL string `@0x2af5f58`, method object `Method.post` (`pp+0xa7e0`) `@0x2af5f50`.
+- `GridConnectUtil::getGroupedOutputPowerSum` (`grid_connect_util.dart @0x2aee464`): URL string `@0x2aee5a0`, method object `Method.post` (`pp+0xa7e0`) `@0x2aee598`.
+- `StationSocDataSource::query` (`station_soc_data_source.dart @0x2afe7a0`): URL string `@0x2afe8e4`, method object `Method.post` (`pp+0xa7e0`) `@0x2afe8dc`.
+- `ElectricityUsageHelper::getCurEmsModeType` (`electricity_usage_helper.dart @0x292e1f4`): URL string `@0x292e3a0` without a `Method` object next to it; the method of this sender was not read.
+
+Further senders reach the same URL without a `Method` pool object in the call setup: the IoT-kit sender `SocCommandCapabilityV2::fetchSocSetting` (`soc_command_capability_v2.dart @0x3677fc4`) puts the path string (`@0x36780b4`) and the string literal `"POST"` (`@0x36780cc`) into a command map for `akIoTKitManager.handle`, and the other URL-literal-only sites listed under Callers in app (`HttpHelper::getDataFromService` users) were not read.
 
 ## Encrypted?
 
@@ -21,22 +59,20 @@ encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header r
 
 ## Request
 
+All 36 listed builders build the body as a map literal (or `[]=` calls); the first two keys are the same everywhere. The values and the set of senders are not repeated here: the `param_type` strings and the `cmd` constants per sender are owned by [param_types.md](../../param_types.md).
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | ? | ? | ? | `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x37b1cc4` |
-| `param_type` | ? | ? | ? | `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x37b1cc4` |
-| `cmd` | ? | ? | ? | `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x37b1cc4` |
-| `device_sn` | ? | ? | ? | `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x3564988` |
-| `parallel_type` | ? | ? | ? | `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x3564988` |
-| `path` | ? | ? | ? | `device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4` |
-| `method` | ? | ? | ? | `device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4` |
-| `param.site_id` | ? | ? | ? | `device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4` |
-| `param.param_type` | ? | ? | ? | `device/src/setting/controller/soc_settings_v2/soc_command_capability_v2.dart @0x3677fc4` |
-| `feed_switch` | ? | ? | ? | `micro_hes/src/a17e2/station/home/a17e2_station_logic.dart @0x233e8c0` |
-| `feed_times` | ? | ? | ? | `micro_hes/src/a17e2/station/home/a17e2_station_logic.dart @0x233e8c0` |
-| `feed_upper_limit` | ? | ? | ? | `micro_hes/src/a17e2/station/home/a17e2_station_logic.dart @0x233e8c0` |
+| `site_id` | string | yes | `"<site_id>"` | in 29 builders the map is typed `<String, String>` or `<String, String?>` (so the value is a String), e.g. `fetchESeriesFeedGridParams` (`power_usage_scenario_controller.dart`, key `@0x2a287e4`, store `@0x2a287f4`, type arguments `@0x2a28810`) and `getSafetySocParams` (`http_request_repository_impl.dart`, key `@0x2377eec`, store `@0x2377efc`, type arguments `@0x2377f18`); the remaining 7 builders (`<String, Object>`, `<String, Object?>` or `<String, dynamic>`) store a parameter or field whose type was not read |
+| `param_type` | string | yes | `"6"` | a string literal in 33 builders, e.g. `"6"` in `_checkPlatformHasSetTOUData` (key `@0x37b1d50`, literal `@0x37b1d5c`, store `@0x37b1d64`); in `get17C1SiteDeviceParam` (`@0x279d494`) and in `getSiteDeviceParam` (`@0x2896ca0`) the value is a parameter, type not read |
+| `cmd` | int (Smi, w) | optional | | present in 5 builders only (`_checkPlatformHasSetTOUData` `@0x37b1d68`, `_fetchPowerLimits` `@0x3564ea4`, `get17C1SiteDeviceParam` `@0x279d4a8`, `getThreePvParam` `@0x237dd00`, `TouHttpService::getSiteDeviceParam` `@0x487959c`); the constant is stored with `stur w16`; its value is owned by [param_types.md](../../param_types.md) |
+| `device_sn` | string | optional | | `_fetchPowerLimits` (literal empty string, key `@0x3564eb8`, literal `@0x3564ec4`) and `get17C1SiteDeviceParam` (key `@0x279d4bc`, null default `""`) |
+| `parallel_type` | ? | optional | | `_fetchPowerLimits` (key `@0x3564ecc`) and `get17C1SiteDeviceParam` (key `@0x279d4e8`); value not read |
+| `path`, `method`, `param.site_id`, `param.param_type` | ? | | | keys of the IoT-kit command map of `fetchSocSetting` (`@0x36780ac`..`@0x36780e0`); `method` is the literal `"POST"`; the `param` map was not read |
 
-Rows are the union over 38 senders; `source` is the first sender that sets the key.
+`ElectricityUsageHelper::getCurEmsModeType` (`electricity_usage_helper.dart @0x292e1f4`) builds its body with `[]=` calls (`site_id` `@0x292e3d0`, `device_sn` `@0x292e448`, `station_id` `@0x292e4dc`) on a `<String, dynamic>` map; values were not read.
+
+The earlier extractor rows `feed_switch`, `feed_times` and `feed_upper_limit` are not request keys: in `A17E2StationLogic::_getFeedGridConfig` (`a17e2_station_logic.dart @0x233e8c0`) they sit in a separate `<String, dynamic>` map (`@0x233e9d0`) stored into the closure context (`@0x233e9e0`) next to the request map `{site_id, param_type: "28"}` (`<String, String>`, `@0x233ea5c`).
 
 ## `param_type`/`cmd`
 
@@ -46,19 +82,23 @@ param_type is a variable at this sender (traced by heuristic — verify against 
 
 ## Response model (link)
 
-<!-- TODO -->
+Per sender; see [param_types.md](../../param_types.md) for the model of each `param_type`. Builder-side `fromJson` parses were read in the sender list: `SiteConsumptionStrategyModel`, `CombineBoxEntity`, `GetSiteDeviceParamResponse`, `SiteHomeLoadModel`, `PeakTimeModel`, `SiteDeviceParamData`, `FeedGridSettingParam`, `HwFeedGridSettingParam`, `HeatPumpParam`, `GridOverloadAutoReduceParam`, `PeakShavingSettingParam`, `SocSettingParam`, `AddDeviceModel` and `EmsModeModel` appear as `response_key` of single senders in `tools/out/request_fields_all.json`; 21 senders have no model attributed. These attributions were not re-read for this page.
 
 ## Response
 
-<!-- TODO -->
+The response fields depend on `param_type` and are owned by the model pages linked from [param_types.md](../../param_types.md).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body of `getSafetySocParams`)
+
+```json
+{"site_id": "<site_id>", "param_type": "18"}
+```
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+None traced for this page as a whole; the senders' failure callbacks were not read. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -183,11 +223,14 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. `tools/out/diff_3.18.0_3.24.3.md` lists `feed_switch`, `feed_times`, `feed_upper_limit` and `method`, `param.param_type`, `param.site_id`, `path` as added keys and `param_type` values 24, 25, 27, 28, 29, 30, 31, 32, 34, 35, 37 as added. The `feed_*` keys are not request keys (see Request); `method`, `param.*` and `path` are the key names of the IoT-kit command map.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Per-sender response handling: the model attributions of the extractor were not re-read here, and 21 of 36 senders have none. Header stays string-only.
+- Types of `site_id` in the 7 builders whose map is `<String, Object>`, `<String, Object?>` or `<String, dynamic>`, and of `param_type` in `get17C1SiteDeviceParam` and `getSiteDeviceParam`.
+- The URL-literal-only senders (`HttpHelper::getDataFromService` users, `ElectricityUsageHelper` closures) and `parallel_type` values were not read.
+- Whether the server accepts a missing `cmd` (most builders omit it): not derivable from the app.
 
 ## Device-tested by
 
