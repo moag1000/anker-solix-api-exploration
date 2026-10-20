@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Checks whether firmware upgrade records exist for a device or a list of devices (callers `AtsOtaLogic::getCheckUpgradeRecordApi`, `AnkerOtaBaseLogic::getCheckUpgradeRecordApi`, `FirmwareUpdatesLogic::getCheckUpgradeRecord`) (asm-traced, caller chain in `data/endpoints.json`).
+Checks whether firmware upgrade records exist for a device or a list of devices (callers `AtsOtaLogic::getCheckUpgradeRecordApi`, `AnkerOTABaseLogic::getCheckUpgradeRecordApi`, `FirmwareUpdatesLogic::getCheckUpgradeRecord`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -38,7 +38,7 @@ n/a
 
 ## Response
 
-(asm-traced) All keys belong to the model page; this endpoint adds no wrapper fields of its own in the code read.
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
 
 - `CheckUpgradeRecordModel` top-level keys (`data/models.json`, `charging::CheckUpgradeRecordModel`): `is_record` (bool?), `device_list` (List).
 

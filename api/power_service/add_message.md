@@ -40,7 +40,7 @@ n/a
 
 ## Response model (link)
 
-not parsed by the app (asm-traced): `addMessage` passes only the named argument `complete` and `showLoading` to `encryptionRequestHttp` (descriptor `r4 = const [0x1, 0x8, 0x8, 0x6, complete, 0x7, showLoading, 0x6, null]` at `charging/http/http_request_repository_impl.dart @0x261b604`) and no `success`; the `complete` closure `@0x261b9a0` calls the stored callback with `true` (`@0x261b9cc`).
+not parsed by the app (asm-traced): the closures `addMessage` passes to `encryptionRequestHttp` (`charging/http/http_request_repository_impl.dart @0x261b59c`, `@0x261b5b0`, `@0x261b5c4`; distinct bodies `@0x261b9a0` and `@0x226824c`) read no response key and build no model: `@0x261b9a0` calls the stored callback with `true` (`@0x261b9cc`), `@0x226824c` forwards its two arguments to a stored callback (`ClosureCall` `@0x2268288`).
 
 ## Response
 

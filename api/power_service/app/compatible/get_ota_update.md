@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Reads the OTA update status of a third-party solar device during EZ1 mode selection, solar power selection and QR scanning (callers `Ez1SelectModeLogic::getOTAUpdateStatus`, `SelectSolarPowerLogic::getThirdOtaStatusRes`, `QrScannerLogic::getOTAUpdateStatus`; builder `getThirdOtaStatus`) (asm-traced, caller chain in `data/endpoints.json`).
+Reads the OTA update status of a third-party solar device during EZ1 mode selection, solar power selection and QR scanning (callers `EZ1SelectModeLogic::getOTAUpdateStatus`, `SelectSolarPowerLogic::getThirdOtaStatusRes`, `QrScannerLogic::getOTAUpdateStatus`; builder `getThirdOtaStatus`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -38,7 +38,7 @@ n/a
 
 ## Response
 
-(asm-traced) All keys belong to the model page; this endpoint adds no wrapper fields of its own in the code read.
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
 
 - `OTAUpdateStatus` top-level keys (`data/models.json`, `charging::OTAUpdateStatus`): `is_ota_update` (bool?), `need_retry` (bool?), `retry_interval` (int?), `device_list` (List), `available` (bool?), `need_installation` (bool?).
 

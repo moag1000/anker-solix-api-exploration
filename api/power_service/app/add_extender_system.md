@@ -20,7 +20,7 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 
 ## Request
 
-(asm-traced) The body is one map literal passed as the named argument `params` (`r4 = const [0, 0x2, 0x1, 0x1, params, 0x1, null]` at `@0x43163fc`); its type arguments are `<String, dynamic>` (`@0x43163e4`), so the literal gives no value type. Values come from parameters of the builder; the asm carries no static parameter type.
+(asm-traced) The body is one map literal passed as the named argument `params` (`r4 = const [0, 0x2, 0x1, 0x1, params, 0x1, null]` at `@0x43163fc`); its type arguments are `<String, dynamic>` (`@0x43163e4`), so the literal gives no value type. Values come from parameters or object fields of the builder; the asm carries no static type.
 
 | field | type | required | example | source |
 |---|---|---|---|---|

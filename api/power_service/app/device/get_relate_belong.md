@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_relate_belong
 
 ## Purpose
 
-<!-- TODO -->
+Reads the "belong type" (ownership relation) of a device for the A1790 home page (callers `HttpRequestControllerImpl::getDeviceBindInfo` from `A1790homeLogic::getA1790DeviceBindInfo`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/power_service/v1/app/device/get_relate_belong`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x33d3e34`
+`POST /power_service/v1/app/device/get_relate_belong` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x33d3e34`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x33d3e2c`, in `HttpRequestControllerImpl::getDeviceBindInfo` (`charging/http/http_request_repository_impl.dart @0x33d3d80`), sent through `encryptionRequestHttp` (`@0x33d3e64`).
 
 ## Encrypted?
 
@@ -20,9 +20,11 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+(asm-traced) The body is one map literal of 1 pair (`AllocateArray`, raw `r2 = 4` at `@0x33d3dcc`, so 2 slots) with type arguments `<String, String>` at `@0x33d3de8`, so every value is typed in the literal; all keys are stored unconditionally.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x33d3d80` |
+| `device_sn` | string | yes | `"<device_sn>"` | `charging/http/http_request_repository_impl.dart @0x33d3dd4` |
 
 ## `param_type`/`cmd`
 
@@ -30,19 +32,37 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+no model class (asm-traced): the success closure (`charging/http/http_request_repository_impl.dart @0x33d3e80`) reads the key `belong_type` (string literal `@0x33d3eac`), casts it to `int?` (`@0x33d3ef8`) and passes it to the stored callback (`ClosureCall` `@0x33d3f20`).
 
 ## Response
 
-<!-- TODO -->
+| field | type | required | example | source |
+|---|---|---|---|---|
+| `belong_type` | int (nullable, cast `int?`) | optional | `?` | `charging/http/http_request_repository_impl.dart @0x33d3eac` |
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "device_sn": "<device_sn>"
+}
+```
+
+Response, synthesized (key read by the success closure; the value is not known)
+
+```json
+{
+  "data": {
+    "belong_type": "<int>"
+  }
+}
+```
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -55,11 +75,12 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- What the numeric `belong_type` values mean: the closure only casts the value to `int?`; the consumer in `A1790homeLogic` was not decoded.
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

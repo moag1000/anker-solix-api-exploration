@@ -38,7 +38,7 @@ n/a
 
 ## Response
 
-(asm-traced) All keys belong to the model page; this endpoint adds no wrapper fields of its own in the code read.
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
 
 - `OTAUpdateStatus` top-level keys (`data/models.json`, `charging::OTAUpdateStatus`): `is_ota_update` (bool?), `need_retry` (bool?), `retry_interval` (int?), `device_list` (List), `available` (bool?), `need_installation` (bool?).
 

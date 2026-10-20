@@ -25,7 +25,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-(asm-traced) Three senders, each with one `<String, String>` literal and one key: `A17c0settingLogic::requestSolarBankInfo` (`a17c0setting_logic.dart @0x2750a4c`, type arguments `@0x2750aa8`), `A5140homeController::getA17C0Info` (`a5140home_logic.dart @0x34ced84`, `@0x34cf010`) and `DeviceMainLogic::getSolarBankParticleData` (`device_main_logic.dart @0x244350c`, `@0x244376c`). The value is a field of the solar-bank device object in the two latter senders and a parameter in the first.
+(asm-traced) Three senders, each with one `<String, String>` literal and one key: `A17c0settingLogic::requestSolarBankInfo` (`charging/ui/page/device/a17c0/a17c0setting/a17c0setting_logic.dart @0x2750a4c`, type arguments `@0x2750aa8`), `A5140homeController::getA17C0Info` (`charging/ui/page/device/a5140/a5140home/a5140home_logic.dart @0x34ced84`, `@0x34cf010`) and `DeviceMainLogic::getSolarBankParticleData` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x244350c`, `@0x244376c`). The value is a field of the solar-bank device object in the two latter senders and a parameter in the first.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
@@ -37,7 +37,7 @@ n/a
 
 ## Response model (link)
 
-`charging/model/check_solar_force_update_model::SolarInfo` (`data/models.json` key; no models page): all three senders pass the closure `@0x2443b28` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`), which builds it with `SolarInfo.fromJson` (`@0x2443b60`, target `check_solar_force_update_model.dart @0x2443ba0`).
+`charging/model/check_solar_force_update_model::SolarInfo` (`data/models.json` key; no models page): all three senders pass the closure `@0x2443b28` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`), which builds it with `SolarInfo.fromJson` (`@0x2443b60`, target `charging/model/check_solar_force_update_model.dart @0x2443ba0`).
 
 ## Response
 

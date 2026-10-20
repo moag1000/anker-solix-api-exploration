@@ -32,7 +32,7 @@ n/a
 
 ## Response
 
-(asm-traced) All keys belong to the model page; this endpoint adds no wrapper fields of its own in the code read.
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
 
 - `AfterSalesCheckSnModel` top-level keys (`data/models.json`, `charging::AfterSalesCheckSnModel`): `web_url` (String?), `device_list` (unknown).
 

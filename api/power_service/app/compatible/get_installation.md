@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Reads the installation (solar integration) mode that is saved for a solar bank or a site, for the A17C0 settings, the EZ1 mode pages and the station main page (callers `A17c0settingLogic::getInstallationReq`, `Ez1CurrentModeLogic::getInstallationReq`, `Ez1SelectModeLogic::getInstallationReq`, `StationMainPageLogic::goSelectMode`) (asm-traced, caller chain in `data/endpoints.json`).
+Reads the installation (solar integration) mode that is saved for a solar bank or a site, for the A17C0 settings, the EZ1 mode pages and the station main page (callers `A17c0settingLogic::getInstallationReq`, `EZ1CurrentModeLogic::getInstallationReq`, `EZ1SelectModeLogic::getInstallationReq`, `StationMainPageLogic::goSelectMode`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -20,7 +20,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-(asm-traced) `HttpRequestControllerImpl::getInstallationApi` (`charging/http/http_request_repository_impl.dart @0x23f2d64`) starts with an empty map literal (`THR::empty_array`, `@0x23f2dbc`) and replaces it by one of two one-pair literals: `{solarbank_sn: <parameter>}` when the first parameter is not null (`cmp w0, NULL` `@0x23f2dc8`, key `@0x23f2ddc`), else `{site_id: <parameter>}` when the second parameter is not null and a `tbz w0, #4` test passes (`cmp w1, NULL` `@0x23f2e0c`, key `@0x23f2e44`, test `@0x23f2e30`); else the empty map is sent. The type-argument loads of these literals are not visible in the asm text.
+(asm-traced) `HttpRequestControllerImpl::getInstallationApi` (`charging/http/http_request_repository_impl.dart @0x23f2d64`) starts with an empty map literal (`THR::empty_array`, `@0x23f2dbc`) and replaces it by one of two one-pair literals: `{solarbank_sn: <parameter>}` when the first parameter is not null (`cmp w0, NULL` `@0x23f2dc8`, key `@0x23f2ddc`), else `{site_id: <parameter>}` when the second parameter is not null and a comparison with the empty string is false (`cmp w1, NULL` `@0x23f2e0c`, `r16 = ""` `@0x23f2e1c`, `tbz w0, #4` `@0x23f2e30` skips the insertion when the comparison is true, key `@0x23f2e44`); else the empty map is sent. The type-argument loads of these literals are not visible in the asm text.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
@@ -37,7 +37,7 @@ n/a
 
 ## Response
 
-(asm-traced) All keys belong to the model page; this endpoint adds no wrapper fields of its own in the code read.
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
 
 - `SaveCompatibleSolarModel` top-level keys (`data/models.json`, `charging::SaveCompatibleSolarModel`): `display_installation` (bool?), `install_mode` (int?), `solar_sn` (String?).
 

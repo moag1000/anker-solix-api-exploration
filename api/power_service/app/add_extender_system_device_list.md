@@ -32,7 +32,7 @@ n/a
 
 ## Response
 
-(asm-traced) All keys belong to the model page; this endpoint adds no wrapper fields of its own in the code read.
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
 
 - `ReSystemAddDeviceFromCloud` top-level keys (`data/models.json`, `oe_a7320::ReSystemAddDeviceFromCloud`): `joined_site_device` (List), `joined_extender_system_device` (List), `can_join_device` (List).
 
@@ -56,7 +56,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- What `AkNetwork::requestHttp` sends in `param` when its `params` argument is null (the command map stores the argument as it is, `ak_network.dart @0x21c3518`; the SDK handler is outside the asm tree read).
+- What `AkNetwork::requestHttp` sends in `param` when its `params` argument is null (the command map stores the argument as it is, `base_service/util/ak_util/src/ak_network.dart @0x21c3518`; the SDK handler is outside the asm tree read).
 - Which devices the server returns and under which conditions.
 - No UI caller is recorded for this builder in `data/endpoints.json`.
 - Encryption: path C (`AkNetwork::requestHttp` to the SDK handler), see `api/encryption.md`; the "Encrypted?" line above is the inventory default.

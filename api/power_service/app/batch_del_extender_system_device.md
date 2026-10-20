@@ -20,7 +20,7 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 
 ## Request
 
-(asm-traced) The body is one map literal passed as the named argument `params` (`r4 = const [0, 0x2, 0x1, 0x1, params, 0x1, null]` at `@0x3a22434`); its type arguments are `<String, dynamic>` (`@0x3a2241c`), so the literal gives no value type. Values come from parameters of the builder; the asm carries no static parameter type.
+(asm-traced) The body is one map literal passed as the named argument `params` (`r4 = const [0, 0x2, 0x1, 0x1, params, 0x1, null]` at `@0x3a22434`); its type arguments are `<String, dynamic>` (`@0x3a2241c`), so the literal gives no value type. Values come from parameters or object fields of the builder; the asm carries no static type.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
@@ -66,7 +66,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Type of `extender_system_id`, `device_sn_list`: parameter(s) of the builder; the map literal is `<String, dynamic>` and the asm carries no parameter type.
+- Type of `extender_system_id`, `device_sn_list`: parameter or object field read by the builder; the map literal is `<String, dynamic>` and the asm carries no static type.
 - Encryption: the call goes through `AkNetwork::requestHttp` and the SDK handler directly (path C in `api/encryption.md`); the "Encrypted?" line above is the inventory default.
 - No UI caller is recorded for this builder in `data/endpoints.json`, so the purpose is inferred from the function name.
 

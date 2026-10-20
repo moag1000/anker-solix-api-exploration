@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Reads the AI-EMS mode status of a site (status, result text and remaining time) for the A17C1 home, the AI-mode study/success pages and the station energy system page (callers `A17c1homeLogic::getAiModeStatus`, `AiModeStudyLogic::getAiModeStatus`, `AiModeSuccessLogic::getAiModeStatus`, `StationEnergySystemLogic::getAiModeStatus`) (asm-traced, caller chain in `data/endpoints.json`).
+Reads the AI-EMS mode status of a site (status, result text and remaining time) for the A17C1 home, the AI-mode study/success pages and the station energy system page (callers `A17C1homeLogic::getAiModeStatus`, `AiModeStudyLogic::getAiModeStatus`, `AiModeSuccessLogic::getAiModeStatus`, `StationEnergySystemLogic::getAiModeStatus`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -36,7 +36,7 @@ n/a
 
 ## Response
 
-(asm-traced) All keys belong to the model page; this endpoint adds no wrapper fields of its own in the code read.
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
 
 - `AiModeStatusModel` top-level keys (`data/models.json`, `charging::AiModeStatusModel`): `status` (int?), `result` (String?), `left_time` (int?).
 

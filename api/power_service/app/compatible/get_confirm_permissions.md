@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Reads the permission-confirmation state of a device model during Wi-Fi set-up (callers `HttpRequestControllerImpl::getConfirmPermissionsApi` from `ZxConfigWifiSucceesLogic::done`) (asm-traced, caller chain in `data/endpoints.json`).
+Reads the permission-confirmation state of a device model during Wi-Fi set-up (callers `HttpRequestControllerImpl::getConfirmPermissionsApi` from `ZXConfigWifiSuccessLogic::done`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -36,7 +36,7 @@ n/a
 
 ## Response
 
-(asm-traced) All keys belong to the model page; this endpoint adds no wrapper fields of its own in the code read.
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
 
 - `ConfirmModel` top-level keys (`data/models.json`, `charging::ConfirmModel`): `is_confirm` (int?), `confirm_type` (String?).
 

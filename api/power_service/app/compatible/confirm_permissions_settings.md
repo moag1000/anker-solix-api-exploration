@@ -43,7 +43,7 @@ n/a
 |---|---|---|---|---|
 | `brand_list` | list of `BrandModel` | optional | `[...]` | `charging/http/http_request_repository_impl.dart @0x244501c` |
 
-(asm-traced) All keys belong to the model page; this endpoint adds no wrapper fields of its own in the code read.
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
 
 - `BrandModel` top-level keys (`data/models.json`, `charging::BrandModel`): `brand_id` (String?), `brand_name` (String?), `brand_img` (String?), `model_list` (List).
 

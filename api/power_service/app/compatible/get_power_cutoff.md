@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Reads the discharge cut-off (SoC) settings of an A17C0/A17C1 solar bank for the settings pages, the A17C1 home preload and the device main page (callers `A17c0settingLogic::requestInfo`, `A17c1homeLogic::_preloadSettingsData`, `A17c1SettingLogic::requestInfo`, `DeviceMainLogic::getSolarBankParticleData`) (asm-traced, caller chain in `data/endpoints.json`).
+Reads the discharge cut-off (SoC) settings of an A17C0/A17C1 solar bank for the settings pages, the A17C1 home preload and the device main page (callers `A17c0settingLogic::requestInfo`, `A17C1homeLogic::_preloadSettingsData`, `A17C1SettingLogic::requestInfo`, `DeviceMainLogic::getSolarBankParticleData`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -39,7 +39,7 @@ n/a
 
 ## Response model (link)
 
-`charging::SocModel` (`data/models.json` key; no models page) as a list under the key `power_cutoff_data`: all five success closures read the string literal `"power_cutoff_data"` and map the entries with the type argument `<SocModel>` (literal/type-argument addresses: `@0x27508b4`/`@0x27509b8` in `a17c0setting_logic.dart`, `@0x2865418`/`@0x2865528` and `@0x26348b4`/`@0x26349b8` in `a17c1home_logic.dart`, `@0x34542e8`/`@0x34543ec` in `a17c1setting_logic.dart`, `@0x244454c`/`@0x2444650` in `device_main_logic.dart`). `A17c1SettingLogic::requestSoc` also constructs a `NewSocParamModel` (`charging::NewSocParamModel`) inside the same closure (`@0x3454244`).
+`charging::SocModel` (`data/models.json` key; no models page) as a list under the key `power_cutoff_data`: all five success closures read the string literal `"power_cutoff_data"` and map the entries with the type argument `<SocModel>` (literal/type-argument addresses: `@0x27508b4`/`@0x27509b8` in `a17c0setting_logic.dart`, `@0x2865418`/`@0x2865528` and `@0x26348b4`/`@0x26349b8` in `a17c1home_logic.dart`, `@0x34542e8`/`@0x34543ec` in `a17c1setting_logic.dart`, `@0x244454c`/`@0x2444650` in `device_main_logic.dart`). `A17C1SettingLogic::requestSoc` also constructs a `NewSocParamModel` (`charging::NewSocParamModel`) inside the same closure (`@0x3454244`).
 
 ## Response
 
@@ -81,7 +81,7 @@ Called from:
 
 ## Known unknowns
 
-- How `NewSocParamModel` is filled from the `SocModel` list in `A17c1SettingLogic::requestSoc` (the closure `@0x3454244` builds it; the field mapping was not decoded).
+- How `NewSocParamModel` is filled from the `SocModel` list in `A17C1SettingLogic::requestSoc` (the closure `@0x3454244` builds it; the field mapping was not decoded).
 - Which device types answer with which cut-off entries (server data; the app queries by `device_sn` only).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

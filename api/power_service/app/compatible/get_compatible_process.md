@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Checks the force-update state of a third-party solar device attached to a solar bank (callers `A17c0homeLogic::checkSolarForceUpdate`, `A17c0settingLogic::checkSolarForceUpdate`, `ZxConfigWifiSucceesLogic::checkSolarForceUpdate`; builder `checkSolarForceUpdateState`) (asm-traced, caller chain in `data/endpoints.json`).
+Checks the force-update state of a third-party solar device attached to a solar bank (callers `A17c0homeLogic::checkSolarForceUpdate`, `A17c0settingLogic::checkSolarForceUpdate`, `ZXConfigWifiSuccessLogic::checkSolarForceUpdate`; builder `checkSolarForceUpdateState`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -37,7 +37,7 @@ n/a
 
 ## Response
 
-(asm-traced) All keys belong to the model page; this endpoint adds no wrapper fields of its own in the code read.
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
 
 - `CheckSolarForceUpdateModel` top-level keys (`data/models.json`, `charging::CheckSolarForceUpdateModel`): `ota_complete_status` (int?), `process_skip_type` (int?), `solar_info` (SolarInfo?).
 

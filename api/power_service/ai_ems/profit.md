@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Reads the AI-EMS profit figures of a site for a time range (callers `AiemsStrategyController::_fetchRevenueData`, `AiSmartModeCardLogic::_fetchRevenue` and `CostSavingsLogic::getAiProfit`) (asm-traced, caller chain in `data/endpoints.json`).
+Reads the AI-EMS profit figures of a site for a time range (callers `AiEmsStrategyController::_fetchRevenueData`, `AISmartModeCardLogic::_fetchRevenue` and `CostSavingsLogic::getAiProfit`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -43,7 +43,7 @@ n/a
 
 ## Response
 
-(asm-traced) All keys belong to the model page; this endpoint adds no wrapper fields of its own in the code read.
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
 
 - `AiEmsProfitModel` top-level keys (`data/models.json`, `charging::AiEmsProfitModel`): `price_unit` (String?), `running_time` (int?), `self_use_diff_percent` (String?), `aiems_lifetime_profit` (String?), `aiems_profit_total` (String?), `aiems_profit` (unknown), `type` (String?), `show_percentage` (bool?), `aiems_self_use_diff` (String?), `schedule_day` (int?), `ss_income` (String?), `ss_chg_energy` (String?).
 

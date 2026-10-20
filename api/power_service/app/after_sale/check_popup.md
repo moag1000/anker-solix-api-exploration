@@ -4,7 +4,7 @@
 
 ## Purpose
 
-Asks whether a device pop-up (after-sale notice) has to be shown on the A17C0 energy plan, the A17C1 energy deploy page and the energy home page (callers `A17c0energyPlanLogic::getCheckDevicePopUp`, `EnergyDeployLogic::getCheckDevicePopUp`, `EnergyHomeController::getCheckDevicePopUp`) (asm-traced, caller chain in `data/endpoints.json`).
+Asks whether a device pop-up (after-sale notice) has to be shown on the A17C0 energy plan, the A17C1 energy deploy page and the energy home page (callers `A17c0energyPlanLogic::getCheckDevicePopUp`, `EnergyDeployLogic::getCheckDevicePopUp`, `EnergyHomeLogic::getCheckDevicePopUp`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -20,7 +20,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-(asm-traced) `HttpRequestControllerImpl::checkDevicePopUpApi` (`charging/http/http_request_repository_impl.dart @0x28c1464`) receives the body map as a parameter (`r5`, `fp-0x18`) and builds none itself. All three callers build the same one-pair literal with type arguments `<String, int>`: `A17c0energyPlanLogic` (`charging/ui/page/device/a17c0/a17c0energyPlan/a17c0energy_plan_logic.dart @0x28c13ac`, value `@0x28c13b8`), `EnergyDeployLogic` (`charging/ui/page/device/a17c1/energy_deploy/energy_deploy_logic.dart @0x28ca5cc`, value `@0x28ca5d8`) and `EnergyHomeController` (`charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart @0x338a938`, value `@0x338a944`). The stored immediate is raw 2 in a tagged slot (`StoreField` of a 32-bit register), so the value is 1 (Smi rule).
+(asm-traced) `HttpRequestControllerImpl::checkDevicePopUpApi` (`charging/http/http_request_repository_impl.dart @0x28c1464`) receives the body map as a parameter (`r5`, `fp-0x18`) and builds none itself. All three callers build the same one-pair literal with type arguments `<String, int>`: `A17c0energyPlanLogic` (`charging/ui/page/device/a17c0/a17c0energyPlan/a17c0energy_plan_logic.dart @0x28c13ac`, value `@0x28c13b8`), `EnergyDeployLogic` (`charging/ui/page/device/a17c1/energy_deploy/energy_deploy_logic.dart @0x28ca5cc`, value `@0x28ca5d8`) and `EnergyHomeLogic` (`charging/ui/page/device/main/sitation_energy_mian/energy_home/controller/energy_home_controller.dart @0x338a938`, value `@0x338a944`). The stored immediate is raw 2 in a tagged slot (`StoreField` of a 32-bit register), so the value is 1 (Smi rule).
 
 | field | type | required | example | source |
 |---|---|---|---|---|
