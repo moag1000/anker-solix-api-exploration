@@ -79,7 +79,7 @@ Called from:
 
 ## Known unknowns
 
-- Types of `phone_number`, `verify_code`, `password`, `is_subscribe`, `country_code`: parameters of the sender stored into a `<String, Object>` literal; the caller's values were not typed.
+- Types of `phone_number`, `verify_code`, `password`, `is_subscribe`, `country_code`: parameters of the sender stored into a `<String, Object>` literal; the caller's values were not typed. — attempted 2026-10-20 (two-hop not readable: `startRegister` (`charging/ui/page/account/register/register_logic.dart @0x3be3020`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - What `is_subscribe` means on the server (e-mail or SMS marketing opt-in): inferred from the name only.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

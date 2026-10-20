@@ -28,13 +28,15 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `id` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3469ad8` (field load `charging/http/http_request_repository_impl.dart @0x3469ae8`) |
-| `name` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3469af4` (field load `@0x3469afc`) |
-| `total_power` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3469b08` (field load `@0x3469b14`) |
-| `max_total_power` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3469b20` (field load `@0x3469b2c`) |
-| `auto_exit` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3469b38` (field load `@0x3469b44`) |
+| `id` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x3469ad8` (field load `charging/http/http_request_repository_impl.dart @0x3469ae8`) |
+| `name` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3469af4` (field load `@0x3469afc`) |
+| `total_power` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x3469b08` (field load `@0x3469b14`) |
+| `max_total_power` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x3469b20` (field load `@0x3469b2c`) |
+| `auto_exit` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x3469b38` (field load `@0x3469b44`) |
 | `has_charge_protocol` | int (Smi, w) | yes | `0` or `1` (not a constant) | `charging/http/http_request_repository_impl.dart @0x3469b50` (built from a bool field: `cmp w2, NULL` `@0x3469b64`, `r2 = 1` `@0x3469b70`, `r2 = 0` `@0x3469b78`) |
-| `power_settings` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x3469b84` (field load `@0x3469b90`; the second sender stores the result of `buildPowerSettingsForCloud` instead) |
+| `power_settings` | list | yes |  | `charging/http/http_request_repository_impl.dart @0x3469b84` (field load `@0x3469b90`; the second sender stores the result of `buildPowerSettingsForCloud` instead) |
+
+Mode object (app side, traced 2026-10-20): the first sender (`charging/http/http_request_repository_impl.dart`) reads `id` `field_7` (`@0x3469ae8`), `name` `field_f` (`@0x3469afc`), `total_power` `field_13` (`@0x3469b14`), `max_total_power` `[0]` (`@0x3469b2c`), `auto_exit` `field_1b` (`@0x3469b44`), `has_charge_protocol` `field_1f` (`@0x3469b5c`) and `power_settings` `field_23` (`@0x3469b90`), the slots of `A2345CustomModeItem` in the order of its `toJson` (`charging/model/a2345/a2345_custom_mode_list.dart`), whose `fromJson` casts `id` and the integer fields to `int?` and `name` to `String?`; the five callers pass the object as a slot of their frame, so the link to that class rests on the identical layout and on the observable with the type argument `<A2345CustomModeItem>` in the two A2345 edit logics (`charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x411f9d0`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart @0x411dcd0`). `power_settings` is a list of `PowerSetting` objects (see [add_charging_mode.md](add_charging_mode.md#request)).
 
 ## `param_type`/`cmd`
 
@@ -92,10 +94,9 @@ Called from:
 
 ## Known unknowns
 
-- Types of `id`, `name`, `total_power`, `max_total_power`, `auto_exit` and `power_settings`: object-field values the builders do not type (map literal `<String, Object?>`); the mode object's class was not read. — attempted 2026-10-20 (two-hop not readable: the five callers pass the mode object as a slot of their own frame, `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_platform_edit_logic.dart @0x3a9f6cc`, `charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x3470d84`, `@0x3e31d4c`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart @0x3e05f0c`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_charging_edit_logic.dart @0x34699bc`; its class is not named in the asm)
-- The element shape of `power_settings` (built by `buildPowerSettingsForCloud` in the second sender, not read).
+- The class of the mode object: the five callers pass it as a slot of their own frame (`small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_platform_edit_logic.dart @0x3a9f6cc`, `charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x3470d84`, `@0x3e31d4c`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart @0x3e05f0c`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_charging_edit_logic.dart @0x34699bc`), so the types in the table follow from the identical slot layout of `A2345CustomModeItem`, not from a declared parameter type — attempted 2026-10-20 (two-hop not readable).
 - Whether the server requires every key or accepts a partial update: the app always sends all seven.
-- Header stays `string-only` because the field types above are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
+- Header stays `string-only` because the class of the mode object is linked by slot layout only (see the bullet above) — rechecked 2026-10-20.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

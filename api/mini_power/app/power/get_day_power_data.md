@@ -40,6 +40,8 @@ n/a
 
 Top-level key of the response: `output_power_list` (list of port curves). Keys of one element (`data/models.json`, `base_service::DayPowerModel`): `port_name` (String?), `interval` (int?), `unit` (String?), `power_points` (List?), `power_protos` (field type not extracted).
 
+Element types (app side, traced 2026-10-20, `base_service/bean/model/day_power_model.dart`): `power_points` is cast to `List?` (`@0x28a89dc`) and turned into a list of `double` (`<double>` `@0x28a8a24`), so its entries are numbers; `power_protos` is stored without a cast or conversion (`ArrayStore` `@0x28a8acc`), so the model keeps it as received and its element type is not fixed by the app; `port_name` is a `String?` (`@0x28a8954`).
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -77,7 +79,6 @@ Called from:
 
 - The format of `date` (the value is a parameter; the callers were not decoded for it).
 - The unit and spacing of `power_points` (`interval` and `unit` are model fields; their values were not decoded).
-- The element type of `power_protos` (`unknown` in `data/models.json`).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

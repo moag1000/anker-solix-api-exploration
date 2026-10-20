@@ -48,6 +48,8 @@ Both senders hand the response to the caller's callback unread (`charging/http/h
 
 Top-level keys (`data/models.json`): `charging::CategoryClockThemeContainer` has `category` (field type not extracted); `charging::ScreenSaverThemeCategoryList` has `category` (`List?`).
 
+Element shapes (app side, traced 2026-10-20, `charging/model/a2345/a2345_category_clock_theme.dart`, `fromJson` casts): `category` is a list of `CategoryClockTheme`, which has `category_name` (`String?`) and `list`, a list of `CategoryClockThemeData` with `title`, `image_url`, `short_url` and `id` (`String?`), `file_crc32` and `text_color` (not typed by the cast scan).
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -86,7 +88,6 @@ Called from:
 
 - Type of `product_code` in the first sender: its `<String, dynamic>` literal does not type it; the String type is proven only by the second sender's `<String, String>` literal, and the callers' argument types were not read.
 - Which `product_code` values the callers pass (device model codes); the callers were not decoded for it.
-- The element shape of `category`: the field type is `unknown` for `CategoryClockThemeContainer` in `data/models.json`; the models were not read for this page.
 - Why two models exist for one URL (different device families call different senders); the server answer for the two families was not compared.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

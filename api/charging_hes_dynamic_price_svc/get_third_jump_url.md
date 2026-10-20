@@ -76,7 +76,7 @@ none traced: no numeric error code is compared in the sender read. Code meanings
 
 ## Known unknowns
 
-- Types of `pn`, `sn` and `siteId`: fields of the logic object; the literal names no value type.
+- Types of `pn`, `sn` and `siteId`: fields of the logic object; the literal names no value type. — attempted 2026-10-20 (two-hop not readable: `onClickTibberProvider` (`electricity_price/components/dynamic_price/setting/electricty_company_select_logic.dart @0x4391770`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - Why `type` is stored twice (`"IMPORT"`, then `"EXPORT"`): the two stores sit in different branches of the sender (`@0x29ac370`, `@0x29ac39c`); which condition selects each was not decoded.
 - Other companies than `"Flatpeak"`: the sender stores this constant only.
 - The response keys and the jump behaviour.

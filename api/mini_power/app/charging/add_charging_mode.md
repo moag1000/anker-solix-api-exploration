@@ -29,13 +29,15 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `device_sn` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38b74b0` (parameter, not typed by the builder) |
-| `name` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38b74c4` (value loaded from a field of the mode object, `charging/http/http_request_repository_impl.dart @0x38b74d0`) |
-| `number` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38b74dc` (field load `@0x38b74e8`) |
-| `total_power` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38b74f4` (field load `@0x38b7500`) |
-| `max_total_power` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38b750c` (field load `@0x38b7518`) |
-| `auto_exit` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38b7524` (field load `@0x38b7530`) |
+| `name` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x38b74c4` (value loaded from a field of the mode object, `charging/http/http_request_repository_impl.dart @0x38b74d0`) |
+| `number` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x38b74dc` (field load `@0x38b74e8`) |
+| `total_power` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x38b74f4` (field load `@0x38b7500`) |
+| `max_total_power` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x38b750c` (field load `@0x38b7518`) |
+| `auto_exit` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x38b7524` (field load `@0x38b7530`) |
 | `has_charge_protocol` | int (Smi, w) | yes | `0` or `1` (not a constant) | `charging/http/http_request_repository_impl.dart @0x38b753c` (built from a bool field: `cmp w2, NULL` `@0x38b7550`, `tbnz w2, #4` `@0x38b7558`, `r2 = 1` `@0x38b755c`, `r2 = 0` `@0x38b7564`, tagged by `lsl x3, x2, #1` `@0x38b7568`, stored `@0x38b756c`) |
-| `power_settings` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38b7570` (field load `@0x38b757c`; the second sender stores the result of `buildPowerSettingsForCloud` instead) |
+| `power_settings` | list | yes |  | `charging/http/http_request_repository_impl.dart @0x38b7570` (field load `@0x38b757c`; the second sender stores the result of `buildPowerSettingsForCloud` instead) |
+
+Mode object (app side, traced 2026-10-20): the field offsets the first sender (`charging/http/http_request_repository_impl.dart`) reads (`name` `field_f` `@0x38b74d0`, `number` `field_b` `@0x38b74e8`, `total_power` `field_13` `@0x38b7500`, `max_total_power` `[0]` `@0x38b7518`, `auto_exit` `field_1b` `@0x38b7530`, `has_charge_protocol` `field_1f` `@0x38b7548`, `power_settings` `field_23` `@0x38b757c`) are the slots of `A2345CustomModeItem` in the order of its `toJson` (`charging/model/a2345/a2345_custom_mode_list.dart`: `id`, `number`, `name`, `total_power`, `max_total_power`, `auto_exit`, `has_charge_protocol`, `power_settings`), and the two A2345 edit logics that call the sender create an observable with the type argument `<A2345CustomModeItem>` (`charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x411f9d0`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart @0x411dcd0`) and pass its `value` (`charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x3e32070`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart @0x3e06cf4`). The class casts `name` to `String?` and the integer fields to `int?` in `fromJson` (`number`, `total_power`, `max_total_power`, `auto_exit`), so those keys are a string and integers (null is possible); `power_settings` is a list of `PowerSetting` objects with the keys `name` (`String?`), `power` and `max_power` (`int?`) and the protocol keys `scp`, `ufcs`, `pd12v`, `pps11v`, `pps16v`, `pps20v` and `huawei`. The third caller, in the small-charging-platform module, uses `CustomChargeModeItem` (type argument at `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_platform_edit_logic.dart @0x370f1f8`) and the second sender.
 
 ## `param_type`/`cmd`
 
@@ -92,10 +94,9 @@ Called from:
 
 ## Known unknowns
 
-- Types of `device_sn`, `name`, `number`, `total_power`, `max_total_power`, `auto_exit` and `power_settings`: they are parameter or object-field values the builders do not type (map literal `<String, Object?>`); the mode object's class and the callers' argument types were not read. — attempted 2026-10-20 (two-hop not readable: the three `_addCustomChargeModeToCloud` callers pass the `value` of an observable (`value()` `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_platform_edit_logic.dart @0x3aa5db4`, `charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x3e32070`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart @0x3e06cf4`) and slots of their frames; the class of the mode object is not named)
-- The element shape of `power_settings` (the second sender builds it in `buildPowerSettingsForCloud`, which was not read).
+- The type of `device_sn`: a parameter of the first sender; the three `_addCustomChargeModeToCloud` callers pass a slot of their frame (`charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x3e320a4`) — attempted 2026-10-20 (two-hop not readable); the other seven keys are typed in Request.
 - Whether the answer carries keys besides `id`: the app reads only `id` and hands the integer to the callback.
-- Header stays `string-only` because the field types above are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
+- Header stays `string-only` because the type of `device_sn` is missing and the mode object is typed through the observable and the slot layout only — rechecked 2026-10-20.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

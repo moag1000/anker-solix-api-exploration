@@ -70,7 +70,7 @@ Called from:
 
 ## Known unknowns
 
-- The type of the returned value (bool or int): the closure forwards it unchecked; the callers `getDeviceIdentityStatusSwitch` were not decoded for it.
+- The type of the returned value (bool or int): the closure forwards it unchecked; the callers `getDeviceIdentityStatusSwitch` were not decoded for it. — attempted 2026-10-20 (two-hop not readable: `getDeviceIdentityStatusSwitch` (`charging/ui/page/device/a2345/a2345home/a2345home_logic.dart @0x3474568`), `getDeviceIdentityStatusSwitch` (`charging/ui/page/device/a2345/a2345laboratory/a2345laboratory_logic.dart @0x28d8214`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - What the flag controls on the device (names only). — reclassified: device test row 154 (2026-10-20: what the setting does on the charger is behaviour of the device, only the endpoint and key names are in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

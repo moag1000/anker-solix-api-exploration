@@ -57,7 +57,7 @@ Called from:
 
 ## Known unknowns
 
-- The type of the callback argument and the names of the two fields the dialog reads (`field_f`, `field_13`, `sms_manager.dart @0x291c99c`/`@0x291c9a4`): no `fromJson` is applied in the sender or in the caller closure, so no model key is known.
+- The type of the callback argument and the names of the two fields the dialog reads (`field_f`, `field_13`, `sms_manager.dart @0x291c99c`/`@0x291c9a4`): no `fromJson` is applied in the sender or in the caller closure, so no model key is known. — attempted 2026-10-20 (two-hop not readable: `_getDisCountDesc` (`charging/common_business/sms/sms_manager.dart @0x291c6f4`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - What the server returns when no promotion exists: the caller logs `getDisCountDesc result is null.` for a null value (`@0x291c97c`).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

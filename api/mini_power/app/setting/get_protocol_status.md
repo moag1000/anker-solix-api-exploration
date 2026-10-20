@@ -38,6 +38,8 @@ n/a
 
 Top-level keys (`data/models.json`, `charging::A2687ProtocolAgreementModel`): `protocol_status` (bool?) and `modes` (field type not extracted).
 
+Element shapes (app side, traced 2026-10-20, `charging/model/a2687/a2687_protocol_agreement_model.dart`, `fromJson` casts): `protocol_status` is a `bool?`; `modes` is a list of `A2687ProtocolMode`, which has `mode` (`String?`) and `protocols`, a list of `A2687ProtocolItem` with `protocol_key` (`String?`) and further keys not typed by the cast scan.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -69,7 +71,6 @@ Called from:
 
 ## Known unknowns
 
-- The element shape of `modes` (`unknown` in `data/models.json`; `models/charger.md` lists no fields for this model).
 - What "protocol" means for the user (a data-sharing or a charging protocol agreement): the key names `protocol_status` and the caller names are the only evidence. — reclassified: server (2026-10-20: the callers `A2687DeviceInfoService::_fetchProtocolAgreementStatus` and `_resetProtocolAgreementForUserChange` name it a protocol agreement of the A2687; the agreement text is not an app-side fact)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

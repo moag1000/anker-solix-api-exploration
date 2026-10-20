@@ -68,7 +68,7 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- The type of `password`: a parameter of the sender stored into a `<String, Object>` literal; the callers' values were not read.
+- The type of `password`: a parameter of the sender stored into a `<String, Object>` literal; the callers' values were not read. — attempted 2026-10-20 (two-hop not readable: an anonymous closure (`charging/ui/page/user/routerInfo/account_verification/account_verification_logic.dart @0x4055a18`), an anonymous closure (`charging/ui/page/account/privacy_policy/verification/verification_logic.dart @0x2faed6c`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
 - Which later request consumes `check_token`, and its lifetime: not traced.
 - The success closure logs `sendVerifyCode success: ` (a copied log text, `@0x2faf09c`) with the `check_token` value.
 - Error codes: none traced in the two call sites.

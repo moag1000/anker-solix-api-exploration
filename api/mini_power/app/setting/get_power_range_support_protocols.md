@@ -44,6 +44,8 @@ n/a
 
 Top-level key per model (`data/models.json`): `port_list` in both `charging::PowerRangeProtocolsResponse` and `small_charging_platform::PowerRangeProtocolsResponse` (field type not extracted).
 
+Element shapes (app side, traced 2026-10-20, `small_charging_platform/src/scp/chargingMode/custom_charge/power_range_protocols_model.dart`, `fromJson` casts): `port_list` is a list of `PortProtocolConfig`, which has `port` (`String?`) and `power_range_protocols_mapping`, a list of `PowerRangeProtocolMapping` with `min_power` and `max_power` (`int?`) and `protocols` (a list of strings).
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -77,7 +79,6 @@ Called from:
 
 ## Known unknowns
 
-- The element shape of `port_list`: the field type is `unknown` in `data/models.json` and the model classes were not read for this page.
 - What the server returns when `device_model` and `device_sn` disagree.
 - Whether 3.18.0 clients sent `device_model` alone (the diff shows only that `device_sn` is new as a literal).
 - Server behaviour is not known from the app: this page states what the app builds and parses.

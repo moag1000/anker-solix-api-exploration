@@ -46,6 +46,8 @@ n/a
 
 Keys of the model the callbacks apply (`data/models.json`, `small_charging_platform::PortProtocolStatusResponse`): `version` (String?) and `port_list` (field type not extracted).
 
+Element shapes (app side, traced 2026-10-20, `small_charging_platform/src/custom_protocol/model/port_protocol_status_model.dart`, `fromJson` casts): `port_list` is a list of `PortInfo` (`@0x285a29c`); `PortInfo` has `title` (`String?`), `ports` (an iterable), `protocols` (a list of `ProtocolGroup`, `@0x285a6a0`) and `tlv`; `ProtocolGroup` has `range` and `subTitle` (`String?`) and `list` (a list of `Protocol`, `@0x285a9d8`); `Protocol` has `name` (`String?`) and `status`.
+
 ## Example request/response
 
 Request: not synthesized (the keys are not re-read in 3.24.3, see Request).
@@ -70,7 +72,6 @@ none traced: the sender body is not in the asm dump, so the failure path of the 
 - The method, the request keys, their types and whether they are required: the sender body is not in the asm dump (mixin-deduplicated function). The inventory rows `device_sn` and `version` are 3.18.0 data.
 - Whether the callbacks receive the response body unchanged: the sender body was not read, so `PortProtocolStatusResponse` is only the model the callers apply.
 - Why the diff lists the URL under "Removed endpoints": the inventory finds no code reference to the string in 3.24.3, while the callers still `bl` into the mixin function.
-- The element shape of `port_list` (`unknown` in `data/models.json`).
 - Header stays `string-only` because Method and request types are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

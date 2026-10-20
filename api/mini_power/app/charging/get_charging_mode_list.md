@@ -43,6 +43,8 @@ n/a
 
 Top-level keys per model (`data/models.json`): `charging::A2345CustomModeList` has `charging_mode_list` (field type not extracted); `small_charging_platform::CustomChargeModeList` has `charging_mode_list` (`List<CustomChargeModeItem>`).
 
+Element shape (app side, traced 2026-10-20, `charging/model/a2345/a2345_custom_mode_list.dart`, `fromJson` casts): `charging_mode_list` is a list of `A2345CustomModeItem` with `id`, `number`, `total_power`, `max_total_power` and `auto_exit` (`int?`), `name` (`String?`), `has_charge_protocol` and `power_settings`, a list of `PowerSetting` with `name` (`String?`), `power` and `max_power` (`int?`) and the protocol keys `scp`, `ufcs`, `pd12v`, `pps11v`, `pps16v`, `pps20v`, `huawei`.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -78,7 +80,6 @@ Called from:
 
 ## Known unknowns
 
-- The element shape of `charging_mode_list`: `models/charger.md` has no field list for `A2345CustomModeList` (field type `unknown` in `data/models.json`), and `CustomChargeModeItem` was not read for this page.
 - Whether the two senders return different lists for the same `device_sn` (the second one belongs to the small-charging-platform module).
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
