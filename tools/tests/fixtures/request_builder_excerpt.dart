@@ -200,3 +200,93 @@ class HttpRequestControllerImpl extends HttpRequestControllerInterface {
     // 0x402c: r0 = Map._fromLiteral()
     // 0x4030: r0 = synthNoMap()
   }
+// SYNTHETIC: key added with `[]=` on an empty literal (shape of delMessage), and a
+// constant Smi 0 stored from the zero register.
+  _ synthMapSet(/* No info */) {
+    // ** addr: 0x5000, size: 0x100
+    // 0x5004: SetupParameters(Synth this /* r1 => r1, fp-0x8 */, dynamic _ /* r2 => r2, fp-0x10 */)
+    // 0x5008: r16 = <String, dynamic>
+    // 0x500c: ldr             lr, [THR, #0xa8]  ; THR::empty_array
+    // 0x5010: stp             lr, x16, [SP]
+    // 0x5014: r0 = Map._fromLiteral()
+    // 0x5018: mov             x4, x0
+    // 0x501c: ldur            x3, [fp, #-0x10]
+    // 0x5020: stur            x4, [fp, #-0x18]
+    // 0x5024: r0 = LoadClassIdInstr(r4)
+    // 0x5028: mov             x1, x4
+    // 0x502c: r2 = "ids"
+    // 0x5030: r0 = GDT[cid_x0 + 0x6a9]()
+    // 0x5034: ldur            x4, [fp, #-0x18]
+    // 0x5038: mov             x1, x4
+    // 0x503c: r3 = true
+    // 0x5040: r2 = "all"
+    // 0x5044: r0 = GDT[cid_x0 + 0x6a9]()
+  }
+  _ synthEmptyOnly(/* No info */) {
+    // ** addr: 0x5100, size: 0x40
+    // 0x5104: r16 = <String, dynamic>
+    // 0x5108: ldr             lr, [THR, #0xa8]  ; THR::empty_array
+    // 0x510c: stp             lr, x16, [SP]
+    // 0x5110: r0 = Map._fromLiteral()
+  }
+  _ synthZero(/* No info */) {
+    // ** addr: 0x5200, size: 0x60
+    // 0x5204: r1 = Null
+    // 0x5208: r2 = 4
+    // 0x520c: r0 = AllocateArray()
+    // 0x5210: mov             x2, x0
+    // 0x5214: r16 = "zero"
+    // 0x5218: StoreField: r2->field_f = r16
+    //     0x5218: stur            w16, [x2, #0xf]
+    // 0x521c: StoreField: r2->field_13 = rZR
+    //     0x521c: stur            wzr, [x2, #0x13]
+    // 0x5220: r16 = <String, dynamic>
+    // 0x5224: stp             x2, x16, [SP]
+    // 0x5228: r0 = Map._fromLiteral()
+  }
+// SYNTHETIC: response-side fromJson. synthRespOk parses the awaited result; synthReqSide
+// parses a map built from the request keys and drops the awaited result; synthDefault
+// parses `awaited ?? {}`.
+  _ synthRespOk(/* No info */) {
+    // ** addr: 0x6000, size: 0x60
+    // 0x6004: r0 = requestHttp()
+    // 0x6008: mov             x1, x0
+    // 0x600c: r0 = Await()
+    // 0x6010: mov             x2, x0
+    // 0x6014: r0 = RespModel.fromJson()
+  }
+  _ synthReqSide(/* No info */) {
+    // ** addr: 0x6100, size: 0x80
+    // 0x6104: r1 = Null
+    // 0x6108: r2 = 4
+    // 0x610c: r0 = AllocateArray()
+    // 0x6110: mov             x2, x0
+    // 0x6114: r16 = "k"
+    // 0x6118: StoreField: r2->field_f = r16
+    //     0x6118: stur            w16, [x2, #0xf]
+    // 0x611c: r16 = true
+    // 0x6120: StoreField: r2->field_13 = r16
+    //     0x6120: stur            w16, [x2, #0x13]
+    // 0x6124: r16 = <String, dynamic>
+    // 0x6128: stp             x2, x16, [SP]
+    // 0x612c: r0 = Map._fromLiteral()
+    // 0x6130: mov             x2, x0
+    // 0x6134: r0 = ReqModel.fromJson()
+    // 0x6138: r0 = requestHttp()
+    // 0x613c: mov             x1, x0
+    // 0x6140: r0 = Await()
+  }
+  _ synthDefault(/* No info */) {
+    // ** addr: 0x6200, size: 0x60
+    // 0x6204: r0 = requestHttp()
+    // 0x6208: mov             x1, x0
+    // 0x620c: r0 = Await()
+    // 0x6210: cmp             w0, NULL
+    // 0x6214: b.ne            #0x6228
+    // 0x6218: r16 = <String, dynamic>
+    // 0x621c: ldr             lr, [THR, #0xa8]  ; THR::empty_array
+    // 0x6220: stp             lr, x16, [SP]
+    // 0x6224: r0 = Map._fromLiteral()
+    // 0x6228: mov             x2, x0
+    // 0x622c: r0 = DefModel.fromJson()
+  }

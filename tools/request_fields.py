@@ -46,16 +46,18 @@ NODEF_OPS = frozenset(('str', 'stur', 'strb', 'sturb', 'strh', 'stp', 'cmp', 'cm
 LDFP_RE = re.compile(r'^ldu?r\s+(?:x|r)?(\d+|lr), \[fp, #(-?)(0x[0-9a-f]+|\d+)\]$')
 STFP_RE = re.compile(r'^stu?r\s+(?:x)?(\d+|lr), \[fp, #(-?)(0x[0-9a-f]+|\d+)\]$')
 LDOTHER_RE = re.compile(r'^ld[a-z]*\s+[xw](\d+), \[')
-SETUP_RE = re.compile(r'r(\d+) => r(\d+), fp-(0x[0-9a-f]+)')
-STOREFIELD_RE = re.compile(r'^StoreField: r(\d+)->field_([0-9a-f]+) = r(\d+)')
-ARRAYSTORE_RE = re.compile(r'^ArrayStore: r(\d+)\[(\d+)\] = r(\d+)')
+SETUP_RE = re.compile(r'r(\d+)(?: => r(\d+))?, fp-(0x[0-9a-f]+)')
+STOREFIELD_RE = re.compile(r'^StoreField: r(\d+)->field_([0-9a-f]+) = r(\d+|ZR)')
+ARRAYSTORE_RE = re.compile(r'^ArrayStore: r(\d+)\[(\d+)\] = r(\d+|ZR)')
 LOADFIELD_RE = re.compile(r'^(?:LoadField|ArrayLoad): r(\d+) = ')
-STORE_RAW_RE = re.compile(r'^(?:stur|str)\s+([wx])(\d+), \[x(\d+), #(0x[0-9a-f]+)\]$')
+STORE_RAW_RE = re.compile(r'^(?:stur|str)\s+([wx])(\d+|zr), \[x(\d+), #(0x[0-9a-f]+)\]$')
 STORE_ADD_RAW_RE = re.compile(r'^add\s+x25, x(\d+), #(0x[0-9a-f]+)$')
-STORE_X25_RE = re.compile(r'^str\s+([wx])(\d+), \[x25\]$')
+STORE_X25_RE = re.compile(r'^str\s+([wx])(\d+|zr), \[x25\]$')
 SP_SPILL_RE = re.compile(r'^(?:stp\s+(x\d+|lr), (x\d+|lr)|str\s+(x\d+|lr)), \[SP(?:, #0x[0-9a-f]+)?\]!?$')
 CMPNULL_RE = re.compile(r'^cmp\s+[wx]\d+, NULL$')
 BRANCH_RE = re.compile(r'^b\.(?:eq|ne)\s+#(0x[0-9a-f]+)$')
+SEND_RE = re.compile(r'[Rr]equestHttp|encryptionRequest|getDataFromService|Http')
+NOT_A_SEND_RE = re.compile(r'^(?:Allocate|Load|Init|Box|Stack|Null|Map\.|_Growable|r\d)')
 CALLS_LIST_RE = re.compile(r'List|GrowableArray|_literal|_withData')
 CALLS_MAP_RE = re.compile(r'Map\.|_Map|LinkedHashMap')
 
@@ -98,6 +100,9 @@ def analyse_function(fn):
     body_calls = []
     calls = {}
     map_lits = 0
+    events = []
+    last_call = None
+    resp_src = None        # (kind, via, how) once a response value is in reach
     for ins in fn.instrs:
         text = ins.text
         raws = ins.raw
@@ -114,13 +119,16 @@ def analyse_function(fn):
             pending_cmp = ins.addr
         if text.startswith('SetupParameters('):
             for m in SETUP_RE.finditer(text):
-                regs[int(m.group(2))] = V('param', 'fp-' + m.group(3), ins.addr, text)
+                regs[int(m.group(2) or m.group(1))] = V('param', 'fp-' + m.group(3), ins.addr, text)
                 slots[-_hex(m.group(3))] = V('param', 'fp-' + m.group(3), ins.addr, text)
             continue
         m = STOREFIELD_RE.match(text) or ARRAYSTORE_RE.match(text)
         if m:
             base = regs.get(int(m.group(1)))
-            val = regs.get(int(m.group(3)), V('unk', None, ins.addr, text))
+            if m.group(3) == 'ZR':
+                val = V('imm', 0, ins.addr, text)
+            else:
+                val = regs.get(int(m.group(3)), V('unk', None, ins.addr, text))
             if base is not None and base.kind in ('arr', 'map'):
                 off = None
                 width = None
@@ -197,7 +205,43 @@ def analyse_function(fn):
             dst = int(m.group(1))
             if name in ('toJson', 'toMap', 'jsonEncode') and name not in body_calls:
                 body_calls.append(name)
-            if name == 'AllocateArray':
+            fm = re.match(r'^([A-Za-z_$][\w$]*)\.(?:fromJson|fromMap)$', name)
+            if fm:
+                arg = regs.get(2)
+                if arg is not None and arg.kind == 'resp':
+                    kind, via, via_addr = 'resp', arg.data[0], arg.data[1]
+                    ev = 'input r2 = response (%s of %s() @%s)' % (arg.data[2], via, via_addr)
+                elif arg is not None and arg.kind == 'param' and fn.name == \
+                        '<anonymous closure>':
+                    kind, via, via_addr = 'cparam', None, None
+                    ev = 'input r2 = closure parameter %s @%s' % (arg.data, arg.addr)
+                elif arg is not None and resp_src is not None and (
+                        arg.kind in ('unk', 'field', 'call', 'param')
+                        or (arg.kind == 'map' and arrays[arg.data].get('empty'))):
+                    # derived from the response (list element, nested field ...):
+                    # a response value was read earlier and the input is neither a
+                    # map built here nor a captured context value
+                    kind, via, via_addr = 'derived', resp_src[1], None
+                    ev = 'input r2 = %s (derived%s; %s)' % (
+                        arg.text or arg.kind,
+                        ', `?? {}` default' if arg.kind == 'map' else '', resp_src[2])
+                else:
+                    kind, via, via_addr = 'other', None, None
+                    ev = 'input r2 = %s' % ((arg.text if arg is not None else 'unset') or arg.kind)
+                events.append({'cls': fm.group(1), 'kind': kind, 'via': via,
+                               'closure': fn.name == '<anonymous closure>',
+                               'addr': ins.addr, 'evidence': '%s -> %s() @%s' % (
+                                   ev, name, ins.addr)})
+                res = V('call', (None, name), ins.addr, text)
+            elif name == 'Await':
+                if last_call is not None:
+                    res = V('resp', (last_call[0], last_call[1], 'Await @' + ins.addr),
+                            ins.addr, text)
+                    resp_src = ('await', last_call[0], 'awaited result of %s() @%s'
+                                % (last_call[0], last_call[1]))
+                else:
+                    res = V('unk', None, ins.addr, text)
+            elif name == 'AllocateArray':
                 arrays.append({'slots': {}, 'len': (last_len // 2) if last_len else None,
                                'nested': False, 'kind': None, 'addr': ins.addr})
                 res = V('arr', len(arrays) - 1, ins.addr, text)
@@ -210,7 +254,12 @@ def analyse_function(fn):
                     arrays[cands[-1].data]['lit_addr'] = ins.addr
                     res = V('map', cands[-1].data, ins.addr, text)
                 else:
-                    res = V('call', ('map', name), ins.addr, text)
+                    # `Map._fromLiteral(THR::empty_array)`: an empty map literal that
+                    # later `[]=` calls may fill
+                    arrays.append({'slots': {}, 'len': 0, 'nested': False,
+                                   'kind': 'map', 'addr': ins.addr,
+                                   'lit_addr': ins.addr, 'empty': True})
+                    res = V('map', len(arrays) - 1, ins.addr, text)
             elif CALLS_MAP_RE.search(name):
                 res = V('call', ('map', name), ins.addr, text)
             elif CALLS_LIST_RE.search(name):
@@ -218,6 +267,8 @@ def analyse_function(fn):
             else:
                 res = V('call', (None, name), ins.addr, text)
             calls.setdefault(name, ins.addr)
+            if not NOT_A_SEND_RE.match(name) and name != 'Await' and not fm:
+                last_call = (name, ins.addr)
             # Dart keeps no value in a register across a call: only the result lives on
             regs = {dst: res}
             spill = []
@@ -242,8 +293,15 @@ def analyse_function(fn):
             off = _hex(m.group(3)) * (-1 if m.group(2) else 1)
             if off > 0:
                 v = V('param', 'fp+0x%x' % off, ins.addr, text)
+                if fn.name == '<anonymous closure>' and resp_src is None:
+                    resp_src = ('closure', None, 'closure parameter fp+0x%x read @%s'
+                                % (off, ins.addr))
             else:
                 v = slots.get(off) or V('unk', None, ins.addr, text)
+                if v.kind == 'param' and fn.name == '<anonymous closure>' \
+                        and resp_src is None:
+                    resp_src = ('closure', None, 'closure parameter %s read @%s'
+                                % (v.data, ins.addr))
             regs[_reg(m.group(1))] = v
             continue
         m = STFP_RE.match(text)
@@ -254,7 +312,15 @@ def analyse_function(fn):
             continue
         m = LOADFIELD_RE.match(text)
         if m:
-            regs[int(m.group(1))] = V('field', text, ins.addr, text)
+            bm = re.search(r'= r(\d+)(?:->|\[)', text)
+            base = regs.get(int(bm.group(1))) if bm else None
+            if base is not None and base.kind == 'resp':
+                regs[int(m.group(1))] = base      # a field (`data`) of the response
+            elif base is None:
+                # base register never defined here: the incoming closure context
+                regs[int(m.group(1))] = V('ctx', None, ins.addr, text)
+            else:
+                regs[int(m.group(1))] = V('field', text, ins.addr, text)
             continue
         m = REG_ANY_RE.match(text)
         if m:
@@ -277,7 +343,7 @@ def analyse_function(fn):
         m = LDOTHER_RE.match(text)
         if m:
             regs[int(m.group(1))] = V('unk', None, ins.addr, text)
-    return {'map_lits': map_lits, 'calls': calls, 'body_calls': body_calls, 'maps': arrays, 'method': method, 'method_addr': method_addr,
+    return {'fromjson_events': events, 'map_lits': map_lits, 'calls': calls, 'body_calls': body_calls, 'maps': arrays, 'method': method, 'method_addr': method_addr,
             'cmp_null': cmp_null}
 
 
@@ -329,6 +395,8 @@ def caller_body_fields(entry, callee_name):
     last = max(before, key=lambda a: _hex(a['lit_addr']))
     out = fields_of(info, only=last)
     for f in out:
+        if f.get('source') == 'map_set':
+            f['via'] = 'map_set'
         f['source'] = 'caller'
         f['caller'] = entry['full'] + ' @' + entry['addr']
         f['call_addr'] = call
@@ -377,7 +445,7 @@ def fields_of(info, only=None):
             f = {'key': key.data, 'value_kind': kind, 'raw': raw, 'value': value,
                  'width': w, 'addr': key.addr,
                  'evidence': '%s @%s (key stored by a call, selector not named)'
-                             % (sel, caddr), 'via': 'call'}
+                             % (sel, caddr), 'source': 'map_set'}
             if val.kind in ('map', 'arr'):
                 sub = arrays_keys(info, val.data)
                 if sub:
@@ -403,13 +471,8 @@ def arrays_keys(info, aid):
             if i % 2 == 0 and arr['slots'][i][0].kind == 'str']
 
 
-def fromjson_classes(fn):
-    out = []
-    for ins in fn.instrs:
-        m = FROMJSON_RE.match(ins.text)
-        if m and m.group(1) not in out:
-            out.append(m.group(1))
-    return out
+def has_fromjson(fn):
+    return any(FROMJSON_RE.match(ins.text) for ins in fn.instrs)
 
 
 def scan_file(path, rel, want_addrs, want_callers):
@@ -429,25 +492,19 @@ def scan_file(path, rel, want_addrs, want_callers):
         full = '%s::%s' % (fn.cls, fn.name)
         if fn.name == '<anonymous closure>':
             par = parents.get(fn.addr)
-            if par:
-                for c in fromjson_classes(fn):
-                    lst = closure_cls.setdefault(par, [])
-                    if c not in lst:
-                        lst.append(c)
+            if par and has_fromjson(fn):
+                closure_cls.setdefault(par, []).extend(
+                    analyse_function(fn)['fromjson_events'])
         if fn.addr in want_addrs:
             info = analyse_function(fn)
-            info['fromjson'] = fromjson_classes(fn)
             info['full'] = full
             builders[fn.addr] = info
         if fn.name in want_callers:
             info = analyse_function(fn)
             callers.setdefault(fn.name, []).append(
-                {'own': fromjson_classes(fn), 'full': full, 'addr': fn.addr, 'info': info})
+                {'full': full, 'addr': fn.addr, 'info': info})
     for info in builders.values():
-        info['closure_fromjson'] = closure_cls.get(info['full'], [])
-    for lst in callers.values():
-        for c in lst:
-            c['closure'] = closure_cls.get(c['full'], [])
+        info['closure_events'] = closure_cls.get(info['full'], [])
     return builders, callers
 
 
@@ -539,10 +596,19 @@ def run(asm_root, endpoints, models, service=None, log=None):
                                'in its direct callers')
             if info['body_calls']:
                 rec['note'] += '; calls ' + ', '.join(info['body_calls'])
-        own = list(info['fromjson'])
-        for c in info['closure_fromjson']:
-            if c not in own:
-                own.append(c)
+        # only a fromJson that consumes the response counts: the closure parameter of
+        # a success callback, or the awaited result of the send call (never a map
+        # built in the same function, never a dropped result)
+        own = []
+        evid = {}
+        for e in info['fromjson_events'] + info['closure_events']:
+            if e['kind'] == 'cparam' or (e['kind'] in ('resp', 'derived') and (
+                    e['via'] is None or SEND_RE.search(e['via']))):
+                if e['kind'] == 'derived' and e['via'] is None and e['closure'] is False:
+                    continue
+                if e['cls'] not in own:
+                    own.append(e['cls'])
+                    evid[e['cls']] = e['evidence']
         here = os.path.dirname(r['dart_file'])
         cls = None
         if own:
@@ -553,15 +619,20 @@ def run(asm_root, endpoints, models, service=None, log=None):
             for c in r.get('callers') or []:
                 f, n = caller_name(c)
                 for ent in results_c.get((f, n)) or []:
-                    for k in ent['own'] + ent['closure']:
-                        if k not in [x[0] for x in cc]:
-                            cc.append((k, f))
+                    for e in ent['info']['fromjson_events']:
+                        if e['kind'] in ('resp', 'derived') and e['via'] == r['function'] \
+                                and e['cls'] not in [x[0] for x in cc]:
+                            cc.append((e['cls'], f))
+                            evid[e['cls']] = '%s: %s' % (ent['full'], e['evidence'])
             if len(cc) == 1:
                 cls, src = cc[0][0], 'caller'
                 here = os.path.dirname(cc[0][1])
             elif cc:
                 rec['response_classes'] = [x[0] for x in cc]
                 rec['response_source'] = 'caller-ambiguous'
+        if evid and (cls or rec['response_source']):
+            rec['response_evidence'] = {k: v for k, v in evid.items()
+                                        if cls is None or k == cls or k in own}
         if cls:
             rec['response_class'] = cls
             rec['response_source'] = src

@@ -95,6 +95,52 @@ class RequestFieldsTest(unittest.TestCase):
         finally:
             shutil.rmtree(root)
 
+    def test_map_set_keys_on_empty_literal(self):
+        _, f = analysed('0x5000')
+        self.assertEqual(list(f), ['ids', 'all'])
+        self.assertEqual(f['ids']['source'], 'map_set')
+        self.assertEqual((f['ids']['value_kind'], f['ids']['raw']), ('param', 'fp-0x10'))
+        self.assertEqual((f['all']['value_kind'], f['all']['value']), ('const_bool', True))
+        info, g = analysed('0x5100')
+        self.assertEqual(g, {})
+        self.assertEqual(info['map_lits'], 1)
+
+    def test_stur_wzr_is_const_smi_zero(self):
+        _, f = analysed('0x5200')
+        z = f['zero']
+        self.assertEqual((z['value_kind'], z['raw'], z['value'], z['width']),
+                         ('const_smi', 0, 0, 'w'))
+        self.assertIn('wzr', z['evidence'])
+
+    def _run_rows(self, specs):
+        root = tempfile.mkdtemp()
+        try:
+            dst = os.path.join(root, REL)
+            os.makedirs(os.path.dirname(dst))
+            shutil.copy(FIX, dst)
+            rows = [{'url': '/power_service/v1/synth/%s' % n, 'service': 'power_service',
+                     'addr': a, 'class': 'HttpRequestControllerImpl', 'function': n,
+                     'dart_file': REL, 'role': 'sender', 'callers': []} for n, a in specs]
+            mod = {'rows': [{'key': 'p::%s' % c, 'class': c, 'dart_file': 'p/m.dart'}
+                            for c in ('RespModel', 'ReqModel', 'DefModel')]}
+            return R.run(root, {'rows': rows}, mod, 'power_service')
+        finally:
+            shutil.rmtree(root)
+
+    def test_fromjson_only_when_it_consumes_the_response(self):
+        ok, req, dflt = self._run_rows([('synthRespOk', '0x6000'),
+                                        ('synthReqSide', '0x6100'),
+                                        ('synthDefault', '0x6200')])
+        self.assertEqual((ok['response_class'], ok['response_key']),
+                         ('RespModel', 'p::RespModel'))
+        self.assertIn('Await @0x600c', ok['response_evidence']['RespModel'])
+        self.assertIn('requestHttp() @0x6004', ok['response_evidence']['RespModel'])
+        # request-side map literal + dropped awaited result: not attributed
+        self.assertIsNone(req['response_class'])
+        self.assertNotIn('response_evidence', req)
+        # `awaited ?? {}` default still is the response
+        self.assertEqual(dflt['response_class'], 'DefModel')
+
     def test_response_class_and_key_from_closure(self):
         root = tempfile.mkdtemp()
         try:
