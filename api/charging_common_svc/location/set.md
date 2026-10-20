@@ -40,6 +40,8 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 
 `saveLocation` sends nine flat keys (array length raw 36 at `ak_iot_common_charging/src/weather/weather_impl.dart @0x2bb0f24`, so 18 slots). `_setLocation` sends four keys, `identifier_type`, `identifier_id`, `location`, `business_type` (array length raw 16 at `electricity_price/components/dynamic_price/util/local_auto_disaster_feature.dart @0x2c142fc`, so 8 slots). The value of `location` is the map literal built by `CloudPlace::json` (`electricity_price/components/dynamic_price/model/cloud_location.dart @0x2c14ae0`, `<String, dynamic>` `@0x2c14bfc`) with the keys `longitude`, `latitude`, `country_code`, `place_id`, `display_name`, `formatted_address`, `post_code`.
 
+Types of the place strings and `identifier_id` (traced 2026-10-20, app side): the `local_auto_disaster_feature.dart` sender loads `identifier_id` from `field_7` of an untyped holder (`@0x2c14344`) and `identifier_type` from `field_b` of `this` (`@0x2c1431c`); the `weather_impl.dart` sender takes parameters. Declared types are not in the dump; the read side [get](get.md#response) produces `String?` for the four place strings.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -93,7 +95,7 @@ Called from:
 ## Known unknowns
 
 - Types of `identifier_id`, `place_id`, `formatted_address`, `country_code` and `display_name`: parameter or field values; the asm shows only the `""` fallback for a null. — attempted 2026-10-20 (two-hop not readable: `syncLocation` (`station_home/src/weather/weather_service.dart @0x2bb0ec8`), an anonymous closure (`electricity_price/components/dynamic_price/util/local_auto_disaster_feature.dart @0x2c1413c`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
-- Which values other callers could pass for `identifier_type` and `business_type`: `_setLocation` stores a field value for the first and a class-id-dependent 0 or 1 for the second (`electricity_price/components/dynamic_price/util/local_auto_disaster_feature.dart @0x2c143a4`).
+- Which values `field_b` (`identifier_type`) of `LocalAutoDisasterFeature` takes was not followed; `business_type` there is a class-id compare of that same object against its own class id 4696 (`@0x2c143a4`; `LocalAutoDisasterFeature` is class id 4696, `local_auto_disaster_feature.dart` line 167 of the dump), so it is 0 for every instance unless a subclass exists (none is in the dump) — traced 2026-10-20
 - Why `_setLocation` nests the place under `location` while `saveLocation` sends its parts flat: both reach the same URL; which shape the server accepts is not known from the app.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

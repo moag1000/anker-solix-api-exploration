@@ -58,6 +58,8 @@ Different senders parse different classes (no page in `models/` exists for any o
 - `electricity_price::CloudPlace`: `longitude` (String), `latitude` (String), `country_code` (String), `place_id` (String?), `display_name` (String?), `post_code` (String?), `formatted_address` (String?).
 - `electricity_price::CommonLocationResponse`: `default_location` (CloudPlace?), `identifier_location` (CloudPlace).
 
+Parse of `identifier_location` / `default_location` (traced 2026-10-20, app side): `ChargingWeatherHttpAdapter::_parseLocation` (`ak_iot_common_charging/src/weather/weather_impl.dart @0x2b11ff4`) walks the two keys `identifier_location` and `default_location` (list `<String>` built at `@0x2b12020`), casts each value to `Map<String, dynamic>?` (`@0x2b12184`), and builds a `WeatherLocation` (`@0x2b122d8`): `latitude` and `longitude` are converted with `toString` and parsed as doubles (`_parse`, `@0x2b12224`, `@0x2b122b4`; empty string when null), `place_id`, `formatted_address`, `country_code` and `display_name` are null-safe `toString` values (key addresses `@0x2b122f4`, `@0x2b12360`, `@0x2b123cc`, `@0x2b12438`), so they stay `String?`.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by `onReady`; `<...>` are placeholders, not captured values)
@@ -100,9 +102,9 @@ Called from:
 
 ## Known unknowns
 
-- Type of `identifier_id` at all five senders: a field or parameter value (`electricity_price/components/dynamic_price/setting/electricty_place_smart_logic.dart @0x298f71c`, `ak_iot_common_charging/src/weather/weather_impl.dart @0x2b11f74`, `electricity_price/components/dynamic_price/util/local_auto_disaster_feature.dart @0x2c15318`, `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart @0x2e8d0d8`, `unity/src/main/weather/weather_manager.dart @0x451c160`) whose declared type is not visible.
+- Type of `identifier_id` at all five senders: a field or parameter value (`electricity_price/components/dynamic_price/setting/electricty_place_smart_logic.dart @0x298f71c`, `ak_iot_common_charging/src/weather/weather_impl.dart @0x2b11f74`, `electricity_price/components/dynamic_price/util/local_auto_disaster_feature.dart @0x2c15318`, `micro_hes/src/common_business/basic_station/module/income_statistics/yesterday_earning_tips_view.dart @0x2e8d0d8`, `unity/src/main/weather/weather_manager.dart @0x451c160`) whose declared type is not visible. — traced 2026-10-20: two of the five are String; `electricty_place_smart_logic.dart` loads field `field_63` (`@0x298f71c`), whose stores are a `String` cast with `""` for null (`@0x34f029c`, `@0x34f0680`); `ems_ai_mode_condition_logic.dart` loads `field_4b` (`@0x2a2fb7c`), stored through a `String` cast (`@0x35682b8`). The `weather_impl.dart`, `local_auto_disaster_feature.dart` and `yesterday_earning_tips_view.dart` values come from parameters or fields whose type is not declared in the dump (`local_auto_disaster_feature.dart @0x2c15318` loads `field_7` of an untyped holder)
 - What `business_type` 1 means: `refreshLocation` derives 0 or 1 from a class-id compare against 4696 (`electricity_price/components/dynamic_price/util/local_auto_disaster_feature.dart @0x2c15338`); which class that is, and what the server does with the value, was not decoded.
-- The parser `ChargingWeatherHttpAdapter::_parseLocation` and the success closure of `WeatherManager::fetchDefaultLocation` were not read.
+- The success closure of `WeatherManager::fetchDefaultLocation` was not read (the parser `_parseLocation` is described under Response) — traced 2026-10-20
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

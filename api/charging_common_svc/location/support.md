@@ -45,6 +45,8 @@ n/a
 
 Top-level keys of both classes (`data/models.json`, `ak_soft_ems::SupportLocation` and `charging::SupportLocation`): `country_code` (type not named by the extractor). Neither sender adds a wrapper field in the closures read.
 
+Element layout of `country_code` (traced 2026-10-20, app side): `SupportLocation.fromJson` reads `country_code` as a list and builds a `List<SupportCountryCode>` (`charging/model/support_location.dart @0x2893004`, `@0x2893034`, element parse `SupportCountryCode.fromJson` `@0x2893128`); each element has `code` (`String?`, key `@0x28931dc`, cast `@0x2893228`) and `google_code` (`String?`, key `@0x2893260`, cast `@0x28932b0`). The `ak_soft_ems` twin (`ak_soft_ems/model/support_location.dart @0x2a2fe18`, keys `@0x2a2ffc0`, `@0x2a30044`) has the same shape.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by `HttpRequestControllerImpl::getLocationSupport`; `<...>` are placeholders, not captured values)
@@ -83,9 +85,8 @@ Called from:
 
 ## Known unknowns
 
-- Type of `identifier_id`: a field value (`ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x2a2fb7c`) or a parameter; the declared type is not visible.
+- Type of `identifier_id`: a field value (`ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x2a2fb7c`) or a parameter; the declared type is not visible. — traced 2026-10-20: the `ems_ai_mode_condition_logic.dart` field `field_4b` (`@0x2a2fb7c`) is stored through a `String` cast (`@0x35682b8`), so that sender sends a String; the `http_request_repository_impl.dart` sender takes a parameter (`@0x2892eac`) whose declared type is not in the dump
 - What `business_type` 2 and `identifier_type` 2 select on the server: the app stores them as constants only.
-- The type of `country_code` in `SupportLocation` (the extractor lists it as unknown) and whether the answer is a list or a single value.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
