@@ -69,7 +69,7 @@ Clear-or-keep (traced 2026-10-20, app side): the logout cleanup only reads the s
 
 ## Since/changed
 
-3.18.0: present (3.18.0 `HttpEncryptionDecorator.dart`: URL string at `@0x1b921bc`, key `gen_key` at `@0x1b922d4`). 3.24.3: same URL and body key. since: ≤3.18.0.
+3.18.0: present (3.18.0 `HttpEncryptionDecorator.dart`: URL string at `0x1b921bc`, key `gen_key` at `0x1b922d4`). 3.24.3: same URL and body key. since: ≤3.18.0.
 
 ## Known unknowns
 

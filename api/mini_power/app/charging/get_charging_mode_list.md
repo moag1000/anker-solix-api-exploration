@@ -80,7 +80,7 @@ Called from:
 
 ## Known unknowns
 
-- Whether the two senders return different lists for the same `device_sn` (the second one belongs to the small-charging-platform module). — reclassified: server (2026-10-20: both senders post the same single key `device_sn` to the same URL; whether the answers differ is decided by the server, the two response models are listed under Response model)
+- Whether the two senders return different lists for the same `device_sn` (the second one belongs to the small-charging-platform module). — reclassified: server (2026-10-20: both senders post the same single key `device_sn` to the same URL; whether the answers differ is not visible in the app, the two response models are listed under Response model)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

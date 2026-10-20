@@ -28,7 +28,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x38b74b0` (parameter, not typed by the builder) |
+| `device_sn` | String | yes | `<device sn>` | `charging/http/http_request_repository_impl.dart @0x38b74b0` (parameter, not typed by the builder); the callers' value is the `deviceSn` getter (`field_6b`) of the late device field (see below) |
 | `name` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x38b74c4` (value loaded from a field of the mode object, `charging/http/http_request_repository_impl.dart @0x38b74d0`) |
 | `number` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x38b74dc` (field load `@0x38b74e8`) |
 | `total_power` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x38b74f4` (field load `@0x38b7500`) |
@@ -38,6 +38,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 | `power_settings` | list | yes |  | `charging/http/http_request_repository_impl.dart @0x38b7570` (field load `@0x38b757c`; the second sender stores the result of `buildPowerSettingsForCloud` instead) |
 
 Mode object (app side, traced 2026-10-20): the field offsets the first sender (`charging/http/http_request_repository_impl.dart`) reads (`name` `field_f` `@0x38b74d0`, `number` `field_b` `@0x38b74e8`, `total_power` `field_13` `@0x38b7500`, `max_total_power` `[0]` `@0x38b7518`, `auto_exit` `field_1b` `@0x38b7530`, `has_charge_protocol` `field_1f` `@0x38b7548`, `power_settings` `field_23` `@0x38b757c`) are the slots of `A2345CustomModeItem` in the order of its `toJson` (`charging/model/a2345/a2345_custom_mode_list.dart`: `id`, `number`, `name`, `total_power`, `max_total_power`, `auto_exit`, `has_charge_protocol`, `power_settings`), and the two A2345 edit logics that call the sender create an observable with the type argument `<A2345CustomModeItem>` (`charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x411f9d0`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart @0x411dcd0`) and pass its `value` (`charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x3e32070`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart @0x3e06cf4`). The class casts `name` to `String?` and the integer fields to `int?` in `fromJson` (`number`, `total_power`, `max_total_power`, `auto_exit`), so those keys are a string and integers (null is possible); `power_settings` is a list of `PowerSetting` objects with the keys `name` (`String?`), `power` and `max_power` (`int?`) and the protocol keys `scp`, `ufcs`, `pd12v`, `pps11v`, `pps16v`, `pps20v` and `huawei`. The third caller, in the small-charging-platform module, uses `CustomChargeModeItem` (type argument at `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_platform_edit_logic.dart @0x370f1f8`) and the second sender.
+
+Source of `device_sn` (fix round 1, 2026-10-20; this corrects the earlier "two-hop not readable" note): `A2345CustomChargingEditLogic::_addCustomChargeModeToCloud` takes no argument (`charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x3e31fec`); it reads the late field at offset 0x7f (late-initialisation check `@0x3e32054`), loads `field_6b` of it (`@0x3e3205c`), which is the `String deviceSn` getter of the device object, and passes it as the first argument to the sender (`@0x3e320a0`). So `device_sn` is a String for this caller; the other two callers and the `small_charging_platform` sender were not read.
 
 ## `param_type`/`cmd`
 
@@ -57,7 +59,7 @@ Request, synthesized (decrypted body as built by the sender; `<...>` are placeho
 
 ```json
 {
-  "device_sn": "<?>",
+  "device_sn": "<device sn>",
   "name": "<?>",
   "number": "<?>",
   "total_power": "<?>",
@@ -94,9 +96,8 @@ Called from:
 
 ## Known unknowns
 
-- The type of `device_sn`: a parameter of the first sender; the three `_addCustomChargeModeToCloud` callers pass a slot of their frame (`charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x3e320a4`) — attempted 2026-10-20 (two-hop not readable); the other seven keys are typed in Request.
 - Whether the answer carries keys besides `id`: the app reads only `id` and hands the integer to the callback. — reclassified: server (2026-10-20: the app reads only `id` and drops the rest, see Response; which other keys the answer carries is not visible in the app)
-- Header stays `string-only` because the type of `device_sn` is missing and the mode object is typed through the observable and the slot layout only — rechecked 2026-10-20.
+- Header stays `string-only` because the mode object is typed through the observable and the slot layout only (the `device_sn` type is no longer missing, see Request) — rechecked 2026-10-20.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

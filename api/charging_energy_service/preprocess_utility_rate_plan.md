@@ -121,7 +121,7 @@ Called from:
 
 - Types of the parameter-backed keys (`peak_sessions` content of `dealUtilityRatePlanData`, `station_id`, `sn`, `time`, `buy`): the literals name no value type. — traced 2026-10-20: `time` (string), `buy` (number) and `sn` (string) are typed under Request; `station_id` and the content of `peak_sessions` for `dealUtilityRatePlanData` stay untyped (two-hop not readable: `a17b1_peak_valley_price_diff_secondary_edit_logic.dart @0x3d3a344`)
 - Why `savePlanPrice` sends one session starting on 1 January and ending on 1 December of the current year with a single price and `peak_type` 1: the constants are read (`charging/ui/page/device/a17b1/device_setting/utility_rate_plan/rate_plan_structure/fixed_rate/a17b1_fixed_rate_logic.dart @0x3d3f744`, `@0x3d3f7a8`); the server's reading of them is not known from the app.
-- What `type` 1, `peak_type` 1, `day_type` 2 and `electricity_strategy.mode` 1 select: constants only. — reclassified: server (2026-10-20: the app sends these as constants and names none of them; the meaning is decided by the server)
+- What `type` 1, `peak_type` 1, `day_type` 2 and `electricity_strategy.mode` 1 select: constants only. — reclassified: server (2026-10-20: the app sends these as constants and names none of them; the meaning is not visible in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

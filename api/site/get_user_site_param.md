@@ -52,9 +52,9 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Callers in app
 
-- UNCONFIRMED candidate: `AE100CustomModeUsageLogic._checkUserTypeAndShowUpgradeDialog` (`charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart @0x2886750`) calls `getUserParamsAsync` of the mixin application `_MixinApplication707&BaseBleController&CommonLocation&AE100ApiExt` (target `0x288c978`, which lies just before `getUserParams` at `0x288cac0`). The Blutter dump omits the mixin body, so the link to `getUserParams` is an address-adjacency guess. No direct `bl` to `HttpRequestControllerImpl::getUserParams` was found.
+- UNCONFIRMED candidate: `AE100CustomModeUsageLogic._checkUserTypeAndShowUpgradeDialog` (`charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart @0x2886750`) calls `getUserParamsAsync` of the mixin application `_MixinApplication707&BaseBleController&CommonLocation&AE100ApiExt` (call target 0x288c978, body absent from the dump, which lies just before `getUserParams` at `0x288cac0`). The Blutter dump omits the mixin body, so the link to `getUserParams` is an address-adjacency guess. No direct `bl` to `HttpRequestControllerImpl::getUserParams` was found.
 
-Link to the mixin function (traced 2026-10-20, app side): the repository sender is `HttpRequestControllerImpl::getUserParams` (`charging/http/http_request_repository_impl.dart @0x288cac0`, URL load `@0x288cb40`). Its only visible user is `AE100CustomModeUsageLogic::checkUserTypeAndShowUpgradeDialog` (`charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart @0x2886750`), which calls the deduplicated mixin function `getUserParamsAsync` (`@0x288c978`, library `dart:mixin_deduplication`, class `_MixinApplication707&BaseBleController&CommonLocation&AE100ApiExt`), awaits it (`@0x288675c`), reads the key `params` from the answer map (`@0x2886784`) and casts it to `Map<String, dynamic>?` (`@0x28867b8`). No direct `bl` to `@0x288cac0` exists in the dump; the mixin body (`@0x288c978`) is not in the dump, and it lies `0x148` bytes before `getUserParams`. So the link is likely (the only other candidate callers are not present) but not proven.
+Link to the mixin function (traced 2026-10-20, app side): the repository sender is `HttpRequestControllerImpl::getUserParams` (`charging/http/http_request_repository_impl.dart @0x288cac0`, URL load `@0x288cb40`). Its only visible user is `AE100CustomModeUsageLogic::checkUserTypeAndShowUpgradeDialog` (`charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart @0x2886750`), which calls the deduplicated mixin function `getUserParamsAsync` (call target 0x288c978 (body absent from the dump), library `dart:mixin_deduplication`, class `_MixinApplication707&BaseBleController&CommonLocation&AE100ApiExt`), awaits it (`@0x288675c`), reads the key `params` from the answer map (`@0x2886784`) and casts it to `Map<String, dynamic>?` (`@0x28867b8`). No direct `bl` to `@0x288cac0` exists in the dump; the mixin body (call target 0x288c978 (body absent from the dump)) is not in the dump, and it lies `0x148` bytes before `getUserParams`. So the link is likely (the only other candidate callers are not present) but not proven.
 
 ## Since/changed
 
@@ -62,7 +62,7 @@ Link to the mixin function (traced 2026-10-20, app side): the repository sender 
 
 ## Known unknowns
 
-- The mixin body (`@0x288c978`) is not in the dump, so the link `getUserParamsAsync` to this URL is likely but not proven (see Callers in app); the answer layout is read on the caller side only (key `params`) — traced 2026-10-20
+- The mixin body (call target 0x288c978 (body absent from the dump)) is not in the dump, so the link `getUserParamsAsync` to this URL is likely but not proven (see Callers in app); the answer layout is read on the caller side only (key `params`) — traced 2026-10-20
 
 ## Device-tested by
 

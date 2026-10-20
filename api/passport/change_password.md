@@ -75,7 +75,7 @@ Called from:
 
 ## Known unknowns
 
-- Password policy and the code for a wrong `original_password`: the app compares no code and shows the message text of the answer (see Errors seen); the policy and the codes are decided by the server — reclassified: server (2026-10-20)
+- Password policy and the code for a wrong `original_password`: the app compares no code and shows the message text of the answer (see Errors seen); the policy and the codes are not visible in the app (the app only shows the answer's message text) — reclassified: server (2026-10-20)
 - Whether other sessions or tokens are invalidated after a change: not visible in the app. — reclassified: server (2026-10-20: session handling on the server is not visible in the app)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

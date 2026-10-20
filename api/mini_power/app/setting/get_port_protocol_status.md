@@ -27,14 +27,14 @@ encrypted: `true` per the 3.18.0 inventory (`encryptionRequestHttp`); not re-rea
 
 ## Request
 
-Not re-read in 3.24.3: the sender is a mixin-deduplicated function whose body is not in the asm dump (see Method+URL), so the keys below are the 3.18.0 inventory rows (`data/endpoints.json`); their addresses do not exist in the 3.24.3 asm and are therefore not cited. No type, requiredness or value is read.
+Not re-read in 3.24.3: the sender is a mixin-deduplicated function whose body is not in the asm dump (see Method+URL), so the keys below are the 3.18.0 inventory rows (`data/endpoints.json`); their addresses do not exist in the 3.24.3 asm and are therefore not cited. Types and requiredness in the table are from the 3.18.0 builder read below, not from 3.24.3.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn` | ? | ? | ? | 3.18.0 inventory row, not present in the 3.24.3 asm |
-| `version` | ? | ? | ? | 3.18.0 inventory row, not present in the 3.24.3 asm |
+| `device_sn` | String (3.18.0 builder) | yes (3.18.0) | `<device sn>` | 3.18.0 builder, see below; not present in the 3.24.3 asm |
+| `version` | String (3.18.0 builder) | yes (3.18.0) | `"v1.1.1"` | 3.18.0 builder, see below; not present in the 3.24.3 asm |
 
-3.18.0 builder read (traced 2026-10-20, 3.18.0 asm tree, not the 3.24.3 app): `getPortProtocolStatus` (`small_charging_platform/src/custom_protocol/page/custom_protocol_manager_logic.dart @0x27a00a4` in the 3.18.0 tree) stores `device_sn` (the second register parameter, `@0x27a0128`) and `version` with the constant string `"v1.1.1"` (`@0x27a013c`) in a map literal with type arguments `<String, String>` (`@0x27a0148`), so both values are strings, and sends it with `encryptionRequestHttp` (`@0x27a01bc`) and the method object `Obj!Method@2c736e1` (3.18.0 `pp.txt` `[pp+0x9b18]`, `objs.txt` of the 3.18.0 tree, name `post`), so POST in 3.18.0; the named arguments are `fail`, `showLoading` (constant `false`, `@0x27a01ac`) and `success`. The 3.24.3 callers still call the deduplicated mixin function (see Method+URL); the page stays `string-only` because that function is not in the 3.24.3 dump.
+3.18.0 builder read (traced 2026-10-20, 3.18.0 asm tree, not the 3.24.3 app): `getPortProtocolStatus` (`small_charging_platform/src/custom_protocol/page/custom_protocol_manager_logic.dart 0x27a00a4` in the 3.18.0 tree) stores `device_sn` (the second register parameter, `0x27a0128`) and `version` with the constant string `"v1.1.1"` (`0x27a013c`) in a map literal with type arguments `<String, String>` (`0x27a0148`), so both values are strings, and sends it with `encryptionRequestHttp` (`0x27a01bc`) and the method object `Obj!Method@2c736e1` (3.18.0 `pp.txt` `[pp+0x9b18]`, `objs.txt` of the 3.18.0 tree, name `post`), so POST in 3.18.0; the named arguments are `fail`, `showLoading` (constant `false`, `0x27a01ac`) and `success`. The 3.24.3 callers still call the deduplicated mixin function (see Method+URL); the page stays `string-only` because that function is not in the 3.24.3 dump.
 
 ## `param_type`/`cmd`
 
@@ -69,12 +69,12 @@ none traced: the sender body is not in the asm dump, so the failure path of the 
 
 3.18.0: present (with a sender in the inventory). 3.24.3: the URL string is in the object pool (`pp+0x5b990`) and the callers listed under Method+URL still call the sender, but the sender body is not in the asm dump; `tools/out/diff_3.18.0_3.24.3.md` lists the URL under Removed endpoints (string-level: the inventory finds no code reference). since: <=3.18.0. Treat the URL as still in use (the callers exist) until a capture says otherwise.
 
-Why the diff lists the URL as removed (traced 2026-10-20): the inventory finds string references only in functions that Blutter wrote to the dump. In 3.18.0 the URL load sits in `getPortProtocolStatus` (`small_charging_platform/src/custom_protocol/page/custom_protocol_manager_logic.dart @0x27a0194` in the 3.18.0 tree, a normal function); in 3.24.3 the two callers still call the same sender, but through a mixin-deduplicated function (`[dart:mixin_deduplication]`) whose body is not in the dump, while the string stays in the object pool (`pp+0x5b990`). So the "removed" status is an artifact of the dump, not evidence that the app dropped the call (the callers named under Method+URL still call it).
+Why the diff lists the URL as removed (traced 2026-10-20): the inventory finds string references only in functions that Blutter wrote to the dump. In 3.18.0 the URL load sits in `getPortProtocolStatus` (`small_charging_platform/src/custom_protocol/page/custom_protocol_manager_logic.dart 0x27a0194` in the 3.18.0 tree, a normal function); in 3.24.3 the two callers still call the same sender, but through a mixin-deduplicated function (`[dart:mixin_deduplication]`) whose body is not in the dump, while the string stays in the object pool (`pp+0x5b990`). So the "removed" status is an artifact of the dump, not evidence that the app dropped the call (the callers named under Method+URL still call it).
 
 ## Known unknowns
 
 - The method, request keys and types of the 3.24.3 sender: the 3.18.0 builder is read (see Request), the 3.24.3 mixin-deduplicated body is not in the dump — traced 2026-10-20
-- Whether the callbacks receive the response body unchanged: the sender body was not read, so `PortProtocolStatusResponse` is only the model the callers apply. — traced 2026-10-20 (3.18.0 tree, same sender): the success closure that `getPortProtocolStatus` passes is the shared closure `charging/http/http_request_repository_impl.dart @0x19dc8a8` (3.18.0), which calls the stored callback with its argument unchanged (`ClosureCall` `@0x19dc8dc`); the 3.24.3 body is not in the dump, but the 3.24.3 shared forwarding closure `@0x2268374` (see [add_feedback](../../../app/help/add_feedback.md#response-model-link)) is the same kind
+- Whether the callbacks receive the response body unchanged: the sender body was not read, so `PortProtocolStatusResponse` is only the model the callers apply. — traced 2026-10-20 (3.18.0 tree, same sender): the success closure that `getPortProtocolStatus` passes is the shared closure `charging/http/http_request_repository_impl.dart 0x19dc8a8` (3.18.0), which calls the stored callback with its argument unchanged (`ClosureCall` `0x19dc8dc`); the 3.24.3 body is not in the dump, but the 3.24.3 shared forwarding closure `@0x2268374` (see [add_feedback](../../../app/help/add_feedback.md#response-model-link)) is the same kind
 - Header stays `string-only` because Method and request types are missing. — rechecked 2026-10-20: still true; the typing attempts are recorded on the bullets of this section
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

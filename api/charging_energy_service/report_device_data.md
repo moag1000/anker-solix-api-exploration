@@ -14,7 +14,7 @@ Renews the MQTT subscription of the station home page ("续约", renewal) by pos
 
 ## Method+URL
 
-`/charging_energy_service/report_device_data`, method `POST` in the 3.18.0 asm: in `renewMqtt` (`charging/ui/page/station/mixin/station_chart_http_reposity.dart @0x1aea4e8`, 3.18.0 addresses) the method object `Instance_Method` is loaded at `@0x1aea5c8` (3.18.0 pool entry `pp+0x9b18`, enum index 1, `post`), the URL string at `@0x1aea5d0`, and the call goes through the mixin `requestHttp` (`@0x1aea5f8`; options `fail`, `isAIotErrorCode`, `success`). In 3.24.3 the URL string exists only in the object pool, so no sender can be read.
+`/charging_energy_service/report_device_data`, method `POST` in the 3.18.0 asm: in `renewMqtt` (`charging/ui/page/station/mixin/station_chart_http_reposity.dart 0x1aea4e8`, 3.18.0 addresses) the method object `Instance_Method` is loaded at `0x1aea5c8` (3.18.0 pool entry `pp+0x9b18`, enum index 1, `post`), the URL string at `0x1aea5d0`, and the call goes through the mixin `requestHttp` (`0x1aea5f8`; options `fail`, `isAIotErrorCode`, `success`). In 3.24.3 the URL string exists only in the object pool, so no sender can be read.
 
 ## Encrypted?
 
@@ -22,9 +22,9 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 
 ## Request
 
-The sender body is not in the 3.24.3 dump (see Callers in app). In the 3.18.0 asm the body is the result of `A17b1StationLogic::mqttRenewParams` (`charging/ui/page/station/mixin/station_chart_http_reposity.dart @0x1aea590`); its keys are listed below.
+The sender body is not in the 3.24.3 dump (see Callers in app). In the 3.18.0 asm the body is the result of `A17b1StationLogic::mqttRenewParams` (`charging/ui/page/station/mixin/station_chart_http_reposity.dart 0x1aea590`); its keys are listed below.
 
-Body keys (traced 2026-10-20): the builder `A17b1StationLogic::mqttRenewParams` is present in both trees (3.18.0 `charging/ui/page/station/A17b1/a17b1_station_logic.dart @0x1aec3a4`, 3.24.3 `@0x2409680`) and builds a `<String, Object>` literal of three pairs (array length raw 12, `@0x24096cc`): `siteIds`, a growable list with the type argument `<String>` and one element, the id of the current station (`getCurrentStation()` field `field_7` with the fallback `""`, 3.18.0 `@0x1aec3d0`..`@0x1aec3e4`, list `@0x1aec424`), `ctrol` (sic, one `l`; raw immediate 2 in a 32-bit array slot, Smi 1; 3.24.3 `@0x2409724`, `@0x2409730`) and `duration` (raw 600, Smi 300; 3.24.3 `@0x2409738`, `@0x2409740`). The method is POST (3.18.0 `Obj!Method@2c736e1`, name `post`, see Method+URL).
+Body keys (traced 2026-10-20): the builder `A17b1StationLogic::mqttRenewParams` is present in both trees (3.18.0 `charging/ui/page/station/A17b1/a17b1_station_logic.dart 0x1aec3a4`, 3.24.3 `@0x2409680`) and builds a `<String, Object>` literal of three pairs (array length raw 12, `@0x24096cc`): `siteIds`, a growable list with the type argument `<String>` and one element, the id of the current station (`getCurrentStation()` field `field_7` with the fallback `""`, 3.18.0 `0x1aec3d0`..`0x1aec3e4`, list `0x1aec424`), `ctrol` (sic, one `l`; raw immediate 2 in a 32-bit array slot, Smi 1; 3.24.3 `@0x2409724`, `@0x2409730`) and `duration` (raw 600, Smi 300; 3.24.3 `@0x2409738`, `@0x2409740`). The method is POST (3.18.0 `Obj!Method@2c736e1`, name `post`, see Method+URL).
 
 ## `param_type`/`cmd`
 
@@ -32,7 +32,7 @@ n/a
 
 ## Response model (link)
 
-not parsed as a model (3.18.0 asm): the success closure passed to the call (`charging/ui/page/station/mixin/station_chart_http_reposity.dart @0x1aec490`) logs the text `StationMqttMixin 触发设备续约 177` and reads no key.
+not parsed as a model (3.18.0 asm): the success closure passed to the call (`charging/ui/page/station/mixin/station_chart_http_reposity.dart 0x1aec490`) logs the text `StationMqttMixin 触发设备续约 177` and reads no key.
 
 ## Response
 
@@ -48,7 +48,7 @@ none traced: no 3.24.3 sender. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
-- `charging/ui/page/station/mixin/station_chart_http_reposity.dart`: `renewMqtt` @0x1aea4e8 (requestHttp; encrypted: default-true (requestHttp) — verify)
+- `charging/ui/page/station/mixin/station_chart_http_reposity.dart`: `renewMqtt` 0x1aea4e8 (3.18.0) (requestHttp; encrypted: default-true (requestHttp) — verify)
 
 3.24.3 callers (traced 2026-10-20): the 3.24.3 dump holds no body for `renewMqtt` (it is a mixin-deduplicated function, like the sender of several other pages), but the app still calls it: `charging/ui/page/station/A17b1/a17b1_station_logic.dart @0x2407658`, `charging/ui/page/station/view/station_house.dart @0x28192b0`, `@0x28192f4` and, through `_renewMqttIfNeeded` (`station_house.dart @0x2bcb05c`, called at `@0x2bcafb8`), `@0x2bcb0a4`, `@0x2bcb110`. The builder of the body (`mqttRenewParams`) also stays in 3.24.3. So the app very likely still sends this request; the "removed" entry of the diff file is an artifact of the dump (the string load sits in the missing function).
 

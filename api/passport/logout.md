@@ -67,7 +67,7 @@ The code catalog is [errors.md](../errors.md). No logout-specific code branch ex
 
 ## Since/changed
 
-3.18.0: present (`http_request_repository_impl.dart`, 3.18.0 `@0x2347db8`, descriptor with `needEncryption` at `@0x2347de4`, `r30 = false` at `@0x2347dd4`). 3.24.3: unchanged. since: ≤3.18.0.
+3.18.0: present (`http_request_repository_impl.dart`, 3.18.0 `0x2347db8`, descriptor with `needEncryption` at `@0x2347de4`, `r30 = false` at `0x2347dd4`). 3.24.3: unchanged. since: ≤3.18.0.
 
 ## Known unknowns
 

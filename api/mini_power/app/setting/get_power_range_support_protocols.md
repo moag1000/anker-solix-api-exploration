@@ -77,7 +77,7 @@ Called from:
 
 3.18.0: present. 3.24.3: present. since: <=3.18.0. `tools/out/diff_3.18.0_3.24.3.md` lists the parameter `device_sn` as added in 3.24.3 (string-level diff); both senders read here store `device_sn`. `data/models.json` lists the `small_charging_platform` model as since 3.24.3; that sender was not compared with 3.18.0.
 
-3.18.0 sender (traced 2026-10-20, 3.18.0 asm tree): `HttpRequestControllerImpl::getPowerSupportProtocols` (`charging/http/http_request_repository_impl.dart`, URL load `@0x24fd09c` in the 3.18.0 tree) stores exactly one key, `device_model`, in a `<String, String>` literal (`@0x24fd03c`..`@0x24fd050`), so 3.18.0 clients sent `device_model` alone and `device_sn` is new in 3.24.3.
+3.18.0 sender (traced 2026-10-20, 3.18.0 asm tree): `HttpRequestControllerImpl::getPowerSupportProtocols` (`charging/http/http_request_repository_impl.dart`, URL load `0x24fd09c` in the 3.18.0 tree) stores exactly one key, `device_model`, in a `<String, String>` literal (`0x24fd03c`..`0x24fd050`), so 3.18.0 clients sent `device_model` alone and `device_sn` is new in 3.24.3.
 
 ## Known unknowns
 
