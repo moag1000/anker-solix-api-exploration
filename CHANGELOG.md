@@ -59,7 +59,7 @@ Corrected facts (old statement to the 3.24.3 reading; the value is on the owner 
 - `charging/mqtt/local.dart` is a certificate and key store, not a local MQTT client. Owner: [mqtt/envelope.md](mqtt/envelope.md#infrastructure).
 - `RefreshManager` has no timer or interval; it only runs registered reload closures. Owner: [reference/business_rules.md](reference/business_rules.md#the-short-version), summary in [docs/SAFE_USAGE.md](docs/SAFE_USAGE.md).
 - `akiot.*` IoT-Kit identifiers: 22 new in 3.24.3. Owner: [reference/iot_kit_channels.md](reference/iot_kit_channels.md).
-- Unresolved disagreements between the app and the old docs or upstream (tag `fd` CRC32 versus timestamp, opcode `005a`, port saving modes, and more) are not decided here: [mqtt/README.md](mqtt/README.md#source-conflicts-unresolved).
+- Unresolved disagreements between the app and the old docs or upstream (tag `fd` CRC32 versus timestamp, opcode `005a`, port saving modes, and more) are not decided here: [mqtt/README.md](mqtt/README.md#source-conflicts-two-sided-app-side-re-checked-2026-10).
 - Everything else the Smi sweeps found (slot counts, state codes, TLV tag letters, MTU, indices) is in the [Errata](#errata-2026-10-smi-decoding) below, one line per WRONG verdict.
 
 ### Removed / superseded
