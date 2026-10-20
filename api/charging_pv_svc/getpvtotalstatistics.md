@@ -26,6 +26,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 |---|---|---|---|---|
 | `sn` | string | yes | `"<sn>"` | `charging/ui/page/device/a5140/a5140home/a5140home_http_reposity.dart @0x34d0a2c` (value store `@0x34d0a3c`, parameter) |
 
+Serial passed (traced 2026-10-20, app side): `A5140homeController::getPvTotalData` takes `deviceSn` (`field_6b`) of its device object (`field_63`) (`charging/ui/page/device/a5140/a5140home/a5140home_logic.dart @0x34d08cc`, `@0x34d08d4`) and calls the repository at `@0x34d0914`.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -66,8 +68,7 @@ Call sites (grep of the asm, traced 2026-10-20): `getPvTotalStatistics` is calle
 
 ## Known unknowns
 
-- What `powerPopUpFlag` and `powerConfig` trigger in the UI: only the class fields are listed.
-- Which serial number `A5140homeController::getPvTotalData` passes: the value is a slot or field of its frame (`charging/ui/page/device/a5140/a5140home/a5140home_logic.dart @0x34d0914`); not decoded further — traced 2026-10-20.
+- What `powerPopUpFlag` and `powerConfig` trigger in the UI: only the class fields are listed. — traced 2026-10-20: the names occur as strings only in the model file (`charging/model/a5140_device_info/pv_total_statistics_model.dart`) and in unrelated settings code (`settings/src/service/site_settings_service_impl.dart @0x3514980` logs a `powerConfig=` text of another model); readers of the model fields use field offsets, not names, and were not followed
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

@@ -88,7 +88,7 @@ Call sites (grep of the asm, traced 2026-10-20): the name `updateUserTieredElecP
 
 ## Known unknowns
 
-- The JSON type of `price`: the field is a double in the class, and `toJson` stores the field object itself (`charging/ui/page/price_setting_page/currency_elec_model.dart @0x2401a44`); whether the encoder sends a number or text was not decoded.
+- The JSON type of `price`: the field is a double in the class, and `toJson` stores the field object itself (`charging/ui/page/price_setting_page/currency_elec_model.dart @0x2401a44`); whether the encoder sends a number or text was not decoded. — traced 2026-10-20: `TieredElecPrices.toJson` puts the double field object itself into the map (`@0x2401a44`, no `toString` call between the load and the `[]=` selector), so the map holds a double and a Dart JSON encoder writes a number; the text-to-double conversion happens only in `fromJson` (`double.parse`, `@0x2401d54`). Whether the HTTP layer re-encodes the map was not read
 - The meaning of `from` and `to` (kWh bounds or time bounds): both are strings in the class; no reader was followed. — reclassified: server (2026-10-20: the model holds both bounds as strings; their meaning is not derivable here)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

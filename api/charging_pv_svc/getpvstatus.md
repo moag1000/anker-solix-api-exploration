@@ -26,6 +26,10 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 |---|---|---|---|---|
 | `sns` | string | yes | `"<sns>"` | `charging/http/http_request_repository_impl.dart @0x2446f80` (value store `@0x2446f90`, parameter) |
 
+Value of `sns` (traced 2026-10-20, app side): `A5140homeController::_isOffline` passes one serial, the `deviceSn` getter (`field_6b`) of its device object (`field_63`) (`charging/ui/page/device/a5140/a5140home/a5140home_logic.dart @0x34d0408`, `@0x34d0410`, call `@0x34d0450`); `DeviceMainLogic::_onGetDeviceListFailed` joins a non-empty list of serials with the separator `","` (`join`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x228a7c4`..`@0x228a7d8`, empty-list guard `cbz` `@0x228a7bc`, call `@0x228a828`). So `sns` is one serial or a comma-separated list of serials.
+
+Value of `sns` (traced 2026-10-20, app side): `A5140homeController::_isOffline` passes one serial, the `deviceSn` getter (`field_6b`) of its device object (`field_63`) (`charging/ui/page/device/a5140/a5140home/a5140home_logic.dart @0x34d0408`, `@0x34d0410`, call `@0x34d0450`); `DeviceMainLogic::_onGetDeviceListFailed` joins a non-empty list of serials with the separator `","` (`join`, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x228a7c4`..`@0x228a7d8`, empty-list guard `cbz` `@0x228a7bc`, call `@0x228a828`). So `sns` is one serial or a comma-separated list of serials.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -37,6 +41,8 @@ n/a
 ## Response
 
 (asm-traced) Top-level keys of `A5140DeviceStatus` (`data/models.json`, `charging::A5140DeviceStatus`): `pvStatuses` (List?). The closure logs the data and forwards the parsed model.
+
+Element layout of `pvStatuses` (traced 2026-10-20, app side): `A5140DeviceStatus.fromJson` reads `pvStatuses` as `List?` and maps it to `List<PvStatus>` (`charging/model/a5140_device_info/a5140_device_status.dart @0x244718c`, cast `@0x24471dc`, element closure `@0x24474e4`, `PvStatus.fromJson` `@0x244751c`); each element has `sn` (`String?`, key `@0x2447560`, cast `@0x24475a0`), `power` (`num?`, key `@0x24475c0`, cast `@0x24475fc`) and `status` (`int?`, key `@0x2447668`, cast `@0x24476a4`). The model page [pps.md](../../models/pps.md) lists the same names without types.
 
 ## Example request/response
 
@@ -72,8 +78,7 @@ Call sites (grep of the asm, traced 2026-10-20): `getPvStatus` is called from `A
 
 ## Known unknowns
 
-- What the string `sns` carries when several devices are queried (a joined list or a single serial): the value is a `String` by the literal type; how the callers join it was not read. — traced 2026-10-20: the callers are `A5140homeController::_isOffline` and `DeviceMainLogic::_onGetDeviceListFailed`; how they join the serial numbers was not read
-- The element structure of `pvStatuses`: owned by the model page.
+- Meaning of `pvStatuses` elements for the server: not shown — see Response for the layout read by the app (traced 2026-10-20)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

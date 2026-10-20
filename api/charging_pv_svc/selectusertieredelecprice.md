@@ -70,7 +70,7 @@ Call sites (grep of the asm, traced 2026-10-20): the name `selectUserTieredElecP
 
 ## Known unknowns
 
-- Why the model page [models/pricing.md](../../models/pricing.md#currencyelecmodel) lists only `from`: that stub is owned by the model page and is not changed here.
+- Why the model page [models/pricing.md](../../models/pricing.md#currencyelecmodel) lists only `from`: that stub is owned by the model page and is not changed here. — traced 2026-10-20: the class in the dump has the fields `sn`, `currencyUnit`, `tieredElecPrices` (and `TieredElecPrices` has `from`, `to`, `price`, see [updateUserTieredElecPrice](updateusertieredelecprice.md#request)); `data/models.json` (`charging::CurrencyElecModel`) lists the full set, so the one-field stub on the model page is a gap of that page generator, not a property of the app; the generator behaviour was not examined
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
