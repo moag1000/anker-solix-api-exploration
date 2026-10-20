@@ -42,6 +42,8 @@ The caller `Thirdpatygeneratorlogic._getStandbyExerciseData` (`ats_ax170/src/ats
 |---|---|---|---|---|
 | `data` | String (JSON text) | yes | `"{...}"` | `third_paty_generator_logic.dart @0x35e1dcc`, `jsonDecode` `@0x35e1e20` |
 
+Keys of the decoded plan (traced 2026-10-20, app side): `Thirdpatygeneratorlogic::_refreshStandbyOilData` (`ats_ax170/src/ats_ax170/third_generator/third_paty_generator_logic.dart @0x35e0188` awaits `_getStandbyExerciseData`) reads the decoded map with `[]` and casts every value to `int?`: `next_maintenance_time` (key `@0x35e01d4`, cast `@0x35e0210`), `interval_period_week` (`@0x35e0230`, cast `@0x35e026c`), `maintenance_time` (`@0x35e028c`, cast `@0x35e02c8`) and `status` (`@0x35e02e4`, cast `@0x35e0320`): the same four keys as the set page.
+
 ## Example request/response
 
 Request, synthesized
@@ -64,7 +66,6 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The keys of the decoded plan are not read here; the set page sends `next_maintenance_time`, `interval_period_week`, `maintenance_time` and `status`, which the plan probably carries as well.
 - The caller passes the serial as `""` when none is known (`r1 = ""`, `@0x35e1ce0`); what the server answers to an empty serial is not known.
 
 ## Device-tested by

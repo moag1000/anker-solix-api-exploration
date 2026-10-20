@@ -29,6 +29,8 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 The body map literal has type arguments `<String, Object>` (`charging/ui/page/user/dataExport/data_export_reposity.dart @0x29855c4`), not evidence of a value type, so all four values stay `?`. `access_token` is the proof of a prior password check (role by name; never documented as a value).
 
+Sources of the four values (traced 2026-10-20, app side): `DataExportLogic::confrimDataExport` (`charging/ui/page/user/dataExport/data_export_logic.dart @0x31024d4`) passes them to `DataExportReposity::exportAccountData` (`data_export_reposity.dart @0x29854c8`; the first `account` is `getUserPhoneNum` of the user service, replaced by `getUserEmail` when the phone string is empty, `@0x31023e0`..`@0x3102400`, so `account` is a String), `access_token` is the `value()` of an observable field of the logic (`@0x310241c`, field 0x5b, type not declared), `export_data_type` is a growable list built from the `lists()` selection filtered with `where` (`@0x310244c`..`@0x310247c`, so a list, not a scalar), and `send_email` is read through the controller chain `field_53` -> `field_27` -> `field_7` (`@0x3102430`..`@0x3102440`), which is the text of an input controller (String, the address typed by the user, by the chain pattern; the field name is not in the dump).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -71,7 +73,7 @@ none traced: no numeric error code is compared in the sender or its closures rea
 ## Known unknowns
 
 - Types of `account`, `send_email`, `access_token` and `export_data_type`: parameters stored into a `<String, Object>` literal. — attempted 2026-10-20 (two-hop not readable: an anonymous closure (`charging/ui/page/user/dataExport/data_export_logic.dart @0x31024d4`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
-- Which `export_data_type` values exist and what `send_email` changes: the callers' arguments were not decoded.
+- Which entries the `lists()` selection can contain (the element values of `export_data_type`) was not read — traced 2026-10-20
 - Whether the export arrives by mail or as a record in `export_record_list`: not visible in the app. — reclassified: server (2026-10-20: the app does not show how the export is delivered; not derivable here)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 

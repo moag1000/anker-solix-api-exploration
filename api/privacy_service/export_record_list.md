@@ -34,6 +34,8 @@ no top-level model: the success closure (`charging/ui/page/user/dataExport/expor
 
 (asm-traced) One key is read from the top level of the response: `record_list` (list). Keys of `charging::DataExportListItemModel` (`data/models.json`, no page under `models/`): `account` (unknown), `send_status` (int?), `send_email` (unknown), `apply_time` (int?).
 
+Item model types (traced 2026-10-20, app side): `DataExportListItemModel.fromJson` (`charging/model/privacy_policy/data_export_list_item_model.dart`) reads each key with `[]`; `account` (`@0x2985998`) and `send_email` (`@0x2985a64`) are stored as `toString` of the value when it is not null, so they are `String?`; `send_status` (`@0x2985a00`) and `apply_time` (`@0x2985ad0`) are `toString` then `int.tryParse` (`@0x2985a48`, `@0x2985b18`), so `int?`.
+
 ## Example request/response
 
 Request: no body fields are built (see Request). Response: not synthesized; no capture exists for this endpoint.
@@ -52,7 +54,6 @@ No server code is compared. The closure itself raises the client-side code 10002
 
 ## Known unknowns
 
-- The types of `account` and `send_email` in the item model (`unknown` in `data/models.json`).
 - What `send_status` values mean (sent, pending, failed): the model key is typed `int?`; the table of values is not visible. — reclassified: server (2026-10-20: the app only forwards `send_status`; the value table is not derivable here)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
