@@ -28,8 +28,10 @@ encrypted: `true` (asm-traced: the sender read reaches `encryptionRequestHttp`, 
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `siteId` | ? | yes | `"<site_id>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b6464` (value from a field of the logic object, `ldr w2` `@0x29b6478`, store `@0x29b6480`) |
-| `pn` | ? | yes | `"<pn>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b6484` (value `LoadField` `@0x29b649c`, store `@0x29b64a4`) |
+| `siteId` | string | yes | `"<site_id>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b6464` (value from a field of the logic object, `ldr w2` `@0x29b6478`, store `@0x29b6480`) |
+| `pn` | string | yes | `"<pn>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b6484` (value `LoadField` `@0x29b649c`, store `@0x29b64a4`) |
+
+Types read in the second pass (traced 2026-10-20, app side): `siteId` is the same String field (offset 279, cast `@0x34f7774`) as on [get_price](get_price.md#request); `pn` is the text of a `PN` enum instance: the logic holds the field at offset 331 as a `PN` (cast `@0x34f7a18`, store `@0x34f7a28` in `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart`) and the sender sends its `field_13` (`@0x29b6494`..`@0x29b649c`), the product-number text of the enum member. The enum `PN` has 26 members with their texts (`objs.txt Obj!PN@4212721` ff.): `A17C5`, `A17C3`, `A17C2`, `A17C1`, `AE113`, `AE111`, `A17E2`, `AE103`, `AE100`, `AS521`, `AS520`, `AS510`, `AX170`, `A1903`, `A17E1`, `A5191`, `A1782`, `A5103`, `A5102`, `A5101`, `A5341`, `A17B1`, `A17C0`, `A5140`, `A5143` and `None`.
 
 ## `param_type`/`cmd`
 
@@ -42,6 +44,8 @@ n/a
 ## Response
 
 (string-only) The answer shape was not read.
+
+Parse (traced 2026-10-20, app side): the success closure of `ChargeDischargeSettingLogic::getDynamicPriceCompany` (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b6538`) logs `getSellInfo: ` (`@0x29b656c`), builds a `DynamicPriceCompanyModel` with `fromJson` (`@0x29b65a4`; keys on [the company model page](../../models/dynamic_price_company_model.md)) and writes parts of it into reactive fields (`value=` `@0x29b6600`).
 
 ## Example request/response
 
@@ -70,9 +74,7 @@ none traced: no numeric error code is compared in the sender read. Code meanings
 
 ## Known unknowns
 
-- Types of `siteId` and `pn` (product name): the literal names no value type.
-- Whether the other thirteen senders send `type` or other keys: only one sender was read.
-- The response keys and how the provider list is parsed.
+- Whether the other thirteen senders send `type` or other keys: only one sender was read. — traced 2026-10-20: the sibling sender `ElectricityPlaceConfirmPageLogic::getDynamicPriceCompany` is on [get_third_jump_url](get_third_jump_url.md#request); the other senders are copies under other class names and were not compared one by one
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

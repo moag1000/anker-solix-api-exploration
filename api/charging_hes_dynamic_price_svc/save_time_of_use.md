@@ -45,6 +45,8 @@ n/a
 
 (string-only) The answer shape was not read.
 
+Callbacks (traced 2026-10-20, app side): the sender passes the shared success forwarder `charging/http/http_request_repository_impl.dart @0x2268374` (it calls the stored callback with the answer unchanged) and a failure closure (shared code, `charging/ui/widget/anker_widget_impl.dart @0x227d9ac`); no key of the answer is read in this helper.
+
 ## Example request/response
 
 Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
@@ -74,10 +76,9 @@ none traced: no numeric error code is compared in the sender read. Code meanings
 
 ## Known unknowns
 
-- Types of `sn` and `siteId`: the literal names no value type.
-- Which values `touType` takes: the value is the result of a call (`electricity_price/components/electricity_price_common/electricity_price_model_api_helper.dart @0x2e822ac`, selector not named by Blutter) boxed as an unboxed integer; the enum behind it was not decoded.
-- Which of the two other senders send other keys.
-- The response keys.
+- Types of `sn` and `siteId`: the literal names no value type. — attempted 2026-10-20 (two-hop not readable: both come from parameters of `ElectricityPriceModeApiHelper::changeToTouMode` (`electricity_price/components/electricity_price_common/electricity_price_model_api_helper.dart @0x2e821dc`, `SetupParameters` `@0x2e821e8`) and are tested with a length load (`field_7` `@0x2e82330`), which is not a type proof)
+- Which values `touType` takes: the value is the result of a call (`electricity_price/components/electricity_price_common/electricity_price_model_api_helper.dart @0x2e822ac`, selector not named by Blutter) boxed as an unboxed integer; the enum behind it was not decoded. — traced 2026-10-20: the value is the result of an argument-less selector on a parameter of `changeToTouMode` (`GDT[cid_x0 + -0x65c]` `@0x2e822ac`), boxed from an unboxed integer, which fits the `index` getter of an enum; the enum with the matching name is `TouMode` with `none` 0, `manual` 1 and `auto` 2 (`objs.txt Obj!TouMode@4208b11`, `@4208b31`, `@4208b51`), but the parameter is not declared with that type in the dump, so the mapping is a reading by name; the auto-TOU page sends the literal 52 (see [the installer variant](../charging_hes_installer_svc/save_time_of_use.md))
+- Which of the two other senders send other keys. — traced 2026-10-20: `ElectricityPricePlanApiHelper::changeToTouPlan` and `TOUAutoPricePkgResultLogic::saveAuto` (listed under Callers in app) were not compared with this sender
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

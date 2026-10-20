@@ -28,11 +28,13 @@ encrypted: `true` (asm-traced: the sender read reaches `encryptionRequestHttp`, 
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `pn` | ? | yes | `"<pn>"` | `electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29ac254` (value `LoadField` `@0x29ac26c`, store `@0x29ac274`) |
-| `sn` | ? | optional | `"<sn>"` | `electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29ac2e4` (guard: a call result tested `tbnz` `@0x29ac2bc`, length test `cbz` `@0x29ac2d0`; store call `@0x29ac2ec`) |
-| `siteId` | ? | yes | `"<site_id>"` | `electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29ac318` (value `LoadField` `@0x29ac304`, store call `@0x29ac320`) |
+| `pn` | string | yes | `"<pn>"` | `electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29ac254` (value `LoadField` `@0x29ac26c`, store `@0x29ac274`) |
+| `sn` | string | optional | `"<sn>"` | `electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29ac2e4` (guard: a call result tested `tbnz` `@0x29ac2bc`, length test `cbz` `@0x29ac2d0`; store call `@0x29ac2ec`) |
+| `siteId` | string | yes | `"<site_id>"` | `electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29ac318` (value `LoadField` `@0x29ac304`, store call `@0x29ac320`) |
 | `companyName` | string | yes | `"Flatpeak"` | `electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29ac340` (constant `@0x29ac348`) |
 | `type` | string | yes | `"IMPORT"` or `"EXPORT"` | `electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29ac37c` (constant `"IMPORT"` `@0x29ac380`); a second store of the same key with `"EXPORT"` (`@0x29ac3a8`, `@0x29ac3ac`) |
+
+Types and branch (traced 2026-10-20, app side): in `electricty_place_confirm_logic.dart` `siteId` is the String field at `field_7b` (cast `@0x34f4438`..`@0x34f4440`, store `@0x34f444c`), `pn` is `field_13` of the `PN` enum member held in `field_9f` (cast `@0x34f4588`, store `@0x34f4594`, load `@0x29ac26c`; enum texts on [get_price_company](get_price_company.md#request)), and `sn` is a text from `field_53.field_7` sent only when `field_d3` is non-null and non-empty (`@0x29ac290`..`@0x29ac2cc`). The two stores of `type` are the two arms of one branch: when the integer parameter in the context equals 1 (`cmp w0, #2` on the tagged value, `@0x29ac364`) the sender stores `"IMPORT"` (`@0x29ac380`), otherwise `"EXPORT"` (`@0x29ac39c` branch). The second sender `_DynamicPriceHttpServer::getThirdJumpUrl` (`electricity_price/components/dynamic_price/general_kit/http_server/dynamic_price_http_server.dart @0x43917b8`) stores the constants `companyName` `"Tibber"` (`@0x439181c`) and `type` `"IMPORT"` (`@0x4391830`) next to `siteId` and `sn`.
 
 ## `param_type`/`cmd`
 
@@ -45,6 +47,8 @@ n/a
 ## Response
 
 (string-only) The answer shape was not read; the function name says the answer holds a URL.
+
+What the callback reads (traced 2026-10-20, app side): the success closure of `ElectricityPlaceConfirmPageLogic::getDynamicPriceCompany` (`electricity_price/components/dynamic_price/setting/electricty_place_confirm_logic.dart @0x29ac478`) logs `getThirdJumpUrl:` with the type (`@0x29ac4ac`, `@0x29ac4c0`), compares the type with 1 (`cmp w1, #2`, tagged, `@0x29ac4f4`) and reads `flatpeakWaitTime` (cast `int`, `@0x29ac50c`..`@0x29ac580`), `aggregationFrequency` (cast `int`, `@0x29ac5b0`..`@0x29ac624`) and `jumpUrl` (cast `String`, `@0x29ac698`..`@0x29ac708`); it stores the frequency under the key `buyAggregationFrequency` in the import branch (`@0x29ac680`) and `saleAggregationFrequency` in the other (`@0x29ac9bc`), and builds the address to open from `jumpUrl` + `&lang=` + the app language (`@0x29ac744`) + `&selectAddress=` (`@0x29ac7d4`). The model keys `jumpUrl`, `flatpeakWaitTime` and `aggregationFrequency` are on [dynamic_price_server_model](../../models/dynamic_price_server_model.md). The failure closure (`@0x29ac43c`) logs `getThirdJumpUrl:fail` (`@0x29ac450`).
 
 ## Example request/response
 
@@ -76,10 +80,6 @@ none traced: no numeric error code is compared in the sender read. Code meanings
 
 ## Known unknowns
 
-- Types of `pn`, `sn` and `siteId`: fields of the logic object; the literal names no value type. — attempted 2026-10-20 (two-hop not readable: `onClickTibberProvider` (`electricity_price/components/dynamic_price/setting/electricty_company_select_logic.dart @0x4391770`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
-- Why `type` is stored twice (`"IMPORT"`, then `"EXPORT"`): the two stores sit in different branches of the sender (`@0x29ac370`, `@0x29ac39c`); which condition selects each was not decoded.
-- Other companies than `"Flatpeak"`: the sender stores this constant only.
-- The response keys and the jump behaviour.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

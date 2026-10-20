@@ -30,9 +30,11 @@ encrypted: `true` (asm-traced: the sender read reaches `encryptionRequestHttp`, 
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `code` | ? | yes | `"<code>"` | `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e45c0` (value stored in the literal, array `@0x41e45bc`) |
-| `sn` | ? | optional | `"<sn>"` | `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e463c` (guard: a dispatch-table call result tested `tbnz` `@0x41e4614`, length test `cbz` `@0x41e4628`) |
-| `siteId` | ? | yes | `"<site_id>"` | `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e4670` (value `LoadField` `@0x41e465c`) |
+| `code` | list | yes | `"<code>"` | `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e45c0` (value stored in the literal, array `@0x41e45bc`) |
+| `sn` | string | optional | `"<sn>"` | `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e463c` (guard: a dispatch-table call result tested `tbnz` `@0x41e4614`, length test `cbz` `@0x41e4628`) |
+| `siteId` | string | yes | `"<site_id>"` | `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e4670` (value `LoadField` `@0x41e465c`) |
+
+Types read in the second pass (traced 2026-10-20, app side): `code` is a list, not a scalar: `ElectricityPriceProviderLogic::fetchAreaByCode` (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e44e4`) maps a list held by the logic (`field_f`) with `map<String>` (type argument `<String>` `@0x41e4550`, `map` `@0x41e4564`) and `toList` (`@0x41e4580`) and stores the result under `code` (`@0x41e45c0`). `sn` (`field_73`, load `@0x41e461c`) and `siteId` (`field_77`, load `@0x41e465c`) are fields that the logic fills with a `String` cast (`field_73` cast `@0x34f3654`, store `@0x34f3660`; `field_77` cast `@0x34f35b8`, store `@0x34f35c4`), so both are Strings; `sn` is sent only when `field_db` is not null and the text is not empty (`@0x41e45f0`, `@0x41e4608`, `@0x41e4624`).
 
 ## `param_type`/`cmd`
 
@@ -45,6 +47,8 @@ not parsed as a model: the success closure (`electricity_price/components/dynami
 ## Response
 
 (string-only) No answer key is read by the closure read; the strings in the result come from a locally held provider list.
+
+What the success closure reads (traced 2026-10-20, app side): the closure `@0x41e4830` (argument `Object?`) reads the key `groupId` of the answer (`@0x41e4874`), finds the first entry of a local list of `OctopusArea` objects whose id matches (`firstWhereOrNull` `<OctopusArea>` `@0x41e4914`..`@0x41e492c`), filters that entry's list (`field_13`, `where` `@0x41e4974`) with a predicate over the strings of the request `code` list (closure `@0x41e49f8`, `(dynamic, String)`) and completes a `Completer` with the resulting list of strings (`_GrowableList.of` `@0x41e4984`, `complete` `@0x41e49a4`). So the app reads only `groupId` from the answer and uses it to choose the local area record; the area names come from the app's own list.
 
 ## Example request/response
 
@@ -74,8 +78,6 @@ none traced: no numeric error code is compared in the sender or the closures rea
 
 ## Known unknowns
 
-- Types of `code`, `sn` and `siteId`: values loaded from fields (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e465c`, `@0x41e460c`); the literal names no value type.
-- What the area list the closure builds contains and where `groupId` is read from (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e4874`): the closure works on a locally cached provider list; the answer's role was not decoded.
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

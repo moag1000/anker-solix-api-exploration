@@ -28,12 +28,14 @@ encrypted: `true` (asm-traced: the sender read reaches `encryptionRequestHttp`, 
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `type` | ? | yes | `"<type>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b2c84` (value from a field of the logic object, `ldr w2` `@0x29b2c94`, stored in the literal `@0x29b2c9c`) |
-| `sn` | ? | optional | `"<sn>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b2d20` (guard: a call result tested `tbnz` `@0x29b2cf8`, length test `cbz` `@0x29b2d10`; store call `@0x29b2d28`) |
-| `siteId` | ? | optional | `"<site_id>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b2d4c` (same guard; store call `@0x29b2d54`) |
-| `companyName` | ? | optional | `"<company>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b2d7c` (guard: length test `cbz` `@0x29b2d6c`; store call `@0x29b2d84`) |
+| `type` | int | yes | `"<type>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b2c84` (value from a field of the logic object, `ldr w2` `@0x29b2c94`, stored in the literal `@0x29b2c9c`) |
+| `sn` | string | optional | `"<sn>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b2d20` (guard: a call result tested `tbnz` `@0x29b2cf8`, length test `cbz` `@0x29b2d10`; store call `@0x29b2d28`) |
+| `siteId` | string | optional | `"<site_id>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b2d4c` (same guard; store call `@0x29b2d54`) |
+| `companyName` | string | optional | `"<company>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b2d7c` (guard: length test `cbz` `@0x29b2d6c`; store call `@0x29b2d84`) |
 | `dynamicPriceParam` | object | optional | the map built by `DynamicPriceParam.toJson` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b2ed4` (the result of `toJson` `@0x29b2ec8`, store call `@0x29b2edc`); two more branches store the same key at `@0x29b33c0` and `@0x29b34f0` |
 | `providerParams` | ? | optional | `{...}` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b3510` (a map read from the sender's local data `@0x29b3518`, tested as `Map` `@0x29b3564`, copied `@0x29b3590`) |
+
+Types read in the second pass (traced 2026-10-20, app side): `ChargeDischargeSettingLogic` (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart`) holds `siteId` (field at offset 279), `sn` (283) and `companyName` (287) as fields that its init code fills with a `String` cast (`@0x34f7774`, `@0x34f7814`, `@0x34f78b4`) and that its constructor sets to the empty string (`@0x4149eb4`..`@0x4149ec4`), so all three are Strings; `type` (offset 291) is set only in the constructor, to the raw immediate 4 in a 32-bit slot, i.e. the integer 2 (`@0x4149e38`, `@0x4149ecc`), so `type` is an integer whose default is 2 and no other store was found; `pn` of the sibling call is the text of the `PN` enum (see [get_price_company](get_price_company.md#request)). `dynamicPriceParam` is `DynamicPriceParam::toJson` (`ak_soft_contract/src/energy/model/electricity_price_model.dart @0x2551668`) with the keys `chargeTime` (`@0x2551704`), `chargeSoc` (`@0x2551734`), `chargeSum` (`@0x2551764`), `dischargeTime` (`@0x25517e4`), `dischargeSum` (`@0x2551814`), `batteryExport` (`@0x2551844`) and `countryCode` (`@0x2551874`); the provider option objects behind `providerParams` are described on [the company model page](../../models/dynamic_price_company_model.md).
 
 ## `param_type`/`cmd`
 
@@ -46,6 +48,8 @@ not parsed in the sender read: `getElectricityPrice` passes closures to `getData
 ## Response
 
 (string-only) The answer shape was not read.
+
+Parse (traced 2026-10-20, app side): the success closure of `ChargeDischargeSettingLogic::getElectricityPrice` (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b5444`) builds an `ElectricityPriceModel` with `ElectricityPriceModel.fromJson` (`@0x29b5488`), the model described on [electricity_price_model](../../models/electricity_price_model.md), and writes parts of it into reactive fields of the logic (`value=`, loads `@0x29b54b4`..`@0x29b54d4`); the failure closure (`electricity_price/components/timeslot/page/charge_discharge_setting_C5/charge_discharge_setting_logic_c5.dart @0x29b3738`) is shared code in another file.
 
 ## Example request/response
 
@@ -77,10 +81,7 @@ none traced: no numeric error code is compared in the sender read. Code meanings
 
 ## Known unknowns
 
-- Types of every key: the literal names no value type; `type` comes from a field (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b2c94`).
-- Which of the other eight senders send other keys: only `ChargeDischargeSettingLogic::getElectricityPrice` was read.
-- The structure of `DynamicPriceParam` and `providerParams` and the provider-specific parameters (the 3.18.0 names `userNordpoolParam`, `userOctopusParam` suggest provider options; not shown by the 3.24.3 asm).
-- The response keys and the closures' parsing.
+- Which of the other eight senders send other keys: only `ChargeDischargeSettingLogic::getElectricityPrice` was read. — traced 2026-10-20: the other senders listed under Callers in app are copies of the same logic under other class names (`ChargeDischargeSettingLogic_C5`, the detail view state, the TOU and time-slot preview logics, `PowerUsageScenario*`, `SystemPolicyLogic`); their key stores were not compared one by one
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by

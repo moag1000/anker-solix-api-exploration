@@ -28,13 +28,15 @@ encrypted: `true` (asm-traced: the sender read reaches `encryptionRequestHttp`, 
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `companyName` | ? | yes | `"<company>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b4700` (value from a field `ldr w2` `@0x41b4714`, store `@0x41b471c`) |
+| `companyName` | string | yes | `"<company>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b4700` (value from a field `ldr w2` `@0x41b4714`, store `@0x41b471c`) |
 | `setMode` | bool | yes | `true` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b4720` (constant `r16 = true` `@0x41b472c`, store `@0x41b4730`) |
-| `sn` | ? | optional | `"<sn>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b47b4` (guard: a call result tested `tbnz` `@0x41b478c`, length test `cbz` `@0x41b47a4`; store call `@0x41b47bc`) |
-| `siteId` | ? | optional | `"<site_id>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b47e0` (same guard; store call `@0x41b47e8`) |
+| `sn` | string | optional | `"<sn>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b47b4` (guard: a call result tested `tbnz` `@0x41b478c`, length test `cbz` `@0x41b47a4`; store call `@0x41b47bc`) |
+| `siteId` | string | optional | `"<site_id>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b47e0` (same guard; store call `@0x41b47e8`) |
 | `dynamicPriceParam` | object | yes | the map built by `DynamicPriceParam.toJson` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b5030` (result of `toJson` `@0x41b5024`, store call `@0x41b5038`) |
 
 Later in the same function the keys `chargeTimeList` (`@0x41b5230`), `chargeDisTimeList` (`@0x41b525c`), `chargeNum` (`@0x41b528c`), `dischargeNum` (`@0x41b52bc`), `export2Grid` (`@0x41b5300`), `cutoffPower` (`@0x41b534c`, an int boxed by `BoxInt64Instr` `@0x41b5324`) and `providerParams` (`@0x41b5374`) are stored into maps; the asm does not show that these are the request map, so they are not listed as request fields.
+
+Types read in the second pass (traced 2026-10-20, app side): `companyName` (field at offset 287, load `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b4714`), `sn` (283, `@0x41b4798`) and `siteId` (279) are the String fields of `ChargeDischargeSettingLogic` that its init code fills with `String` casts (`@0x34f78b4`, `@0x34f7814`, `@0x34f7774`) and its constructor sets to `""` (`@0x4149eb4`..`@0x4149ec4`); see [get_price](get_price.md#request). `dynamicPriceParam` has the keys listed there. The call is sent with `encryptionRequestHttp` (`@0x41b55f0`, named arguments `fail`, `showLoading` (constant true), `success`, descriptor `@0x41b55e8`).
 
 ## `param_type`/`cmd`
 
@@ -47,6 +49,8 @@ n/a
 ## Response
 
 (string-only) The answer shape was not read.
+
+Callbacks (traced 2026-10-20, app side): the success closure of `ChargeDischargeSettingLogic::save` (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b691c`, argument `Object?`) stores the key `isReset` in a map (`@0x41b6964`), casts the answer to `Map<String, dynamic>` (`@0x41b6984`) and goes on to call `ElectricityPriceService` (`getService` `@0x41b69ac`); the model of the answer that the installer-service variant parses is `SaveDynamicPriceResponse` on [dynamic_price_server_model](../../models/dynamic_price_server_model.md). Which keys the consumer closure reads from the map was not followed.
 
 ## Example request/response
 
@@ -78,10 +82,9 @@ none traced: no numeric error code is compared in the sender read. Code meanings
 
 ## Known unknowns
 
-- Types of `companyName`, `sn`, `siteId`: the literal names no value type.
-- Whether `chargeTimeList`, `chargeDisTimeList`, `chargeNum`, `dischargeNum`, `export2Grid`, `cutoffPower`, `providerParams` belong to the request body (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b5230`..`@0x41b5374`): the target map of those stores was not traced.
-- Which of the twelve other senders send other keys.
-- The response keys.
+- Whether `chargeTimeList`, `chargeDisTimeList`, `chargeNum`, `dischargeNum`, `export2Grid`, `cutoffPower`, `providerParams` belong to the request body (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x41b5230`..`@0x41b5374`): the target map of those stores was not traced. — attempted 2026-10-20: the stores at `@0x41b5230`..`@0x41b5374` use `[]=` on `field_4f` of the logic (`@0x41b521c`), a field that no store in this file assigns, while the request map is the literal at `@0x41b4734` kept in a frame slot; whether `field_4f` is the same map is not shown (two-hop not readable), so the keys stay unlisted
+- Which of the twelve other senders send other keys. — traced 2026-10-20: the other senders are copies of the same logic under other class names or helper classes (`CustomTimePeriodController`, `ElectricityCompanySelectLogic`, listed under Callers in app); their key stores were not compared one by one
+- The response keys. — traced 2026-10-20: the success closure casts the answer to `Map<String, dynamic>` and the key reads were not followed (see Response)
 - Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
