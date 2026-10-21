@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
 
 # platform_get_site_savings
 
@@ -25,12 +25,12 @@ Both senders build the same five keys.
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `site_id` | String | yes | `"<site id>"` | `charging/ui/page/device/a17e2/benifits/a17e2_benifits_http_repository.dart @0x2a48198` (map literal), `station_home/src/ui/shared/income/income_detail/income_detail_controller.dart @0x2a435d8` (set with `[]=`; value is the late field `siteId`, offset 0xc7, `@0x2a435b8`) |
-| `type` | int | yes | not decoded | `@0x2a481ac`, `@0x2a43600`; the income detail sender boxes an untagged int (`BoxInt64Instr`, `@0x2a43614`), i.e. an enum index or similar computed value, not a literal |
-| `data_type` | not decoded | yes | not decoded | `@0x2a481bc`, `@0x2a43640` |
-| `start_time` | not decoded | yes | not decoded | `@0x2a481d0`, `@0x2a43668` |
-| `end_time` | not decoded | yes | not decoded | `@0x2a48210` (set with `[]=` after the literal), `@0x2a43698` |
+| `type` | int (unboxed, x) | yes | `1` or `2` | `charging/ui/page/device/a17e2/benifits/a17e2_benifits_http_repository.dart @0x2a481ac`, `@0x2a43600`; the income detail sender boxes an unboxed int (`BoxInt64Instr`, `@0x2a43614`) that its callers pass in: the month chart passes the constant 1 (`r2 = 1` `station_home/src/ui/shared/income/income_detail/income_detail_controller.dart @0x2a4537c`, call `@0x2a45388`), the day chart the constant 2 (`r2 = 2` `@0x2a45ea4`, call `@0x2a45f20`), the third call (`@0x2a43520`) a value from the closure context (`ArrayLoad` `@0x2a434e4`, `LoadInt32Instr` `@0x2a434ec`); the A17E2 sender was not followed |
+| `data_type` | string | yes | `"month"` or `"day"` | `charging/ui/page/device/a17e2/benifits/a17e2_benifits_http_repository.dart @0x2a481bc`, `@0x2a43640`; the income detail month call passes the String literal `"month"` (`r7 = "month"` `station_home/src/ui/shared/income/income_detail/income_detail_controller.dart @0x2a45380`), the day call `"day"` (`r7 = "day"` `@0x2a45f14`), the third call a local that defaults to `""` (`r7 = ""` `@0x2a434d0`) |
+| `start_time` | String at the income detail month and day calls (`_interpolate` of year, month and `-01`: `@0x2a45310`, `@0x2a45d54`); not typed at the third call and at the A17E2 sender | yes | `"2025-01-01"` (shape from the interpolations) | `charging/ui/page/device/a17e2/benifits/a17e2_benifits_http_repository.dart @0x2a481d0`, `station_home/src/ui/shared/income/income_detail/income_detail_controller.dart @0x2a43668` |
+| `end_time` | string | no | | `charging/ui/page/device/a17e2/benifits/a17e2_benifits_http_repository.dart @0x2a48210` (set with `[]=` after the literal), `@0x2a43698`; the income detail sender adds it only when the String is not empty (`LoadField field_7` `station_home/src/ui/shared/income/income_detail/income_detail_controller.dart @0x2a43680`, `cbz` `@0x2a43684`); the month call passes a text that ends in `-12` (`r16 = "-12"` `@0x2a45344`, `_interpolate` `@0x2a45354`) |
 
-The A17E2 sender also logs `getA17E2ChartStatistics: siteId=..., type=..., dataType=..., startTime=..., endTime=...` (`@0x2a48074`). It passes `debounceMills` as a call argument (raw `600` at `@0x2a48260`, a tagged argument, so 300 ms of debounce) and `showLoading`/`showDefaultError`: these are request options, not body keys.
+The A17E2 sender also logs `getA17E2ChartStatistics: siteId=..., type=..., dataType=..., startTime=..., endTime=...` (`charging/ui/page/device/a17e2/benifits/a17e2_benifits_http_repository.dart @0x2a48074`). It passes `debounceMills` as a call argument (raw `600` at `@0x2a48260`, a tagged argument, so 300 ms of debounce) and `showLoading`/`showDefaultError`: these are request options, not body keys.
 
 ## `param_type`/`cmd`
 
@@ -69,7 +69,8 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The value domains and formats of `type`, `data_type`, `start_time` and `end_time` are not decoded.
+- Type of `start_time` at two senders (this is why the page is `string-only`): the income detail third call gets it from `A17e2BenifitsController._formatTimeForApi` (`charging/ui/page/device/a17e2/benifits/a17e2_benifits_logic.dart @0x2a447c4`), which on some paths returns its untyped argument unchanged, and the A17E2 sender (`@0x2a481d0`) stores its untyped parameter `fp-0x20` without a type; its callers were not read.
+- The values the A17E2 benefits sender passes for `type`, `data_type`, `start_time` and `end_time`, the date format of `start_time` and of the day call's `end_time`, and the values of the income detail's third call. — traced 2026-10-20: the income detail month and day calls are traced in Request; the A17E2 sender's callers (`charging/ui/page/device/a17e2/benifits/a17e2_benifits_http_repository.dart @0x2a47fd4`) and the day call's date formatting (`station_home/src/ui/shared/income/income_detail/income_detail_controller.dart @0x2a45eac`) were not followed
 - The unit and currency semantics of `total` and `unit` are not known.
 - Server behaviour is not known.
 

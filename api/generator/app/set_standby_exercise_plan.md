@@ -44,6 +44,8 @@ n/a (asm-traced): `handle` is called without a type argument (`stp x16, NULL`, `
 
 The caller awaits the result (`@0x382329c`) and shows `setupSuccessful` or `settingFailed` toasts (`@0x382342c`, `@0x3823474`); the answer body is not read.
 
+Order of device and cloud write (traced 2026-10-20, app side): `Thirdpatygeneratorlogic::assertAndSync` (`ats_ax170/src/ats_ax170/third_generator/third_paty_generator_logic.dart @0x3823030`) first calls `updateThirdOilSetting` (`@0x38230d0`, device-side update) and awaits it; only when the result type equals the stored `AKResultType` instance (`@0x38230e8`, `@0x38230f0`, `b.eq` to `@0x3823170`) does it compute the next maintenance time (`_calculateNextMaintenanceTime` `@0x38231c8`) and call `setStandbyExercise` (`@0x3823290`); otherwise it shows the `settingFailed` toast (`@0x3823148`) and returns. So the cloud plan is written after a successful device update, not instead of it. Whether the device update also carries the same plan values was not compared.
+
 ## Example request/response
 
 Request, synthesized
@@ -66,8 +68,8 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The units of `next_maintenance_time` and `maintenance_time` and the values of `status` are not decoded.
-- Whether the cloud plan is also written to the generator (the app first calls `updateThirdOilSetting`, a device-side update) or only mirrored is not traced beyond that call order.
+- The units of `next_maintenance_time` and `maintenance_time` and the values of `status` are not decoded. — reclassified: server (2026-10-20: the app writes the numbers as given (see Request); their units and the status values are not derivable from the app)
+- Whether the device update carries the same plan values as the cloud call (the order is on the Response section) was not compared — traced 2026-10-20
 
 ## Device-tested by
 

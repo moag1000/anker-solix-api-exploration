@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # price_detail
 
 ## Purpose
 
-<!-- TODO -->
+Reads the dynamic electricity price of a day for a provider and area: `DynamicPriceDetailLogic::requestDynamicPriceDetail` (`dynamic_price_detail_logic.dart`) calls `getDynamicPriceDetail`.
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/power_service/v1/dynamic_price/price_detail`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x26e3db4`
+`POST /power_service/v1/dynamic_price/price_detail` (asm-traced): URL string at `http_request_repository_impl.dart @0x26e3db4`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x26e3dac`, in `HttpRequestControllerImpl::getDynamicPriceDetail` (`http_request_repository_impl.dart @0x26e3cbc`).
 
 ## Encrypted?
 
@@ -20,12 +20,14 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+The body is a 4-pair map literal typed `<String, String>` (type arguments `@0x26e3d68`), so every value is a String or non-null String as the static type says; the builder is `getDynamicPriceDetail` (`http_request_repository_impl.dart @0x26e3cbc`).
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `company` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x26e3cbc` |
-| `area` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x26e3cbc` |
-| `date` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x26e3cbc` |
-| `device_sn` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x26e3cbc` |
+| `company` | string | yes | `"<company>"` | key `@0x26e3d18`, value store `@0x26e3d28` (parameter at `fp-0x18`) |
+| `area` | string | yes | `"<area>"` | key `@0x26e3d2c`, value store `@0x26e3d3c` (parameter at `fp-0x10`) |
+| `date` | string | yes | `"<date>"` | key `@0x26e3d40`, value store `@0x26e3d50` (parameter at `fp-0x20`) |
+| `device_sn` | string | yes | `"<device_sn>"` | key `@0x26e3d54`, value store `@0x26e3d64` (parameter at `fp-0x28`) |
 
 ## `param_type`/`cmd`
 
@@ -33,19 +35,25 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+`base_service::DynamicPriceDetailModel` (`data/models.json` key; fields on [`models/pricing.md`](../../../models/pricing.md#dynamicpricedetailmodel)), parsed in the success closure `http_request_repository_impl.dart @0x26e3e00` by `DynamicPriceDetailModel.fromJson`.
 
 ## Response
 
-<!-- TODO -->
+Top-level keys of the model (from `data/models.json`): `release_time` (String), `currency` (String), `today_avg_price` (String), `tomorrow_avg_price` (String), `today_price_trend` and `tomorrow_price_trend` (element type not resolved there).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by `getDynamicPriceDetail`)
+
+```json
+{"company": "<company>", "area": "<area>", "date": "<date>", "device_sn": "<device_sn>"}
+```
+
+Response keys: see Response; no capture.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+None traced. The builder's failure callback is the `postJML` template `@0x226824c` that forwards to the caller's callback; the callers' callbacks were not read. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -59,11 +67,12 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. The endpoint is in none of the added, removed or changed-params lists of `tools/out/diff_3.18.0_3.24.3.md`, so there is no string-level parameter delta. The model `DynamicPriceDetailModel` is `≤3.18.0` in `data/models.json`.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Format of `date` and the set of `company`/`area` values: the builder passes the parameters through; the value set is server side (see [support_option](support_option.md) for the lists the app can fetch).
+- Failure handling in the callers of `getDynamicPriceDetail` was not read. — traced 2026-10-20: the call sites pass no `fail` closure among their named arguments: `ElectricityPricePadPreviewLogic.getDynamicPriceFroServer` (`electricity_price/components/tou_pct/page/electricity_price_pad_preview/electricity_price_pad_preview_logic.dart @0x29c24e4`): no named argument; `ElectricityPricePatSettingLogic.getDynamicPriceFroServer` (`electricity_price/components/tou_pct/page/electricity_price_pad_setting/electricity_price_pad_setting_logic.dart @0x29c60f8`): no named argument; `DynamicPriceDetailLogic.requestDynamicPriceDetail` (`charging/feature/utilitiy_rate_plan/dynamic_price/detail/dynamic_price_detail_logic.dart @0x26e3c40`): no named argument. Failure then falls to the callee's default or to the awaiting code, neither of which was read
 
 ## Device-tested by
 

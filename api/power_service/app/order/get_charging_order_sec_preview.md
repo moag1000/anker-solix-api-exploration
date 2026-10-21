@@ -70,7 +70,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- What a `list` block represents (its `start_time` and `power_unit` only are modelled) is not decoded; the actual power values arrive from [get_charging_order_sec_detail](get_charging_order_sec_detail.md).
+- What a `list` block represents (its `start_time` and `power_unit` only are modelled) is not decoded; the actual power values arrive from [get_charging_order_sec_detail](get_charging_order_sec_detail.md). — reclassified: server (not visible in the app: the model reads only `start_time` and `power_unit`)
 
 ## Device-tested by
 

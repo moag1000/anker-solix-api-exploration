@@ -68,7 +68,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The EV charger app is the only sender found; whether other apps or screens of this APK send the URL is not known (the pool string is shared, the inventory finds one sender).
+- The EV charger app is the only sender found; whether other apps or screens of this APK send the URL is not known (the pool string is shared, the inventory finds one sender). — traced 2026-10-20: the pool string is shared; the inventory still lists one sender (EV charger app) and no further `bl` or pool reference was searched for in this pass
 - Whether the call works for a member account (upstream: needs owner) is not recorded here.
 - No response was captured.
 

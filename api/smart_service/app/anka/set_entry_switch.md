@@ -54,13 +54,15 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 - `AnkaAgentSettingLogic.toggleAnkaAI` (`charging/ui/page/user/ankaAgent/anka_agent_setting_logic.dart @0x403efec`)
 
+Other screens (traced 2026-10-20, app side): the entry visibility is held by the singleton `AnkaAgentEntryConfigService` (`anka_agent/services/anka_agent_entry_config_service.dart`, `updateVisibility` `@0x3650998` region, getter `show` at line 1702 of the dump); other screens read it from the singleton, for example the message detail view (`charging/ui/page/message/messageDetailInfo/message_detail_info_view.dart @0x4020bc8`..`@0x4020bd0`, `_instance` then `show`), and the service is also referenced by `settings_page_logic.dart`, `message_push_handler.dart` and `anka_agent_entry_logic.dart`. So the setting acts on the shared entry state, not on one screen; which widgets hide on `show == false` was not traced one by one.
+
 ## Since/changed
 
 3.18.0: present (pool `pp+0xafe50`); the sender function has no literal difference between 3.18.0 and 3.24.3 (`tools/cmp_since.py`: ordered string, integer and type literals compared; branch logic not compared). 3.24.3: present (pool `pp+0xdd090`). since: ≤3.18.0.
 
 ## Known unknowns
 
-- Whether the switch also hides the entry on other screens is not traced.
+- Which widgets of the other screens hide when `show` is false (the shared state is described in Callers in app) — traced 2026-10-20
 
 ## Device-tested by
 

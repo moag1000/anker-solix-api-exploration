@@ -71,7 +71,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 ## Known unknowns
 
 - Server behaviour of the installer service (whether the list differs from the consumer list) is not known.
-- The meaning of `systemId` (an installer system id) is inferred from the route argument name.
+- The meaning of `systemId` (an installer system id) is inferred from the route argument name. — traced 2026-10-20: `systemId` is a route-argument key of the add-device flow, read and passed on by `SelectPowerDeviceController`, `AddDeviceController`, `ConnectingController` and `PlatformAppointAddDeviceController` (`flutter_charging_beginning/beginning/state_cards/add_devices/`, for example `platform_appoint_add_device_controller.dart @0x350b238`); the request uses it only as a switch (set: app id `anker_pros`, else `anker_power`); what the id identifies is not shown
 - Whether the installer answer carries `countries` is not known.
 
 ## Device-tested by

@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # handle_survey_popup
 
 ## Purpose
 
-<!-- TODO -->
+Reports what the user did with a survey popup banner and asks whether another popup follows; sent by `DeviceMainLogic::bannerClick` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/app/help/handle_survey_popup`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x4699934`
+`POST /app/help/handle_survey_popup` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x4699934`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x469992c`, in `HttpRequestControllerImpl::handleSurveyPopup` (`charging/http/http_request_repository_impl.dart @0x4699864`), sent through `encryptionRequestHttp` (`@0x4699954`).
 
 ## Encrypted?
 
@@ -22,8 +22,12 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `banner_id` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x4699864` |
-| `handle_type` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x4699864` |
+| `banner_id` | int | yes | | `charging/http/http_request_repository_impl.dart @0x46998bc` (value store `@0x46998cc`) |
+| `handle_type` | int (Smi, w) | yes | | `charging/http/http_request_repository_impl.dart @0x46998d0` (value store `@0x46998e4`) |
+
+Both values are ints: the map literal has type arguments `<String, int?>` (`@0x46998e8`); `handle_type` is the tagged result of an unboxed int (`lsl` `@0x46998e0`), stored with a 32-bit store. `banner_id` is typed `int` from the `<String, int?>` literal only; its store width is not claimed (a parameter could be boxed or null).
+
+Values of `handle_type` (app side, traced 2026-10-20, `charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart`): both calls are in `DeviceMainLogic::bannerClick` (`@0x469944c`); the direct call passes the unboxed constant 1 (`r3 = 1` `@0x469974c`, call `@0x4699758`) and a call in a closure of the same function (`@0x4699db8`) passes 2 (`r3 = 2` `@0x4699e5c`, call `@0x4699e64`). The argument is unboxed (the sender tags it with `lsl`), so these are the real values. Which user action each stands for (shown, closed, answered) is not named in the asm.
 
 ## `param_type`/`cmd`
 
@@ -31,19 +35,30 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+no top-level model: the success closure (`charging/http/http_request_repository_impl.dart @0x4699970`, argument typed `Map<String, dynamic>`) reads the key `has_popup` (`@0x469999c`) as `bool?` (`@0x46999e4`), builds a `SurveyPopupModel` (`@0x46999f4`, constructed from the value, not parsed with `fromJson`) and passes it to the callback (`ClosureCall` `@0x4699a20`).
 
 ## Response
 
-<!-- TODO -->
+(asm-traced) One key is read from the top level of the response: `has_popup` (bool, nullable).
+
+Model and callback (traced 2026-10-20, app side): `SurveyPopupModel` (`charging/model/banner_model.dart`) has one field, `has_popup` (`field_7`, `toJson` key `has_popup`, `@0x4699a5c`). The callback of `DeviceMainLogic::bannerClick` (`charging/ui/page/device/main/station_device_home/device_main_page/device_main_logic.dart @0x4699b10`, argument typed `SurveyPopupModel`) reads `field_7` (`@0x4699b3c`) and, when it is true (compare `@0x4699b48`), builds a dialog from the texts `questionnaireTips`, `surveyPopupAgree` and `commonPrivacyPolicy` with a rich-text link element (`Trans.tr` `@0x4699b70`, `@0x4699b7c`, `@0x4699b98`, `RichTextElement` `@0x4699c24`).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "banner_id": "<banner_id>",
+  "handle_type": "<handle_type>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender, its closures or the caller functions read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -56,11 +71,12 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- What the two `handle_type` values 1 and 2 stand for in the UI (shown, closed or answered): not named in the asm — traced 2026-10-20 (the values and call sites are in Request).
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

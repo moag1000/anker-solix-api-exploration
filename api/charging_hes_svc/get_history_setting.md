@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # get_history_setting
 
 ## Purpose
 
-<!-- TODO -->
+Reads the history schedule mode and the last time-of-use set type of a site for the price settings (`GeneralPriceSettingLogic::queryLargeChargingDeviceHasSetMode`; the inventory also lists `TouAndTimeSlotSettingsDetailLogic` and `TouAndTimeslotSettingsPolyLogic`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,15 +12,21 @@
 
 ## Method+URL
 
-`/charging_hes_svc/get_history_setting`, method: not extracted by the inventory <!-- TODO -->; string-only: `base_service/api_url.dart @0x29a4968`
+`Api::getHistorySetting` (`base_service/api_url.dart @0x29a4950`) returns `/charging_hes_installer_svc/get_history_setting` (`@0x29a495c`) when the static flag `0xad8` is true and `/charging_hes_svc/get_history_setting` (`@0x29a4968`) otherwise (`tbnz w1, #4` `@0x29a4958` branches on false). The sender `GeneralPriceSettingLogic::queryLargeChargingDeviceHasSetMode` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a412c`) loads the late static field `getHistorySetting` (`@0x29a41b0`) and calls `HttpHelper::getDataFromService` (`@0x29a4250`); the helper (`electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bda38`) sends with the method object `Method.post` (pool entry `pp+0xa7e0`, `@0x27bdb94`) through `encryptionRequestHttp` (`@0x27bdbc8`). That the late static field holds the result of `Api::getHistorySetting` was not read, so the URL link stays string-only.
+
+Run-time choice of the URL (app side, traced 2026-10-20): the flag `isProApp` (`Api::isProApp`, `base_service/api_url.dart @0x22b317c`, static slot `0xad8`) is stored once in `Api.init` (`base_service/api_url.dart @0x49ce9dc`) from a string test of the package name against the literal `"anker.pros"` (`@0x49ce9c0`..`@0x49ce9cc`); a true flag selects the `/charging_hes_installer_svc/` URL, a false flag the `/charging_hes_svc/` URL. The variant rule and the package name of this APK are owned by [charging_hes_installer_svc/README.md](../charging_hes_installer_svc/README.md#variant-selector-installer-app-versus-consumer-app).
 
 ## Encrypted?
 
-encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: `true` (app side). Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app". The helper `HttpHelper::getDataFromService` (`electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bda38`) calls `encryptionRequestHttp` (`@0x27bdbc8`).
 
 ## Request
 
-No request keys found by the extractor. <!-- TODO -->
+The caller builds a `<String, dynamic>` literal (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a41e8`), which does not type the value, with the single key `station_id` (`@0x29a41cc`); the value is `field_7b` of the logic (load `@0x29a41dc`, stored `@0x29a41e4`). `GeneralPriceSettingLogic::onInit` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x34f1210`) fills that field from the key `site_id` of its arguments with a cast to `String?` (`r8 = String?` `@0x34f13c8`, cast `@0x34f13d4`, store `@0x34f13e0`), so the value is a String. The map goes to `getDataFromService` (`@0x29a4250`).
+
+| field | type | required | example | source |
+|---|---|---|---|---|
+| `station_id` | string | yes | `"<station_id>"` | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a41cc` |
 
 ## `param_type`/`cmd`
 
@@ -28,19 +34,29 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+no model: the success closure (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a42a8`) reads the keys of the response map directly (see Response).
 
 ## Response
 
-<!-- TODO -->
+(asm-traced) Keys read by the success closure: `history_schedule_mode` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4438`, a map), `tou_last_set_type` (`@0x29a4480`, a map), `is_manual_tou_configured` (`@0x29a4598`, bool, default `false` `@0x29a45b4`) and `last_select_mode` (`@0x29a460c`, int); the integer is compared with tagged immediates and decides between `setToManualTou` (`@0x29a47f8`) and `setToAutoTou` (`@0x29a48f8`). A response that is not a map logs `historyScheduleMode error` (`@0x29a43f0`).
+
+Values of `last_select_mode` (app side, traced 2026-10-20, `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart`): after `LoadInt32Instr` (`@0x29a46d4`) the closure compares the untagged value with 2 (`cmp x1, #2` `@0x29a46e0`) and 1 (`@0x29a46e8`), then calls `==` against the tagged immediates 102 and 104 (`@0x29a4704`, `@0x29a4730`), which are 51 and 52 under the Smi rule; all four values (1, 2, 51, 52) lead to the same branch (`@0x29a4748`), every other value to `@0x29a4938`. Which of the four stands for manual or automatic time-of-use is not named in the asm.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "station_id": "<station_id>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`. The failure closure (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a426c`) logs `getHistorySetting error` (`@0x29a4280`).
 
 ## Callers in app
 
@@ -48,11 +64,13 @@ n/a
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. `tools/out/diff_3.18.0_3.24.3.md` lists `station_id` as removed for this URL (string-level), but the 3.24.3 sender still stores the key (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a41cc`), so that row only means the literal is not matched to the senders linked to this URL. The installer variant `/charging_hes_installer_svc/get_history_setting` is new in 3.24.3.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- The URL link stays string-only: the sender loads the late static `getHistorySetting` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a419c`; offset 0xb08, declared `static late String getHistorySetting` in `base_service/api_url.dart`); its initializer was not found, so that it holds the result of `Api::getHistorySetting` rests on the shared name and offset. — traced 2026-10-20: the only store to a static slot in `base_service/api_url.dart` is the flag (`@0x49ce9dc`), so the late field `getHistorySetting` (offset 0xb08) has no explicit store in the asm and the only function of that name is `Api::getHistorySetting` (`@0x29a4950`); the initializer link stays the Dart late-static mechanism (not visible in the asm), so the header stays string-only
+- What the four accepted values of `last_select_mode` (1, 2, 51, 52, see Response) mean: not named in the asm — traced 2026-10-20 (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a46e0`..`@0x29a4744`).
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

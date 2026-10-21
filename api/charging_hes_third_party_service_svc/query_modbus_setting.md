@@ -99,7 +99,7 @@ None recorded. On failure the home assistant page only logs `getCommunicationSet
 
 ## Known unknowns
 
-- Whether the success callback receives the whole envelope or only its `data` object; the table assumes `data`, as for the other encrypted endpoints. The envelope handling in `HttpServiceImpl` was not re-traced for this page.
+- Whether the success callback receives the whole envelope or only its `data` object; the table assumes `data`, as for the other encrypted endpoints. The envelope handling in `HttpServiceImpl` was not re-traced for this page. — traced 2026-10-20: on the SDK path `HttpEncryptionDecorator` reads the key `data` of the SDK result and JSON-decodes it (`charging/http/HttpEncryptionDecorator.dart @0x486ab9c`, `decode` `@0x486ac18`; see [../encryption.md](../encryption.md#response-handling-and-error-codes)), so the callback receives the decoded `data` there; on the plain path `_handler200` passes the body message and a code to the failure callback only when the body `code` is not 0 (`@0x486c914`..`@0x486c970`), and the success argument of that path was not traced; which path runs for this call is decided at run time (device test row 150)
 - The real types of `tcpPort` and `rtuBand` (the app only prints them) and the value range of `modbusStatus` beyond 0, 1 and 2.
 - Whether the server answers for every device, or only for products that support Modbus (the menu hides itself when both support flags are `false`).
 - Whether `siteId` and `sn` may be sent together.

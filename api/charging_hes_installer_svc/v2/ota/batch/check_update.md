@@ -1,4 +1,4 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: asm-traced · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
 
 # check_update
 
@@ -89,9 +89,10 @@ UI: the firmware upgrade card of the initial-setup (`flutter_charging_beginning`
 
 ## Known unknowns
 
+- Types of five request values (this is why the page is `string-only`): `system_id` and the `StationDevice` members `sub_ota_way`, `link_mode`, `force_version` and `device_type`. `StationDevice` has no `fromJson`; `toJson` (`station_device_model.dart @0x229e4e4`) stores the fields `field_1b`, `field_1f`, `field_23`, `field_27` without a cast, and the constructor `StationDevice()` is called from at least five places in `firmware_upgrade_controller.dart` (`@0x2b0aa10`, `@0x2b0e6e0`, `@0x2b0e71c`, `@0x2b0ef40`, `@0x2b0fc6c`), so the types are not within one hop.
 - Server behaviour of the installer service (compared with the consumer answer) is not known.
-- The name and type of the `initialSetupController` field behind `system_id` are not in the asm.
-- The element layout of `update_infos` is not traced in 3.24.3; the upstream example is for the consumer twin.
+- The name and type of the `initialSetupController` field behind `system_id` are not in the asm. — attempted 2026-10-20 (two-hop not readable: the request reads `field_5b` of `FirmwareUpgradeController` (`flutter_charging_beginning/beginning/state_cards/firmware_upgrade/firmware_upgrade_controller.dart @0x2b0d318`, key `system_id` `@0x2b0d324`) after a late-initialisation check (`object_sentinel` `@0x2b0d30c`); no store of that field is in this file)
+- The element layout of `update_infos` is not traced in 3.24.3; the upstream example is for the consumer twin. — traced 2026-10-20: the consumer parse of the same shape is on [the consumer page](../../../../app/ota/batch/check_update.md#response): `update_infos` is a list of `UpdateInfo` (`base_service/bean/model/firmware_update/batch_device_model.dart @0x229ea78`); whether the installer closure uses the same parse (`firmware_upgrade_controller.dart @0x2b0ac98`, `@0x2b0f2e0` call `BatchDeviceModel.fromJson`) matches the consumer path, the installer answer itself is server data
 
 ## Device-tested by
 

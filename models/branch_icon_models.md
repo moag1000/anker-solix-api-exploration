@@ -36,6 +36,31 @@ One icon (name and URL) in `BranchIconModel.icon_infos`.
 | `name` | `String?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x27d6540` |
 | `url` | `String?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x27d65b0` |
 
+### BranchCircuitModel
+
+A branch circuit record of the same file (name, icon, relay and power state). It is not part of the icon-catalogue answer; the page lists it because the file holds it. Its producer was not traced here.
+
+`fromJson` `branch_circuit_data.dart @0x2336cac`.
+
+| JSON key | Dart type | nullable | since | source |
+|---|---|---|---|---|
+| `id` | `int?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2336cd8` |
+| `name` | `String?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2336d4c` |
+| `remark` | `String?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2336dc0` |
+| `icon_url` | `String?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2336e38` |
+| `icon_name` | `String?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2336eb0` |
+| `defaultName` | `String?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2336f28` |
+| `defaultImg` | `String?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2336fa0` |
+| `defaultOffImg` | `String?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2337018` |
+| `merge_branche` | `int?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2337090` |
+| `isInitialData` | `bool?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2337104` |
+| `switchOn` | `bool?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2337178` |
+| `local` | `bool?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x23371ec` |
+| `isCharging` | `bool?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2337260` |
+| `power` | `int?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x23372d4` |
+| `combinedRelayStatus` | `bool?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x2337348` |
+| `relayOverloadStatus` | `bool?` | yes | ≤3.18.0 | `branch_circuit_data.dart @0x23373b8` |
+
 ## Produced by
 
 - [`get_custom_branch_icon`](../api/power_service/v2/app/get_custom_branch_icon.md): the data list holds `BranchIconModel` elements (mapping closure `custom_branch_controller.dart @0x27d6014`, `BranchIconModel.fromJson` call `@0x27d604c`).
@@ -51,4 +76,3 @@ Both classes are present in 3.18.0 (`since` column); no key is new in 3.24.3.
 ## Known unknowns
 
 - Whether `icon_url` values (and `url` here) point to PNG or SVG images and from which host is not known.
-- The sibling class `BranchCircuitModel` in the same file (a branch circuit record) is not part of this answer and not documented here.

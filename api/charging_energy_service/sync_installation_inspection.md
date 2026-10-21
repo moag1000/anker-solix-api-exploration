@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # sync_installation_inspection
 
 ## Purpose
 
-<!-- TODO -->
+Reports the A17B1 installation inspection (page reached and errors) to the cloud (callers `ElectricitySceneLogic::createOrJoinSuccess` and `syncGoHome`, `A17B1SystemTestLogic::handlerSelfCheckComplete`, `SiteLogic::toHomeInitialProcess` through `HttpRequestControllerImpl::syncInstallation`) (string-only: inferred from the caller and function names, the chain is not in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/charging_energy_service/sync_installation_inspection`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x26eb180`
+`POST /charging_energy_service/sync_installation_inspection` (asm-traced): URL string `@0x26eb180`, method object `Method.post` (pool entry `pp+0xa7e0`) `@0x26eb178`, in `HttpRequestControllerImpl::syncInstallation` (`charging/http/http_request_repository_impl.dart @0x26eb06c`), sent through `HttpRequestControllerImpl::requestHttp` (`@0x26eb1b0`).
 
 ## Encrypted?
 
@@ -20,11 +20,17 @@ encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `ap
 
 ## Request
 
+(string-only: two field types are not read) One sender. The map literal has the type arguments `<String, Object>` (`charging/http/http_request_repository_impl.dart @0x26eb130`), which name no value type; three pairs (array length raw 12 at `@0x26eb0bc`), stored without a guard.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `sn` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x26eb06c` |
-| `page` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x26eb06c` |
-| `errors` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x26eb06c` |
+| `sn` | ? | yes | `"<sn>"` | `charging/http/http_request_repository_impl.dart @0x26eb0c8` (value store `@0x26eb0d8`, parameter) |
+| `page` | string | yes | `"/a17b1Home"`, `"/electricityScene"`, `"/createSite"` or `"/systemTest"` (constants in the four callers) | `charging/http/http_request_repository_impl.dart @0x26eb0dc` (value store `@0x26eb0ec`, parameter) |
+| `errors` | list | yes | `[]` | `charging/http/http_request_repository_impl.dart @0x26eb0f0` (value is a new empty growable list, `_GrowableList` with length 0 `@0x26eb100`, `@0x26eb104`) |
+
+`errors` (app side, traced 2026-10-20): the wrapper always sends an empty list (`charging/http/http_request_repository_impl.dart @0x26eb104`), so no caller can add entries through this function.
+
+Caller values (traced 2026-10-20, app side): the four callers pass a route-name constant as `page`: `"/a17b1Home"` (`SiteLogic::toHomeInitialProcess`, `charging/ui/page/green_energy/site/site_logic.dart @0x27b3608`..`@0x27b3668`), `"/electricityScene"` (`A17B1ElectricitySceneLogic::syncGoHome`, `charging/ui/page/device/a17b1/a17b1electricity_scene/electricity_scene_logic.dart @0x26eaee8`), `"/createSite"` (`createOrJoinSuccess`, same file `@0x3d07c04`) and `"/systemTest"` (`A17B1SystemTestLogic::handlerSelfCheckComplete`, `charging/ui/page/device/a17b1/a17b1system_test/system_test_logic.dart @0x3d221a0`); `sn` is `field_6b` of a device object in the callers read (`site_logic.dart @0x27b363c`, `electricity_scene_logic.dart @0x26eae80`), the device serial-number getter (a String). So `page` names the app page from which the sync was triggered.
 
 ## `param_type`/`cmd`
 
@@ -32,19 +38,29 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+not parsed in this wrapper: the closure passed as `complete` (`charging/http/http_request_repository_impl.dart @0x24044f0`) forwards its argument to a stored callback and reads no key; the callers' callbacks were not read.
 
 ## Response
 
-<!-- TODO -->
+No response key is read by the wrapper (see Response model).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "sn": "<sn>",
+  "page": "<page>",
+  "errors": []
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page (the failure closure only logs `code` and `msg`). Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -60,11 +76,12 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- What the server stores with `page`: server behaviour; the four values the app sends are listed under Request.
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

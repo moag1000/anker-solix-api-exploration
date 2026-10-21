@@ -58,6 +58,8 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 - `EmsAiModeConditionLogic.authorizeAiEmsToCloud` (`ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x37a4244`), the AI mode condition screen of the `ak_soft_ems` package (class `EmsAiModeConditionLogic`). The UI element that triggers it was not traced.
 
+UI trigger (grep of the asm, traced 2026-10-20): `authorizeAiEmsToCloud` is called from `EmsAiModeConditionLogic::jumpToDataPermissionDialog` (`ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x37a3f3c`), which `EmsAiModeConditionPage::_buildDataAuthItem` (`ak_soft_ems/ems_list/ems_ai_mode_condition_page.dart @0x37a301c`) calls, so the trigger is the data-authorization row of the AI mode condition page.
+
 ## Since/changed
 
 3.18.0: absent as an installer URL (the 3.18.0 pool holds no `installer_svc` string); the consumer twin `/charging_hes_svc/authorize_aiems` is in the 3.18.0 pool. 3.24.3: present (new). since: 3.24.3.
@@ -65,7 +67,6 @@ No error code specific to this endpoint was traced. The failure closure of each 
 ## Known unknowns
 
 - Server behaviour (what the authorization changes, whether it can be revoked) is not known; the matching read is the `isAuthorizeAIEms` flag of [get_system_strategy](get_system_strategy.md#response).
-- The trigger in the UI (which button calls `authorizeAiEmsToCloud`) is not traced.
 
 ## Device-tested by
 

@@ -22,7 +22,7 @@ Answer of `strategy/visualization`.
 
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
-| `energy_chart_data` | `unknown` | yes | 3.24.3 | `strategy_visualization_model.dart @0x24a43d4` |
+| `energy_chart_data` | `List<EnergyChartDataPoint>` (the key read is not type-tested in place; the list is built with the type argument `<EnergyChartDataPoint>` `@0x24a465c`, the `List` check `@0x24a45f8` and the mapping closure `@0x24a4648` that calls `EnergyChartDataPoint.fromJson` `@0x24a4dc0`) | yes | 3.24.3 | `strategy_visualization_model.dart @0x24a43d4` |
 | `current_strategy` | `Map?` | yes | 3.24.3 | `strategy_visualization_model.dart @0x24a441c` |
 | `price_unit` | `String` | yes | 3.24.3 | `strategy_visualization_model.dart @0x24a44c4` |
 | `energy_unit` | `String` | yes | 3.24.3 | `strategy_visualization_model.dart @0x24a4540` |
@@ -87,6 +87,5 @@ All classes are new in 3.24.3.
 
 ## Known unknowns
 
-- `energy_chart_data` is typed `unknown`; the element class `EnergyChartDataPoint` is inferred from the model file and the key name (UNCONFIRMED).
 - The units are given by `energy_unit` and `price_unit` in the answer; the value formats of `solar_energy`, `battery_energy`, `home_load`, `grid_energy`, `battery_soc`, `battery_status` and `price` are `unknown` for the extractor.
-- `current_strategy` is a free map; its keys are not read here, and `strategy_type`/`strategy_detail_values` are not decoded.
+- `current_strategy` is a free map (`Map?`, `@0x24a4440`): its keys are not read here, and `strategy_type`/`strategy_detail_values` are not decoded — traced 2026-10-20: the string keys `strategy_detail_values` and `strategy_detail_description` are loaded in no file other than this model (grep over the asm root: 1 file each), so no code reads them from `current_strategy` by name; `strategy_type` occurs in other models (range extender, schedule), none of them a reader of this map; reads by field offset on `EnergyChartDataPoint` were not followed.

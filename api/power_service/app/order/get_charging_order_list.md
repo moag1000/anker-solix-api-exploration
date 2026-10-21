@@ -72,7 +72,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The values of `order_status` are not decoded (3 is what the home card sends; upstream also notes them as unknown).
+- What `order_status` 3 selects (a constant here, see Request; the other endpoint that sends this status passes 3 and 4, see [get_charge_order_stats_list](get_charge_order_stats_list.md#request)). — reclassified: server (not visible in the app: `objs.txt` holds no enum object with `Order` or `Status` in its name for it, searched 2026-10-20)
 - Whether the server honours `start_time`/`end_time` as dates, and whether `page_num` is 1-based, is not tested.
 - No response was captured; the response layout is the model's `fromJson`, not a server sample.
 

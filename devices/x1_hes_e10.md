@@ -162,13 +162,14 @@ The three request shapes of the old page (manual, auto, quit) are not repeated; 
 
 - No firmware is recorded for any statement on this page.
 
+`auto_disaster_switch` in requests (checked 2026-10-20): the key string occurs at only two places in the whole dump, both in `DisasterSetting.fromJson` (`base_service/ak_iot_kit/business/basic/model/device_disaster_model.dart @0x2a2bd84` and `charging/ui/page/station/mixin/auto_disaster.dart @0x46c4a30`), so the app reads it from answers and never builds a request body with it in 3.24.3 (audit row 190).
+
 ## Known unknowns
 
 Tag: untagged by design (no API fact).
 
 - Which wire code maps to which field is asm-traced (tables above), but what each field means on the device needs a live capture; the vocabulary tells what fields exist, not their units or scales.
-- Whether the app ever sends `auto_disaster_switch` in a request body in 3.24.3 (audit row 190).
-- Wire codes of the `diesel*` family beyond the range in the owner page, and the A5103 variants: see [../mqtt/a5101.md](../mqtt/a5101.md).
+- Wire codes of the `diesel*` family and the A5103 variants: the 17 `diesel*` codes (`0x02be` to `0x02cd` and `0x02d1`) are in [../mqtt/a5101.md](../mqtt/a5101.md#data-code-maps-setdatacodemap-and-getdatacodemap); the A5103 variants are not separated there.
 - Needed from device owners (per upstream): system exports as owner account (shared accounts lack permissions); MQTT monitoring with mqtt_monitor to validate the field to code mapping; comparing abbreviated MQTT values with the app display. X1 uses JSON "trans" payloads with abbreviations, which are easier to decode than binary. Open requests: [../docs/DEVICE_TEST_BACKLOG.md](../docs/DEVICE_TEST_BACKLOG.md).
 
 ## Device-tested by

@@ -25,6 +25,12 @@ Related endpoints, not login themselves: [passport/validate_email.md](passport/v
 
 The app also contains a native login container (`ank_user_module`, platform channel method `startLogin`, `ank_user_module_method_channel.dart @0x26fc740`) whose result is a `UserData` object with `token`, `tokenExpiresAt`, `userId`, `geoKey`, `abCode`, `apCloudUserId` (key strings at `ank_user_module/models/user_data.dart @0x26fbc64` to `@0x26fc258`). It is not an HTTP interface and is not described further; see Known unknowns.
 
+Which login entry the app code uses (app side, traced 2026-10-20): the code that needs a login calls `LoginHandler::startLoginFlow` (`charging/account/handlers/login_handler.dart @0x26fb51c`), which sets the open UDID (`setOpenUdid` `@0x26fb610`), saves a login context, configures the login UI (`_configureLoginUI` `@0x26fb59c`) and starts the native container with `AnkUserModule::startLogin` (call `@0x26fb748`, target `ank_user_module/ank_user_module.dart @0x26fb7b0`); 35 call sites in the asm call `LoginHandler::startLoginFlow`, among them the GDPR page (`charging/ui/page/home/gdpr/gdpr_page_logic.dart @0x4016d40`), the device-bind task (`base_service/util/bind_task.dart @0x26fb338`) and the upload-log page (`charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b6f38`). The Dart `LoginLogic::startLogin` (`charging/ui/page/account/login/login_logic.dart @0x3bd6d88`, which sends `/passport/login`) is called from `LoginLogic::checkIsFormat` (`@0x3bd6d6c`) on the Dart login page, which is registered under the route `/login` (`charging/routers/routes_reg.dart @0x294215c`). So the container is the entry that the feature code calls; which entry a first start shows (route `/login` versus the container) was not decided.
+
+`/passport/external_login` (traced 2026-10-20): the asm has no sender for it; the string occurs only in the closure of `HttpEncryptionDecorator::_handler401` (`charging/http/HttpEncryptionDecorator.dart @0x486ba30`, closure `@0x486b958`), where it is passed to a string predicate (selector not named by Blutter) together with the URL of a failed request, so the app never sends it in 3.24.3; details on [passport/external_login.md](passport/external_login.md).
+
+First start (app side, traced 2026-10-20): `SplashLogic::_navigatePage` (`charging/ui/page/account/splash/splash_logic.dart @0x2940158`) logs the text `启动闪屏后跳转至登录页或首页, 登录状态为: ` (after the splash screen go to the login page or the home page, with the login state, `@0x2940178`) and, when the state is true, calls `offAllHomePage` (`@0x29401a8`); otherwise it builds a `LoginContext` with the target `"/home"` (`@0x29401b0`, `@0x29401b8`) and calls `LoginHandler::startLoginFlow` (`@0x29401ec`), so a start without a login enters through the native container. A second call of `startLoginFlow` sits in a splash closure after a `requestHost` call (`@0x2970a5c`, `@0x2970a90`).
+
 ## Common request headers
 
 Built for the plain Dio path by `HttpRequestImpl::_headerToken` (`charging/http/http_request_impl.dart @0x486d610`). Header names are case-insensitive on the wire; the spelling below is the one in the app. On the SDK path the Dart side only hands over the caller's own `header` map, and the SDK adds its headers natively (not visible in asm); the headers the upstream capture shows on encrypted calls are listed in [encryption.md](encryption.md#request-headers-on-encrypted-calls). Tag for the Dart-built rows: asm-traced; the last column also gives the upstream view where one exists.
@@ -85,8 +91,7 @@ Compared with the 3.18.0 asm (`ankerAPK/blutter_output`), by identical pool stri
 
 ## Known unknowns
 
-- Which login entry is the default in 3.24.3: the Dart `LoginLogic::startLogin` (HTTP `/passport/login`) or the native `ank_user_module` container; both exist in both versions.
-- `/passport/external_login` is only a string ([passport/external_login.md](passport/external_login.md)); no sender, body or response is known.
+- Whether the splash decision (login state) can be true for a visitor session before any account login: not traced; see Token lifecycle for the SDK state.
 - Whether the login request itself goes over the SDK path or the Dio path at run time.
 - What the native SDK sends as headers on its requests (beyond the upstream capture) and how it holds the token.
 - The server contract for `ab`, `enc`, `time_zone`, `transaction` (sent by upstream, not by the app).

@@ -34,6 +34,8 @@ Body (`param`) is the map passed to the command function unchanged (`ev_charge_c
 | `energy_consumption_per_100km` | num? | no | `18` | `vehicle_model.dart @0x2ab4e2c` |
 | `enode_vehicle_id` | String? | no | `null` | `vehicle_model.dart @0x2ab4e44` |
 
+Null handling (asm-traced): `VehicleModel::toJson` (`ev_charger/src/ev_charger/model/vehicle_model.dart @0x2ab4d6c`) writes nine keys into a map literal (`AllocateArray r2 = 36` `@0x2ab4d90`) and then calls `Map.removeWhere` (`@0x2ab4e9c`) with the shared closure `charging/ak_iot_kit/business/a25x7/model/a25x7_device_info.dart @0x244b198`, which returns true when its value argument is null (`cmp w1, NULL` `@0x244b19c`, `csel` `@0x244b1a8`): keys whose value is null are removed, so unset fields are left out of the body (app side).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -69,7 +71,6 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- Whether `toJson` writes `null` for unset fields or leaves the keys out was not read.
 - The `num` fields may be sent as integers or decimals; not known.
 
 ## Device-tested by

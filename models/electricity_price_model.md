@@ -40,7 +40,7 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
-| `peakValleyPriceSeasons` | `unknown` | yes | ≤3.18.0 | `electricity_price_model.dart @0x2553a74` |
+| `peakValleyPriceSeasons` | `List?` of `PeakValleyPriceSeasons` (mapping closure `@0x25540d0` calls `PeakValleyPriceSeasons.fromJson`, allocated at `0x2553b0c`) | yes | ≤3.18.0 | `electricity_price_model.dart @0x2553a74` |
 | `currency` | `String?` | yes | ≤3.18.0 | `electricity_price_model.dart @0x2553b38` |
 
 ### PeakValleyPriceSeasons
@@ -51,7 +51,7 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 |---|---|---|---|---|
 | `sessionStart` | `int?` | yes | ≤3.18.0 | `electricity_price_model.dart @0x25541f0` |
 | `sessionEnd` | `int?` | yes | ≤3.18.0 | `electricity_price_model.dart @0x2554278` |
-| `peakValleyPrices` | `unknown` | yes | ≤3.18.0 | `electricity_price_model.dart @0x2554300` |
+| `peakValleyPrices` | `List?` of `PeakValleyPrices` (mapping closure `@0x25543d4` calls `PeakValleyPrices.fromJson`, allocated at `0x2554398`) | yes | ≤3.18.0 | `electricity_price_model.dart @0x2554300` |
 
 ### PeakValleyPrices
 
@@ -86,10 +86,10 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
-| `chargeTime` | `unknown` | yes | ≤3.18.0 | `electricity_price_model.dart @0x25521e0` |
+| `chargeTime` | `List?` of `ChargeTime` (mapping closure `@0x2552834` calls `ChargeTime.fromJson`, allocated at `0x2552278`) | yes | ≤3.18.0 | `electricity_price_model.dart @0x25521e0` |
 | `chargeSoc` | `int?` | yes | ≤3.18.0 | `electricity_price_model.dart @0x25522a4` |
 | `chargeSum` | `int?` | yes | ≤3.18.0 | `electricity_price_model.dart @0x255232c` |
-| `dischargeTime` | `unknown` | yes | ≤3.18.0 | `electricity_price_model.dart @0x25523b4` |
+| `dischargeTime` | `List?` of `ChargeTime` (mapping closure `@0x2552608` calls `ChargeTime.fromJson`, allocated at `0x255244c`) | yes | ≤3.18.0 | `electricity_price_model.dart @0x25523b4` |
 | `dischargeSum` | `int?` | yes | ≤3.18.0 | `electricity_price_model.dart @0x2552478` |
 | `batteryExport` | `bool?` | yes | ≤3.18.0 | `electricity_price_model.dart @0x2552500` |
 | `countryCode` | `String?` | yes | ≤3.18.0 | `electricity_price_model.dart @0x255256c` |
@@ -100,9 +100,9 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
-| `prices` | `unknown` | yes | ≤3.18.0 | `electricity_price_model.dart @0x2552960` |
-| `buyRealPrice` | `unknown` | yes | ≤3.18.0 | `electricity_price_model.dart @0x2552a14` |
-| `sellRealPrice` | `unknown` | yes | ≤3.18.0 | `electricity_price_model.dart @0x2552ac8` |
+| `prices` | `List?` of `Prices` (mapping closure `@0x25532b4` calls `Prices.fromJson`, allocated at `0x25529f0`) | yes | ≤3.18.0 | `electricity_price_model.dart @0x2552960` |
+| `buyRealPrice` | `List?` of `BuyRealPrice` (mapping closure `@0x25531d0` calls `BuyRealPrice.fromJson`, allocated at `0x2552aa4`) | yes | ≤3.18.0 | `electricity_price_model.dart @0x2552a14` |
+| `sellRealPrice` | `List?` of `BuyRealPrice` (mapping closure `@0x2552d78` calls `BuyRealPrice.fromJson`, allocated at `0x2552b58`) | yes | ≤3.18.0 | `electricity_price_model.dart @0x2552ac8` |
 | `day` | `String?` | yes | ≤3.18.0 | `electricity_price_model.dart @0x2552b80` |
 | `changeDst` | `bool?` | yes | ≤3.18.0 | `electricity_price_model.dart @0x2552c04` |
 | `isManual` | `bool?` | yes | ≤3.18.0 | `electricity_price_model.dart @0x2552c70` |
@@ -162,5 +162,4 @@ Keys with `since` 3.24.3 are new: all of `DynamicPrice` (the class is new in thi
 
 ## Known unknowns
 
-- The list element types listed as `unknown` were not resolved (see the note below the tables).
 - The unit and rounding of `buyPrice` / `sellPrice` (double) and the meaning of `type`, `dayType` and `canSelect` are not documented; no captured response exists.

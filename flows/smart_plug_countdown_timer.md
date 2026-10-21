@@ -12,6 +12,7 @@ On the countdown page (`a17x8countdown_view.dart`) the user taps the start, paus
 
 - The page considers the plug reachable (`_isCurDeviceConnected`, `a17x8countdown_logic.dart @0x275e4dc`, called at `@0x3dd03c4` and `@0x3dcf9b8`). If the page flag `field_8b` is true (BLE mode of the page) the test is: the BLE business connection state is `connectDone` (`@0x275e528`) and the connected MAC equals the plug's MAC (`getUnifiedMac` at `@0x275e550`). Otherwise the test is on the device status: `wifiConnected` gives true (`@0x275e5e8`); `wifiDisconnected` (`@0x275e618`), `appUnable` (`@0x275e638`) and `bleDisconnected` (`@0x275e658`) give false; every other status gives true (`@0x275e678`).
 - When the test fails the page shows a toast and sends nothing: `deviceOfflineAndBluetoothDisconnected` in BLE mode (`@0x3dd0558`), else `deviceIsOffline` (`@0x3dd056c`), shown at `@0x3dd0580` (same texts in `deleteCountdown`, `@0x3dcfa24` and `@0x3dcfa38`).
+- Initial values (`A17x8CountdownLogic::onInit`, `a17x8countdown_logic.dart @0x3461800` to `@0x346196c`): the page loads the cached `CountDownInfo` of the device (device offset 1167). The remaining-seconds value of the page is `info[0]` (`ArrayLoad ... List_8`, `@0x3461838`), 0 when no info is cached (`r4 = 0`, unboxed, `@0x3461858`). The page `type` (64-bit, unboxed) is `info.field_1f`, default 1 (`@0x34618d8`). The state value is `info.field_f`, default 2 (pause, `r2 = 2` at `@0x3461930`, unboxed, then boxed into the Rx). If the state then compares as running (`cmp w0, #6` at `@0x3461970`, running is 3) `onInit` starts the tick (`@0x346197c`). So the page starts in the pause state (2) when the device reports no timer, and the state is first set from the cached info; the cache is filled by the status parser of step 10.
 
 ## Steps
 
@@ -35,6 +36,8 @@ State values on the wire (type byte `a2`): start and resume 3, pause 2, delete 0
 - The cached timer info (`CountDownInfo`) is overwritten at step 4 before the device confirms and zeroed on a delete response (step 9).
 - Event bus messages 1351 (after a send), 1350 (delete confirmed) and 1356 (status parsed) are fired for the UI (`a17x8countdown_logic.dart @0x3dd0524`, `@0x275e490`; `a17x8_device_commands.dart @0x3b63690`).
 - The plug's relay is not touched by this flow; the relay toggle is [smart_plug_relay_toggle.md](smart_plug_relay_toggle.md).
+- The tick closure (`a17x8countdown_logic.dart @0x3461a60` to `@0x3461b94`) reads the remaining seconds Rx; at 0 it cancels the timer (`@0x3461aa4`) and closes the page with `GetNavigation.back()` (`@0x3461ad0`); otherwise it decrements the value by 1 (unboxed `sub x2, x1, #1`, `@0x3461b10`), stores it back into the Rx (`@0x3461b30`) and writes it into element 0 of the cached `CountDownInfo` at device offset 1167 (`ArrayStore r2[0]`, `@0x3461b80`). It sends nothing.
+- Two more messages are handled by `onMessageDispatch` besides the response ids (`a17x8countdown_logic.dart @0x275dee4`; the message id is read with a 64-bit load and compared raw): id 558 (`cmp x0, #0x22e`, `@0x275df0c`) carries a bool; when it is false the page calls `BleManager::disconnect` and clears its page flag `field_6b` (`@0x275df68`, `@0x275df78`). Id 575 (`cmp x0, #0x23f`, `@0x275df7c`) is ignored while the page is in BLE mode (`field_8b` true, `@0x275df90`); otherwise it carries a map with the keys `deviceSn`, `devicePn` and `connected` (strings at `@0x275e028`, `@0x275e060`, `@0x275e094`), and when the serial matches the page's device, the product is `A17X8` and `connected` is false (`@0x275e174`, `@0x275e184`) and a dialog is open, it dismisses the dialog and shows the toast `deviceIsOffline` (`@0x275e1bc`, `@0x275e1f0`). Ids 563 and 564 (`cmp x0, #0x233`, `#0x234`) go to `_dealWithResponse`. The names of the ids are not in the pool.
 
 ## Timing (delays/polling)
 
@@ -58,7 +61,4 @@ Corrections of the old FLOWS.md (audit rows in brackets), with the old value:
 
 ## Known unknowns
 
-- The meaning of the initial or idle state value of the page (audit row 19) and where the state is first set.
-- The body of the tick closure `a17x8countdown_logic.dart @0x3461a60` (whether it only decrements the displayed time).
-- The two other message ids the page dispatches (`cmp x0, #0x22e` at `a17x8countdown_logic.dart @0x275df0c` and `@0x275df7c`) are connection events whose names were not read.
 - Whether the relay switch state of the plug changes when a timer ends (device behaviour).

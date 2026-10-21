@@ -80,7 +80,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 ## Known unknowns
 
 - The meaning of `type` (values 1 and 2 after the Smi rule) is not documented.
-- The values of the provider parameter maps are not decoded here; their shape follows the provider objects of [get_price_company](get_price_company.md).
+- The values of the provider parameter maps are not decoded here; their shape follows the provider objects of [get_price_company](get_price_company.md). — traced 2026-10-20: the provider objects are listed with their keys on [the company model page](../../models/dynamic_price_company_model.md); the value types of the entries stay as documented there
 - Server behaviour is not known.
 
 ## Device-tested by

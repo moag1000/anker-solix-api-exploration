@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # check
 
 ## Purpose
 
-<!-- TODO -->
+Asks whether features are enabled for a product: `PowerUsageScenarioController::_updateFeatureVisibility` (EMS scenario list; features `AIEMS` and `STORM-GUARD`), `PowerUsageScenarioLogic::getWhiteListStatus`, `UserMainPageLogic::_getWhileList` (refresh) and `HomeSettingLogic::_requestEvChargerWhiteList` call the white-list check.
 
 ## Upstream name
 
@@ -12,8 +12,10 @@
 
 ## Method+URL
 
-`/power_service/v1/app/whitelist/feature/check`, method: not extracted by the inventory <!-- TODO -->; string-only: `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x35662f8`
-(literal also at 1 more site(s) in `data/endpoints.json`)
+`POST /power_service/v1/app/whitelist/feature/check` (asm-traced) at the senders that load a `Method` object next to the URL string (pool entry `pp+0xa7e0`, `Method.post`):
+
+- `PowerUsageScenarioController::checkFeatureVisibility` (`power_usage_scenario_controller.dart @0x3565f9c`): URL string `@0x35662f8`, method object `Method.post` (`pp+0xa7e0`) `@0x35662f0`.
+- `HttpRequestControllerImpl::getWhiteListStatusRes` (`http_request_repository_impl.dart @0x26ffad4`): URL string `@0x26ffc3c`, method object `Method.post` (`pp+0xa7e0`) `@0x26ffc34`.
 
 ## Encrypted?
 
@@ -21,12 +23,15 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+Both senders build a body with one key `check_list`: a list of maps typed `<Map<String, String>>` inside a map typed `<String, List<Map<String, String>>>`, so the elements are Strings.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `feature_code` | ? | ? | ? | `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x3565f9c` |
-| `product_code` | ? | ? | ? | `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x3565f9c` |
+| `check_list` | list | yes | `[{"feature_code": "AIEMS", "product_code": "<product_code>"}]` | key `http_request_repository_impl.dart @0x26ffb30` in the repository sender `getWhiteListStatusRes` (function `@0x26ffad4`): value store `@0x26ffbc8`, one-element growable list (`AllocateGrowableArray` `@0x26ffba8`), outer type arguments `@0x26ffbec`; `PowerUsageScenarioController::checkFeatureVisibility` (`power_usage_scenario_controller.dart @0x3565f9c`): key `@0x35660a8`, a list of one map with `"AIEMS"` and a second map with `"STORM-GUARD"` added when a flag is set (`tbnz` `@0x3566174`) |
+| `check_list[].feature_code` | string | yes | `"AIEMS"` | repository sender: key `@0x26ffb48`, store `@0x26ffb58` (parameter at `fp-0x18`), map type `<String, String>` `@0x26ffb70`; EMS sender: literals `"AIEMS"` (`@0x35660d0`) and `"STORM-GUARD"` (`@0x3566194`) |
+| `check_list[].product_code` | string | yes | `"<product_code>"` | repository sender: key `@0x26ffb5c`, store `@0x26ffb68` (parameter at `fp-0x20`); EMS sender: key `@0x35660dc`, store `@0x35660f4` / `@0x35661b8` from `productCode()` (`@0x35660ec`, `@0x35661b0`) |
 
-Rows are the union over 2 senders; `source` is the first sender that sets the key.
+Feature codes the app sends (asm-traced): the repository sender `getWhiteListStatusRes` (`charging/http/http_request_repository_impl.dart @0x26ffad4`) takes the code from its callers, which pass String literals: `"XTEST"` with the empty product code `""` (`UserMainLogic._getWhileList`, `charging/ui/page/user/main/user_main_page_logic.dart @0x26ffa9c`, `@0x26ffaa4`), `"AIEMS"` (`PowerUsageScenarioLogic.getWhiteListStatus`, `charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/power_usage_scenario_logic.dart @0x28a3854`) and `"evcharger_linkage"` (`charging/ui/page/device/a5101/setting/homeSetting/home_setting_logic.dart @0x292b8b0`); the EMS sender sends `"AIEMS"` and `"STORM-GUARD"`. So the codes in the app are `AIEMS`, `STORM-GUARD`, `evcharger_linkage` and `XTEST`; the string `APP_DEVICE_EMS_MODEL_SETUP` occurs only in a callback string.
 
 ## `param_type`/`cmd`
 
@@ -34,19 +39,29 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+None: no model class is parsed. The repository sender's success closure `http_request_repository_impl.dart @0x26ffd28` reads the keys `check_list` and `enabled` from the response map and hands the result to the callers, which cast `enabled` with `bool()` (`user_main_page_logic.dart @0x26ffe4c`, `power_usage_scenario_logic.dart @0x28a3944`); the EMS sender's closure `power_usage_scenario_controller.dart @0x356653c` reads `check_list`, `feature_code` and `enabled` and compares the feature code with `"AIEMS"`.
 
 ## Response
 
-<!-- TODO -->
+Keys read by the app: `check_list` (list), and per element `feature_code` (String) and `enabled` (type-checked as `bool` by the callers: a value of another JSON type would fail that check; `charging/ui/page/user/main/user_main_page_logic.dart @0x26ffe4c`).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body of `getWhiteListStatusRes`)
+
+```json
+{"check_list": [{"feature_code": "<feature_code>", "product_code": "<product_code>"}]}
+```
+
+Response, synthesized (keys read by the app; values are placeholders, not a capture)
+
+```json
+{"code": 0, "msg": "success", "data": {"check_list": [{"feature_code": "AIEMS", "enabled": true}]}}
+```
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+None traced. The failure callbacks (`http_request_repository_impl.dart @0x26ffc80`, `power_usage_scenario_controller.dart @0x3566484`) log the code and message and call `exeError()`; no code is compared (the 64-bit compares with 16076 in the EMS closure are class-id tests). Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -63,11 +78,11 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. The endpoint is in none of the added, removed or changed-params lists of `tools/out/diff_3.18.0_3.24.3.md`, so there is no string-level parameter delta.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- What the server returns for a feature it does not know: the callers read only `enabled`.
 
 ## Device-tested by
 

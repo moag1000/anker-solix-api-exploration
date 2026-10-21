@@ -69,7 +69,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The integer values of `status` that the list closure sends (UNCONFIRMED `[1, 2]`) and the meaning of `status` and `member_type` in the answer are not decoded.
+- The integer values of `status` that the list closure sends (UNCONFIRMED `[1, 2]`) and the meaning of `status` and `member_type` in the answer are not decoded. — reclassified: server (2026-10-20: the app sends the members `inviting` and `joined` of `DeviceShareStatus` mapped to integers (see Request); what the numbers mean in the answer is not derivable from the app)
 - Whether the member type 1 means a family member or something else is not known (the invitation also sends `member_type` 1).
 
 ## Device-tested by

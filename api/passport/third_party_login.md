@@ -77,6 +77,8 @@ The code catalog is [errors.md](../errors.md). The failure closure of the Amazon
 - `charging/http/http_request_repository_impl.dart`: `thirdLoginRequest` @0x3bd1858 (`encryptionRequestHttp`).
 - Called from `charging/http/http_request_repository.dart::thirdLoginRequest` and `charging/ui/page/account/login/login_logic.dart::amazonLogin` (`@0x3bd161c`): it first runs the native Amazon sign-in (`ChannelHelper::amazonLogin`, `@0x3bd1728`) and then `thirdLoginRequest` (`@0x3bd1780`). There is no other sender of this URL in 3.24.3.
 
+Call sites (grep of the asm, traced 2026-10-20): the name `thirdLoginRequest` has one call site, `LoginLogic::amazonLogin` (`charging/ui/page/account/login/login_logic.dart @0x3bd1780`); `callWeChatLogin` calls `weChatLogin` (`@0x3bd1138`) and neither function calls `thirdLoginRequest`, so the WeChat login does not send this endpoint.
+
 ## Since/changed
 
 3.18.0: present (`http_request_repository_impl.dart`, 3.18.0 `@0x2d2347c`). 3.24.3: present, same body keys. since: ≤3.18.0.
@@ -84,7 +86,6 @@ The code catalog is [errors.md](../errors.md). The failure closure of the Amazon
 ## Known unknowns
 
 - Whether providers other than `"amazon"` are accepted by the server; the app hardcodes one.
-- Which of the two `login_logic.dart` WeChat functions (`callWeChatLogin`, `weChatLogin`) end in this endpoint; no second sender of the URL was found, so they probably use a different path.
 - Response differences from the password login (if any).
 
 ## Device-tested by

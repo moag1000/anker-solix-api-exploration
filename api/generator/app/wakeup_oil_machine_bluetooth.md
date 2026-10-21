@@ -61,7 +61,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 ## Known unknowns
 
 - What the server does (sends a wake-up message to the generator, which then enables its Bluetooth) is inferred from the name; no capture exists.
-- Why the app uses the cloud to wake the Bluetooth, and how this relates to the BLE documentation in [../../../ble/README.md](../../../ble/README.md), is not traced.
+- Why the app uses the cloud to wake the Bluetooth, and how this relates to the BLE documentation in [../../../ble/README.md](../../../ble/README.md), is not traced. — reclassified: device test row 158 (2026-10-20: what the cloud call does to the generator is device behaviour)
 
 ## Device-tested by
 

@@ -24,7 +24,9 @@ Body is a `<String, dynamic>` map; it holds `scene_type` only when the argument 
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `scene_type` | String | no | `"power_outage"` | `anka_agent_http.dart @0x2e544d0`; the example scene is a placeholder (the values are not shown by the sender) |
+| `scene_type` | String | no | `"power_outage"` | `anka_agent_http.dart @0x2e544d0`; `power_outage` is the one scene literal the app compares with (see below) |
+
+Source of `scene_type` (traced 2026-10-20, app side): `AiChatController::refreshReminderCta` (`anka_agent/pages/home/controller/ai_chat_controller.dart @0x2e54354`, named parameter `sceneType`) is called from `_fetchCtaForSpecialMessages` (`@0x2e5432c`) with the scene taken from the chat message data: the string key `scene_type` is read from message maps at `ai_chat_controller.dart @0x2e6112c`, `@0x2e61b80`, `@0x2e63170` and passed on in the log text ` sceneType=`. The app itself compares the scene string with the literal `"power_outage"` in two places: `AnkaAgentEntryConfigService::getPushSwitchForScene` (`anka_agent/services/anka_agent_entry_config_service.dart @0x2e61500`; on a match it reads the field at offset 0x23, otherwise the field at 0x1f, branch `tbnz w0, #4` `@0x2e61518`) and the answer item widget (`anka_agent/pages/home/widgets/ai_chat_content_user_answer_item.dart @0x2e62f7c`, compare, then a map with `scene_type` is built `@0x2e62fb4`). So `power_outage` is the only app-known value; any other scene arrives with the messages and its set is not visible in the app.
 
 ## `param_type`/`cmd`
 
@@ -70,7 +72,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The set of `scene_type` values is not decoded here.
+- Further `scene_type` values besides `power_outage`: not visible in the app (they arrive with the chat messages; traced 2026-10-20, see Request).
 
 ## Device-tested by
 

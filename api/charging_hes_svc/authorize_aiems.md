@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # authorize_aiems
 
 ## Purpose
 
-<!-- TODO -->
+Authorizes the AI-EMS data usage of a site towards the cloud after the user confirms the data-authorization dialog (`SmartModeLogic::showDataAuthorizationDialog` leads to `SmartModeLogic::authorizeAiEmsToCloud`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,18 +12,21 @@
 
 ## Method+URL
 
-`/charging_hes_svc/authorize_aiems`, method: not extracted by the inventory <!-- TODO -->; string-only: `ak_soft_ems/http/ems_api.dart @0x37a4494`
-(literal also at 1 more site(s) in `data/endpoints.json`)
+`POST /charging_hes_svc/authorize_aiems` (asm-traced): URL string at `charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eb26d8`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x3eb26d0`, in `SmartModeLogic::authorizeAiEmsToCloud` (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eb25d8`), sent through `encryptionRequestHttp` (`@0x3eb2700`).
 
 ## Encrypted?
 
 encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
+- `encryptionRequestHttp` forwards `needEncryption` with its default true to `requestHttp` (`api/encryption.md`): `SmartModeLogic::authorizeAiEmsToCloud` (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart`, call `@0x3eb2700`).
+
 ## Request
+
+(asm-traced) Each sender stores its keys in one map literal with type arguments `<String, String>` read at the cited address, so every value is a String: `SmartModeLogic::authorizeAiEmsToCloud` (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eb2688`, 1 key). No key is behind a null guard.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `siteId` | ? | ? | ? | `charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eb25d8` |
+| `siteId` | string | yes | `"<siteId>"` | `charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eb264c` |
 
 ## `param_type`/`cmd`
 
@@ -31,19 +34,29 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+not parsed by the app (asm-traced): the success closure (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eb27c8`) logs a fixed text (`@0x3eb27f0`), sets a flag to `true` (`value=` `@0x3eb2820`) and calls `GetNavigation.back` (`@0x3eb284c`); it reads no response key and builds no model.
 
 ## Response
 
-<!-- TODO -->
+No response key is read by the app (see Response model).
+
+Success flag (app side, traced 2026-10-20): the success closure sets `value = true` on `field_7` of `SmartModeLogic.field_53` (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eb2804`..`@0x3eb2820`). `field_53` is a `SmartModeState` (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_state.dart`), whose constructor creates `field_7` and `field_b` as `false.obs` (`@0x4129478`..`@0x41294b4`); the getter `SmartModeState::isEnableButtonEnabled` returns `field_7.value && field_b.value` (`@0x3eaede8`..`@0x3eaee24`), and the smart-mode view reads it (`smart_mode_view.dart @0x3eaed78`) for a button-enabled closure. So the flag is the authorization half of the condition that enables the button in the smart-mode view; what `field_b` stands for is not named in the asm.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "siteId": "<siteId>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -56,11 +69,12 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- What the server does with the authorization or whether it answers with a body (the app ignores the answer).
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

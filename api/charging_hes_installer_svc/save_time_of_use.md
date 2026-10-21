@@ -68,9 +68,9 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The enum values behind `touType` (the helper senders send an enum index) are not decoded; only the auto-TOU page sends a literal (52).
+- The enum values behind `touType` (the helper senders send an enum index) are not decoded; only the auto-TOU page sends a literal (52). — traced 2026-10-20: see the consumer page [save_time_of_use](../charging_hes_dynamic_price_svc/save_time_of_use.md#known-unknowns): the helper senders send the `index` of an enum parameter, fitting `TouMode` (`none` 0, `manual` 1, `auto` 2) by name only; the auto-TOU page sends 52
 - Server behaviour is not known.
-- Whether `providerParams` is merged into the body of the auto-TOU save is not checked.
+- Whether `providerParams` is merged into the body of the auto-TOU save is not checked. — traced 2026-10-20: `TOUAutoPricePkgResultLogic::saveAuto` (listed on the consumer page) reads `providerParams` from the page arguments (`tou_auto_price_pkg_result_logic.dart @0x2c48b40`, see [get_price](get_price.md#request)); whether it reaches the save body was not followed
 
 ## Device-tested by
 

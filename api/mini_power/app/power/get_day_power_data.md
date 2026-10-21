@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # get_day_power_data
 
 ## Purpose
 
-<!-- TODO -->
+Loads the power curve of one day for the power-curve pages (callers `_getPowerCurveData` in the A2345 and A91B2 power-curve logic and `HttpServiceImpl::getDayPowerData`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/mini_power/v1/app/power/get_day_power_data`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x28a8538`
+`POST /mini_power/v1/app/power/get_day_power_data` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x28a8538`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x28a8530`, in `HttpRequestControllerImpl::getDayPowerData` (`charging/http/http_request_repository_impl.dart @0x28a8454`), sent through `encryptionRequestHttp` (`@0x28a8560`).
 
 ## Encrypted?
 
@@ -20,11 +20,15 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+(asm-traced) `HttpRequestControllerImpl::getDayPowerData` (`charging/http/http_request_repository_impl.dart @0x28a8454`) stores three keys unconditionally in a map literal with type arguments `<String, String>` (`@0x28a84ec`), so all three values are Strings.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_model` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x28a8454` |
-| `device_sn` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x28a8454` |
-| `date` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x28a8454` |
+| `device_model` | string | yes | `"<device_model>"` | `charging/http/http_request_repository_impl.dart @0x28a84b0` (map literal `<String, String>` `charging/http/http_request_repository_impl.dart @0x28a84ec`) |
+| `device_sn` | string | yes | `"<device_sn>"` | `charging/http/http_request_repository_impl.dart @0x28a84c4` (same literal) |
+| `date` | string | yes | `"<date>"` | `charging/http/http_request_repository_impl.dart @0x28a84d8` (same literal) |
+
+Caller values (traced 2026-10-20, app side): `A2345PowerCurveLogic::_getPowerCurveData` (`charging/ui/page/device/a2345/a2345power_curve/a2345power_curve_logic.dart`) passes the constant `"A2345"` as `device_model` (`r2 = "A2345"` `@0x28a83c4`), `field_6b` of its device object as `device_sn` (`@0x28a8370`) and, as `date`, the result of `DateUtil.getCurrentYYMMDDByDateStr` (`@0x28a837c`, stored in the frame `@0x28a838c`, passed as `r5` `@0x28a83b8`). That function (`base_service/util/date_util.dart @0x2352e1c`..`@0x2352e6c`) formats the current `DateTime` with the pattern `yyyy-MM-dd` (`@0x2352e50`), so the app sends today's date in the form `2026-10-20`; the method name says `YYMMDD` but the pattern is `yyyy-MM-dd`. The A91B2 caller (`charging/ui/page/device/a91b2/a91b2power_curve/a91b2power_curve_logic.dart`) calls the same date function (`@0x28f0ab8`) and sends the constant `"A91B2"` as `device_model` (`@0x28f0b00`).
 
 ## `param_type`/`cmd`
 
@@ -32,19 +36,31 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+- [`DayPowerModel`](../../../../models/other.md#daypowermodel), parsed per list element by `DayPowerModel.fromJson` at `charging/http/http_request_repository_impl.dart @0x28a8708`. The success closure (`@0x28a857c`) reads the key `output_power_list` (`@0x28a85cc`), casts it to `List?` (`@0x28a860c`), parses each element into a `List<DayPowerModel>` (`@0x28a8620`) and passes it to the callback (`ClosureCall` `@0x28a87a8`).
 
 ## Response
 
-<!-- TODO -->
+Top-level key of the response: `output_power_list` (list of port curves). Keys of one element (`data/models.json`, `base_service::DayPowerModel`): `port_name` (String?), `interval` (int?), `unit` (String?), `power_points` (List?), `power_protos` (field type not extracted).
+
+Element types (app side, traced 2026-10-20, `base_service/bean/model/day_power_model.dart`): `power_points` is cast to `List?` (`@0x28a89dc`) and turned into a list of `double` (`<double>` `@0x28a8a24`), so its entries are numbers; `power_protos` is stored without a cast or conversion (`ArrayStore` `@0x28a8acc`), so the model keeps it as received and its element type is not fixed by the app; `port_name` is a `String?` (`@0x28a8954`).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "device_model": "<device_model>",
+  "device_sn": "<device_sn>",
+  "date": "<date>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page (the failure closure `charging/http/http_request_repository_impl.dart @0x226824c` forwards code and message to a stored callback without reading them). Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -59,11 +75,12 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- The unit and spacing of `power_points` (`interval` and `unit` are model fields; their values were not decoded). — reclassified: server (2026-10-20: `interval` and `unit` arrive in the answer; the app code read here does not name their values)
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

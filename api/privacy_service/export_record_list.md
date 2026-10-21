@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # export_record_list
 
 ## Purpose
 
-<!-- TODO -->
+Lists the user's earlier data export requests; sent by `DataExportListReposity::getExportRecordList` (`charging/ui/page/user/dataExport/export_list/data_export_list_reposity.dart @0x2985374`) (asm-traced for the sender; the inventory lists no caller, so the screen is not in the chain, string-only).
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/privacy_service/v1/export_record_list`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/ui/page/user/dataExport/export_list/data_export_list_reposity.dart @0x29853fc`
+`POST /privacy_service/v1/export_record_list` (asm-traced): URL string at `charging/ui/page/user/dataExport/export_list/data_export_list_reposity.dart @0x29853fc`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x29853f4`, in `DataExportListReposity::getExportRecordList` (`charging/ui/page/user/dataExport/export_list/data_export_list_reposity.dart @0x2985374`), sent through `encryptionRequestHttp` (`@0x2985424`).
 
 ## Encrypted?
 
@@ -20,7 +20,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-No request keys found by the extractor. <!-- TODO -->
+No body field: the sender builds an empty map literal (`Map._fromLiteral` `charging/ui/page/user/dataExport/export_list/data_export_list_reposity.dart @0x29853c0`, no key store before it).
 
 ## `param_type`/`cmd`
 
@@ -28,19 +28,21 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+no top-level model: the success closure (`charging/ui/page/user/dataExport/export_list/data_export_list_reposity.dart @0x29856c4`) reads the key `record_list` (key string `@0x2985700`, lookup `@0x2985720`), tests it for `List` (`@0x29857c8`) and maps each element with `DataExportListItemModel.fromJson` (`@0x2985954`, element closure `@0x298591c`, call target `#0x298596c`, `charging/model/privacy_policy/data_export_list_item_model.dart`) to a `List<DataExportListItemModel>` for the callback (`ClosureCall` `@0x2985884`). A missing list gives an empty list (`@0x29858cc`); a value that is not a list calls the failure callback with the client-side code raw 20004 (a tagged Smi, so 10002, `@0x29858e4`) and the text `data is not List`.
 
 ## Response
 
-<!-- TODO -->
+(asm-traced) One key is read from the top level of the response: `record_list` (list). Keys of `charging::DataExportListItemModel` (`data/models.json`, no page under `models/`): `account` (unknown), `send_status` (int?), `send_email` (unknown), `apply_time` (int?).
+
+Item model types (traced 2026-10-20, app side): `DataExportListItemModel.fromJson` (`charging/model/privacy_policy/data_export_list_item_model.dart`) reads each key with `[]`; `account` (`@0x2985998`) and `send_email` (`@0x2985a64`) are stored as `toString` of the value when it is not null, so they are `String?`; `send_status` (`@0x2985a00`) and `apply_time` (`@0x2985ad0`) are `toString` then `int.tryParse` (`@0x2985a48`, `@0x2985b18`), so `int?`.
 
 ## Example request/response
 
-<!-- TODO -->
+Request: no body fields are built (see Request). Response: not synthesized; no capture exists for this endpoint.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+No server code is compared. The closure itself raises the client-side code 10002 (raw 20004 in a tagged slot, `charging/ui/page/user/dataExport/export_list/data_export_list_reposity.dart @0x29858e4`) with the text `data is not List` when `record_list` is not a list. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -48,11 +50,12 @@ n/a
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- What `send_status` values mean (sent, pending, failed): the model key is typed `int?`; the table of values is not visible. — reclassified: server (2026-10-20: the app only forwards `send_status`; the value table is not derivable here)
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

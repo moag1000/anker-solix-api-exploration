@@ -1,6 +1,6 @@
 # BLE/MQTT Command Map — Static Cross-Reference
 
-> **3.18.0 archive (unaudited prose; numbers may be 2× too large).** Kept because seven of its product sections have no 3.24.3 owner page yet (PPS A176X/A178X, EV chargers A5190/A5191, EverFrost A17A4/A17A5, generator adapter A17D0). Every integer here was read without Smi decoding; the verdict per number is in [../audit/BLE_COMMAND_MAP.md](../audit/BLE_COMMAND_MAP.md). For everything that has an owner use [../../ble/README.md](../../ble/README.md) and [../../mqtt/README.md](../../mqtt/README.md); never cite this file as a source.
+> **3.18.0 archive (unaudited prose; numbers may be 2× too large).** Kept as 3.18.0 history. The seven product sections that had no owner now have one: PPS A176X/A178X in [../../ble/a176x_a178x.md](../../ble/a176x_a178x.md), EV chargers A5190/A5191 in [../../ble/a5190_a5191.md](../../ble/a5190_a5191.md), EverFrost A17A4/A17A5 in [../../ble/a17a3.md](../../ble/a17a3.md) (no page of their own: the factory builds the A17A3 controller for them), generator adapter A17D0 in [../../ble/a17d0.md](../../ble/a17d0.md). Every integer here was read without Smi decoding; the verdict per number is in [../audit/BLE_COMMAND_MAP.md](../audit/BLE_COMMAND_MAP.md). For everything that has an owner use [../../ble/README.md](../../ble/README.md) and [../../mqtt/README.md](../../mqtt/README.md); never cite this file as a source.
 
 
 > **New methodology (2026-03-28)**: This mapping was produced by cross-referencing

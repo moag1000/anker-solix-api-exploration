@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # upload
 
 ## Purpose
 
-<!-- TODO -->
+Tells the server that a log file has been uploaded to storage and gives its URL; sent by `DeviceLogsLogic::_notifyServer` (device logs, called from `_putFile`) and `UploadLogLogic::uploadLogURL` (app log, called from `uploadAppLogData`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,8 +12,11 @@
 
 ## Method+URL
 
-`/app/logging/upload`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133e68`
-(literal also at 1 more site(s) in `data/endpoints.json`)
+`POST /app/logging/upload` (asm-traced): URL string at `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133e68`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x3133e60`, in `DeviceLogsLogic::_notifyServer` (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80`), sent through `encryptionRequestHttp` (`@0x3133e8c`).
+
+Same URL in the other sender(s) read:
+
+- `POST /app/logging/upload` (asm-traced): URL string at `charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b6520`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x46b6518`, in `UploadLogLogic::uploadLogURL` (`charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b62e0`), sent through `encryptionRequestHttp` (`@0x46b6544`).
 
 ## Encrypted?
 
@@ -23,17 +26,17 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `url` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
-| `source` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
-| `logging_time` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
-| `level` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
-| `os` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
-| `version` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
-| `app_version` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
-| `related_device_sn` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
-| `device_sn` | ? | ? | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80` |
+| `url` | ? | yes | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133c90` (value store `@0x3133ca8`) |
+| `source` | string | yes | `"app"` | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133cac` (value store `@0x3133cbc`) |
+| `logging_time` | int (unboxed, x) | yes | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133cc0` (value store `@0x3133cec`) |
+| `level` | string | yes | `"info"` | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133d10` (value store `@0x3133d24`) |
+| `os` | string | yes | `"android"` | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133d28` (value store `@0x3133d38`) |
+| `version` | string | yes | `"<version>"` | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133d3c` (value store `@0x3133d50`) |
+| `app_version` | string | yes | `"<app_version>"` | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133d74` (value store `@0x3133d88`) |
+| `related_device_sn` | ? | yes | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133dac` (value store `@0x3133dc0`) |
+| `device_sn` | ? | yes | ? | `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133de4` (value store `@0x3133df8`) |
 
-Rows are the union over 2 senders; `source` is the first sender that sets the key.
+Union over the two senders; the table lists the keys of `DeviceLogsLogic::_notifyServer` (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133b80`, map literal `<String, Object?>` `@0x3133e1c`), which is not evidence of a value type. `UploadLogLogic::uploadLogURL` (`charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b62e0`, map literal `<String, dynamic>` `@0x46b64d8`) sends the same keys except `related_device_sn` and `device_sn`. `logging_time` is boxed by `BoxInt64Instr` (`@0x3133cd4`, `@0x46b6400`), so it is an unboxed int (in `uploadLogURL` the value is the current time in milliseconds computed with `sdiv`). `source` is `"app"`, `level` `"info"` and `os` `"android"` in both senders (constants; no platform test was found in the senders). `version` and `app_version` are awaited results of `systemVersion` and `appVersion` (`@0x3133c6c`, `@0x3133c58`); both functions declare `InitAsync() -> Future<String>` (`charging/util/device_util.dart @0x225093c` and `@0x224ee44`), so both values are strings (one-hop evidence).
 
 ## `param_type`/`cmd`
 
@@ -41,19 +44,35 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+not parsed by the app (asm-traced): the success closures never read their response argument; `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x3133ef4` calls the stored callback (`ClosureCall` `@0x3133f2c`) and `charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b662c` deletes the uploaded file, cuts the log file and records the upload time (`_deleteUploadFile` `@0x46b666c`, `cutUploadLogFile` `@0x46b668c`, `eventTrackUploadLogInfo` `@0x46b6728`). No `fromJson`.
 
 ## Response
 
-<!-- TODO -->
+No response key is read by the app (see Response model).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "url": "<url>",
+  "source": "app",
+  "logging_time": "<logging_time>",
+  "level": "info",
+  "os": "android",
+  "version": "<version>",
+  "app_version": "<app_version>",
+  "related_device_sn": "<related_device_sn>",
+  "device_sn": "<device_sn>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or its closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -65,13 +84,17 @@ Called from:
 - `charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart::_putFile`
 - `charging/ui/page/user/upload_log/upload_log_logic.dart::uploadAppLogData`
 
+Failure path (traced 2026-10-20, app side): `UploadLogLogic::uploadLogFail` (`charging/ui/page/user/upload_log/upload_log_logic.dart @0x46b6568`; body `@0x46b2680`..`@0x46b27d8`) logs `UploadLogLogic uploadLogFail: ` (`@0x46b269c`), reads the upload time (`getUploadTime` `@0x46b271c`), reports a tracking event (`eventTrackUploadLogInfo` `@0x46b2748`) and sets the status text `uploadLogFail` (`Trans.tr` `@0x46b277c`, `value=` `@0x46b2794`, `@0x46b27ac`). The notify call passes a `success` and a `fail` closure (`@0x46b64e8`, `@0x46b64fc`, argument list `@0x46b653c`); the `fail` closure (`@0x46b657c`) logs the error and calls `uploadLogFail` (`@0x46b6610`).
+
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Types of `url` (a field in `_notifyServer`, a parameter in `uploadLogURL`), `related_device_sn` and `device_sn` (parameters of `_notifyServer`): no declared type was read at the callers. — attempted 2026-10-20 (two-hop not readable: `_notifyServer` is called from `_putFile` (`charging/ui/page/user/upload_log/device_logs/device_logs_logic.dart @0x31339d8`) with six values taken from frame slots of `_putFile` itself (`fp-0xc0`..`fp-0xf8`, `@0x31339b8`..`@0x31339d4`) and `_putFile` PUTs the file with `put` (`@0x3133978`) before it notifies; no declared types)
+- Whether `source: "app"` and `os: "android"` are replaced on iOS: no branch was found in the senders. — reclassified: device test row 161 (2026-10-20: the workspace holds the Android build only, so an iOS branch cannot be checked here)
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

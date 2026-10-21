@@ -39,5 +39,5 @@ The whole class is new in 3.24.3 (`since` 3.24.3 on both keys). Other senders of
 
 ## Known unknowns
 
-- The keys inside each `peak_sessions` map are not traced (the model keeps raw maps).
+- The keys inside each `peak_sessions` map are not traced (the model keeps raw maps). — traced 2026-10-20: `large_tou_repository.dart` (the consumer, call `@0x4878f8c`) loads only the two string keys `peak_sessions` and `price_unit`; the keys inside each element map are read in other files that use the key `peak_sessions` (for example `tou_plan_logic.dart`, `general_price_setting.dart`, `electricity_usage_helper.dart`), whose read sites were not followed.
 - The `"$"` default means a missing unit renders as a dollar sign even for non-dollar sites; whether the server always sends the key is not known.

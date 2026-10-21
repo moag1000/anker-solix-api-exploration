@@ -22,7 +22,7 @@ Reads the list of region codes (countries with their states and grid codes) that
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `product_code` | String | yes | `"A5102"` | `base_service/view/grid/grid_param_util.dart @0x28f5ff0` (map literal, one pair); value is the function argument. The SDK closure of `PowerPlantConfigController` sends a `param` map as well (`@0x2b07d20`; keys not read) |
+| `product_code` | String | yes | `"A5102"` | `base_service/view/grid/grid_param_util.dart @0x28f5ff0` (map literal, one pair); value is the function argument. The SDK closure of `PowerPlantConfigController` sends a `param` map as well (`flutter_charging_beginning/beginning/state_cards/settings/power_plant_config_controller.dart @0x2b07d20`; keys not read) |
 
 The example value is upstream's (`apitypes.py` line 346).
 

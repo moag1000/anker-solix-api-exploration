@@ -46,6 +46,8 @@ Success closure of the first sender: `@0x2ad12fc`; the second sender's closure i
 |---|---|---|---|---|
 | `<list>` | list of `SelfCheckConfigItem` | no | `[ { "checkId": 1, "title": "...", "content": "...", "imageUrl": "...", "checkType": 1 } ]` | [../../models/self_check_config_model.md](../../models/self_check_config_model.md#selfcheckconfigitem); item keys `checkId`, `content`, `imageUrl`, `checkType`, `title` (`self_check_config_model.dart @0x2ad2410` to `@0x2ad262c`) |
 
+How the answer reaches the item list (traced 2026-10-20, app side): the first success closure (`flutter_charging_beginning/beginning/state_cards/self_check/self_check_controller.dart @0x2ad12fc`) passes its argument to `SelfCheckConfigModel.fromJson` (`@0x2ad1354`) and adds the model's item list (`field_7`, `addAll` `@0x2ad1378`) to a growable `List<SelfCheckConfigItem>`. `fromJson` (`self_check_config_model.dart @0x2ad1428` region) reads no key: it decodes its argument with a `JsonCodec` when it is text (`@0x2ad145c`, after a class-id test `@0x2ad1440`), casts the result to `List` (`@0x2ad1504`) and maps each element to `SelfCheckConfigItem` (`map` `@0x2ad1570`, `toList` `@0x2ad159c`); an exception logs `SelfCheckConfigModel.fromJson error: ` (`@0x2ad15e8`). So the `data` of the answer is the list itself (or a JSON text of the list).
+
 ## Example request/response
 
 Request, synthesized (self-check screen)
@@ -79,8 +81,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- How the answer reaches the item list (which key, or whether `data` is the list itself) is not decoded; see the model page.
-- What `errorBits` encodes (a bit index or a bit mask) is not shown by the sender.
+- What `errorBits` encodes (a bit index or a bit mask) is not shown by the sender. — reclassified: device test row 157 (2026-10-20: bit meaning is device behaviour (self-check error bits))
 
 ## Device-tested by
 

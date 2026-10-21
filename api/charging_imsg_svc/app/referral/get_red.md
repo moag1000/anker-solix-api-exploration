@@ -61,7 +61,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The wire shape of the empty request is not shown (no map is built).
+- The wire shape of the empty request is not shown (no map is built). — reclassified: device test row 160 (2026-10-20: whether an empty body is sent as `{}`, as no body or as null is decided by the HTTP layer and the SDK, which a capture shows)
 - How the red dot is cleared on the server is [del_red](del_red.md).
 
 ## Device-tested by

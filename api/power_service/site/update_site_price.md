@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # update_site_price
 
 ## Purpose
 
-<!-- TODO -->
+Saves the electricity price setup of a site: the TOU plan editors (`TOUPlanLogic::savePlan`, `TOUEditPreviewLogic::savePlan`, `TouHttpService::updateSitePrice`), the fixed-price page (`GeneralPriceSettingLogic::setFixedPrice`), the medium-charging plan helper (`ElectricityPricePlanApiHelper::saveMediumChargingPlan`) and two repository senders (`updateSitePriceRequest`, `postCloudSitePrice`) post it.
 
 ## Upstream name
 
@@ -12,8 +12,15 @@
 
 ## Method+URL
 
-`/power_service/v1/site/update_site_price`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x279e384`
-(literal also at 8 more site(s) in `data/endpoints.json`)
+`POST /power_service/v1/site/update_site_price` (asm-traced) at the senders that load a `Method` object next to the URL string (pool entry `pp+0xa7e0`, `Method.post`):
+
+- `HttpRequestControllerImpl::postCloudSitePrice` (`http_request_repository_impl.dart @0x31e4050`): URL string `@0x31e40d0`, method object `Method.post` (`pp+0xa7e0`) `@0x31e40c8`.
+- `HttpRequestControllerImpl::updateSitePriceRequest` (`http_request_repository_impl.dart @0x279e0cc`): URL string `@0x279e384`, method object `Method.post` (`pp+0xa7e0`) `@0x279e37c`.
+- `ElectricityPricePlanApiHelper::saveMediumChargingPlan` (`electricity_price_plan_api_helper.dart @0x41a73e0`): URL string `@0x41a75d0`, method object `Method.post` (`pp+0xa7e0`) `@0x41a75c8`.
+- `TOUPlanLogic::savePlan` (`tou_plan_logic.dart @0x31b88b4`): URL string `@0x31b8b14`, method object `Method.post` (`pp+0xa7e0`) `@0x31b8b0c`.
+- `GeneralPriceSettingLogic::setFixedPrice` (`general_price_setting.dart @0x41a7afc`): URL string `@0x41a8044`, method object `Method.post` (`pp+0xa7e0`) `@0x41a803c`.
+- `TouHttpService::updateSitePrice` (`tou_http_service.dart @0x4883d48`): URL string `@0x4883d7c`, method object `Method.post` (`pp+0xa7e0`) `@0x4883d94`.
+- `TOUEditPreviewLogic::savePlan` (`tou_edit_preview_logic.dart @0x31de7dc`): URL string `@0x31dea04`, method object `Method.post` (`pp+0xa7e0`) `@0x31de9fc`.
 
 ## Encrypted?
 
@@ -21,29 +28,20 @@ encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header r
 
 ## Request
 
+Seven senders with different key sets; the keys common to the senders that were read are listed.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `site_id` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x279e0cc` |
-| `price` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x279e0cc` |
-| `site_co2` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x279e0cc` |
-| `site_price_unit` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x279e0cc` |
-| `price_type` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x279e0cc` |
-| `current_mode` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x279e0cc` |
-| `accuracy` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x279e0cc` |
-| `device_sn` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `attributes.price_type` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `attributes.fixed_price` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `attributes.currency` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `id` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `buy` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `sell` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `energy_unit` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `start_time_period` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `end_time_period` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `peak_type` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `day_type` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
+| `site_id` | ? | yes |  | key `charging/http/http_request_repository_impl.dart @0x279e134`; `HttpRequestControllerImpl::updateSitePriceRequest` (`http_request_repository_impl.dart @0x279e0cc`): `<String, Object>` (`@0x279e338`), key `@0x279e134`, store `@0x279e144` (stack parameter); `ElectricityPricePlanApiHelper::saveMediumChargingPlan`, `TOUPlanLogic::savePlan`, `TOUEditPreviewLogic::savePlan`: `[]=` keys `electricity_price/components/electricity_price_common/electricity_price_plan_api_helper.dart @0x41a747c`, `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart @0x31b8964`, `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart @0x31de898`; `GeneralPriceSettingLogic::setFixedPrice` key `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7df0` (`field_7b` of the logic); `postCloudSitePrice`: the body is built by the caller `ConfirmPeakValleyLogic::setSitePrice` (`charging/feature/peak_valley/confirm/confirm_peak_valley_logic.dart @0x3bc0dc8`), key `@0x3bc0e10` |
+| `price` | ? | yes | | `updateSitePriceRequest`: key `charging/http/http_request_repository_impl.dart @0x279e148`, double stored with `inline_Allocate_Double` `@0x279e180`; `[]=` keys in the TOU senders; `postCloudSitePrice` (caller `ConfirmPeakValleyLogic::setSitePrice`) key `charging/feature/peak_valley/confirm/confirm_peak_valley_logic.dart @0x3bc0e64` (0.0) |
+| `site_co2` | ? | yes | | `updateSitePriceRequest` key `charging/http/http_request_repository_impl.dart @0x279e1ac` (double); TOU senders `[]=` keys `electricity_price/components/electricity_price_common/electricity_price_plan_api_helper.dart @0x41a7524`, `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart @0x31b8a20`, `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart @0x31de904`; `postCloudSitePrice` key `charging/feature/peak_valley/confirm/confirm_peak_valley_logic.dart @0x3bc0e8c` |
+| `site_price_unit` | ? | yes | | `updateSitePriceRequest` key `charging/http/http_request_repository_impl.dart @0x279e210`; TOU senders `[]=` keys `electricity_price/components/electricity_price_common/electricity_price_plan_api_helper.dart @0x41a7578`, `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart @0x31b8a88`, `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart @0x31de96c`; `postCloudSitePrice` key `charging/feature/peak_valley/confirm/confirm_peak_valley_logic.dart @0x3bc0e78` (empty string) |
+| `price_type` | string | yes | `"use_time"` | `postCloudSitePrice` key `charging/feature/peak_valley/confirm/confirm_peak_valley_logic.dart @0x3bc0ea0`, literal `@0x3bc0eac`; `setFixedPrice` literal `"fixed"` (key `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7ec0`, literal `@0x41a7ecc`); `updateSitePriceRequest` key `charging/http/http_request_repository_impl.dart @0x279e248` takes a parameter |
+| `current_mode` | int (unboxed, x) | yes | | `updateSitePriceRequest` key `charging/http/http_request_repository_impl.dart @0x279e280`, `BoxInt64Instr` `@0x279e2b4` |
+| `accuracy` | int (unboxed, x) | yes | | `updateSitePriceRequest` key `charging/http/http_request_repository_impl.dart @0x279e2f0`, `BoxInt64Instr` `@0x279e2fc` |
+| `use_time` | ? | optional | | `postCloudSitePrice` key `charging/feature/peak_valley/confirm/confirm_peak_valley_logic.dart @0x3bc0eb8`; TOU senders `[]=` keys `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart @0x31b8abc`, `electricity_price/components/tou/page/tou_detail/view/tou_edit_preview_logic.dart @0x31de9a4` |
 
-Rows are the union over 2 senders; `source` is the first sender that sets the key.
+`GeneralPriceSettingLogic::setFixedPrice` (`general_price_setting.dart @0x41a7afc`) builds several larger bodies for fixed and peak-valley prices (`peak_sessions`, `peak_valley_prices`, `fixed_price`, `currency`, `not_include_nem`, `utility_rate_plan`, `systemCode`, `main_sn`, `time`, `station_id`, `sell_price`) and also posts to `set_device_attrs` (`@0x41a7d84`) in the same function; only the send at `@0x41a8044` belongs to this URL, and which of the bodies it carries was not decoded.
 
 ## `param_type`/`cmd`
 
@@ -51,19 +49,25 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+None resolved. `updateSitePriceRequest` passes the forwarding template `http_request_repository_impl.dart @0x261b9a0` and a failure closure `@0x279e3f8` that logs and calls `exeError()`; the TOU senders' callbacks (`tou_plan_logic.dart @0x31bb49c`, `tou_edit_preview_logic.dart @0x31df400`, `electricity_price_plan_api_helper.dart @0x41a7700`, `general_price_setting.dart @0x41a7970`) log `getSupportOption success` or `success: ` and navigate; none calls `fromJson` in the closures read.
 
 ## Response
 
-<!-- TODO -->
+No response key is read in the callbacks read.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (key set of `postCloudSitePrice`; types of the double fields unresolved)
+
+```json
+{"site_id": "<site_id>", "price": 0.0, "site_price_unit": "", "site_co2": 0.0, "price_type": "use_time", "use_time": "<use_time>"}
+```
+
+Response: none parsed in the callbacks read.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+One compare is traced: the `TOUEditPreviewLogic::savePlan` failure callback `tou_edit_preview_logic.dart @0x31df304` shows `settingFailed` and logs the code and the URL; no code compare was found. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -98,11 +102,14 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. `tools/out/diff_3.18.0_3.24.3.md` (changed params) lists ` salePrice.value.isEmpty:` and `fixedPrice.value.isEmpty:` as added: these are log-label strings inside `GeneralPriceSettingLogic::setFixedPrice` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a80dc`, `@0x41a810c`), not request keys.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Types of `site_id`, `price`, `site_co2`, `site_price_unit` and `price_type` in most senders (parameters and `[]=` values). Header stays string-only. — attempted 2026-10-20 (two-hop not readable: senders pass parameters and `[]=` values; not followed in this pass. Header stays string-only)
+- Which body `setFixedPrice` sends to this URL (its function holds several bodies and two requests). — not traced 2026-10-20 in this pass (`setFixedPrice` bodies); the reason given in the bullet stands
+- `TouHttpService::updateSitePrice` (`tou_http_service.dart @0x4883d48`): body not read. `ElectricityPricePlanApiHelper::saveMediumChargingPlan` gets part of its body from the caller `GeneralPriceSettingLogic::setTOU` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a68ac`: `device_sn`, `attributes`, `use_time`), also not decoded. — not traced 2026-10-20 in this pass (`TouHttpService::updateSitePrice` and `saveMediumChargingPlan`); the reason given in the bullet stands
+- Response handling was read only at the callback level; no model class is parsed there. — not traced 2026-10-20 in this pass (callbacks); the reason given in the bullet stands
 
 ## Device-tested by
 

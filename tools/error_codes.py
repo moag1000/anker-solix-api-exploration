@@ -1,13 +1,22 @@
 """Extract the error-code catalog (upstream errors.py, 3.24.3 asm, issue reports).
 
 Usage (repo root):
-  python3 -I tools/error_codes.py [--repo .] [--asm ROOT] [--upstream errors.py] [--check]
+  python3 -I tools/error_codes.py [--repo .] [--asm ROOT] [--upstream errors.py] [--pool pp.txt] [--check]
 
 Writes data/errors.json and nothing else (the path is fixed, there is no --out).
 With --check nothing is written: exit 1 when data/errors.json is missing or stale,
 or when api/errors.md exists and lacks a table row for a code in the JSON.
 Standard library only; the asm tree and the upstream file are only read
 (upstream is parsed with ast, never imported).
+
+Asm rows also carry `message_keys` (every localization key loaded in the equal-path
+block after the compare that exists in the app's en_US translation table, read from the
+Blutter pool dump `pp.txt`, `--pool`), `message_key` (the first; may be a dialog title,
+not the body), `message_en` (its text) and `message_tag` (`asm-traced (proximity)`,
+only when a key exists).  The equal-path block is the fall-through of `b.ne` or the
+target of `b.eq`, up to an unconditional branch, `ret`, the `b.ne` target or the next
+compare; a range split (gt/lt) has none.  `common*` button labels and GENERIC_KEYS
+are skipped.  Proximity, not proof of what the user sees.
 
 Row sources (field `source`):
   upstream  class ERRORS entry of upstream api/errors.py, tag upstream-confirmed
@@ -224,6 +233,47 @@ def _compare(instrs, i):
     return None
 
 
+BR_COND = re.compile(r'^b\.(\w+)\s+#(0x[0-9a-f]+)')
+BR_UNCOND = re.compile(r'^(b\s+#|ret\b|br\s)')
+BLOCK_MAX = 80
+
+
+def equal_block_strings(ins, j, stop):
+    """String literals loaded on the path where the compare was equal.
+
+    ins[j] is the conditional branch after the compare.  `b.ne T`: the equal path
+    is the fall-through, which ends at the address T, at an unconditional branch,
+    at `ret` or at the next compare (index `stop`).  `b.eq T`: the equal path starts
+    at T and ends at the first unconditional branch, `ret` or compare.  Any other
+    condition (a range split) has no single equal path: returns [].
+    """
+    m = BR_COND.match(ins[j].text) if j < len(ins) else None
+    if not m or m.group(1) not in ('eq', 'ne'):
+        return []
+    target = m.group(2)
+    if m.group(1) == 'ne':
+        start, limit = j + 1, None
+    else:
+        idx = [k for k, x in enumerate(ins) if x.addr == target]
+        if not idx:
+            return []
+        start, limit = idx[0], None
+        stop = len(ins)
+    out = []
+    for k in range(start, min(len(ins), start + BLOCK_MAX)):
+        if m.group(1) == 'ne' and (ins[k].addr == target or k >= stop):
+            break
+        if m.group(1) == 'eq' and k > start and _compare(ins, k):
+            break
+        t = ins[k].text
+        if BR_UNCOND.match(t):
+            break
+        s = STR_LIT.match(t)
+        if s and s.group(1) not in out:
+            out.append(s.group(1))
+    return out
+
+
 def scan_function(fn, min_value, label=None, max_value=None):
     """Return the code compares of one function as row dicts (no source fields)."""
     ins = fn.instrs
@@ -252,6 +302,7 @@ def scan_function(fn, min_value, label=None, max_value=None):
             'addr': ins[i].addr, 'function': label or fn.name,
             'function_addr': fn.addr, 'odd_raw': width == 'w' and raw % 2 == 1,
             'strings': strings[:4],
+            'block': equal_block_strings(ins, j, stop),
         })
     return rows
 
@@ -306,14 +357,71 @@ def parse_upstream(path):
     return rows
 
 
-def build(asm_root, upstream_path, sites=None, msg_sites=None):
+# Keys that label a button or a generic state next to a compare; never the message.
+GENERIC_KEYS = {'failed', 'signUpGoSignIn', 'forgetPwdResend'}
+LOCALE = 'en_US'
+MESSAGE_TAG = 'asm-traced (proximity)'
+POOL_MAP_HEAD = re.compile(r'^\[pp\+0x[0-9a-f]+\] Map<String, Map<String, String>>\(\d+\) \{$')
+POOL_ENTRY = re.compile(r'^    "((?:[^"\\]|\\.)*)": "(.*)",?$')
+
+
+def load_locale(pool_path, locale=LOCALE):
+    """key -> text of one locale from the Blutter pool dump (read only).
+
+    The dump prints the app's translation table as `Map<String, Map<String, String>>`
+    with one `"<locale>": Map<String, String>(n) {` block per language; entries are
+    `    "key": "text",`.  Returns {} when no such block is found.
+    """
+    out, state = {}, 0
+    head = '  "%s": Map<String, String>' % locale
+    with open(pool_path, encoding='utf-8', errors='replace') as fh:
+        for line in fh:
+            line = line.rstrip('\n')
+            if state == 0:
+                state = 1 if POOL_MAP_HEAD.match(line) else 0
+            elif state == 1:
+                state = 2 if line.startswith(head) else 1
+            else:
+                if line.startswith('  }'):
+                    break
+                m = POOL_ENTRY.match(line)
+                if m:
+                    out[m.group(1)] = m.group(2).replace("\\'", "'").replace('\\?', '?')
+    return out
+
+
+def message_for(strings, texts):
+    """(keys, text of the first key) of the localization keys loaded in the equal-path block.
+
+    A key counts when it is in the locale table and is neither a `common*` button
+    label nor in GENERIC_KEYS.  Proximity, not proof: the first key may be a dialog
+    title, not the body (see MESSAGE_TAG).  ([], None) when there is none.
+    """
+    keys = []
+    for s in strings:
+        if s in texts and not s.startswith('common') and s not in GENERIC_KEYS \
+                and s not in keys:
+            keys.append(s)
+    return keys, (texts[keys[0]] if keys else None)
+
+
+def build(asm_root, upstream_path, sites=None, msg_sites=None, pool=None):
     rows = parse_upstream(upstream_path)
     asm_rows, missing = scan_sites(asm_root, sites)
+    texts = load_locale(pool) if pool else {}
+    for r in asm_rows:
+        keys, en = message_for(r['block'], texts)
+        r['message_key'], r['message_en'] = (keys[0] if keys else None), en
+        r['message_keys'] = keys
+        if keys:
+            r['message_tag'] = MESSAGE_TAG
     msg = MSG_SITES if msg_sites is None else msg_sites
     msg_rows, miss2 = scan_sites(
         asm_root, [(f, a, lb, MSG_RANGE[0]) for f, a, lb in msg], 'message-type-excluded',
         MSG_RANGE[1])
     missing += miss2
+    for r in asm_rows + msg_rows:
+        r.pop('block', None)
     rows += asm_rows + msg_rows + [dict(r) for r in ISSUE_ROWS]
     rows.sort(key=lambda r: (r['code'], r['source'], r.get('file', ''),
                              r.get('addr', ''), r.get('line', 0)))
@@ -337,6 +445,50 @@ def page_gaps(repo, rows):
     return sorted({r['code'] for r in rows if r['kind'] == 'api'} - have)
 
 
+MESSAGE_SECTION = '## User-visible message'
+
+
+def message_table_gaps(text, rows):
+    """Differences between the page's message table and the JSON, as strings.
+
+    The table is the one under `## User-visible message`.  For every code row the
+    backticked keys of its second cell must be exactly the union of `message_keys`
+    over that code's api rows (order-insensitive); a code with keys in the JSON must
+    have a row; a key on the page that no JSON row of the code holds fails.
+    """
+    want = {}
+    for r in rows:
+        if r.get('kind') == 'api':
+            want.setdefault(r['code'], set()).update(r.get('message_keys') or [])
+    want = {c: k for c, k in want.items() if k}
+    i = text.find(MESSAGE_SECTION)
+    section = text[i:] if i >= 0 else ''
+    nxt = re.search(r'^## ', section[len(MESSAGE_SECTION):], re.M)
+    if nxt:
+        section = section[:len(MESSAGE_SECTION) + nxt.start()]
+    have = {}  # the main table's second column is not read: it has no message cell
+    for m in re.finditer(r'^\|\s*(\d+)\s*\|([^|]*)\|', section, re.M):
+        have.setdefault(int(m.group(1)), set()).update(re.findall(r'`([^`]+)`', m.group(2)))
+    out = []
+    head = re.search(r'^## Table\n+(\|[^\n]*)', text, re.M)
+    if head and re.search(r'\|\s*message\s*\|', head.group(1)):
+        out.append('main table has a message column: keys live only in the message table')
+    for c in sorted(set(want) | set(have)):
+        w, h = want.get(c, set()), have.get(c, set())
+        if w != h:
+            out.append('%d: page %s, json %s' % (c, sorted(h), sorted(w)))
+    return out
+
+
+def message_gaps(repo, rows):
+    """Message-table drift of api/errors.md against the rows ([] when no page)."""
+    page = os.path.join(repo, PAGE_REL)
+    if not os.path.isfile(page):
+        return []
+    with open(page, encoding='utf-8') as fh:
+        return message_table_gaps(fh.read(), rows)
+
+
 def write_guarded(repo, text):
     """The only write of this tool: data/errors.json under the repo."""
     path = os.path.join(repo, OUT_REL)
@@ -352,9 +504,13 @@ def main(argv=None):
     ap.add_argument('--asm', default=A.DEFAULT_NEW_ROOT)
     ap.add_argument('--upstream', default=os.path.join(
         os.path.dirname(A.DEFAULT_UPSTREAM), 'errors.py'))
+    ap.add_argument('--pool', default=os.path.join(os.path.dirname(A.DEFAULT_NEW_ROOT.rstrip('/')), 'pp.txt'))
     ap.add_argument('--check', action='store_true')
     a = ap.parse_args(argv)
-    rows, missing = build(a.asm, a.upstream)
+    if not os.path.isfile(a.pool):
+        print('pool dump not found (nothing written): %s' % a.pool, file=sys.stderr)
+        return 2
+    rows, missing = build(a.asm, a.upstream, pool=a.pool)
     if missing:
         print('sites not found (nothing written): %s' % ', '.join(missing), file=sys.stderr)
         return 2
@@ -371,10 +527,13 @@ def main(argv=None):
                      sort_keys=True))
     if gaps:
         print('codes without a table row in %s: %s' % (PAGE_REL, gaps))
+    kgaps = message_gaps(a.repo, rows)
+    if kgaps:
+        print('message table of %s differs from the JSON: %s' % (PAGE_REL, kgaps))
     if a.check:
         stale = old != text
         print('data/errors.json: %s' % ('stale or missing' if stale else 'up to date'))
-        return 1 if (stale or gaps) else 0
+        return 1 if (stale or gaps or kgaps) else 0
     print('changed: %s' % ('none' if old == text else OUT_REL))
     if old != text:
         write_guarded(a.repo, text)

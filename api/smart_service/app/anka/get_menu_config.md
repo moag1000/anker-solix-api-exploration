@@ -62,7 +62,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The values of the menu item ids are not decoded.
+- The values of the menu item ids are not decoded. — reclassified: server (2026-10-20: the ids arrive in the answer; the app code read here does not name them)
 
 ## Device-tested by
 

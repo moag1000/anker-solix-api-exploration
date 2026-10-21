@@ -25,11 +25,11 @@ S1/S2 sender (`param` map literal, four pairs, `r2 = 16`, `@0x2991cb0`):
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `device_sn` | String | yes | `"<device sn>"` | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2991cb8` |
-| `start_time` | String | yes | `"2026-10"` | `@0x2991ccc`; function argument; the caller `_fetchFromServer` (`s1_s2/src/page/charge_sessions/repository/charger_chart_http_repository.dart @0x2990f58`) cuts the date string with `substring(0, n)` depending on the chart date type: raw `14` (`@0x299104c`) and raw `8` (`@0x2991094`), pushed as call arguments (`str x16, [SP]` at `@0x2991050`, `@0x2991098`; `tools/smi.py` cannot decode an argument push) (tagged), so 7 and 4 characters, consistent with `yyyy-MM` and `yyyy` (inference, the date format itself is not decoded) |
-| `end_time` | String | yes | `"2026-10"` | `@0x2991ce0`; function argument, cut the same way |
-| `type` | not decoded | yes | not decoded | `@0x2991cf4`; value is the field at offset 0xf of the chart-type argument (`@0x2991d00`) |
+| `start_time` | String | yes | `"2026-10"` | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2991ccc`; function argument; the caller `_fetchFromServer` (`s1_s2/src/page/charge_sessions/repository/charger_chart_http_repository.dart @0x2990f58`) cuts the date string with `substring(0, n)` depending on the chart date type: raw `14` (`@0x299104c`) and raw `8` (`@0x2991094`), pushed as call arguments (`str x16, [SP]` at `@0x2991050`, `@0x2991098`; `tools/smi.py` cannot decode an argument push) (tagged), so 7 and 4 characters, consistent with `yyyy-MM` and `yyyy` (inference, the date format itself is not decoded) |
+| `end_time` | String | yes | `"2026-10"` | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2991ce0`; function argument, cut the same way |
+| `type` | string | yes | `"month"` | `s1_s2/src/sdk/command/s1_s2_device_command.dart @0x2991cf4`; the map is typed `<String, String>` (`@0x2991d0c`); the value is the field at offset 0xf (`@0x2991d00`) of the first argument, a `ChartDateType` enum instance: `_fetchFromServer` compares that argument with `ChartDateType` instances (`s1_s2/src/page/charge_sessions/repository/charger_chart_http_repository.dart @0x2990fc0` to `@0x2991030`) and passes it on (`@0x29910cc`); offset 0xf is the name (`off_10`) of `day` (`objs.txt Obj!ChartDateType@4210741`), `week` (`objs.txt Obj!ChartDateType@4210721`), `month` (`objs.txt Obj!ChartDateType@4210701`) or `year` (`objs.txt Obj!ChartDateType@42106e1`) |
 
-AE1X0 sender (`Map<String, String?>`, five pairs, `r2 = 20`, `@0x2ca2974`; every value is read from the chart parameter map that `getChartParams()` (`@0x2ca2878`) returns, keys `device_sn`, `start`, `end`, `phase`, `type`):
+AE1X0 sender (`Map<String, String?>`, five pairs, `r2 = 20`, `third_device/src/module/ae1x0/history/widget/meter_chart_logic.dart @0x2ca2974`; every value is read from the chart parameter map that `getChartParams()` (`@0x2ca2878`) returns, keys `device_sn`, `start`, `end`, `phase`, `type`):
 
 | field | type | required | example | source |
 |---|---|---|---|---|
@@ -79,7 +79,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The value domain of `type` (the AE1X0 values and the S1/S2 chart type) and of `phase` is not decoded.
+- The value domain of `type` and `phase` in the AE1X0 sender: the values come from the map returned by `getChartParams()` (`third_device/src/module/ae1x0/history/widget/meter_chart_logic.dart @0x2ca2878`), which the chart widget fills; the S1/S2 `type` is traced in Request. — traced 2026-10-20: the AE1X0 chart widget that fills the parameter map was not followed
 - Whether both device families return the same layout is not known; the two models differ.
 - Server behaviour is not known.
 

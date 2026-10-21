@@ -36,6 +36,8 @@ n/a (asm-traced): the callbacks are supplied by the caller; the function itself 
 
 Not parsed by the sender; the callbacks come from the caller.
 
+Relation to the `power_service` twins (traced 2026-10-20): this sender uses the URL `/site/v1/get_user_site_param` (`charging/http/http_request_repository_impl.dart @0x288cb40`); the EV charger sender and the page [get_user_params](../power_service/app/user/get_user_params.md) use the `power_service` URL. They are different endpoints in the app; whether the server returns the same parameters for both is server behaviour and not visible here.
+
 ## Example request/response
 
 Request, synthesized
@@ -50,7 +52,9 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Callers in app
 
-- UNCONFIRMED candidate: `AE100CustomModeUsageLogic._checkUserTypeAndShowUpgradeDialog` (`charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart @0x2886750`) calls `getUserParamsAsync` of the mixin application `_MixinApplication707&BaseBleController&CommonLocation&AE100ApiExt` (target `0x288c978`, which lies just before `getUserParams` at `0x288cac0`). The Blutter dump omits the mixin body, so the link to `getUserParams` is an address-adjacency guess. No direct `bl` to `HttpRequestControllerImpl::getUserParams` was found.
+- UNCONFIRMED candidate: `AE100CustomModeUsageLogic._checkUserTypeAndShowUpgradeDialog` (`charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart @0x2886750`) calls `getUserParamsAsync` of the mixin application `_MixinApplication707&BaseBleController&CommonLocation&AE100ApiExt` (call target 0x288c978, body absent from the dump, which lies just before `getUserParams` at `0x288cac0`). The Blutter dump omits the mixin body, so the link to `getUserParams` is an address-adjacency guess. No direct `bl` to `HttpRequestControllerImpl::getUserParams` was found.
+
+Link to the mixin function (traced 2026-10-20, app side): the repository sender is `HttpRequestControllerImpl::getUserParams` (`charging/http/http_request_repository_impl.dart @0x288cac0`, URL load `@0x288cb40`). Its only visible user is `AE100CustomModeUsageLogic::checkUserTypeAndShowUpgradeDialog` (`charging/ui/page/device/main/sitation_energy_system/station_home_settings/power_usage_scenario/ae100/custom_mode_usage_scenario_logic.dart @0x2886750`), which calls the deduplicated mixin function `getUserParamsAsync` (call target 0x288c978 (body absent from the dump), library `dart:mixin_deduplication`, class `_MixinApplication707&BaseBleController&CommonLocation&AE100ApiExt`), awaits it (`@0x288675c`), reads the key `params` from the answer map (`@0x2886784`) and casts it to `Map<String, dynamic>?` (`@0x28867b8`). No direct `bl` to `@0x288cac0` exists in the dump; the mixin body (call target 0x288c978 (body absent from the dump)) is not in the dump, and it lies `0x148` bytes before `getUserParams`. So the link is likely (the only other candidate callers are not present) but not proven.
 
 ## Since/changed
 
@@ -58,8 +62,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The link between the AE100 `getUserParamsAsync` mixin function and this URL is not confirmed; the request body (none is built by `getUserParams`) and the answer layout are unknown.
-- Compare [get_user_params](../power_service/app/user/get_user_params.md) and the EV charger `get_user_params` sender, which use the `power_service` URL.
+- The mixin body (call target 0x288c978 (body absent from the dump)) is not in the dump, so the link `getUserParamsAsync` to this URL is likely but not proven (see Callers in app); the answer layout is read on the caller side only (key `params`) — traced 2026-10-20
 
 ## Device-tested by
 

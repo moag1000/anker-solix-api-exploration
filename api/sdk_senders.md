@@ -64,6 +64,8 @@ The UI callers of a function are the Dart call sites of `AKIotEVChargeCommand::<
 
 `handle<Y0>` takes the response class as its type argument, and the answer is an `IoTAKResult<Y0>`. The conversion from the SDK result to `Y0` happens in a closure of `handle` (allocated at `ak_iot_kit_manager_impl.dart @0x21c3d24`; its body was not read). The EV charger package registers a `fromJson` factory for every response class in `AnkerJsonUtils.initAnkerModelSerializable` (`ev_charger/src/ev_charger/ev_charger_json_factory.internal.dart @0x45ab020`; for example `A5190ChargeSessionsModel` at `@0x45ab13c`), so the conversion most probably goes through this registry (inferred, not traced). The registered `fromJson` of the A5190 session models first checks whether `json["data"]` is a `String` and, if so, decodes it with `jsonDecode`; it uses the map itself when `data` is absent (for example `a5190_charge_sessions_model.dart @0x45b2b6c` to `@0x45b2c4c`). The model pages record this as the `data` wrapper field.
 
+Closure body (app side, traced 2026-10-20): the closure allocated at `base_service/ak_iot_kit/ak_iot_kit_manager_impl.dart @0x21c3d24` has its body at `@0x221cdf0`; it turns the native event into an `IoTAKResult` with `_ioTAKResultFromNative` (`@0x221ce60`, function `@0x221d2ac`), which converts the payload with `AnkerJson::_parseData` (call `@0x221d380`, `anker_get/src/json/anker_json.dart @0x2208788`; the function loads the static field `0x18a0` at `@0x2208858` and tests the type argument `Y0` at `@0x2208814`), and then runs `_processResult` (`@0x221ce98`, function `@0x221cef0`), which folds the result through the registered `IoTAKInterceptor` objects with `interceptResult` (`fold` `@0x221cfc0`, `@0x221d02c`). So the conversion to `Y0` goes through the `AnkerJson` converter; that the factories of the EV charger registry are the ones it uses is by the shared `Y0` lookup, not traced into the static field.
+
 ## Reading the inventory rows
 
 | inventory shape | meaning |
@@ -74,6 +76,6 @@ The UI callers of a function are the Dart call sites of `AKIotEVChargeCommand::<
 
 ## Known unknowns
 
-- Which request headers and which body encryption the native SDK applies to a `"akiot.cloud_api"` call is not known from Dart.
-- The body of the closure that converts the SDK result into the typed model (`ak_iot_kit_manager_impl.dart @0x21c3d24`) was not read; the registry link is inferred.
+- Which request headers and which body encryption the native SDK applies to a `"akiot.cloud_api"` call is not known from Dart. — reclassified: device test row 153 (2026-10-20: native SDK behaviour, no Dart asm)
+- Which factory table the static field `0x18a0` of `AnkerJson::_parseData` holds (the link to `AnkerJsonUtils.initAnkerModelSerializable` of the EV charger package): not traced — traced 2026-10-20 (the closure body is in Response typing).
 - The SDK may accept a leading-slash and a no-slash `path` alike (`add_vehicle` is the only literal with a slash); this was not tested.

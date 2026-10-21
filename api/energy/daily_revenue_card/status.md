@@ -65,7 +65,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The meaning of the `status` codes and the unit of `revenue` are not decoded.
+- The meaning of the `status` codes and the unit of `revenue` are not decoded. — reclassified: server (2026-10-20: the codes and the unit arrive in the answer; the app code read here does not name them)
 - The example response values are placeholders of the right JSON types, not a capture.
 
 ## Device-tested by

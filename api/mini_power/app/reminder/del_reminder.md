@@ -55,13 +55,15 @@ No error code specific to this endpoint was traced; the shared transport codes a
 - `CustomReminderManagerLogic.deleteReminder` (`small_charging_platform/src/custom_reminder/custom_reminder_manager/custom_reminder_manager_logic.dart @0x2f2d77c`)
 - `CustomReminderEditLogic._submitDeleteReminder` (`small_charging_platform/src/custom_reminder/custom_reminder_edit/custom_reminder_edit_logic.dart @0x3a7bc1c`)
 
+Success handling (traced 2026-10-20, app side): the success closure of `CustomReminderManagerLogic::deleteReminder` (`small_charging_platform/src/custom_reminder/custom_reminder_manager/custom_reminder_manager_logic.dart @0x2f2d52c`) stores the changed reminder info for the device (`setCustomReminderInfo` `@0x2f2d5a8`, keyed by the device serial number `field_6b` `@0x2f2d574` and the unified MAC `getUnifiedMac` `@0x2f2d588`), removes the entry from the list held by the logic (`removeWhere` `@0x2f2d614`) and refreshes the observable list (`refresh` `@0x2f2d630`). The closure sends no BLE or MQTT command; whether the device keeps its own copy and is told elsewhere is not shown by this closure.
+
 ## Since/changed
 
 3.18.0: absent (the URL string is not in the 3.18.0 object pool). 3.24.3: present (pool `pp+0xa2fc0`). since: 3.24.3.
 
 ## Known unknowns
 
-- Whether deleting a reminder also removes it from the device is not traced (the device side is a separate BLE or MQTT command).
+- Whether the charger drops its own copy of a deleted reminder (the delete closure only updates the app-side list and cache, see Callers in app) — reclassified: device test row 162 (2026-10-20)
 
 ## Device-tested by
 

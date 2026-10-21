@@ -31,7 +31,7 @@ Consumer balcony solar, sold on anker.com and Amazon EU. Product codes are class
 | grid export (`0080` fields, `setDevicePowerLimit` in a17c1_device_controller.dart @0x2277580) | [set_device_attrs](../api/power_service/app/device/set_device_attrs.md); flow: [solarbank_toggle_grid_export](../flows/solarbank_toggle_grid_export.md) | `0080` [setDevicePowerLimit](../mqtt/a17c1.md#0080-setdevicepowerlimit) | [ble/a17c1.md](../ble/a17c1.md) | no (upstream only) |
 | inverter type (A17C0 only) | none | `0068` `setMicroInversionModel` (a17C0_device_controller.dart @0x261d4c8), see [a17c0](../mqtt/a17c0.md#setters-0050-005e-0067-0068-0071) | [ble/a17c0.md](../ble/a17c0.md) | no |
 | light mode (A17C1) | none | `0068` [setDeviceLightMode](../mqtt/a17c1.md#0068-setdevicelightmode) (upstream-confirmed `CMD_SB_LIGHT_MODE`) | [ble/a17c1.md](../ble/a17c1.md) | no |
-| max load | none | `005a`, no app builder, see [a17c1](../mqtt/a17c1.md#opcodes-without-a-confirmed-app-builder-005a-0082-006a-0069) | none | yes: mqtt_monitor, A17C1 FW 1.0.6.10 (upstream-confirmed; audit row 24 UNVERIFIABLE for the app side) |
+| max load | none | `005a`, no app builder, see [a17c1](../mqtt/a17c1.md#opcodes-without-a-confirmed-app-builder-005a-0069) | none | yes: mqtt_monitor, A17C1 FW 1.0.6.10 (upstream-confirmed; audit row 24 UNVERIFIABLE for the app side) |
 | third-party PV | [set_site_device_param](../api/power_service/site/set_site_device_param.md) (cloud) | `0085`, cloud-driven, upstream-confirmed only; see [upstream_commands](../mqtt/upstream_commands.md) | none | no |
 
 All other features: unknown (not researched for this page).
@@ -77,8 +77,8 @@ Status keys of the A17B1 system context (`soc`, `bp`, `pp`, `gp`, `lp`, `op`, `m
 
 Tag: untagged by design (no API fact).
 
-- `005a` and `0085`: the app has no builder; only upstream and mqtt_monitor know them (audit rows 24, 29, 32).
-- `0080` field `a9` (`export_limit`) is not in `setDevicePowerLimit` (audit row 30); the field names `a6` `disable_switch` and the `005e` `a2` mode range (1 to 8) are upstream's (audit rows 33).
+- `005a` and `0085`: the app has no builder — checked 2026-10-20: the pool holds 119 opcode lists of the form `[0, x]` and none is `[0, 0x5a]` or `[0, 0x85]`, and the strings `"005a"`, `"005A"` and `"0085"` are not in the pool (grep of `pp.txt` and `const [0, 0x5a]` over the asm root: 0 hits); only upstream and mqtt_monitor know them (audit rows 24, 29, 32).
+- `0080` field `a9` (`export_limit`) is not in `setDevicePowerLimit`: confirmed 2026-10-20, the builder (`a17c1_device_controller.dart setDevicePowerLimit @0x2276e48`) uses the raw tag keys 324, 326, 328, 330, 332, 334 and 336, which are `a2` to `a8`, and no key 338 (`a9`); the field names `a6` `disable_switch` and the `005e` `a2` mode range (1 to 8) are upstream's (audit rows 33).
 - Meaning of the attribute keys `feeder0w`, `pv_power_limit_option` and `user_power_limit` named on the old page: not found in the upstream `api/api.py` lines checked; no owner yet.
 - Which of the five PNs accept each opcode: only A17C1 is device-tested.
 - Open test requests for these products: [../docs/DEVICE_TEST_BACKLOG.md](../docs/DEVICE_TEST_BACKLOG.md).

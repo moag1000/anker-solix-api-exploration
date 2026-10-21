@@ -26,6 +26,8 @@ The function first checks that the product code is in a constant set of six stri
 |---|---|---|---|---|
 | `device_sns` | list of String | yes | `["<device sn>"]` | `base_service/util/ak_util/src/ak_sn_converter.dart @0x2300b38`; the filtered serial list |
 
+The product-code argument is not a body key (traced 2026-10-20): the six-element set check and the "unsupported PN" return (`base_service/util/ak_util/src/ak_sn_converter.dart @0x23009f8`, `@0x2300a18`) are the only uses of the product code in `convertSns`; the body map holds `device_sns` only (`@0x2300b38`).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -76,8 +78,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The wire name of the product-code argument is not sent; the PN only selects whether the request is made.
-- What the laser serial is used for in the UI (display of the printed serial, matching of sub-package serials) is not traced.
+- What the laser serial is used for in the UI (display of the printed serial, matching of sub-package serials) is not traced. — traced 2026-10-20: the only visible user is `A17E2HomeController::_convertSubPackageSns` (`micro_hes/src/a17e2/home/a17e2_home_controller.dart @0x355dde0`, call `convertSns`), which merges the answer map into a cache field of the controller (`addAll`, `@0x355de0c`) and then, for each sub-package device entry, replaces the raw serial with the converted one (log text `_convertSubPackageSns: apply sn, rawSn=... -> convertedSn=...`, `@0x355df7c`, store `@0x355dfe8`); so the laser serial replaces the sub-package serial in the A17E2 home device list. Where that list is shown was not followed
 - No response was captured.
 
 ## Device-tested by

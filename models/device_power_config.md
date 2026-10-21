@@ -21,7 +21,7 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
 | `device_sn` | `String?` | yes | 3.24.3 | `device_power_config.dart @0x2af2168` |
-| `config` | `unknown` | yes | 3.24.3 | `device_power_config.dart @0x2af21f0` |
+| `config` | container map (not stored itself): `fromJson` tests it for null (`@0x2af2214`) and reads `output` and `input` from it, not from the item (receiver at `@0x2af2250`) | yes | 3.24.3 | `device_power_config.dart @0x2af21f0` |
 | `output` | `OutputPowerInfo?` | yes | 3.24.3 | `device_power_config.dart @0x2af2248` |
 | `input` | `InputPowerInfo?` | yes | 3.24.3 | `device_power_config.dart @0x2af22e8` |
 
@@ -61,4 +61,4 @@ Both classes are new in 3.24.3.
 
 ## Known unknowns
 
-- The units and the meaning of `config`, `output` and `input` are not decoded beyond the Dart types.
+- The units of the power values in `output` and `input` and their meaning beyond the names are not decoded — traced 2026-10-20: the structure is decoded (`config` is the map that holds `output` and `input`, see the `config` row); no unit string was found in `device_power_config.dart` or `output_power_info.dart`.

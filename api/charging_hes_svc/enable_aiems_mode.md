@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # enable_aiems_mode
 
 ## Purpose
 
-<!-- TODO -->
+Switches the AI-EMS smart mode on for a site (`SmartModeLogic::enableSmartMode`, called from `SmartModePage::build`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,18 +12,21 @@
 
 ## Method+URL
 
-`/charging_hes_svc/enable_aiems_mode`, method: not extracted by the inventory <!-- TODO -->; string-only: `ak_soft_ems/http/ems_api.dart @0x379e6e8`
-(literal also at 1 more site(s) in `data/endpoints.json`)
+`POST /charging_hes_svc/enable_aiems_mode` (asm-traced): URL string at `charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eaefa0`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x3eaef98`, in `SmartModeLogic::enableSmartMode` (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eaee94`), sent through `encryptionRequestHttp` (`@0x3eaefc8`).
 
 ## Encrypted?
 
 encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
+- `encryptionRequestHttp` forwards `needEncryption` with its default true to `requestHttp` (`api/encryption.md`): `SmartModeLogic::enableSmartMode` (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart`, call `@0x3eaefc8`).
+
 ## Request
+
+(asm-traced) Each sender stores its keys in one map literal with type arguments `<String, String>` read at the cited address, so every value is a String: `SmartModeLogic::enableSmartMode` (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eaef50`, 1 key). No key is behind a null guard.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `siteId` | ? | ? | ? | `charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eaee94` |
+| `siteId` | string | yes | `"<siteId>"` | `charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eaef14` |
 
 ## `param_type`/`cmd`
 
@@ -31,19 +34,29 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+not parsed by the app (asm-traced): the success closure (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eaf020`) logs a fixed text (`@0x3eaf038`) and opens the named route `/smartModeStartSuccessPage` (`GetNavigation.toNamed` `@0x3eaf078`); it reads no response key and builds no model.
 
 ## Response
 
-<!-- TODO -->
+No response key is read by the app (see Response model).
+
+Failure path (app side, traced 2026-10-20): the failure closure (`charging/ui/page/device/a5101/setting/smartMode/smart_mode_logic.dart @0x3eaefe4`, signature `(dynamic, int, String)`) does not read the code or the message: it logs the fixed text `SmartModeLogic: Smart Mode fails to start` through `exeError` (`@0x3eaeff8`..`@0x3eaf008`) and returns.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "siteId": "<siteId>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -56,11 +69,12 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- What the server answers or changes besides the mode flag: the app ignores the body.
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

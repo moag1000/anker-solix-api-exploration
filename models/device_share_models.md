@@ -38,8 +38,8 @@ One share entry (member) in `DeviceShareListResponse.device_list`.
 | `device_sn` | `String?` | yes | ≤3.18.0 | `device_share_list_model.dart @0x21c2f2c` |
 | `email` | `String?` | yes | ≤3.18.0 | `device_share_list_model.dart @0x21c2fa8` |
 | `phone` | `String?` | yes | ≤3.18.0 | `device_share_list_model.dart @0x21c3024` |
-| `status` | `int?` | yes | ≤3.18.0 | `device_share_list_model.dart @0x21c30a0` |
-| `member_type` | `int?` | yes | ≤3.18.0 | `device_share_list_model.dart @0x21c3128` |
+| `status` | `int?`, converted with `DeviceShareStatus.fromValue` (`@0x21c3110`): 1 inviting, 2 joined, 3 rejected, 4 expired, other 0, see [enums](../reference/enums.md#devicesharestatus-and-devicesharemembertype) | yes | ≤3.18.0 | `device_share_list_model.dart @0x21c30a0` |
+| `member_type` | `int?`, converted with `DeviceShareMemberType.fromValue` (`@0x21c31ac`): 1 normal, 2 owner, 10 installer, 11 other, see [enums](../reference/enums.md#devicesharestatus-and-devicesharemembertype) | yes | ≤3.18.0 | `device_share_list_model.dart @0x21c3128` |
 
 ### DeviceShareInstallerListModel
 
@@ -49,7 +49,7 @@ Answer of `get_installer_invited_list`: the invited installers.
 
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
-| `installerList` | `unknown` of `DeviceShareInstallerItem` | yes | ≤3.18.0 | `device_share_installer_list_model.dart @0x2aaf4fc` |
+| `installerList` | `List<DeviceShareInstallerItem>` (type argument `<DeviceShareInstallerItem>` `@0x2aaf52c`, mapping closure `@0x2aaf594`) | yes | ≤3.18.0 | `device_share_installer_list_model.dart @0x2aaf4fc` |
 
 ### DeviceShareInstallerItem
 
@@ -79,6 +79,4 @@ All classes are present in 3.18.0 (`since` column); no key is new in 3.24.3.
 
 ## Known unknowns
 
-- The numeric meaning of `status` and `member_type` (the app sends `member_type` 1 for an invitation and an enum `DeviceShareStatus` with `inviting` and `joined` for the status filter) is not decoded in the models.
-- `installerList` is typed `unknown` by the extractor; the element class `DeviceShareInstallerItem` is read from the `<X>` type argument next to the key.
-- `sourceType` of an installer item is not decoded.
+- `sourceType` of an installer item is not decoded — traced 2026-10-20: the key string `sourceType` occurs in the model and in unrelated OTA, load-balancing and station files, none of them a reader of this model; reads by field offset in the installer pages were not followed.

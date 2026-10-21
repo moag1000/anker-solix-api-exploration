@@ -21,10 +21,10 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
 | `self_suf_rate_info` | `SelfSufRateInfo` | no | 3.24.3 | `income_detail_model.dart @0x2a4379c` |
-| `trends` | `List?` | yes | 3.24.3 | `income_detail_model.dart @0x2a4383c` |
+| `trends` | `List?` of `Trends` (mapping closure `@0x2a44198` calls `Trends.fromJson` `@0x2a441d0`) | yes | 3.24.3 | `income_detail_model.dart @0x2a4383c` |
 | `total` | `String?` | yes | 3.24.3 | `income_detail_model.dart @0x2a43944` |
 | `unit` | `String?` | yes | 3.24.3 | `income_detail_model.dart @0x2a439b0` |
-| `years` | `List?` | yes | 3.24.3 | `income_detail_model.dart @0x2a43a1c` |
+| `years` | `List?` of `int` (mapping closure `@0x2a4414c` type-tests each element as `int`, `@0x2a44178`) | yes | 3.24.3 | `income_detail_model.dart @0x2a43a1c` |
 
 ### SelfSufRateInfo
 
@@ -43,7 +43,7 @@ Column `since`: `≤3.18.0` means the key is present in 3.18.0 (earlier versions
 |---|---|---|---|---|
 | `time` | `String?` | yes | 3.24.3 | `income_detail_model.dart @0x2a44214` |
 | `value` | `String?` | yes | 3.24.3 | `income_detail_model.dart @0x2a44274` |
-| `rods` | `List?` | yes | 3.24.3 | `income_detail_model.dart @0x2a442cc` |
+| `rods` | `List?` (stored as read, with no element mapping or cast between `@0x2a4430c` and the constructor `@0x2a44320`) | yes | 3.24.3 | `income_detail_model.dart @0x2a442cc` |
 
 The `A17e2BenifitsModel` copy has the same keys at other addresses:
 
@@ -54,10 +54,10 @@ The `A17e2BenifitsModel` copy has the same keys at other addresses:
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
 | `self_suf_rate_info` | `SelfSufRateInfo?` | yes | 3.24.3 | `a17e2_benifits_model.dart @0x2a48a2c` |
-| `trends` | `List?` | yes | 3.24.3 | `a17e2_benifits_model.dart @0x2a48ab8` |
+| `trends` | `List?` of `Trends` (mapping closure `@0x2a48ef8` calls `Trends.fromJson` `@0x2a48f30`) | yes | 3.24.3 | `a17e2_benifits_model.dart @0x2a48ab8` |
 | `total` | `String?` | yes | 3.24.3 | `a17e2_benifits_model.dart @0x2a48bb0` |
 | `unit` | `String?` | yes | 3.24.3 | `a17e2_benifits_model.dart @0x2a48c10` |
-| `years` | `List?` | yes | 3.24.3 | `a17e2_benifits_model.dart @0x2a48c6c` |
+| `years` | `List?` of `int` (mapping closure `@0x2a48eac`) | yes | 3.24.3 | `a17e2_benifits_model.dart @0x2a48c6c` |
 
 ## Produced by
 
@@ -73,5 +73,4 @@ The whole class family is new in 3.24.3.
 
 ## Known unknowns
 
-- The element types of `trends`, `rods` and `years` (`List?`) are not resolved.
-- The unit semantics of `total` and `unit` (currency or energy) are not decoded.
+- The unit semantics of `total` and `unit` (currency or energy) are not decoded — traced 2026-10-20: the consumer is `IncomeDetailController` (`station_home/src/ui/shared/income/income_detail/income_detail_controller.dart`, `IncomeDetailModel.fromJson` call `@0x2a436f8`; three result closures `@0x2a44b50` and later) whose year view builds twelve month bars from `trends[i].time` and `trends[i].value` (strings, parsed as numbers) with `"0"` defaults; no string literal there says that `unit` is a currency. The page is the income (savings) page of the station, which suggests a currency unit, but no asm string states it.

@@ -67,12 +67,12 @@ The code catalog is [errors.md](../errors.md). No logout-specific code branch ex
 
 ## Since/changed
 
-3.18.0: present (`http_request_repository_impl.dart`, 3.18.0 `@0x2347db8`, descriptor with `needEncryption` at `@0x2347de4`, `r30 = false` at `@0x2347dd4`). 3.24.3: unchanged. since: ≤3.18.0.
+3.18.0: present (`http_request_repository_impl.dart`, 3.18.0 `0x2347db8`, descriptor with `needEncryption` at `@0x2347de4`, `r30 = false` at `0x2347dd4`). 3.24.3: unchanged. since: ≤3.18.0.
 
 ## Known unknowns
 
 - Whether the server invalidates the token on this call (the app clears its own copy either way).
-- Whether `_performCoreCleanup` runs when the request fails: the order of the closures in `performLogoutWithRequest` was not traced to that level.
+- Whether `_performCoreCleanup` runs when the request fails: the order of the closures in `performLogoutWithRequest` was not traced to that level. — traced 2026-10-20: `performLogoutWithRequest` (`charging/account/handlers/logout_handler.dart @0x38d63dc`) passes the closure that runs `_performCoreCleanup` as the named argument `complete` (argument descriptor `@0x38d64bc`, closure `@0x38d6870`, call `@0x38d64c4`); `logOutRequest` forwards `complete` to `requestHttp` (`charging/http/http_request_repository_impl.dart @0x38d66d8`, descriptor name `complete`) next to its own success closure `@0x38d67b8` and failure closure `@0x38d66fc`. Whether `requestHttp` calls `complete` after a failed request is decided in code outside the app asm tree, so the failure case is not readable
 
 ## Device-tested by
 

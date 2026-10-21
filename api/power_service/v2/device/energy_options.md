@@ -41,7 +41,7 @@ The caller `fetchs1s2StartUseTime` (`s1_s2/src/page/charge_sessions/repository/c
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `data` | String (JSON text) or already a map | yes | `"{\"earliest_date\": \"2024-08-01\"}"` | `s1_s2/src/page/charge_sessions/repository/charger_chart_http_repository.dart @0x2998b6c`; the closure accepts a `String` and runs `jsonDecode` (`@0x2998ba0`), then casts to `Map<String, dynamic>` (`@0x2998bc0`) |
-| `data.earliest_date` | String | no | `"2024-08-01"` | `@0x2998bd4`; the example value is an assumption of the format; when the key is missing the app logs `No earliest_date from server, using today as startUseTime` (`@0x2998d28`) and uses the current time |
+| `data.earliest_date` | String | no | `"2024-08-01"` | `@0x2998bd4`; the string is passed to `DateTime.parse` (`@0x2998c4c`) only when it is a non-empty String (class-id test `@0x2998c34` to `@0x2998c3c`, length test `cbz` `@0x2998c44`), so the app accepts every format that `DateTime.parse` accepts and the example is of that form but not captured; when the key is missing the app logs `No earliest_date from server, using today as startUseTime` (`@0x2998d28`) and uses the current time |
 
 ## Example request/response
 
@@ -67,7 +67,6 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The date format of `earliest_date` is not decoded (the app only logs it and hands the string on).
 - Whether other chart options besides `earliest_date` exist in the answer is not known; the endpoint name (`energy_options`) suggests more.
 - Server behaviour is not known.
 

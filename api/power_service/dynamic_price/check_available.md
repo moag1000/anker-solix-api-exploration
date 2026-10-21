@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: asm-traced · Owner page: this page
 
 # check_available
 
 ## Purpose
 
-<!-- TODO -->
+Sent after a login: `LoginHandler::_postHasChangeCountryAsync` (`login_handler.dart`) and `LoginLogic::handleLoginSuccess` call `postHasChangeCountry`, whose callbacks log `postHasChangeCountry request success` / `failed`.
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/power_service/v1/dynamic_price/check_available`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x273bfcc`
+`POST /power_service/v1/dynamic_price/check_available` (asm-traced): URL string at `http_request_repository_impl.dart @0x273bfcc`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x273bfc4`, in `HttpRequestControllerImpl::postHasChangeCountry` (`http_request_repository_impl.dart @0x273bf40`).
 
 ## Encrypted?
 
@@ -20,7 +20,7 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
-No request keys found by the extractor. <!-- TODO -->
+The body is an empty map literal (`ldr x16, [THR, #0xa8]` empty array `@0x273bf84`, `Map._fromLiteral` `@0x273bf8c`); the builder contains no `[]=` call, so no key is added. The map goes to `encryptionRequestHttp` (`@0x273bff4`).
 
 ## `param_type`/`cmd`
 
@@ -28,19 +28,25 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+None: the response body is not parsed. The success callback `http_request_repository_impl.dart @0x273c0b8` loads its argument once, for the log string `"---> postHasChangeCountry request success"`, and calls `exeSuccess()`.
 
 ## Response
 
-<!-- TODO -->
+No response key is read by the app.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by `postHasChangeCountry`)
+
+```json
+{}
+```
+
+Response: none parsed.
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+None traced. The failure callback `@0x273c010` logs `"---> postHasChangeCountry failed, code "` and the message, then calls `exeError()`; no code is compared. Error codes are catalogued in `api/errors.md`.
 
 ## Callers in app
 
@@ -54,11 +60,12 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: ≤3.18.0. The endpoint is in none of the added, removed or changed-params lists of `tools/out/diff_3.18.0_3.24.3.md`, so there is no string-level parameter delta.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- What the server derives from this empty call (the builder name `postHasChangeCountry` is the only hint).
+- Why the URL is under `dynamic_price/check_available`: app side: the app sends no parameter; what the server uses instead (presumably the session) is not known.
 
 ## Device-tested by
 

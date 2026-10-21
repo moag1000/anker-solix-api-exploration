@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # get_area_by_code
 
 ## Purpose
 
-<!-- TODO -->
+Looks up the supported price areas for a dynamic-price provider group (caller `ElectricityPriceProviderLogic::fetchAreaByCode`) (string-only: inferred from the function and class names; the call itself is asm-traced).
 
 ## Upstream name
 
@@ -12,15 +12,29 @@
 
 ## Method+URL
 
-`/charging_hes_dynamic_price_svc/get_area_by_code`, method: not extracted by the inventory <!-- TODO -->; string-only: `base_service/api_url.dart @0x41e4a88`
+`POST /charging_hes_dynamic_price_svc/get_area_by_code` (asm-traced): in `ElectricityPriceProviderLogic::fetchAreaByCode` (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e44e4`) the URL comes from the static field `getAreaByCode` (`LoadStaticField(0xae4)` `@0x41e4728`, initializer `Api.getAreaByCode`), the method object `Method.post` (pool entry `pp+0xa7e0`) is loaded at `@0x41e477c`, and the request goes through `HttpServiceImpl::encryptionRequestHttp` (`@0x41e47a8`).
+
+The URL is chosen at run time by `Api.getAreaByCode` (`base_service/api_url.dart @0x41e4a70`): it loads the static flag at field offset `0xad8` (`@0x41e4a70`, `tbnz` on the Dart false bit) and returns `/charging_hes_dynamic_price_svc/get_area_by_code` when the flag is false (`@0x41e4a88`) and `/charging_hes_installer_svc/get_area_by_code` when it is true (`@0x41e4a7c`). The result is cached in the late static field at offset `0xae4`, which the senders read.
+
+The installer variant is documented under `charging_hes_installer_svc`.
+
+The static flag `0xad8` (traced 2026-10-20): it is `Api::isProApp`, stored once in `Api.init` (`base_service/api_url.dart @0x49ce9dc`) from a package-name test against `"anker.pros"` (`@0x49ce9c0`..`@0x49ce9cc`); true selects the installer URLs; the rule is owned by [../charging_hes_installer_svc/README.md](../charging_hes_installer_svc/README.md#variant-selector-installer-app-versus-consumer-app).
 
 ## Encrypted?
 
-encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: `true` (asm-traced: the sender read reaches `encryptionRequestHttp`, `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e47a8`). Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
 ## Request
 
-No request keys found by the extractor. <!-- TODO -->
+(string-only: the three field types are not read) One sender builds a `<String, dynamic>` literal (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e45d0`), which names no value type; the first key is in the literal, the other two are added behind a guard.
+
+| field | type | required | example | source |
+|---|---|---|---|---|
+| `code` | list | yes | `"<code>"` | `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e45c0` (value stored in the literal, array `@0x41e45bc`) |
+| `sn` | string | optional | `"<sn>"` | `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e463c` (guard: a dispatch-table call result tested `tbnz` `@0x41e4614`, length test `cbz` `@0x41e4628`) |
+| `siteId` | string | yes | `"<site_id>"` | `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e4670` (value `LoadField` `@0x41e465c`) |
+
+Types read in the second pass (traced 2026-10-20, app side): `code` is a list, not a scalar: `ElectricityPriceProviderLogic::fetchAreaByCode` (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e44e4`) maps a list held by the logic (`field_f`) with `map<String>` (type argument `<String>` `@0x41e4550`, `map` `@0x41e4564`) and `toList` (`@0x41e4580`) and stores the result under `code` (`@0x41e45c0`). `sn` (`field_73`, load `@0x41e461c`) and `siteId` (`field_77`, load `@0x41e465c`) are fields that the logic fills with a `String` cast (`field_73` cast `@0x34f3654`, store `@0x34f3660`; `field_77` cast `@0x34f35b8`, store `@0x34f35c4`), so both are Strings; `sn` is sent only when `field_db` is not null and the text is not empty (`@0x41e45f0`, `@0x41e4608`, `@0x41e4624`).
 
 ## `param_type`/`cmd`
 
@@ -28,19 +42,31 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+not parsed as a model: the success closure (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e4830`) reads `groupId` (`@0x41e4874`) from the request data and filters the provider's area list (`firstWhereOrNull` `@0x41e492c`, `where` `@0x41e4974`) into a list of strings; the answer's own keys are not read here.
 
 ## Response
 
-<!-- TODO -->
+(string-only) No answer key is read by the closure read; the strings in the result come from a locally held provider list.
+
+What the success closure reads (traced 2026-10-20, app side): the closure `@0x41e4830` (argument `Object?`) reads the key `groupId` of the answer (`@0x41e4874`), finds the first entry of a local list of `OctopusArea` objects whose id matches (`firstWhereOrNull` `<OctopusArea>` `@0x41e4914`..`@0x41e492c`), filters that entry's list (`field_13`, `where` `@0x41e4974`) with a predicate over the strings of the request `code` list (closure `@0x41e49f8`, `(dynamic, String)`) and completes a `Completer` with the resulting list of strings (`_GrowableList.of` `@0x41e4984`, `complete` `@0x41e49a4`). So the app reads only `groupId` from the answer and uses it to choose the local area record; the area names come from the app's own list.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "code": "<code>",
+  "sn": "<sn>",
+  "siteId": "<site_id>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -48,11 +74,11 @@ n/a
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. Params changed: removed `code` (`tools/out/diff_3.18.0_3.24.3.md`, string-level diff on the URL builder `Api.getAreaByCode`); in 3.24.3 the key `code` is built by the sender `fetchAreaByCode` itself (`electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x41e45c0`), so the key still exists.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

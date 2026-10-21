@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # validate_pass
 
 ## Purpose
 
-<!-- TODO -->
+Verifies the account password before a sensitive action (the verify kind is the constant `"export_account"`); sent by `VerifyHttpReposity::verifyAccount` (`charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faee20`), called from `charging/ui/page/account/privacy_policy/verification/verification_logic.dart @0x2faed6c` and `charging/ui/page/user/routerInfo/account_verification/account_verification_logic.dart @0x4055a18` (asm-traced for the call sites; the purpose is read from the constant and the response key `check_token`, string-only for the wording).
 
 ## Upstream name
 
@@ -12,7 +12,7 @@
 
 ## Method+URL
 
-`/passport/validate_pass`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faefa4`
+`POST /passport/validate_pass` (asm-traced): URL string at `charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faefa4`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x2faef9c`, in `VerifyHttpReposity::verifyAccount` (`charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faee20`), sent through `encryptionRequestHttp` (`@0x2faefcc`).
 
 ## Encrypted?
 
@@ -22,9 +22,11 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `password` | ? | ? | ? | `charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faee20` |
-| `verify_kind` | ? | ? | ? | `charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faee20` |
-| `client_secret_info.public_key` | ? | ? | ? | `charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faee20` |
+| `password` | ? | yes | ? | `charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faeec8` (value store `@0x2faeed8`) |
+| `verify_kind` | string | yes | `"export_account"` | `charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faeedc` (value store `@0x2faeef0`) |
+| `client_secret_info` | object | yes | `{"public_key": "<public_key>"}` | `charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faeef4` (value store `@0x2faef34`) |
+
+The body map literal has type arguments `<String, Object>` (`@0x2faef58`), which is not evidence of a value type, so `password` stays `?`. `verify_kind` is the constant string `"export_account"` (`@0x2faeee8`). `client_secret_info` is a nested map literal `<String, String>` (`@0x2faef20`) with the key `public_key` (`@0x2faef0c`), value from a parameter.
 
 ## `param_type`/`cmd`
 
@@ -32,19 +34,31 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+no model: the success closure (`charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faf064`) reads the key `check_token` from the response value with a dynamic call (key string `@0x2faf12c`, call `@0x2faf14c`), casts the result to `String` (`@0x2faf188`) and passes it to the `success` callback (`ClosureCall` `@0x2faf19c`).
 
 ## Response
 
-<!-- TODO -->
+(asm-traced) One key is read from the top level of the response: `check_token` (String). What the app does with it next (which later request sends it back) was not traced.
+
+Use of `check_token` (traced 2026-10-20, app side): the string `check_token` occurs only in the success closure of `verifyAccount` (`charging/ui/page/account/privacy_policy/verification/verification_http_reposity.dart @0x2faf0b4`, `@0x2faf12c`); no other code reads that key. The caller callbacks receive the token as a String argument: in `VerificationLogic::passwordVerify` (`charging/ui/page/account/privacy_policy/verification/verification_logic.dart`, call `@0x2faed6c`) the success closure `@0x2faf68c` passes it on through a stored closure (`ClosureCall` `@0x2faf6f4`), and in `AccountVerificationLogic::getAccountName` (`charging/ui/page/user/routerInfo/account_verification/account_verification_logic.dart`, call `@0x4055a18`) the success closure is `@0x4055a2c`. The success closure of the sender logs `sendVerifyCode success: ` (a log text copied from `phone_verification_code`, `@0x2faf09c`) together with the token value, so the token reaches the app log.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "password": "<password>",
+  "verify_kind": "export_account",
+  "client_secret_info": {}
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -52,11 +66,14 @@ n/a
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- The type of `password`: a parameter of the sender stored into a `<String, Object>` literal; the callers' values were not read. — attempted 2026-10-20 (two-hop not readable: an anonymous closure (`charging/ui/page/user/routerInfo/account_verification/account_verification_logic.dart @0x4055a18`), an anonymous closure (`charging/ui/page/account/privacy_policy/verification/verification_logic.dart @0x2faed6c`) pass slots or fields of their own frames; no literal or declared type in the argument setups)
+- Which later request consumes `check_token`, and its lifetime: not traced. — traced 2026-10-20: no request builder in the asm reads or sends a field named `check_token` (the string occurs once, in the sender above), so the app passes the value only to closures; which later request, if any, carries it is not readable from the Dart code read (the next step is inside the stored closure of `passwordVerify`, `verification_logic.dart @0x2faf6f4`, not resolved to a function)
+- Error codes: none traced in the two call sites. — traced 2026-10-20: the sender's failure closure (`verification_http_reposity.dart @0x2faefe8`) logs `sendVerifyCode fail` (`@0x2faf010`) and calls the caller-supplied failure callback (`ClosureCall` `@0x2faf040`) without comparing a code; the callbacks of the two call sites (`verification_logic.dart @0x2faed6c`, `account_verification_logic.dart @0x4055a18`) were not decoded for codes
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

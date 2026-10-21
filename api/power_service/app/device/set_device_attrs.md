@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # set_device_attrs
 
 ## Purpose
 
-<!-- TODO -->
+Writes named device attributes (TOU plan, feed-grid and load-port settings, device currency/price, PV names, game status, location tag, power options) for many settings pages; 27 senders share this URL (callers e.g. `PPSTouHttpService::clearTouPlan`, `TouSettingLogic::opreateTouPlanAsync`, `CustomBranchController::syncIotCommand`, `LoginHandler::_reportDeviceGameStatus`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,8 +12,11 @@
 
 ## Method+URL
 
-`/power_service/v1/app/device/set_device_attrs`, method: not extracted by the inventory <!-- TODO -->; string-only: `ak_soft_pps_ems/src/modules/pps_tou/service/pps_tou_http_service.dart @0x27e3cc4`
-(literal also at 26 more site(s) in `data/endpoints.json`)
+`POST /power_service/v1/app/device/set_device_attrs` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x2276a6c`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x2276a64`, in `HttpRequestControllerImpl::setDevicePowerOptionsReq` (`charging/http/http_request_repository_impl.dart @0x2276948`), sent through `encryptionRequestHttp` (`@0x2276a8c`).
+
+Same URL and method object in the other sender(s) read:
+
+- `POST /power_service/v1/app/device/set_device_attrs` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x386ad50`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x386ad48`, in `HttpRequestControllerImpl::setDeviceAttrsInfo` (`charging/http/http_request_repository_impl.dart @0x386acd0`), sent through `encryptionRequestHttp` (`@0x386ad78`).
 
 ## Encrypted?
 
@@ -21,48 +24,12 @@ encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header r
 
 ## Request
 
-Some senders wrap these keys in `param_data` as a JSON string (`jsonEncode`); outer keys: `attributes`, `device_sn`.
+(asm-traced) 27 senders were found for this URL; two `HttpRequestControllerImpl` senders were read. `setDevicePowerOptionsReq` (`charging/http/http_request_repository_impl.dart @0x2276948`) builds `{device_sn, attributes}` in a `<String, Object>` literal (`@0x2276a20`; raw `r2 = 8` at `@0x22769f0`) whose `attributes` value is an inner literal `<String, int>` (`@0x2276994`), so that sender writes integer attribute values. `setDeviceAttrsInfo` (`@0x386acd0`) receives the body as parameters (`device_sn` from a field, `attributes` from a literal in the caller). Most other senders use the same two keys with an inner `attributes` literal of type `<String, int>`, `<String, String>` or `<String, Object>`; `GeneralPriceSettingLogic::setFixedPrice` adds `site_id`, `price`, `site_price_unit`, `price_type = "fixed"`, `site_co2`, `accuracy`, `sell_price` and `peak_sessions`; `setSolarName` sets `device_pn = "A17C5"`; `AKIotAX170Command::setCustomBranchList` sends the command map with `path`, `method = "POST"` and `param`.
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `pps_use_time` | ? | ? | ? | `ak_soft_pps_ems/src/modules/pps_tou/service/pps_tou_http_service.dart @0x27e3af8` |
-| `path` | ? | ? | ? | `ats_ax170/src/sdk/command/ax170_command.dart @0x2f2cd4c` |
-| `method` | ? | ? | ? | `ats_ax170/src/sdk/command/ax170_command.dart @0x2f2cd4c` |
-| `param.device_sn` | ? | ? | ? | `ats_ax170/src/sdk/command/ax170_command.dart @0x2f2cd4c` |
-| `param.attributes.custom_branch.custom_branches` | ? | ? | ? | `ats_ax170/src/sdk/command/ax170_command.dart @0x2f2cd4c` |
-| `param.attributes.custom_branch.third_party_pv_connect_status` | ? | ? | ? | `ats_ax170/src/sdk/command/ax170_command.dart @0x2f2cd4c` |
-| `param.attributes.custom_branch.third_party_diesel_connect_status` | ? | ? | ? | `ats_ax170/src/sdk/command/ax170_command.dart @0x2f2cd4c` |
-| `device_sn` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x2624ed8` |
-| `attributes.currency` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x2624ed8` |
-| `attributes.switch_0w` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3d90a90` |
-| `init_status` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x2703b6c` |
-| `attributes` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x2276948` |
-| `attributes.pv_power_limit` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3d97864` |
-| `attributes.tag` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x386ae3c` |
-| `device_pn` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x42b8c80` |
-| `attributes.ac_power_limit` | ? | ? | ? | `charging/ui/page/device/a17c1/a17c1setting/a17c1setting_logic.dart @0x3d91390` |
-| `attributes.price_type` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `attributes.fixed_price` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `site_id` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `price` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `site_price_unit` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `price_type` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `site_co2` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `accuracy` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `id` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `buy` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `sell` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `energy_unit` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `start_time_period` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `end_time_period` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `peak_type` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `day_type` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x41a7afc` |
-| `attributes.feed_setting` | ? | ? | ? | `settings/src/common/page/feed_grid/feed_grid_controller.dart @0x2283f70` |
-| `attributes.hardware_anti_backflow_config` | ? | ? | ? | `settings/src/common/page/hardware_feed_grid/hardware_feed_grid_controller.dart @0x2aebd24` |
-| `attributes.load_port_setting` | ? | ? | ? | `settings/src/common/page/load_port_setting/load_port_settings_controller.dart @0x2e889f4` |
-| `attributes.load_port_name` | ? | ? | ? | `settings/src/common/page/load_port_setting/load_port_settings_controller.dart @0x3a68038` |
-
-Rows are the union over 25 senders; `source` is the first sender that sets the key.
+| `device_sn` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x22769f8` |
+| `attributes` | object (`Map`); value type per sender | yes | `{"<name>": <value>}` | `charging/http/http_request_repository_impl.dart @0x2276a0c` (this sender: inner `<String, int>` `@0x2276994`) |
 
 ## `param_type`/`cmd`
 
@@ -70,19 +37,30 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+not parsed in the builders read (asm-traced): both pass forwarding closures (`@0x2268374` style) that hand the response object to the caller; no `fromJson` or response key is read in them.
 
 ## Response
 
-<!-- TODO -->
+Not read in the builders read.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "device_sn": "<?>",
+  "attributes": {
+    "<attribute name>": "<value>"
+  }
+}
+```
+
+Response: not synthesized (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -93,7 +71,7 @@ n/a
 - `charging/ui/page/device/main/sitation_energy_system/station_home_settings/station_power_limit/station_power_limit_logic.dart`: `_setDevicePowerLimit` @0x4356240 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/electricity_price_common/electricity_usage_helper.dart`: `getSaveDeviceEMSPrice` @0x249e420 (URL literal only, no `*Http*` call; sender `ElectricityUsageHelper::setDeviceEMSPriceArgument` (`electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x249e2cc`), reached through callers `ElectricityUsageHelper::setDeviceEMSPriceArgument` (`electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x249e2cc`); resolved from the URL literal at `electricity_price/components/electricity_price_common/electricity_usage_helper.dart @0x249e4c4` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
 - `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart`: `setFixedPrice` @0x41a7afc (encryptionRequestHttp; encrypted: true); `setTOU` @0x41a68ac (encryptionRequestHttp; encrypted: true)
-- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_setDeviceAttrs` @0x3968464 (_requestHttp; encrypted: default-true (requestHttp) — verify)
+- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_setDeviceAttrs` (`schedule_network.dart @0x3968464`; _requestHttp; encrypted: default-true (requestHttp) — verify)
 - `micro_hes/src/a17ex/home/components/electricity_price/a17ex_electricity_price_logic.dart`: `_saveCurrencyThenPrice` @0x39cd088 (encryptionRequestHttp; encrypted: true)
 - `micro_hes/src/common_business/basic_station/module/system_flow/common/energy_system_cover_helper.dart`: `editPvName` @0x32b02b4 (encryptionRequestHttp; encrypted: true)
 - `settings/src/common/page/feed_grid/feed_grid_controller.dart`: `<anonymous closure> in FeedGridController::updateByDevice` @0x2283f70 (encryptionRequestHttp; encrypted: true)
@@ -152,11 +130,14 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. Param delta in `tools/out/diff_3.18.0_3.24.3.md`: 3.24.3 added the attribute names `attributes.feed_setting`, `attributes.hardware_anti_backflow_config`, `attributes.load_port_name` and `attributes.load_port_setting` (feed-grid and load-port controllers) and the literals ` salePrice.value.isEmpty:` and `fixedPrice.value.isEmpty:` (price pages; their use was not decoded).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Types of `device_sn` (parameter, field or constant depending on the sender) and the attribute value types of each sender (see Request); `<String, Object>` only says non-null. — attempted 2026-10-20 (two-hop not readable: about 25 senders; not followed per sender in this pass; header stays string-only)
+- Which attribute names the server accepts: the senders give many names, none was decoded to a complete list here; upstream `set_device_attributes` documents some.
+- The 25 senders not read in detail: bodies and the response handling were not decoded. — not traced 2026-10-20 in this pass (25 senders); the reason given in the bullet stands
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

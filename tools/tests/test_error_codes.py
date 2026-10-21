@@ -28,6 +28,23 @@ ROOT_NEW = os.environ.get(
 UPSTREAM_ERRORS = os.environ.get(
     'ANKER_UPSTREAM_ERRORS', os.path.join(_SIBLINGS, 'anker-solix-api/api/errors.py'))
 
+POOL_NEW = os.environ.get(
+    'ANKER_POOL', os.path.join(_SIBLINGS, 'v3.24.3/blutter_output/pp.txt'))
+
+FAKE_POOL = '''[pp+0x1] String: "unrelated"
+[pp+0x4b308] Map<String, Map<String, String>>(2) {
+  "de_DE": Map<String, String>(1) {
+    "loginErrorPwd": "Passwort falsch",
+  },
+  "en_US": Map<String, String>(4) {
+    "commonOK": "OK",
+    "loginErrorPwd": "Password Incorrect",
+    "noInviteSelf": "Can\\'t Invite Myself",
+    "failed": "Failed",
+  },
+}
+'''
+
 FAKE_ERRORS = '''"""Errors."""
 
 
@@ -153,6 +170,150 @@ class ScanTest(unittest.TestCase):
             self.assertEqual(len(missing), 2)
 
 
+BRANCH_ASM = '''class H {
+  _ ne_shape(/* No info */) {
+    // ** addr: 0x3000, size: 0x40
+    // 0x3000: r17 = 10019
+    //     0x3000: mov             x17, #0x2723
+    // 0x3004: cmp             x0, x17
+    // 0x3008: b.ne            #0x3020
+    // 0x300c: r1 = "keyA"
+    //     0x300c: add             x1, PP, #1, lsl #12
+    // 0x3010: r1 = "keyA2"
+    //     0x3010: add             x1, PP, #1, lsl #12
+    // 0x3014: b               #0x3030
+    // 0x3020: r1 = "keyB"
+    //     0x3020: add             x1, PP, #1, lsl #12
+    // 0x3030: ret
+    //     0x3030: ret
+  }
+  _ ne_else_only(/* No info */) {
+    // ** addr: 0x3100, size: 0x40
+    // 0x3100: r17 = 10019
+    //     0x3100: mov             x17, #0x2723
+    // 0x3104: cmp             x0, x17
+    // 0x3108: b.ne            #0x3120
+    // 0x310c: r1 = "other"
+    // 0x3110: b               #0x3130
+    // 0x3120: r1 = "keyB"
+    // 0x3130: ret
+  }
+  _ eq_shape(/* No info */) {
+    // ** addr: 0x3200, size: 0x40
+    // 0x3200: r17 = 10019
+    //     0x3200: mov             x17, #0x2723
+    // 0x3204: cmp             x0, x17
+    // 0x3208: b.eq            #0x3220
+    // 0x320c: r1 = "keyB"
+    // 0x3210: b               #0x3230
+    // 0x3220: r1 = "keyA"
+    // 0x3224: ret
+  }
+}
+'''
+
+
+class EqualPathBlockTest(unittest.TestCase):
+    def keys(self, addr):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = os.path.join(tmp, 'h.dart')
+            with open(path, 'w', encoding='utf-8') as fh:
+                fh.write(BRANCH_ASM)
+            fns = {f.addr: f for f in A.iter_functions(path, 'h.dart')}
+            rows = E.scan_function(fns[addr], 400, 'x')
+        texts = {'keyA': 'A', 'keyA2': 'A2', 'keyB': 'B', 'other': 'O'}
+        return E.message_for(rows[0]['block'], texts)
+
+    def test_ne_takes_fall_through_not_else(self):
+        keys, en = self.keys('0x3000')
+        self.assertEqual(keys, ['keyA', 'keyA2'])
+        self.assertEqual(en, 'A')
+
+    def test_else_key_is_not_attributed(self):
+        keys, en = self.keys('0x3100')
+        self.assertEqual(keys, ['other'])  # equal path loads only this one
+        self.assertNotIn('keyB', keys)
+
+    def test_eq_takes_branch_target(self):
+        keys, _ = self.keys('0x3200')
+        self.assertEqual(keys, ['keyA'])
+
+
+class MessageTableCheckTest(unittest.TestCase):
+    ROWS = [
+        {'code': 10019, 'kind': 'api', 'message_keys': ['loginErrorPwd', 'loginErrorFiveTimes']},
+        {'code': 10019, 'kind': 'api', 'message_keys': ['loginErrorPwd']},
+        {'code': 1000, 'kind': 'api', 'message_keys': []},
+        {'code': 5000, 'kind': 'api'},
+    ]
+
+    def page(self, *lines):
+        return ('| 1000 | `errorOccur` | main table, outside the section |\n'
+                '## User-visible message\n\n| code | keys | text |\n|---|---|---|\n'
+                + ''.join(l + '\n' for l in lines) + '\n## Next\n| 5000 | `zzz` | x |\n')
+
+    def test_exact_union_passes_in_any_order(self):
+        text = self.page('| 10019 | `loginErrorFiveTimes`, `loginErrorPwd` | a |')
+        self.assertEqual(E.message_table_gaps(text, self.ROWS), [])
+
+    def test_drifted_row_fails(self):
+        text = self.page('| 10019 | `loginErrorPwd` | a |')
+        self.assertEqual(len(E.message_table_gaps(text, self.ROWS)), 1)
+
+    def test_key_no_json_row_holds_fails(self):
+        text = self.page('| 10019 | `loginErrorPwd`, `loginErrorFiveTimes` | a |',
+                         '| 1000 | `errorOccur` | a |')
+        gaps = E.message_table_gaps(text, self.ROWS)
+        self.assertEqual(len(gaps), 1)
+        self.assertTrue(gaps[0].startswith('1000:'))
+
+    def test_message_column_in_main_table_fails(self):
+        text = ('## Table\n\n| code | message | meaning |\n|---|---|---|\n| 1000 | `x` | y |\n'
+                + self.page('| 10019 | `loginErrorPwd`, `loginErrorFiveTimes` | a |'))
+        gaps = E.message_table_gaps(text, self.ROWS)
+        self.assertEqual(len(gaps), 1)
+        self.assertIn('message column', gaps[0])
+
+    def test_missing_row_fails(self):
+        self.assertEqual(len(E.message_table_gaps(self.page(), self.ROWS)), 1)
+
+    def test_cli_check_fails_on_drifted_page(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.makedirs(os.path.join(tmp, 'api'))
+            with open(os.path.join(tmp, 'api', 'errors.md'), 'w', encoding='utf-8') as fh:
+                fh.write(self.page('| 10019 | `loginErrorPwd` | a |'))
+            self.assertEqual(len(E.message_gaps(tmp, self.ROWS)), 1)
+            self.assertEqual(E.message_gaps(os.path.join(tmp, 'none'), self.ROWS), [])
+
+
+class MessageKeyTest(unittest.TestCase):
+    def test_locale_block_only_and_unescaped(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            pool = os.path.join(tmp, 'pp.txt')
+            with open(pool, 'w', encoding='utf-8') as fh:
+                fh.write(FAKE_POOL)
+            texts = E.load_locale(pool)
+        self.assertEqual(texts['loginErrorPwd'], 'Password Incorrect')
+        self.assertEqual(texts['noInviteSelf'], "Can't Invite Myself")
+        self.assertEqual(len(texts), 4)
+
+    def test_first_real_message_key_skips_buttons_and_logs(self):
+        texts = {'commonOK': 'OK', 'failed': 'Failed', 'loginErrorPwd': 'Password Incorrect'}
+        self.assertEqual(
+            E.message_for(['request fail', 'commonOK', 'failed', 'loginErrorPwd'], texts),
+            (['loginErrorPwd'], 'Password Incorrect'))
+        self.assertEqual(E.message_for(['commonOK', 'unknownKey'], texts), ([], None))
+        self.assertEqual(E.message_for([], texts), ([], None))
+
+    def test_missing_pool_aborts_without_writing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out, err = io.StringIO(), io.StringIO()
+            with redirect_stdout(out), redirect_stderr(err):
+                rc = E.main(['--repo', tmp, '--pool', os.path.join(tmp, 'nope.txt')])
+            self.assertEqual(rc, 2)
+            self.assertFalse(os.path.exists(os.path.join(tmp, E.OUT_REL)))
+
+
 class UpstreamTest(unittest.TestCase):
     def test_parse(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -172,10 +333,14 @@ class BuildAndCliTest(unittest.TestCase):
         os.makedirs(repo, exist_ok=True)
         old, old_msg = E.SITES, E.MSG_SITES
         E.SITES, E.MSG_SITES = FAKE_SITES, FAKE_MSG
+        pool = os.path.join(tmp, 'pp.txt')
+        with open(pool, 'w', encoding='utf-8') as fh:
+            fh.write(FAKE_POOL)
         try:
             with redirect_stdout(out), redirect_stderr(err):
                 rc = E.main(['--repo', repo, '--asm', os.path.join(tmp, 'asm'),
-                             '--upstream', os.path.join(tmp, 'errors.py')] + list(extra))
+                             '--upstream', os.path.join(tmp, 'errors.py'),
+                             '--pool', pool] + list(extra))
         finally:
             E.SITES, E.MSG_SITES = old, old_msg
         return rc, out.getvalue(), repo
@@ -293,16 +458,38 @@ class BuildAndCliTest(unittest.TestCase):
             self.assertFalse(os.path.exists(os.path.join(repo, 'data')))
 
 
-@unittest.skipUnless(os.path.isdir(ROOT_NEW) and os.path.isfile(UPSTREAM_ERRORS),
-                     'asm root or upstream errors.py missing')
+@unittest.skipUnless(os.path.isdir(ROOT_NEW) and os.path.isfile(UPSTREAM_ERRORS)
+                     and os.path.isfile(POOL_NEW),
+                     'asm root, pp.txt or upstream errors.py missing')
 class RealDataTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.rows, cls.missing = E.build(ROOT_NEW, UPSTREAM_ERRORS)
+        cls.rows, cls.missing = E.build(ROOT_NEW, UPSTREAM_ERRORS, pool=POOL_NEW)
 
     def find(self, source, code, **kw):
         return [r for r in self.rows if r['source'] == source and r['code'] == code
                 and all(r.get(k) == v for k, v in kw.items())]
+
+    def test_message_key_extracted_for_known_code(self):
+        # 10004 has no compare in a request handler, so its row set has no key; the
+        # nearest real code with a branch key is 21102 (invite limit) and 10019
+        # (wrong password); both texts come from the en_US table of pp.txt
+        self.assertEqual(self.find('issue', 10004)[0].get('message_key'), None)
+        r = self.find('asm', 21102, addr='0x40619dc')[0]
+        self.assertEqual((r['message_key'], r['message_en']),
+                         ('membersReached', 'Invite limit reached.'))
+        r = self.find('asm', 10019, addr='0x3bd2544')[0]
+        self.assertEqual(r['message_keys'], ['loginErrorPwd', 'loginErrorFiveTimes'])
+        self.assertEqual(r['message_tag'], 'asm-traced (proximity)')
+        # else-branch keys are not attributed (reviewer I-1)
+        for code, addr in ((1000, '0x3bc372c'), (26202, '0x2fafdf8'),
+                           (100053, '0x4055ac0'), (200218, '0x433024c')):
+            r = self.find('asm', code, addr=addr)[0]
+            self.assertIsNone(r['message_key'])
+            self.assertEqual(r['message_keys'], [])
+            self.assertNotIn('message_tag', r)
+        # a branch with only a button label has no message key
+        self.assertIsNone(self.find('asm', 4007, addr='0x3be28e4')[0]['message_key'])
 
     def test_every_site_found(self):
         self.assertEqual(self.missing, [])

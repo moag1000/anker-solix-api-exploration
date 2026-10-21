@@ -59,5 +59,4 @@ The whole class is new in 3.24.3 (`since` 3.24.3 on every key).
 
 ## Known unknowns
 
-- The unit and meaning of `period_export`, `period_import` and the lifetime values (kWh versus Wh, strings versus numbers) are not decoded here beyond the Dart type.
-- The element type of `data_trend` is not resolved.
+- The unit and meaning of `period_export`, `period_import` and the lifetime values (kWh versus Wh, strings versus numbers) are not decoded here beyond the Dart type. — traced 2026-10-20: all of these values and the four `ChartDataPoint` values are `String?` in the model (table above). The only unit labels in the history files (`third_device/src/module/ae1x0/history/`) are the localization keys `unitKWh` and `unitW` in `widget/meter_chart_widget.dart`; the page `ae1x0_history_page.dart` has only the title keys `dataHistoryAe1x0`, `energyStorageExportAe1x0`, `energyStorageImportAe1x0`, `lifetime` and `total`. So the app shows kWh and W labels; which of the model values carries which label was not followed to the field loads.

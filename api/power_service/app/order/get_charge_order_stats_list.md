@@ -28,7 +28,7 @@ Body (`param`) is a `<String, Object>` map of seven pairs (`r2 = 28` for the bod
 | `start_date` | String | yes | `2026-10-01` | `ev_charge_command.dart @0x29a2fb8` |
 | `end_date` | String | yes | `2026-10-19` | `ev_charge_command.dart @0x29a2fcc` |
 | `date_type` | String | yes | `"month"` | `ev_charge_command.dart @0x29a2fe0`; the name of a `ChartDateType` instance, as on [get_charge_order_stats](get_charge_order_stats.md#request) |
-| `order_status` | int | yes | `1` | `ev_charge_command.dart @0x29a2ffc`; the argument is an integer (Smi-tagged with `lsl x1, x0, #1`, `@0x29a300c`), not a constant |
+| `order_status` | int (Smi, w) | yes | `3` | `ev_charge_command.dart @0x29a2ffc`; the parameter is an unboxed int that the sender tags with `lsl x1, x0, #1` (`@0x29a300c`). It is the fourth parameter (`r5`, `fp-0x20`, `SetupParameters` `@0x29a2f04`). The two callers pass constants: `ChargerChartHttpRepository.fetchChargeOrderList` passes 3 (`r5 = 3`, `ev_charger/src/ev_charger/page/home/charge_sessions/repository/charger_chart_http_repository.dart @0x29a2974`, call `@0x29a2978`) and `ChargeSessionsExceptionLogic.getChargeListSessions` passes 4 (`r5 = 4`, `ev_charger/src/ev_charger/page/home/charge_sessions/charge_sessions_exception_logic.dart @0x2aabfc4`, call `@0x2aabfc8`) |
 | `page` | int | yes | `1` | `ev_charge_command.dart @0x29a3014`; the argument is boxed with `BoxInt64Instr` (`@0x29a3024`), unboxed int64 |
 | `page_size` | int | yes (constant) | `15` | `ev_charge_command.dart @0x29a3060`; raw `30` at `@0x29a306c`, stored with `stur w16`, a Smi, so 15 (`tools/smi.py`) |
 
@@ -74,8 +74,9 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The values of `order_status` and whether `page` is 0-based (upstream sends 0) or 1-based are not decoded from the sender.
+- What `order_status` 3 and 4 select. — reclassified: server (not visible in the app: `objs.txt` holds no enum object with `Order` or `Status` in its name for it, searched 2026-10-20)
 - How this list differs from [get_charging_order_list](get_charging_order_list.md) for the server (both list orders) is not known.
+- Whether `page` is 0-based or 1-based: the sender takes it from its caller; `getChargeListSessions` loads it from a controller field (`field_4f`, `ev_charger/src/ev_charger/page/home/charge_sessions/charge_sessions_exception_logic.dart @0x2aabfa4`) and `fetchChargeOrderList` passes a local on (`r6`, `ev_charger/src/ev_charger/page/home/charge_sessions/repository/charger_chart_http_repository.dart @0x29a296c`). — traced 2026-10-20: the initial value of the page counter was not followed
 
 ## Device-tested by
 

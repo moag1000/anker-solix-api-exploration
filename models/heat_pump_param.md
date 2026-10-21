@@ -47,6 +47,8 @@ These four keys are also the `param_data` keys of the set call (`Params.toJson`:
 
 The heat pump settings page (`HeatPumpSettingController`, `heat_pump_setting_controller.dart`): after parsing, the closure applies `fixedActivatePower` (`@0x2af6af8`), `fixedMinRunningTime` (`@0x2af6b68`) and `fixedMinInterval` (`@0x2af6be0`) to the values and rebuilds the model (`@0x2af6e80`). `setHeatPump` (`@0x3a5e8d4`) parses the typed values with `tryParse` and clamps them (`clamp` calls `@0x3a5e960` and `@0x3a5ea00`); the bounds were not decoded.
 
+Fallback values when the switch is off (traced 2026-10-20): `setHeatPump` (`heat_pump_setting_controller.dart @0x3a5e8d4`) takes `activate_power`, `min_running_time` and `min_interval` from the parsed and clamped page values when `enabled` is true (`ArrayLoad` at `@0x3a5eb38`), and from three controller fields when it is false: `field_47` (`@0x3a5eb5c`), `field_4f` (`@0x3a5eba8`) and `field_57` (`@0x3a5ebe0`). The controller initialiser sets these three 64-bit fields to the raw values 500, 5 and 5 (`@0x370be98` to `@0x370beb8`, unboxed, so real values): the fallbacks are the page defaults 500 for `activate_power` and 5 for `min_running_time` and `min_interval`. The units of the three numbers are not stated in the asm.
+
 ## Changed since 3.18.0
 
 New: both classes and the `param_type` 24 requests do not exist in 3.18.0 (see [param_types.md](../api/param_types.md#changed-since-3180)).
@@ -54,4 +56,3 @@ New: both classes and the `param_type` 24 requests do not exist in 3.18.0 (see [
 ## Known unknowns
 
 - The units and valid ranges of `activate_power`, `min_running_time` and `min_interval`, and the clamp bounds used by `setHeatPump`.
-- The meaning of the fallback values read from controller fields when `enabled` is false (`field_47`, `field_4f`, `field_57` at `@0x3a5eb5c`, `@0x3a5eba8`, `@0x3a5ebe0`).

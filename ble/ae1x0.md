@@ -35,6 +35,7 @@ Notes on this product:
 
 - The factory has no branch for these codes. Both are in the product-scan map and use the ZX UUID triple; `DeviceConstant.shouldSkipWifiConfig` lists `AE1R0` together with the Shelly codes and `ECOIR`, that is the app skips its WiFi configuration step for it (`device_constant.dart @0x3913364`).
 - The BLE use of the two meters was not traced.
+- Negotiation and BLE use, app side: `AE1X0` and `AE1R0` are registered SDK product codes (`IotAnkerDeviceConfig.register` calls in `third_device/src/module/ae1x0/ae1x0_module.dart @0x45df200` and `third_device/src/module/ae1r0/ae1r0_module.dart @0x45de564`), so `BleHandler._getCurrentImpl` returns `BleHandlerImpl2` for them; that handler has no reference to `ZXBleConfer`, and the negotiation is the kit's, which runs in the native plugin and is not in the Dart asm ([handshake.md](handshake.md#which-implementation-runs-for-a-product)). BLE is used app side: `AE1X0HomeLogic.reconnectBle` (`third_device/src/module/ae1x0/home/ae1x0_home_logic.dart @0x3af086c`; log text `AE1X0HomeLogic: ble reconnect --->>> [` `@0x3af0954`) calls `PermissionUtilsProvider.checkBTEnable` (`@0x3af089c`) and then `AnkerBleConnectUtils.checkPermissionAndReconnect` (`base_service/util/ble_connect_utils.dart`, call `@0x3af0934`); the AE1R0 home logic has the same pair (`third_device/src/module/ae1r0/home/ae1r0_home_logic.dart @0x3ae20e4`, `@0x3ae21bc`, log texts `AE1R0HomeLogic: ble reconnect success` and `... failed`). The reconnect helper ends in `HomeDeviceManagerProvider.startScanWithConnect` (`ble_connect_utils.dart @0x24518a4`); see the open item below.
 
 ## Commands
 
@@ -82,8 +83,7 @@ none: the handshake has no MQTT twin and the product has no MQTT page.
 
 #### Known unknowns
 
-- Which negotiation implementation runs for this product, the Dart conferer or the native kit ([handshake.md](handshake.md#known-unknowns)).
-- Whether and how BLE is used for these products: the `micro_hes` and `ak_soft_ems` modules were not traced for their transport.
+- Whether the reconnect helper reaches `BleHandler.startScanWithConnect`: the same open item as on [a17e2.md](a17e2.md) (service-locator dispatch behind `HomeDeviceManagerProvider.startScanWithConnect`). — traced 2026-10-20: see [a17e2.md](a17e2.md).
 
 BLE is unavailable while the device is on WiFi; see `ble/protocol.md` (community finding, see protocol.md; not asm-traced).
 
@@ -95,6 +95,6 @@ none.
 
 Tag: untagged by design (no API fact).
 
-- Whether the product is negotiated by the Dart conferers or by the native kit ([handshake.md](handshake.md#two-implementations)).
+- What the kit's negotiation does for these codes (stages, key derivation): it runs in the native plugin — reclassified: native plugin, not in Dart asm, [device test row 123](../docs/DEVICE_TEST_BACKLOG.md#added-2026-10-20-depth-pass).
 - Device-test status: no BLE session against a real device is recorded in this repository.
 

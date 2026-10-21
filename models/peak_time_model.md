@@ -52,4 +52,4 @@ No key added or removed in `PeakTimeModel` or `Data` (same four and two keys in 
 ## Known unknowns
 
 - The meaning and value sets of `mode` and `ext`, and the unit of `start_time` / `end_time` (minutes, seconds or an index).
-- Whether the value that the set callers serialize is a `PeakTimeModel` object (`string-only` inference, see [param_types.md](../api/param_types.md)).
+- Whether the value that the set callers serialize is a `PeakTimeModel` object (`string-only` inference, see [param_types.md](../api/param_types.md)). — traced 2026-10-20: `PeakTimeModel.toJson` (`@0x28f1974`) and `Data.toJson` (`@0x28f1858`) have no direct caller outside `peak_time_model.dart` (grep for `bl #0x28f1974` and `bl #0x28f1858`: only the model file); a serialization through `jsonEncode`, which calls `toJson` by dynamic dispatch, would not show as a `bl`, so the question stays open.

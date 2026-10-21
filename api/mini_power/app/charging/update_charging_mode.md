@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # update_charging_mode
 
 ## Purpose
 
-<!-- TODO -->
+Saves the edited values of an existing custom charging mode of an A2345 or A2687 charger (`_updateCustomChargeModeToCloud` and `_applySCPBackwardCompatFixIfNeeded` in the A2345 and A2687 custom-charging edit logic classes) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,8 +12,11 @@
 
 ## Method+URL
 
-`/mini_power/v1/app/charging/update_charging_mode`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x3469be8`
-(literal also at 1 more site(s) in `data/endpoints.json`)
+`POST /mini_power/v1/app/charging/update_charging_mode` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x3469be8`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x3469be0`, in `HttpRequestControllerImpl::updateCustomChargeMode` (`charging/http/http_request_repository_impl.dart @0x3469a84`), sent through `encryptionRequestHttp` (`@0x3469c10`).
+
+Same URL and method object in the other sender(s) read:
+
+- `POST /mini_power/v1/app/charging/update_charging_mode` (asm-traced): URL string at `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart @0x3192630`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x3192628`, in `CustomChargeCloudApi::updateCustomChargeMode` (`small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart @0x319249c`), sent through `encryptionRequestHttp` (`@0x3192658`).
 
 ## Encrypted?
 
@@ -21,17 +24,19 @@ encrypted: `true`. Scheme and header rules: `api/encryption.md`; per-sender valu
 
 ## Request
 
+(asm-traced for the stores, `?` where the value is not typed) Two senders store seven keys unconditionally in one map literal with type arguments `<String, Object?>` (`charging/http/http_request_repository_impl.dart @0x3469b9c`; second sender `small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart @0x31925f4`), which does not type the values. `HttpRequestControllerImpl::updateCustomChargeMode` (`charging/http/http_request_repository_impl.dart @0x3469a84`) loads `id` and the other values from fields of one mode object. `CustomChargeCloudApi::updateCustomChargeMode` (`small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart @0x319249c`) stores the same keys, with `power_settings` from `buildPowerSettingsForCloud` (`@0x31925c8`) and `has_charge_protocol` built the same way (`cmp w2, NULL` `@0x319259c`, `r2 = 1` `@0x31925a8`, `r2 = 0` `@0x31925b0`). Unlike `add_charging_mode` there is no `device_sn` and no `number`.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `id` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3469a84` |
-| `name` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3469a84` |
-| `total_power` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3469a84` |
-| `max_total_power` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3469a84` |
-| `auto_exit` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3469a84` |
-| `has_charge_protocol` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3469a84` |
-| `power_settings` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x3469a84` |
+| `id` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x3469ad8` (field load `charging/http/http_request_repository_impl.dart @0x3469ae8`) |
+| `name` | string | yes |  | `charging/http/http_request_repository_impl.dart @0x3469af4` (field load `@0x3469afc`) |
+| `total_power` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x3469b08` (field load `@0x3469b14`) |
+| `max_total_power` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x3469b20` (field load `@0x3469b2c`) |
+| `auto_exit` | int | yes |  | `charging/http/http_request_repository_impl.dart @0x3469b38` (field load `@0x3469b44`) |
+| `has_charge_protocol` | int (Smi, w) | yes | `0` or `1` (not a constant) | `charging/http/http_request_repository_impl.dart @0x3469b50` (built from a bool field: `cmp w2, NULL` `@0x3469b64`, `r2 = 1` `@0x3469b70`, `r2 = 0` `@0x3469b78`) |
+| `power_settings` | list | yes |  | `charging/http/http_request_repository_impl.dart @0x3469b84` (field load `@0x3469b90`; the second sender stores the result of `buildPowerSettingsForCloud` instead) |
 
-Rows are the union over 2 senders; `source` is the first sender that sets the key.
+Mode object (app side, traced 2026-10-20): the first sender (`charging/http/http_request_repository_impl.dart`) reads `id` `field_7` (`@0x3469ae8`), `name` `field_f` (`@0x3469afc`), `total_power` `field_13` (`@0x3469b14`), `max_total_power` `[0]` (`@0x3469b2c`), `auto_exit` `field_1b` (`@0x3469b44`), `has_charge_protocol` `field_1f` (`@0x3469b5c`) and `power_settings` `field_23` (`@0x3469b90`), the slots of `A2345CustomModeItem` in the order of its `toJson` (`charging/model/a2345/a2345_custom_mode_list.dart`), whose `fromJson` casts `id` and the integer fields to `int?` and `name` to `String?`; the five callers pass the object as a slot of their frame, so the link to that class rests on the identical layout and on the observable with the type argument `<A2345CustomModeItem>` in the two A2345 edit logics (`charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x411f9d0`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart @0x411dcd0`). `power_settings` is a list of `PowerSetting` objects (see [add_charging_mode.md](add_charging_mode.md#request)).
 
 ## `param_type`/`cmd`
 
@@ -39,19 +44,33 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+not parsed by the app (asm-traced): the success closure `charging/http/http_request_repository_impl.dart @0x261b9a0` calls the stored callback with the constant `true` (`@0x261b9cc`) and reads no response key; the second sender's success closure (`small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_cloud_api.dart @0x3192444`) does the same (`@0x3192470`).
 
 ## Response
 
-<!-- TODO -->
+No response key is read by the app (see Response model).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "id": "<?>",
+  "name": "<?>",
+  "total_power": "<?>",
+  "max_total_power": "<?>",
+  "auto_exit": "<?>",
+  "has_charge_protocol": "<int>",
+  "power_settings": "<?>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page (the failure closure `charging/http/http_request_repository_impl.dart @0x226824c` forwards code and message to a stored callback without reading them). Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -71,11 +90,14 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types). The `small_charging_platform` sender was not compared with 3.18.0.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- The class of the mode object: the five callers pass it as a slot of their own frame (`small_charging_platform/src/scp/chargingMode/custom_charge/custom_charge_platform_edit_logic.dart @0x3a9f6cc`, `charging/ui/page/device/a2345/a2345custom_charging_edit/a2345custom_charging_edit_logic.dart @0x3470d84`, `@0x3e31d4c`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_platfrom_charging_edit_logic.dart @0x3e05f0c`, `charging/ui/page/device/a2345/a2345CNcustom_charging_edit/a2345CNcustom_charging_edit_logic.dart @0x34699bc`), so the types in the table follow from the identical slot layout of `A2345CustomModeItem`, not from a declared parameter type — attempted 2026-10-20 (two-hop not readable).
+- Whether the server requires every key or accepts a partial update: the app always sends all seven.
+- Header stays `string-only` because the class of the mode object is linked by slot layout only (see the bullet above) — rechecked 2026-10-20.
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # external_login
 
 ## Purpose
 
-A login URL the app knows by name but never sends in 3.24.3: the string is only compared against the URL of a failed request to decide whether the login screen must be started again after a forced logout.
+A login URL the app knows by name but never sends in 3.24.3: the string is only passed to a string predicate (selector not named by Blutter) together with the URL of a failed request to decide whether the login screen must be started again after a forced logout.
 
 ## Upstream name
 
@@ -60,8 +60,8 @@ None as a sender. The only reference is the exemption check in the logout-comple
 
 ## Known unknowns
 
-- Request body, method and response: no sender; the URL may be used by native code or be a leftover.
-- Whether it is related to the `third_party_login` flow (the app handles both names the same way in the exemption check).
+- Request body, method and response: no sender; the URL may be used by native code or be a leftover. — reclassified: device test row 153 (2026-10-20: the URL string appears once in the Dart code, in the exemption check of `_handler401`, `HttpEncryptionDecorator.dart @0x486ba30`; a request to it can only come from the native SDK, which the Dart asm does not show)
+- Whether it is related to the `third_party_login` flow (the app handles both names the same way in the exemption check). — traced 2026-10-20: the only code that names both URLs is the same exemption check (`HttpEncryptionDecorator.dart @0x486ba00` for `/passport/third_party_login`, `@0x486ba30` for this one); `/passport/third_party_login` has a Dart sender (`charging/http/http_request_repository_impl.dart @0x3bd1a9c`), this URL has none; whether the native login uses it is device-side — reclassified: device test row 153
 
 ## Device-tested by
 

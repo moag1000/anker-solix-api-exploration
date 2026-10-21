@@ -29,6 +29,8 @@ Body (`param`) is a `<String, Object>` map of two pairs (`r2 = 8`, `@0x321a018`)
 
 The caller is `closeErrorMsg` of the fault-info widget; the type of the ids (`A5190FaultInfoModel` rows carry an integer `id`, `a5190_fault_info_model.dart @0x2705ca0`) is inferred, not traced.
 
+Element type of `faultIds` (traced 2026-10-20, app side): `_A5190FaultInfoWidgetState::closeErrorMsg` (`ev_charger/src/ev_charger/page/home/widget/a5190_fault_info_widget.dart @0x3219f20`) builds the list with `AllocateGrowableArray` of type `<int>` (`r1 = <int>` `@0x3219efc`, `@0x3219f00`) holding one element, so `faultIds` is a `List<int>` with one id; `sn` is the `deviceSn` getter (`field_6b`, `@0x3219eb8`).
+
 ## `param_type`/`cmd`
 
 n/a
@@ -63,7 +65,6 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The type of the elements of `faultIds` is not read in the sender (UNCONFIRMED integer ids).
 - Whether the fault is only hidden in the app or cleared server-side is not known.
 
 ## Device-tested by

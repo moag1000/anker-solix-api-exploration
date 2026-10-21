@@ -46,7 +46,7 @@ Read by `S1S2HomeLogic._fetchAndShowGuardianUnlockSheet` (`s1_s2/src/page/home/s
 | `data.list` | list | no | `[ ... ]` | `@0x2a08e64` |
 | `data.top_event` | map | no | `{ "id": ..., "is_read": false }` | `@0x2a08ec8`; when missing the app logs `No top_event found` (`@0x2a08eec`) |
 | `data.top_event.is_read` | bool | no | `false` | `@0x2a08fc4`; when true the sheet is skipped (`top_event already read - skip`, `@0x2a09194`) |
-| `data.top_event.id` | not decoded | yes | not decoded | `@0x2a091dc`; a missing `id` logs `top_event missing id field` (`@0x2a09244`); the app then marks the event read with [batch_read](event/batch_read.md) |
+| `data.top_event.id` | int (type-checked `int?`, `r8 = int?` `@0x2a09228`) | yes | not decoded | `@0x2a091dc`; a missing `id` logs `top_event missing id field` (`@0x2a09244`); the app then marks the event read with [batch_read](event/batch_read.md) |
 
 The log texts at `@0x2a09270` and `@0x2a0929c` name the fields `type` and `eventLevel` of the top event (parsed by the journal service, not in this function).
 
@@ -74,7 +74,7 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The element layout of `list` and `top_event` (event types, levels) is not decoded; "guardian" is the app's name for the feature, its meaning (a protection feature of the S1/S2 charger) is inferred.
+- The element layout of `list` and `top_event` (event types, levels): `top_event` is read for `id` and `is_read` only; the log texts name `type` and `eventLevel` (`s1_s2/src/page/home/s1_s2_home_logic.dart @0x2a09270`, `@0x2a0929c`) but the journal service that parses them was not followed, and "guardian" is the app's name for the feature (its meaning, a protection feature of the S1/S2 charger, is inferred). — traced 2026-10-20: the elements of `data.list` (`s1_s2/src/page/home/s1_s2_home_logic.dart @0x2a08e64`) were not followed
 - Paging or limits (the request has no such key) are not known.
 - Server behaviour is not known.
 

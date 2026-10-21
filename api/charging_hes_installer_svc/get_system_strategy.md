@@ -45,7 +45,7 @@ The success closure `@0x2a314bc` checks that the payload is a `Map<String, dynam
 | field | type | required | example | source |
 |---|---|---|---|---|
 | `electricity_strategy` | map | no | `{ "isAuthorizeAIEms": 1 }` | `ak_soft_ems/ems_list/ems_ai_mode_condition_logic.dart @0x2a3155c` |
-| `electricity_strategy.isAuthorizeAIEms` | int (null counts as 0) | no | `1` | `@0x2a31580`; read through a pool helper with default 0 (`r4 = 0`, `@0x2a3158c`); the closure compares the value with raw `2` (`@0x2a315e0`, a Smi argument of a dispatch-table call, so 1; the call is most likely `==`) and stores the result with `value=` in the field at offset 0x97 (`@0x2a315fc`), the same observable that [authorize_aiems](authorize_aiems.md) sets to `true` |
+| `electricity_strategy.isAuthorizeAIEms` | int (null counts as 0) | no | `1` | `@0x2a31580`; read through a pool helper with default 0 (`r4 = 0`, `@0x2a3158c`); the closure compares the value with raw `2` (`@0x2a315e0`, a Smi argument of a dispatch-table call, so 1; the callee is not named in the dump) and stores the result with `value=` in the field at offset 0x97 (`@0x2a315fc`), the same observable that [authorize_aiems](authorize_aiems.md) sets to `true` |
 
 Everything else in the answer is ignored by this sender, although the consumer URL name (`get_device_command`) suggests a larger device-command document.
 
@@ -77,8 +77,8 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The full response layout is not traced; only `electricity_strategy.isAuthorizeAIEms` is read.
-- The meaning of `accuracy` and the type of `isAuthorizeAIEms` on the wire (int versus bool) are not verified; the app compares with the integer 1 after a default of 0.
+- The full response layout is not traced; only `electricity_strategy.isAuthorizeAIEms` is read. — reclassified: server (2026-10-20: the app reads only `electricity_strategy.isAuthorizeAIEms`, see Response; any other key of the answer is not read by the code, so its layout is not visible from the app)
+- The meaning of `accuracy` and the type of `isAuthorizeAIEms` on the wire (int versus bool) are not verified; the app compares with the integer 1 after a default of 0. — reclassified: server (2026-10-20: the wire type is not visible in the app; the app side treats the value as an integer: default 0 and a compare with Smi 1, see Response)
 - Server behaviour is not known.
 
 ## Device-tested by

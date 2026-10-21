@@ -42,6 +42,8 @@ The sender completes an `_AsyncCompleter<StrategyVisualizationDetail?>` (`@0x24a
 |---|---|---|---|---|
 | `energy_chart_data`, `current_strategy`, `price_unit`, `energy_unit`, `price_chart_data` | see model page | no | `{ "energy_chart_data": [ ... ], "current_strategy": { ... }, "price_unit": "...", "energy_unit": "kWh", "price_chart_data": { "buy_real_prices": [ ... ], "sell_real_prices": [ ... ] } }` | `strategy_visualization_model.dart @0x24a43d4`, `@0x24a441c`, `@0x24a44c4`, `@0x24a4540`, `@0x24a46e0`; [model page](../../../models/strategy_visualization_models.md#strategyvisualizationdetail) |
 
+Failure path (traced 2026-10-20, app side): after logging with `exeError` (`ak_soft_ems/aiems/api/ai_ems_request.dart @0x24a4294`) the failure closure completes the completer with `null` (`complete(null)`, `@0x24a429c`..`@0x24a42ac`), so a failed call yields a null `StrategyVisualizationDetail?`, not an exception.
+
 ## Example request/response
 
 Request, synthesized
@@ -65,7 +67,6 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- What the failure closure does after logging (null result or an error to the caller) was not read.
 - Whether the server returns an object for sites without an AI EMS strategy is not known (the future is nullable).
 
 ## Device-tested by

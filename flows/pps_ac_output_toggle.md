@@ -24,7 +24,7 @@ On the A1770 home page the user taps the AC output switch: the view calls `A1770
 | 5 | app | `A1770DeviceController::setAcSwitch` turns the state into a one-byte list (`intToList`), loads the static command `A1770Commands.setAcSwitch` (static field offset 0x2130) and calls `_sendCommandWithParams` with the named argument `value`. | [ble/a1770.md](../ble/a1770.md) | `a1770_device_controller.dart @0x3c799e8`, `@0x3c799f0`, `@0x3c79a28` |
 | 6 | app | `_sendCommandWithParams` formats the command with the controller's transformer and sends it with `sendCommand` (default wait 5 s); there is no connection-status test in this function. | [ble/protocol.md](../ble/protocol.md#timeouts-and-limits) | `a1770_device_controller.dart @0x33ead4c`, `@0x33ead5c`, `@0x33ead7c` |
 | 7 | app | Records the analytics click `DEVICE_AC_OUTPUT_CLICK` with the value `"1"` or `"0"`, then calls `_clearAcCountdown` and `_setAcPowerCurve`. | this page | `a1770home_logic.dart @0x3c798c8`, `@0x3c798e4`, `@0x3c798ec`, `@0x3c798f4` |
-| 8 | device | Reports the switch states in its status push. The parser `parseSwitchData` reads the list positions 9, 10, 11, 12 and 13 (the raw immediates 18, 20, 22, 24 and 26 are tagged indexes); the audit assigns the AC state to position 9, the DC state to 10 and the smart mode to 12. | [ble/a1770.md](../ble/a1770.md) | `a1770_commands.dart @0x45eb1f8`, `@0x45eb27c`, `@0x45eb300`, `@0x45eb384`, `@0x45eb454` |
+| 8 | device | Reports the switch states in its status push. The parser `parseSwitchData` reads the list positions 9, 10, 11, 12 and 13 (the raw immediates 18, 20, 22, 24 and 26 are tagged indexes); `parseSwitchData` stores position 9 as a bool at device offset 935 (`@0x45eb26c`), position 10 at 939, position 11 at 955, position 12 as an int below 4 at 959 and its value 4 as a bool at 411 (`@0x45eb408`, `@0x45eb448`) and position 13 at 947 (`@0x45eb4cc`). The AC state is position 9: the page's optimistic write in step 3 stores the new state in the same device offset 935 (`a1770home_logic.dart @0x3c7982c`), so offset 935 is the AC switch of this page; the DC and smart-mode assignments of the audit (positions 10 and 12) were not checked against a consumer. | [ble/a1770.md](../ble/a1770.md) | `a1770_commands.dart @0x45eb1f8`, `@0x45eb27c`, `@0x45eb300`, `@0x45eb384`, `@0x45eb454` |
 
 The static command `A1770Commands.setAcSwitch` is a seven-element byte list; its bytes and Smi widths are owned by [ble/a1770.md](../ble/a1770.md#setacswitch-static-command-list).
 
@@ -33,6 +33,7 @@ The static command `A1770Commands.setAcSwitch` is a seven-element byte list; its
 - The displayed AC state changes immediately (step 3), before the device answers.
 - `_clearAcCountdown` clears the AC countdown shown on the page and `_setAcPowerCurve` restarts the power curve (bodies not read).
 - Analytics event `DEVICE_AC_OUTPUT_CLICK`.
+- Frame of step 6 (app side, from the asm): `formatCommand` of the PDP transformer (`pdp_command_transformer.dart @0x240ff84`) only stores the command list and the one-byte value in the transformer; `generateCommand` (`@0x240fc6c`) calls `CmdUtil::getTotalCmd` (`cmd_util.dart @0x240fcac`), which allocates a byte array of `len(command) + len(value) + 3` bytes (`@0x240fcd4` to `@0x240fd04`), copies the command at index 0, writes the total length as two bytes with `intToList2` (low byte first) at index `len(command)` (`@0x240fdd0` to `@0x240fe6c`), copies the value after them (`@0x240fe98`) and stores a checksum in the last byte: the sum of all bytes, masked with 0xff (`_getCheckSum`, `@0x240ff0c`, store at `@0x240fed4`). For `setAcSwitch` this is the seven command bytes 08 ee 00 00 00 02 86 (owner [ble/a1770.md](../ble/a1770.md#setacswitch-static-command-list)), the length 0b 00 (11), the state byte 01 or 00 and the checksum byte 8a (state 1) or 89 (state 0): 11 bytes. The receiving side checks the same layout in `validateCommand` (`@0x4788a6c`: length from bytes 7 to 8, checksum over all bytes but the last). Fact belongs on ble/a1770.md (`setAcSwitch` frame; its Known unknowns on the state byte position).
 
 ## Timing (delays/polling)
 
@@ -54,6 +55,4 @@ Corrections of the old FLOWS.md (audit rows in brackets), with the old value:
 
 ## Known unknowns
 
-- The meaning of the seven command bytes and how the state byte is merged (`formatCommand`, `a1770_device_controller.dart @0x33ead4c`).
-- Which of the positions 9 to 13 of `parseSwitchData` is the AC state in the model (the audit row and the old page differ; the model field names were not read).
-- Whether the AC switch of the A1771 and A172x controllers (list `[0, 0x4a]`) is the PPS family the old page meant for other products.
+- Whether the AC switch of the A1771 and A172x controllers (list `[0, 0x4a]`) is the PPS family the old page meant for other products — traced 2026-10-20: not traced; the question is a product-naming one and needs the old page's product list, which is not in the asm.

@@ -61,7 +61,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The wire shape of the empty request (`{}` versus no body) is not shown here.
+- The wire shape of the empty request (`{}` versus no body) is not shown here. — reclassified: device test row 160 (2026-10-20: whether an empty body is sent as `{}`, as no body or as null is decided by the HTTP layer and the SDK, which a capture shows)
 - What makes a popup due (a new report since the last one) is decided by the server; the unit of `outage_start_time` is not known.
 
 ## Device-tested by

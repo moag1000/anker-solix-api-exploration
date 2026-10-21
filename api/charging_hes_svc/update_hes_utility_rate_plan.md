@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # update_hes_utility_rate_plan
 
 ## Purpose
 
-<!-- TODO -->
+Writes the peak-and-valley price plan of a site from the peaks-and-valleys page (`PeaksAndValleysLogic::submitPeakAndValley` through `HttpRequestControllerImpl::updatePeakAndValley`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,18 +12,24 @@
 
 ## Method+URL
 
-`/charging_hes_svc/update_hes_utility_rate_plan`, method: not extracted by the inventory <!-- TODO -->; string-only: `charging/http/http_request_repository_impl.dart @0x4326e40`
+`POST /charging_hes_svc/update_hes_utility_rate_plan` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x4326e40`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x4326e38`, in `HttpRequestControllerImpl::updatePeakAndValley` (`charging/http/http_request_repository_impl.dart @0x4326d40`), sent through `requestHttp` (`@0x4326e68`).
 
 ## Encrypted?
 
-encrypted: "default-true (requestHttp) — verify". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: "default-true (requestHttp)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+
+- No named argument `needEncryption` is passed by `HttpRequestControllerImpl::updatePeakAndValley` (`charging/http/http_request_repository_impl.dart`, call `@0x4326e68`, argument list `@0x4326e60`); `requestHttp` declares `needEncryption = true` as default (`charging/http/http_request_repository_impl.dart @0x2264944`).
 
 ## Request
 
+`HttpRequestControllerImpl::updatePeakAndValley` (`charging/http/http_request_repository_impl.dart @0x4326d40`) stores 2 keys in a map literal with type arguments `<String, Object>` (`@0x4326df0`), which do not type the values. `siteId` is the constant empty string (`r16 = ""` `@0x4326dac`, stored `@0x4326db0`); `peakValleyPriceSeason` is the result of a `toJson` call (`@0x4326dc4`, stored `@0x4326dcc`) whose return type was not resolved, so the type stays `?`.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `siteId` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x4326d40` |
-| `peakValleyPriceSeason` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x4326d40` |
+| `siteId` | string | yes | `""` (constant empty string) | `charging/http/http_request_repository_impl.dart @0x4326da0` |
+| `peakValleyPriceSeason` | object | yes |  | `charging/http/http_request_repository_impl.dart @0x4326db4` |
+
+Structure of `peakValleyPriceSeason` (traced 2026-10-20): the only caller `PeaksValleysLogic::submitPeakAndValley` (`charging/ui/page/device/a5101/setting/peaksAndValleys/peaks_valleys_logic.dart`) builds a `PeakValleyPriceSeasons` object (`@0x4326b44`), logs it with the text `peakValleyPriceSeasonsToJson--->` (`@0x4326b94`) and passes it to `updatePeakAndValley` (`@0x4326bf0`). `PeakValleyPriceSeasons::toJson` (`charging/model/a5101/a5101_hes_setting_model.dart @0x34d88c0`, declared return type `Map<String, dynamic>`) writes the keys `from` (`@0x34d88f0`), `to` (`@0x34d8904`), `energyUnit` (`@0x34d892c`), `priceUnits` (`@0x34d89c8`, list through `PriceUnits::toJson`, keys `priceUnit`, `isDefault`, `name`), `weekDay` (`@0x34d8a64`, list through `DaySchedule::toJson`, keys `from`, `to`, `sellPrice`, `buyPrice`, `peak`), `holiday` (`@0x34d8b00`) and `snDateTime` (`@0x34d8b30`). The value is therefore a JSON object; the element key list of `DaySchedule`/`PriceUnits` is by the field order of their `fromJson` and `toJson` in the same file.
 
 ## `param_type`/`cmd`
 
@@ -31,19 +37,28 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+not parsed by the sender (asm-traced): the success closure is the folded forwarder `charging/http/http_request_repository_impl.dart @0x2268374`, which passes the response object unchanged to the callback stored in the context (`ClosureCall` `@0x22683a8`); the failure closure is the folded forwarder `@0x226824c` (`ClosureCall` `@0x2268288`).
 
 ## Response
 
-<!-- TODO -->
+No response key is read in the sender.
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "siteId": "",
+  "peakValleyPriceSeason": "<peakValleyPriceSeason>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -56,11 +71,13 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Why `siteId` is always sent as the empty string: the builder stores the constant (`charging/http/http_request_repository_impl.dart @0x4326dac`), and the `toJson` of `PeakValleyPriceSeasons` (see Request) has no site or station key, so this request carries no site identifier in its body (traced 2026-10-20); how the server picks the site is server behaviour and not known from the app. — reclassified: server
+- Whether the transport really encrypts the `requestHttp` call(s): `needEncryption` keeps its default true, the later predicates (login state, base URL) are described in `api/encryption.md` and were not evaluated per call. — reclassified: device test row 150 (traced 2026-10-20: per call the SDK login state `AkIotKitFlutter::isLogin` and the base-URL predicate decide, `HttpEncryptionDecorator.dart @0x4869504`, `@0x4869544`; the predicate is a GDT dispatch whose selector the asm does not name, and the login state is runtime data)
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

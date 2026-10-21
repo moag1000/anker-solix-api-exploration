@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # get_device_attrs
 
 ## Purpose
 
-<!-- TODO -->
+Reads named device attributes (power limit, time zone, price type, feed-grid and load-port settings, PV names, TOU data) for many settings pages; 25 senders share this URL (callers e.g. `PowerUsageScenarioController::getDeviceTimezoneWithCallback`, `AS200HomeLogic::onReady`, `CustomBranchController::onInit`) (asm-traced, caller chain in `data/endpoints.json`).
 
 ## Upstream name
 
@@ -12,8 +12,11 @@
 
 ## Method+URL
 
-`/power_service/v1/app/device/get_device_attrs`, method: not extracted by the inventory <!-- TODO -->; string-only: `ak_soft_ems/util/timezone_util.dart @0x22ba254`
-(literal also at 24 more site(s) in `data/endpoints.json`)
+`POST /power_service/v1/app/device/get_device_attrs` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x239edb4`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x239edac`, in `HttpRequestControllerImpl::getDeviceAttrs` (`charging/http/http_request_repository_impl.dart @0x239ec40`), sent through `encryptionRequestHttp` (`@0x239eddc`).
+
+Same URL and method object in the other sender(s) read:
+
+- `POST /power_service/v1/app/device/get_device_attrs` (asm-traced): URL string at `charging/http/http_request_repository_impl.dart @0x238410c`, method object `Method.post` (pool entry `pp+0xa7e0`) at `@0x2384104`, in `HttpRequestControllerImpl::getDeviceAttrsInfo` (`charging/http/http_request_repository_impl.dart @0x2384088`), sent through `encryptionRequestHttp` (`@0x2384134`).
 
 ## Encrypted?
 
@@ -21,19 +24,13 @@ encrypted: "default-true (requestHttp) — verify" / `true`. Scheme and header r
 
 ## Request
 
+(asm-traced) 25 senders were found for this URL in `tools/out/request_fields_all.json`; the two senders of `HttpRequestControllerImpl` were read. `getDeviceAttrs` (`charging/http/http_request_repository_impl.dart @0x239ec40`) stores `device_sn` and `attributes` (both parameters) in a `<String, Object>` literal (`@0x239ecfc`), then adds `supports` = `{"enable_0w_v2": <parameter>}` (`<String, bool>` literal `@0x239ed40`) only when its first parameter is not null (`cmp w0, NULL` `@0x239ed18`). `getDeviceAttrsInfo` (`@0x2384088`) sends the two keys with the body passed in as a parameter. The other 23 senders (`TimezoneUtil::getDeviceTimezone`, `PPSTouHttpService::getTouElectricAttrs`, `AS200HomeLogic::_getLowLoadAutoShutdownTimeout`, `AKIotAX170Command::getCustomBranchList`, `ElectricityUsageHelper::getPriceType`, `TOUPlanLogic::getDataFromAPi`, `GeneralPriceSettingLogic`, `ScheduleNetwork::_getDeviceAttrs`, `A17EXElectricityPriceLogic::_fetchDeviceCurrency`, the feed-grid, load-port and PV-name helpers and others) send the same two keys `device_sn` and `attributes` in `<String, Object>`, `<String, Object?>` or `<String, dynamic>` literals; `TOUPlanLogic` and `GeneralPriceSettingLogic::getDevicePriceType` add keys such as `site_id`, `accuracy`, `station_id`, `not_include_nem`, `currency`.
+
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `device_sn` | ? | ? | ? | `ak_soft_pps_ems/src/modules/pps_tou/service/pps_tou_http_service.dart @0x2a3ebd0` |
-| `attributes` | ? | ? | ? | `ak_soft_pps_ems/src/modules/pps_tou/service/pps_tou_http_service.dart @0x2a3ebd0` |
-| `enable_0w_v2` | ? | ? | ? | `charging/http/http_request_repository_impl.dart @0x239ec40` |
-| `site_id` | ? | ? | ? | `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart @0x2c49144` |
-| `accuracy` | ? | ? | ? | `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart @0x2c49144` |
-| `ems_data` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4974` |
-| `station_id` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4974` |
-| `not_include_nem` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4974` |
-| `currency` | ? | ? | ? | `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4974` |
-
-Rows are the union over 7 senders; `source` is the first sender that sets the key.
+| `device_sn` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x239ecd4` |
+| `attributes` | ? | yes | ? | `charging/http/http_request_repository_impl.dart @0x239ece8` |
+| `supports` | object (`Map<String, bool>`) | optional (first parameter not null, guard `@0x239ed18`) | `{"enable_0w_v2": true}` | `charging/http/http_request_repository_impl.dart @0x239ed68` (key `enable_0w_v2` at `@0x239ed2c`; the value is a parameter of type `bool` by the `<String, bool>` literal) |
 
 ## `param_type`/`cmd`
 
@@ -41,19 +38,35 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+- [`DevicePowerLimit`](../../../../models/power.md#devicepowerlimit), parsed by `DevicePowerLimit.fromJson` at `charging/http/http_request_repository_impl.dart @0x239eee8`. Model of the `getDeviceAttrs` sender.
+- [`DeviceAttributes`](../../../../models/other.md#deviceattributes), parsed by `DeviceAttributes.fromJson` at `charging/http/http_request_repository_impl.dart @0x2384254`. Model of the `getDeviceAttrsInfo` sender (the key `charging::DeviceAttributes`). Other senders parse `DeviceAttributesModel` (`settings::DeviceAttributesModel`), `SolarNameModel`, `LoadPortConfig`, `BranchCircuitModel`, `PriceSmartStatusModel` and `EmsModeModel`; their closures were not read.
 
 ## Response
 
-<!-- TODO -->
+(asm-traced) For each sender that parses a model, the keys below are the top-level keys of the model; that sender adds no wrapper fields of its own in the code read.
+
+- `DevicePowerLimit` top-level keys (`data/models.json`, `charging::DevicePowerLimit`): `device_sn` (String?), `attributes` (Attributes?).
+- `DeviceAttributes` top-level keys (`data/models.json`, `charging::DeviceAttributes`): `attributes` (Attributes?).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "device_sn": "<?>",
+  "attributes": "<?>",
+  "supports": {
+    "enable_0w_v2": true
+  }
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender or the closures read for this page. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -66,7 +79,7 @@ n/a
 - `electricity_price/components/electricity_price_common/tou_auto_preview/tou_auto_price_pkg_result_logic.dart`: `_getDevicePriceUnit` @0x31acd90 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/electricity_price_common/view/tou_plan_logic.dart`: `getDataFromAPi` @0x2c49144 (encryptionRequestHttp; encrypted: true)
 - `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart`: `<anonymous closure> in GeneralPriceSettingLogic::getDevicePriceType` @0x29a4e04 (URL literal only, no `*Http*` call; sends in the same function (`HttpServiceImpl::encryptionRequestHttp`); resolved from the URL literal at `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a5064` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md)); `_getDevicePriceUnit` @0x2a799d0 (encryptionRequestHttp; encrypted: true); `getDevicePriceType` @0x29a4974 (encryptionRequestHttp; encrypted: true); `getPriceTypeUrl` @0x29a4d20 (URL literal only, no `*Http*` call; sender `GeneralPriceSettingLogic::getDevicePriceType` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4974`), reached through callers `GeneralPriceSettingLogic::getDevicePriceType` (`electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4974`); resolved from the URL literal at `electricity_price/components/fixed_price/general_electricity_price_settting/general_price_setting.dart @0x29a4d44` (string-only: the sender was found by following callers; it may send other URLs too — see tools/README.md))
-- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_getDeviceAttrs` @0x2851084 (_requestHttp; encrypted: default-true (requestHttp) — verify)
+- `ev_charger/src/ev_charger/page/home/schedule_charge/network/%20schedule_network.dart`: `_getDeviceAttrs` (`schedule_network.dart @0x2851084`; _requestHttp; encrypted: default-true (requestHttp) — verify)
 - `micro_hes/src/a17ex/home/components/electricity_price/a17ex_electricity_price_logic.dart`: `_fetchDeviceCurrency` @0x35fe644 (encryptionRequestHttp; encrypted: true)
 - `micro_hes/src/common_business/basic_station/module/system_flow/common/energy_system_cover_helper.dart`: `getSolarPvNameMode` @0x2c8d5a0 (encryptionRequestHttp; encrypted: true)
 - `settings/src/common/menu_controller/equipment_feed_power_menu_controller.dart`: `getMenuVisible` @0x3691b40 (encryptionRequestHttp; encrypted: true)
@@ -127,11 +140,14 @@ Called from:
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. No parameter delta is recorded for this URL in `tools/out/diff_3.18.0_3.24.3.md` (string-level diff only; it compares literals, not types).
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Types of `device_sn` and `attributes`: parameters or fields in every sender, with `<String, Object>`/`<String, dynamic>` literals; senders with a `<String, String>` outer literal do not exist for this URL. — attempted 2026-10-20 (two-hop not readable: about 25 senders with parameter or field values; the per-sender trace was not done in this pass; header stays string-only)
+- Which attribute names each sender requests (`attributes` is a list in most senders and a parameter in others) and which names the server knows (upstream `get_device_attributes` lists some).
+- The 23 senders other than the two `HttpRequestControllerImpl` ones: bodies and response parsing were not decoded (see Request). — not traced 2026-10-20 in this pass (25 senders listed on the page); the reason given in the bullet stands
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

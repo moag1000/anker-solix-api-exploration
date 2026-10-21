@@ -24,7 +24,9 @@ Body is a `<String, dynamic>` map of one pair (`r2 = 4`, `@0x2f24970`); the func
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `enabled` | bool (inferred) | yes | `true` | `anka_agent_http.dart @0x2f24978`; value is the first argument. The map type is `dynamic` and the entry switch uses `bool`, so a boolean is expected; the models store the switch as `int?` (`memory_switch`) |
+| `enabled` | int (unboxed, x) | yes | `1` | `anka_agent_http.dart @0x2f24978`; value is the first argument, an unboxed integer 1 or 0 (see below); the models store the switch as `int?` (`memory_switch`) |
+
+Wire type (traced 2026-10-20, app side): `AnkaAgentHttp::setMemorySwitch` (`anka_agent/http/anka_agent_http.dart @0x2f24914`) takes the switch as an unboxed integer and boxes it with `BoxInt64Instr` before the store (`@0x2f2492c`), so `enabled` is a JSON number. The caller `AiChatFlowSettingLogic::toggleMemory` (`anka_agent/pages/setting/ai_chat_flow_setting_logic.dart @0x2f2484c`) converts the bool state of the toggle to 1 or 0 (`tst x1, #0x10`, `cset x2, eq`, `lsl`, `LoadInt32Instr`, `@0x2f248b0`..`@0x2f248bc`) and passes it as the first argument (`@0x2f248e8`); the other caller passes an unboxed integer from a frame slot (`feature_intro_orchestrator.dart @0x35c5138`). So the wire value is 1 (on) or 0 (off), not a boolean.
 
 ## `param_type`/`cmd`
 
@@ -43,7 +45,7 @@ Not parsed by the sender.
 Request, synthesized
 
 ```json
-{ "enabled": true }
+{ "enabled": 1 }
 ```
 
 ## Errors seen
@@ -61,7 +63,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- Whether the wire value is a boolean or 0/1 is not shown by the sender.
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

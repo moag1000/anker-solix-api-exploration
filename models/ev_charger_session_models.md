@@ -60,14 +60,14 @@ One charging order in `A5190ChargeSessionsModel.list`.
 |---|---|---|---|---|
 | `charge_unit` | `String?` | yes | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b2fcc` |
 | `charge_time` | `int?` | yes | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b3054` |
-| `cost` | `unknown` | ? | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b30dc` |
+| `cost` | `dynamic` (no type test between the key load and the store) | ? | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b30dc` |
 | `cost_unit` | `String?` | yes | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b3170` |
 | `reason` | `List<String>` | no | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b31f8` |
 | `start_time` | `int?` | yes | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b32d4` |
 | `order_id` | `String?` | yes | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b335c` |
 | `end_time` | `int?` | yes | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b33e4` |
 | `order_status` | `int?` | yes | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b346c` |
-| `charge_total` | `unknown` | ? | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b34f4` |
+| `charge_total` | `dynamic` (no type test between the key load and the store) | ? | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b34f4` |
 | `time_zone` | `String?` | yes | ≤3.18.0 | `a5190_charge_sessions_model.dart @0x45b3588` |
 
 ### A5190ExportChargeOrderModel
@@ -102,12 +102,12 @@ Totals of one bucket (and the overall total) in `ChargerSessionChartModel`.
 
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
-| `charge_unit` | `unknown` | yes | ≤3.18.0 | `charger_session_chart_model.dart @0x45aeb80` |
+| `charge_unit` | `dynamic` (no type test between the key load and the store) | yes | ≤3.18.0 | `charger_session_chart_model.dart @0x45aeb80` |
 | `charge_time` | `num?` | yes | ≤3.18.0 | `charger_session_chart_model.dart @0x45aec04` |
 | `charge_count` | `num?` | yes | ≤3.18.0 | `charger_session_chart_model.dart @0x45aec90` |
-| `cost_unit` | `unknown` | yes | ≤3.18.0 | `charger_session_chart_model.dart @0x45aed1c` |
-| `cost_saving` | `unknown` | yes | ≤3.18.0 | `charger_session_chart_model.dart @0x45aeda0` |
-| `co2_saveing_unit` | `unknown` | yes | ≤3.18.0 | `charger_session_chart_model.dart @0x45aee24` |
+| `cost_unit` | `dynamic` (no type test between the key load and the store) | yes | ≤3.18.0 | `charger_session_chart_model.dart @0x45aed1c` |
+| `cost_saving` | `dynamic` (no type test between the key load and the store) | yes | ≤3.18.0 | `charger_session_chart_model.dart @0x45aeda0` |
+| `co2_saveing_unit` | `dynamic` (no type test between the key load and the store) | yes | ≤3.18.0 | `charger_session_chart_model.dart @0x45aee24` |
 | `charge_total` | `num` | no | ≤3.18.0 | `charger_session_chart_model.dart @0x45aef18` |
 | `co2_saving` | `num` | no | ≤3.18.0 | `charger_session_chart_model.dart @0x45aefa0` |
 | `cost` | `num` | no | ≤3.18.0 | `charger_session_chart_model.dart @0x45af028` |
@@ -185,7 +185,7 @@ Answer of `get_charging_order_detail`: one charging order with vehicle, SoC and 
 | `order_status` | `int?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f97a4` |
 | `charge_unit` | `String?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9828` |
 | `end_way` | `int?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f98ac` |
-| `charge_total` | `unknown` | ? | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9930` |
+| `charge_total` | `dynamic` (no type test between the key load and the store) | ? | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9930` |
 | `reason` | `unknown` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f99c0` |
 | `start_time` | `int?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9a7c` |
 | `cost_unit` | `String?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9b00` |
@@ -193,16 +193,16 @@ Answer of `get_charging_order_detail`: one charging order with vehicle, SoC and 
 | `end_time` | `int?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9c08` |
 | `data_point` | `unknown` of `DataPoint` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9c8c` |
 | `order_id` | `String?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9d4c` |
-| `cost` | `unknown` | ? | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9dd0` |
-| `cost_saving` | `unknown` | ? | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9e60` |
+| `cost` | `dynamic` (no type test between the key load and the store) | ? | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9dd0` |
+| `cost_saving` | `dynamic` (no type test between the key load and the store) | ? | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9e60` |
 | `device_sn` | `String?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9ef0` |
 | `charge_time` | `int?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9f74` |
 | `device_name` | `String?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36f9ff8` |
 | `transaction_id` | `int?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fa07c` |
-| `charge_from_solar` | `unknown` | ? | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fa0f4` |
+| `charge_from_solar` | `dynamic` (no type test between the key load and the store) | ? | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fa0f4` |
 | `rfid_no` | `String?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fa130` |
 | `time_zone` | `String?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fa1b4` |
-| `co2_saving` | `unknown` | ? | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fa25c` |
+| `co2_saving` | `dynamic` (no type test between the key load and the store) | ? | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fa25c` |
 | `co2_saving_unit` | `String?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fa298` |
 | `charge_vehicle_info` | `ChargeVehicleInfo?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fa31c` |
 | `charge_soc_info` | `ChargeSocInfo?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fa448` |
@@ -260,7 +260,7 @@ One power point of the order curve.
 | JSON key | Dart type | nullable | since | source |
 |---|---|---|---|---|
 | `upload_time` | `int?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fb6cc` |
-| `power_val` | `unknown` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fb754` |
+| `power_val` | `dynamic` (no type test between the key load and the store) | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fb754` |
 | `power_unit` | `String?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fb820` |
 | `is_predict` | `bool?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fb8a8` |
 | `price` | `num?` | yes | ≤3.18.0 | `a5190_sessions_detail_model.dart @0x36fb914` |
@@ -352,7 +352,7 @@ All classes are present in 3.18.0 (`data/models.json`, `since` column). Keys mar
 
 ## Known unknowns
 
-- The Dart types `unknown` (for example `cost`, `charge_total`, `power_val`, `co2_saving`) are numbers whose exact Dart type the extractor could not resolve (int or double).
-- Meaning and unit of `order_status`, `end_way`, `start_way` and `reason` are not decoded; upstream only notes that the order status values are unknown (`apitypes.py`, comment at the `get_device_charge_order_stats_list` entry).
+- The Dart types `unknown` are not known to be numbers: traced 2026-10-20, each of them is read with no type test between the key load and the constructor store, so the app declares them as Dart `dynamic` (rows above, for example `cost` `@0x45b30dc`, `charge_total` `@0x45b34f4`, `power_val` `@0x36fb754`, `co2_saving` `@0x36fa25c`). Where the app does cast, the type is `num`: `ChartState.charge_total`, `co2_saving` and `cost` (`charger_session_chart_model.dart @0x45aef64`, `@0x45aefec`, `@0x45af074`) and `num?` for `DataPoint.charge_total` (`a5190_sessions_detail_model.dart @0x36fbaa4`); so the app expects a number there, and whether the untyped fields carry numbers or strings is not shown by the app.
+- Meaning and unit of `order_status`, `end_way` and `reason` are not decoded; upstream only notes that the order status values are unknown (`apitypes.py`, comment at the `get_device_charge_order_stats_list` entry). `start_way` is decoded by the app enum `StartWayEnum` ([enums](../reference/enums.md#startwayenum-and-chargingpausereason): 1 wifi, 2 ble, 3 touch, 4 rfid, 5 plug, 6 timed, 7 autoResume, 8 modbus, -1 unknown; the session detail page converts an int field of the loaded detail model with `StartWayEnum.fromValue`, `sessions_detail_logic.dart @0x39592cc`) — traced 2026-10-20: the object dump holds no enum for `order_status`, `end_way` or `reason` (searched the class names of `objs.txt`), so no wire-value table exists for them in the app.
 - Whether the server wraps the answer in a `data` string (the reason for the `jsonDecode` branch) or always sends an object is not known; no capture exists.
 - Time fields (`start_time`, `end_time`, `upload_time`, `timestamp`) carry no unit in the asm; the order-list request sends date strings, the second-level requests send an integer `start_time`.

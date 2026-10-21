@@ -11,6 +11,7 @@ Single source for BLE-specific facts: the wire protocol ([protocol.md](protocol.
 | [a1340.md](a1340.md) | asm-traced | A1340 BLE |
 | [a172x.md](a172x.md) | asm-traced | A1722, A1723, A1725, A1726, A1727, A1728, A1729 (SOLIX C200 and C300 family) BLE |
 | [a1753.md](a1753.md) | asm-traced | A1753, A1754, A1755, A1761, A1762 (SOLIX C800 and C1000 family) BLE |
+| [a176x_a178x.md](a176x_a178x.md) | asm-traced | A1763, A1765, A1782, A1783, A1785 (kit-driven portable power stations, no device class) BLE, plus the archive PPS opcode list checked against 3.24.3 |
 | [a1770.md](a1770.md) | asm-traced | A1770 (F1200 Bluetooth-only) BLE |
 | [a1771.md](a1771.md) | asm-traced | A1771 (F1200 Bluetooth and WLAN) BLE |
 | [a1772.md](a1772.md) | asm-traced | A1772 (F1500) BLE |
@@ -27,6 +28,7 @@ Single source for BLE-specific facts: the wire protocol ([protocol.md](protocol.
 | [a17c2.md](a17c2.md) | asm-traced | A17C2 (Solarbank 2 E1600 AC) BLE |
 | [a17c3.md](a17c3.md) | asm-traced | A17C3 (Solarbank 2 E1600 Plus) BLE |
 | [a17c5.md](a17c5.md) | asm-traced | A17C5 (Solarbank 3 E2700 Pro) BLE |
+| [a17d0.md](a17d0.md) | asm-traced | A17D0 (Generator Input Adapter, accessory entry of A1790 and A17B1, no device class) BLE |
 | [a17e2.md](a17e2.md) | asm-traced | A17E2, AE103, AE111, AE113, A17E1 (Solarbank E2 series and E10) BLE |
 | [a17x7.md](a17x7.md) | asm-traced | A17X7 and A17X7US (Smart Meter) BLE |
 | [a17x8.md](a17x8.md) | asm-traced | A17X8 (Smart Plug) BLE |
@@ -35,8 +37,11 @@ Single source for BLE-specific facts: the wire protocol ([protocol.md](protocol.
 | [a5101.md](a5101.md) | asm-traced | A5101, A5102, A5103, A5341 (X1 HES power module) BLE |
 | [a5140.md](a5140.md) | asm-traced | A5140, A5141, A5143 (MI60 and MI80 microinverters) BLE |
 | [a5150.md](a5150.md) | asm-traced | A5150 (A5150 Module) BLE |
+| [a5190_a5191.md](a5190_a5191.md) | asm-traced | A5190 and A5191 (EV Charger V1, IoT-kit property writes, no device class) BLE |
 | [a91b2.md](a91b2.md) | asm-traced | A91B2 (240 W Charging Station) BLE |
 | [ae1x0.md](ae1x0.md) | asm-traced | AE1X0 and AE1R0 (meters) BLE |
 | [shelly.md](shelly.md) | asm-traced | SHEM3, SHEMP3, SHPPS (Shelly 3EM, 3EM Pro, Plus Plug S) BLE |
+
+A17A4 and A17A5 have no page of their own: the app builds the A17A3 controller for them, so they are on [a17a3.md](a17a3.md). Product codes without any device class (A1763, A1765, A1782, A1783, A1785, A5190, A5191, A17D0) are described by the three pages [a176x_a178x.md](a176x_a178x.md), [a5190_a5191.md](a5190_a5191.md) and [a17d0.md](a17d0.md).
 
 Not here: MQTT field maps ([../mqtt/README.md](../mqtt/README.md)), cloud endpoints ([../api/README.md](../api/README.md)), enums ([../reference/enums.md](../reference/enums.md)); owner map in [../docs/STRUCTURE.md](../docs/STRUCTURE.md).

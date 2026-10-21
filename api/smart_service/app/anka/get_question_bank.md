@@ -58,6 +58,8 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 - `AiChatController._fetchAiEmsRecommendQuestions` (`anka_agent/pages/home/controller/ai_chat_controller.dart @0x35c60dc`)
 
+Why the inventory misses the URL (traced 2026-10-20): the literal is loaded as `r30 = "/smart_service/v1//app/anka/get_question_bank"` (`anka_agent/http/anka_agent_http.dart @0x35c61cc`), like the other `r30` URL loads, and it is the only one of 332 distinct `r30` URL literals of the dump that is absent from `data/endpoints.json`; it is also the only one with a double slash, so the extractor's URL pattern most likely rejects the `//`. The page is hand-added for that reason; the call itself is a normal sender (`AiChatController::_fetchAiEmsRecommendQuestions`).
+
 ## Since/changed
 
 3.18.0: absent (the URL string is not in the 3.18.0 object pool). 3.24.3: present (pool `pp+0xf07e8`). since: 3.24.3.
@@ -65,7 +67,6 @@ No error code specific to this endpoint was traced; the shared transport codes a
 ## Known unknowns
 
 - The URL is `/smart_service/v1//app/anka/get_question_bank` (two slashes, `pp+0xf07e8`); whether the server normalises the path or the double slash is part of the real route is not known.
-- This URL is not in `data/endpoints.json`: the inventory extractor did not pick the literal up (reported as a tool finding), so this page is hand-added.
 
 ## Device-tested by
 

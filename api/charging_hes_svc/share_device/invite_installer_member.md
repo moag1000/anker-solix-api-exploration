@@ -27,6 +27,8 @@ Body (`params`) is a `<String, dynamic>` map of two pairs (`r2 = 8`, `@0x396be50
 | `installerEmail` | String | yes | `installer@example.org` | `device_share_network.dart @0x396be58`; first argument |
 | `deviceSnList` | list of String | yes | `["<device sn>"]` | `device_share_network.dart @0x396be6c`; second argument, passed through unchanged (element type not shown) |
 
+Element type (traced 2026-10-20): the only caller `DeviceShareInstallerInviteLogic::onTapInvite` (`ev_charger/src/ev_charger/page/home/setting/device_share_installer/device_share_installer_invite_logic.dart`, sender call `@0x396bac4`) builds the second argument as a growable list with the type argument `<String>` (`@0x396baa0`, length raw 2 = one element, `@0x396bab8`) holding `field_6b` of a device object (`@0x396ba74`), which is the `String deviceSn` getter of `AnkerDevice` (`base_service/device/anker_device.dart @0x22053d4`). So `deviceSnList` is a list of strings, one serial number per call from this caller.
+
 ## `param_type`/`cmd`
 
 n/a
@@ -61,7 +63,6 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The element type of `deviceSnList` is not read in the sender (strings expected).
 - What the installer sees after accepting (commissioning access, read-only access) is not known; see the installer service ([../../charging_hes_installer_svc/README.md](../../charging_hes_installer_svc/README.md)).
 
 ## Device-tested by

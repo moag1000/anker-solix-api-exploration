@@ -1,10 +1,10 @@
-> Verified against: App 3.24.3 · Date: 2026-10-19 · Confidence: string-only · Owner page: this page
+> Verified against: App 3.24.3 · Date: 2026-10-20 · Confidence: string-only · Owner page: this page
 
 # get_price_company
 
 ## Purpose
 
-<!-- TODO -->
+Lists the dynamic-price providers (companies) available for a site (callers `ChargeDischargeSettingLogic::getDynamicPriceCompany`, `ChargeDischargeSettingLogic_C5::getDynamicPriceCompany`, `DynamicPriceDetailInfoViewState::getDynamicPriceCompany`, `ElectricityCompanySelectLogic::getDynamicPriceCompany`, `ElectricityPriceProviderLogic::getDynamicPriceCompany`, `ElectricityPriceServiceImpl::_supportAutoTou`, `PowerUsageScenarioController::_requestDynamicPriceCompany`, `PowerUsageScenarioLogic::_requestDynamicPriceCompany`, `SystemPolicyLogic::_getDynamicPriceCompany`) (string-only: inferred from the function names; one sender is read).
 
 ## Upstream name
 
@@ -12,15 +12,26 @@
 
 ## Method+URL
 
-`/charging_hes_dynamic_price_svc/get_price_company`, method: not extracted by the inventory <!-- TODO -->; string-only: `base_service/api_url.dart @0x27bde50`
+`POST /charging_hes_dynamic_price_svc/get_price_company` (asm-traced for the sender read): `ChargeDischargeSettingLogic::getDynamicPriceCompany` (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b6424`) loads the URL from the static field `getPriceCompany` (`LoadStaticField(0xae0)` `@0x29b64b8`, initializer `Api.getPriceCompany`) and calls `HttpHelper::getDataFromService` (`@0x29b651c`), which sends with `Method.post` (pool entry `pp+0xa7e0`, `electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bdb94`) through `encryptionRequestHttp` (`electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bdbc8`).
+
+The URL is chosen at run time by `Api.getPriceCompany` (`base_service/api_url.dart @0x27bde38`): it loads the static flag at field offset `0xad8` (`@0x27bde38`, `tbnz` on the Dart false bit) and returns `/charging_hes_dynamic_price_svc/get_price_company` when the flag is false (`@0x27bde50`) and `/charging_hes_installer_svc/get_price_company` when it is true (`@0x27bde44`). The result is cached in the late static field at offset `0xae0`, which the senders read.
+
+Fourteen further places load the static field `getPriceCompany` (for example `electricity_price/components/dynamic_price/setting/electricity_price_provider_logic.dart @0x29a791c`, `electricity_price/components/electricity_module/electricity_price_serviceImpl.dart @0x2891d18`, `ak_soft_ems/ems_list/power_usage_scenario_controller.dart @0x2a2f010`); those senders were not read.
 
 ## Encrypted?
 
-encrypted: "unknown (URL literal only, no `*Http*` call)". Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
+encrypted: `true` (asm-traced: the sender read reaches `encryptionRequestHttp`, `electricity_price/components/electricity_price_common/http/http_helper.dart @0x27bdbc8`). Scheme and header rules: `api/encryption.md`; per-sender values are in "Callers in app".
 
 ## Request
 
-No request keys found by the extractor. <!-- TODO -->
+(string-only: both field types are not read) One sender read. Its map literal has the type arguments `<String, dynamic>` (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b64a8`), which name no value type; both keys are stored in the literal without a guard (array length raw 8 at `@0x29b645c`).
+
+| field | type | required | example | source |
+|---|---|---|---|---|
+| `siteId` | string | yes | `"<site_id>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b6464` (value from a field of the logic object, `ldr w2` `@0x29b6478`, store `@0x29b6480`) |
+| `pn` | string | yes | `"<pn>"` | `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b6484` (value `LoadField` `@0x29b649c`, store `@0x29b64a4`) |
+
+Types read in the second pass (traced 2026-10-20, app side): `siteId` is the same String field (offset 279, cast `@0x34f7774`) as on [get_price](get_price.md#request); `pn` is the text of a `PN` enum instance: the logic holds the field at offset 331 as a `PN` (cast `@0x34f7a18`, store `@0x34f7a28` in `electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart`) and the sender sends its `field_13` (`@0x29b6494`..`@0x29b649c`), the product-number text of the enum member. The enum `PN` has 26 members with their texts (`objs.txt Obj!PN@4212721` ff.): `A17C5`, `A17C3`, `A17C2`, `A17C1`, `AE113`, `AE111`, `A17E2`, `AE103`, `AE100`, `AS521`, `AS520`, `AS510`, `AX170`, `A1903`, `A17E1`, `A5191`, `A1782`, `A5103`, `A5102`, `A5101`, `A5341`, `A17B1`, `A17C0`, `A5140`, `A5143` and `None`.
 
 ## `param_type`/`cmd`
 
@@ -28,19 +39,30 @@ n/a
 
 ## Response model (link)
 
-<!-- TODO -->
+(string-only) not parsed in the sender read: the closures passed to `getDataFromService` were not read.
 
 ## Response
 
-<!-- TODO -->
+(string-only) The answer shape was not read.
+
+Parse (traced 2026-10-20, app side): the success closure of `ChargeDischargeSettingLogic::getDynamicPriceCompany` (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b6538`) logs `getSellInfo: ` (`@0x29b656c`), builds a `DynamicPriceCompanyModel` with `fromJson` (`@0x29b65a4`; keys on [the company model page](../../models/dynamic_price_company_model.md)) and writes parts of it into reactive fields (`value=` `@0x29b6600`).
 
 ## Example request/response
 
-<!-- TODO -->
+Request, synthesized (decrypted body as built by the sender; `<...>` are placeholders, not captured values)
+
+```json
+{
+  "siteId": "<site_id>",
+  "pn": "<pn>"
+}
+```
+
+Response: not synthesized; the keys are listed under Response (no capture exists for this endpoint).
 
 ## Errors seen
 
-`api/errors.md`: <!-- TODO -->
+none traced: no numeric error code is compared in the sender read. Code meanings are owned by `api/errors.md`.
 
 ## Callers in app
 
@@ -48,11 +70,12 @@ n/a
 
 ## Since/changed
 
-3.18.0: present. 3.24.3: present. since: ≤3.18.0. <!-- TODO --> (compare params in `tools/out/diff_3.18.0_3.24.3.md`)
+3.18.0: present. 3.24.3: present. since: <=3.18.0. Params changed: removed `pn`, `siteId`, `type` (`tools/out/diff_3.18.0_3.24.3.md`, string-level diff on the URL builder `Api.getPriceCompany`). In 3.24.3 the sender read still builds `siteId` and `pn` itself (`electricity_price/components/timeslot/page/charge_discharge_setting/charge_discharge_setting_logic.dart @0x29b6464`, `@0x29b6484`); `type` was not found in that sender.
 
 ## Known unknowns
 
-- <!-- TODO -->
+- Whether the other thirteen senders send `type` or other keys: only one sender was read. — traced 2026-10-20: the sibling sender `ElectricityPlaceConfirmPageLogic::getDynamicPriceCompany` is on [get_third_jump_url](get_third_jump_url.md#request); the other senders are copies under other class names and were not compared one by one
+- Server behaviour is not known from the app: this page states what the app builds and parses.
 
 ## Device-tested by
 

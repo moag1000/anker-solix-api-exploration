@@ -57,6 +57,8 @@ No error code specific to this endpoint was traced; the shared transport codes a
 - `RfidTools.addRfidCard` (`ev_charger/src/ev_charger/page/home/setting/rfid_cards/tools/rfid_tools.dart @0x3216a70`)
 - an anonymous closure in `RfidDetailLogic` (`ev_charger/src/ev_charger/page/home/setting/rfid_cards/rfid_detail/rfid_detail_logic.dart @0x397b064`)
 
+Order of the BLE write and this call (asm-traced): `RfidTools.addRfidCard` (`ev_charger/src/ev_charger/page/home/setting/rfid_cards/tools/rfid_tools.dart`) shows the loading indicator (`showLoading` `@0x32169c4`), calls the BLE command `setRfidCard` (`@0x32169d4`), awaits it (`Await` `@0x32169e0`) and only then calls `saveDeviceCard` (`@0x3216a70`), so there the card is written to the charger first and saved to the cloud afterwards. The `RfidDetailLogic` closure (`ev_charger/src/ev_charger/page/home/setting/rfid_cards/rfid_detail/rfid_detail_logic.dart`) calls `showLoading` (`@0x397afa4`), trims a text value (`trim` `@0x397afd0`, `value()` `@0x397b040`) and calls `saveDeviceCard` (`@0x397b064`) without a `setRfidCard` call in that closure.
+
 ## Since/changed
 
 3.18.0: present (URL string in the 3.18.0 object pool, `pp+0x68f60`); the sender function has no literal difference between 3.18.0 and 3.24.3 (`tools/cmp_since.py`: ordered string, integer and type literals compared; branch logic not compared). Not new in 3.24.3: the inventory learned URL literals without a leading slash, which made the URL visible. 3.24.3: present. since: ≤3.18.0.
@@ -64,7 +66,6 @@ No error code specific to this endpoint was traced; the shared transport codes a
 ## Known unknowns
 
 - Whether the same call renames an existing card (same `card_number`) or creates a duplicate is not known.
-- Whether the app writes the card to the charger before or after this call is not traced here (the BLE command is `setRfidCard`).
 
 ## Device-tested by
 

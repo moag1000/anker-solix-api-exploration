@@ -41,6 +41,8 @@ n/a
 
 `_parseWeather` reads the key `data` (`ak_iot_common_charging/src/weather/weather_impl.dart @0x2b11714`) and passes it to `WeatherApiResult.fromJson`; the Unity path parses with `WeatherResponseData.fromJson`. All fields are on the model page (wrapper `code`, `msg`, `data` as in [encryption.md](../../encryption.md#response-handling-and-error-codes)).
 
+Value sets (asm-traced from the object dump; the derivation and the unity copies are on [weather_models.md](../../../models/weather_models.md)): `weather_type` is 1 sunny, 2 cloudy, 3 rainy, 4 stormy, 5 snowy, 6 thunderstorm (for example `objs.txt Obj!WeatherType@4217041` sunny, `objs.txt Obj!WeatherType@4217061` thunderstorm); `temperature_type` is 1 celsius and 2 fahrenheit (`objs.txt Obj!TemperatureUnit@4216fe1`, `objs.txt Obj!TemperatureUnit@4216fc1`). Which icon the widgets draw for each type is not traced.
+
 ## Example request/response
 
 Request, synthesized
@@ -66,7 +68,6 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- The weather type codes and the unit of `temperature` (see `temperature_type`) are not decoded.
 - Whether the server uses the account location or the sent coordinates is not known.
 - Server behaviour is not known.
 

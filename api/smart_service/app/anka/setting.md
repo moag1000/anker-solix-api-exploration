@@ -60,7 +60,7 @@ No error code specific to this endpoint was traced; the shared transport codes a
 
 ## Known unknowns
 
-- The values of the switches (0/1 or other) are not shown by the model.
+- The values of the switches (0/1 or other) are not shown by the model. — reclassified: server (2026-10-20: the values arrive in the answer; the app code read here does not name them)
 
 ## Device-tested by
 

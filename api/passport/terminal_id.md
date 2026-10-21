@@ -65,14 +65,15 @@ The code catalog is [errors.md](../errors.md). If no non-empty id results, `Http
 - `charging/http/HttpEncryptionDecorator.dart`: `requestTerminalId` @0x4867cd8. Called from `HttpEncryptionDecorator::request` (`@0x4869310`) when `needTerminalId` is true (default `true`, `@0x486921c`) and the account is not logged in (`SpUtilImpl::isLogin`, `@0x4869304`; the branch skips the call when it returns true, `@0x4869308`). A `BasicLock` serializes concurrent callers (`synchronized`, `@0x4867d34`); inside the lock an already stored non-empty id is returned without a request (`SpUtilImpl::getTerminalId`, `@0x4867dbc`, empty check `@0x4867dc8`).
 - Consumers of the stored id: header `Openudid`, sent by `aiotPlatformRequestHttp` (`@0x260de6c`), `uploadDeviceToken` (`@0x27418d8`), `getAlexaLinkCodeRequest` (`@0x3bce938`, `@0x3bcea54`), `thirdLoginRequest` (`@0x3bd1a3c`), `iotLoginRequest` (`@0x3bd721c`), `verifyCodeLoginRequest` (`@0x3bd84d4`), all in `http_request_repository_impl.dart` (see [login](login.md#request), [third_party_login](third_party_login.md#request) for the two login bodies), header `X-Terminal-ID` on the plain path ([../auth.md](../auth.md#common-request-headers)), the SDK login map key `terminalId` ([../auth.md](../auth.md#token-lifecycle)), and the native login module (`ank_user_module_method_channel.dart`, `setOpenUdid`, string at `@0x26fd364`).
 
+Clear-or-keep (traced 2026-10-20, app side): the logout cleanup only reads the stored id (`getTerminalId`, `charging/account/handlers/logout_handler.dart @0x38d6f5c`, used for `loadPersistedDeviceForUser` `@0x38d6f70`) and does not remove it. `removeTerminalId` is called at three sites only: `SplashLogic::onReady` (`charging/ui/page/account/splash/splash_logic.dart @0x293cf0c` and, after the log `terminalId is false`, `@0x293d008`) and `DemoSiteUtilImpl::exitDemo` (`charging/util/demosite_util_impl.dart @0x2741eac`). So a logout keeps the id; the app clears it on start-up in the two splash branches and when the demo site is left.
+
 ## Since/changed
 
-3.18.0: present (3.18.0 `HttpEncryptionDecorator.dart`: URL string at `@0x1b921bc`, key `gen_key` at `@0x1b922d4`). 3.24.3: same URL and body key. since: ≤3.18.0.
+3.18.0: present (3.18.0 `HttpEncryptionDecorator.dart`: URL string at `0x1b921bc`, key `gen_key` at `0x1b922d4`). 3.24.3: same URL and body key. since: ≤3.18.0.
 
 ## Known unknowns
 
 - What the server derives the id from (the request carries no client data, only `gen_key: ""`) and whether it is stable per installation or per call.
-- Whether the id changes after a login or logout: the logout cleanup reads the stored id (`getTerminalId`, `logout_handler.dart @0x38d6f5c`) but the clear-or-keep decision was not traced.
 
 ## Device-tested by
 

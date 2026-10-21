@@ -1,0 +1,750 @@
+{
+ "api/app/devicerelation/confirm_invite.md:f76e7eceb9": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/app/devicerelation/device_invite.md:81210e5383": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/app/devicerelation/get_shared_device.md:94bbced8bd": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/app/devicerelation/update_share.md:6fa7654e1d": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/auth.md:881e54f679": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "api/auth.md:f7d3d833d9": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "api/charging_hes_installer_svc/get_area_by_code.md:3e006553c2": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_installer_svc/get_area_by_code.md:89f4286b72": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_installer_svc/get_price.md:6a4199831e": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_installer_svc/get_third_jump_url.md:060ac3eb7f": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_installer_svc/get_third_jump_url.md:20414ac57e": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "api/charging_hes_installer_svc/get_utility_rate_plans.md:d226b46645": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_installer_svc/get_world_monetary_unit.md:32a128a426": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_installer_svc/passport_login.md:066b3a7b21": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_installer_svc/v2/app/third/platform/list.md:c7335a6b0a": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_svc/share_device/delete_installer_inviting_member.md:318d182d3a": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_svc/share_device/get_installer_invited_list.md:0df778d592": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_svc/share_device/invite_installer_member.md:03fe97701b": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_third_party_service_svc/query_modbus_setting.md:44e5ab90d5": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_third_party_service_svc/query_modbus_setting.md:590a441659": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_third_party_service_svc/set_modbus_setting.md:de67533bcb": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/charging_hes_third_party_service_svc/set_modbus_setting.md:e3936c8113": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/device_svc/get_url_by_country_code.md:e0db9799d5": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/devicecontrol/app/record_device_command.md:10f83ceaca": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/devicecontrol/device/verify_unlock_default_power_code.md:fedcb053be": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/encryption.md:beb5bc8c19": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/energy/backup_report/report_list.md:686b586906": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/marketing/app/referral/entrance_check.md:d0d4021e67": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/passport/login.md:42169a3983": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "api/passport/third_party_login.md:be7dc95c28": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/app/get_ocpp_endpoint_list.md:e8b6444df6": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/app/get_ocpp_info.md:00976cfd89": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/app/get_ocpp_info.md:0fddefbc63": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/app/group/get_group_devices.md:1f6562fa33": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/app/order/delete_charging_order.md:fbbeb22564": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/app/order/export_charge_order.md:b96c212ce8": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/app/order/get_charge_order_stats.md:47d600db9b": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/app/order/get_charging_order_sec_detail.md:ad0e997d7e": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/app/vehicle/delete_vehicle.md:4218b83f1b": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/app/vehicle/set_charging_vehicle.md:74b892d88f": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/app/vehicle/update_vehicle.md:3c951c5f5a": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/device/get_tamper_records.md:36728d3f02": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/device/get_tamper_records.md:5dc280f0b0": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/everhome/bind.md:1df92a5bc9": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/rfid/delete_device_card.md:1c416bc1c4": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/rfid/get_device_cards.md:e90ad12d9f": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/rfid/save_device_card.md:4e1459a3de": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/set_user_site_param.md:b644da8903": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/site/electrician/add.md:58013536f9": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/site/electrician/get.md:7f98480db1": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/site/get_power_limit.md:b6898f8cab": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "api/power_service/site/get_site_detail_by_sn.md:120b9be525": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/site/set_device_feature.md:3b20622d21": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/site/set_site_device_param.md:05f894efd3": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "api/power_service/site/set_site_device_param.md:4e13db5f90": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/site/set_site_device_param.md:d0a059fc44": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/v2/app/get_custom_branch_icon.md:3774ee7606": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/v2/app/set_device_pv_name.md:f79fedc184": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/v2/device/energy_analysis.md:08561e7fab": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/v2/device/energy_options.md:b605398cf4": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/v2/device/report_data.md:a426c77ac0": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/v2/device/timeline/event.md:a958a336b3": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/v2/platform_get_pn_region_code.md:62c11ca4e7": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/v2/site/platform_energy_analysis_options.md:beae0f74b9": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/v2/site/platform_get_site_savings.md:55b801fe2c": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/power_service/v2/site/platform_get_site_scene.md:a6011ead4a": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/sdk_senders.md:d13c4002c3": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "api/smart_service/app/anka/delete_all_memory.md:3b9829e20e": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/smart_service/app/anka/get_entry_show.md:e2cceced5a": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "api/smart_service/app/anka/set_push_switch.md:1c70d5e8f8": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "ble/a1340.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a172x.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a1753.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a1770.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a1771.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a1772.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a1780.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a1780p.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a1781.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a1790.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17a0.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17a3.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17b1.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17b2.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17c0.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17c1.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17c2.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17c3.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17c5.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17e2.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17x7.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17x8.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a17y0.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a2345.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a5101.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a5140.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a5150.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/a91b2.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/ae1x0.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "ble/handshake.md:5ff63e16b0": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "ble/handshake.md:d68cc00edc": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "ble/shelly.md:5876809c0f": {
+  "class": "device",
+  "note": "no BLE session against a real device is recorded"
+ },
+ "devices/ev_charger.md:47f2e0c947": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/ev_charger.md:90643c125e": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/ev_charger.md:f1e34df0e2": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/home_power_panel.md:3f861c92ea": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/modbus.md:cb9b379eb2": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/modbus.md:d5d09467f4": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/modbus.md:e92ec5b58a": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "devices/smart_plug.md:272364f0c1": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/smart_plug.md:3f861c92ea": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/smart_plug.md:a3cafaf110": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/smart_plug.md:fc02c61793": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/solarbank.md:8354c48500": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/solarbank.md:b08376bd7c": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "devices/x1_hes_e10.md:bf5fe83f8e": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "docs/ARCHITECTURE.md:5bf8b42655": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "docs/ARCHITECTURE.md:e7d2fa3594": {
+  "class": "asm",
+  "note": "app-side detail that a closer read of the asm can settle (sender, parser, field or call path not read yet)"
+ },
+ "flows/encrypted_request.md:08a6f0f450": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "flows/encrypted_request.md:9171a26311": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "flows/modbus_setup.md:288bc8b472": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "flows/modbus_setup.md:9bb0567519": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "flows/smart_plug_countdown_timer.md:d6c87f7883": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "flows/solarbank_temperature_unit.md:49b8b53335": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "models/a5190_device_info.md:ee2f1800e2": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "models/anka_agent_models.md:5fc293a5c1": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/backup_report_models.md:3f1bb6edf6": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/backup_report_models.md:c2111c95e1": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/branch_icon_models.md:655ff74e57": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/combine_box_entity.md:40006e78af": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/ev_charger_session_models.md:81f66beae6": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/ev_charger_vehicle_models.md:616a594f84": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/feed_grid_setting_param.md:789f6a2029": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/get_site_device_param_response.md:739957b525": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/grid_code_model.md:235729a61a": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/grid_overload_auto_reduce_param.md:1f48e850d1": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/grid_param_setting_info.md:41ea908146": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/grid_param_setting_info.md:5bfa777f28": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/heat_pump_param.md:0a31491142": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/hw_feed_grid_setting_param.md:0dba5b4d11": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/hw_feed_grid_setting_param.md:3675cb3183": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/location_support_country_code.md:e8a529e11b": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/peak_shaving_setting_param.md:be9fbe82fe": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/peak_time_model.md:f6578ca071": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/s1_s2_charger_session_chart_model.md:c66aaa59ca": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/site_device_param_response.md:f6592adfb7": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/site_sn_relation_list.md:76a7428855": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/soc_setting_param.md:887cbf1f60": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/station_power_limit.md:0b4f7dc5cc": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/station_power_limit.md:6350be2b58": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "models/strategy_visualization_models.md:1862ec61f3": {
+  "class": "server",
+  "note": "the answer is a server-side value, format or behaviour (meaning, unit, value set, who may call)"
+ },
+ "mqtt/a1340.md:d24684150f": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a172x.md:0371b760da": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a172x.md:a5b6ef568a": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a1780.md:26e5749edb": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a1780.md:527f8238c1": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a1780.md:5cbab04fca": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a1780.md:8328d5ad31": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a1790.md:6b0d4be055": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a1790.md:a9f185468b": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a1790.md:dcf5037120": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a1790.md:f373b61df5": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17b1.md:be9036d3eb": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17c0.md:5c65f911d9": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17c1.md:69e6c793ad": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17c1.md:6d80dad6f3": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17c1.md:715f45f549": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17c1.md:ce916ce6e7": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17c1.md:e2be4a9ff2": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17c1_status.md:5152f46f7b": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17c1_status.md:cfa198722c": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17c2.md:58374b3cf4": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17c2.md:8f4f7b806a": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17x7.md:2197c20b95": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17x7.md:993ac47ef9": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17x8.md:4aca81128c": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a17x8.md:94e5d02af5": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a2345.md:3105c9af54": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a2345.md:583ca085e4": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a2345.md:82e53ee58e": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a2345.md:a83e1eb861": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a91b2.md:41290c319c": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/a91b2.md:9b4b0587ab": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/shelly.md:22c60de446": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/shelly.md:53629fc342": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "mqtt/shelly.md:be88d09864": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ },
+ "reference/validation_model.md:fe17418f54": {
+  "class": "device",
+  "note": "needs a device test, a capture or a runtime observation"
+ }
+}

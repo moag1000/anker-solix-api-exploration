@@ -38,9 +38,11 @@ Other call arguments: `showLoading: false` (`r30 = false`, `@0x3bd7294`; the app
 
 What upstream sends in addition (upstream-confirmed, `session.py`): the body keys `ab` (country id), `enc` (`0`), `time_zone` and `transaction`. The 3.24.3 `iotLoginRequest` has none of these four keys, and upstream sends no `Openudid` header. The server accepts the upstream form, so the four keys are not rejected; whether the app-style body without them is accepted by the server for every account is not tested here.
 
-What `processPassword` (`validate_account_model.dart @0x2faf368`) does to the password is selected by the `EncType` of the account (`raw` or `sha256`, enum names from pool entries `pp+0xc19d8` and `pp+0xc19e0`); the account's `enc_text` field comes from [validate_email](validate_email.md). Upstream sends the raw password with `enc: 0`.
+What `processPassword` (`validate_account_model.dart @0x2faf368`) does to the password is selected by the `EncType` argument (traced 2026-10-20): the instance `pp+0xc19d8` (`raw`, index 0, value `raw`) makes it return the string unchanged (compare `@0x2faf38c`, return `@0x2faf39c`); the instance `pp+0xc19e0` (`sha256`, index 1, value `sha2`) encodes the string as UTF-8 (`Utf8Encoder.convert` `@0x2faf3bc`), runs it through `_Sha256.convert` (`@0x2faf3cc`) and returns `toString` of the digest (`@0x2faf3d4`), the hex text of the SHA-256 hash; any other value returns the string unchanged. The login screen passes the `EncType` of the account, whose `enc_text` field comes from [validate_email](validate_email.md); the register, forgot-password, set-account-password and change-password screens pass the constant `pp+0xc19e0` (`sha256`): `register_logic.dart @0x3be22e8`, `forget_pwd_logic.dart @0x3bc88e0`, `account_set_password_logic.dart @0x4055474`, `user_change_password_logic.dart @0x4041dd4`, and a second register site in another closure (`charging/ui/page/account/register/register_logic.dart @0x3be2f9c`, also `sha256`). Callers that pass a variable (a `field_b` load, the `EncType` of the validated account) instead of a constant: the first change-password call (`user_change_password_logic.dart @0x4041da0`), `charging/ui/page/user/routerInfo/account_verification/account_verification_logic.dart @0x4055980`, `charging/ui/page/account/privacy_policy/verification/verification_logic.dart @0x2faece8` and `charging/ui/page/account/login/installer_login_logic.dart @0x3191f30`. Upstream sends the raw password with `enc: 0`.
 
 Scope note: pre-processing named only; not described (vendor protection; decision pending with the repo owner).
+
+Login entry (app side, traced 2026-10-20): the Dart `LoginLogic::startLogin` that sends this request is called from `LoginLogic::checkIsFormat` (`charging/ui/page/account/login/login_logic.dart @0x3bd6d6c`) on the Dart login page; the feature code of the app (35 call sites) calls `LoginHandler::startLoginFlow`, which starts the native `ank_user_module` container instead; a start without a login enters through the container (`SplashLogic::_navigatePage`); the evidence is on [../auth.md](../auth.md#login-endpoints).
 
 ## `param_type`/`cmd`
 
@@ -121,8 +123,8 @@ Transport-level codes (401, 461, 463, 26084, 26085) are handled before the login
 
 ## Known unknowns
 
+- Whether the login state that `SplashLogic` tests can already be true for a visitor session: see [../auth.md](../auth.md#login-endpoints) (traced 2026-10-20).
 - Which transport path the login request takes at run time (SDK path or plain Dio path); depends on the SDK state, not decidable from asm.
-- Whether the native `ank_user_module` login is the default entry in 3.24.3 or only a variant; it receives a `UserData` with the token (`user_data.dart`), not the HTTP response.
 - What the server returns for `26123` and when it returns `26109`.
 - Whether the server requires `ab`, `time_zone`, `transaction` for accounts in non-default regions (upstream sends them, the app does not).
 

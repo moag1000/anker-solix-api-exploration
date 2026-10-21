@@ -16,7 +16,7 @@ Saves the grid code settings of a product for the user: the app sends the grid p
 
 ## Encrypted?
 
-`updateCloudSetting`, `_setEnwgSwitch` and `saveProtectParam` call `encryptionRequestHttp` (`device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x47c85f4`, `settings/src/common/page/grid_param_setting/grid_protect_setting_controller.dart @0x3a5a1b4`, `_setEnwgSwitch` after `@0x3facb54`) without `needEncryption`, so the default `true` applies ([which calls are encrypted](../../encryption.md#which-calls-are-encrypted)); whether the call goes through the SDK is decided at run time. The `system_config_controller` closure is a direct SDK call (path C). `saveProtectParam` turns the loading overlay off (`r30 = false`, `@0x3a5a19c`).
+`updateCloudSetting`, `_setEnwgSwitch` and `saveProtectParam` call `encryptionRequestHttp` (`device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x47c85f4`, `settings/src/common/page/grid_param_setting/grid_protect_setting_controller.dart @0x3a5a1b4`, `_setEnwgSwitch` after `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart @0x3facb54`) without `needEncryption`, so the default `true` applies ([which calls are encrypted](../../encryption.md#which-calls-are-encrypted)); whether the call goes through the SDK is decided at run time. The `system_config_controller` closure is a direct SDK call (path C). `saveProtectParam` turns the loading overlay off (`r30 = false`, `@0x3a5a19c`).
 
 ## Request
 
@@ -24,7 +24,7 @@ The body is the grid parameter document (the `GridParamSettingInfo` keys, see [t
 
 | field | type | required | example | source |
 |---|---|---|---|---|
-| `is_push_device` | int | yes | `2` | `updateCloudSetting`: `device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x47c8564` (settings copy `@0x3a571a4`); value computed from a boolean field of the controller (offset 0x83, `@0x47c8548`) with `csetm`, `and #2`, `add #2` (`@0x47c8554` to `@0x47c855c`): tagged Smi 2 when the field is true, 1 when false (raw 4 / raw 2). `_setEnwgSwitch`: `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart @0x3facab4`, literal raw `2` (`@0x3facabc`, a map `[]=` argument, tagged), so 1. `saveProtectParam`: `settings/src/common/page/grid_param_setting/grid_protect_setting_controller.dart @0x3a5a0e8`, computed like `updateCloudSetting` from a field at offset 0x47 (`@0x3a5a0cc` to `@0x3a5a0e0`) |
+| `is_push_device` | int | yes | `2` | `updateCloudSetting`: `device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x47c8564` (settings copy `@0x3a571a4`); value computed from the boolean controller field at offset 0x83 (`@0x47c8548`), which `updateBleMode` sets to the result of `isBleMode()` or, when that is false, of `isBleAvailable()` (`isBleMode` call `@0x35a4808`, `isBleAvailable` call `@0x35a4840`, `tbnz` on the first result `@0x35a4860`, store `@0x35a486c`), with `csetm`, `and #2`, `add #2` (`@0x47c8554` to `@0x47c855c`): tagged Smi 2 when the field is true, 1 when false (raw 4 / raw 2). `_setEnwgSwitch`: `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart @0x3facab4`, literal raw `2` (`@0x3facabc`, a map `[]=` argument, tagged), so 1. `saveProtectParam`: `settings/src/common/page/grid_param_setting/grid_protect_setting_controller.dart @0x3a5a0e8`, computed like `updateCloudSetting` from a field at offset 0x47 (`@0x3a5a0cc` to `@0x3a5a0e0`) |
 | `grid_code`, `country_code`, `grid_code_name`, `enable_params` | String / map | `_setEnwgSwitch` | not decoded | `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart @0x3faca20`, `@0x3faca58`, `@0x3faca90`, `@0x3facaa4`; the first three come from the selected grid object (null if none), `enable_params` is the switch map (`1` / `0` strings `@0x3fac96c`, `@0x3fac978` select its value) |
 | `scenario_type` | int | `saveProtectParam` | not decoded | `settings/src/common/page/grid_param_setting/grid_protect_setting_controller.dart @0x3a5a0b0`; value is a field at offset 0x4b (`@0x3a5a098`) |
 | `advanced_params_template`, `enable_params` | removed | `saveProtectParam` only | n/a | the keys are removed from the document before sending (`remove`, key loads `@0x3a5a104`, `@0x3a5a120`); the advanced values travel as a JSON-encoded text (`jsonEncode`, `@0x3a5a044`) in the document built by the page |
@@ -41,7 +41,7 @@ n/a (asm-traced): no response model; see Response.
 
 ## Response
 
-No response field is read by the traced senders (asm-traced): the success closures (`@0x3192d04`, a mixin closure `_updateCloudSetting` in the deduplicated mixin region, not in `grid_param_setting_controller.dart`; mixin-sourced, body not read; `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart @0x3facc64`) only close the loading overlay and report success; the failure closures (`@0x47c8614`, `@0x3facb9c`) report the error.
+No response field is read by the traced senders (asm-traced): the success closures (code at `0x3192d04`, not in the asm tree: a mixin closure `_updateCloudSetting` in the deduplicated mixin region, not in `grid_param_setting_controller.dart`; mixin-sourced, body not read; `charging/ui/page/device/main/sitation_energy_system/station_home_settings/advanced_setting/grid_setting_logic.dart @0x3facc64`) only close the loading overlay and report success; the failure closures (`@0x47c8614`, `@0x3facb9c`) report the error.
 
 ## Example request/response
 
@@ -69,8 +69,8 @@ No error code specific to this endpoint was traced. The failure closure of each 
 
 ## Known unknowns
 
-- What `is_push_device` 1 and 2 mean (probably "cloud only" and "also pushed to the device") is inferred; the semantics are not decoded.
-- The full document structure sent by `updateCloudSetting` (built by the caller page) is not traced.
+- What the cloud does with `is_push_device` 2 beyond what the key name says: the app sets it to 2 exactly when its controller is in BLE mode or BLE is available, and to 1 otherwise (see Request). — reclassified: server (not visible in the app: only the key name hints at "push to the device")
+- The full document structure sent by `updateCloudSetting` (built by the caller page) is not traced. — traced 2026-10-20: the page names the document as the `GridParamSettingInfo` keys; `setGridInfo` passes three captured values to `updateCloudSetting` (`device/src/station_setting/controller/common_grid_param/page/grid_param_setting_controller.dart @0x47c84cc`), whose construction in the three callers was not decoded beyond the keys the senders add or remove (table above)
 - Server behaviour is not known.
 
 ## Device-tested by
