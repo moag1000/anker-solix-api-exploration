@@ -1,6 +1,6 @@
 # Changelog
 
-2026-10-20 — depth pass r2 ready for merge (branch followup/3.24.3-depth)
+2026-10-21 — depth pass r2 merged (branch followup/3.24.3-depth, merge commit 2e165be, tag v2026.10-app3.24.3-r2)
 
 2026-10-20 — rework merged (branch rework/3.24.3, tag v2026.10-app3.24.3); README/index version pass
 
@@ -8,7 +8,7 @@
 
 > **Numbers under review (2026-10-19):** integers on this page that came from decompiled code were read without Smi decoding and may be 2× too large. Verified values: see docs/audit/CHANGELOG_old_entries.md; corrected facts live on their owner pages (docs/STRUCTURE.md).
 
-## 2026-10 — Depth pass (r2) on the 3.24.3 reference (branch followup/3.24.3-depth, tag v2026.10-app3.24.3-r2 — tag set at merge)
+## 2026-10 — Depth pass (r2) on the 3.24.3 reference (branch followup/3.24.3-depth, tag v2026.10-app3.24.3-r2, merged 2026-10-21)
 
 The depth pass deepens the 3.24.3 reference without changing its structure (branch from `main` at `7aecc9e`; 101 commits up to `19ee601`, the last commit before the final-review fixes, by `git rev-list --count 7aecc9e..19ee601`; `git diff --stat 7aecc9e..19ee601` = 580 files, +19440 / −5572). It did three things: it read the request side of the endpoint pages from the instructions instead of from names (most skeleton pages became `asm-traced`), it worked through the Known-unknowns bullets that the asm can answer, and it added the tools that make both repeatable. As before, an owner page holds each fact and this entry only links it. The tag `v2026.10-app3.24.3-r2` is set at merge. The page and tag counts quoted below are not in the generated block of [README.md](README.md#5-coverage-and-confidence-tags); they are reproduced by the commands named next to them.
 
