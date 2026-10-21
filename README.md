@@ -137,6 +137,7 @@ A page header reads `> Verified against: App 3.24.3 · Date · Confidence: <tag>
 | [devices/](devices/README.md) | product pages, all on 3.24.3 ([a17c5](devices/a17c5.md), [Modbus](devices/modbus.md) and five product pages) |
 | [models/](models/README.md) | response and request model pages that own the field lists |
 | [reference/](reference/README.md) | enums, business rules, validation model, IoT-Kit channels |
+| [platform/](platform/README.md) | the parts of the APK outside the Dart snapshot: [android_manifest](platform/android_manifest.md), [native_libraries](platform/native_libraries.md), [webview_bridge](platform/webview_bridge.md), [app_packaging](platform/app_packaging.md) |
 | [data/](data/README.md) | machine-readable exports (generated, never hand-edited) |
 | [docs/](docs/STRUCTURE.md) | [STRUCTURE.md](docs/STRUCTURE.md) (fact ownership and migration map), [PERSONAS.md](docs/PERSONAS.md), [ARCHITECTURE.md](docs/ARCHITECTURE.md), [SAFE_USAGE.md](docs/SAFE_USAGE.md), [DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md), [audit/](docs/audit/) (Smi audit tables), templates |
 | [tools/](tools/README.md) | the generators, the linter and the tests behind the data and the statistics |
