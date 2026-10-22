@@ -168,6 +168,7 @@ def main(argv=None):
     ap.add_argument('--snapshot', default=A.SNAPSHOT_3_24_3)
     ap.add_argument('--out', default='data/param_types.json')
     a = ap.parse_args(argv)
+    A.check_root(a.asm_root, a.version)
     t0 = time.time()
     res = build_param_types(a.asm_root, a.version, a.upstream,
                             log=lambda s: print(s, file=sys.stderr))

@@ -87,6 +87,7 @@ class TestMain(unittest.TestCase):
                           row('E', 'p/e.dart', fields=[]), row('S', 'sentry/s.dart')]}
         out = os.path.join(tempfile.mkdtemp(), 'models.json')
         with mock.patch.object(M, 'build_models', return_value=built), \
+                mock.patch.object(M.A, 'check_root'), \
                 redirect_stdout(StringIO()), redirect_stderr(StringIO()):
             self.assertEqual(M.main(['ROOT', '--version', '3.24.3', '--out', out] + extra), 0)
         with open(out, encoding='utf-8') as fh:

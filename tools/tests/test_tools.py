@@ -452,6 +452,60 @@ class OutputGuardTests(unittest.TestCase):
             render_pages.render_all, render_pages._write = saved
 
 
+class RootGuardTests(unittest.TestCase):
+    def _root(self, body):
+        import asmparse
+        import tempfile
+        root = tempfile.mkdtemp()
+        rel = asmparse.ROOT_LANDMARKS['3.24.3'][0]
+        os.makedirs(os.path.join(root, os.path.dirname(rel)))
+        with open(os.path.join(root, rel), 'w', encoding='utf-8') as fh:
+            fh.write(body)
+        return root
+
+    def test_landmark_present_passes(self):
+        import asmparse
+        mark = asmparse.ROOT_LANDMARKS['3.24.3'][1]
+        asmparse.check_root(self._root('r16 = [pp+0x1] "x" @%s' % mark), '3.24.3')
+
+    def test_same_file_other_build_refused(self):
+        import asmparse
+        with self.assertRaises(SystemExit):
+            asmparse.check_root(self._root('set_aps_power at another address'), '3.24.3')
+
+    def test_missing_file_refused(self):
+        import asmparse
+        import tempfile
+        with self.assertRaises(SystemExit):
+            asmparse.check_root(tempfile.mkdtemp(), '3.24.3')
+
+    def test_version_without_landmark_passes(self):
+        import asmparse
+        import tempfile
+        asmparse.check_root(tempfile.mkdtemp(), '9.9.9')
+
+    def test_cli_refuses_before_building(self):
+        import tempfile
+        import endpoint_inventory
+        import model_fields
+        import param_types
+
+        def boom(*a, **k):
+            raise AssertionError('must not build')
+
+        for mod, name in ((endpoint_inventory, 'build_inventory'),
+                          (model_fields, 'build_models'),
+                          (param_types, 'build_param_types')):
+            saved = getattr(mod, name)
+            setattr(mod, name, boom)
+            try:
+                with self.assertRaises(SystemExit):
+                    mod.main([tempfile.mkdtemp(), '--version', '3.24.3',
+                              '--out', os.path.join(tempfile.mkdtemp(), 'x.json')])
+            finally:
+                setattr(mod, name, saved)
+
+
 class UrlLiteralTests(unittest.TestCase):
     """URL literals without a leading slash (synthetic, fast)."""
 
@@ -979,6 +1033,16 @@ class LintDocsTests(unittest.TestCase):
                        'api/param_types.md': self.HDR + txt}, ['owner-cmd'])
         self.assertEqual({f.path for f in r}, {'reference/a.md'})
         self.assertEqual(self.lint({'reference/a.md': self.HDR + 'the `cmd` value, see x\n'}, ['owner-cmd']), [])
+
+    def test_ble_fallback(self):
+        bad = 'BLE works as a fallback when the cloud is down.\n'
+        r = self.lint({'reference/a.md': self.HDR + bad, 'docs/plan.md': '# plan\n' + bad},
+                      ['ble-fallback'])
+        self.assertEqual([f.path for f in r], ['reference/a.md'])
+        for ok in ('BLE is not a live fallback for the cloud.\n',
+                   'The BLE entry point of the fallback controller.\n',
+                   'with the BLE MAC as fallback.\n'):
+            self.assertEqual(self.lint({'reference/a.md': self.HDR + ok}, ['ble-fallback']), [], ok)
 
     def test_slug_and_legacy_skip(self):
         import lint_docs

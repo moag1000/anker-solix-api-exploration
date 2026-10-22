@@ -15,6 +15,7 @@ Rules (each finding is printed as `path:line: ERROR|WARN rule: message`):
   dup-payload                 identical ```json block on more than one page
   secret                      a 32+ hex run outside docs/audit
   owner-cmd                   numeric cmd value outside api/param_types.md
+  ble-fallback                BLE offered as a cloud/WiFi fallback (not negated)
 
 Exit 1 when any error is reported. `--warn-only` runs only the warning rules and exits 0.
 Old root docs listed in the migration map of docs/STRUCTURE.md that still lack a status
@@ -55,7 +56,8 @@ def valid_header(line):
 
 
 RULES = ('header', 'sections', 'uncited-int', 'tag-overclaim', 'inferred-as-traced-sequence',
-         'todo-purpose', 'links', 'length', 'dup-payload', 'secret', 'owner-cmd')
+         'todo-purpose', 'links', 'length', 'dup-payload', 'secret', 'owner-cmd',
+         'ble-fallback')
 SOFT = ('todo-purpose', 'length')
 SKIP_DIRS = {'.git', '.superpowers', 'out', '__pycache__', 'easter_eggs', 'node_modules'}
 HEADER_DIRS = ('api', 'models', 'flows', 'devices', 'mqtt', 'ble', 'reference')
@@ -519,11 +521,32 @@ def rule_owner_cmd(pg, ctx):
             yield i + 1, 'numeric cmd value "%s" belongs on api/param_types.md' % m.group(0), ln
 
 
+BLE_RE = re.compile(r'\b(BLE|Bluetooth)\b')
+FALLBACK_RE = re.compile(r'\bfall(s|ing)?[ -]?back\b|\bfallback\b', re.I)
+TRANSPORT_RE = re.compile(r'\b(cloud|Wi-?Fi|internet|offline|online)\b', re.I)
+NEGATION_RE = re.compile(r"\b(not|no|never|nothing|without|unavailable|cannot|isn't|doesn't)\b", re.I)
+
+
+def rule_ble_fallback(pg, ctx):
+    # Fact pages only. BLE is unavailable while the device is on WiFi (ble/protocol.md), so a
+    # sentence that offers BLE as a fallback for the cloud/WiFi path is wrong unless negated.
+    # "fallback controller" or "MAC as fallback" carry no transport word and pass.
+    if pg.rel.startswith('docs/audit/') or not is_fact_page(pg):
+        return
+    for i, ln in enumerate(pg.lines):
+        for s in re.split(r'(?<=[.;])\s+', ln):
+            if (BLE_RE.search(s) and FALLBACK_RE.search(s) and TRANSPORT_RE.search(s)
+                    and not NEGATION_RE.search(s)):
+                yield i + 1, 'BLE offered as a cloud/WiFi fallback (see ble/protocol.md)', ln
+                break
+
+
 PAGE_RULES = {
     'header': rule_header, 'sections': rule_sections, 'uncited-int': rule_uncited_int,
     'tag-overclaim': rule_tag_overclaim, 'inferred-as-traced-sequence': rule_traced_seq,
     'todo-purpose': rule_todo_purpose, 'links': rule_links, 'length': rule_length,
     'dup-payload': rule_dup_payload, 'secret': rule_secret, 'owner-cmd': rule_owner_cmd,
+    'ble-fallback': rule_ble_fallback,
 }
 
 

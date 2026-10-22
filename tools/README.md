@@ -32,6 +32,8 @@ python3 -I tools/readme_stats.py [--check]                                 # REA
 python3 -I tools/smi.py <asm_file> <0xADDR> [--dump]                       # check one number by eye
 ```
 
+The three generators first check that `$N` really is the build named by `--version`: `check_root` in `asmparse.py` looks for a landmark string (`ROOT_LANDMARKS`) and exits without writing when it is missing, so the 3.18.0 tree cannot be stamped as 3.24.3. A version without a landmark is not checked.
+
 `readme_stats.py` rewrites the block between the `readme_stats:begin/end` markers of `README.md` and the Status column of the migration map in `docs/STRUCTURE.md` from `data/*.json` and the files on disk (idempotent; `--check` exits 1 when a file is stale). `service_index.py` refuses (exit 1, names the file, writes nothing) to overwrite a service README that carries prose the generator does not emit unless the file contains the `<!-- hand-written below: kept by tools/service_index.py -->` marker. Every service README row has one of four statuses: `owner` (purpose without TODO), `skeleton`, `pool-only` and `removed` (the last two from the inventory); `api/README.md` counts them.
 
 `data/*.json` is committed (envelope: `generated_by`, `app_version`, `snapshot`, `rows`; keys sorted). `tools/out/` is scratch and git-ignored. `render_pages.py` never writes into `api/` or `models/`: render into `tools/out/pages/`, then copy into `api/` with a no-clobber copy (`cp -n`, or a loop that skips existing files) so hand-written pages are never overwritten. After copying, run `tools/service_index.py` (reads `data/endpoints.json` and the pages on disk, rewrites `api/README.md` and every `api/<service>/README.md`; idempotent, purpose column comes from each page's "Purpose" line). Page paths: `v1` is dropped, other version segments are kept ([../docs/STRUCTURE.md](../docs/STRUCTURE.md#naming-conventions)). `render_pages.py` renders one page per distinct URL (all senders listed under "Callers in app"), including URLs removed in 3.24.3.
@@ -78,6 +80,7 @@ python3 -I tools/lint_docs.py [--rule header,links] [--json] [--warn-only] [--st
 | `dup-payload` | identical ```json block on more than one page. Not checked: docs/templates, docs/audit, the empty success envelope, and identical shapes that each sit in their own endpoint page's `Example request/response` section |
 | `secret` | 32+ hex run outside docs/audit. A run of exactly 32, 40 or 64 characters directly after `sha256`, `sha1`, `md5`, `snapshot` or `checksum` is a build identifier, not a secret |
 | `owner-cmd` | `"cmd": N`, `cmd = N`, `cmd N` (also with the backticked word) on a fact page other than `api/param_types.md`. Exempt: docs/audit, and a line carrying the marker `<!-- lint: owner-cmd example -->` (the worked Smi example in METHODOLOGY) |
+| `ble-fallback` | a sentence on a fact page that names BLE or Bluetooth, a fallback and a transport word (cloud, WiFi, internet, online, offline) without a negation: BLE is unavailable while the device is on WiFi ([../ble/protocol.md](../ble/protocol.md#connection-routing-and-the-wifi-exclusion-rule)). "fallback controller" or "MAC as fallback" carry no transport word and pass |
 
 ## 5. Tests
 
