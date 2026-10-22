@@ -173,6 +173,30 @@ DEFAULT_OLD_ROOT = os.environ.get(
     'ANKER_ASM_OLD', os.path.join(_SIBLINGS, 'blutter_output/asm'))
 DEFAULT_UPSTREAM = os.environ.get(
     'ANKER_UPSTREAM', os.path.join(_SIBLINGS, 'anker-solix-api/api/apitypes.py'))
+
+# SNAPSHOT_3_24_3 is only a label stamped into data/*.json. A landmark (an asm-relative file and a
+# string only that build's copy contains) proves a root really is that build: the older tree at
+# DEFAULT_OLD_ROOT has the same file with other addresses, so a wrong root would otherwise be
+# stamped "3.24.3" silently.
+ROOT_LANDMARKS = {
+    # set_aps_power URL load, api/charging_pv_svc/set_aps_power.md
+    '3.24.3': ('charging/ui/page/device/a5140/a5140home/a5140home_http_reposity.dart',
+               '0x3ee90e0'),
+}
+
+
+def check_root(asm_root, version):
+    """Exit unless asm_root is the build of `version`; a version without a landmark passes."""
+    mark = ROOT_LANDMARKS.get(version)
+    if mark is None:
+        return
+    try:
+        ok = file_contains(os.path.join(asm_root, mark[0]), (mark[1],))[0]
+    except OSError:
+        ok = False
+    if not ok:
+        raise SystemExit('asm root %s is not the %s build: %s lacks landmark %s'
+                         % (asm_root, version, mark[0], mark[1]))
 ALL_CALLEE_RE = re.compile(r'\bbl\s+#0x[0-9a-f]+\s+; \[[^\]]*\] (\S+)')
 
 

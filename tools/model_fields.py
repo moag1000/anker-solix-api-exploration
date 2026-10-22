@@ -257,6 +257,7 @@ def main(argv=None):
     ap.add_argument('--include-noise', action='store_true',
                     help='keep the sentry package')
     a = ap.parse_args(argv)
+    A.check_root(a.asm_root, a.version)
     t0 = time.time()
     res = build_models(a.asm_root, a.version, a.old_root,
                        log=lambda s: print(s, file=sys.stderr))

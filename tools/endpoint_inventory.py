@@ -805,6 +805,7 @@ def main(argv=None):
     ap.add_argument('--snapshot', default=A.SNAPSHOT_3_24_3)
     ap.add_argument('--out', default='data/endpoints.json')
     a = ap.parse_args(argv)
+    A.check_root(a.asm_root, a.version)
     t0 = time.time()
     inv = build_inventory(a.asm_root, a.version, a.old_root, a.upstream,
                           log=lambda s: print(s, file=sys.stderr))

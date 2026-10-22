@@ -139,7 +139,7 @@ A page header reads `> Verified against: App 3.24.3 · Date · Confidence: <tag>
 | [reference/](reference/README.md) | enums, business rules, validation model, IoT-Kit channels |
 | [platform/](platform/README.md) | the parts of the APK outside the Dart snapshot: [android_manifest](platform/android_manifest.md), [native_libraries](platform/native_libraries.md), [webview_bridge](platform/webview_bridge.md), [app_packaging](platform/app_packaging.md) |
 | [data/](data/README.md) | machine-readable exports (generated, never hand-edited) |
-| [docs/](docs/STRUCTURE.md) | [STRUCTURE.md](docs/STRUCTURE.md) (fact ownership and migration map), [PERSONAS.md](docs/PERSONAS.md), [ARCHITECTURE.md](docs/ARCHITECTURE.md), [SAFE_USAGE.md](docs/SAFE_USAGE.md), [DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md), [audit/](docs/audit/) (Smi audit tables), templates |
+| [docs/](docs/STRUCTURE.md) | [STRUCTURE.md](docs/STRUCTURE.md) (fact ownership and migration map), [PERSONAS.md](docs/PERSONAS.md), [ARCHITECTURE.md](docs/ARCHITECTURE.md), [SAFE_USAGE.md](docs/SAFE_USAGE.md), [DEVICE_TEST_BACKLOG.md](docs/DEVICE_TEST_BACKLOG.md), [LESSONS.md](docs/LESSONS.md) (error patterns and their guards), [audit/](docs/audit/) (Smi audit tables), templates |
 | [tools/](tools/README.md) | the generators, the linter and the tests behind the data and the statistics |
 | [docs/archive/](docs/archive/patches-2026-03/README.md) | the 2026-03 patches against the mqtt_monitor tool (3.18.0 era); stale, kept for provenance, do not apply |
 | root | [METHODOLOGY.md](METHODOLOGY.md), [GLOSSARY.md](GLOSSARY.md), [CONTRIBUTING.md](CONTRIBUTING.md), [CHANGELOG.md](CHANGELOG.md), and the superseded pages of section 9 |

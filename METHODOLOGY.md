@@ -62,6 +62,17 @@ An odd raw immediate in a tagged slot is impossible. If you see a raw odd value 
 
 EVERY number in the exploration docs that came from a Blutter immediate (cmd codes, enum ints, default values, type ids, flags, lengths, hardcoded ids) must be re-checked at the asm site, and the asm site is cited next to the number. Numbers that came from string literals ("19", "6"), from pp.txt strings, from live mqtt_monitor captures, or from upstream code are NOT affected.
 
+## Verification discipline
+
+Tag: untagged by design (working rules, no API fact).
+
+These rules come from errors this repository made; [docs/LESSONS.md](docs/LESSONS.md) lists each error with the guard that now catches it.
+
+- **A delegated finding is a lead, not a fact.** When a subagent, a script or a reviewer reports a value that contradicts an existing page, re-read the asm or object-pool site yourself before editing either. The existing page stands until the source says otherwise.
+- **Conclude from complete output.** A check piped through `head`, `tail` or `sort -u` can hide the defect it looks for, and `sort -u` also merges lines of different pool objects into one apparent list. Count with `grep -c`, or read the whole result.
+- **Compare like with like.** When matching names across sources (URL paths against page file names, enum names against wire strings), normalise case and separators on both sides first.
+- **Prove which build a root is.** The generators refuse an asm root that lacks the landmark of the version they stamp (`ROOT_LANDMARKS` and `check_root` in `tools/asmparse.py`).
+
 ## Known server tolerances
 
 This section is intentionally empty for now. It will record cases where the server accepts values different from what the app sends (for example the two `cmd` values of the power-limit call, listed on [api/param_types.md](api/param_types.md); to be recorded), each with the tag that earned it.
